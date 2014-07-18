@@ -33,12 +33,13 @@ Allowing templating should be at the core of every framework. Twist features a u
 The database class was our first so we wanted to make it special. You have the ability to use full-fat SQL queries if you like or you can stick with our quick and easy OO approach.
 
 ```php
-$newFruit = Twist::Database() -> createRecord( 'fruit' );
-$newFruit -> set( 'name', 'Apple' );
-$newFruit -> set( 'colour', 'green' );
-$newFruit -> commit();
+<?php
+	$newFruit = Twist::Database() -> createRecord( 'fruit' );
+	$newFruit -> set( 'name', 'Apple' );
+	$newFruit -> set( 'colour', 'green' );
+	$newFruit -> commit();
 
-$fruit = Twist::Database() -> getAll( 'fruit' );
+	$fruit = Twist::Database() -> getAll( 'fruit' );
 ```
 
 ###Simplified routing
@@ -46,15 +47,16 @@ $fruit = Twist::Database() -> getAll( 'fruit' );
 Routing is something we saw in a lot of other frameworks and wanted it to be at the heart of ours. Once you outgrow it, we have a structure module waiting in the wings to jump in and create you a fantastic semantically-structured site complete with a migration facility to get you there.
 
 ```php
-Twist::Route() -> baseTemplate( '_base.tpl' );
+<?php
+	Twist::Route() -> baseTemplate( '_base.tpl' );
 
-Twist::Route() -> template( '/', 'pages/home.tpl' );
-Twist::Route() -> element( '/contact/%', 'contact-form.php' );
-Twist::Route() -> redirect( '/about/%', 'http://facebook.com/Me' );
-Twist::Route() -> restrict( '/account/%', '/login' );
-Twist::Route() -> template( '/login', 'pages/login.tpl' );
+	Twist::Route() -> template( '/', 'pages/home.tpl' );
+	Twist::Route() -> element( '/contact/%', 'contact-form.php' );
+	Twist::Route() -> redirect( '/about/%', 'http://facebook.com/Me' );
+	Twist::Route() -> restrict( '/account/%', '/login' );
+	Twist::Route() -> template( '/login', 'pages/login.tpl' );
 
-Twist::Route() -> serve();
+	Twist::Route() -> serve();
 ```
 
 ###No more command line
@@ -65,7 +67,7 @@ We also built in a setup wizard with a GUI to help you get started even faster. 
 One line is all it takes...
 
 ```php
-<php
+<?php
     require_once 'twist/framework.php';
 ```
 
