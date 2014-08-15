@@ -22,10 +22,10 @@ Allowing templating should be at the core of every framework. Twist features a u
 {template:includes/header.tpl}
 {element:navigation/menu.php}
 <h1>Hello {session:user/name}</h1>
-<p>Dates: Good {date:G<12?'morning':'afternoon'} - the date is {date:F jS, Y}</p>
-<p>Server array {server:remote_addr}</p>
-<p>Simple PHP commands <input value="{escape[post:email]}" data-checksum="{md5[post:email]}"></p>
-<h2>Log in to your account</h2>
+<p>Good {date:G<12?'morning':'afternoon'} - the date is {date:F jS, Y}</p>
+<p>Your IP is {server:remote_addr}</p>
+<p>Simple PHP commands
+	<input value="{escape[post:email]}" data-checksum="{md5[post:email]}"></p>
 {user:login_form}
 ```
 
