@@ -16,29 +16,35 @@ Making new modules is as easy as using existing ones and we've given you a good 
 
 ###Templating made easier
 
-Allowing templating should be at the core of every framework. Twist features a unique templating system which was inspired by CodeIgnitor.
+Allowing templating should be at the core of every framework. Twist features a unique templating system inspired by CodeIgnitor which provides you with a whole heap of functionality to keep your PHP and HTML separate.
 
 ```html
 {template:includes/header.tpl}
-<h1>Hello {session:user/name}</h1>
 {element:navigation/menu.php}
-<p>Right now, it is {date:F jS, Y}</p>
-<p>Your IP address is {server:remote_addr}</p>
+<h1>Hello {session:user/name}</h1>
+<p>Dates: Good {date:G<12?'morning':'afternoon'} - the date is {date:F jS, Y}</p>
+<p>Server array {server:remote_addr}</p>
+<p>Simple PHP commands and the post array <input value="{escape[post:email]}" data-checksum="{md5[post:email]}"></p>
 <h2>Log in to your account</h2>
 {user:login_form}
 ```
 
 ###Helping you with databases
 
-The database class was our first so we wanted to make it special. You have the ability to use full-fat SQL queries if you like or you can stick with our quick and easy OO approach.
+The database class was our first so we wanted to make it special. You have the ability to use full-fat SQL queries if you like or you can stick with our quick and easy object-oriented approach.
 
 ```php
 $newFruit = Twist::Database() -> createRecord( 'fruit' );
-$newFruit -> set( 'name', 'Apple' );
+$newFruit -> set( 'name', 'apple' );
 $newFruit -> set( 'colour', 'green' );
-$newFruit -> commit();
+$fruitID = $newFruit -> commit();
 
-$fruit = Twist::Database() -> getAll( 'fruit' );
+$apple = Twist::Database() -> getRecord( 'fruit', $fruitID );
+$apple -> set( 'colour', 'red' );
+$apple -> commit();
+
+$allFruit = Twist::Database() -> getAll( 'fruit' );
+$greenFruit = Twist::Database() -> find( 'fruit', 'green', 'colour' );
 ```
 
 ###Simplified routing
@@ -49,24 +55,78 @@ Routing is something we saw in a lot of other frameworks and wanted it to be at 
 Twist::Route() -> baseTemplate( '_base.tpl' );
 
 Twist::Route() -> template( '/', 'pages/home.tpl' );
-Twist::Route() -> element( '/contact/%', 'contact-form.php' );
-Twist::Route() -> redirect( '/about/%', 'http://facebook.com/Me' );
+
+Twist::Route() -> element( '/languages', 'languages.php' );
+Twist::Route() -> getTemplate( '/contact', 'contact-form.tpl' );
+Twist::Route() -> postElement( '/contact', 'send-contact.php' );
+
+Twist::Route() -> redirect( '/about', 'http://facebook.com/Me' );
+
+Twist::Route() -> controller( '/portfolio/%', 'Portfolio' );
+
 Twist::Route() -> restrict( '/account/%', '/login' );
-Twist::Route() -> template( '/login', 'pages/login.tpl' );
+Twist::Route() -> getTemplate( '/login', 'pages/login.tpl' );
 
 Twist::Route() -> serve();
 ```
 
+###Restful controllers
+
+You can process GET, POST, DELETE and PUT requests in your controllers using a simple and easy syntax. When extended, the BaseController class allows you some additional functionality to catch unexpected requests.
+
+```php
+namespace TwistController;
+
+class Users extends BaseController {
+    public function _default(){
+        \TwistPHP\Error::errorPage( 404 );
+        return false;
+    }
+
+	public function member() {
+		/*
+		 * The default function if the method is not specified
+		 */
+	}
+
+	public function getMember() {
+		$user = \Twist::User -> get( $_SERVER['TWIST_ROUTE_PARTS'][0] );
+		return \Twist::Template -> build( 'user_details.tpl', $user );
+	}
+
+	public function postMember() {
+		$user = \Twist::User -> create();
+		$user -> firstname( $_POST['first_name'] );
+		$user -> surname( $_POST['surname'] );
+		$user -> email( $_POST['email'] );
+		$user -> commit();
+		$user -> sendWelcomeEmail();
+	}
+
+	public function deleteMember() {
+		$user = \Twist::User -> get( $_SERVER['TWIST_ROUTE_PARTS'][0] );
+		$user -> delete();
+		header( 'Location: /users' );
+	}
+
+	public function putMember() {
+		/*
+		 * ...does anyone still use PUT?
+		 */
+	}
+}
+```
+
 ###No more command line
 
-Twist comes with its own web-based manager that allows you to update your framework, install new modules and change your sites settings.
+Twist has the option of a web-based manager that allows you to update your framework, install new modules and change your sites settings without having to fumble around in the command line or mess around with an FTP client.
 
-We also built in a setup wizard with a GUI to help you get started even faster. All of this makes Twist ideal for use on shared hosting where you may not have access to the command line.
-One line is all it takes...
+We also built in a setup wizard with a GUI to help you get started even faster. All of this makes Twist ideal for use on shared hosting where you may not have root access to your server.
+One line is all it takes:
 
 ```php
 require_once 'twist/framework.php';
 ```
 
 ####Please Note:
-TwistPHP is currently a private project
+TwistPHP is currently a private project - it will hopefully become open source on September 1st 2014. Watch this space!
