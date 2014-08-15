@@ -18,13 +18,13 @@ Making new modules is as easy as using existing ones and we've given you a good 
 
 Allowing templating should be at the core of every framework. Twist features a unique templating system inspired by CodeIgnitor which provides you with a whole heap of functionality to keep your PHP and HTML separate.
 
-```html
+```tpl
 {template:includes/header.tpl}
 {element:navigation/menu.php}
 <h1>Hello {session:user/name}</h1>
 <p>Dates: Good {date:G<12?'morning':'afternoon'} - the date is {date:F jS, Y}</p>
 <p>Server array {server:remote_addr}</p>
-<p>Simple PHP commands and the post array <input value="{escape[post:email]}" data-checksum="{md5[post:email]}"></p>
+<p>Simple PHP commands <input value="{escape[post:email]}" data-checksum="{md5[post:email]}"></p>
 <h2>Log in to your account</h2>
 {user:login_form}
 ```
