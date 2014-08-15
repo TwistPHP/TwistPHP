@@ -84,9 +84,7 @@ class Users extends BaseController {
     }
 
 	public function member() {
-		/*
-		 * The default function if the method is not specified
-		 */
+		throw new \Exception( 'No member selected' );
 	}
 
 	public function getMember() {
@@ -122,6 +120,7 @@ class Users extends BaseController {
 Twist has the option of a web-based manager that allows you to update your framework, install new modules and change your sites settings without having to fumble around in the command line or mess around with an FTP client.
 
 We also built in a setup wizard with a GUI to help you get started even faster. All of this makes Twist ideal for use on shared hosting where you may not have root access to your server.
+
 One line is all it takes:
 
 ```php
