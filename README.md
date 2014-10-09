@@ -4,7 +4,7 @@
 
 We looked around for a PHP micro framework that suited our needs and found nothing that we were completely happy with. So we made one.
 
-TwistPHP is built from ground up to support the way you already work and was based on the already fantastic Shadow framework.
+Twist is built from ground up to support the way you already work. With an naming convention that's easy to grasp, the learning curve is kept to a minimum.
 
 ###Code your way, just faster
 
@@ -12,7 +12,7 @@ We didn't like being tied into a particular software pattern so rather than make
 
 Every function has been painstakingly developed to create the most intuitive structure possible with sensible function names and a well thought-out structure.
 
-Making new modules is as easy as using existing ones and we've given you a good start with the ability to download a bunch of powerful pre-built modules.
+Making new modules is as easy as using existing ones and we've given you the best start with the ability to download a bunch of powerful pre-built modules.
 
 ###Templating made easier
 
@@ -126,6 +126,3 @@ One line is all it takes:
 ```php
 require_once 'twist/framework.php';
 ```
-
-####Please Note:
-TwistPHP is currently a private project - it will hopefully become open source on September 1st 2014. Watch this space!
