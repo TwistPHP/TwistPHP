@@ -16,7 +16,7 @@ Making new modules is as easy as using existing ones and we've given you the bes
 
 ###Templating made easier
 
-Allowing templating should be at the core of every framework. Twist features a unique templating system inspired by CodeIgnitor which provides you with a whole heap of functionality to keep your PHP and HTML separate.
+Templating should be at the core of every framework. Twist features a unique templating system inspired by CodeIgnitor which provides you with a whole heap of functionality to keep your PHP and HTML separate.
 
 ```tpl
 {template:includes/header.tpl}
