@@ -719,7 +719,7 @@ class Route extends ModuleBase{
 					$_SERVER['TWIST_ROUTE_DYNAMIC'] = $arrRoute['current']['dynamic'];
 					$_SERVER['TWIST_ROUTE_PARTS'] = $arrRoute['current']['parts'];
 					$_SERVER['TWIST_ROUTE_URI'] = $arrRoute['current']['uri'];
-					//$_SERVER['TWIST_ROUTE_TITLE'] = $arrRoute['current']['title'];
+                    $_SERVER['TWIST_ROUTE_TITLE'] = \Twist::framework()->setting('SITE_NAME');
 
 					//Load the page from cache
 					$this->loadPageCache($arrRoute['cache_key']);
@@ -824,7 +824,7 @@ class Route extends ModuleBase{
 							break;
 					}
 
-					//$arrTags['title'] = $_SERVER['TWIST_ROUTE_TITLE'];
+					$arrTags['title'] = $_SERVER['TWIST_ROUTE_TITLE'];
 					$this->framework() -> module() -> extend('Template','route',$arrTags);
 
 					if(!is_null($this->strBaseTemplate) && $arrRoute['base_template'] === true){
