@@ -25,22 +25,23 @@
 	use TwistPHP\ModuleBase;
 
 	/**
-	 * Simply format data and time strings, generate human readable age of any given date. For example 120 will become "2 minutes" provide a timestamp
-	 * and the age can be presented as "10 minutes ago". Work with date ranges and producing on screen calendars.
+	 * Simply format data and time strings, generate human readable age of any given date. For example 120 will become "2 minutes" provide a timestamp and the age can be presented as "10 minutes ago". Work with date ranges and producing on screen calendars.
 	 */
 	class DateTime extends ModuleBase{
 
 		protected $fltYearDays = 356.2425;
 		protected $strTimeSource = null;
 
+		/**
+		 * Get the default time source method if required
+		 */
 		public function __construct(){
-			//Get the time source method if required
 			$this->strTimeSource = $this->framework()->setting('DATETIME_SOURCE');
 		}
 
 		/**
-		 * Get the current timestamp
-		 * @return int
+		 * Get the current timestamp from the system, depending on framework settings this will either be from MySQL connection of natively from PHP.
+		 * @return int Returns the timestamp in seconds
 		 */
 		public function time(){
 
@@ -64,8 +65,14 @@
 		}
 
 		/**
-		 * Get the current date using the time function with the the framework defined method of getting the time. (either PHP or database)
-		 * @return int
+		 * Get the current date using the time function with the the framework defined method of getting the time. (Either natively from PHP or from the MySQL connection).
+		 *
+		 * @related time
+		 * @reference http://php.net/manual/en/function.date.php
+		 *
+		 * @param $strFormat Format the datetime (using PHP date format notation)
+		 * @param $intTimestamp Provide a custom timestamp to process the date
+		 * @return date Returns the date as a string
 		 */
 		public function date($strFormat = 'Y-m-d H:i:s',$intTimestamp = null){
 
@@ -77,9 +84,12 @@
 		}
 
 		/**
-		 * Determine if a timestamp is in the future
-		 * @param $intTimestamp
-		 * @return bool
+		 * Determine if a provided timestamp is in the future when compared to the current timestamp of 'time'
+		 *
+		 * @related inPast
+		 *
+		 * @param $intTimestamp Timestamp for comparison
+		 * @return boolean Returns true if future timestamp
 		 */
 		public function inFuture($intTimestamp){
 			$intSecondsDifference = $this->time() - $intTimestamp;
@@ -87,9 +97,12 @@
 		}
 
 		/**
-		 * Determine if a timestamp is in the future
-		 * @param $intTimestamp
-		 * @return bool
+		 * Determine if a provided timestamp is in the past when compared to the current timestamp of 'time'
+		 *
+		 * @related inFuture
+		 *
+		 * @param $intTimestamp Timestamp for comparison
+		 * @return boolean Returns true if past timestamp
 		 */
 		public function inPast($intTimestamp){
 			$intSecondsDifference = $this->time() - $intTimestamp;
@@ -98,8 +111,11 @@
 
 		/**
 		 * Get a nicely formatted string for the age of a timestamp eg. 'A moment ago' or 'In 3 Hours'
-		 * @param $intTimestamp
-		 * @return string
+		 *
+		 * @related prettyTime
+		 *
+		 * @param $intTimestamp Timestamp for conversion
+		 * @return string Returns a formatted human readable time
 		 */
 		public function prettyAge($intTimestamp){
 
@@ -145,8 +161,11 @@
 
 		/**
 		 * Turn a number of seconds into a nicely formatted string eg. '1 Day 2 Hours' or 1d 2h
-		 * @param $intSeconds
-		 * @param bool $blShortLabels
+		 *
+		 * @related prettyAge
+		 *
+		 * @param $intSeconds Time in seconds for conversion
+		 * @param $blShortLabels Set to true for short labels i.e. y,mo,w over year,month,week
 		 * @return string
 		 */
 		public function prettyTime($intSeconds,$blShortLabels = false){
@@ -196,29 +215,24 @@
 		}
 
 		/**
-		 * Alias function of prettyAge
 		 * @alias prettyAge
-		 * @param $intTimestamp
-		 * @return string
 		 */
 		public function getAge($intTimestamp){ return $this->prettyAge($intTimestamp); }
 
 		/**
-		 * Alias function of prettyTime
 		 * @alias prettyTime
-		 * @param $intTimestamp
-		 * @return string
 		 */
 		public function getTimePeriod($intTimestamp){ return $this->prettyTime($intTimestamp); }
 
 		/**
 		 * Get the age of a person in years from their date of birth
-		 * @param $strDOB
-		 * @return string
+		 *
+		 * @param $dateDOB Date of birth as a date string
+		 * @return integer Returns age in years
 		 */
-		public function getPersonAge($strDOB){
+		public function getPersonAge($dateDOB){
 
-			$intDOB = strtotime($strDOB);
+			$intDOB = strtotime($dateDOB);
 
 			$intYearBorn = date('Y',$intDOB);
 			$intMonthBorn = date('m',$intDOB);
@@ -238,30 +252,31 @@
 
 		/**
 		 * Get an array of every X day between two given dates
-		 * @param $startDate
-		 * @param $endDate
+		 *
+		 * @param $startDate Start date of the range
+		 * @param $endDate End date of the range
 		 * @param $weekdayNumber
-		 * @return array
+		 * @return array Returns and array of dates
 		 */
-		public function getDayBetweenDates($startDate, $endDate, $weekdayNumber){
+		public function getDayBetweenDates($dateStart, $dateEnd, $intWeekdayNumber){
 
-			$startDate = strtotime($startDate);
-			$endDate = strtotime($endDate);
+			$intStartDate = strtotime($dateStart);
+			$intEndDate = strtotime($dateEnd);
 
-			$dateArr = array();
+			$arrDates = array();
 
 			do{
-				if(date("w", $startDate) != $weekdayNumber){
-					$startDate += (24 * 3600); // add 1 day
+				if(date("w", $intStartDate) != $intWeekdayNumber){
+					$intStartDate += (24 * 3600); // add 1 day
 				}
-			}while(date("w", $startDate) != $weekdayNumber);
+			}while(date("w", $intStartDate) != $intWeekdayNumber);
 
 
-			while($startDate <= $endDate){
-				$dateArr[] = date('Y-m-d', $startDate);
-				$startDate += (7 * 24 * 3600); // add 7 days
+			while($intStartDate <= $intEndDate){
+				$arrDates[] = date('Y-m-d', $intStartDate);
+				$intStartDate += (7 * 24 * 3600); // add 7 days
 			}
 
-			return($dateArr);
+			return $arrDates;
 		}
 	}

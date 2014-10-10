@@ -25,19 +25,24 @@
 	use TwistPHP\ModuleBase;
 
 	/**
-	 * Cache any data using a simple store and retrieve process, all cached data must be assigned a unique key.
-	 * Each cache can be given a life time in seconds, when the cache expires it will no longer be returned.
-	 * The default storage location used is the folder '/cache' in the document root of your site. A .htaccess file
-	 * is placed in the cache folder to ensure all cached data is private.
+	 * Cache data using a simple store and retrieve process, all cached data must be assigned a unique key. Each cache can be given a life time in seconds, when the cache expires it will no longer be returned.
+	 * The default storage location used is the folder '/cache' in the document root of your site. A '.htaccess' file is placed in the cache folder to ensure all cached data is private.
+	 * The cache system is instanceable, for each instance a new cache folder will be created. This makes management of cache files easier.
+	 *
+	 * @instanceable
 	 */
 	class Cache extends ModuleBase{
 
-		protected $strFileExtension = 'ssc';
+		protected $strFileExtension = 'twi';
 		protected $strStorageLocation = '';
 		protected $strInstanceKey = '';
 
 		protected $arrRuntimeSessionCache = array();
 
+		/**
+		 * Load all the default options for the cache system, create folders and '.htaccess' if required.
+		 * @param $strInstanceKey Instance key to help group cache data
+		 */
 		public function __construct($strInstanceKey){
 
 			$this->strInstanceKey = $strInstanceKey;
@@ -67,30 +72,30 @@
 		}
 
 		/**
-		 * Set a custom storage location for your cached data
-		 * @param $strStorageLocation
+		 * Set a custom storage location for your cached data,this must be set every time you use the cache system
+		 *
+		 * @param $strStorageLocation Full path to the new storage location
 		 */
 		public function setStorageLocation($strStorageLocation){
 			$this->strStorageLocation = $strStorageLocation;
 		}
 
 		/**
-		 * Set the cache file extension that will be used when sotring cache files
-		 * @param $strFileExtension
+		 * Set the cache file extension that will be used when storing cache files,this must be set every time you use the cache system
+		 *
+		 * @param $strFileExtension Custom cache file extension to use
 		 */
-		public function setFileExtension($strFileExtension){
+		public function setFileExtension($strFileExtension = 'twi'){
 			$this->strFileExtension = $strFileExtension;
 		}
 
 		/**
-		 * Store data in the cache, default life time is 1 hour (3600 seconds)
-		 * You will need to pass a Unique ID so that you can reference the data again later.
-		 * Setting the life time to '0' will mean that the cache will be stored as a PHP Runtime Session
-		 * and will be nolonger exists once the current runtime has ended.
-		 * @param $strUniqueID
-		 * @param $mxdData
-		 * @param int $intLifeTime
-		 * @return void
+		 * Store data in the cache, default life time is 1 hour (3600 seconds). Setting the life time to '0' will mean that the cache will be stored as a PHP Runtime Session and will be no longer exists once the current runtime has ended.
+		 * A Unique ID must be passed in so that you can reference the data again later.
+		 *
+		 * @param $strUniqueID Unique ID used to reference the cache
+		 * @param $mxdData Data to be stored in the cache
+		 * @param $intLifeTime Life of the cache, time until expiry
 		 */
 		public function store($mxdUniqueID,$mxdData,$intLifeTime = 3600){
 
@@ -120,10 +125,11 @@
 		}
 
 		/**
-		 * Retrieve the data form the cache at any point by passing in the Unique ID.
-		 * If the cache has expired you will be passed back a null response.
-		 * @param $mxdUniqueID
-		 * @return mixed|null
+		 * Retrieve the data form the cache at any point by passing in the Unique ID. Expired cache date will be purged and passed back as NULL in the result.
+		 *
+		 * @param $mxdUniqueID Unique ID used to reference the cache
+		 * @param $blFullData Set true to retrieve cache properties as array
+		 * @return mixed Returns cache data or array of cache properties
 		 */
 		public function retrieve($mxdUniqueID,$blFullData=false){
 
@@ -140,8 +146,6 @@
 
 						$arrData['data'] = json_decode($arrData['data'],true);
 						$mxdOut = ($blFullData) ? $arrData : $arrData['data'];
-					}else{
-						$this->__logError('Cache Verification',$arrVerificationData['message']);
 					}
 				}
 			}
@@ -150,9 +154,10 @@
 		}
 
 		/**
-		 * Remove a cache manually (before expiry) if you want to stop using it or no longer require its contents. Pass in the Unique ID to reference the cache you want to remove, alternatively passing in null will remove all cache files for this instance
-		 * @param null $mxdUniqueID
-		 * @return bool
+		 * Remove a cache manually (before expiry) if you want to stop using it or no longer require its contents. Pass in the Unique ID to reference the cache you want to remove, alternatively passing in null will remove all cache files for this instance.
+		 *
+		 * @param $mxdUniqueID Unique ID used to reference the cache
+		 * @return bool Status of the cache removal
 		 */
 		public function remove($mxdUniqueID = null){
 
@@ -178,10 +183,10 @@
 		}
 
 		/**
-		 * Get the remaining life span of a cache, you will need to pass in the Unique ID
-		 * and you will get back its remaining time in seconds.
-		 * @param $mxdUniqueID
-		 * @return int
+		 * Get the remaining life span of a cache, you will need to pass in the Unique ID and you will get back its remaining time in seconds.
+		 *
+		 * @param $mxdUniqueID Unique ID used to reference the cache
+		 * @return int Returns the remaining life of the cache in seconds
 		 */
 		public function getRemainingLife($mxdUniqueID){
 
@@ -197,8 +202,7 @@
 		}
 
 		/**
-		 * Clean up the system, this is garbage collection. Any expired caches will be removed form the system.
-		 * This will not remove any session data in the PHP session storage
+		 * Clean up the system, this is garbage collection. Any expired caches will be removed form the system. This will not remove any session data in the PHP session storage
 		 */
 		public function clean(){
 
@@ -224,9 +228,10 @@
 		}
 
 		/**
-		 * Get the cache data and extract its parts
-		 * @param $mxdUniqueID
-		 * @return array|null
+		 * Get the cache properties and extract its parts into a usable array
+		 *
+		 * @param $mxdUniqueID Unique ID used to reference the cache
+		 * @return array Returns array of cache properties
 		 */
 		protected function getCacheData($mxdUniqueID){
 
@@ -261,10 +266,11 @@
 
 		/**
 		 * Verify the retrieved cache data and make sure it has not been tampered with
-		 * @param $strDataJSON
-		 * @param $strHashKey
-		 * @param $intDataLength
-		 * @return array
+		 *
+		 * @param $strDataJSON JSON Cache data
+		 * @param $strHashKey Unique Hash of the data that can be verified
+		 * @param $intDataLength Length of the cache date
+		 * @return array Returns a status and message
 		 */
 		protected function verifyData($strDataJSON,$strHashKey,$intDataLength){
 

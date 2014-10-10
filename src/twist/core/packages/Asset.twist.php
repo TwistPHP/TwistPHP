@@ -24,6 +24,10 @@
 	namespace TwistPHP\Packages;
 	use TwistPHP\ModuleBase;
 
+	/**
+	 * Asset management package that allows the addition and grouping of assets. Assets can be images, videos, files, links and other data that can be uploaded to a website/service.
+	 * @package TwistPHP\Packages
+	 */
 	class Asset extends ModuleBase{
 
 		protected $resTemplate = null;
@@ -58,8 +62,9 @@
 
 		/**
 		 * Get an asset by Asset ID, this will also expand the asset to include a sub array of its type and group information
-		 * @param $intAssetID
-		 * @return array|null|DatabaseRecord
+		 *
+		 * @param $intAssetID ID of the required asset
+		 * @return array Returns an array of the assets information
 		 */
 		public function get($intAssetID){
 
@@ -70,9 +75,10 @@
 		}
 
 		/**
-		 * Get all assets by Asset ID, this will also expand the asset to include a sub array of its type and group information
-		 * @param $intAssetID
-		 * @return array|null|DatabaseRecord
+		 * Get all the assets in the asset system, this will also expand the asset to include a sub array of its type and group information
+		 *
+		 * @related get
+		 * @return array Returns a multi-dimensional array of all the assets in the system
 		 */
 		public function getAll(){
 
@@ -89,9 +95,11 @@
 		}
 
 		/**
-		 * Get all assets that are in any particular group by Asset Group ID, this will also expand the asset to include a sub array of its type and group information
-		 * @param $intGroupID
-		 * @return array
+		 * Get all assets that of a asset group by Asset Group ID, this will also expand the asset to include a sub array of its type and group information
+		 *
+		 * @related get
+		 * @param $intGroupID ID of the required asset group
+		 * @return array Returns a multi-dimensional array of the groups assets
 		 */
 		public function getByGroup($intGroupID){
 
@@ -108,9 +116,11 @@
 		}
 
 		/**
-		 * Get all assets that are any particular type by Asset Type ID, this will also expand the asset to include a sub array of its type and group information
-		 * @param $intTypeID
-		 * @return array
+		 * Get all assets of a particular type by Asset Type ID, this will also expand the asset to include a sub array of its type and group information
+		 *
+		 * @related get
+		 * @param $intTypeID ID of the required asset type
+		 * @return array Returns a multi-dimensional array of assets
 		 */
 		public function getByType($intTypeID){
 
@@ -127,9 +137,10 @@
 		}
 
 		/**
-		 * Expand the asset to include extra data such as type/group information
-		 * @param $arrAsset
-		 * @return mixed
+		 * Expand the assets default array of date to include extra data such as detailed type/group information
+		 *
+		 * @param $arrAsset Default asset array before expansion
+		 * @return array Expanded asset array
 		 */
 		private function expand($arrAsset){
 
@@ -150,72 +161,11 @@
 		}
 
 		/**
-		 * Get asset type information by its asset type ID
-		 * @param $intTypeID
-		 * @return array
+		 * Get all the supporting content for this asset, this includes thumbnails and alternative sizes/formats. If none are found the default icon set will be returned.
+		 *
+		 * @param $arrAsset Default asset array before expansion
+		 * @return array Returns array of supporting content
 		 */
-		public function getType($intTypeID){
-			return (array_key_exists($intTypeID,$this->arrTypes)) ? $this->arrTypes[$intTypeID] : array();
-		}
-
-		/**
-		 * Get asset type information by its asset type Slug
-		 * @param $strTypeSlug
-		 * @return array
-		 */
-		public function getTypeBySlug($strTypeSlug){
-			return (array_key_exists($strTypeSlug,$this->arrTypeSlugs)) ? $this->arrTypeSlugs[$strTypeSlug] : array();
-		}
-
-		/**
-		 * Get asset group information by its asset group ID
-		 * @param $intGroupID
-		 * @return array
-		 */
-		public function getGroup($intGroupID){
-			return (array_key_exists($intGroupID,$this->arrGroups)) ? $this->arrGroups[$intGroupID] : array();
-		}
-
-		public function addGroup($strDescription,$srtSlug){
-
-			//Create the asset group record in the database
-			$resRecord = \Twist::Database()->createRecord(sprintf('%sasset_groups',DATABASE_TABLE_PREFIX));
-			$resRecord->set('description',$strDescription);
-			$resRecord->set('slug',$srtSlug);
-			$resRecord->set('created',\Twist::DateTime()->date('Y-m-d H:i:s'));
-
-			return $resRecord->commit();
-		}
-
-		public function editGroup($intGroupID,$strDescription,$srtSlug){
-
-			//Create the asset group record in the database
-			$resRecord = \Twist::Database()->getRecord(sprintf('%sasset_groups',DATABASE_TABLE_PREFIX),$intGroupID);
-			$resRecord->set('description',$strDescription);
-			$resRecord->set('slug',$srtSlug);
-			$resRecord->set('created',\Twist::DateTime()->date('Y-m-d H:i:s'));
-
-			return $resRecord->commit();
-		}
-
-		public function getGroups(){
-			return $this->arrGroups;
-		}
-
-		public function getGroupTree(){
-			return $this->arrGroupTree;
-		}
-
-
-		/**
-		 * Get asset group information by its asset group Slug
-		 * @param $mxdGroupSlug
-		 * @return array
-		 */
-		public function getGroupBySlug($mxdGroupSlug){
-			return (array_key_exists($mxdGroupSlug,$this->arrGroupSlugs)) ? $this->arrGroupSlugs[$mxdGroupSlug] : array();
-		}
-
 		public function getSupportingContent($arrAsset){
 
 			$arrOut = array();
@@ -232,33 +182,141 @@
 			return $arrOut;
 		}
 
+		/**
+		 * Get all the default content icons the the assets type
+		 *
+		 * @related getSupportingContent
+		 * @param $arrAsset Default asset array before expansion
+		 * @return array Returns array of default content icons
+		 */
 		public function getDefaultSupportingContent($arrAsset){
 
 			$strIconURI = str_replace(BASE_LOCATION,'',sprintf('%s/images/icons/%s',DIR_FRAMEWORK_RESOURCES,$arrAsset['type']['icon']));
 
-		   $arrOut = array(
-			   'square-thumb-256' => $strIconURI,
-			   'square-thumb-128' => $strIconURI,
-			   'square-thumb-64' => $strIconURI,
-			   'square-thumb-32' => $strIconURI,
-			   'thumb-512' => $strIconURI,
-			   'thumb-256' => $strIconURI,
-			   'thumb-128' => $strIconURI,
-			   'thumb-64' => $strIconURI
-		   );
+			$arrOut = array(
+				'square-thumb-256' => $strIconURI,
+				'square-thumb-128' => $strIconURI,
+				'square-thumb-64' => $strIconURI,
+				'square-thumb-32' => $strIconURI,
+				'thumb-512' => $strIconURI,
+				'thumb-256' => $strIconURI,
+				'thumb-128' => $strIconURI,
+				'thumb-64' => $strIconURI
+			);
 
 			return $arrOut;
 		}
 
 		/**
-		 * Add an asset to the system, the asset type will be detected automatically. Asset group is not a requirement but will default to the default group
+		 * Get an array of asset type information by its asset type ID
+		 *
+		 * @param $intTypeID ID of the required asset type
+		 * @return array Returns an array of the asset type information
+		 */
+		public function getType($intTypeID){
+			return (array_key_exists($intTypeID,$this->arrTypes)) ? $this->arrTypes[$intTypeID] : array();
+		}
+
+		/**
+		 * Get an array of asset type information by its asset type slug
+		 *
+		 * @related getType
+		 * @param $strTypeSlug Slug of the required asset type
+		 * @return array Returns an array of the asset type information
+		 */
+		public function getTypeBySlug($strTypeSlug){
+			return (array_key_exists($strTypeSlug,$this->arrTypeSlugs)) ? $this->arrTypeSlugs[$strTypeSlug] : array();
+		}
+
+		/**
+		 * Get an array of asset group information by its asset group ID
+		 *
+		 * @param $intGroupID ID of the required asset group
+		 * @return array Returns an array of the asset group information
+		 */
+		public function getGroup($intGroupID){
+			return (array_key_exists($intGroupID,$this->arrGroups)) ? $this->arrGroups[$intGroupID] : array();
+		}
+
+		/**
+		 * Get an array of asset group information by its asset group slug
+		 *
+		 * @related getGroup
+		 * @param $strGroupSlug Slug of the required asset type
+		 * @return array Returns an array of the asset group information
+		 */
+		public function getGroupBySlug($strGroupSlug){
+			return (array_key_exists($strGroupSlug,$this->arrGroupSlugs)) ? $this->arrGroupSlugs[$strGroupSlug] : array();
+		}
+
+		/**
+		 * Get a multi-dimensional array of all the asset groups registered in the system
+		 *
+		 * @related getGroup
+		 * @return array Returns a multi-dimensional array of asset groups
+		 */
+		public function getGroups(){
+			return $this->arrGroups;
+		}
+
+		/**
+		 * Get a multi-dimensional array in a parent/child configuration of all the asset groups registered in the system
+		 *
+		 * @related getGroup
+		 * @return array Returns a multi-dimensional parent/child array of the groups assets
+		 */
+		public function getGroupTree(){
+			return $this->arrGroupTree;
+		}
+
+		/**
+		 * Add a new group to the asset groups table, the asset groups will allow you slit/categorise your assets into manageable groups.
+		 * @related getGroup
+		 *
+		 * @param $strDescription Description of the group
+		 * @param $srtSlug Slug of the group, used to reference the group
+		 * @return int ID of the newly created group
+		 */
+		public function addGroup($strDescription,$srtSlug){
+
+			//Create the asset group record in the database
+			$resRecord = \Twist::Database()->createRecord(sprintf('%sasset_groups',DATABASE_TABLE_PREFIX));
+			$resRecord->set('description',$strDescription);
+			$resRecord->set('slug',$srtSlug);
+			$resRecord->set('created',\Twist::DateTime()->date('Y-m-d H:i:s'));
+
+			return $resRecord->commit();
+		}
+
+		/**
+		 * Update a asset group, change the group description and slug without affecting the assets contained within the group.
+		 *
+		 * @param $intGroupID ID of the asset group to be updated
+		 * @param $strDescription Description of the group
+		 * @param $srtSlug Slug of the group, used to reference the group
+		 * @return bool Returns the status of the update
+		 */
+		public function editGroup($intGroupID,$strDescription,$srtSlug){
+
+			//Create the asset group record in the database
+			$resRecord = \Twist::Database()->getRecord(sprintf('%sasset_groups',DATABASE_TABLE_PREFIX),$intGroupID);
+			$resRecord->set('description',$strDescription);
+			$resRecord->set('slug',$srtSlug);
+			$resRecord->set('created',\Twist::DateTime()->date('Y-m-d H:i:s'));
+
+			return $resRecord->commit();
+		}
+
+		/**
+		 * Add an asset to the system, the asset type will be detected automatically. The asset group must be passed in as a group ID.
 		 * In the first parameter you can either pass in a string i.e URL, Youtube Link, Co-ordinates or a full path to a file i.e /my/file/to/add/file.ext
+		 *
 		 * @param $mxdData
-		 * @param $intGroupID
-		 * @param string $strTitle
-		 * @param string $strDescription
-		 * @param bool $blActive
-		 * @return bool|int
+		 * @param $intGroupID Initial group for the asset to be added
+		 * @param $strTitle Title of the asset
+		 * @param $strDescription Description for the asset
+		 * @param $blActive Default status of the asset once created in the system
+		 * @return int Returns the ID of the newly added asset
 		 */
 		public function add($mxdData,$intGroupID,$strTitle='',$strDescription='',$blActive=true){
 
@@ -415,14 +473,15 @@
 		}
 
 		/**
-		 * Upload an asset to the system (utilises 'add' to store the asset once uploaded), the asset type will be detected automatically. Asset group is not a requirement but will default to the default group
-		 * In the first parameter you can either pass in a string i.e URL, Youtube Link, Co-ordinates or a full path to a file i.e /my/file/to/add/file.ext
-		 * @param $strFileKey
-		 * @param $intGroupID
-		 * @param string $strTitle
-		 * @param string $strDescription
-		 * @param bool $blActive
-		 * @return bool|int
+		 * Upload an asset to the system (utilises 'add' to store the asset once uploaded), the asset type will be detected automatically. An asset group must be provided.
+		 *
+		 * @related add
+		 * @param $strFileKey File upload key from the $_FILES array
+		 * @param $intGroupID Initial group for the asset to be added
+		 * @param $strTitle Title of the asset
+		 * @param $strDescription Description for the asset
+		 * @param $blActive Default status of the asset once created in the system
+		 * @return int Returns the ID of the newly uploaded/added asset
 		 */
 		public function upload($strFileKey,$intGroupID,$strTitle='',$strDescription='',$blActive=true){
 
@@ -438,10 +497,11 @@
 
 		/**
 		 * Edit the title and description of an asset by its asset ID
-		 * @param $intAssetID
-		 * @param $strTitle
-		 * @param string $strDescription
-		 * @return bool|int
+		 *
+		 * @param $intAssetID ID of the asset to be updated
+		 * @param $strTitle Title to be stored for the provided asset ID
+		 * @param $strDescription Description to be stored for the provided asset ID
+		 * @return bool Returns that status of the update
 		 */
 		public function edit($intAssetID,$strTitle,$strDescription=''){
 
@@ -454,9 +514,10 @@
 
 		/**
 		 * Set the status of an asset between active/inactive by passing a boolean of either true or false in the second parameter.
-		 * @param $intAssetID
-		 * @param bool $blActive
-		 * @return bool|int
+		 *
+		 * @param $intAssetID ID of the asset to be updated
+		 * @param $blActive Status in which to set the enabled field
+		 * @return bool Returns that status of teh update
 		 */
 		public function active($intAssetID,$blActive=true){
 
@@ -468,8 +529,9 @@
 
 		/**
 		 * Delete an asset from the system, this will remove both the database record and the file (if there is one)
-		 * @param $intAssetID
-		 * @return bool
+		 *
+		 * @param $intAssetID ID of the asset to be deleted
+		 * @return bool Returns that status of the delete command
 		 */
 		public function delete($intAssetID){
 
@@ -490,6 +552,26 @@
 			return $blOut;
 		}
 
+		/**
+		 * Extends the default functionality of the Template package, adding the ability to output simple upload forms and asset information directly into a template
+		 * {asset:upload}
+		 * {asset:upload-html}
+		 * {asset:upload-init}
+		 * {asset:upload-js}
+		 * {asset:uri}
+		 * {asset:title}
+		 * {asset:description}
+		 * {asset:size_bytes}
+		 * {asset:size}
+		 * {asset:type}
+		 * {asset:group}
+		 * {asset:link}
+		 * {asset:inline,type}
+		 *
+		 * @extends Template
+		 * @param $strReference Template tag passed in from a template
+		 * @return string Formatted HTML/Markup to be output by the template package
+		 */
 		public function templateExtension($strReference){
 
 			$strOut = '';
