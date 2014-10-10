@@ -1,8 +1,8 @@
 #[TwistPHP](http://twistphp.com/)
 
-##A fresh, new PHP 5.3+ micro framework
+##A fresh, new open source PHP micro framework
 
-We looked around for an open source PHP micro framework that suited our needs and found nothing that we were completely happy with. So we made one.
+We looked around for a PHP framework that suited our needs and found nothing that we were completely happy with. So we made one.
 
 Twist is built from ground up to support the way you already work. With an naming convention that's easy to grasp, the learning curve is kept to a minimum.
 
