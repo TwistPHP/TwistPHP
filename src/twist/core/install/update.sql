@@ -1,0 +1,24 @@
+-- ------------------------------------------------------
+--
+-- All SQL updates that have been made to the default tables
+-- since the last version should be placed in here. All queries
+-- are run in the order that they appear in this file.
+--
+-- Changes to tables      add an ALTER query
+-- New tables             add a CREATE query
+-- Removal of tables      add a DROP query
+-- Additional records     add an INSERT query
+-- Removal of records     add a DELETE query
+-- Updating of records    add a UPDATE query
+--
+-- Any changes that are made by queries in this file
+-- must also be made to the corresponding install.sql
+--
+-- To Add the Twist table prefix you must use the following
+-- syntax /*TABLE_PREFIX*/`table_name`
+--
+-- You can use a single line comment above each query using
+-- the following syntax "-- @comment This is my query comment"
+--
+-- ------------------------------------------------------
+

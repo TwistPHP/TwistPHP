@@ -21,8 +21,33 @@
 	 *
 	 */
 
-	//Include the boot file
-	require_once sprintf('%s/core/boot.php',dirname(__FILE__));
+	namespace TwistPHP\Packages;
 
-	//Launch the framework ready for use
-	Twist::launch();
+	class ArchivePclZip{
+
+		protected $resZip = null;
+
+		public function __construct(){
+			require_once sprintf('%s/libraries/Archive/PclZip.class.php',DIR_FRAMEWORK_PACKAGES);
+		}
+
+		public function create($strZipArchive){
+			$this->resZip = new \PclZip($strZipArchive);
+		}
+
+		public function load($strZipArchive){
+			$this->resZip = new \PclZip($strZipArchive);
+		}
+
+		public function addFile($strLocalFile){
+			$this->resZip->add($strLocalFile, PCLZIP_OPT_ADD_PATH,'install',PCLZIP_OPT_REMOVE_PATH,'dev');
+		}
+
+		public function extract($strExtractPath){
+			return ($this->resZip->extract(PCLZIP_OPT_PATH, $strExtractPath) == 0) ? false : true;
+		}
+
+		public function close(){
+			$this->resZip->close();
+		}
+	}

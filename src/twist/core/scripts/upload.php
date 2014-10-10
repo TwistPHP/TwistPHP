@@ -21,8 +21,25 @@
 	 *
 	 */
 
-	//Include the boot file
-	require_once sprintf('%s/core/boot.php',dirname(__FILE__));
+	require_once sprintf('%s/../../framework.php',dirname(__FILE__));
 
-	//Launch the framework ready for use
-	Twist::launch();
+	if(is_array($_FILES) && count($_FILES)){
+		$arrOut = Twist::File()->upload('');
+	}else{
+		$arrOut = Twist::File()->uploadPUT();
+	}
+
+	//Now if the file upload was successful process the asset (if required)
+	if($arrOut['status'] == true && (array_key_exists('HTTP_TWIST_PROCESS',$_SERVER) && $_SERVER['HTTP_TWIST_PROCESS'] == 'asset' || array_key_exists('twist_process',$_GET) && $_GET['twist_process'] == 'asset')){
+
+		$intAssetID = Twist::Asset()->add($arrOut['file']['path'],1);
+		$arrAsset = Twist::Asset()->get($intAssetID);
+
+		//Add 2 additional parameters to the output
+		$arrOut['uri'] = $arrAsset['data'];
+		$arrOut['support'] = $arrAsset['support'];
+		$arrOut['type'] = $arrAsset['type']['slug'];
+		$arrOut['asset_id'] = $intAssetID;
+	}
+
+	echo json_encode($arrOut);

@@ -21,8 +21,31 @@
 	 *
 	 */
 
-	//Include the boot file
-	require_once sprintf('%s/core/boot.php',dirname(__FILE__));
+	namespace TwistPHP;
 
-	//Launch the framework ready for use
-	Twist::launch();
+	if(!class_exists('Instance')){
+		class Instance{
+
+			protected static $arrFrameworkObjects = array();
+
+			public static function isObject($strObjectIdentifier){
+				return (array_key_exists($strObjectIdentifier,self::$arrFrameworkObjects));
+			}
+
+			public static function storeObject($strObjectIdentifier,$objResource){
+				self::$arrFrameworkObjects[$strObjectIdentifier] = $objResource;
+			}
+
+			public static function retrieveObject($strObjectIdentifier){
+				return self::$arrFrameworkObjects[$strObjectIdentifier];
+			}
+
+			public static function removeObject($strObjectIdentifier){
+				self::$arrFrameworkObjects[$strObjectIdentifier] = null;
+			}
+
+			public static function listObjects(){
+				return array_keys(self::$arrFrameworkObjects);
+			}
+		}
+	}

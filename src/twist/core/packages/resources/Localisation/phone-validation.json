@@ -1,0 +1,177 @@
+[
+	{
+		"iso": "FR",
+		"phone": "/^0[1-6]{1}(([0-9]{2}){4})|((\s[0-9]{2}){4})|((-[0-9]{2}){4})$/",
+		"notes": "Mobile/Cell and Fixed/Landline"
+	},
+	{
+		"iso": "DE",
+		"phone": "/^\(\d{1,2}(\s\d{1,2}){1,2}\)\s(\d{1,2}(\s\d{1,2}){1,2})((-(\d{1,4})){0,1})$/",
+		"notes": "Mobile/Cell and Fixed/Landline"
+	},
+	{
+		"iso": "AU",
+		"phone": "/(^1300\d{6}$)|(^1800|1900|1902\d{6}$)|(^0[2|3|7|8]{1}[0-9]{8}$)|(^13\d{4}$)|(^04\d{2,3}\d{6}$)/",
+		"notes": "Mobile/Cell and Fixed/Landline"
+	},
+	{
+		"iso": "US",
+		"phone": "/^(1?)(-| ?)(\()?([0-9]{3})(\)|-| |\)-|\) )?([0-9]{3})(-| )?([0-9]{4}|[0-9]{4})$/",
+		"notes": "Mobile/Cell and Fixed/Landline"
+	},
+	{
+		"iso": "GB",
+		"phone": "/^\(?(?:(?:0(?:0|11)\)?[\s-]?\(?|\+)44\)?[\s-]?\(?(?:0\)?[\s-]?\(?)?|0)(?:\d{5}\)?[\s-]?\d{4,5}|\d{4}\)?[\s-]?(?:\d{5}|\d{3}[\s-]?\d{3})|\d{3}\)? [\s-]?\d{3}[\s-]?\d{3,4}|\d{2}\)?[\s-]?\d{4}[\s-]?\d{4}|8(?:00[\s-]?11[\s-]?11|45[\s-]?46[\s-]?4\d))(?:(?:[\s-]?(?:x|ext\.?\s?|\#)\d+)?)$/",
+		"notes": "Mobile/Cell and Fixed/Landline"
+	},
+	{
+		"iso": "SE",
+		"phone": "/^(([+]\d{2}[ ][1-9]\d{0,2}[ ])|([0]\d{1,3}[-]))((\d{2}([ ]\d{2}){2})|(\d{3}([ ]\d{3})*([ ]\d{2})+))$/",
+		"notes": "Mobile/Cell and Fixed/Landline"
+	},
+	{
+		"iso": "IT",
+		"phone": "/^([+]39)?((38[{8,9}|0])|(34[{7-9}|0])|(36[6|8|0])|(33[{3-9}|0])|(32[{8,9}]))([\d]{7})$/",
+		"notes": "Mobile/Cell and Fixed/Landline"
+	},
+	{
+		"iso": "ES",
+		"phone": "/^[0-9]{2,3}-? ?[0-9]{6,7}$/",
+		"notes": "Mobile/Cell and Fixed/Landline"
+	},
+	{
+		"iso": "IN",
+		"phone": "/^0{0,1}[1-9]{1}[0-9]{2}[\s]{0,1}[\-]{0,1}[\s]{0,1}[1-9]{1}[0-9]{6}$/",
+		"notes": "Mobile/Cell and Fixed/Landline"
+	},
+	{
+		"iso": "BR",
+		"phone": "/^([0-9]{2})?((\([0-9]{2})\)|[0-9]{2})?([0-9]{3}|[0-9]{4})(\-)?[0-9]{4}$/",
+		"notes": "Mobile/Cell and Fixed/Landline"
+	},
+	{
+		"iso": "BR",
+		"phone": "/^([0-9]{2})?((\([0-9]{2})\)|[0-9]{2})?([0-9]{3}|[0-9]{4})(\-)?[0-9]{4}$/",
+		"notes": "Mobile/Cell and Fixed/Landline"
+	},
+	{
+		"iso": "NL",
+		"phone": "/^([0]{1}[6]{1}[-\s]*[1-9]{1}[\s]*([0-9]{1}[\s]*){7})|([0]{1}[1-9]{1}[0-9]{1}[0-9]{1}[-\s]*[1-9]{1}[\s]*([0-9]{1}[\s]*){5})|([0]{1}[1-9]{1}[0-9]{1}[-\s]*[1-9]{1}[\s]*([0-9]{1}[\s]*){6})$/",
+		"notes": "Mobile/Cell and Fixed/Landline"
+	},
+	{
+		"iso": "NZ",
+		"phone": "/(^\([0]\d{2}\))(\d{6,7}$)/",
+		"notes": "Mobile/Cell and Fixed/Landline"
+	},
+	{
+		"iso": "RU",
+		"phone": "/((8|\+7)-?)?\(?\d{3,5}\)?-?\d{1}-?\d{1}-?\d{1}-?\d{1}-?\d{1}((-?\d{1})?-?\d{1})?/",
+		"notes": "Mobile/Cell and Fixed/Landline"
+	},
+	{
+		"iso": "HR",
+		"phone": "/^((\d{2,4})/)?((\d{6,8})|(\d{2})-(\d{2})-(\d{2,4})|(\d{3,4})-(\d{3,4}))$/",
+		"notes": "Mobile/Cell and Fixed/Landline"
+	},
+	{
+		"iso": "IL",
+		"phone": "/^[0][5][0]-\d{7}|[0][5][2]-\d{7}|[0][5][4]-\d{7}|[0][5][7]-\d{7}|[0][7][7]-\d{7}|[0][2]-\d{7}|[0][3]-\d{7}|[0][4]-\d{7}|[0][8]-\d{7}|[0][9]-\d{7}|[0][5][0]\d{7}|[0][5][2]\d{7}|[0][5][4]\d{7}|[0][5][7]\d{7}|[0][7][7]\d{7}|[0][2]\d{7}|[0][3]\d{7}|[0][4]\d{7}|[0][8]\d{7}|[0][9]\d{7}$/",
+		"notes": "Mobile/Cell and Fixed/Landline"
+	},
+	{
+		"iso": "ZA",
+		"phone": "/(\(0\d\d\)\s\d{3}[\s-]+\d{4})|(0\d\d[\s-]+\d{3}[\s-]+\d{4})|(0\d{9})|(\+\d\d\s?[\(\s]\d\d[\)\s]\s?\d{3}[\s-]?\d{4})/",
+		"notes": "Mobile/Cell and Fixed/Landline"
+	},
+	{
+		"iso": "UA",
+		"phone": "/^((8|\+38)-?)?(\(?044\)?)?-?\d{3}-?\d{2}-?\d{2}$/",
+		"notes": "Mobile/Cell and Fixed/Landline"
+	},
+	{
+		"iso": "BE",
+		"phone": "/^0[1-9]\d{7,8}$/",
+		"notes": "Mobile/Cell and Fixed/Landline"
+	},
+	{
+		"iso": "CL",
+		"phone": "/^((\(\d{3}\) ?)|(\d{3}-)|(\(\d{2}\) ?)|(\d{2}-)|(\(\d{1}\) ?)|(\d{1}-))?\d{3}-(\d{3}|\d{4})/",
+		"notes": "Mobile/Cell and Fixed/Landline"
+	},
+	{
+		"iso": "PL",
+		"phone": "/^((\+48\s*)?\d{2}\s*\d{3}(\s*|\-)\d{2}(\s*|\-)\d{2}|(\+48\s+)?\d{3}(\s*|\-)\d{3}(\s*|\-)\d{3})$/",
+		"notes": "Mobile/Cell and Fixed/Landline"
+	},
+	{
+		"iso": "CZ",
+		"phone": "/[^0-9]((\(?(\+420|00420)\)?( |-)?)?([0-9]{3} ?(([0-9]{3} ?[0-9]{3})|([0-9]{2} ?[0-9]{2} ?[0-9]{2})))|([0-9]{3}-(([0-9]{3}-[0-9]{3})|([0-9]{2}-[0-9]{2}-[0-9]{2}))))[^0-9|/]/",
+		"notes": "Mobile/Cell and Fixed/Landline"
+	},
+	{
+		"iso": "CH",
+		"phone": "/^(\+?)(\d{2,4})(\s?)(\-?)((\(0\))?)(\s?)(\d{2})(\s?)(\-?)(\d{3})(\s?)(\-?)(\d{2})(\s?)(\-?)(\d{2})/",
+		"notes": "Mobile/Cell and Fixed/Landline"
+	},
+	{
+		"iso": "SA",
+		"phone": "/^(\d{5}-\d{2}-\d{7})*$/",
+		"notes": "Mobile/Cell and Fixed/Landline"
+	},
+	{
+		"iso": "IE",
+		"phone": "/\+353\(0\)\s\d\s\d{3}\s\d{4}/",
+		"notes": "Mobile/Cell and Fixed/Landline"
+	},
+	{
+		"iso": "FI",
+		"phone": "/^((([\+][\s]{0,1})|([0]{2}[\s-]{0,1}))([358]{3})([\s-]{0,1})|([0]{1}))(([1-9]{1}[0-9]{0,1})([\s-]{0,1})([0-9]{2,4})([\s-]{0,1})([0-9]{2,4})([\s-]{0,1}))([0-9]{0,3}){1}$/",
+		"notes": "Mobile/Cell and Fixed/Landline"
+	},
+	{
+		"iso": "HU",
+		"phone": "/^(\+?36)?[ -]?(\d{1,2}|(\(\d{1,2}\)))/?([ -]?\d){6,7}$/",
+		"notes": "Mobile/Cell and Fixed/Landline"
+	},
+	{
+		"iso": "PT",
+		"phone": "/((\+351|00351|351)?)(2\d{1}|(9(3|6|2|1)))\d{7}/",
+		"notes": "Mobile/Cell and Fixed/Landline"
+	},
+	{
+		"iso": "PK",
+		"phone": "/^(\+)?([9]{1}[2]{1})?-? ?(\()?([0]{1})?[1-9]{2,4}(\))?-? ??(\()?[1-9]{4,7}(\))?$/",
+		"notes": "Mobile/Cell and Fixed/Landline"
+	},
+	{
+		"iso": "AR",
+		"phone": "/((\(?\d{2,5}\)?)?(\d|-| )?(15((\d|-| ){6,13})))/",
+		"notes": "Mobile/Cell Only"
+	},
+	{
+		"iso": "VE",
+		"phone": "/^0[0-9]{3}-[0-9]{7}$/",
+		"notes": "Mobile/Cell and Fixed/Landline - to be tested further"
+	},
+	{
+		"iso": "EG",
+		"phone": "/^01[0-2]\d{8}$/",
+		"notes": "Mobile/Cell and Fixed/Landline"
+	},
+	{
+		"iso": "VN",
+		"phone": "/^[0]{1}[19]{1}[0-9]{8,9}$/",
+		"notes": "Mobile/Cell and Fixed/Landline- to be tested further"
+	},
+	{
+		"iso": "KG",
+		"phone": "/^\(?\+([9]{2}?[6])\)?[-. ]?([0-9]{3})[-. ]?([0-9]{3})[-. ]?([0-9]{3})$/",
+		"notes": "Mobile/Cell and Fixed/Landline- to be tested further"
+	},
+	{
+		"iso": "DK",
+		"phone": "/((^\d{8})|(^\d{2}[ ]\d{2}[ ]\d{2}[ ]\d{2})|(^\d{4}[ ]\d{4}))$/",
+		"notes": "Mobile/Cell and Fixed/Landline- to be tested further"
+	}
+]

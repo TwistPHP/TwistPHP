@@ -1,0 +1,289 @@
+<?php
+	/**
+	 * This file is part of TwistPHP.
+	 *
+	 * TwistPHP is free software: you can redistribute it and/or modify
+	 * it under the terms of the GNU General Public License as published by
+	 * the Free Software Foundation, either version 3 of the License, or
+	 * (at your option) any later version.
+	 *
+	 * TwistPHP is distributed in the hope that it will be useful,
+	 * but WITHOUT ANY WARRANTY; without even the implied warranty of
+	 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	 * GNU General Public License for more details.
+	 *
+	 * You should have received a copy of the GNU General Public License
+	 * along with TwistPHP.  If not, see <http://www.gnu.org/licenses/>.
+	 *
+	 * @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
+	 * @license    https://www.gnu.org/licenses/gpl.html LGPL License
+	 * @link       http://twistphp.com/
+	 *
+	 */
+
+	namespace TwistPHP\Packages;
+	use TwistPHP\ModuleBase;
+
+	/**
+	 * Cache any data using a simple store and retrieve process, all cached data must be assigned a unique key.
+	 * Each cache can be given a life time in seconds, when the cache expires it will no longer be returned.
+	 * The default storage location used is the folder '/cache' in the document root of your site. A .htaccess file
+	 * is placed in the cache folder to ensure all cached data is private.
+	 */
+	class Cache extends ModuleBase{
+
+		protected $strFileExtension = 'ssc';
+		protected $strStorageLocation = '';
+		protected $strInstanceKey = '';
+
+		protected $arrRuntimeSessionCache = array();
+
+		public function __construct($strInstanceKey){
+
+			$this->strInstanceKey = $strInstanceKey;
+			$this->strStorageLocation = DIR_CACHE;
+
+			//Create the default cache folder
+			if(!file_exists($this->strStorageLocation)){
+				mkdir($this->strStorageLocation);
+			}
+
+			//Check that it has been protected
+			if(!file_exists($this->strStorageLocation.'.htaccess')){
+				file_put_contents($this->strStorageLocation.'.htaccess',"Deny from all");
+			}
+
+			//Create the instance cache folder
+			$this->strStorageLocation = sprintf('%s%s/',$this->strStorageLocation,$strInstanceKey);
+
+			if(!file_exists($this->strStorageLocation)){
+				mkdir($this->strStorageLocation);
+			}
+
+			//Probability it set between 1-10 set to 0
+			if(mt_rand(1, 10) <= $this->framework()->setting('CACHE_GB_PROBABILITY')){
+				$this->clean();
+			}
+		}
+
+		/**
+		 * Set a custom storage location for your cached data
+		 * @param $strStorageLocation
+		 */
+		public function setStorageLocation($strStorageLocation){
+			$this->strStorageLocation = $strStorageLocation;
+		}
+
+		/**
+		 * Set the cache file extension that will be used when sotring cache files
+		 * @param $strFileExtension
+		 */
+		public function setFileExtension($strFileExtension){
+			$this->strFileExtension = $strFileExtension;
+		}
+
+		/**
+		 * Store data in the cache, default life time is 1 hour (3600 seconds)
+		 * You will need to pass a Unique ID so that you can reference the data again later.
+		 * Setting the life time to '0' will mean that the cache will be stored as a PHP Runtime Session
+		 * and will be nolonger exists once the current runtime has ended.
+		 * @param $strUniqueID
+		 * @param $mxdData
+		 * @param int $intLifeTime
+		 * @return void
+		 */
+		public function store($mxdUniqueID,$mxdData,$intLifeTime = 3600){
+
+			//Generate the expiry time - Fix for php session cache (allow 30 second runtime before re-cache)
+			$intExpiryTime = ($intLifeTime == 0) ? (\Twist::DateTime()->time() + 30) : (\Twist::DateTime()->time() + $intLifeTime);
+			$strCacheName = sprintf("%s.%s",$mxdUniqueID,$this->strFileExtension);
+			$strDataString = json_encode($mxdData);
+
+			//Set all the cache info
+			$arrCacheInfo = array(
+				'unique_id' => $mxdUniqueID,
+				'create_date' => \Twist::DateTime()->date('Y-m-d H:i:s'),
+				'expiry_date' => \Twist::DateTime()->date('Y-m-d H:i:s',$intExpiryTime),
+				'life_time' => $intLifeTime,
+				'data_bytes' => strlen($strDataString),
+				'data_hash' => sha1($strDataString)
+			);
+
+			$strCacheData = sprintf("%s[@--SSC--@]%s",json_encode($arrCacheInfo),$strDataString);
+
+			if($intLifeTime == 0){
+				//If life of store is '0' the use the temp storage (Current PHP session only)
+				$this->arrRuntimeSessionCache[$strCacheName] = $strCacheData;
+			}else{
+				file_put_contents(sprintf("%s%s",$this->strStorageLocation,$strCacheName),$strCacheData);
+			}
+		}
+
+		/**
+		 * Retrieve the data form the cache at any point by passing in the Unique ID.
+		 * If the cache has expired you will be passed back a null response.
+		 * @param $mxdUniqueID
+		 * @return mixed|null
+		 */
+		public function retrieve($mxdUniqueID,$blFullData=false){
+
+			$mxdOut = null;
+			$arrData = $this->getCacheData($mxdUniqueID);
+
+			if(is_array($arrData) && count($arrData) == 2){
+
+				$arrVerificationData = $this->verifyData($arrData['data'],$arrData['info']['data_hash'],$arrData['info']['data_bytes']);
+
+				if($this->getRemainingLife($mxdUniqueID) > 0){
+
+					if($arrVerificationData['status'] == true){
+
+						$arrData['data'] = json_decode($arrData['data'],true);
+						$mxdOut = ($blFullData) ? $arrData : $arrData['data'];
+					}else{
+						$this->__logError('Cache Verification',$arrVerificationData['message']);
+					}
+				}
+			}
+
+			return $mxdOut;
+		}
+
+		/**
+		 * Remove a cache manually (before expiry) if you want to stop using it or no longer require its contents. Pass in the Unique ID to reference the cache you want to remove, alternatively passing in null will remove all cache files for this instance
+		 * @param null $mxdUniqueID
+		 * @return bool
+		 */
+		public function remove($mxdUniqueID = null){
+
+			$blOut = false;
+
+			//Build the cache files location
+			$strCacheName = sprintf("%s.%s",$mxdUniqueID,$this->strFileExtension);
+			$strCacheFile = sprintf("%s%s",$this->strStorageLocation,$strCacheName);
+
+			if(is_null($mxdUniqueID)){
+				\Twist::File()->recursiveRemove($this->strStorageLocation);
+				$this->arrRuntimeSessionCache = array();
+			}else{
+				if(array_key_exists($strCacheName,$this->arrRuntimeSessionCache)){
+					unset($this->arrRuntimeSessionCache[$strCacheName]);
+					$blOut = true;
+				}elseif(file_exists($strCacheFile)){
+					$blOut = unlink($strCacheFile);
+				}
+			}
+
+			return $blOut;
+		}
+
+		/**
+		 * Get the remaining life span of a cache, you will need to pass in the Unique ID
+		 * and you will get back its remaining time in seconds.
+		 * @param $mxdUniqueID
+		 * @return int
+		 */
+		public function getRemainingLife($mxdUniqueID){
+
+			$intOut = 0;
+			$arrData = $this->getCacheData($mxdUniqueID);
+
+			if(is_array($arrData) && count($arrData) == 2){
+				//Return the life remaining in seconds
+				$intOut = strtotime($arrData['info']['expiry_date']) - \Twist::DateTime()->time();
+			}
+
+			return $intOut;
+		}
+
+		/**
+		 * Clean up the system, this is garbage collection. Any expired caches will be removed form the system.
+		 * This will not remove any session data in the PHP session storage
+		 */
+		public function clean(){
+
+			$arrCacheFiles = scandir($this->strStorageLocation);
+
+			//Go through all the cache items to keep them clean
+			if(is_array($arrCacheFiles) && count($arrCacheFiles) > 0){
+				foreach($arrCacheFiles as $strCacheFile){
+
+					//Now check the file is not a directory and that it is the correct extension
+					if(!in_array($strCacheFile,array('..','.')) && strstr($strCacheFile,sprintf(".%s",$this->strFileExtension))){
+
+						//Get the remaining life of the file
+						$intRemainingLife = $this->getRemainingLife(substr($strCacheFile,0,-4));
+
+						//If the file has a life of less than 1 second or a negative value then remove
+						if($intRemainingLife < 1){
+							$this->remove(substr($strCacheFile,0,-4));
+						}
+					}
+				}
+			}
+		}
+
+		/**
+		 * Get the cache data and extract its parts
+		 * @param $mxdUniqueID
+		 * @return array|null
+		 */
+		protected function getCacheData($mxdUniqueID){
+
+			$arrOut = $strCacheData = null;
+
+			//Build the cache files location
+			$strCacheName = sprintf("%s.%s",$mxdUniqueID,$this->strFileExtension);
+			$strCacheFile = sprintf("%s%s",$this->strStorageLocation,$strCacheName);
+
+			if(array_key_exists($strCacheName,$this->arrRuntimeSessionCache)){
+				$strCacheData = $this->arrRuntimeSessionCache[$strCacheName];
+			}elseif(file_exists($strCacheFile)){
+				$strCacheData = file_get_contents($strCacheFile);
+			}
+
+			if(!is_null($strCacheData) && $strCacheData != ''){
+
+				$arrParts = explode('[@--SSC--@]',$strCacheData);
+
+				if(is_array($arrParts) && count($arrParts) == 2){
+
+					//Return all the data
+					$arrOut = array(
+						'info' => json_decode($arrParts[0],true),
+						'data' => $arrParts[1]
+					);
+				}
+			}
+
+			return $arrOut;
+		}
+
+		/**
+		 * Verify the retrieved cache data and make sure it has not been tampered with
+		 * @param $strDataJSON
+		 * @param $strHashKey
+		 * @param $intDataLength
+		 * @return array
+		 */
+		protected function verifyData($strDataJSON,$strHashKey,$intDataLength){
+
+			$arrOut = array('status' => false, 'message' => '');
+
+			//Check that the data length is correct
+			if(strlen($strDataJSON) == $intDataLength){
+
+				//Check that the data matches the data hash
+				if(sha1($strDataJSON) == $strHashKey){
+					$arrOut['status'] = true;
+				}else{
+					$arrOut['message'] = 'Error: Hash verification failed';
+				}
+			}else{
+				$arrOut['message'] = 'Error: The data length is incorrect';
+			}
+
+			return $arrOut;
+		}
+
+	}

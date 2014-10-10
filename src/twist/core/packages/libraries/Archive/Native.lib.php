@@ -21,8 +21,33 @@
 	 *
 	 */
 
-	//Include the boot file
-	require_once sprintf('%s/core/boot.php',dirname(__FILE__));
+	namespace TwistPHP\Packages;
 
-	//Launch the framework ready for use
-	Twist::launch();
+	class ArchiveNative{
+
+		protected $resZip = null;
+
+		public function create($strZipArchive){
+			$this->resZip = new ZipArchive();
+			$blStatus = $this->resZip->open($strZipArchive, ZipArchive::CREATE);
+			return $blStatus;
+		}
+
+		public function load($strZipArchive){
+			$this->resZip = new ZipArchive();
+			$blStatus = $this->resZip->open($strZipArchive);
+			return $blStatus;
+		}
+
+		public function addFile($strLocalFile,$strZipPath){
+			$this->resZip->addFile($strLocalFile,$strZipPath);
+		}
+
+		public function extract($strExtractPath){
+			$this->resZip->extractTo($strExtractPath);
+		}
+
+		public function close(){
+			$this->resZip->close();
+		}
+	}

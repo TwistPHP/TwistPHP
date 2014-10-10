@@ -21,8 +21,15 @@
 	 *
 	 */
 
-	//Include the boot file
-	require_once sprintf('%s/core/boot.php',dirname(__FILE__));
+	namespace TwistInterface;
 
-	//Launch the framework ready for use
-	Twist::launch();
+	class Setup extends BaseInterface{
+
+		public function load(){
+			
+			$this->baseTemplate('_base.tpl');
+			$this->baseURI(BASE_URI);
+			$this->controller('/%',array('Setup'));
+		}
+
+	}

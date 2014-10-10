@@ -1,0 +1,1 @@
+<a href="{data:logout_page}">Logout</a>

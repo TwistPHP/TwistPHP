@@ -21,8 +21,4 @@
 	 *
 	 */
 
-	//Include the boot file
-	require_once sprintf('%s/core/boot.php',dirname(__FILE__));
-
-	//Launch the framework ready for use
-	Twist::launch();
+    Twist::framework()->interfaces()->register('Setup');
