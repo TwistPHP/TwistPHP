@@ -776,10 +776,20 @@ class Route extends ModuleBase{
 
 								if(in_array("_extended",get_class_methods($objController))){
 
+									$arrAliases = $objController->_getAliases();
+									$arrReplacements = $objController->_getReplacements();
+
 									$arrControllerFunctions = array();
 									foreach(get_class_methods($objController) as $strFunctionName){
-										$arrControllerFunctions[strtolower($strFunctionName)] = $strFunctionName;
+										if(array_key_exists($strFunctionName,$arrReplacements)){
+											$arrControllerFunctions[strtolower($arrReplacements[$strFunctionName])] = $strFunctionName;
+										}else{
+											$arrControllerFunctions[strtolower($strFunctionName)] = $strFunctionName;
+										}
 									}
+
+									//Merge in all the registered aliases if any exist
+									$arrControllerFunctions = array_merge($arrControllerFunctions,$arrAliases);
 
 									$strRequestMethodFunction = sprintf('%s%s',strtolower($_SERVER['REQUEST_METHOD']),strtolower($strControllerFunction));
 									$strControllerFunction = strtolower($strControllerFunction);
