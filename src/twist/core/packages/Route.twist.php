@@ -720,6 +720,9 @@ class Route extends ModuleBase{
 					$_SERVER['TWIST_ROUTE_PARTS'] = $arrRoute['current']['parts'];
 					$_SERVER['TWIST_ROUTE_URI'] = $arrRoute['current']['uri'];
                     $_SERVER['TWIST_ROUTE_TITLE'] = \Twist::framework()->setting('SITE_NAME');
+                    $_SERVER['TWIST_ROUTE_DESCRIPTION'] = \Twist::framework()->setting('SITE_DESCRIPTION');
+                    $_SERVER['TWIST_ROUTE_AUTHOR'] = \Twist::framework()->setting('SITE_AUTHOR');
+                    $_SERVER['TWIST_ROUTE_KEYWORDS'] = \Twist::framework()->setting('SITE_KEYWORDS');
 
 					//Load the page from cache
 					$this->loadPageCache($arrRoute['cache_key']);
@@ -825,6 +828,10 @@ class Route extends ModuleBase{
 					}
 
 					$arrTags['title'] = $_SERVER['TWIST_ROUTE_TITLE'];
+					$arrTags['description'] = $_SERVER['TWIST_ROUTE_DESCRIPTION'];
+					$arrTags['author'] = $_SERVER['TWIST_ROUTE_AUTHOR'];
+					$arrTags['keywords'] = $_SERVER['TWIST_ROUTE_KEYWORDS'];
+
 					$this->framework() -> module() -> extend('Template','route',$arrTags);
 
 					if(!is_null($this->strBaseTemplate) && $arrRoute['base_template'] === true){
