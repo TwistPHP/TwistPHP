@@ -126,3 +126,11 @@ One line is all it takes:
 ```php
 require_once 'twist/framework.php';
 ```
+
+##Documentation
+
+Full documentation of the framework can be found on the [TwistPHP site](http://twistphp.com/docs).
+
+##Issues
+
+Please use the [GitHub's issue tracker](https://github.com/Shadow-Technologies/TwistPHP/issues) to report any problems.

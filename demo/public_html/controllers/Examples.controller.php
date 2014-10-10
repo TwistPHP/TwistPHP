@@ -2,13 +2,13 @@
 
     namespace Controller;
 
-    class Example{
+    class Examples {
 
-        public function listPage(){
+        public function listPage() {
             return 'List of Examples in Examples folder';
         }
 
-        public function aboutPage(){
+        public function aboutPage() {
             return 'About Examples Page';
         }
     }
