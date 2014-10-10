@@ -31,94 +31,113 @@
 
 		protected $blResponseJSON = false;
 		protected $blDisableUrlEncoding = false;
-		protected $strUserAgent = 'TwistPHP Curl';
+		protected $strDefaultUserAgent = 'TwistPHP Curl';
+		protected $strUserAgent = '';
 		protected $strUserPassword = null;
 		protected $arrRequestInfo = array();
 		protected $arrRequestError = array();
 		protected $intTimeout = 5;
 
-		function __construct(){}
+		function __construct(){
+			$this->setUserAgent();
+		}
 
 		/**
 		 * Automatically return a JSON response as an array
-		 * @param bool $blStatus
+		 *
+		 * @param $blEnable Determines if functionality should be used
 		 */
-		public function decodeResponseJSON($blStatus = false){
-			$this->blResponseJSON = $blStatus;
+		public function decodeResponseJSON($blEnable = false){
+			$this->blResponseJSON = $blEnable;
 		}
 
 		/**
 		 * Stop the system from URL encoding all parameters before they are sent
-		 * @param bool $blStatus
+		 *
+		 * @param $blEnable Determines if functionality should be used
 		 */
-		public function disableUrlEncoding($blStatus = true){
-			$this->blDisableUrlEncoding = $blStatus;
+		public function disableUrlEncoding($blEnable = true){
+			$this->blDisableUrlEncoding = $blEnable;
 		}
 
 		/**
 		 * Set the max timeout for the requests to be made
-		 * @param string $strUserAgent
+		 *
+		 * @param $intTimeout Time in seconds
 		 */
 		public function setTimeout($intTimeout = 5){
 			$this->intTimeout = $intTimeout;
 		}
 
 		/**
-		 * Set a custom user agent header
-		 * @param string $strUserAgent
+		 * Set a custom user agent header to be used when making the request, pass in null to use default user agent
+		 *
+		 * @param $strUserAgent Custom User Agent Header
 		 */
-		public function setUserAgent($strUserAgent = ''){
-			$this->strUserAgent = $strUserAgent;
+		public function setUserAgent($strUserAgent = null){
+			$this->strUserAgent = (is_null($strUserAgent)) ? $this->strDefaultUserAgent : $strUserAgent;
 		}
 
 		/**
 		 * Set a username and password, this will log you into any request that may have HTTP User Restriction in place
-		 * @param string $strUserAgent
+		 *
+		 * @param $strUsername Username required for the request
+		 * @param $strPassword Password required for the request
 		 */
 		public function setUserPass($strUsername,$strPassword){
 			$this->strUserPassword = sprintf("%s:%s",$strUsername,$strPassword);
 		}
 
 		/**
+		 * Make a GET request to the provided URL, set the User Agent header when required
+		 *
+		 * @param $strURL Full URL for the request
+		 * @param $arrRequestData Array of get parameters
+		 * @param $arrHeaders Array of additional headers to be sent
+		 * @return mixed Returns the results of the request, will be an array if 'decodeResponseJSON' is enabled
+		 */
+		public function get($strURL,$arrRequestData,$arrHeaders = array()){
+			return $this->makeRequest($strURL,$arrRequestData,'get',$arrHeaders);
+		}
+
+		/**
 		 * Make a POST request to the provided URL, set the User Agent header when required
-		 * @param $strURL
-		 * @param $arrData
-		 * @param null $strUserAgent
-		 * @return array|mixed
+		 *
+		 * @related get
+		 *
+		 * @param $strURL Full URL for the request
+		 * @param $arrData Array of post parameters
+		 * @param $arrHeaders Array of additional headers to be sent
+		 * @return mixed Returns the results of the request, will be an array if 'decodeResponseJSON' is enabled
 		 */
 		public function post($strURL,$arrData,$arrHeaders = array()){
 			return $this->makeRequest($strURL,$arrData,'post',$arrHeaders);
 		}
 
 		/**
-		 * Make a GET request to the provided URL, set the User Agent header when required
-		 * @param $strURL
-		 * @param $mxdRequestData
-		 * @param null $strUserAgent
-		 * @return array|mixed
-		 */
-		public function get($strURL,$mxdRequestData,$arrHeaders = array()){
-			return $this->makeRequest($strURL,$mxdRequestData,'get',$arrHeaders);
-		}
-
-		/**
 		 * Make a PUT request to the provided URL, set the User Agent header when required, put request can contain get parameters and file data should be passed in
-		 * @param $strURL
-		 * @param $strFileData
-		 * @param $mxdRequestData
-		 * @param null $strUserAgent
-		 * @return array|mixed
+		 *
+		 * @related get
+		 *
+		 * @param $strURL Full URL for the request
+		 * @param $strRawData Raw data to be posted
+		 * @param $mxdRequestData Array of get parameters
+		 * @param $arrHeaders Array of additional headers to be sent
+		 * @return mixed Returns the results of the request, will be an array if 'decodeResponseJSON' is enabled
 		 */
-		public function put($strURL,$strFileData,$mxdRequestData = array(),$arrHeaders = array()){
-			return $this->makeRequest($strURL,$mxdRequestData,'put',$arrHeaders,$strFileData);
+		public function put($strURL,$strRawData,$mxdRequestData = array(),$arrHeaders = array()){
+			return $this->makeRequest($strURL,$mxdRequestData,'put',$arrHeaders,$strRawData);
 		}
 
 		/**
 		 * Make a DELETE request to the provided URL, set the User Agent header when required
-		 * @param $strURL
-		 * @param $mxdRequestData
-		 * @param null $strUserAgent
-		 * @return array|mixed
+		 *
+		 * @related get
+		 *
+		 * @param $strURL Full URL for the request
+		 * @param $mxdRequestData Array of get parameters
+		 * @param $arrHeaders Array of additional headers to be sent
+		 * @return mixed Returns the results of the request, will be an array if 'decodeResponseJSON' is enabled
 		 */
 		public function delete($strURL,$mxdRequestData,$arrHeaders = array()){
 			return $this->makeRequest($strURL,$mxdRequestData,'delete',$arrHeaders);
@@ -126,13 +145,15 @@
 
 		/**
 		 * The function that makes the CURL requests, all data is passed in and the response is returned
-		 * @param $strURL
-		 * @param $mxdRequestData
-		 * @param string $strType
-		 * @param null $strUserAgent
-		 * @return array|mixed
+		 *
+		 * @param $strURL Full URL for the request
+		 * @param $mxdRequestData Array of post/get parameters
+		 * @param $strType HTTP protocol of the request
+		 * @param $arrHeaders Array of additional headers to be sent
+		 * @param $strRawData Raw data to be posted
+		 * @return mixed Returns the results of the request, will be an array if 'decodeResponseJSON' is enabled
 		 */
-		protected function makeRequest($strURL,$mxdRequestData,$strType = 'get',$arrHeaders=array(),$strFileData = ''){
+		protected function makeRequest($strURL,$mxdRequestData,$strType = 'get',$arrHeaders=array(),$strRawData = ''){
 
 			$strData = "";
 
@@ -172,13 +193,13 @@
 					//Max 256KB of RAM can be assigned before creating a file
 					$resRequestBody = fopen('php://temp/maxmemory:256000', 'w');
 					(!is_resource($resRequestBody)) ? new \Exception('Unable to assign memory to create request body!') : null;
-					fwrite($resRequestBody, $strFileData);
+					fwrite($resRequestBody, $strRawData);
 					fseek($resRequestBody, 0);
 
 					//Send the PUT data in the body of the request
 					curl_setopt($resCurl, CURLOPT_PUT, true);
 					curl_setopt($resCurl, CURLOPT_INFILE, $resRequestBody);
-					curl_setopt($resCurl, CURLOPT_INFILESIZE, strlen($strFileData));
+					curl_setopt($resCurl, CURLOPT_INFILESIZE, strlen($strRawData));
 					break;
 
 				case 'delete':
@@ -236,7 +257,8 @@
 
 		/**
 		 * Get a detailed array of data about the last request made through the API
-		 * @return array
+		 *
+		 * @return array Returns request information array
 		 */
 		public function getRequestInformation(){
 			return $this->arrRequestInfo;
@@ -244,7 +266,8 @@
 
 		/**
 		 * Get an array of error data relating to the last request, if no error occurred the array will be empty
-		 * @return array
+		 *
+		 * @return array Returns request error array
 		 */
 		public function getRequestError(){
 			return $this->arrRequestError;

@@ -1,10 +1,10 @@
 {
 	"RELEASE_CHANNEL":{
 		"title":"Release Chanel",
-		"description":"Select the release channel that is relevant to you",
+		"description":"Select the release channel that is relevant to you. Development releases should not be used on production servers.",
 		"default":"Stable",
 		"type":"options",
-		"options":"Stable,Nightly",
+		"options":"Stable,Development",
 		"null":0
 	},
 	"SITE_NAME":{
@@ -15,6 +15,30 @@
 		"options":"",
 		"null":0
 	},
+    "SITE_DESCRIPTION":{
+        "title":"Site Description",
+        "description":"Enter the default meta description for your website",
+        "default":"",
+        "type":"string",
+        "options":"",
+        "null":0
+    },
+    "SITE_KEYWORDS":{
+        "title":"Site Keywords",
+        "description":"Enter the default set of keywords for your website",
+        "default":"",
+        "type":"string",
+        "options":"",
+        "null":0
+    },
+    "SITE_AUTHOR":{
+        "title":"Site Author",
+        "description":"Enter the default author of your website",
+        "default":"",
+        "type":"string",
+        "options":"",
+        "null":0
+    },
 	"SITE_HOST":{
 		"title":"Site Host",
 		"description":"Enter the HTTP Host name of the website for instance http://www.example.com/index.php would be 'example.com'",

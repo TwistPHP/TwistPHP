@@ -50,11 +50,12 @@
 
 		/**
 		 * Make the main connection to the database, automatically called if a custom connection is not required
-		 * @param string $strHost
-		 * @param string $strUsername
-		 * @param string $strPassword
-		 * @param string $strDatabaseName
-		 * @param string $strProtocol
+		 *
+		 * @param $strHost
+		 * @param $strUsername
+		 * @param $strPassword
+		 * @param $strDatabaseName
+		 * @param $strProtocol
 		 * @throws \Exception
 		 */
 		public function connect($strHost = null,$strUsername = null,$strPassword = null,$strDatabaseName = null,$strProtocol = null){
@@ -118,7 +119,8 @@
 
 		/**
 		 * Check for default settings for the database
-		 * @param bool $blThrowException
+		 *
+		 * @param $blThrowException
 		 * @return bool
 		 * @throws \Exception
 		 */
@@ -144,8 +146,8 @@
 		}
 
 		/**
-		 * Run the query on the database, optionally pass the query in as a raw sprintf string "SELECT * FROM `table` WHERE `id` = %d" followed
-		 * by all the parameters to fill the string. All parameters are escaped before being entered into the sprintf.
+		 * Run the query on the database, optionally pass the query in as a raw sprintf string "SELECT * FROM `table` WHERE `id` = %d" followed by all the parameters to fill the string. All parameters are escaped before being entered into the sprintf.
+		 *
 		 * @param $strQuery
 		 * @return null
 		 */
@@ -170,7 +172,8 @@
 		}
 
 		/**
-		 * "Private" Run the standard query with no debug enabled
+		 * Run the standard query with no debug enabled
+		 *
 		 * @param $strQuery
 		 * @return null
 		 */
@@ -180,7 +183,8 @@
 		}
 
 		/**
-		 * "Private" Debug and log the query results for use in the debug interface
+		 * Debug and log the query results for use in the debug interface
+		 *
 		 * @param $strQuery
 		 * @return null
 		 */
@@ -204,6 +208,7 @@
 
 		/**
 		 * Return the last run query by that database class
+		 *
 		 * @return string
 		 */
 		public function lastQuery(){
@@ -212,6 +217,7 @@
 
 		/**
 		 * Create a new database record (row) an empty object will be returned from this function, you can then populate the record and commit your changes
+		 *
 		 * @param $strTable
 		 * @return null|DatabaseRecord
 		 */
@@ -234,6 +240,7 @@
 		/**
 		 * Get a database record as a object with the ability to updated, and delete. The where clause is generated from the second parameter, must be an array.
 		 * For example to get the user with the 'id' of 1 pass in array('id' => 1).
+		 *
 		 * @param $strTable
 		 * @param $mxdValue
 		 * @param string $strField
@@ -261,6 +268,7 @@
 		/**
 		 * Get a clone of a database record as an object to be stored as a new record (auto-increment fields will be nulled). The where clause is generated from the second parameter, must be an array.
 		 * For example to get the user with the 'id' of 1 pass in array('id' => 1).
+		 *
 		 * @param $strTable
 		 * @param $mxdValue
 		 * @param string $strField
@@ -294,6 +302,7 @@
 		/**
 		 * Get the record (row) back as an array. The where clause is generated from the second parameter, must be an array.
 		 * For example to get the user with the 'id' of 1 pass in array('id' => 1).
+		 *
 		 * @param $strTable
 		 * @param $mxdValue
 		 * @param string $strField
@@ -319,6 +328,7 @@
 
 		/**
 		 * Get all the records from a table, this should only be used when absolutely required as is slower and you many not need all the data that is returned
+		 *
 		 * @param $strTable
 		 * @param $strOrderBy
 		 * @return array
@@ -342,6 +352,7 @@
 
 		/**
 		 * Delete a record form the database
+		 *
 		 * @return boolean
 		 */
 		public function delete($strTable,$mxdValue,$strField = 'id',$intLimit = 1){
@@ -366,11 +377,13 @@
 		/**
 		 * Get a count of records (rows) as an array. The where clause is generated from the second parameter, must be an array. For example to get the user with the 'id' of 1 pass in array('id' => 1) you could look for the user by email with a wild card array('email' => 'dan@%')
 		 * The where array accepts multiple parameters at a time.
+		 *
+		 * @throws \Exception
+		 *
 		 * @param $strTable
 		 * @param $mxdValue
 		 * @param $strField
 		 * @return array
-		 * @throws
 		 */
 		public function count($strTable,$mxdValue = null,$strField = null){
 
@@ -408,14 +421,16 @@
 		/**
 		 * Get a set of records (rows) as an array. The where clause is generated from the second parameter, must be an array. For example to get the user with the 'id' of 1 pass in array('id' => 1) you could look for the user by email with a wild card array('email' => 'dan@%')
 		 * The where array accepts multiple parameters at a time.
+		 *
+		 * @throws \Exception
+		 *
 		 * @param $strTable
 		 * @param $mxdValue
 		 * @param $strField
-		 * @param null $strOrderBy
-		 * @param null $intLimit
-		 * @param null $intOffset
+		 * @param $strOrderBy
+		 * @param $intLimit
+		 * @param $intOffset
 		 * @return array
-		 * @throws
 		 */
 		public function find($strTable,$mxdValue,$strField,$strOrderBy = null,$intLimit = null,$intOffset = null){
 
@@ -455,9 +470,10 @@
 
 		/**
 		 * Get a database table as an object, if that tables has not been created then you can create the table from this object
-		 * @param $strTable
-		 * @param null $strDatabase
-		 * @return null|DatabaseTable
+		 *
+		 * @param $strTable Name of that table to lookup
+		 * @param $strDatabase Name of the tables database if not the current database
+		 * @return object Returns and object of the database table
 		 */
 		public function table($strTable,$strDatabase = null){
 
@@ -471,10 +487,11 @@
 		}
 
 		/**
-		 * Get the structure of a table by table name
-		 * @param $strTable
-		 * @param null $strDatabase
-		 * @return array|null
+		 * Get the structure information of a table by table name
+		 *
+		 * @param $strTable Name of that table to lookup
+		 * @param $strDatabase Name of the tables database if not the current database
+		 * @return array Single dimensional array of structure info
 		 */
 		protected function getStructure($strTable,$strDatabase = null){
 
@@ -528,9 +545,11 @@
 		}
 
 		/**
-		 * Enable/Disable auto commit
-		 * @param $blStatus
-		 * @return boolean
+		 * Change the status of autocommit on the current database connection
+		 *
+		 * @related commit
+		 * @param $blStatus Required status of autocommit
+		 * @return boolean Returns the status of the call
 		 */
 		public function autoCommit($blStatus = true){
 			return $this->resLibrary->autocommit($blStatus);
@@ -538,7 +557,9 @@
 
 		/**
 		 * Commit a query that has not be committed
-		 * @return boolean
+		 *
+		 * @related commit
+		 * @return boolean Returns the status of the commit
 		 */
 		public function commit(){
 			return $this->resLibrary->commit();
@@ -546,7 +567,9 @@
 
 		/**
 		 * Roll back when using the commit rollback methods
-		 * @return boolean
+		 *
+		 * @related commit
+		 * @return boolean Returns the status of the rollback
 		 */
 		public function rollback(){
 			return $this->resLibrary->rollback();
@@ -554,7 +577,9 @@
 
 		/**
 		 * Check if the database session has uncommitted queries
-		 * @return boolean
+		 *
+		 * @related commit
+		 * @return boolean Returns the uncommitted queries status
 		 */
 		public function uncommittedQueries(){
 			return $this->resLibrary->blActiveTransaction;
@@ -562,7 +587,9 @@
 
 		/**
 		 * Check if autocommit is turned on in the current database setting
-		 * @return boolean
+		 *
+		 * @related commit
+		 * @return boolean Returns the autocommit status
 		 */
 		public function autocommitStatus(){
 			return $this->resLibrary->blAutoCommit;
@@ -570,7 +597,9 @@
 
 		/**
 		 * Get the insert ID from the result of the last query that has been run
-		 * @return mixed
+		 *
+		 * @related getArray
+		 * @return integer Returns ID of newly inserted row
 		 */
 		public function getInsertID(){
 			$this->connected();
@@ -579,7 +608,9 @@
 
 		/**
 		 * Get the count of affected rows from the last run query
-		 * @return mixed
+		 *
+		 * @related getArray
+		 * @return mixed Returns a count of effected rows
 		 */
 		public function getAffectedRows(){
 			$this->connected();
@@ -588,7 +619,9 @@
 
 		/**
 		 * Get the count of found rows in the current result set of the last run query
-		 * @return int
+		 *
+		 * @related getArray
+		 * @return int Returns a count of query results
 		 */
 		public function getNumberRows(){
 			$this->connected();
@@ -596,8 +629,9 @@
 		}
 
 		/*
-		 * Get a single row (result) from the last run query
-		 * @return array
+		 * Get a single row (result) from the last run query as a single dimensional array
+		 *
+		 * @return array Returns as single dimensional array
 		 */
 		public function getArray($blFullArray = false){
 			$this->connected();
@@ -616,8 +650,10 @@
 		}
 
 		/**
-		 * Get all rows (results) from the last run query
-		 * @return array
+		 * Get all rows (results) from the last run query as a multi-dimensional array of data
+		 *
+		 * @related getArray
+		 * @return array Returns a multi-dimensional array
 		 */
 		public function getFullArray(){
 			return $this->getArray(true);
@@ -625,8 +661,9 @@
 
 		/**
 		 * Escape/Pre-pair and sanitise a string ready to be used in a database query
-		 * @param $strRawString
-		 * @return int|string
+		 *
+		 * @param $strRawString Unsanitized string to be escaped
+		 * @return string Sanatized/escaped string
 		 */
 		public function escapeString($strRawString){
 			$this->connected();
@@ -637,7 +674,8 @@
 
 		/**
 		 * Check to see if a connection is present to a database server
-		 * @return bool
+		 *
+		 * @return bool Returns status of connection
 		 * @throws \Exception
 		 */
 		protected function connected(){
@@ -661,52 +699,54 @@
 
 		/**
 		 * Check to see if a connection is present and return true/false (does not attempt to make a connection if not already)
-		 * @return bool
+		 *
+		 * @return bool Returns status of connection
 		 */
 		public function isConnected(){
 			return (is_object($this->resLibrary) && $this->resLibrary->connected()) ? true : false;
 		}
 
 		/**
-		 * Get the version for the mySQL version
-		 * @return mixed
+		 * Get the version for the connected mySQL server version
+		 *
+		 * @return array Returns array of server information
 		 */
 		public function getServerInfo(){
 			return $this->resLibrary->serverInfo();
 		}
 
 		/**
-		 * Alias function of getInsertID
 		 * @alias getInsertID
-		 * @return mixed
 		 */
 		public function getInsID(){ return $this->getInsertID(); }
 
 		/**
-		 * Alias function of getAffectedRows
+		 * @alias getInsertID
+		 */
+		public function insID(){ return $this->getInsertID(); }
+
+		/**
 		 * @alias getAffectedRows
-		 * @return mixed
 		 */
 		public function getAffRows(){ return $this->getAffectedRows(); }
 
 		/**
-		 * Alias function of getNumberRows
+		 * @alias getAffectedRows
+		 */
+		public function affRows(){ return $this->getAffectedRows(); }
+
+		/**
 		 * @alias getNumberRows
-		 * @return mixed
 		 */
 		public function getNumRows(){ return $this->getNumberRows(); }
 
 		/**
-		 * Alias function of getNumberRows
 		 * @alias getNumberRows
-		 * @return mixed
 		 */
 		public function numRows(){ return $this->getNumberRows(); }
 
 		/**
-		 * Alias function of escapeString
 		 * @alias escapeString
-		 * @return mixed
 		 */
 		public function escape($strRawString){ return $this->escapeString($strRawString); }
 	}

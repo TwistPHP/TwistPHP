@@ -719,7 +719,10 @@ class Route extends ModuleBase{
 					$_SERVER['TWIST_ROUTE_DYNAMIC'] = $arrRoute['current']['dynamic'];
 					$_SERVER['TWIST_ROUTE_PARTS'] = $arrRoute['current']['parts'];
 					$_SERVER['TWIST_ROUTE_URI'] = $arrRoute['current']['uri'];
-					//$_SERVER['TWIST_ROUTE_TITLE'] = $arrRoute['current']['title'];
+                    $_SERVER['TWIST_ROUTE_TITLE'] = \Twist::framework()->setting('SITE_NAME');
+                    $_SERVER['TWIST_ROUTE_DESCRIPTION'] = \Twist::framework()->setting('SITE_DESCRIPTION');
+                    $_SERVER['TWIST_ROUTE_AUTHOR'] = \Twist::framework()->setting('SITE_AUTHOR');
+                    $_SERVER['TWIST_ROUTE_KEYWORDS'] = \Twist::framework()->setting('SITE_KEYWORDS');
 
 					//Load the page from cache
 					$this->loadPageCache($arrRoute['cache_key']);
@@ -773,10 +776,20 @@ class Route extends ModuleBase{
 
 								if(in_array("_extended",get_class_methods($objController))){
 
+									$arrAliases = $objController->_getAliases();
+									$arrReplacements = $objController->_getReplacements();
+
 									$arrControllerFunctions = array();
 									foreach(get_class_methods($objController) as $strFunctionName){
-										$arrControllerFunctions[strtolower($strFunctionName)] = $strFunctionName;
+										if(array_key_exists($strFunctionName,$arrReplacements)){
+											$arrControllerFunctions[strtolower($arrReplacements[$strFunctionName])] = $strFunctionName;
+										}else{
+											$arrControllerFunctions[strtolower($strFunctionName)] = $strFunctionName;
+										}
 									}
+
+									//Merge in all the registered aliases if any exist
+									$arrControllerFunctions = array_merge($arrControllerFunctions,$arrAliases);
 
 									$strRequestMethodFunction = sprintf('%s%s',strtolower($_SERVER['REQUEST_METHOD']),strtolower($strControllerFunction));
 									$strControllerFunction = strtolower($strControllerFunction);
@@ -824,7 +837,11 @@ class Route extends ModuleBase{
 							break;
 					}
 
-					//$arrTags['title'] = $_SERVER['TWIST_ROUTE_TITLE'];
+					$arrTags['title'] = $_SERVER['TWIST_ROUTE_TITLE'];
+					$arrTags['description'] = $_SERVER['TWIST_ROUTE_DESCRIPTION'];
+					$arrTags['author'] = $_SERVER['TWIST_ROUTE_AUTHOR'];
+					$arrTags['keywords'] = $_SERVER['TWIST_ROUTE_KEYWORDS'];
+
 					$this->framework() -> module() -> extend('Template','route',$arrTags);
 
 					if(!is_null($this->strBaseTemplate) && $arrRoute['base_template'] === true){
