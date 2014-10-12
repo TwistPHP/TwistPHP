@@ -378,12 +378,11 @@
 		 * Get a count of records (rows) as an array. The where clause is generated from the second parameter, must be an array. For example to get the user with the 'id' of 1 pass in array('id' => 1) you could look for the user by email with a wild card array('email' => 'dan@%')
 		 * The where array accepts multiple parameters at a time.
 		 *
-		 * @throws \Exception
-		 *
 		 * @param $strTable
 		 * @param $mxdValue
 		 * @param $strField
 		 * @return array
+		 * @throws \Exception
 		 */
 		public function count($strTable,$mxdValue = null,$strField = null){
 
@@ -422,8 +421,6 @@
 		 * Get a set of records (rows) as an array. The where clause is generated from the second parameter, must be an array. For example to get the user with the 'id' of 1 pass in array('id' => 1) you could look for the user by email with a wild card array('email' => 'dan@%')
 		 * The where array accepts multiple parameters at a time.
 		 *
-		 * @throws \Exception
-		 *
 		 * @param $strTable
 		 * @param $mxdValue
 		 * @param $strField
@@ -431,6 +428,7 @@
 		 * @param $intLimit
 		 * @param $intOffset
 		 * @return array
+		 * @throws \Exception
 		 */
 		public function find($strTable,$mxdValue,$strField,$strOrderBy = null,$intLimit = null,$intOffset = null){
 
@@ -489,6 +487,7 @@
 		/**
 		 * Get the structure information of a table by table name
 		 *
+         * @related table
 		 * @param $strTable Name of that table to lookup
 		 * @param $strDatabase Name of the tables database if not the current database
 		 * @return array Single dimensional array of structure info

@@ -26,8 +26,7 @@
 
 	/**
 	 * Localisation of websites is becoming a necessity, the ability to list counties, languages and there relationship is essential.
-	 * Get a full list of countries and their ISO codes. Get the native spoken language of a country by its ISO code. Get the name of
-	 * a language by its ISO language code.
+	 * Get a full list of countries and their ISO codes. Get the native spoken language of a country by its ISO code. Get the name of a language by its ISO language code.
 	 */
 	class Localisation extends ModuleBase{
 
@@ -36,7 +35,10 @@
 		protected $arrCountries = array();
 		protected $arrTimezones = array();
 
-		public function __construct(){
+        /**
+         * Load in the language and country information
+         */
+        public function __construct(){
 
 			$jsonLanguage = file_get_contents(sprintf('%score/packages/resources/Localisation/languages.json',DIR_FRAMEWORK));
 			$arrLanguages = json_decode($jsonLanguage,true);
@@ -64,9 +66,10 @@
 		}
 
 		/**
-		 * Get language by 2 or 5 car language code
-		 * @param $strLanguageISO
-		 * @return array
+		 * Get a single-dimensional array of language information related to the provided 2 Character ISO language code.
+         *
+		 * @param $strLanguageISO 2 Character ISO code
+		 * @return array Returns a single-dimensional language array
 		 */
 		public function getLanguage($strLanguageISO){
 			$strLanguageISO = strtolower($strLanguageISO);
@@ -74,18 +77,21 @@
 		}
 
 		/**
-		 * Get all languages, optionally include the localised version of languages
-		 * @param bool $blIncludeLocalisation
-		 * @return array
+		 * Get multi-dimensional array of all languages. Optionally include the localised/native language name.
+         *
+         * @related getLanguage
+		 * @param $blIncludeLocalisation Enable localised/native language name
+		 * @return array Returns a multi-dimensional array of languages
 		 */
 		public function getLanguages($blIncludeLocalisation = false){
 			return ($blIncludeLocalisation) ? $this->arrLanguagesLocalised : $this->arrLanguages;
 		}
 
 		/**
-		 * Get country by its 2 char country code
-		 * @param $strCountryISO
-		 * @return array
+		 * Get a single-dimensional array country information by its 2 Character ISO country code.
+         *
+		 * @param $strCountryISO 2 Character ISO code
+		 * @return array Returns an single-dimensional country array
 		 */
 		public function getCountry($strCountryISO){
 			$strCountryISO = strtolower($strCountryISO);
@@ -93,17 +99,21 @@
 		}
 
 		/**
-		 * Get an array of all countries
-		 * @return array
+		 * Get an array of all country names, ISO codes and Official spoken language.
+         *
+         * @related getCountry
+		 * @return array Returns a multi-dimensional array of countries
 		 */
 		public function getCountries(){
 			return $this->arrCountries;
 		}
 
 		/**
-		 * Get the offical language of any given country by 2 char country code
-		 * @param $strCountryISO
-		 * @return array
+		 * Get the official language of any given country by 2 character ISO country code.
+         *
+         * @related getLanguage
+		 * @param $strCountryISO 2 Character ISO code
+		 * @return array Returns an single-dimensional language array
 		 */
 		public function getOfficialLanguage($strCountryISO){
 			$arrCountry = $this->getCountry($strCountryISO);
