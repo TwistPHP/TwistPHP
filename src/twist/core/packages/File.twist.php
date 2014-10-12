@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with TwistPHP.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
- * @license    https://www.gnu.org/licenses/gpl.html LGPL License
- * @link       http://twistphp.com/
+ * @author    Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
+ * @license   https://www.gnu.org/licenses/gpl.html LGPL License
+ * @link      http://twistphp.com/
  *
  */
 
@@ -33,17 +33,17 @@ class File extends ModuleBase{
 	protected $resTemplate = null;
 	protected $strAssetDirectory = null;
 
-    /**
-     * Load up an instance of the template class for when it is required
-     */
-    public function __construct(){
+	/**
+	 * Load up an instance of the template class for when it is required
+	 */
+	public function __construct(){
 		$this->resTemplate = \Twist::Template('pkgFile');
 		$this->resTemplate->setTemplatesDirectory( sprintf('%s/templates/File/',DIR_FRAMEWORK_PACKAGES));
 	}
 
 	/**
 	 * Convert bytes to a human readable size for example 1536 would be converted to 1.5KB
-     *
+	 *
 	 * @param $intBytes Size in bytes
 	 * @return mixed Returns a human readable data size
 	 */
@@ -88,7 +88,7 @@ class File extends ModuleBase{
 
 	/**
 	 * Sanitize a file name to make it more user friendly. Also helps to prevent errors and make a much cleaner file system.
-     *
+	 *
 	 * @param $strFilename Name to be sanitized
 	 * @param $blIsFilename Set to true will allow '~' and '.' in file names
 	 * @return string Returns the sanitized file name
@@ -110,7 +110,7 @@ class File extends ModuleBase{
 
 	/**
 	 * Get the file extension of any file, provide the file or its full path.
-     *
+	 *
 	 * @param $strFilePath File name/path
 	 * @return string Returns the file extension
 	 */
@@ -128,7 +128,7 @@ class File extends ModuleBase{
 
 	/**
 	 * Get the filename, trim off any path information that is not required.
-     *
+	 *
 	 * @param $strFile Full path to file including file name
 	 * @return string Returns the file name only
 	 */
@@ -144,7 +144,7 @@ class File extends ModuleBase{
 
 	/**
 	 * Find a file in a directory when there is multiple of the same file with many different version numbers.
-     *
+	 *
 	 * @param $strDirectory Path of directory to search
 	 * @param $strFilePrefix File prefix to help filter correct files
 	 * @param $strVersion Version of file to find
@@ -202,7 +202,7 @@ class File extends ModuleBase{
 	/**
 	 * Serve any local file to the user to be downloaded. Mime type, Max Cache Time and Restricted Download Speed in KB are all optional
 	 *
-     * @param $strFile Full path of file to be served
+	 * @param $strFile Full path of file to be served
 	 * @param $strServeAsName Serve the file as the name provided
 	 * @param $strMimeType Mime type to serve file as
 	 * @param $intMaxCacheTime Set to the max cache time in seconds
@@ -312,7 +312,7 @@ class File extends ModuleBase{
 	 * Handle uploaded files, call the function and pass in the html file input name. The file will then be uploaded to the system ready to be processed.
 	 * Optionally pass in a UID so that you can reference the temp file to further process the file, can be useful if uploading a file before the user has submitted the form.
 	 *
-     * @param $strFileKey Key for the file in the $_FILES array
+	 * @param $strFileKey Key for the file in the $_FILES array
 	 * @param $strUID Unique ID used to reference the file after upload
 	 * @return array Returns an array of information for the uploaded file
 	 */
@@ -385,13 +385,13 @@ class File extends ModuleBase{
 		return $arrOut;
 	}
 
-    /**
-     * Upload a file the easy way with the new AJAX PUT upload function by TwistPHP. Use the template tags and provided JS files to achieve simple file uploads.
-     *
-     * @related upload
-     * @return array Returns an array of information for the uploaded file
-     */
-    public function uploadPUT(){
+	/**
+	 * Upload a file the easy way with the new AJAX PUT upload function by TwistPHP. Use the template tags and provided JS files to achieve simple file uploads.
+	 *
+	 * @related upload
+	 * @return array Returns an array of information for the uploaded file
+	 */
+	public function uploadPUT(){
 
 		$arrOut = array(
 			'status' => false,
@@ -434,46 +434,46 @@ class File extends ModuleBase{
 		return $arrOut;
 	}
 
-    /**
-     * Basic alias function of PHP's hash_file, hash a file on the local server
-     *
-     * @reference http://php.net/manual/en/function.hash-file.php
-     * @param $strFilePath Path to the file
-     * @param $strHashAlgorithm Set the hash algorithm 'md5' or 'sha1'
-     * @return string Returns a hash of the file
-     */
-    public function hash($strFilePath, $strHashAlgorithm='md5'){
-        return hash_file($strHashAlgorithm,$strFilePath);
-    }
+	/**
+	 * Basic alias function of PHP's hash_file, hash a file on the local server
+	 *
+	 * @reference http://php.net/manual/en/function.hash-file.php
+	 * @param $strFilePath Path to the file
+	 * @param $strHashAlgorithm Set the hash algorithm 'md5' or 'sha1'
+	 * @return string Returns a hash of the file
+	 */
+	public function hash($strFilePath, $strHashAlgorithm='md5'){
+		return hash_file($strHashAlgorithm,$strFilePath);
+	}
 
 	/**
 	 * Get a unique Hash of a directory in MD5 or SHA1. If any single item within the directory or sub-directories changes the unique hash will change as well.
 	 *
-     * @related hash
-     * @param $strDirectoryPath Path of the directory
+	 * @related hash
+	 * @param $strDirectoryPath Path of the directory
 	 * @param $strHashAlgorithm Set the hash algorithm 'md5' or 'sha1'
 	 * @return bool|string
 	 */
 	public function directoryHash($strDirectoryPath, $strHashAlgorithm='md5'){
 
-        $arrHashes = array();
+		$arrHashes = array();
 
 		if(is_dir($strDirectoryPath)){
 
 			$arrHashes = array();
-            $resDir = dir($strDirectoryPath);
+			$resDir = dir($strDirectoryPath);
 
-            while(false !== ($strEntry = $resDir->read())){
-                if($strEntry != '.' && $strEntry != '..'){
-                    if(is_dir($strDirectoryPath.'/'.$strEntry)){
-                        $arrHashes[] = $this->directoryHash($strDirectoryPath.'/'.$strEntry,$strHashAlgorithm);
-                    }else{
-                        $arrHashes[] = $this->hash($strDirectoryPath.'/'.$strEntry,$strHashAlgorithm);
-                    }
-                }
-            }
+			while(false !== ($strEntry = $resDir->read())){
+				if($strEntry != '.' && $strEntry != '..'){
+					if(is_dir($strDirectoryPath.'/'.$strEntry)){
+						$arrHashes[] = $this->directoryHash($strDirectoryPath.'/'.$strEntry,$strHashAlgorithm);
+					}else{
+						$arrHashes[] = $this->hash($strDirectoryPath.'/'.$strEntry,$strHashAlgorithm);
+					}
+				}
+			}
 
-            $resDir->close();
+			$resDir->close();
 		}
 
 		return ($strHashAlgorithm == 'md5') ? md5(implode('', $arrHashes)) : sha1(implode('', $arrHashes));
@@ -482,29 +482,29 @@ class File extends ModuleBase{
 	/**
 	 * Get the full size in bytes of any directory by providing its full path. Optional parameter to format the return data in a human readable format.
 	 *
-     * @param $strDirectoryPath Path of the directory
+	 * @param $strDirectoryPath Path of the directory
 	 * @param $blFormatOutput Set 'true' to format output
 	 * @return mixed Returns the size in bytes or a human readable format
 	 */
 	public function directorySize($strDirectoryPath, $blFormatOutput=false){
 
-        $intSizeBytes = 0;
+		$intSizeBytes = 0;
 
 		if(is_dir($strDirectoryPath)){
 
-            $resDir = dir($strDirectoryPath);
+			$resDir = dir($strDirectoryPath);
 
-            while(false !== ($strEntry = $resDir->read())){
-                if ($strEntry != '.' && $strEntry != '..'){
-                    if (is_dir($strDirectoryPath.'/'.$strEntry)){
-                        $intSizeBytes += $this->directorySize($strDirectoryPath.'/'.$strEntry);
-                    }else{
-                        $intSizeBytes += filesize($strDirectoryPath.'/'.$strEntry);
-                    }
-                }
-            }
-            $resDir->close();
-        }
+			while(false !== ($strEntry = $resDir->read())){
+				if ($strEntry != '.' && $strEntry != '..'){
+					if (is_dir($strDirectoryPath.'/'.$strEntry)){
+						$intSizeBytes += $this->directorySize($strDirectoryPath.'/'.$strEntry);
+					}else{
+						$intSizeBytes += filesize($strDirectoryPath.'/'.$strEntry);
+					}
+				}
+			}
+			$resDir->close();
+		}
 
 		return ($blFormatOutput) ? $this->bytesToSize($intSizeBytes) : $intSizeBytes;
 	}
@@ -512,49 +512,49 @@ class File extends ModuleBase{
 	/**
 	 * Basic alias function of PHP's unlink, removes a file from the local server
 	 *
-     * @reference http://php.net/manual/en/function.unlink.php
-     * @param $strFilePath Path of the file to be removed
+	 * @reference http://php.net/manual/en/function.unlink.php
+	 * @param $strFilePath Path of the file to be removed
 	 * @return bool Return the status of the removal
 	 */
 	public function remove($strFilePath){
 		return (file_exists($strFilePath)) ? unlink($strFilePath) : false;
 	}
 
-    /**
-     * @alias remove
-     */
-    public function delete($strFilePath){ return $this->remove($strFilePath); }
+	/**
+	 * @alias remove
+	 */
+	public function delete($strFilePath){ return $this->remove($strFilePath); }
 
-    /**
-     * Recursively remove a directory and all its files and sub directories on the local server
-     *
-     * @related remove
-     * @param $strDirectory Path of the directory to be removed
-     */
-    public function recursiveRemove($strDirectory){
+	/**
+	 * Recursively remove a directory and all its files and sub directories on the local server
+	 *
+	 * @related remove
+	 * @param $strDirectory Path of the directory to be removed
+	 */
+	public function recursiveRemove($strDirectory){
 
-        if(file_exists($strDirectory) && is_dir($strDirectory)){
+		if(file_exists($strDirectory) && is_dir($strDirectory)){
 
-            $arrFiles = scandir($strDirectory);
+			$arrFiles = scandir($strDirectory);
 
-            foreach ($arrFiles as $strEachFile){
-                ($strEachFile != "." && $strEachFile != "..") ? $this->recursiveRemove("$strDirectory/$strEachFile") : null;
-            }
+			foreach ($arrFiles as $strEachFile){
+				($strEachFile != "." && $strEachFile != "..") ? $this->recursiveRemove("$strDirectory/$strEachFile") : null;
+			}
 
-            if(file_exists($strDirectory) && is_dir($strDirectory)){
-                rmdir($strDirectory);
-            }
+			if(file_exists($strDirectory) && is_dir($strDirectory)){
+				rmdir($strDirectory);
+			}
 
-        }elseif(file_exists($strDirectory)){
-            $this->remove($strDirectory);
-        }
-    }
+		}elseif(file_exists($strDirectory)){
+			$this->remove($strDirectory);
+		}
+	}
 
 	/**
 	 * Basic alias function of PHP's rename, move/rename a file on the local server
 	 *
-     * @reference http://php.net/manual/en/function.rename.php
-     * @param $strSourcePath Path of file to be moved
+	 * @reference http://php.net/manual/en/function.rename.php
+	 * @param $strSourcePath Path of file to be moved
 	 * @param $strDestinationPath Destination path and name for moved file
 	 * @return bool Returns the status of the move
 	 */
@@ -565,10 +565,10 @@ class File extends ModuleBase{
 	/**
 	 * Basic alias function of PHP's copy, copy a file on the local server
 	 *
-     * @reference http://php.net/manual/en/function.copy.php
-     * @param $strSourcePath Path of file to be copied
-     * @param $strDestinationPath Destination path and name for copied file
-     * @return bool Returns the status of the copied
+	 * @reference http://php.net/manual/en/function.copy.php
+	 * @param $strSourcePath Path of file to be copied
+	 * @param $strDestinationPath Destination path and name for copied file
+	 * @return bool Returns the status of the copied
 	 */
 	public function copy($strSourcePath,$strDestinationPath){
 		return copy($strSourcePath, $strDestinationPath);
@@ -577,8 +577,8 @@ class File extends ModuleBase{
 	/**
 	 * Recursively copy a directory and all its files and sub-directories to a new location on the local server
 	 *
-     * @related copy
-     * @param $strSource
+	 * @related copy
+	 * @param $strSource
 	 * @param $strDestination
 	 */
 	public function recursiveCopy($strSourcePath,$strDestinationPath){
@@ -607,8 +607,8 @@ class File extends ModuleBase{
 	/**
 	 * Recursively create a directory on the local server
 	 *
-     * @param $strDirectoryPath New directory path
-     * @return boolean Returns that status of the new directory
+	 * @param $strDirectoryPath New directory path
+	 * @return boolean Returns that status of the new directory
 	 */
 	public function recursiveCreate($strDirectoryPath){
 
@@ -628,11 +628,11 @@ class File extends ModuleBase{
 		return (file_exists($strDirectoryPath)) ? true : false;
 	}
 
-    /**
-     * @param $strReference
-     * @return string
-     */
-    public function templateExtension($strReference){
+	/**
+	 * @param $strReference
+	 * @return string
+	 */
+	public function templateExtension($strReference){
 
 		$strOut = '';
 		$arrParams = array();
