@@ -253,9 +253,9 @@
 		/**
 		 * Get an array of every X day between two given dates
 		 *
-		 * @param $startDate Start date of the range
-		 * @param $endDate End date of the range
-		 * @param $weekdayNumber
+		 * @param $dateStart Start date of the range
+		 * @param $dateEnd End date of the range
+		 * @param $intWeekdayNumber
 		 * @return array Returns and array of dates
 		 */
 		public function getDayBetweenDates($dateStart, $dateEnd, $intWeekdayNumber){
