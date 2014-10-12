@@ -49,20 +49,31 @@
 			$this->resLibrary = new $strLibraryClass();
 		}
 
-		public function connect($strHost,$intPort = 21,$intConnectionTimeout = null){
+        /**
+         * Connect to the remote FTP server
+         *
+         * @param $strHost
+         * @param $intPort
+         * @param $intConnectionTimeout
+         */
+        public function connect($strHost,$intPort = 21,$intConnectionTimeout = null){
 
 			//Set the connection timeout
 			$this->resLibrary->setTimeout($intConnectionTimeout);
 			$this->resLibrary->connect($strHost,$intPort);
 		}
 
-		public function disconnect(){
+        /**
+         * Disconnect from the remote FTP server
+         */
+        public function disconnect(){
 			$this->resLibrary->disconnect();
 			$this->arrFeatures = array();
 		}
 
 		/**
 		 * Login to the open FTP connection
+         *
 		 * @param $strUsername
 		 * @param $strPassword
 		 * @return bool
@@ -73,7 +84,8 @@
 
 		/**
 		 * Enable/Disable passive mode globally for this connection
-		 * @param bool $blEnable
+         *
+		 * @param $blEnable
 		 */
 		public function passiveMode($blEnable = true){
 			$this->resLibrary->pasv($blEnable);
@@ -81,6 +93,7 @@
 
 		/**
 		 * Get the system name for the FTP connection
+         *
 		 * @return bool
 		 */
 		public function systemName(){
@@ -89,6 +102,7 @@
 
 		/**
 		 * Get an array of supported features for the current FTP server connection
+         *
 		 * @return array|bool
 		 */
 		public function featureList(){
@@ -97,7 +111,8 @@
 
 		/**
 		 * Detect if the connected FTP server supports this feature
-		 * @param $strFeature
+         *
+		 * @param $strFeature Name of feature to check
 		 * @return bool
 		 */
 		public function featureSupported($strFeature){
@@ -106,17 +121,19 @@
 		}
 
 		/**
-		 * Get current working directory
-		 * @return bool|string
+		 * Get path of the current working directory on the remote FTP server
+         *
+		 * @return string Returns the directory path
 		 */
 		public function getCurrentDirectory(){
 			return $this->resLibrary->pwd();
 		}
 
 		/**
-		 * Change the current working directory
-		 * @param $strDirectory
-		 * @return bool
+		 * Change the current working directory to a new location
+         *
+		 * @param $strDirectory Path of new working directory
+		 * @return bool Returns the status of change
 		 */
 		public function changeDirectory($strDirectory){
 			return $this->resLibrary->cwd($strDirectory);
@@ -124,17 +141,19 @@
 
 		/**
 		 * Detect if the directory exists and is a directory
-		 * @param $strDirectory
-		 * @return bool
+         *
+		 * @param $strDirectory Path of directory
+		 * @return bool Returns the status of directory
 		 */
 		public function isDirectory($strDirectory){
 			return (count($this->resLibrary->nlist($strDirectory))) ? true : false;
 		}
 
 		/**
-		 * Make Directory
-		 * @param $strDirectory
-		 * @return bool
+		 * Make a new directory on the remote FTP server
+         *
+		 * @param $strDirectory Path for the new directory
+		 * @return bool Returns the status of directory creation
 		 */
 		public function makeDirectory($strDirectory,$blRecursive = false){
 
@@ -159,9 +178,10 @@
 		}
 
 		/**
-		 * Remove Directory
-		 * @param $strDirectory
-		 * @return bool
+		 * Remove a directory on the remote FTP server
+         *
+		 * @param $strDirectory Path of the directory to remove
+		 * @return bool Returns the status of the removal
 		 */
 		public function removeDirectory($strDirectory,$blRecursive = false){
 
@@ -191,6 +211,7 @@
 
 		/**
 		 * List the provided directory and return as an array
+         *
 		 * @param $strDirectory
 		 * @return array|bool
 		 */
@@ -200,6 +221,7 @@
 
 		/**
 		 * Rename either a file or directory to a new name
+         *
 		 * @param $strFilename
 		 * @param $strNewFilename
 		 * @return bool
@@ -210,6 +232,7 @@
 
 		/**
 		 * Upload a file to the remote FTP server
+         *
 		 * @param $strLocalFilename
 		 * @param $strRemoteFilename
 		 * @param string $strMode
@@ -221,6 +244,7 @@
 
 		/**
 		 * Download a file from the remote FTP server
+         *
 		 * @param $strRemoteFilename
 		 * @param $strLocalFilename
 		 * @param string $strMode
@@ -232,6 +256,7 @@
 
 		/**
 		 * Remove the file from the server
+         *
 		 * @param $strFilename
 		 * @return bool
 		 */
@@ -241,6 +266,7 @@
 
 		/**
 		 * CHMOD the files permissions
+         *
 		 * @param $strFilename
 		 * @param $intMode
 		 * @return bool
@@ -251,6 +277,7 @@
 
 		/**
 		 * Get the size of any given file on the remote FTP server
+         *
 		 * @param $strFilename
 		 * @return bool|int
 		 */
@@ -260,6 +287,7 @@
 
 		/**
 		 * Get the last modified time of any given file on the remote FTP server
+         *
 		 * @param $strFilename
 		 * @return bool|int
 		 */
