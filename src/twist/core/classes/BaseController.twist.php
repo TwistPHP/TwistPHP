@@ -70,7 +70,7 @@ class BaseController{
 		if(array_key_exists($strRequestMethodFunction,$arrControllerFunctions)){
 			return $this->$arrControllerFunctions[$strRequestMethodFunction]();
 		}elseif(array_key_exists(strtolower($strCallFunctionName),$arrControllerFunctions)){
-			return $this->$arrControllerFunctions[$strCallFunctionName]();
+			return $this->$arrControllerFunctions[strtolower($strCallFunctionName)]();
 		}else{
 			\TwistPHP\Error::errorPage(404);
 			return false;
