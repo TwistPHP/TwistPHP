@@ -1,14 +1,19 @@
 #TwistPHP Coding Conventions
 
 ##PHP
+
 All PHP files should use the extension *.php*. Extensions such as *.php4*, *.php5* and *.phps* should be avoided.
+
 PHP files should start with an opening PHP tag with no whitespace before and a blank line after. The closing php tag should always be omitted.
+
 ```php
 <?php
 
     //Start code here
 ```
+
 If creating a PHP file with a licence embedded then include the licence on line 2, straight after the opening PHP tag:
+
 ```php
 <?php
 	/**
@@ -35,12 +40,17 @@ If creating a PHP file with a licence embedded then include the licence on line 
 ```
 
 ###Indentation and Whitespace
+
 PHP, JavaScript and CSS files should all use tabs for indentation. A tab consists of 4 spaces. If smart tabs is an option in your IDE, it should be used. All PHP should be indented once more than the opening `<?php` tag.
+
 No more than two consecutive spaces or line breaks should be used.
 
 ####Comments
+
 Single line comments simply need the opening `//` with no space before the first character of the comment.
+
 Multi line comments should begin with a `/**`, use an extra space on each line before a ` * ` and then close with a ` */`. Comments for classes and methods should all be multi line comments, even if they only need a single line.
+
 ```php
 	//Single line comment
 	
@@ -50,10 +60,14 @@ Multi line comments should begin with a `/**`, use an extra space on each line b
 ```
 
 ####Namespaces, Classes and Methods
+
 After starting your PHP file with an opening tag (and optionally the licence) followed by a blank line, you can declare your namespace parameters followed by a space.
+
 An empty line should also be added:
+
 * Before each method or method comment in a class
 * After each method declaration in a class
+
 ```php
 <?php
 
@@ -87,9 +101,11 @@ An empty line should also be added:
 ####Variables
 
 ###Method Comments
+
 [FORMATTING]
 
 Several method parameters have been supported by our documentation module in order to parse the PHP and create documentation.
+
 | Parameter      | Expecting         | Quantity | Description                                                                    | Example                                                          |
 | -------------- | ----------------- | -------- | ------------------------------------------------------------------------------ | ---------------------------------------------------------------- |
 | @alias         | Method            | Single   | The method is an alias to another method                                       | `@alias anotherMethod`                                           |
