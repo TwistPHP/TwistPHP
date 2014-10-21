@@ -719,10 +719,10 @@ class Route extends ModuleBase{
 					$_SERVER['TWIST_ROUTE_DYNAMIC'] = $arrRoute['current']['dynamic'];
 					$_SERVER['TWIST_ROUTE_PARTS'] = $arrRoute['current']['parts'];
 					$_SERVER['TWIST_ROUTE_URI'] = $arrRoute['current']['uri'];
-                    $_SERVER['TWIST_ROUTE_TITLE'] = \Twist::framework()->setting('SITE_NAME');
-                    $_SERVER['TWIST_ROUTE_DESCRIPTION'] = \Twist::framework()->setting('SITE_DESCRIPTION');
-                    $_SERVER['TWIST_ROUTE_AUTHOR'] = \Twist::framework()->setting('SITE_AUTHOR');
-                    $_SERVER['TWIST_ROUTE_KEYWORDS'] = \Twist::framework()->setting('SITE_KEYWORDS');
+					$_SERVER['TWIST_ROUTE_TITLE'] = \Twist::framework()->setting('SITE_NAME');
+					$_SERVER['TWIST_ROUTE_DESCRIPTION'] = \Twist::framework()->setting('SITE_DESCRIPTION');
+					$_SERVER['TWIST_ROUTE_AUTHOR'] = \Twist::framework()->setting('SITE_AUTHOR');
+					$_SERVER['TWIST_ROUTE_KEYWORDS'] = \Twist::framework()->setting('SITE_KEYWORDS');
 
 					//Load the page from cache
 					$this->loadPageCache($arrRoute['cache_key']);

@@ -15,9 +15,9 @@
 	 * You should have received a copy of the GNU General Public License
 	 * along with TwistPHP.  If not, see <http://www.gnu.org/licenses/>.
 	 *
-	 * @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
-	 * @license    https://www.gnu.org/licenses/gpl.html LGPL License
-	 * @link       http://twistphp.com/
+	 * @author	 Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
+	 * @license	https://www.gnu.org/licenses/gpl.html LGPL License
+	 * @link	   http://twistphp.com/
 	 *
 	 */
 
@@ -35,10 +35,10 @@
 		protected $arrCountries = array();
 		protected $arrTimezones = array();
 
-        /**
-         * Load in the language and country information
-         */
-        public function __construct(){
+		/**
+		 * Load in the language and country information
+		 */
+		public function __construct(){
 
 			$jsonLanguage = file_get_contents(sprintf('%score/packages/resources/Localisation/languages.json',DIR_FRAMEWORK));
 			$arrLanguages = json_decode($jsonLanguage,true);
@@ -67,7 +67,7 @@
 
 		/**
 		 * Get a single-dimensional array of language information related to the provided 2 Character ISO language code.
-         *
+		 *
 		 * @param $strLanguageISO 2 Character ISO code
 		 * @return array Returns a single-dimensional language array
 		 */
@@ -78,8 +78,8 @@
 
 		/**
 		 * Get multi-dimensional array of all languages. Optionally include the localised/native language name.
-         *
-         * @related getLanguage
+		 *
+		 * @related getLanguage
 		 * @param $blIncludeLocalisation Enable localised/native language name
 		 * @return array Returns a multi-dimensional array of languages
 		 */
@@ -89,7 +89,7 @@
 
 		/**
 		 * Get a single-dimensional array country information by its 2 Character ISO country code.
-         *
+		 *
 		 * @param $strCountryISO 2 Character ISO code
 		 * @return array Returns an single-dimensional country array
 		 */
@@ -100,8 +100,8 @@
 
 		/**
 		 * Get an array of all country names, ISO codes and Official spoken language.
-         *
-         * @related getCountry
+		 *
+		 * @related getCountry
 		 * @return array Returns a multi-dimensional array of countries
 		 */
 		public function getCountries(){
@@ -110,8 +110,8 @@
 
 		/**
 		 * Get the official language of any given country by 2 character ISO country code.
-         *
-         * @related getLanguage
+		 *
+		 * @related getLanguage
 		 * @param $strCountryISO 2 Character ISO code
 		 * @return array Returns an single-dimensional language array
 		 */

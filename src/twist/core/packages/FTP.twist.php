@@ -15,9 +15,9 @@
 	* You should have received a copy of the GNU General Public License
 	* along with TwistPHP.  If not, see <http://www.gnu.org/licenses/>.
 	*
-	* @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
-	* @license    https://www.gnu.org/licenses/gpl.html LGPL License
-	* @link       http://twistphp.com/
+	 * @author    Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
+	 * @license   https://www.gnu.org/licenses/gpl.html LGPL License
+	 * @link      http://twistphp.com/
 	*
 	*/
 
@@ -49,31 +49,31 @@
 			$this->resLibrary = new $strLibraryClass();
 		}
 
-        /**
-         * Connect to the remote FTP server
-         *
-         * @param $strHost
-         * @param $intPort
-         * @param $intConnectionTimeout
-         */
-        public function connect($strHost,$intPort = 21,$intConnectionTimeout = null){
+		/**
+		 * Connect to the remote FTP server
+		 *
+		 * @param $strHost
+		 * @param $intPort
+		 * @param $intConnectionTimeout
+		 */
+		public function connect($strHost,$intPort = 21,$intConnectionTimeout = null){
 
 			//Set the connection timeout
 			$this->resLibrary->setTimeout($intConnectionTimeout);
 			$this->resLibrary->connect($strHost,$intPort);
 		}
 
-        /**
-         * Disconnect from the remote FTP server
-         */
-        public function disconnect(){
+		/**
+		 * Disconnect from the remote FTP server
+		 */
+		public function disconnect(){
 			$this->resLibrary->disconnect();
 			$this->arrFeatures = array();
 		}
 
 		/**
 		 * Login to the open FTP connection
-         *
+		 *
 		 * @param $strUsername
 		 * @param $strPassword
 		 * @return bool
@@ -84,7 +84,7 @@
 
 		/**
 		 * Enable/Disable passive mode globally for this connection
-         *
+		 *
 		 * @param $blEnable
 		 */
 		public function passiveMode($blEnable = true){
@@ -93,7 +93,7 @@
 
 		/**
 		 * Get the system name for the FTP connection
-         *
+		 *
 		 * @return bool
 		 */
 		public function systemName(){
@@ -102,7 +102,7 @@
 
 		/**
 		 * Get an array of supported features for the current FTP server connection
-         *
+		 *
 		 * @return array|bool
 		 */
 		public function featureList(){
@@ -111,7 +111,7 @@
 
 		/**
 		 * Detect if the connected FTP server supports this feature
-         *
+		 *
 		 * @param $strFeature Name of feature to check
 		 * @return bool
 		 */
@@ -122,7 +122,7 @@
 
 		/**
 		 * Get path of the current working directory on the remote FTP server
-         *
+		 *
 		 * @return string Returns the directory path
 		 */
 		public function getCurrentDirectory(){
@@ -131,7 +131,7 @@
 
 		/**
 		 * Change the current working directory to a new location
-         *
+		 *
 		 * @param $strDirectory Path of new working directory
 		 * @return bool Returns the status of change
 		 */
@@ -141,7 +141,7 @@
 
 		/**
 		 * Detect if the directory exists and is a directory
-         *
+		 *
 		 * @param $strDirectory Path of directory
 		 * @return bool Returns the status of directory
 		 */
@@ -151,7 +151,7 @@
 
 		/**
 		 * Make a new directory on the remote FTP server
-         *
+		 *
 		 * @param $strDirectory Path for the new directory
 		 * @return bool Returns the status of directory creation
 		 */
@@ -179,7 +179,7 @@
 
 		/**
 		 * Remove a directory on the remote FTP server
-         *
+		 *
 		 * @param $strDirectory Path of the directory to remove
 		 * @return bool Returns the status of the removal
 		 */
@@ -211,7 +211,7 @@
 
 		/**
 		 * List the provided directory and return as an array
-         *
+		 *
 		 * @param $strDirectory
 		 * @return array|bool
 		 */
@@ -221,7 +221,7 @@
 
 		/**
 		 * Rename either a file or directory to a new name
-         *
+		 *
 		 * @param $strFilename
 		 * @param $strNewFilename
 		 * @return bool
@@ -232,7 +232,7 @@
 
 		/**
 		 * Upload a file to the remote FTP server
-         *
+		 *
 		 * @param $strLocalFilename
 		 * @param $strRemoteFilename
 		 * @param string $strMode
@@ -244,7 +244,7 @@
 
 		/**
 		 * Download a file from the remote FTP server
-         *
+		 *
 		 * @param $strRemoteFilename
 		 * @param $strLocalFilename
 		 * @param string $strMode
@@ -256,7 +256,7 @@
 
 		/**
 		 * Remove the file from the server
-         *
+		 *
 		 * @param $strFilename
 		 * @return bool
 		 */
@@ -266,7 +266,7 @@
 
 		/**
 		 * CHMOD the files permissions
-         *
+		 *
 		 * @param $strFilename
 		 * @param $intMode
 		 * @return bool
@@ -277,7 +277,7 @@
 
 		/**
 		 * Get the size of any given file on the remote FTP server
-         *
+		 *
 		 * @param $strFilename
 		 * @return bool|int
 		 */
@@ -287,7 +287,7 @@
 
 		/**
 		 * Get the last modified time of any given file on the remote FTP server
-         *
+		 *
 		 * @param $strFilename
 		 * @return bool|int
 		 */

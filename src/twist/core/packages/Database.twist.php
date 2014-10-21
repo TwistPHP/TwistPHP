@@ -487,7 +487,7 @@
 		/**
 		 * Get the structure information of a table by table name
 		 *
-         * @related table
+		 * @related table
 		 * @param $strTable Name of that table to lookup
 		 * @param $strDatabase Name of the tables database if not the current database
 		 * @return array Single dimensional array of structure info
