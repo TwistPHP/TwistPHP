@@ -77,23 +77,23 @@ class BaseController{
 		}
 	}
 
-	public function _route(){
+	protected function _route(){
 		return $_SERVER['TWIST_ROUTE'];
 	}
 
-	public function _title($strTitle = null){
+	protected function _title($strTitle = null){
 		return (is_null($strTitle)) ? $_SERVER['TWIST_ROUTE_TITLE'] : $_SERVER['TWIST_ROUTE_TITLE'] = $strTitle;
 	}
 
-	public function _description($strDescription = null){
+	protected function _description($strDescription = null){
 		return (is_null($strDescription)) ? $_SERVER['TWIST_ROUTE_DESCRIPTION'] : $_SERVER['TWIST_ROUTE_DESCRIPTION'] = $strDescription;
 	}
 
-	public function _author($strAuthor = null){
+	protected function _author($strAuthor = null){
 		return (is_null($strAuthor)) ? $_SERVER['TWIST_ROUTE_AUTHOR'] : $_SERVER['TWIST_ROUTE_AUTHOR'] = $strAuthor;
 	}
 
-	public function _keywords($strKeywords = null){
+	protected function _keywords($strKeywords = null){
 		return (is_null($strKeywords)) ? $_SERVER['TWIST_ROUTE_KEYWORDS'] : $_SERVER['TWIST_ROUTE_KEYWORDS'] = $strKeywords;
 	}
 }
