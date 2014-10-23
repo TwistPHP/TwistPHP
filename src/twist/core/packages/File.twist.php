@@ -545,7 +545,7 @@ class File extends ModuleBase{
 				rmdir($strDirectory);
 			}
 
-		}elseif(file_exists($strDirectory)){
+		}elseif(file_exists($strDirectory) || is_link($strDirectory)){
 			$this->remove($strDirectory);
 		}
 	}
