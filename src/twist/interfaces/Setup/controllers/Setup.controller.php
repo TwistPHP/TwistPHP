@@ -31,7 +31,6 @@ class Setup extends BaseController{
 
 	public function welcome(){
 
-
 		setcookie('twist_setup_test','1');
 
 		\Twist::Session()->data('twist-setup',array(
@@ -46,12 +45,13 @@ class Setup extends BaseController{
 		/**
 		 * Update the .htaccess file to be a TwistPHP htaccess file
 		 */
-		$strFile_htaccess = sprintf('%s/.htaccess',DIR_BASE);
+		$dirHTaccessFile = sprintf('%s/.htaccess',DIR_BASE);
 
-		if(!file_exists($strFile_htaccess)){
-			$arrTags_htaccess = array();
-			file_put_contents($strFile_htaccess,"# TWISTPHP\nRewriteEngine on\n# Routes Rewrite to allow for dynamic pages\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteCond %{REQUEST_FILENAME} !-d\nRewriteRule ^(.*)$ index.php [L,QSA]\n# /TWISTPHP");
+		if(file_exists($dirHTaccessFile)){
+			\Twist::File()->move($dirHTaccessFile,sprintf('%s/old.htaccess',DIR_BASE));
 		}
+
+		file_put_contents($dirHTaccessFile,"# TWISTPHP\nRewriteEngine on\n# Routes Rewrite to allow for dynamic pages\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteCond %{REQUEST_FILENAME} !-d\nRewriteRule ^(.*)$ index.php [L,QSA]\n# /TWISTPHP");
 
 		return \Twist::Template()->build('pages/welcome.tpl');
 	}
@@ -352,10 +352,10 @@ class Setup extends BaseController{
 		/**
 		 * Update the index.php file to be a TwistPHP index file
 		 */
-		$strIndexFile = sprintf('%s/index.php',BASE_DIR);
+		$dirIndexFile = sprintf('%s/index.php',DIR_BASE);
 
-		if(file_exists($strIndexFile)){
-			rename($strIndexFile,sprintf('%s/index-old.php',BASE_DIR));
+		if(file_exists($dirIndexFile)){
+			\Twist::File()->move($dirIndexFile,sprintf('%s/old-index.php',DIR_BASE));
 		}
 
 		//Later on we can add in example templates etc if required
@@ -365,20 +365,13 @@ class Setup extends BaseController{
 			'serve' => 'Twist::Route() -> serve();'
 		);
 
-		file_put_contents($strIndexFile,\Twist::Template()->build(sprintf('%s/default-index.tpl',DIR_FRAMEWORK_TEMPLATES),$arrIndexTags));
+		file_put_contents($dirIndexFile,\Twist::Template()->build(sprintf('%s/default-index.tpl',DIR_FRAMEWORK_TEMPLATES),$arrIndexTags));
 
 		/**
 		 * Update the .htaccess file to be a TwistPHP htaccess file
 		 */
-		$strHtaccessFile = sprintf('%s/.htaccess',BASE_DIR);
-
-		if(file_exists($strHtaccessFile)){
-			rename($strHtaccessFile,sprintf('%s/old.htaccess',BASE_DIR));
-		}
-
-		$arrHtaccessTags = array();
-
-		file_put_contents($strHtaccessFile,\Twist::Template()->build(sprintf('%s/default-htaccess.tpl',DIR_FRAMEWORK_TEMPLATES),$arrHtaccessTags));
+		$dirHTaccessFile = sprintf('%s/.htaccess',DIR_BASE);
+		file_put_contents($dirHTaccessFile,\Twist::Template()->build(sprintf('%s/default-htaccess.tpl',DIR_FRAMEWORK_TEMPLATES)));
 
 		return \Twist::Template()->build('pages/finish.tpl');
 	}
