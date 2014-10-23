@@ -31,8 +31,8 @@ use TwistPHP\Instance;
 class Template extends ModuleBase{
 
     protected $strInstanceKey = '';
-    protected $strTemplatesDir = '';
-    protected $strElementsDir = '';
+    protected $dirTemplates = '';
+    protected $dirElements = '';
     protected $arrElementData = array();
     protected $arrElementParams = array();
 
@@ -51,23 +51,18 @@ class Template extends ModuleBase{
 
     /**
      * Set the template directory to default or provide a new directory
-     * @param null $strCustomTemplatesDir
+     * @param $dirCustomTemplates Path to a custom template directory
      */
-    public function setTemplatesDirectory($strCustomTemplatesDir = null){
-        $this->strTemplatesDir = (is_null($strCustomTemplatesDir)) ? DIR_TEMPLATES : $strCustomTemplatesDir;
+    public function setTemplatesDirectory($dirCustomTemplates = null){
+        $this->dirTemplates = (is_null($dirCustomTemplates)) ? DIR_TEMPLATES : $dirCustomTemplates;
     }
 
     /**
      * Set the element directory to the default or provide a new directory
-     * @param null $strCustomElementsDir
+     * @param $dirCustomElements Path to a custom elements directory
      */
-    public function setElementsDirectory($strCustomElementsDir = null){
-
-        if( is_null( $strCustomElementsDir ) ) {
-            $this->strElementsDir = sprintf( '%selements/', $this->strTemplatesDir );
-        } else {
-            $this->strElementsDir = $strCustomElementsDir;
-        }
+    public function setElementsDirectory($dirCustomElements = null){
+	    $this->dirElements = (is_null($dirCustomElements)) ? sprintf('%selements/',$this->dirTemplates) : $dirCustomElements;
     }
 
     /**
@@ -75,7 +70,7 @@ class Template extends ModuleBase{
      * @return string
      */
     public function getTemplatesDirectory(){
-        return $this->strTemplatesDir;
+        return $this->dirTemplates;
     }
 
     /**
@@ -83,25 +78,25 @@ class Template extends ModuleBase{
      * @return string
      */
     public function getElementsDirectory(){
-        return $this->strElementsDir;
+        return $this->dirElements;
     }
 
     /**
      * Build the template with the array of tags supplied
      *
-     * @param string $strTemplateFullPath
+     * @param string $dirTemplate
      * @param array $arrTemplateTags
      * @param boolean $blRemoveUnusedTags
      * @return string
      */
-    public function build($strTemplate,$arrTemplateTags = null,$blRemoveUnusedTags = false) {
+    public function build($dirTemplate,$arrTemplateTags = null,$blRemoveUnusedTags = false) {
 
         $strTemplateDataOut = null;
         $this->validDataTags($arrTemplateTags);
 
         //Get the raw template data
-        $strRawTemplateData = $this->getTemplateFile($strTemplate);
-        $arrLiveTags = $this->getTemplateTags($strTemplate);
+        $strRawTemplateData = $this->getTemplateFile($dirTemplate);
+        $arrLiveTags = $this->getTemplateTags($dirTemplate);
 
         foreach($arrLiveTags as $strEachTag){
             $strRawTemplateData = $this->processTag($strRawTemplateData,$strEachTag,$arrTemplateTags);
@@ -115,9 +110,8 @@ class Template extends ModuleBase{
             $strTemplateDataOut = $this->removeUnusedTags($strTemplateDataOut);
         }
 
-
         if($this->framework() -> setting('DEVELOPMENT_MODE')){
-            $this->framework() -> debug() -> log('Template','usage',array('instance' => $this->strInstanceKey,'file' => $strTemplate,'tags' => $arrLiveTags));
+            $this->framework() -> debug() -> log('Template','usage',array('instance' => $this->strInstanceKey,'file' => $dirTemplate,'tags' => $arrLiveTags));
         }
 
         //$this->arrStats[] = array('file' => $strTemplate,'tags' => $arrLiveTags);
@@ -245,7 +239,7 @@ class Template extends ModuleBase{
 
         if(!is_file($strTemplate)){
             //Try using the designated template directory
-            $strTemplate = sprintf("%s%s",$this->strTemplatesDir,$strTemplate);
+            $strTemplate = sprintf("%s%s",$this->dirTemplates,$strTemplate);
         }
 
         //Check to see if the template file exists
@@ -750,8 +744,8 @@ class Template extends ModuleBase{
         }
 
         //Check to see if it is a full path or partial path
-        if(!strstr($strElement,'/') || (!file_exists($strElement) && file_exists(sprintf('%s%s',$this->strElementsDir,strtolower($strElement))))){
-            $strElement = sprintf('%s%s',$this->strElementsDir,strtolower($strElement));
+        if(!strstr($strElement,'/') || (!file_exists($strElement) && file_exists(sprintf('%s%s',$this->dirElements,strtolower($strElement))))){
+            $strElement = sprintf('%s%s',$this->dirElements,strtolower($strElement));
         }
 
         if(file_exists($strElement)){
