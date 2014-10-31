@@ -77,8 +77,23 @@ class BaseController{
 		}
 	}
 
-	public function routeDetails($arrRoute){
-		\TwistPHP\Error::errorPage(404);
-		return false;
+	protected function _route(){
+		return $_SERVER['TWIST_ROUTE'];
+	}
+
+	protected function _title($strTitle = null){
+		return (is_null($strTitle)) ? $_SERVER['TWIST_ROUTE_TITLE'] : $_SERVER['TWIST_ROUTE_TITLE'] = $strTitle;
+	}
+
+	protected function _description($strDescription = null){
+		return (is_null($strDescription)) ? $_SERVER['TWIST_ROUTE_DESCRIPTION'] : $_SERVER['TWIST_ROUTE_DESCRIPTION'] = $strDescription;
+	}
+
+	protected function _author($strAuthor = null){
+		return (is_null($strAuthor)) ? $_SERVER['TWIST_ROUTE_AUTHOR'] : $_SERVER['TWIST_ROUTE_AUTHOR'] = $strAuthor;
+	}
+
+	protected function _keywords($strKeywords = null){
+		return (is_null($strKeywords)) ? $_SERVER['TWIST_ROUTE_KEYWORDS'] : $_SERVER['TWIST_ROUTE_KEYWORDS'] = $strKeywords;
 	}
 }

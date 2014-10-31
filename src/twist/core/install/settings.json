@@ -191,6 +191,14 @@
 		"options":"1,0",
 		"null":0
 	},
+	"TEMPLATE_PRE_PROCESS_CACHE":{
+		"title":"PreProcess Cache Life",
+		"description":"The amount of time to store a Pre Processed template cache, this cache helps speed up the processing of template",
+		"default":84600,
+		"type":"integer",
+		"options":"",
+		"null":0
+	},
 	"EMAIL_MULTIPART_ENCODING":{
 		"title":"Default Encoding",
 		"description":"Set the default encoding type to use when sending emails",
@@ -261,6 +269,14 @@
 		"default":"native",
 		"type":"options",
 		"options":"native,file,memcache,mysql",
+		"null":0
+	},
+	"CACHE_ENABLED":{
+		"title":"Cache Enabled",
+		"description":"Caching of data, templates and pages are handled with the Twist Cache Package. Disabling the cache will return 'null' for all cache requests, no new data will be stored. Cache files can still be removed when disabled",
+		"default":"1",
+		"type":"boolean",
+		"options":"0,1",
 		"null":0
 	},
 	"CACHE_GB_PROBABILITY":{

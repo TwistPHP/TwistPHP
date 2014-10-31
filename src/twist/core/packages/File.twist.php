@@ -510,14 +510,14 @@ class File extends ModuleBase{
 	}
 
 	/**
-	 * Basic alias function of PHP's unlink, removes a file from the local server
+	 * Basic alias function of PHP's unlink, removes a file or symlink from the local server
 	 *
 	 * @reference http://php.net/manual/en/function.unlink.php
 	 * @param $strFilePath Path of the file to be removed
 	 * @return bool Return the status of the removal
 	 */
 	public function remove($strFilePath){
-		return (file_exists($strFilePath)) ? unlink($strFilePath) : false;
+		return (file_exists($strFilePath) || is_link($strFilePath)) ? unlink($strFilePath) : false;
 	}
 
 	/**
@@ -545,7 +545,7 @@ class File extends ModuleBase{
 				rmdir($strDirectory);
 			}
 
-		}elseif(file_exists($strDirectory)){
+		}elseif(file_exists($strDirectory) || is_link($strDirectory)){
 			$this->remove($strDirectory);
 		}
 	}

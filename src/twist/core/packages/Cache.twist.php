@@ -36,6 +36,7 @@
 		protected $strFileExtension = 'twi';
 		protected $strStorageLocation = '';
 		protected $strInstanceKey = '';
+		protected $blCacheEnabled = true;
 
 		protected $arrRuntimeSessionCache = array();
 
@@ -64,6 +65,9 @@
 			if(!file_exists($this->strStorageLocation)){
 				mkdir($this->strStorageLocation);
 			}
+
+			//Get the status of the cache system, disabled cache wil return null for all requests (no data will be stored)
+			$this->blCacheEnabled = $this->framework()->setting('CACHE_ENABLED');
 
 			//Probability it set between 1-10 set to 0
 			if(mt_rand(1, 10) <= $this->framework()->setting('CACHE_GB_PROBABILITY')){
@@ -99,28 +103,33 @@
 		 */
 		public function store($mxdUniqueID,$mxdData,$intLifeTime = 3600){
 
-			//Generate the expiry time - Fix for php session cache (allow 30 second runtime before re-cache)
-			$intExpiryTime = ($intLifeTime == 0) ? (\Twist::DateTime()->time() + 30) : (\Twist::DateTime()->time() + $intLifeTime);
-			$strCacheName = sprintf("%s.%s",$mxdUniqueID,$this->strFileExtension);
-			$strDataString = json_encode($mxdData);
+			if($this->blCacheEnabled){
 
-			//Set all the cache info
-			$arrCacheInfo = array(
-				'unique_id' => $mxdUniqueID,
-				'create_date' => \Twist::DateTime()->date('Y-m-d H:i:s'),
-				'expiry_date' => \Twist::DateTime()->date('Y-m-d H:i:s',$intExpiryTime),
-				'life_time' => $intLifeTime,
-				'data_bytes' => strlen($strDataString),
-				'data_hash' => sha1($strDataString)
-			);
+				//Generate the expiry time - Fix for php session cache (allow 30 second runtime before re-cache)
+				$intExpiryTime = ($intLifeTime == 0) ? (\Twist::DateTime()->time() + 30) : (\Twist::DateTime()->time() + $intLifeTime);
+				$strCacheName = sprintf("%s.%s",$mxdUniqueID,$this->strFileExtension);
+				$strDataString = json_encode($mxdData);
 
-			$strCacheData = sprintf("%s[@--SSC--@]%s",json_encode($arrCacheInfo),$strDataString);
+				//Set all the cache info
+				$arrCacheInfo = array(
+					'unique_id' => $mxdUniqueID,
+					'create_date' => \Twist::DateTime()->date('Y-m-d H:i:s'),
+					'expiry_date' => \Twist::DateTime()->date('Y-m-d H:i:s',$intExpiryTime),
+					'life_time' => $intLifeTime,
+					'data_bytes' => strlen($strDataString),
+					'data_hash' => sha1($strDataString)
+				);
 
-			if($intLifeTime == 0){
-				//If life of store is '0' the use the temp storage (Current PHP session only)
-				$this->arrRuntimeSessionCache[$strCacheName] = $strCacheData;
-			}else{
-				file_put_contents(sprintf("%s%s",$this->strStorageLocation,$strCacheName),$strCacheData);
+				$strCacheData = sprintf("%s[@--SSC--@]%s",json_encode($arrCacheInfo),$strDataString);
+
+				if($intLifeTime == 0){
+					//If life of store is '0' the use the temp storage (Current PHP session only)
+					$this->arrRuntimeSessionCache[$strCacheName] = $strCacheData;
+				}else{
+					$dirCacheFile = sprintf("%s%s",$this->strStorageLocation,$strCacheName);
+					\Twist::File()->recursiveCreate(dirname($dirCacheFile));
+					file_put_contents($dirCacheFile,$strCacheData);
+				}
 			}
 		}
 
@@ -134,18 +143,19 @@
 		public function retrieve($mxdUniqueID,$blFullData=false){
 
 			$mxdOut = null;
-			$arrData = $this->getCacheData($mxdUniqueID);
 
-			if(is_array($arrData) && count($arrData) == 2){
+			if($this->blCacheEnabled){
+				$arrData = $this->getCacheData($mxdUniqueID);
 
-				$arrVerificationData = $this->verifyData($arrData['data'],$arrData['info']['data_hash'],$arrData['info']['data_bytes']);
+				if(is_array($arrData) && count($arrData) == 2){
+					$arrVerificationData = $this->verifyData($arrData['data'],$arrData['info']['data_hash'],$arrData['info']['data_bytes']);
 
-				if($this->getRemainingLife($mxdUniqueID) > 0){
+					if($this->getRemainingLife($mxdUniqueID) > 0){
+						if($arrVerificationData['status'] == true){
 
-					if($arrVerificationData['status'] == true){
-
-						$arrData['data'] = json_decode($arrData['data'],true);
-						$mxdOut = ($blFullData) ? $arrData : $arrData['data'];
+							$arrData['data'] = json_decode($arrData['data'],true);
+							$mxdOut = ($blFullData) ? $arrData : $arrData['data'];
+						}
 					}
 				}
 			}

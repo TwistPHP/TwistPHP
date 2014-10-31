@@ -516,19 +516,19 @@ class Route extends ModuleBase{
 		if(!is_null($arrCacheInfo)){
 
 			$mxdModifiedTime = gmdate('D, d M Y H:i:s ', strtotime($arrCacheInfo['info']['create_date'])) . 'GMT';
-			$strEtag = sha1($strPageCacheKey . $mxdModifiedTime);
+			$strETag = sha1($strPageCacheKey . $mxdModifiedTime);
 
-			$if_modified_since = isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) ? $_SERVER['HTTP_IF_MODIFIED_SINCE'] : false;
-			$if_none_match = isset($_SERVER['HTTP_IF_NONE_MATCH']) ? $_SERVER['HTTP_IF_NONE_MATCH'] : false;
+			$blModifiedSince = isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) ? $_SERVER['HTTP_IF_MODIFIED_SINCE'] : false;
+			$blNoneMatch = isset($_SERVER['HTTP_IF_NONE_MATCH']) ? $_SERVER['HTTP_IF_NONE_MATCH'] : false;
 
-			if((($if_none_match && $if_none_match == $strEtag) || (!$if_none_match)) && ($if_modified_since && $if_modified_since == $mxdModifiedTime)){
+			if((($blNoneMatch && $blNoneMatch == $strETag) || (!$blNoneMatch)) && ($blModifiedSince && $blModifiedSince == $mxdModifiedTime)){
 				header('HTTP/1.1 304 Not Modified');
 				die();
-			}elseif(!$if_modified_since && !$if_none_match){
+			}elseif(!$blModifiedSince && !$blNoneMatch){
 
 				header("Cache-Control: max-age=".$arrCacheInfo['info']['life_time']);
 				header("Last-Modified: $mxdModifiedTime");
-				header("ETag: \"{$strEtag}\"");
+				header("ETag: \"{$strETag}\"");
 
 				//Output the cached page here
 				echo $arrCacheInfo['data'];
