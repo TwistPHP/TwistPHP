@@ -62,7 +62,7 @@ class Template extends ModuleBase{
      * @param $dirCustomElements Path to a custom elements directory
      */
     public function setElementsDirectory($dirCustomElements = null){
-	    $this->dirElements = (is_null($dirCustomElements)) ? sprintf('%selements/',$this->dirTemplates) : $dirCustomElements;
+	    $this->dirElements = (is_null($dirCustomElements)) ? $this->dirTemplates : $dirCustomElements;
     }
 
     /**
@@ -94,30 +94,34 @@ class Template extends ModuleBase{
         $strTemplateDataOut = null;
         $this->validDataTags($arrTemplateTags);
 
-        //Get the raw template data
-        $strRawTemplateData = $this->getTemplateFile($dirTemplate);
-        $arrLiveTags = $this->getTemplateTags($dirTemplate);
+		$arrTemplateData = \Twist::Cache('pkgTemplate')->retrieve($dirTemplate);
 
-        foreach($arrLiveTags as $strEachTag){
-            $strRawTemplateData = $this->processTag($strRawTemplateData,$strEachTag,$arrTemplateTags);
+	    if(is_null($arrTemplateData)){
+		    $arrTemplateData = array();
+		    $arrTemplateData['html_raw'] = $this->getTemplateFile($dirTemplate);
+		    $arrTemplateData['html_hash'] = md5($arrTemplateData['html_raw']);
+		    $arrTemplateData['tags'] = $this->getTemplateTags($arrTemplateData['html_raw'],false);
+
+		    \Twist::Cache('pkgTemplate')->store($dirTemplate,$arrTemplateData,$this->framework()->setting('TEMPLATE_PRE_PROCESS_CACHE'));
+	    }
+
+        foreach($arrTemplateData['tags'] as $strEachTag){
+	        $arrTemplateData['html_raw'] = $this->processTag($arrTemplateData['html_raw'],$strEachTag,$arrTemplateTags);
         }
-
-        //No tags found, return raw template data
-        $strTemplateDataOut = $strRawTemplateData;
 
         //Remove all un-used template tags
         if($blRemoveUnusedTags){
-            $strTemplateDataOut = $this->removeUnusedTags($strTemplateDataOut);
+	        $arrTemplateData['html_raw'] = $this->removeUnusedTags($arrTemplateData['html_raw']);
         }
 
         if($this->framework() -> setting('DEVELOPMENT_MODE')){
-            $this->framework() -> debug() -> log('Template','usage',array('instance' => $this->strInstanceKey,'file' => $dirTemplate,'tags' => $arrLiveTags));
+            $this->framework() -> debug() -> log('Template','usage',array('instance' => $this->strInstanceKey,'file' => $dirTemplate,'tags' => $arrTemplateData['tags']));
         }
 
         //$this->arrStats[] = array('file' => $strTemplate,'tags' => $arrLiveTags);
         //$this->arrStats[] = array('file' => $strTemplate,'tags' => $arrLiveTags,'data' => $arrTemplateTags);
 
-        return $strTemplateDataOut;
+        return $arrTemplateData['html_raw'];
     }
 
     /**

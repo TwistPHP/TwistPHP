@@ -126,7 +126,9 @@
 					//If life of store is '0' the use the temp storage (Current PHP session only)
 					$this->arrRuntimeSessionCache[$strCacheName] = $strCacheData;
 				}else{
-					file_put_contents(sprintf("%s%s",$this->strStorageLocation,$strCacheName),$strCacheData);
+					$dirCacheFile = sprintf("%s%s",$this->strStorageLocation,$strCacheName);
+					\Twist::File()->recursiveCreate(dirname($dirCacheFile));
+					file_put_contents($dirCacheFile,$strCacheData);
 				}
 			}
 		}

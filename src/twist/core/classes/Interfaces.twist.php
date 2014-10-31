@@ -80,10 +80,11 @@
         /**
          * Register the interface for use in the framework
          * @param $strClassName
+         * @param $dirInterfacePath
          */
-        public function register($strClassName){
+        public function register($strClassName,$dirInterfacePath=null){
 
-            $strPath = sprintf('%s%s',DIR_FRAMEWORK_INTERFACES,$strClassName);
+		    $strPath = sprintf('%s%s',(is_null($dirInterfacePath)) ? DIR_FRAMEWORK_INTERFACES : $dirInterfacePath,$strClassName);
             $strURI = str_replace(BASE_LOCATION,"",$strPath);
 
             $arrInformation = json_decode(file_get_contents(sprintf('%s/info.json',$strPath)),true);
