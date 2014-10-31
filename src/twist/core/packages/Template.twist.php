@@ -94,15 +94,24 @@ class Template extends ModuleBase{
         $strTemplateDataOut = null;
         $this->validDataTags($arrTemplateTags);
 
-		$arrTemplateData = \Twist::Cache('pkgTemplate')->retrieve($dirTemplate);
+	    $dirFullTemplatePath = (!is_file($dirTemplate)) ? sprintf("%s%s",$this->dirTemplates,$dirTemplate) : $dirTemplate;
+		$strCacheKey = str_replace(array(BASE_LOCATION,'twist/interfaces','twist/core'),array('','twist-interface','twist-core'),$dirFullTemplatePath);
+		$arrTemplateData = \Twist::Cache('pkgTemplate')->retrieve($strCacheKey);
+
+	    //Detect if the file has changed, if changed remove cache and rebuild
+	    if(!is_null($arrTemplateData) && $arrTemplateData['html_hash'] !== \Twist::File()->hash($dirFullTemplatePath,'md5')){
+		    \Twist::Cache('pkgTemplate')->remove($strCacheKey);
+		    $arrTemplateData = null;
+	    }
 
 	    if(is_null($arrTemplateData)){
 		    $arrTemplateData = array();
-		    $arrTemplateData['html_raw'] = $this->getTemplateFile($dirTemplate);
-		    $arrTemplateData['html_hash'] = md5($arrTemplateData['html_raw']);
+
+		    $arrTemplateData['html_raw'] = $this->getTemplateFile($dirFullTemplatePath);
+		    $arrTemplateData['html_hash'] = \Twist::File()->hash($dirFullTemplatePath,'md5');
 		    $arrTemplateData['tags'] = $this->getTemplateTags($arrTemplateData['html_raw'],false);
 
-		    \Twist::Cache('pkgTemplate')->store($dirTemplate,$arrTemplateData,$this->framework()->setting('TEMPLATE_PRE_PROCESS_CACHE'));
+		    \Twist::Cache('pkgTemplate')->store($strCacheKey,$arrTemplateData,$this->framework()->setting('TEMPLATE_PRE_PROCESS_CACHE'));
 	    }
 
         foreach($arrTemplateData['tags'] as $strEachTag){
