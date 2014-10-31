@@ -148,66 +148,82 @@
 
 			if(array_key_exists($strRepoKey,$this->arrRepositories)){
 
-				require_once sprintf('%s/RC4.twist.php',dirname(__FILE__));
-				$objTwistRC4 = new \Crypt_RC4();
-				$objTwistRC4->setKey($this->arrRepositories[$strRepoKey]['token']);
+				$arrOut = null;
+				$strCacheKey = sprintf('%s-%s-%s-%s',$strRepoKey,$strType,$strChannel,sha1(serialize($arrPostParameters)));
+				$blUseCache = (!in_array($strType,array('download','authenticate','connect'))) ? true : false;
 
-				$strRepoURL = $this->arrRepositories[$strRepoKey]['url'];
+				$arrOut = null;
+				if($blUseCache){
+					$arrOut = \Twist::Cache('twistUpgrade')->retrieve($strCacheKey);
+				}
 
-				$resCurl = curl_init();
-				curl_setopt($resCurl, CURLOPT_URL, sprintf('%s?type=%s&channel=%s',$strRepoURL,$strType,$strChannel));
+				if(is_null($arrOut)){
 
-				if(count($arrPostParameters)){
+					require_once sprintf('%s/RC4.twist.php',dirname(__FILE__));
+					$objTwistRC4 = new \Crypt_RC4();
+					$objTwistRC4->setKey($this->arrRepositories[$strRepoKey]['token']);
 
-					$strPostData = '';
-					if(is_array($arrPostParameters) && count($arrPostParameters)){
-						foreach($arrPostParameters as $mxdKey => $mxdData){
-							$strPostData .= sprintf("%s=%s&",$mxdKey,$mxdData);
+					$strRepoURL = $this->arrRepositories[$strRepoKey]['url'];
+
+					$resCurl = curl_init();
+					curl_setopt($resCurl, CURLOPT_URL, sprintf('%s?type=%s&channel=%s',$strRepoURL,$strType,$strChannel));
+
+					if(count($arrPostParameters)){
+
+						$strPostData = '';
+						if(is_array($arrPostParameters) && count($arrPostParameters)){
+							foreach($arrPostParameters as $mxdKey => $mxdData){
+								$strPostData .= sprintf("%s=%s&",$mxdKey,$mxdData);
+							}
 						}
+						$strPostData = rtrim($strPostData,'&');
+
+						curl_setopt($resCurl, CURLOPT_POST, count($arrPostParameters));
+						curl_setopt($resCurl, CURLOPT_POSTFIELDS, $strPostData);
 					}
-					$strPostData = rtrim($strPostData,'&');
 
-					curl_setopt($resCurl, CURLOPT_POST, count($arrPostParameters));
-					curl_setopt($resCurl, CURLOPT_POSTFIELDS, $strPostData);
-				}
+					curl_setopt($resCurl, CURLOPT_SSL_VERIFYHOST, 0);
+					curl_setopt($resCurl, CURLOPT_SSL_VERIFYPEER, 0);
+					curl_setopt($resCurl, CURLOPT_RETURNTRANSFER, 1);
+					curl_setopt($resCurl, CURLOPT_TIMEOUT, 5);
 
-				curl_setopt($resCurl, CURLOPT_SSL_VERIFYHOST, 0);
-				curl_setopt($resCurl, CURLOPT_SSL_VERIFYPEER, 0);
-				curl_setopt($resCurl, CURLOPT_RETURNTRANSFER, 1);
-				curl_setopt($resCurl, CURLOPT_TIMEOUT, 5);
+					if($this->arrRepositories[$strRepoKey]['licence'] != ''){
+						curl_setopt($resCurl, CURLOPT_HTTPHEADER, array('Request-Key: '.$this->arrRepositories[$strRepoKey]['licence']));
+					}
 
-				if($this->arrRepositories[$strRepoKey]['licence'] != ''){
-					curl_setopt($resCurl, CURLOPT_HTTPHEADER, array('Request-Key: '.$this->arrRepositories[$strRepoKey]['licence']));
-				}
+					curl_setopt($resCurl, CURLOPT_USERAGENT, 'Twist Framework Manager');
+					$mxdResponse = curl_exec($resCurl);
+					$arrRequestInfo = curl_getinfo($resCurl);
 
-				curl_setopt($resCurl, CURLOPT_USERAGENT, 'Twist Framework Manager');
-				$mxdResponse = curl_exec($resCurl);
-				$arrRequestInfo = curl_getinfo($resCurl);
+					if(!curl_errno($resCurl)){
 
-				if(!curl_errno($resCurl)){
+						if($arrRequestInfo['http_code'] == 200){
 
-					if($arrRequestInfo['http_code'] == 200){
+							if($strType == 'authenticate' && $this->arrRepositories[$strRepoKey]['token'] != ''){
+								$mxdResponse = $objTwistRC4->decrypt($mxdResponse);
+								$arrOut = (strstr($mxdResponse,'{')) ? json_decode($mxdResponse,true) : array('error' => 'Licence Key Error');
+							}else{
+								$arrOut = (strstr($mxdResponse,'{')) ? json_decode($mxdResponse,true) : array('error' => 'Communication Error');
+							}
 
-						if($strType == 'authenticate' && $this->arrRepositories[$strRepoKey]['token'] != ''){
-							$mxdResponse = $objTwistRC4->decrypt($mxdResponse);
-							$arrOut = (strstr($mxdResponse,'{')) ? json_decode($mxdResponse,true) : array('error' => 'Licence Key Error');
+							if($strType == 'download' && !is_array($arrOut)){
+								$arrOut = array('file' => $mxdResponse);
+							}
+
+							if($blUseCache){
+								\Twist::Cache('twistUpgrade')->store($strCacheKey,$arrOut,86400);
+							}
+
 						}else{
-							$arrOut = (strstr($mxdResponse,'{')) ? json_decode($mxdResponse,true) : array('error' => 'Communication Error');
+							$arrOut = array('error' => sprintf('Communication Error: [%s] Forbidden access',$arrRequestInfo['http_code']));
 						}
 
-						if($strType == 'download' && !is_array($arrOut)){
-							$arrOut = array('file' => $mxdResponse);
-						}
 					}else{
-						$arrOut = array('error' => sprintf('Communication Error: [%s] Forbidden access',$arrRequestInfo['http_code']));
+						$arrOut = array('error' => sprintf('Communication Error: [%s] %s',curl_errno($resCurl),curl_error($resCurl)));
 					}
 
-				}else{
-					$arrOut = array('error' => sprintf('Communication Error: [%s] %s',curl_errno($resCurl),curl_error($resCurl)));
+					curl_close($resCurl);
 				}
-
-				curl_close($resCurl);
-
 			}else{
 				$arrOut = array('error' => sprintf('Invalid repository: %s',$strRepoKey));
 			}
