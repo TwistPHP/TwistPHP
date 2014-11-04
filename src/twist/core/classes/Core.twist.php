@@ -213,6 +213,29 @@
 				}
 			}
 
+			/**
+			 * Redirect the user to a new page or site by URL, optionally you can make the redirect permanent.
+			 * @param $urlRedirectURL URL that the user will be redirected too
+			 * @param $blPermanent Set the redirect type to be a Permanent 301 redirect
+			 */
+			public static function redirect($urlRedirect,$blPermanent = false){
+				header(sprintf('Location: %s',$urlRedirect),true,($blPermanent) ? 301 : 302);
+				die();
+			}
+
+			/**
+			 * Respond with a HTTP status page, pass in the status code that you require
+			 * @param $intResponseCode Code of the required response i.e. 404
+			 */
+			public static function respond($intResponseCode){
+				\TwistPHP\Error::errorPage($intResponseCode);
+			}
+
+			/**
+			 * Dump data to the screen in a nice format with other key debug information
+			 * @param null $mxdData
+			 * @throws Exception
+			 */
 			public static function dump($mxdData = null){
 				throw new \Exception(json_encode($mxdData),1200);
 			}

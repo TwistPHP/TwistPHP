@@ -296,9 +296,10 @@ class Route extends ModuleBase{
 	 *
 	 * @param $strURI
 	 * @param $strURL
+	 * @param $blPermanent
 	 */
-	public function redirect($strURI,$strURL){
-		$this->addRoute($strURI,'redirect',$strURL);
+	public function redirect($strURI,$strURL,$blPermanent = false){
+		$this->addRoute($strURI,($blPermanent) ? 'redirect-permanent' : 'redirect',$strURL);
 	}
 
 	/**
@@ -659,18 +660,19 @@ class Route extends ModuleBase{
 	/**
 	 * Serve is used to active the routes system after all routes have been set
 	 */
-	public function serve(){
+	public function serve()
+	{
 
 		\Twist::Timer('TwistPageLoad')->log('Routes Prepared');
 
 		$arrRoute = $this->current();
-		if(count($arrRoute)){
+		if (count($arrRoute)) {
 
 			//First of all check for an interface and do that
-			if($arrRoute['type'] == 'interface'){
-				\Twist::framework()->interfaces()->load($arrRoute['item'],$arrRoute['uri'],$arrRoute['base_template']);
+			if ($arrRoute['type'] == 'interface') {
+				\Twist::framework()->interfaces()->load($arrRoute['item'], $arrRoute['uri'], $arrRoute['base_template']);
 				die();
-			}else{
+			} else {
 
 				//Else proceed as normal
 				$strFullLoginURL = $this->framework()->setting('USER_DEFAULT_LOGIN_URI');
@@ -678,15 +680,15 @@ class Route extends ModuleBase{
 				$arrRestrictedInfo = array();
 				$blRestrictedPage = false;
 
-				foreach($this->arrRestrict as $strRestrictURI => $arrRestrictedInfo){
-					$strExpression = sprintf("#(%s%s)#",rtrim($strRestrictURI,'/'),($arrRestrictedInfo['wildcard'] == '1') ? '[/\w]+?' : '[/]?');
+				foreach ($this->arrRestrict as $strRestrictURI => $arrRestrictedInfo) {
+					$strExpression = sprintf("#(%s%s)#", rtrim($strRestrictURI, '/'), ($arrRestrictedInfo['wildcard'] == '1') ? '[/\w]+?' : '[/]?');
 
-					if(preg_match($strExpression,$arrRoute['relative_uri'],$arrMatches)){
+					if (preg_match($strExpression, $arrRoute['relative_uri'], $arrMatches)) {
 
-						$strFullLoginURL = sprintf('%s/%s',$this->strBaseURI,ltrim($arrRestrictedInfo['login_uri'],'/'));
+						$strFullLoginURL = sprintf('%s/%s', $this->strBaseURI, ltrim($arrRestrictedInfo['login_uri'], '/'));
 						$blRestrictedPage = true;
 
-						if($arrRestrictedInfo['login_uri'] == $arrRoute['current']['uri']){
+						if ($arrRestrictedInfo['login_uri'] == $arrRoute['current']['uri']) {
 							$blRestrictedPage = false;
 							$arrRestrictedInfo = array();
 						}
@@ -697,22 +699,22 @@ class Route extends ModuleBase{
 
 				$blDatabaseEnabled = \Twist::Database()->checkSettings();
 
-				if($blDatabaseEnabled){
+				if ($blDatabaseEnabled) {
 					//Set the login URL that is specified by restrict otherwise from framework settings
 					\Twist::User()->strLoginUrl = $strFullLoginURL;
 					\Twist::User()->authenticate();
-				}elseif($blRestrictedPage){
+				} elseif ($blRestrictedPage) {
 					throw new \Exception('You must have a database connection enabled to use restricted pages');
 				}
 
 				//redirect the user to the login page if required
-				if($blRestrictedPage && !\Twist::User()->loggedIn()){
+				if ($blRestrictedPage && !\Twist::User()->loggedIn()) {
 					\Twist::User()->setAfterLoginRedirect();
-					header(sprintf('Location: %s',str_replace('//','/',$strFullLoginURL)));
+					header(sprintf('Location: %s', str_replace('//', '/', $strFullLoginURL)));
 					die();
-				}elseif($blRestrictedPage && (!\Twist::User()->loggedIn() || (!is_null($arrRestrictedInfo['level']) && \Twist::User()->currentLevel() < $arrRestrictedInfo['level']))){
-					$this->respond(403);
-				}else{
+				} elseif ($blRestrictedPage && (!\Twist::User()->loggedIn() || (!is_null($arrRestrictedInfo['level']) && \Twist::User()->currentLevel() < $arrRestrictedInfo['level']))) {
+					\Twist::respond(403);
+				} else {
 
 					//Pass all the current route info to the global server array
 					$_SERVER['TWIST_ROUTE'] = $arrRoute;
@@ -733,7 +735,7 @@ class Route extends ModuleBase{
 					$arrTags['response_type'] = $arrRoute['type'];
 
 					$arrTags['request'] = ($arrRoute['current']['uri'] == '') ? '/' : $arrRoute['current']['uri'];
-					$arrTags['request_item'] = ltrim($arrRoute['current']['dynamic'],'/');
+					$arrTags['request_item'] = ltrim($arrRoute['current']['dynamic'], '/');
 
 					$arrTags['base_uri'] = $this->strBaseURI;
 					$arrTags['interface_uri'] = $this->strInterfaceURI;
@@ -741,99 +743,101 @@ class Route extends ModuleBase{
 					//$arrTags['title'] = $arrRoute['title'];
 					$arrTags['data'] = $arrRoute['data'];
 
-					$this->framework() -> module() -> extend('Template','route',$arrTags);
+					$this->framework()->module()->extend('Template', 'route', $arrTags);
 
-					switch($arrRoute['type']){
+					switch ($arrRoute['type']) {
 						case'template':
-							$arrTags['response'] .= $this->resTemplate->build($arrRoute['item'],$arrRoute['data']);
+							$arrTags['response'] .= $this->resTemplate->build($arrRoute['item'], $arrRoute['data']);
 							break;
 						case'element':
-							$arrTags['response'] .= $this->resTemplate->processElement($arrRoute['item'],$arrRoute['data']);
+							$arrTags['response'] .= $this->resTemplate->processElement($arrRoute['item'], $arrRoute['data']);
 							break;
 						case'controller':
-							if(is_array($arrRoute['item']) && count($arrRoute['item']) >= 1){
+							if (is_array($arrRoute['item']) && count($arrRoute['item']) >= 1) {
 
-								$strControllerFile = sprintf('%s/%s.controller.php',$this->strControllerDirectory,$arrRoute['item'][0]);
-								$strControllerFileLegacy = sprintf('%s/%s.class.php',$this->strControllerDirectory,$arrRoute['item'][0]);
+								$strControllerFile = sprintf('%s/%s.controller.php', $this->strControllerDirectory, $arrRoute['item'][0]);
+								$strControllerFileLegacy = sprintf('%s/%s.class.php', $this->strControllerDirectory, $arrRoute['item'][0]);
 
-								if(file_exists($strControllerFile)){
+								if (file_exists($strControllerFile)) {
 									require_once $strControllerFile;
-								}elseif(file_exists($strControllerFileLegacy)){
+								} elseif (file_exists($strControllerFileLegacy)) {
 									require_once $strControllerFileLegacy;
-									trigger_error(sprintf("Deprecated controller name '%s' rename controller as '%s'",$strControllerFileLegacy,$strControllerFile),E_TWIST_DEPRECATED);
-								}else{
-									throw new \Exception(sprintf("Controller '%s' does not exists",$arrRoute['item'][0]));
+									trigger_error(sprintf("Deprecated controller name '%s' rename controller as '%s'", $strControllerFileLegacy, $strControllerFile), E_TWIST_DEPRECATED);
+								} else {
+									throw new \Exception(sprintf("Controller '%s' does not exists", $arrRoute['item'][0]));
 								}
 
-								$strControllerClass = sprintf('\TwistController\\%s',$arrRoute['item'][0]);
-								if(count($arrRoute['item']) > 1){
+								$strControllerClass = sprintf('\TwistController\\%s', $arrRoute['item'][0]);
+								if (count($arrRoute['item']) > 1) {
 									$strControllerFunction = $arrRoute['item'][1];
-								}else{
+								} else {
 									$strControllerFunction = (count($arrRoute['current']['parts'])) ? $arrRoute['current']['parts'][0] : '_default';
 								}
 
 								$objController = new $strControllerClass();
 
-								if(in_array("_extended",get_class_methods($objController))){
+								if (in_array("_extended", get_class_methods($objController))) {
 
 									$arrAliases = $objController->_getAliases();
 									$arrReplacements = $objController->_getReplacements();
 
 									$arrControllerFunctions = array();
-									foreach(get_class_methods($objController) as $strFunctionName){
-										if(array_key_exists($strFunctionName,$arrReplacements)){
+									foreach (get_class_methods($objController) as $strFunctionName) {
+										if (array_key_exists($strFunctionName, $arrReplacements)) {
 											$arrControllerFunctions[strtolower($arrReplacements[$strFunctionName])] = $strFunctionName;
-										}else{
+										} else {
 											$arrControllerFunctions[strtolower($strFunctionName)] = $strFunctionName;
 										}
 									}
 
 									//Merge in all the registered aliases if any exist
-									$arrControllerFunctions = array_merge($arrControllerFunctions,$arrAliases);
+									$arrControllerFunctions = array_merge($arrControllerFunctions, $arrAliases);
 
-									$strRequestMethodFunction = sprintf('%s%s',strtolower($_SERVER['REQUEST_METHOD']),strtolower($strControllerFunction));
+									$strRequestMethodFunction = sprintf('%s%s', strtolower($_SERVER['REQUEST_METHOD']), strtolower($strControllerFunction));
 									$strControllerFunction = strtolower($strControllerFunction);
 
-									if(array_key_exists($strRequestMethodFunction,$arrControllerFunctions)){
+									if (array_key_exists($strRequestMethodFunction, $arrControllerFunctions)) {
 
 										$strControllerFunction = $arrControllerFunctions[$strRequestMethodFunction];
 										$arrTags['response'] .= $objController->$strControllerFunction();
 
-									}elseif(array_key_exists($strControllerFunction,$arrControllerFunctions)){
+									} elseif (array_key_exists($strControllerFunction, $arrControllerFunctions)) {
 
 										$strControllerFunction = $arrControllerFunctions[$strControllerFunction];
 										$arrTags['response'] .= $objController->$strControllerFunction();
 
-									}else{
+									} else {
 
 										$strControllerFunction = '_fallback';
 										$arrTags['response'] .= $objController->$strControllerFunction();
 									}
-								}else{
-									throw new \Exception(sprintf("Controller '%s' must extend BaseController",$strControllerClass));
+								} else {
+									throw new \Exception(sprintf("Controller '%s' must extend BaseController", $strControllerClass));
 								}
-							}else{
-								$this->respond(500);
+							} else {
+								\Twist::respond(500);
 							}
 							break;
 						case'ajax':
 							//Only allow ajax to make these requests
-							if(TWIST_AJAX_REQUEST){
+							if (TWIST_AJAX_REQUEST) {
 								\Twist::AJAX()->server(
 									$arrRoute['data']['functions'],
 									$arrRoute['data']['templates'],
 									$arrRoute['data']['elements']
 								);
-							}else{
-								$this->respond(405);
+							} else {
+								\Twist::respond(405);
 							}
 							break;
 						case'interface':
 							//Should never get here -- See at the top of this function call (more efficient)
 							break;
+						case'redirect-permanent':
+							\Twist::redirect($arrRoute['item'], true);
+							break;
 						case'redirect':
-							header(sprintf('Location: %s',$arrRoute['item']));
-							die();
+							\Twist::redirect($arrRoute['item']);
 							break;
 					}
 
@@ -842,26 +846,26 @@ class Route extends ModuleBase{
 					$arrTags['author'] = $_SERVER['TWIST_ROUTE_AUTHOR'];
 					$arrTags['keywords'] = $_SERVER['TWIST_ROUTE_KEYWORDS'];
 
-					$this->framework() -> module() -> extend('Template','route',$arrTags);
+					$this->framework()->module()->extend('Template', 'route', $arrTags);
 
-					if(!is_null($this->strBaseTemplate) && $arrRoute['base_template'] === true){
+					if (!is_null($this->strBaseTemplate) && $arrRoute['base_template'] === true) {
 
-						$strPageOut = $this->resTemplate->build($this->strBaseTemplate,$arrRoute['data']);
-					}elseif(!is_bool($arrRoute['base_template'])){
+						$strPageOut = $this->resTemplate->build($this->strBaseTemplate, $arrRoute['data']);
+					} elseif (!is_bool($arrRoute['base_template'])) {
 
-						$strCustomTemplate = sprintf('%s/%s',$this->resTemplate->getTemplatesDirectory(),$arrRoute['base_template']);
-						if(file_exists($strCustomTemplate)){
-							$strPageOut = $this->resTemplate->build($arrRoute['base_template'],$arrRoute['data']);
-						}else{
-							throw new \Exception(sprintf("The custom base template (%s) for the route %s '%s' does not exist",$arrRoute['base_template'],$arrRoute['type'],$arrRoute['current']['uri']));
+						$strCustomTemplate = sprintf('%s/%s', $this->resTemplate->getTemplatesDirectory(), $arrRoute['base_template']);
+						if (file_exists($strCustomTemplate)) {
+							$strPageOut = $this->resTemplate->build($arrRoute['base_template'], $arrRoute['data']);
+						} else {
+							throw new \Exception(sprintf("The custom base template (%s) for the route %s '%s' does not exist", $arrRoute['base_template'], $arrRoute['type'], $arrRoute['current']['uri']));
 						}
-					}else{
+					} else {
 						$strPageOut = $arrTags['response'];
 					}
 
 					//Cache the page if cache is enabled for this route
-					if($arrRoute['cache'] == true && $arrRoute['cache_life'] > 0){
-						$this->storePageCache($arrRoute['cache_key'],$strPageOut,$arrRoute['cache_life']);
+					if ($arrRoute['cache'] == true && $arrRoute['cache_life'] > 0) {
+						$this->storePageCache($arrRoute['cache_key'], $strPageOut, $arrRoute['cache_life']);
 					}
 
 					//Output the page
@@ -869,16 +873,8 @@ class Route extends ModuleBase{
 				}
 			}
 
-		}elseif($this->bl404){
-			$this->respond(404);
+		} elseif ($this->bl404) {
+			\Twist::respond(404);
 		}
-	}
-
-	/**
-	 * Respond with a HTTP status page, pass in the status code that you require
-	 * @param $intResponseCode
-	 */
-	public function respond($intResponseCode){
-		\TwistPHP\Error::errorPage($intResponseCode);
 	}
 }
