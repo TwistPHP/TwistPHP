@@ -356,8 +356,8 @@ class Template extends ModuleBase{
                         $strTempReplace2 = $arrConditions[4][$intKey];
                     }
 
-                    $mxdValue1 = (!is_null($arrValue1Parts)) ? $this->runTags($strTempTag1,$strTempReplace1,$arrValue1Parts[0],$arrValue1Parts[1],$arrData) : $arrConditions[2][$intKey];
-                    $mxdValue2 = (!is_null($arrValue2Parts)) ? $this->runTags($strTempTag2,$strTempReplace2,$arrValue2Parts[0],$arrValue2Parts[1],$arrData) : $arrConditions[4][$intKey];
+                    $mxdValue1 = (!is_null($arrValue1Parts)) ? $this->runTags($strTempTag1,$strTempReplace1,$arrValue1Parts[0],$arrValue1Parts[1],$arrData,true) : $arrConditions[2][$intKey];
+                    $mxdValue2 = (!is_null($arrValue2Parts)) ? $this->runTags($strTempTag2,$strTempReplace2,$arrValue2Parts[0],$arrValue2Parts[1],$arrData,true) : $arrConditions[4][$intKey];
 
                     //Detect undefined parameters and match against 'undefined'
                     $mxdValue1 = ($mxdValue1 === $strTempTag1) ? 'twst-undefined-variable' : $mxdValue1;
@@ -454,7 +454,7 @@ class Template extends ModuleBase{
      */
     protected function detectType($mxdValue){
 
-        if(!is_bool($mxdValue)){
+        if(!is_bool($mxdValue) && !is_array($mxdValue)){
 
             //Get the length of the original string and strip containing quote marks
             $intLength = strlen($mxdValue);
@@ -501,40 +501,40 @@ class Template extends ModuleBase{
 
         switch($strCondition){
             case'===':
-                $blOut = ($mxdValue1 === $mxdValue2) ? true : false;
+                $blOut = ($mxdValue1 === $mxdValue2);
                 break;
             case'!==':
-                $blOut = ($mxdValue1 !== $mxdValue2) ? true : false;
+                $blOut = ($mxdValue1 !== $mxdValue2);
                 break;
             case'==':
-                $blOut = ($mxdValue1 == $mxdValue2 || ($mxdValue1 == '' && $mxdValue2 === 'twst-undefined-variable') || ($mxdValue2 == '' && $mxdValue1 === 'twst-undefined-variable')) ? true : false;
+                $blOut = ($mxdValue1 == $mxdValue2 || ($mxdValue1 == '' && $mxdValue2 === 'twst-undefined-variable') || ($mxdValue2 == '' && $mxdValue1 === 'twst-undefined-variable'));
                 break;
             case'<':
-                $blOut = ($mxdValue1 < $mxdValue2) ? true : false;
+                $blOut = ($mxdValue1 < $mxdValue2);
                 break;
             case'>':
-                $blOut = ($mxdValue1 > $mxdValue2) ? true : false;
+                $blOut = ($mxdValue1 > $mxdValue2);
                 break;
             case'<=':
-                $blOut = ($mxdValue1 <= $mxdValue2) ? true : false;
+                $blOut = ($mxdValue1 <= $mxdValue2);
                 break;
             case'>=':
-                $blOut = ($mxdValue1 >= $mxdValue2) ? true : false;
+                $blOut = ($mxdValue1 >= $mxdValue2);
                 break;
             case'!=':
-                $blOut = ($mxdValue1 != $mxdValue2) ? true : false;
+                $blOut = ($mxdValue1 != $mxdValue2);
                 break;
             case'*':
-                $blOut = (in_array($mxdValue1,$mxdValue2)) ? true : false;
+                $blOut = in_array($mxdValue2,$mxdValue1);
                 break;
             case'^=':
-                $blOut = (substr($mxdValue1,0,strlen($mxdValue2)) == $mxdValue2) ? true : false;
+                $blOut = (substr($mxdValue1,0,strlen($mxdValue2)) == $mxdValue2);
                 break;
             case'*=':
-                $blOut = (strpos($mxdValue1,$mxdValue2) !== false) ? true : false;
+                $blOut = (strpos($mxdValue1,$mxdValue2) !== false);
                 break;
             case'$=':
-                $blOut = (substr($mxdValue1,strlen($mxdValue1)-strlen($mxdValue2),strlen($mxdValue2)) == $mxdValue2) ? true : false;
+                $blOut = (substr($mxdValue1,strlen($mxdValue1)-strlen($mxdValue2),strlen($mxdValue2)) == $mxdValue2);
                 break;
         }
 
@@ -550,7 +550,7 @@ class Template extends ModuleBase{
      * @param $arrData
      * @return mixed
      */
-    public function runTags($strRawTemplate,$strTag,$strType,$strReference,$arrData = array()){
+    public function runTags($strRawTemplate,$strTag,$strType,$strReference,$arrData = array(),$blReturnArray = false){
 
         $strFunction = null;
 
@@ -574,13 +574,13 @@ class Template extends ModuleBase{
                         $mxdTempData = $this -> framework() -> tools() -> arrayParse($strReference,$arrData);
                         $blFound = (is_null($mxdTempData)) ? false : true;
 
-                        $strTempData = (is_array($mxdTempData)) ? print_r($mxdTempData,true) : $mxdTempData;
+                        $strTempData = (is_array($mxdTempData) && $blReturnArray == false) ? print_r($mxdTempData,true) : $mxdTempData;
 
                         //Do what normally happens
                     }elseif(array_key_exists($strReference,$arrData)){
 
                         $blFound = true;
-                        $strTempData = (is_array($arrData[$strReference])) ? print_r($arrData[$strReference],true) : $arrData[$strReference];
+                        $strTempData = (is_array($arrData[$strReference]) && $blReturnArray == false) ? print_r($arrData[$strReference],true) : $arrData[$strReference];
                     }
 
                     if($blFound){
@@ -695,10 +695,10 @@ class Template extends ModuleBase{
 
                         if(strstr($strReference,'/')){
                             $mxdTempData = $this->framework()->tools()->arrayParse($strReference,$arrExtensions[$strType]);
-                            $strReplacementData = (is_array($mxdTempData)) ? print_r($mxdTempData,true) : $mxdTempData;
+                            $strReplacementData = (is_array($mxdTempData) && $blReturnArray == false) ? print_r($mxdTempData,true) : $mxdTempData;
                         }else{
                             if(array_key_exists($strReference,$arrExtensions[$strType])){
-                                $strReplacementData = (is_array($arrExtensions[$strType][$strReference])) ? print_r($arrExtensions[$strType][$strReference],true) : $arrExtensions[$strType][$strReference];
+                                $strReplacementData = (is_array($arrExtensions[$strType][$strReference]) && $blReturnArray == false) ? print_r($arrExtensions[$strType][$strReference],true) : $arrExtensions[$strType][$strReference];
                             }
                         }
                     }
