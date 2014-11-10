@@ -1,1 +1,0 @@
-The demo site displays all the functionality of the framework as well as giving some example snippits
