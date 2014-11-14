@@ -610,7 +610,7 @@ class Route extends ModuleBase{
 					arsort($arrFoundWildCard);
 					$strWildCard = array_shift($arrFoundWildCard);
 
-					$strRouteDynamic = str_replace($strWildCard,'',$strCurrentURI);
+					$strRouteDynamic = substr($strCurrentURI,strlen($strWildCard),strlen($strCurrentURI)-strlen($strWildCard));
 					$arrRouteParts = explode('/',trim($strRouteDynamic,'/'));
 
 					$strCurrentURI = $strWildCard;
