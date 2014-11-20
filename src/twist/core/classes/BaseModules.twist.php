@@ -43,6 +43,7 @@
 			public static function Asset(){ return parent::Asset(); }
 			public static function CSV(){ return parent::CSV(); }
 			public static function Cache(){ return parent::Cache( count(func_get_args()) ? func_get_arg(0) : 'twist' ); }
+			public static function Command(){ return parent::Command(); }
 			public static function Curl(){ return parent::Curl(); }
 			public static function Database(){ return parent::Database( count(func_get_args()) ? func_get_arg(0) : 'twist' ); }
 			public static function DateTime(){ return parent::DateTime(); }

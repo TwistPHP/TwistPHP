@@ -78,6 +78,15 @@
 				return $resTwistModule;
 			}
 
+			protected static function Command(){
+
+				require_once sprintf('%sCommand.twist.php',DIR_FRAMEWORK_PACKAGES);
+
+				$resTwistModule = (!Instance::isObject('pkgCommand')) ? new Packages\Command() : Instance::retrieveObject('pkgCommand');
+				Instance::storeObject('pkgCommand',$resTwistModule);
+				return $resTwistModule;
+			}
+
 			protected static function Curl(){
 
 				require_once sprintf('%sCurl.twist.php',DIR_FRAMEWORK_PACKAGES);
