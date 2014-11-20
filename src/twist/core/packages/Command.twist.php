@@ -30,11 +30,14 @@ use TwistPHP\ModuleBase;
 class Command extends ModuleBase{
 
 	/**
-	 * Pass in the bash command to be executed on the server, the result will be formatted as an array with overall status, return code and error messages in an error array
+	 * Pass in the bash command to be executed on the server, the result will be formatted as an array with overall status, return code and error messages in an error array.
+	 * You can override the current working directory, by default the current working directory is you document root. Commands can either be written utilising full path stings
+	 * or they can be relative to the current working directory.
 	 * @param $strCommand Correctly formatted bash command
+	 * @param $dirCurrentWorkingDirectory Override of your current working directory
 	 * @return array Formatted array of data containing the fields command, status, output, errors, return
 	 */
-	public function execute($strCommand){
+	public function execute($strCommand,$dirCurrentWorkingDirectory = null){
 
 		$arrDescriptorSpec = array(
 			0 => array("pipe", "r"),//Input Pipe
@@ -43,11 +46,11 @@ class Command extends ModuleBase{
 			2 => array("pipe", "w")//Output to a Pipe
 		);
 
-		$strCurrentWorkingDirectory = getcwd();
+		$dirCurrentWorkingDirectory = (is_null($dirCurrentWorkingDirectory) || !is_dir($dirCurrentWorkingDirectory)) ? DIR_BASE : $dirCurrentWorkingDirectory;
 		$mxdEnvironmentsVars = null;
 		$strAdditionalInput = '';
 
-		$resProcess = proc_open($strCommand, $arrDescriptorSpec, $arrPipes, $strCurrentWorkingDirectory, $mxdEnvironmentsVars);
+		$resProcess = proc_open($strCommand, $arrDescriptorSpec, $arrPipes, $dirCurrentWorkingDirectory, $mxdEnvironmentsVars);
 
 		$arrOut = array(
 			'command' => $strCommand,
@@ -76,5 +79,4 @@ class Command extends ModuleBase{
 
 		return $arrOut;
 	}
-
 }
