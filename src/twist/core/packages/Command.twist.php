@@ -32,7 +32,7 @@ class Command extends ModuleBase{
 	/**
 	 * Pass in the bash command to be executed on the server, the result will be formatted as an array with overall status, return code and error messages in an error array
 	 * @param $strCommand Correctly formatted bash command
-	 * @return array
+	 * @return array Formatted array of data containing the fields command, status, output, errors, return
 	 */
 	public function execute($strCommand){
 
