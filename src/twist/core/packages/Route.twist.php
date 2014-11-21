@@ -39,6 +39,7 @@ class Route extends ModuleBase{
 	protected $arrRoutesDELETE = array();
 
 	protected $arrWildCards = array();
+	protected $arrRegxMatches = array();
 	protected $arrRestrict = array();
 	protected $strBaseTemplate = null;
 	protected $strBaseURI = null;
@@ -467,9 +468,21 @@ class Route extends ModuleBase{
 			$strURI = str_replace('%','',$strURI);
 		}
 
-		$strURI = rtrim($strURI,'/').($this->framework()->setting('SITE_TAILING_SLASH')) ? '/' : '';
+		$strTrailingSlash = ($this->framework()->setting('SITE_TAILING_SLASH')) ? '/' : '';
+		$strURI = rtrim($strURI,'/').$strTrailingSlash;
+
+		$regxMatchURI = null;
+		if(strstr($strURI,'/{') && strstr($strURI,'}')){
+			/**
+			 * Turn the URI '/my/{page}/uri'
+			 * Into the Regx '#^(?<twist_uri>\/my\/(?<tphp_page>[^\/]+)\/uri)#i'
+			 * If Wildcard '#^(?<twist_uri>\/my\/(?<tphp_page>[^\/]+)\/uri)(?<twist_wildcard>.*)#i'
+			 */
+			$regxMatchURI = sprintf("#^(?<twist_uri>%s)%s#i",str_replace(array("/","{","}"),array("\\/","(?<tphp_",">[^\/]+)"),$strURI),($blWildCard) ? '(?<twist_wildcard>.*)' : '$');
+		}
 
 		$arrRouteData = array(
+			'regx' => $regxMatchURI,
 			'uri' => sprintf("%s%s",$this->baseURI(),str_replace('//','/',$strURI)),
 			'base_uri' => $this->baseURI(),
 			'relative_uri' => $strURI,
@@ -484,6 +497,8 @@ class Route extends ModuleBase{
 			'cache_key' => str_replace('/','+',trim(sprintf("%s%s",$this->baseURI(),str_replace('//','/',$strURI)),'/')),
 			'cache_life' => ($mxdCache === true) ? $this->intCacheTime : ($mxdCache !== false) ? $mxdCache : 0
 		);
+
+		print_r($arrRouteData);
 
 		switch($arrRouteData['method']){
 			case'GET':
@@ -503,9 +518,16 @@ class Route extends ModuleBase{
 				break;
 		}
 
-		if($blWildCard){
+		if($blWildCard && is_null($regxMatchURI)){
+
+			//Add the plain wild cards
 			$this->arrWildCards[] = $strURI;
 			sort($this->arrWildCards);
+		}elseif(!is_null($regxMatchURI)){
+
+			//Add the regx matches including the regx wildcard matches
+			$this->arrRegxMatches[$strURI] = $regxMatchURI;
+			ksort($this->arrRegxMatches);
 		}
 	}
 
@@ -582,7 +604,7 @@ class Route extends ModuleBase{
 	 */
 	public function current(){
 
-		$arrOut = array();
+		$arrOut = $arrUriParameters = array();
 		$arrMethodRoutes = $this->currentMethodRoutes();
 
 		if(count($arrMethodRoutes) || count($this->arrRoutes)){
@@ -591,15 +613,53 @@ class Route extends ModuleBase{
 			$strPageCacheKey = str_replace('/','+',trim($arrPartsURI[0],'/'));
 			$arrPartsURI[0] = (!in_array($this->strBaseURI,array(null,'/'))) ? str_replace($this->strBaseURI,'',$arrPartsURI[0]) : $arrPartsURI[0];
 
-			//Get the current URI to be used
-			$strCurrentURI = rtrim( str_replace(rtrim($this->framework()->setting('SITE_BASE'),'/'),'',$arrPartsURI[0]), '/').($this->framework()->setting('SITE_TAILING_SLASH')) ? '/' : '';
+			$strTrailingSlash = ($this->framework()->setting('SITE_TAILING_SLASH')) ? '/' : '';
+
+			//Get the current URI to be used, added a URI key as teh regx version has 2 different variations a real URI and a param uri (the key)
+			$strCurrentURI = $strCurrentURIKey = rtrim( str_replace(rtrim($this->framework()->setting('SITE_BASE'),'/'),'',$arrPartsURI[0]), '/').$strTrailingSlash;
 
 			$strRouteDynamic = '';
 			$arrRouteParts = array();
+			$blMatched = false;
+
+			//Check the regX matched first if there are any to be checked
+			if(count($this->arrRegxMatches)){
+
+				$arrFoundRegxMatches = array();
+
+				foreach($this->arrRegxMatches as $strMatchedURI => $regxUriExpression){
+					if(preg_match($regxUriExpression, $strCurrentURI, $arrResult)){
+						$arrFoundRegxMatches[$strMatchedURI] = array('match_uri' => $strMatchedURI, 'matches' => $arrResult);
+					}
+				}
+
+				if(count($arrFoundRegxMatches)){
+
+					krsort($arrFoundRegxMatches);
+					$arrMatchResults = array_shift($arrFoundRegxMatches);
+
+					foreach($arrMatchResults['matches'] as $strKey => $strValue){
+						if(strstr($strKey,'tphp_')){
+							$arrUriParameters[str_replace('tphp_','',$strKey)] = $strValue;
+						}
+					}
+
+					if(array_key_exists('twist_wildcard',$arrMatchResults['matches'])){
+						$strRouteDynamic = $arrMatchResults['matches']['twist_wildcard'];
+						$arrRouteParts = explode('/',trim($strRouteDynamic,'/'));
+					}
+
+					$strCurrentURIKey = $arrMatchResults['match_uri'];
+					$strCurrentURI = $arrMatchResults['matches']['twist_uri'];
+					$blMatched = true;
+				}
+			}
 
 			//If no route is found and there are wild cards then look up the wild cards
-			if(!array_key_exists($strCurrentURI,$arrMethodRoutes) && !array_key_exists($strCurrentURI,$this->arrRoutes) && count($this->arrWildCards)){
+			if(!$blMatched && !array_key_exists($strCurrentURI,$arrMethodRoutes) && !array_key_exists($strCurrentURI,$this->arrRoutes) && count($this->arrWildCards)){
+
 				$arrFoundWildCard = array();
+
 				foreach($this->arrWildCards as $strWildCard){
 					if(substr($strCurrentURI,0,strlen($strWildCard)) === $strWildCard){
 						$arrFoundWildCard[strlen($strWildCard)] = $strWildCard;
@@ -607,29 +667,39 @@ class Route extends ModuleBase{
 				}
 
 				if(count($arrFoundWildCard)){
+
 					arsort($arrFoundWildCard);
 					$strWildCard = array_shift($arrFoundWildCard);
 
 					$strRouteDynamic = substr($strCurrentURI,strlen($strWildCard),strlen($strCurrentURI)-strlen($strWildCard));
 					$arrRouteParts = explode('/',trim($strRouteDynamic,'/'));
 
-					$strCurrentURI = $strWildCard;
+					$strCurrentURI = $strCurrentURIKey = $strWildCard;
+					$blMatched = true;
 				}
 			}
 
-			$strRouteURI = $strCurrentURI;
+			//Use the Current URI Key here to ensure
+			if(array_key_exists($strCurrentURIKey,$arrMethodRoutes) || array_key_exists($strCurrentURIKey,$this->arrRoutes)){
 
-			if(array_key_exists($strCurrentURI,$arrMethodRoutes) || array_key_exists($strCurrentURI,$this->arrRoutes)){
-
-				$arrOut = array_key_exists($strCurrentURI,$arrMethodRoutes) ? $arrMethodRoutes[$strCurrentURI] : $this->arrRoutes[$strCurrentURI];
+				$arrOut = array_key_exists($strCurrentURIKey,$arrMethodRoutes) ? $arrMethodRoutes[$strCurrentURIKey] : $this->arrRoutes[$strCurrentURIKey];
 
 				$arrOut['cache_key'] = $strPageCacheKey;
 
 				$arrOut['current']['title'] = (is_null($arrOut['title'])) ? $this->framework() -> setting('SITE_NAME') : $arrOut['title'];
-				$arrOut['current']['url'] = $arrOut['url'].$strRouteDynamic;
-				$arrOut['current']['uri'] = $strCurrentURI.$strRouteDynamic;
+				$arrOut['current']['uri'] = sprintf('%s/%s',rtrim($strCurrentURI,'/'),ltrim($strRouteDynamic,'/'));
+				$arrOut['current']['uri_parameters'] = $arrUriParameters;
 				$arrOut['current']['dynamic'] = $strRouteDynamic;
 				$arrOut['current']['parts'] = $arrRouteParts;
+
+				//Now sanitise the relative_uri and the url
+				if(!is_null($arrOut['regx'])){
+					foreach($arrUriParameters as $strParamKey => $strParamValue){
+						$strReplaceKey = sprintf("{%s}",$strParamKey);
+						$arrOut['relative_uri'] = str_replace($strReplaceKey,$strParamValue,$arrOut['relative_uri']);
+						$arrOut['url'] = str_replace($strReplaceKey,$strParamValue,$arrOut['url']);
+					}
+				}
 			}
 		}
 
@@ -660,8 +730,7 @@ class Route extends ModuleBase{
 	/**
 	 * Serve is used to active the routes system after all routes have been set
 	 */
-	public function serve()
-	{
+	public function serve(){
 
 		\Twist::Timer('TwistPageLoad')->log('Routes Prepared');
 
@@ -742,6 +811,7 @@ class Route extends ModuleBase{
 
 					//$arrTags['title'] = $arrRoute['title'];
 					$arrTags['data'] = $arrRoute['data'];
+					$arrTags['current'] = $arrRoute['current'];
 
 					$this->framework()->module()->extend('Template', 'route', $arrTags);
 
