@@ -592,7 +592,7 @@ class Route extends ModuleBase{
 			$arrPartsURI[0] = (!in_array($this->strBaseURI,array(null,'/'))) ? str_replace($this->strBaseURI,'',$arrPartsURI[0]) : $arrPartsURI[0];
 
 			//Get the current URI to be used
-			$strCurrentURI = rtrim( str_replace(rtrim($this->framework()->setting('SITE_BASE'),'/'),'',$arrPartsURI[0]), '/').'/';
+			$strCurrentURI = rtrim( str_replace(rtrim($this->framework()->setting('SITE_BASE'),'/'),'',$arrPartsURI[0]), '/').($this->framework()->setting('SITE_TAILING_SLASH')) ? '/' : '';
 
 			$strRouteDynamic = '';
 			$arrRouteParts = array();
