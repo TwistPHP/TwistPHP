@@ -541,180 +541,208 @@ class Template extends ModuleBase{
         return $blOut;
     }
 
-    /**
-     * Run the tag processing on each tag that was found in the template and process them accordingly (Snipit module is required to process multi-dimensional tag arrays)
-     * @param $strRawTemplate
-     * @param $strTag
-     * @param $strType
-     * @param $strReference
-     * @param $arrData
-     * @return mixed
-     */
-    public function runTags($strRawTemplate,$strTag,$strType,$strReference,$arrData = array(),$blReturnArray = false){
+	/**
+	 * Run the tag processing on each tag that was found in the template and process them accordingly (Snipit module is required to process multi-dimensional tag arrays)
+	 * @param $strRawTemplate
+	 * @param $strTag
+	 * @param $strType
+	 * @param $strReference
+	 * @param $arrData
+	 * @return mixed
+	 */
+	public function runTags($strRawTemplate,$strTag,$strType,$strReference,$arrData = array(),$blReturnArray = false){
 
-        $strFunction = null;
+		$strFunction = null;
 
-        if(preg_match("#(.*)\[(.*)\:(.*)\]#",$strTag,$srtMatchResults)){
-            $strFunction = $srtMatchResults[1];
-            $strType = $srtMatchResults[2];
-            $strReference = $srtMatchResults[3];
-        }
+		if(preg_match("#(.*)\[(.*)\:(.*)\]#",$strTag,$srtMatchResults)){
+			$strFunction = $srtMatchResults[1];
+			$strType = $srtMatchResults[2];
+			$strReference = $srtMatchResults[3];
+		}
 
-        switch($strType){
+		switch($strType){
 
-            case'data':
+			case'data':
 
-                $strTempData = '';
-                $blFound = false;
+				$arrResult = $this->processArrayItem($strReference,$arrData,$blReturnArray);
 
-                if(is_array($arrData)){
+				if($arrResult['status'] == true){
+					$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$arrResult['return'],$strFunction);
+				}
 
-                    if(strstr($strReference,'/')){
+				break;
 
-                        $mxdTempData = $this -> framework() -> tools() -> arrayParse($strReference,$arrData);
-                        $blFound = (is_null($mxdTempData)) ? false : true;
+			case'element':
 
-                        $strTempData = (is_array($mxdTempData) && $blReturnArray == false) ? print_r($mxdTempData,true) : $mxdTempData;
+				$strOut = $this->processElement($strReference,$arrData);
+				$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$strOut,$strFunction);
+				break;
 
-                        //Do what normally happens
-                    }elseif(array_key_exists($strReference,$arrData)){
+			case'template':
 
-                        $blFound = true;
-                        $strTempData = (is_array($arrData[$strReference]) && $blReturnArray == false) ? print_r($arrData[$strReference],true) : $arrData[$strReference];
-                    }
+				$strTemplate = $strReference;
 
-                    if($blFound){
-                        $strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$strTempData,$strFunction);
-                    }
-                }
-                break;
+				//Allow the use of "structure_template" which will determine the current structure template
+				if($strReference == 'structure_template'){
+					$arrStructure = \Twist::Structure() -> getCurrent();
+					$strTemplate = $arrStructure['template']['tpl_file'];
+				}
 
-            case'element':
+				$strTagData = $this->build($strTemplate,$arrData);
+				$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$strTagData,$strFunction);
+				break;
 
-                $strOut = $this->processElement($strReference,$arrData);
-                $strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$strOut,$strFunction);
-                break;
+			/**
+			 * PHP Global VARS GET, POST, SERVER, COOKIE
+			 */
+			case'get':
+			case'raw-get':
 
-            case'template':
+				$arrResult = $this->processArrayItem($strReference,$_GET,$blReturnArray);
 
-                $strTemplate = $strReference;
+				if($arrResult['status'] == true){
+					//Protect against XSS attacks
+					$arrResult['return'] = ($strType == 'raw-get') ? $arrResult['return'] : htmlspecialchars($arrResult['return']);
+					$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$arrResult['return'],$strFunction);
+				}
 
-                //Allow the use of "structure_template" which will determine the current structure template
-                if($strReference == 'structure_template'){
-                    $arrStructure = \Twist::Structure() -> getCurrent();
-                    $strTemplate = $arrStructure['template']['tpl_file'];
-                }
+				break;
 
-                $strTagData = $this->build($strTemplate,$arrData);
-                $strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$strTagData,$strFunction);
-                break;
+			case'post':
+			case'raw-post':
 
-            /**
-             * PHP Global VARS GET, POST, SERVER, COOKIE
-             */
-            case'get':
-            case'raw-get':
-                if(array_key_exists($strReference,$_GET)){
-                    //Protect against XSS attacks
-                    $strData = ($strType == 'raw-get') ? $_GET[$strReference] : htmlspecialchars($_GET[$strReference]);
-                    $strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$strData,$strFunction);
-                }
-                break;
+				$arrResult = $this->processArrayItem($strReference,$_POST,$blReturnArray);
 
-            case'post':
-            case'raw-post':
-                if(array_key_exists($strReference,$_POST)){
-                    //Protect against XSS attacks
-                    $strData = ($strType == 'raw-post') ? $_POST[$strReference] : htmlspecialchars($_POST[$strReference]);
-                    $strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$strData,$strFunction);
-                }
-                break;
+				if($arrResult['status'] == true){
+					//Protect against XSS attacks
+					$arrResult['return'] = ($strType == 'raw-post') ? $arrResult['return'] : htmlspecialchars($arrResult['return']);
+					$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$arrResult['return'],$strFunction);
+				}
+				break;
 
-            case'setting':
+			case'setting':
 
-                $strOut = \Twist::framework()->setting(strtoupper($strReference));
-                $strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$strOut,$strFunction);
-                break;
+				$strOut = \Twist::framework()->setting(strtoupper($strReference));
+				$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$strOut,$strFunction);
+				break;
 
-            case'server':
-                if(array_key_exists(strtoupper($strReference),$_SERVER)){
-                    $strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$_SERVER[strtoupper($strReference)],$strFunction);
-                }
-                break;
+			case'server':
 
-            case'cookie':
-                if(array_key_exists($strReference,$_COOKIE)){
-                    //Protect against XSS attacks
-                    $strData = htmlspecialchars($_COOKIE[$strReference]);
-                    $strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$strData,$strFunction);
-                }
-                break;
+				$arrResult = $this->processArrayItem($strReference,$_SERVER,$blReturnArray);
 
-            case'static':
-                $strReference = trim($strReference,'"');
-                $strReference = trim($strReference,"'");
-                $strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$strReference,$strFunction);
-                break;
+				if($arrResult['status'] == true){
+					$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$arrResult['return'],$strFunction);
+				}
 
-            case'date':
-                $strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,\Twist::DateTime()->date($strReference),$strFunction);
-                break;
+				break;
 
-            /**
-             * Use custom tags, set using registerTag('tagType',array('key' => 'value'))
-             */
-            default:
+			case'cookie':
 
-                //Get all registered extensions form the extension handler
-                $arrExtensions = $this -> __extensions();
+				$arrResult = $this->processArrayItem(strtoupper($strReference),$_COOKIE,$blReturnArray);
 
-                if(count($arrExtensions) && array_key_exists($strType,$arrExtensions)){
+				if($arrResult['status'] == true){
+					//Protect against XSS attacks
+					$arrResult['return'] = htmlspecialchars($arrResult['return']);
+					$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$arrResult['return'],$strFunction);
+				}
+				break;
 
-                    $strReplacementData = '';
+			case'static':
+				$strReference = trim($strReference,'"');
+				$strReference = trim($strReference,"'");
+				$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$strReference,$strFunction);
+				break;
 
-                    if(array_key_exists('module',$arrExtensions[$strType])){
+			case'date':
+				$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,\Twist::DateTime()->date($strReference),$strFunction);
+				break;
 
-                        $strClassName = $arrExtensions[$strType]['module'];
-                        $strFunctionName = $arrExtensions[$strType]['function'];
+			/**
+			 * Use custom tags, set using registerTag('tagType',array('key' => 'value'))
+			 */
+			default:
 
-                        $strReplacementData = \Twist::$strClassName() -> $strFunctionName($strReference);
+				//Get all registered extensions form the extension handler
+				$arrExtensions = $this -> __extensions();
 
-                    }elseif(array_key_exists('class',$arrExtensions[$strType])){
+				if(count($arrExtensions) && array_key_exists($strType,$arrExtensions)){
 
-                        $strClassName = $arrExtensions[$strType]['class'];
-                        $strFunctionName = $arrExtensions[$strType]['function'];
+					$strReplacementData = '';
 
-                        $objClass = new $strClassName();
-                        $strReplacementData = $objClass -> $strFunctionName($strReference);
+					if(array_key_exists('module',$arrExtensions[$strType])){
 
-                    }elseif(array_key_exists('function',$arrExtensions[$strType])){
+						$strClassName = $arrExtensions[$strType]['module'];
+						$strFunctionName = $arrExtensions[$strType]['function'];
 
-                        $strFunctionName = $arrExtensions[$strType]['function'];
-                        $strReplacementData = call_user_func($strFunctionName,$strReference);
-                    }else{
+						$strReplacementData = \Twist::$strClassName() -> $strFunctionName($strReference);
 
-                        if(strstr($strReference,'/')){
-                            $mxdTempData = $this->framework()->tools()->arrayParse($strReference,$arrExtensions[$strType]);
-                            $strReplacementData = (is_array($mxdTempData) && $blReturnArray == false) ? print_r($mxdTempData,true) : $mxdTempData;
-                        }else{
-                            if(array_key_exists($strReference,$arrExtensions[$strType])){
-                                $strReplacementData = (is_array($arrExtensions[$strType][$strReference]) && $blReturnArray == false) ? print_r($arrExtensions[$strType][$strReference],true) : $arrExtensions[$strType][$strReference];
-                            }
-                        }
-                    }
+					}elseif(array_key_exists('class',$arrExtensions[$strType])){
 
-                    $strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$strReplacementData,$strFunction);
-                }
+						$strClassName = $arrExtensions[$strType]['class'];
+						$strFunctionName = $arrExtensions[$strType]['function'];
 
-                //if(count($this->arrCustomTags) && array_key_exists($strType,$this->arrCustomTags) && array_key_exists($strReference,$this->arrCustomTags[$strType])){
-                //	$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$this->arrCustomTags[$strType][$strReference]);
-                //}
-                break;
+						$objClass = new $strClassName();
+						$strReplacementData = $objClass -> $strFunctionName($strReference);
 
-        }
+					}elseif(array_key_exists('function',$arrExtensions[$strType])){
 
-        return $strRawTemplate;
-    }
+						$strFunctionName = $arrExtensions[$strType]['function'];
+						$strReplacementData = call_user_func($strFunctionName,$strReference);
+					}else{
+
+						if(strstr($strReference,'/')){
+							$mxdTempData = $this->framework()->tools()->arrayParse($strReference,$arrExtensions[$strType]);
+							$strReplacementData = (is_array($mxdTempData) && $blReturnArray == false) ? print_r($mxdTempData,true) : $mxdTempData;
+						}else{
+							if(array_key_exists($strReference,$arrExtensions[$strType])){
+								$strReplacementData = (is_array($arrExtensions[$strType][$strReference]) && $blReturnArray == false) ? print_r($arrExtensions[$strType][$strReference],true) : $arrExtensions[$strType][$strReference];
+							}
+						}
+					}
+
+					$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$strReplacementData,$strFunction);
+				}
+
+				//if(count($this->arrCustomTags) && array_key_exists($strType,$this->arrCustomTags) && array_key_exists($strReference,$this->arrCustomTags[$strType])){
+				//	$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$this->arrCustomTags[$strType][$strReference]);
+				//}
+				break;
+
+		}
+
+		return $strRawTemplate;
+	}
+
+	/**
+	 * Find an item within an array of data, return the round status and the return value.
+	 * @param $strKey Key that can contain / to move though an arrays structure
+	 * @param $arrData Array of data to be searched
+	 * @param $blReturnArray Option to define if an array or string must be retured
+	 * @return array The results of the search with status
+	 */
+	protected function processArrayItem($strKey,$arrData,$blReturnArray=false){
+
+		$arrResponse = array('status' => false,'return' => '');
+
+		if(is_array($arrData)){
+
+			if(strstr($strKey,'/')){
+
+				$mxdTempData = $this -> framework() -> tools() -> arrayParse($strKey,$arrData);
+
+				$arrResponse['status'] = (is_null($mxdTempData)) ? false : true;
+				$arrResponse['return'] = (is_array($mxdTempData) && $blReturnArray == false) ? print_r($mxdTempData,true) : $mxdTempData;
+
+				//Do what normally happens
+			}elseif(array_key_exists($strKey,$arrData)){
+
+				$arrResponse['status'] = true;
+				$arrResponse['return'] = (is_array($arrData[$strKey]) && $blReturnArray == false) ? print_r($arrData[$strKey],true) : $arrData[$strKey];
+			}
+		}
+
+		return $arrResponse;
+	}
 
     /**
      * For elements to get the element data when required
