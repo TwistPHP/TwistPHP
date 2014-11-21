@@ -63,6 +63,14 @@
 		"options":"",
 		"null":0
 	},
+	"SITE_TRAILING_SLASH":{
+		"title":"Site Trailing Slash",
+		"description":"URIs and URLs in Routes and Structure will have a trailing slash '/' sufix",
+		"default":"0",
+		"type":"boolean",
+		"options":"",
+		"null":0
+	},
 	"SITE_PROTOCOL":{
 		"title":"Site Protocol",
 		"description":"Select the primary protocol for the website",

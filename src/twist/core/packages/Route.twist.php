@@ -467,7 +467,7 @@ class Route extends ModuleBase{
 			$strURI = str_replace('%','',$strURI);
 		}
 
-		$strURI = rtrim($strURI,'/').'/';
+		$strURI = rtrim($strURI,'/').($this->framework()->setting('SITE_TAILING_SLASH')) ? '/' : '';
 
 		$arrRouteData = array(
 			'uri' => sprintf("%s%s",$this->baseURI(),str_replace('//','/',$strURI)),
