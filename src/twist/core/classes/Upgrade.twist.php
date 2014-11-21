@@ -248,7 +248,7 @@
 				'token' => ''
 			);
 
-			$arrOut = $this->_request($newRepo,'connect',$this->strReleaseChannel,array('request-host' => $_SERVER['HTTP_HOST'],'package-type' => 'core'));
+			$arrOut = $this->_request($newRepo,'connect',$this->strReleaseChannel,array('request-host' => (array_key_exists('HTTP_HOST',$_SERVER) && $_SERVER['HTTP_HOST'] != '') ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'],'package-type' => 'core'));
 
 			if(array_key_exists('name',$arrOut) && array_key_exists('key',$arrOut)){
 				$strRepoFile = sprintf('%s/%s.json',$this->strRepoPath,$arrOut['key']);
@@ -263,7 +263,7 @@
 
 		protected function _authenticate($strRepoKey){
 
-			$arrOut = $this->_request($strRepoKey,'authenticate',$this->strReleaseChannel,array('request-host' => $_SERVER['HTTP_HOST']));
+			$arrOut = $this->_request($strRepoKey,'authenticate',$this->strReleaseChannel,array('request-host' => (array_key_exists('HTTP_HOST',$_SERVER) && $_SERVER['HTTP_HOST'] != '') ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME']));
 
 			if(count($arrOut)){
 				$arrOut['licence_key'] = $this->arrRepositories[$strRepoKey]['licence'];
@@ -277,17 +277,17 @@
 		}
 
 		protected function _core(){
-			$arrOut = $this->_request('twistphp','packages',$this->strReleaseChannel,array('request-host' => $_SERVER['HTTP_HOST'],'package-type' => 'core'));
+			$arrOut = $this->_request('twistphp','packages',$this->strReleaseChannel,array('request-host' => (array_key_exists('HTTP_HOST',$_SERVER) && $_SERVER['HTTP_HOST'] != '') ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'],'package-type' => 'core'));
 			return $arrOut;
 		}
 
 		protected function _modules($strRepoKey){
-			$arrOut = $this->_request($strRepoKey,'packages',$this->strReleaseChannel,array('request-host' => $_SERVER['HTTP_HOST'],'package-type' => 'modules'));
+			$arrOut = $this->_request($strRepoKey,'packages',$this->strReleaseChannel,array('request-host' => (array_key_exists('HTTP_HOST',$_SERVER) && $_SERVER['HTTP_HOST'] != '') ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'],'package-type' => 'modules'));
 			return $arrOut;
 		}
 
 		protected function _interfaces($strRepoKey){
-			$arrOut = $this->_request($strRepoKey,'packages',$this->strReleaseChannel,array('request-host' => $_SERVER['HTTP_HOST'],'package-type' => 'interfaces'));
+			$arrOut = $this->_request($strRepoKey,'packages',$this->strReleaseChannel,array('request-host' => (array_key_exists('HTTP_HOST',$_SERVER) && $_SERVER['HTTP_HOST'] != '') ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'],'package-type' => 'interfaces'));
 			return $arrOut;
 		}
 
@@ -296,7 +296,7 @@
 			$this->_debug(sprintf("Downloading TwistPHP core v%s",$strVersion));
 
 			$mxdRequestData = array(
-				'request-host' => $_SERVER['HTTP_HOST'],
+				'request-host' => (array_key_exists('HTTP_HOST',$_SERVER) && $_SERVER['HTTP_HOST'] != '') ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'],
 				'package' => 'twist',
 				'package-type' => 'core',
 				'package-version' => $strVersion,
@@ -314,7 +314,7 @@
 			$this->_debug(sprintf("Downloading module %s v%s from %s",$strModule,$strVersion,$strRepoKey));
 
 			$mxdRequestData = array(
-				'request-host' => $_SERVER['HTTP_HOST'],
+				'request-host' => (array_key_exists('HTTP_HOST',$_SERVER) && $_SERVER['HTTP_HOST'] != '') ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'],
 				'package' => $strModule,
 				'package-type' => 'modules',
 				'package-version' => $strVersion,
@@ -332,7 +332,7 @@
 			$this->_debug(sprintf("Downloading interface %s v%s from %s",$strInterface,$strVersion,$strRepoKey));
 
 			$mxdRequestData = array(
-				'request-host' => $_SERVER['HTTP_HOST'],
+				'request-host' => (array_key_exists('HTTP_HOST',$_SERVER) && $_SERVER['HTTP_HOST'] != '') ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'],
 				'package' => $strInterface,
 				'package-type' => 'interfaces',
 				'package-version' => $strVersion,
