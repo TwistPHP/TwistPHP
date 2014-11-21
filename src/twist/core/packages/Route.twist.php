@@ -498,8 +498,6 @@ class Route extends ModuleBase{
 			'cache_life' => ($mxdCache === true) ? $this->intCacheTime : ($mxdCache !== false) ? $mxdCache : 0
 		);
 
-		print_r($arrRouteData);
-
 		switch($arrRouteData['method']){
 			case'GET':
 				$this->arrRoutesGET[$strURI] = $arrRouteData;
