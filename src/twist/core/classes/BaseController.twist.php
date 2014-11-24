@@ -96,4 +96,13 @@ class BaseController{
 	protected function _keywords($strKeywords = null){
 		return (is_null($strKeywords)) ? $_SERVER['TWIST_ROUTE_KEYWORDS'] : $_SERVER['TWIST_ROUTE_KEYWORDS'] = $strKeywords;
 	}
+
+	protected function _uriParameter($strParameterKey = null){
+
+		if(is_null($strParameterKey)){
+			return $_SERVER['TWIST_ROUTE']['current']['uri_parameters'];
+		}else{
+			return (array_key_exists($strParameterKey,$_SERVER['TWIST_ROUTE']['current']['uri_parameters'])) ? $_SERVER['TWIST_ROUTE']['current']['uri_parameters'][$strParameterKey] : null;
+		}
+	}
 }
