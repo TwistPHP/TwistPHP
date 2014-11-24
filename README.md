@@ -1,4 +1,4 @@
-#[TwistPHP](http://twistphp.com/)
+#[TwistPHP](https://twistphp.com/)
 
 ##A fresh, new open source PHP micro framework
 
@@ -129,8 +129,12 @@ require_once 'twist/framework.php';
 
 ##Documentation
 
-Full documentation of the framework can be found on the [TwistPHP site](http://twistphp.com/docs).
+Full documentation of the framework can be found on the [TwistPHP site](https://twistphp.com/docs).
 
 ##Issues
 
 Please use the [GitHub's issue tracker](https://github.com/Shadow-Technologies/TwistPHP/issues) to report any problems.
+
+###Branches
+
+For branching, please use the 'development' branch. All updates get pushed from the [development branch](https://github.com/Shadow-Technologies/TwistPHP/tree/development) to the master.
