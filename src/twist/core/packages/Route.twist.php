@@ -620,60 +620,64 @@ class Route extends ModuleBase{
 			$arrRouteParts = array();
 			$blMatched = false;
 
-			//Check the regX matched first if there are any to be checked
-			if(count($this->arrRegxMatches)){
+			//Only go into these wildcard and regx matches is there is not exact match found
+			if(!array_key_exists($strCurrentURIKey,$arrMethodRoutes) && !array_key_exists($strCurrentURIKey,$this->arrRoutes)) {
 
-				$arrFoundRegxMatches = array();
+				//Check the regX matched first if there are any to be checked
+				if(count($this->arrRegxMatches)){
 
-				foreach($this->arrRegxMatches as $strMatchedURI => $regxUriExpression){
-					if(preg_match($regxUriExpression, $strCurrentURI, $arrResult)){
-						$arrFoundRegxMatches[$strMatchedURI] = array('match_uri' => $strMatchedURI, 'matches' => $arrResult);
-					}
-				}
+					$arrFoundRegxMatches = array();
 
-				if(count($arrFoundRegxMatches)){
-
-					krsort($arrFoundRegxMatches);
-					$arrMatchResults = array_shift($arrFoundRegxMatches);
-
-					foreach($arrMatchResults['matches'] as $strKey => $strValue){
-						if(strstr($strKey,'tphp_')){
-							$arrUriParameters[str_replace('tphp_','',$strKey)] = $strValue;
+					foreach($this->arrRegxMatches as $strMatchedURI => $regxUriExpression){
+						if(preg_match($regxUriExpression, $strCurrentURI, $arrResult)){
+							$arrFoundRegxMatches[$strMatchedURI] = array('match_uri' => $strMatchedURI, 'matches' => $arrResult);
 						}
 					}
 
-					if(array_key_exists('twist_wildcard',$arrMatchResults['matches'])){
-						$strRouteDynamic = $arrMatchResults['matches']['twist_wildcard'];
+					if(count($arrFoundRegxMatches)){
+
+						krsort($arrFoundRegxMatches);
+						$arrMatchResults = array_shift($arrFoundRegxMatches);
+
+						foreach($arrMatchResults['matches'] as $strKey => $strValue){
+							if(strstr($strKey,'tphp_')){
+								$arrUriParameters[str_replace('tphp_','',$strKey)] = $strValue;
+							}
+						}
+
+						if(array_key_exists('twist_wildcard',$arrMatchResults['matches'])){
+							$strRouteDynamic = $arrMatchResults['matches']['twist_wildcard'];
+							$arrRouteParts = explode('/',trim($strRouteDynamic,'/'));
+						}
+
+						$strCurrentURIKey = $arrMatchResults['match_uri'];
+						$strCurrentURI = $arrMatchResults['matches']['twist_uri'];
+						$blMatched = true;
+					}
+				}
+
+				//If no route is found and there are wild cards then look up the wild cards
+				if(!$blMatched && !array_key_exists($strCurrentURI,$arrMethodRoutes) && !array_key_exists($strCurrentURI,$this->arrRoutes) && count($this->arrWildCards)){
+
+					$arrFoundWildCard = array();
+
+					foreach($this->arrWildCards as $strWildCard){
+						if(substr($strCurrentURI,0,strlen($strWildCard)) === $strWildCard){
+							$arrFoundWildCard[strlen($strWildCard)] = $strWildCard;
+						}
+					}
+
+					if(count($arrFoundWildCard)){
+
+						arsort($arrFoundWildCard);
+						$strWildCard = array_shift($arrFoundWildCard);
+
+						$strRouteDynamic = substr($strCurrentURI,strlen($strWildCard),strlen($strCurrentURI)-strlen($strWildCard));
 						$arrRouteParts = explode('/',trim($strRouteDynamic,'/'));
+
+						$strCurrentURI = $strCurrentURIKey = $strWildCard;
+						$blMatched = true;
 					}
-
-					$strCurrentURIKey = $arrMatchResults['match_uri'];
-					$strCurrentURI = $arrMatchResults['matches']['twist_uri'];
-					$blMatched = true;
-				}
-			}
-
-			//If no route is found and there are wild cards then look up the wild cards
-			if(!$blMatched && !array_key_exists($strCurrentURI,$arrMethodRoutes) && !array_key_exists($strCurrentURI,$this->arrRoutes) && count($this->arrWildCards)){
-
-				$arrFoundWildCard = array();
-
-				foreach($this->arrWildCards as $strWildCard){
-					if(substr($strCurrentURI,0,strlen($strWildCard)) === $strWildCard){
-						$arrFoundWildCard[strlen($strWildCard)] = $strWildCard;
-					}
-				}
-
-				if(count($arrFoundWildCard)){
-
-					arsort($arrFoundWildCard);
-					$strWildCard = array_shift($arrFoundWildCard);
-
-					$strRouteDynamic = substr($strCurrentURI,strlen($strWildCard),strlen($strCurrentURI)-strlen($strWildCard));
-					$arrRouteParts = explode('/',trim($strRouteDynamic,'/'));
-
-					$strCurrentURI = $strCurrentURIKey = $strWildCard;
-					$blMatched = true;
 				}
 			}
 
