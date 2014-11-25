@@ -155,7 +155,11 @@
 
 							$arrData['data'] = json_decode($arrData['data'],true);
 							$mxdOut = ($blFullData) ? $arrData : $arrData['data'];
+						}else{
+							$this->remove($mxdUniqueID);
 						}
+					}else{
+						$this->remove($mxdUniqueID);
 					}
 				}
 			}
