@@ -567,7 +567,7 @@ class Template extends ModuleBase{
 				$arrResult = $this->processArrayItem($strReference,$arrData,$blReturnArray);
 
 				if($arrResult['status'] == true){
-					$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$arrResult['return'],$strFunction);
+					$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$arrResult['return'],$strFunction,$arrResult['return_raw']);
 				}
 
 				break;
@@ -603,7 +603,7 @@ class Template extends ModuleBase{
 				if($arrResult['status'] == true){
 					//Protect against XSS attacks
 					$arrResult['return'] = ($strType == 'raw-get') ? $arrResult['return'] : htmlspecialchars($arrResult['return']);
-					$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$arrResult['return'],$strFunction);
+					$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$arrResult['return'],$strFunction,$arrResult['return_raw']);
 				}
 
 				break;
@@ -616,7 +616,7 @@ class Template extends ModuleBase{
 				if($arrResult['status'] == true){
 					//Protect against XSS attacks
 					$arrResult['return'] = ($strType == 'raw-post') ? $arrResult['return'] : htmlspecialchars($arrResult['return']);
-					$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$arrResult['return'],$strFunction);
+					$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$arrResult['return'],$strFunction,$arrResult['return_raw']);
 				}
 				break;
 
@@ -631,7 +631,7 @@ class Template extends ModuleBase{
 				$arrResult = $this->processArrayItem($strReference,$_SERVER,$blReturnArray);
 
 				if($arrResult['status'] == true){
-					$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$arrResult['return'],$strFunction);
+					$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$arrResult['return'],$strFunction,$arrResult['return_raw']);
 				}
 
 				break;
@@ -643,7 +643,7 @@ class Template extends ModuleBase{
 				if($arrResult['status'] == true){
 					//Protect against XSS attacks
 					$arrResult['return'] = htmlspecialchars($arrResult['return']);
-					$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$arrResult['return'],$strFunction);
+					$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$arrResult['return'],$strFunction,$arrResult['return_raw']);
 				}
 				break;
 
@@ -722,7 +722,7 @@ class Template extends ModuleBase{
 	 */
 	protected function processArrayItem($strKey,$arrData,$blReturnArray=false){
 
-		$arrResponse = array('status' => false,'return' => '');
+		$arrResponse = array('status' => false,'return' => '','return_raw' => '');
 
 		if(is_array($arrData)){
 
@@ -732,12 +732,14 @@ class Template extends ModuleBase{
 
 				$arrResponse['status'] = (is_null($mxdTempData)) ? false : true;
 				$arrResponse['return'] = (is_array($mxdTempData) && $blReturnArray == false) ? print_r($mxdTempData,true) : $mxdTempData;
+				$arrResponse['return_raw'] = $mxdTempData;
 
 				//Do what normally happens
 			}elseif(array_key_exists($strKey,$arrData)){
 
 				$arrResponse['status'] = true;
 				$arrResponse['return'] = (is_array($arrData[$strKey]) && $blReturnArray == false) ? print_r($arrData[$strKey],true) : $arrData[$strKey];
+				$arrResponse['return_raw'] = $arrData[$strKey];
 			}
 		}
 
@@ -814,7 +816,7 @@ class Template extends ModuleBase{
      * @param $strData
      * @return mixed
      */
-    protected function replaceTag($strRawTemplate,$strTag,$strData,$strFunction = null){
+    protected function replaceTag($strRawTemplate,$strTag,$strData,$strFunction = null,$mxdRawData){
 
         if(!is_null($strFunction)){
 
@@ -826,15 +828,19 @@ class Template extends ModuleBase{
                 'json_encode','json_decode',
                 'strip_tags',
                 'addslashes','stripslashes',
-                'round','ceil','floor',
-                'strtolower','strtoupper',
+                'count','round','ceil','floor',
+                'strlen','strtolower','strtoupper',
                 'ucfirst','ucwords',
                 'prettytime','bytestosize',
                 'date'
             );
 
             if(in_array($strFunction,$arrAllowedFunctions) || $strFunction == 'escape'){
-                if($strFunction == 'date'){
+
+                if(in_array($strFunction,array('count','json_encode',))){
+	                //This is used when processing arrays
+	                $strData = call_user_func($strFunction,$mxdRawData);
+                }elseif($strFunction == 'date'){
 
                     $strDateFormat = 'Y-m-d H:i:s';
 
