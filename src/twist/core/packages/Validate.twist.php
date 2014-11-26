@@ -42,6 +42,21 @@ class Validate extends ModuleBase{
 		return filter_var($strEmailAddress, FILTER_VALIDATE_EMAIL);
 	}
 
+	/**
+	 * Validate Domain Names, allows all of the following combinations
+	 * - localhost
+	 * - test.test.com
+	 * - test-1.test.com
+	 * - test.a.do-main.com
+	 * - a.b
+	 * The first character and last character of any part (split by .) cannot be a - or _ and the last part (.com or .co.uk) can only contain a-z
+	 * @param $strDomain Domain name excluding the protocol, slashes and spaces
+	 * @return mixed The returned data will either be the validated domain or false
+	 */
+	public function domain($strDomain){
+		return $this->regx($strDomain,"/^(locahost|([a-z\d]([a-z\d\-\_]+[a-z\d])*\.)*([a-z\d]([a-z\d\-\_]+[a-z\d])*)(\.[a-z]+)+)$/i");
+	}
+
 	public function url($strURL){
 		return filter_var($strURL, FILTER_VALIDATE_URL);
 	}
