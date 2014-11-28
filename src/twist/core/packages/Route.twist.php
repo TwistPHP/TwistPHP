@@ -731,8 +731,10 @@ class Route extends ModuleBase{
 
 	/**
 	 * Serve is used to active the routes system after all routes have been set
+	 * @param $blExitOnComplete Exit script once the page has been served
+	 * @throws \Exception
 	 */
-	public function serve(){
+	public function serve($blExitOnComplete = true){
 
 		\Twist::Timer('TwistPageLoad')->log('Routes Prepared');
 
@@ -936,12 +938,17 @@ class Route extends ModuleBase{
 					}
 
 					//Cache the page if cache is enabled for this route
-					if ($arrRoute['cache'] == true && $arrRoute['cache_life'] > 0) {
+					if($arrRoute['cache'] == true && $arrRoute['cache_life'] > 0) {
 						$this->storePageCache($arrRoute['cache_key'], $strPageOut, $arrRoute['cache_life']);
 					}
 
 					//Output the page
 					echo $strPageOut;
+
+					//Exit the script, no further processing will be done
+					if($blExitOnComplete){
+						exit;
+					}
 				}
 			}
 
