@@ -64,10 +64,10 @@ class Command extends ModuleBase{
 			fwrite($arrPipes[0], $strAdditionalInput);
 			fclose($arrPipes[0]);
 
-			$arrOut['errors'] = stream_get_contents($arrPipes[1]);
+			$arrOut['output'] = stream_get_contents($arrPipes[1]);
 			fclose($arrPipes[1]);
 
-			$arrOut['output'] = stream_get_contents($arrPipes[2]);
+			$arrOut['errors'] = stream_get_contents($arrPipes[2]);
 			fclose($arrPipes[2]);
 
 			$arrOut['return'] = (int) proc_close($resProcess);
