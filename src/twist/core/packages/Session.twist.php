@@ -66,8 +66,6 @@
 
 		/**
 		 * Create the guest session for the user, this will then be used when the user becomes real
-		 * @static
-		 * @return void
 		 */
 		public function start(){
 
@@ -81,8 +79,8 @@
 		}
 
 		/**
-		 * Get the currently assigned session ID
-		 * @return string
+		 * Get the currently assigned session ID from the session handler
+		 * @return mixed The ID of the current session
 		 */
 		public function getSessionID(){
 			return session_id();
@@ -90,9 +88,9 @@
 
 		/**
 		 * Set and get the twist session data, passing only a key will return the data stored against that key. Pass in a value as well will set and return the result. Null is returned upon error.
-		 * @param $strKey
-		 * @param null $mxdValue
-		 * @return null
+		 * @param $strKey The key for the item to be returned
+		 * @param $mxdValue The value to be set against the provided key, passing null will not set any data
+		 * @return mixed Return the data that is contained in the provided key (if any exists otherwise NULL)
 		 */
 		public function data($strKey,$mxdValue = null){
 
@@ -105,7 +103,7 @@
 
 		/**
 		 * Remove a single session item or clear the whole session by leaving the key field null
-		 * @param null $strKey
+		 * @param $strKey The key for the item to be removed, passing null removes all
 		 */
 		public function remove($strKey = null){
 

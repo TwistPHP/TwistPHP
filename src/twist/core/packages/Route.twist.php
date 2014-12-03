@@ -62,26 +62,38 @@ class Route extends ModuleBase{
 		//$this->framework()->register()->shutdownEvent('TwistRoutes','Twist::Route','process');
 	}
 
-	public function setTemplatesDirectory($strTemplateFile = null){
-		$this->resTemplate->setTemplatesDirectory($strTemplateFile);
-	}
-
-	public function setElementsDirectory($strTemplateFile = null){
-		$this->resTemplate->setElementsDirectory($strTemplateFile);
-	}
-
-	public function setControllerDirectory($strControllerDirectory = null){
-		$this->strControllerDirectory = rtrim($strControllerDirectory,'/');
+	/**
+	 * Set a custom template directory to use for this routes instance, leaving blank will use the default templates directory
+	 * @param $dirTemplatePath Path to the template directory
+	 */
+	public function setTemplatesDirectory($dirTemplatePath = null){
+		$this->resTemplate->setTemplatesDirectory($dirTemplatePath);
 	}
 
 	/**
-	 * Set a base template file to contain your page content. Place the tag "{data:route}" in the base template where you would like the page to be displayed
-	 * @param null $strTemplateFile
+	 * Set a custom element directory to use for this routes instance, leaving blank will use the default elements directory
+	 * @param $dirElementPath Path to the element directory
 	 */
-	public function baseTemplate($strTemplateFile = null){
+	public function setElementsDirectory($dirElementPath = null){
+		$this->resTemplate->setElementsDirectory($dirElementPath);
+	}
 
-		if(!is_null($strTemplateFile)){
-			$this->strBaseTemplate = $strTemplateFile;
+	/**
+	 * Set a custom controller directory to use for this routes instance, leaving blank will use the default controllers directory
+	 * @param $dirControllerPath Path to the controller directory
+	 */
+	public function setControllerDirectory($dirControllerPath = null){
+		$this->strControllerDirectory = rtrim($dirControllerPath,'/');
+	}
+
+	/**
+	 * Set a path to the base template that you wish to wrap the output of the route with
+	 * @param $dirTemplateFile Path to the base template file, relative to your template directory (a full path can be used if required)
+	 */
+	public function baseTemplate($dirTemplateFile = null){
+
+		if(!is_null($dirTemplateFile)){
+			$this->strBaseTemplate = $dirTemplateFile;
 		}
 
 		return $this->strBaseTemplate;
@@ -89,7 +101,7 @@ class Route extends ModuleBase{
 
 	/**
 	 * Set a base URI so that you can use routes in folders that are not your Doc Root
-	 * @param null $strBaseURI
+	 * @param $strBaseURI
 	 */
 	public function baseURI($strBaseURI = null){
 
@@ -106,7 +118,7 @@ class Route extends ModuleBase{
 
 	/**
 	 * Set/Get the interface URI, used only when creating or working with an framework interface
-	 * @param null $strInterface
+	 * @param $strInterface
 	 */
 	public function interfaceURI($strInterface = null){
 
@@ -529,6 +541,10 @@ class Route extends ModuleBase{
 		}
 	}
 
+	/**
+	 * Load an existing page form the page cache, use the page key to find the cached page.
+	 * @param $strPageCacheKey
+	 */
 	protected function loadPageCache($strPageCacheKey){
 
 		//Get the page cache if exists
@@ -558,6 +574,12 @@ class Route extends ModuleBase{
 		}
 	}
 
+	/**
+	 * Store a page into the page cache, use a unique page key so that the page can be found again later when required.
+	 * @param $strPageCacheKey
+	 * @param $strPageData
+	 * @param $intCacheTime
+	 */
 	protected function storePageCache($strPageCacheKey,$strPageData,$intCacheTime = 3600){
 
 		$mxdModifiedTime = gmdate('D, d M Y H:i:s ', \Twist::DateTime()->time()) . 'GMT';

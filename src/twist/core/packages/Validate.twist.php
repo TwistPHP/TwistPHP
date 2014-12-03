@@ -24,6 +24,11 @@
 namespace TwistPHP\Packages;
 use TwistPHP\ModuleBase;
 
+/**
+ * Data validation package can validate diffrent types of data i.e Email Address, URLS, Telephone numbers, UK Postcodes and much more.
+ * Also includes a testing suite that allows testing of an array of data providing detailed results, very useful for HTML form validation.
+ * @package TwistPHP\Packages
+ */
 class Validate extends ModuleBase{
 
 	public function __construct(){
@@ -32,12 +37,21 @@ class Validate extends ModuleBase{
 
 	/**
 	 * Get a validator object, form here you can define all your validator checks and then test your data against the checks
-	 * @return Validator
+	 *
+	 * @return_object Validator core/packages/libraries/Validator/Validator.lib.php
+	 * @return object Returns an object of the Validator tool
 	 */
 	public function createTest(){
 		return new Validator();
 	}
 
+	/**
+	 * Validate the format of a Email
+	 *
+	 * @link http://php.net/manual/en/filter.constants.php
+	 * @param $strEmailAddress Email Address to be validated
+	 * @return mixed
+	 */
 	public function email($strEmailAddress){
 		return filter_var($strEmailAddress, FILTER_VALIDATE_EMAIL);
 	}
@@ -50,6 +64,7 @@ class Validate extends ModuleBase{
 	 * - test.a.do-main.com
 	 * - a.b
 	 * The first character and last character of any part (split by .) cannot be a - or _ and the last part (.com or .co.uk) can only contain a-z
+	 *
 	 * @param $strDomain Domain name excluding the protocol, slashes and spaces
 	 * @return mixed The returned data will either be the validated domain or false
 	 */
@@ -57,23 +72,61 @@ class Validate extends ModuleBase{
 		return $this->regx($strDomain,"/^(locahost|([a-z\d]([a-z\d\-\_]+[a-z\d])*\.)*([a-z\d]([a-z\d\-\_]+[a-z\d])*)(\.[a-z]+)+)$/i");
 	}
 
+	/**
+	 * Validate the format of a URL
+	 *
+	 * @link http://php.net/manual/en/filter.constants.php
+	 * @param $strURL URL to be validated
+	 * @return mixed
+	 */
 	public function url($strURL){
 		return filter_var($strURL, FILTER_VALIDATE_URL);
 	}
 
+	/**
+	 * Validate the format of a IP address, can validate both IPv4 and IPv6 addresses
+	 *
+	 * @link http://php.net/manual/en/filter.constants.php
+	 * @param $mxdIPAddress IP address to be validated
+	 * @param $blValidateIPV6 Set to true if and IPv6 address is to be validated
+	 * @return mixed
+	 */
 	public function ip($mxdIPAddress,$blValidateIPV6 = false){
 		$strFilterFlag = ($this->boolean($blValidateIPV6)) ? FILTER_FLAG_IPV6 : FILTER_FLAG_IPV4;
 		return filter_var($mxdIPAddress, FILTER_VALIDATE_IP,$strFilterFlag);
 	}
 
+	/**
+	 * Validate a boolean state
+	 *
+	 * @link http://php.net/manual/en/filter.constants.php
+	 * @param $blBoolean Boolean to be validated
+	 * @return mixed
+	 */
 	public function boolean($blBoolean){
 		return filter_var($blBoolean, FILTER_VALIDATE_BOOLEAN);
 	}
 
+	/**
+	 * Validate a float
+	 *
+	 * @link http://php.net/manual/en/filter.constants.php
+	 * @param $fltFloat Float to be validated
+	 * @return mixed
+	 */
 	public function float($fltFloat){
 		return filter_var($fltFloat, FILTER_VALIDATE_FLOAT);
 	}
 
+	/**
+	 * Validate an integer, optionally you can pass in a min and max range for further validation
+	 *
+	 * @link http://php.net/manual/en/filter.constants.php
+	 * @param $intInteger Integer to be validated
+	 * @param $intRangeMin Lowest acceptable integer value
+	 * @param $intRangeMax Highest acceptable integer value
+	 * @return mixed
+	 */
 	public function integer($intInteger,$intRangeMin = null,$intRangeMax = null){
 
 		if(!is_null($intRangeMin) || !is_null($intRangeMax)){
@@ -93,15 +146,27 @@ class Validate extends ModuleBase{
 		return filter_var($intInteger, FILTER_VALIDATE_INT);
 	}
 
+	/**
+	 * Validate a sting, this will ensure the is is not an object, resource or boolean value
+	 *
+	 * @param $mxdString String to be validated
+	 * @return bool
+	 */
 	public function string($mxdString){
 		return (is_object($mxdString) || is_resource($mxdString) || is_bool($mxdString)) ? false : $mxdString;
 	}
 
+	/**
+	 * Validate a telephone number, this function if very universal phone number validator also allow for ext|ext.|,|; with upto 4 digit extension.
+	 * Optional spacing, brackets and dashes throughout
+	 *
+	 * @param $mxdPhoneNumber Phone number to be validated
+	 * @return bool|mixed
+	 */
 	public function telephone($mxdPhoneNumber){
 
 		$blOut = false;
 
-		//A much more universal phone number validator also allow for ext|ext.|,|; with upto 4 digit extension. Optional spacing, brackets and dashes throughout
 		if(preg_match("/^(\+?(\([0-9\-\s]+\)|[0-9\-\s]+){6,16}((ext\.?|\,|\;)\s?[0-9]{1,4})?)$/i",$mxdPhoneNumber,$arrMatches)){
 			$blOut = true;
 			$mxdPhoneNumber = str_replace(array("+ ","  ","--","( "," )"," (",") ","(",")"),array("+"," ","-","(",")","(",")"," (",") "),$mxdPhoneNumber);
@@ -110,6 +175,12 @@ class Validate extends ModuleBase{
 		return ($blOut) ? $mxdPhoneNumber : false;
 	}
 
+	/**
+	 * Validate a UK postcode
+	 *
+	 * @param $strPostcode Postcode to be validated
+	 * @return bool|mixed|string
+	 */
 	public function postcode($strPostcode){
 
 		// Permitted letters depend upon their position in the postcode.
@@ -168,6 +239,13 @@ class Validate extends ModuleBase{
 		}
 	}
 
+	/**
+	 * Validate some data using an Regular Expression
+	 *
+	 * @param $mxdData Data to be validated
+	 * @param $strRegX Expression used to validate the data
+	 * @return bool
+	 */
 	public function regx($mxdData,$strRegX){
 		return (preg_match($strRegX,$mxdData,$arrMatches)) ? $mxdData : false;
 	}

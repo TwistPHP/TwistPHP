@@ -66,16 +66,16 @@ class Template extends ModuleBase{
     }
 
     /**
-     * Get the current template directory in use
-     * @return string
+     * Get the current template directory/path that is in use by the template package
+     * @return directory Returns the current template path
      */
     public function getTemplatesDirectory(){
         return $this->dirTemplates;
     }
 
     /**
-     * Get the current element directory in use
-     * @return string
+     * Get the current element directory/path that is in use by the template package
+     * @return directory Returns the current element path
      */
     public function getElementsDirectory(){
         return $this->dirElements;
@@ -84,9 +84,9 @@ class Template extends ModuleBase{
     /**
      * Build the template with the array of tags supplied
      *
-     * @param string $dirTemplate
-     * @param array $arrTemplateTags
-     * @param boolean $blRemoveUnusedTags
+     * @param $dirTemplate
+     * @param $arrTemplateTags
+     * @param $blRemoveUnusedTags
      * @return string
      */
     public function build($dirTemplate,$arrTemplateTags = null,$blRemoveUnusedTags = false) {
@@ -136,9 +136,9 @@ class Template extends ModuleBase{
     /**
      * Replace tags in raw template data with the array of tags supplied
      *
-     * @param string $strRawTemplateData
-     * @param array $arrTemplateTags
-     * @param boolean $blRemoveUnusedTags
+     * @param $strRawTemplateData
+     * @param $arrTemplateTags
+     * @param $blRemoveUnusedTags
      * @return string
      */
     public function replace($strRawTemplateData,$arrTemplateTags = null,$blRemoveUnusedTags = false) {
@@ -174,9 +174,9 @@ class Template extends ModuleBase{
     /**
      * Get all the tags of a given template and return them as an array
      *
-     * @param string $strTemplate
-     * @param boolean $blIsFile
-     * @param boolean $blDiscover
+     * @param $strTemplate
+     * @param $blIsFile
+     * @param $blDiscover
      * @return array
      */
     public function getTemplateTags($strTemplate,$blIsFile = true,$blDiscover = false){
@@ -222,7 +222,7 @@ class Template extends ModuleBase{
     /**
      * Removes all tags that remain in the template after use
      *
-     * @param string $strTemplateData
+     * @param $strTemplateData
      * @return string
      */
     public function removeUnusedTags($strTemplateData){
@@ -243,7 +243,7 @@ class Template extends ModuleBase{
     /**
      * Get the raw template data form teh template file
      *
-     * @param string $strTemplateFullPath
+     * @param $strTemplateFullPath
      * @return string
      */
     protected function getTemplateFile($strTemplate){
@@ -280,7 +280,7 @@ class Template extends ModuleBase{
     /**
      * Decide weather the template data tags are valid or not
      *
-     * @param array $arrTemplateTags
+     * @param $arrTemplateTags
      * @return boolean
      */
     protected function validDataTags($arrTemplateTags){
@@ -449,6 +449,7 @@ class Template extends ModuleBase{
 
     /**
      * Detect and correct the type of the inputs contents
+     *
      * @param $mxdValue
      * @return bool|int|mixed|null|string
      */
@@ -486,6 +487,7 @@ class Template extends ModuleBase{
 
     /**
      * Run the logical comparison between to sets of data
+     *
      * @param $mxdValue1
      * @param $strCondition
      * @param $mxdValue2
@@ -543,6 +545,7 @@ class Template extends ModuleBase{
 
 	/**
 	 * Run the tag processing on each tag that was found in the template and process them accordingly (Snipit module is required to process multi-dimensional tag arrays)
+	 *
 	 * @param $strRawTemplate
 	 * @param $strTag
 	 * @param $strType
@@ -715,6 +718,7 @@ class Template extends ModuleBase{
 
 	/**
 	 * Find an item within an array of data, return the round status and the return value.
+	 *
 	 * @param $strKey Key that can contain / to move though an arrays structure
 	 * @param $arrData Array of data to be searched
 	 * @param $blReturnArray Option to define if an array or string must be retured
@@ -766,10 +770,11 @@ class Template extends ModuleBase{
      * Process element tag, return the data captured from the output of the element.
      * Additional parameters are exploded of the end of the Element var, these parameters are comma separated.
      * To retrieve the parameters use $this->getParameters(); in your element.
+     *
      * @param $strElement
-     * @param null $arrData
+     * @param $arrData
      * @return string
-     * @throws Exception
+     * @throws \Exception
      */
     public function processElement($strElement,$arrData = null){
 
@@ -814,9 +819,11 @@ class Template extends ModuleBase{
      * @param $strRawTemplate
      * @param $strTag
      * @param $strData
+     * @param $strFunction
+     * @param $mxdRawData
      * @return mixed
      */
-    protected function replaceTag($strRawTemplate,$strTag,$strData,$strFunction = null,$mxdRawData){
+    protected function replaceTag($strRawTemplate,$strTag,$strData,$strFunction = null,$mxdRawData = array()){
 
         if(!is_null($strFunction)){
 

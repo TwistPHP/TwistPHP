@@ -24,8 +24,16 @@
 	namespace TwistPHP\Packages;
 	use TwistPHP\ModuleBase;
 
+	/**
+	 * Image editing suite that allows for new images to be created and existing images to be loaded in for modification
+	 * @package TwistPHP\Packages
+	 */
 	class Image extends ModuleBase{
 
+		/**
+		 * Checked that the PHP GD library is installed and loads in the image object library
+		 * @throws \Exception
+		 */
 		public function __construct(){
 			if(!extension_loaded('gd')){
 				throw new \Exception('Required extension GD is not loaded.');
@@ -35,25 +43,35 @@
 		}
 
 		/**
-		 * Load an existing image into an object
+		 * Load an existing image, and Image object will be produced allowing complete control over the image.
+		 * Once all changes have been made you can then export the image as a file or serve to the screen.
+		 *
 		 * @param $mxdImage
+		 * @return_object ImageObject core/packages/libraries/Image/Object.lib.php
+		 * @return object Returns an object of the loaded Image
 		 */
 		public function load($mxdImage){
 			return new ImageObject($mxdImage);
 		}
 
 		/**
-		 * Create a new image from scratch
+		 * Create a new image from scratch, and Image object will be produced allowing complete control over the image.
+		 * Once all changes have been made you can then export the image as a file or serve to the screen.
+		 *
 		 * @param $intWidth
 		 * @param $intHeight
 		 * @param $strFillColour
+		 * @return_object ImageObject core/packages/libraries/Image/Object.lib.php
+		 * @return object Returns an object of the new Image
 		 */
 		public function create($intWidth,$intHeight,$strFillColour){
 			return new ImageObject(null,$intWidth,$intHeight,$strFillColour);
 		}
 
 		/**
-		 * Get the URI for a placeholder image
+		 * Get the URI for a placeholder image, the placeholder image can be generated in an range of sizes and colors.
+		 * The image contains some basic information about the site and its size.
+		 *
 		 * @param int $intWidth
 		 * @param int $intHeight
 		 * @param string $strBackgroundColour
