@@ -76,11 +76,11 @@ class Validate extends ModuleBase{
 	 * Validate the format of a URL
 	 *
 	 * @reference http://php.net/manual/en/filter.constants.php
-	 * @param $strURL URL to be validated
+	 * @param $urlFullLink URL to be validated
 	 * @return mixed
 	 */
-	public function url($strURL){
-		return filter_var($strURL, FILTER_VALIDATE_URL);
+	public function url($urlFullLink){
+		return filter_var($urlFullLink, FILTER_VALIDATE_URL);
 	}
 
 	/**
