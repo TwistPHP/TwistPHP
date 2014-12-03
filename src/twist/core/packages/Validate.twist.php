@@ -25,7 +25,7 @@ namespace TwistPHP\Packages;
 use TwistPHP\ModuleBase;
 
 /**
- * Data validation package can validate diffrent types of data i.e Email Address, URLS, Telephone numbers, UK Postcodes and much more.
+ * Data validation package can validate different types of data i.e Email Address, URLS, Telephone numbers, UK Postcodes and much more.
  * Also includes a testing suite that allows testing of an array of data providing detailed results, very useful for HTML form validation.
  * @package TwistPHP\Packages
  */
@@ -48,7 +48,7 @@ class Validate extends ModuleBase{
 	/**
 	 * Validate the format of a Email
 	 *
-	 * @link http://php.net/manual/en/filter.constants.php
+	 * @reference http://php.net/manual/en/filter.constants.php
 	 * @param $strEmailAddress Email Address to be validated
 	 * @return mixed
 	 */
@@ -75,18 +75,18 @@ class Validate extends ModuleBase{
 	/**
 	 * Validate the format of a URL
 	 *
-	 * @link http://php.net/manual/en/filter.constants.php
-	 * @param $strURL URL to be validated
+	 * @reference http://php.net/manual/en/filter.constants.php
+	 * @param $urlFullLink URL to be validated
 	 * @return mixed
 	 */
-	public function url($strURL){
-		return filter_var($strURL, FILTER_VALIDATE_URL);
+	public function url($urlFullLink){
+		return filter_var($urlFullLink, FILTER_VALIDATE_URL);
 	}
 
 	/**
 	 * Validate the format of a IP address, can validate both IPv4 and IPv6 addresses
 	 *
-	 * @link http://php.net/manual/en/filter.constants.php
+	 * @reference http://php.net/manual/en/filter.constants.php
 	 * @param $mxdIPAddress IP address to be validated
 	 * @param $blValidateIPV6 Set to true if and IPv6 address is to be validated
 	 * @return mixed
@@ -99,7 +99,7 @@ class Validate extends ModuleBase{
 	/**
 	 * Validate a boolean state
 	 *
-	 * @link http://php.net/manual/en/filter.constants.php
+	 * @reference http://php.net/manual/en/filter.constants.php
 	 * @param $blBoolean Boolean to be validated
 	 * @return mixed
 	 */
@@ -110,7 +110,7 @@ class Validate extends ModuleBase{
 	/**
 	 * Validate a float
 	 *
-	 * @link http://php.net/manual/en/filter.constants.php
+	 * @reference http://php.net/manual/en/filter.constants.php
 	 * @param $fltFloat Float to be validated
 	 * @return mixed
 	 */
@@ -121,7 +121,7 @@ class Validate extends ModuleBase{
 	/**
 	 * Validate an integer, optionally you can pass in a min and max range for further validation
 	 *
-	 * @link http://php.net/manual/en/filter.constants.php
+	 * @reference http://php.net/manual/en/filter.constants.php
 	 * @param $intInteger Integer to be validated
 	 * @param $intRangeMin Lowest acceptable integer value
 	 * @param $intRangeMax Highest acceptable integer value
