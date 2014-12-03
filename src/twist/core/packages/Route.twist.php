@@ -62,26 +62,38 @@ class Route extends ModuleBase{
 		//$this->framework()->register()->shutdownEvent('TwistRoutes','Twist::Route','process');
 	}
 
-	public function setTemplatesDirectory($strTemplateFile = null){
-		$this->resTemplate->setTemplatesDirectory($strTemplateFile);
-	}
-
-	public function setElementsDirectory($strTemplateFile = null){
-		$this->resTemplate->setElementsDirectory($strTemplateFile);
-	}
-
-	public function setControllerDirectory($strControllerDirectory = null){
-		$this->strControllerDirectory = rtrim($strControllerDirectory,'/');
+	/**
+	 * Set a custom template directory to use for this routes instance, leaving blank will use the default templates directory
+	 * @param $dirTemplatePath Path to the template directory
+	 */
+	public function setTemplatesDirectory($dirTemplatePath = null){
+		$this->resTemplate->setTemplatesDirectory($dirTemplatePath);
 	}
 
 	/**
-	 * Set a base template file to contain your page content. Place the tag "{data:route}" in the base template where you would like the page to be displayed
-	 * @param null $strTemplateFile
+	 * Set a custom element directory to use for this routes instance, leaving blank will use the default elements directory
+	 * @param $dirElementPath Path to the element directory
 	 */
-	public function baseTemplate($strTemplateFile = null){
+	public function setElementsDirectory($dirElementPath = null){
+		$this->resTemplate->setElementsDirectory($dirElementPath);
+	}
 
-		if(!is_null($strTemplateFile)){
-			$this->strBaseTemplate = $strTemplateFile;
+	/**
+	 * Set a custom controller directory to use for this routes instance, leaving blank will use the default controllers directory
+	 * @param $dirControllerPath Path to the controller directory
+	 */
+	public function setControllerDirectory($dirControllerPath = null){
+		$this->strControllerDirectory = rtrim($dirControllerPath,'/');
+	}
+
+	/**
+	 * Set a path to the base template that you wish to wrap the output of the route with
+	 * @param $dirTemplateFile Path to the base template file, relative to your template directory (a full path can be used if required)
+	 */
+	public function baseTemplate($dirTemplateFile = null){
+
+		if(!is_null($dirTemplateFile)){
+			$this->strBaseTemplate = $dirTemplateFile;
 		}
 
 		return $this->strBaseTemplate;
@@ -89,7 +101,7 @@ class Route extends ModuleBase{
 
 	/**
 	 * Set a base URI so that you can use routes in folders that are not your Doc Root
-	 * @param null $strBaseURI
+	 * @param $strBaseURI
 	 */
 	public function baseURI($strBaseURI = null){
 
@@ -106,7 +118,7 @@ class Route extends ModuleBase{
 
 	/**
 	 * Set/Get the interface URI, used only when creating or working with an framework interface
-	 * @param null $strInterface
+	 * @param $strInterface
 	 */
 	public function interfaceURI($strInterface = null){
 
@@ -529,6 +541,10 @@ class Route extends ModuleBase{
 		}
 	}
 
+	/**
+	 * Load an existing page form the page cache, use the page key to find the cached page.
+	 * @param $strPageCacheKey
+	 */
 	protected function loadPageCache($strPageCacheKey){
 
 		//Get the page cache if exists
@@ -558,6 +574,12 @@ class Route extends ModuleBase{
 		}
 	}
 
+	/**
+	 * Store a page into the page cache, use a unique page key so that the page can be found again later when required.
+	 * @param $strPageCacheKey
+	 * @param $strPageData
+	 * @param $intCacheTime
+	 */
 	protected function storePageCache($strPageCacheKey,$strPageData,$intCacheTime = 3600){
 
 		$mxdModifiedTime = gmdate('D, d M Y H:i:s ', \Twist::DateTime()->time()) . 'GMT';
@@ -620,60 +642,64 @@ class Route extends ModuleBase{
 			$arrRouteParts = array();
 			$blMatched = false;
 
-			//Check the regX matched first if there are any to be checked
-			if(count($this->arrRegxMatches)){
+			//Only go into these wildcard and regx matches is there is not exact match found
+			if(!array_key_exists($strCurrentURIKey,$arrMethodRoutes) && !array_key_exists($strCurrentURIKey,$this->arrRoutes)) {
 
-				$arrFoundRegxMatches = array();
+				//Check the regX matched first if there are any to be checked
+				if(count($this->arrRegxMatches)){
 
-				foreach($this->arrRegxMatches as $strMatchedURI => $regxUriExpression){
-					if(preg_match($regxUriExpression, $strCurrentURI, $arrResult)){
-						$arrFoundRegxMatches[$strMatchedURI] = array('match_uri' => $strMatchedURI, 'matches' => $arrResult);
-					}
-				}
+					$arrFoundRegxMatches = array();
 
-				if(count($arrFoundRegxMatches)){
-
-					krsort($arrFoundRegxMatches);
-					$arrMatchResults = array_shift($arrFoundRegxMatches);
-
-					foreach($arrMatchResults['matches'] as $strKey => $strValue){
-						if(strstr($strKey,'tphp_')){
-							$arrUriParameters[str_replace('tphp_','',$strKey)] = $strValue;
+					foreach($this->arrRegxMatches as $strMatchedURI => $regxUriExpression){
+						if(preg_match($regxUriExpression, $strCurrentURI, $arrResult)){
+							$arrFoundRegxMatches[$strMatchedURI] = array('match_uri' => $strMatchedURI, 'matches' => $arrResult);
 						}
 					}
 
-					if(array_key_exists('twist_wildcard',$arrMatchResults['matches'])){
-						$strRouteDynamic = $arrMatchResults['matches']['twist_wildcard'];
+					if(count($arrFoundRegxMatches)){
+
+						krsort($arrFoundRegxMatches);
+						$arrMatchResults = array_shift($arrFoundRegxMatches);
+
+						foreach($arrMatchResults['matches'] as $strKey => $strValue){
+							if(strstr($strKey,'tphp_')){
+								$arrUriParameters[str_replace('tphp_','',$strKey)] = $strValue;
+							}
+						}
+
+						if(array_key_exists('twist_wildcard',$arrMatchResults['matches'])){
+							$strRouteDynamic = $arrMatchResults['matches']['twist_wildcard'];
+							$arrRouteParts = explode('/',trim($strRouteDynamic,'/'));
+						}
+
+						$strCurrentURIKey = $arrMatchResults['match_uri'];
+						$strCurrentURI = $arrMatchResults['matches']['twist_uri'];
+						$blMatched = true;
+					}
+				}
+
+				//If no route is found and there are wild cards then look up the wild cards
+				if(!$blMatched && !array_key_exists($strCurrentURI,$arrMethodRoutes) && !array_key_exists($strCurrentURI,$this->arrRoutes) && count($this->arrWildCards)){
+
+					$arrFoundWildCard = array();
+
+					foreach($this->arrWildCards as $strWildCard){
+						if(substr($strCurrentURI,0,strlen($strWildCard)) === $strWildCard){
+							$arrFoundWildCard[strlen($strWildCard)] = $strWildCard;
+						}
+					}
+
+					if(count($arrFoundWildCard)){
+
+						arsort($arrFoundWildCard);
+						$strWildCard = array_shift($arrFoundWildCard);
+
+						$strRouteDynamic = substr($strCurrentURI,strlen($strWildCard),strlen($strCurrentURI)-strlen($strWildCard));
 						$arrRouteParts = explode('/',trim($strRouteDynamic,'/'));
+
+						$strCurrentURI = $strCurrentURIKey = $strWildCard;
+						$blMatched = true;
 					}
-
-					$strCurrentURIKey = $arrMatchResults['match_uri'];
-					$strCurrentURI = $arrMatchResults['matches']['twist_uri'];
-					$blMatched = true;
-				}
-			}
-
-			//If no route is found and there are wild cards then look up the wild cards
-			if(!$blMatched && !array_key_exists($strCurrentURI,$arrMethodRoutes) && !array_key_exists($strCurrentURI,$this->arrRoutes) && count($this->arrWildCards)){
-
-				$arrFoundWildCard = array();
-
-				foreach($this->arrWildCards as $strWildCard){
-					if(substr($strCurrentURI,0,strlen($strWildCard)) === $strWildCard){
-						$arrFoundWildCard[strlen($strWildCard)] = $strWildCard;
-					}
-				}
-
-				if(count($arrFoundWildCard)){
-
-					arsort($arrFoundWildCard);
-					$strWildCard = array_shift($arrFoundWildCard);
-
-					$strRouteDynamic = substr($strCurrentURI,strlen($strWildCard),strlen($strCurrentURI)-strlen($strWildCard));
-					$arrRouteParts = explode('/',trim($strRouteDynamic,'/'));
-
-					$strCurrentURI = $strCurrentURIKey = $strWildCard;
-					$blMatched = true;
 				}
 			}
 
@@ -727,8 +753,10 @@ class Route extends ModuleBase{
 
 	/**
 	 * Serve is used to active the routes system after all routes have been set
+	 * @param $blExitOnComplete Exit script once the page has been served
+	 * @throws \Exception
 	 */
-	public function serve(){
+	public function serve($blExitOnComplete = true){
 
 		\Twist::Timer('TwistPageLoad')->log('Routes Prepared');
 
@@ -932,12 +960,17 @@ class Route extends ModuleBase{
 					}
 
 					//Cache the page if cache is enabled for this route
-					if ($arrRoute['cache'] == true && $arrRoute['cache_life'] > 0) {
+					if($arrRoute['cache'] == true && $arrRoute['cache_life'] > 0) {
 						$this->storePageCache($arrRoute['cache_key'], $strPageOut, $arrRoute['cache_life']);
 					}
 
 					//Output the page
 					echo $strPageOut;
+
+					//Exit the script, no further processing will be done
+					if($blExitOnComplete){
+						exit;
+					}
 				}
 			}
 

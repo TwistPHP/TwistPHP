@@ -23,6 +23,11 @@
 
 namespace TwistPHP\Packages;
 
+/**
+ * Image object that allow the manipulation of images, adding text, inserting watermarks, applying effects, resizing and altering output quality.
+ * The object can both import and export an image in Base64 encoding and Raw image source. Images can be served to screen our output as a file if required.
+ * @package TwistPHP\Packages
+ */
 class ImageObject{
 
 	protected $mxdFile = null;
@@ -119,8 +124,8 @@ class ImageObject{
 
 	/**
 	 * Save the image as a file, the format will be determined by the file extension. Leaving the file name as null will use the original filename.
-	 * @param null|string $strFilename If omitted the original file will be overwritten
-	 * @param null|string $intQuality Output image quality in percents 0-100
+	 * @param $strFilename If omitted the original file will be overwritten
+	 * @param $intQuality Output image quality in percents 0-100
 	 * @return $this
 	 * @throws \Exception
 	 */
@@ -155,10 +160,10 @@ class ImageObject{
 
 	/**
 	 * Outputs the image to the screen without saving
-	 * @param null|string $strFormat If omitted or null - format of original file will be used, may be gif|jpg|png
-	 * @param null|int $intQuality Output image quality in percents 0-100
-	 * @param null|int $intCache set the life of the image so that the browser can cache it, defaults to 3600 seconds, set to null for no caching
-	 * @param boolean $blGZip Output the image compressed with gzip, this will only happen if set to true and the browser accepts gzip encoding
+	 * @param $strFormat If omitted or null - format of original file will be used, may be gif|jpg|png
+	 * @param $intQuality Output image quality in percents 0-100
+	 * @param $intCache set the life of the image so that the browser can cache it, defaults to 3600 seconds, set to null for no caching
+	 * @param $blGZip Output the image compressed with gzip, this will only happen if set to true and the browser accepts gzip encoding
 	 * @throws \Exception
 	 */
 	public function output($strFormat=null,$intQuality=null,$intCache=3600,$blGZip=true){
@@ -187,8 +192,8 @@ class ImageObject{
 
 	/**
 	 * Outputs the image as a Base64 encoded string
-	 * @param null|string $strFormat If omitted or null - format of original file will be used, may be gif|jpg|png
-	 * @param null|int $intQuality Output image quality in percents 0-100
+	 * @param $strFormat If omitted or null - format of original file will be used, may be gif|jpg|png
+	 * @param $intQuality Output image quality in percents 0-100
 	 * @return string
 	 */
 	public function outputBase64($strFormat=null,$intQuality=null){
@@ -199,8 +204,8 @@ class ImageObject{
 
 	/**
 	 * Get the raw data of an image that can be output as a file, served to the screen or transformed into a base64 string
-	 * @param null $strFormat
-	 * @param null $intQuality
+	 * @param $strFormat
+	 * @param $intQuality
 	 * @return array
 	 * @throws \Exception
 	 */

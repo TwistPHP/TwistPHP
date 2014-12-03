@@ -26,13 +26,23 @@ namespace TwistPHP\Packages;
 class Validator{
 
 	protected $arrChecks = array();
-	protected $arrTypes = array('email','url','ip','boolean','float','integer','string','telephone','postcode');
+	protected $arrTypes = array('email','domain','url','ip','boolean','float','integer','string','telephone','postcode');
 	protected $arrTestResults = array();
 
 	public function checkEmail($strKey,$blAllowBlank = false,$blRequired = true,$blTrim = true){
 
 		$this->arrChecks[$strKey] = array(
 			'type' => 'email',
+			'blank' => ($blAllowBlank == true || $blAllowBlank == 1) ? 1 : 0,
+			'required' => ($blRequired == true || $blRequired == 1) ? 1 : 0,
+			'trim' => ($blTrim == true || $blTrim == 1) ? 1 : 0
+		);
+	}
+
+	public function checkDomain($strKey,$blAllowBlank = false,$blRequired = true,$blTrim = true){
+
+		$this->arrChecks[$strKey] = array(
+			'type' => 'domain',
 			'blank' => ($blAllowBlank == true || $blAllowBlank == 1) ? 1 : 0,
 			'required' => ($blRequired == true || $blRequired == 1) ? 1 : 0,
 			'trim' => ($blTrim == true || $blTrim == 1) ? 1 : 0
