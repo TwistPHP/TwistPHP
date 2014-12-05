@@ -866,6 +866,8 @@ class Route extends ModuleBase{
 								$strControllerClass = sprintf('\TwistController\\%s', $arrRoute['item'][0]);
 								if (count($arrRoute['item']) > 1) {
 									$strControllerFunction = $arrRoute['item'][1];
+								} elseif(count($arrRoute['current']['uri_parameters']) && array_key_exists('function',$arrRoute['current']['uri_parameters'])) {
+									$strControllerFunction = $arrRoute['current']['uri_parameters']['function'];
 								} else {
 									$strControllerFunction = (count($arrRoute['current']['parts'])) ? $arrRoute['current']['parts'][0] : '_default';
 								}
