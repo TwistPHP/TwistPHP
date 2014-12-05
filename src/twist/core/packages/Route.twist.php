@@ -495,7 +495,8 @@ class Route extends ModuleBase{
 
 		$arrRouteData = array(
 			'regx' => $regxMatchURI,
-			'uri' => sprintf("%s%s",$this->baseURI(),str_replace('//','/',$strURI)),
+			'uri' => '',
+			'registered_uri' => sprintf("%s%s",$this->baseURI(),str_replace('//','/',$strURI)),
 			'base_uri' => $this->baseURI(),
 			'relative_uri' => $strURI,
 			'url' => sprintf("%s://%s%s%s",$this->framework()->setting('SITE_PROTOCOL'),$this->framework()->setting('SITE_HOST'),$this->baseURI(),str_replace('//','/',$strURI)),
@@ -710,11 +711,11 @@ class Route extends ModuleBase{
 
 				$arrOut['cache_key'] = $strPageCacheKey;
 
-				$arrOut['current']['title'] = (is_null($arrOut['title'])) ? $this->framework() -> setting('SITE_NAME') : $arrOut['title'];
-				$arrOut['current']['uri'] = sprintf('%s/%s',rtrim($strCurrentURI,'/'),ltrim($strRouteDynamic,'/'));
-				$arrOut['current']['uri_parameters'] = $arrUriParameters;
-				$arrOut['current']['dynamic'] = $strRouteDynamic;
-				$arrOut['current']['parts'] = $arrRouteParts;
+				$arrOut['title'] = (is_null($arrOut['title'])) ? $this->framework() -> setting('SITE_NAME') : $arrOut['title'];
+				$arrOut['uri'] = sprintf('%s/%s',rtrim($strCurrentURI,'/'),ltrim($strRouteDynamic,'/'));
+				$arrOut['vars'] = $arrUriParameters;
+				$arrOut['dynamic'] = $strRouteDynamic;
+				$arrOut['parts'] = $arrRouteParts;
 
 				//Now sanitise the relative_uri and the url
 				if(!is_null($arrOut['regx'])){
@@ -765,7 +766,7 @@ class Route extends ModuleBase{
 
 			//First of all check for an interface and do that
 			if ($arrRoute['type'] == 'interface') {
-				\Twist::framework()->interfaces()->load($arrRoute['item'], $arrRoute['uri'], $arrRoute['base_template']);
+				\Twist::framework()->interfaces()->load($arrRoute['item'], $arrRoute['registered_uri'], $arrRoute['base_template']);
 				die();
 			} else {
 
@@ -783,7 +784,7 @@ class Route extends ModuleBase{
 						$strFullLoginURL = sprintf('%s/%s', $this->strBaseURI, ltrim($arrRestrictedInfo['login_uri'], '/'));
 						$blRestrictedPage = true;
 
-						if ($arrRestrictedInfo['login_uri'] == $arrRoute['current']['uri']) {
+						if ($arrRestrictedInfo['login_uri'] == $arrRoute['uri']) {
 							$blRestrictedPage = false;
 							$arrRestrictedInfo = array();
 						}
@@ -813,9 +814,9 @@ class Route extends ModuleBase{
 
 					//Pass all the current route info to the global server array
 					$_SERVER['TWIST_ROUTE'] = $arrRoute;
-					$_SERVER['TWIST_ROUTE_DYNAMIC'] = $arrRoute['current']['dynamic'];
-					$_SERVER['TWIST_ROUTE_PARTS'] = $arrRoute['current']['parts'];
-					$_SERVER['TWIST_ROUTE_URI'] = $arrRoute['current']['uri'];
+					$_SERVER['TWIST_ROUTE_DYNAMIC'] = $arrRoute['dynamic'];
+					$_SERVER['TWIST_ROUTE_PARTS'] = $arrRoute['parts'];
+					$_SERVER['TWIST_ROUTE_URI'] = $arrRoute['uri'];
 					$_SERVER['TWIST_ROUTE_TITLE'] = \Twist::framework()->setting('SITE_NAME');
 					$_SERVER['TWIST_ROUTE_DESCRIPTION'] = \Twist::framework()->setting('SITE_DESCRIPTION');
 					$_SERVER['TWIST_ROUTE_AUTHOR'] = \Twist::framework()->setting('SITE_AUTHOR');
@@ -824,20 +825,16 @@ class Route extends ModuleBase{
 					//Load the page from cache
 					$this->loadPageCache($arrRoute['cache_key']);
 
-					$arrTags = array();
+					$arrTags = $arrRoute;
 					$arrTags['response'] = '';
 					$arrTags['response_item'] = $arrRoute['item'];
 					$arrTags['response_type'] = $arrRoute['type'];
 
-					$arrTags['request'] = ($arrRoute['current']['uri'] == '') ? '/' : $arrRoute['current']['uri'];
-					$arrTags['request_item'] = ltrim($arrRoute['current']['dynamic'], '/');
+					$arrTags['request'] = ($arrRoute['uri'] == '') ? '/' : $arrRoute['uri'];
+					$arrTags['request_item'] = ltrim($arrRoute['dynamic'], '/');
 
 					$arrTags['base_uri'] = $this->strBaseURI;
 					$arrTags['interface_uri'] = $this->strInterfaceURI;
-
-					//$arrTags['title'] = $arrRoute['title'];
-					$arrTags['data'] = $arrRoute['data'];
-					$arrTags['current'] = $arrRoute['current'];
 
 					$this->framework()->module()->extend('Template', 'route', $arrTags);
 
@@ -866,8 +863,10 @@ class Route extends ModuleBase{
 								$strControllerClass = sprintf('\TwistController\\%s', $arrRoute['item'][0]);
 								if (count($arrRoute['item']) > 1) {
 									$strControllerFunction = $arrRoute['item'][1];
+								} elseif(count($arrRoute['vars']) && array_key_exists('function',$arrRoute['vars'])) {
+									$strControllerFunction = $arrRoute['vars']['function'];
 								} else {
-									$strControllerFunction = (count($arrRoute['current']['parts'])) ? $arrRoute['current']['parts'][0] : '_default';
+									$strControllerFunction = (count($arrRoute['parts'])) ? $arrRoute['parts'][0] : '_default';
 								}
 
 								$objController = new $strControllerClass();
@@ -953,7 +952,7 @@ class Route extends ModuleBase{
 						if (file_exists($strCustomTemplate)) {
 							$strPageOut = $this->resTemplate->build($arrRoute['base_template'], $arrRoute['data']);
 						} else {
-							throw new \Exception(sprintf("The custom base template (%s) for the route %s '%s' does not exist", $arrRoute['base_template'], $arrRoute['type'], $arrRoute['current']['uri']));
+							throw new \Exception(sprintf("The custom base template (%s) for the route %s '%s' does not exist", $arrRoute['base_template'], $arrRoute['type'], $arrRoute['uri']));
 						}
 					} else {
 						$strPageOut = $arrTags['response'];

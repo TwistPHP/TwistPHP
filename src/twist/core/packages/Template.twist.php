@@ -35,6 +35,7 @@ class Template extends ModuleBase{
     protected $dirElements = '';
     protected $arrElementData = array();
     protected $arrElementParams = array();
+    protected $dirCurrentTemplate = null;
 
     public function __construct($strInstanceKey){
         $this->strInstanceKey = $strInstanceKey;
@@ -93,6 +94,7 @@ class Template extends ModuleBase{
 
         $strTemplateDataOut = null;
         $this->validDataTags($arrTemplateTags);
+	    $this->dirCurrentTemplate = $dirTemplate;
 
 	    $dirFullTemplatePath = (!is_file($dirTemplate)) ? sprintf("%s%s",$this->dirTemplates,$dirTemplate) : $dirTemplate;
 		$strCacheKey = str_replace(array(BASE_LOCATION,'twist/interfaces','twist/core'),array('','twist-interface','twist-core'),$dirFullTemplatePath);
@@ -145,6 +147,7 @@ class Template extends ModuleBase{
 
         $strTemplateDataOut = null;
         $this->validDataTags($arrTemplateTags);
+	    $this->dirCurrentTemplate = null;
 
         //Check that the raw template data is not null or blank
         if(!is_null($strRawTemplateData) && $strRawTemplateData != ''){
@@ -589,6 +592,10 @@ class Template extends ModuleBase{
 				if($strReference == 'structure_template'){
 					$arrStructure = \Twist::Structure() -> getCurrent();
 					$strTemplate = $arrStructure['template']['tpl_file'];
+				}
+
+				if(substr($strTemplate,0,1) == '.'){
+					$strTemplate = sprintf('%s/%s',dirname($this->dirCurrentTemplate),$strTemplate);
 				}
 
 				$strTagData = $this->build($strTemplate,$arrData);
