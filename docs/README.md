@@ -13,7 +13,7 @@
 ###Advanced
 
 8. Further Templating
-9. Redirections
+9. Redirects
 10. More Controllers
 11. Tools
 
@@ -24,3 +24,12 @@
 * [Tables](examples/Database/Tables.md)
 * Routes
 * Templates
+
+##Coding Conventions
+
+### PHP
+
+* [Files](PHP/Files.md)
+* [Methods](PHP/Methods.md)
+* [Variables](PHP/Variables.md)
+* [Indentation and Whitespace](PHP/Whitespace.md)
