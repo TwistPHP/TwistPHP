@@ -29,7 +29,7 @@
 
 ### PHP
 
-* [Files](PHP/Files.md)
-* [Methods](PHP/Methods.md)
-* [Variables](PHP/Variables.md)
-* [Indentation and Whitespace](PHP/Whitespace.md)
+* [Files](coding-conventions/PHP/Files.md)
+* [Methods](coding-conventions/PHP/Methods.md)
+* [Variables](coding-conventions/PHP/Variables.md)
+* [Indentation and Whitespace](coding-conventions/PHP/Whitespace.md)
