@@ -1,3 +1,20 @@
+#PHP Files
+
+All PHP files should use the extension *.php*. Extensions such as *.php4*, *.php5* and *.phps* should be avoided.
+
+PHP files should start with an opening PHP tag with no whitespace before and a blank line after. The closing php tag should always be omitted.
+
+```php
+<?php
+
+    //Start code here
+```
+
+##Licence
+
+If creating a PHP file with a licence embedded then include the licence on line 2, straight after the opening PHP tag:
+
+```php
 <?php
 	/**
 	 * This file is part of TwistPHP.
@@ -20,32 +37,4 @@
 	 * @link       http://twistphp.com
 	 *
 	 */
-
-	namespace TwistPHP;
-
-	if(!class_exists('Instance')){
-		class Instance{
-
-			protected static $arrFrameworkObjects = array();
-
-			public static function isObject($strObjectIdentifier){
-				return (array_key_exists($strObjectIdentifier,self::$arrFrameworkObjects));
-			}
-
-			public static function storeObject($strObjectIdentifier,$objResource){
-				self::$arrFrameworkObjects[$strObjectIdentifier] = $objResource;
-			}
-
-			public static function retrieveObject($strObjectIdentifier){
-				return self::$arrFrameworkObjects[$strObjectIdentifier];
-			}
-
-			public static function removeObject($strObjectIdentifier){
-				self::$arrFrameworkObjects[$strObjectIdentifier] = null;
-			}
-
-			public static function listObjects(){
-				return array_keys(self::$arrFrameworkObjects);
-			}
-		}
-	}
+```
