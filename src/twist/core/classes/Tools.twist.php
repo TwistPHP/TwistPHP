@@ -17,7 +17,7 @@
 	 *
 	 * @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
 	 * @license    https://www.gnu.org/licenses/gpl.html LGPL License
-	 * @link       http://twistphp.com/
+	 * @link       http://twistphp.com
 	 *
 	 */
 
@@ -27,6 +27,7 @@
 
 		/**
 		 * Similar to print_r but corrects issues such as booleans, also give more useful information about the data
+         *
 		 * @param $arrData
 		 * @param string $strIndent
 		 * @return string
@@ -52,9 +53,11 @@
 		}
 
 		/**
-		 * @param $arrIn
-		 * @param null $strMultiDimensionalKey
-		 * @param string $strSplitChar
+         * Transform an associative array into a multidimensional array using a key to define the structure
+         *
+		 * @param $arrIn Array to transform
+		 * @param null $strMultiDimensionalKey Key in the array to use to define a structure
+		 * @param string $strSplitChar Structure separator
 		 * @return array
 		 */
 		public function array2dTo3d( $arrIn, $strMultiDimensionalKey = null, $strSplitChar = '/' ) {
@@ -83,9 +86,11 @@
 		}
 
 		/**
-		 * @param $arrIn
-		 * @param string $strJoinChar
-		 * @param null $mxdPreviousKey
+         * Collapse a multidimensional array into a single associative array
+         *
+		 * @param $arrIn Array to transform
+		 * @param string $strJoinChar Structure separator
+		 * @param null $mxdPreviousKey Previous key encountered (used in the recursive process)
 		 * @return array
 		 */
 		public function array3dTo2d( $arrIn, $strJoinChar = '/', $mxdPreviousKey = null ) {
@@ -107,8 +112,10 @@
 		}
 
 		/**
-		 * @param $arrPrimary
-		 * @param $arrSecondary
+         * Fully merge two multidimensional arrays
+         *
+		 * @param $arrPrimary Primary array
+		 * @param $arrSecondary Secondary array
 		 * @return mixed
 		 */
 		public function arrayMergeRecursive($arrPrimary,$arrSecondary){
@@ -133,11 +140,11 @@
 		}
 
 		/**
-		 * Parse an array of data looking for the result of a multi dimentional key.
-		 * The key should be formatted using '/' for instance 'user/name'
-		 * @param $strKey
-		 * @param $arrData
-		 * @param string $strSplitChar
+		 * Return a value in an array using multi dimensional key to parse the structure of the array
+         *
+		 * @param $strKey Location of the value in the array
+		 * @param $arrData Array to parse
+		 * @param string $strSplitChar Structure separator
 		 * @return null $mxdOut
 		 */
 		public function arrayParse($strKey,$arrData,$strSplitChar='/'){

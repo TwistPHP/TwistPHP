@@ -17,40 +17,75 @@
 	 *
 	 * @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
 	 * @license    https://www.gnu.org/licenses/gpl.html LGPL License
-	 * @link       http://twistphp.com/
+	 * @link       http://twistphp.com
 	 *
 	 */
 
 	namespace TwistPHP\Packages;
 	use TwistPHP\ModuleBase;
 
+	/**
+	 * ICS Calendar and Event Handler, can import, edita nd create ics files that are compatible with Google Calendars and iCAl/Mac Calendar
+	 * @package TwistPHP\Packages
+	 */
 	class ICS{
 
+		/**
+		 * Loads in the two returnable object classes
+		 */
 		public function __construct(){
 			require_once sprintf('%s/libraries/ICS/Calendar.lib.php',DIR_FRAMEWORK_PACKAGES);
 			require_once sprintf('%s/libraries/ICS/Event.lib.php',DIR_FRAMEWORK_PACKAGES);
 		}
 
+		/**
+		 * Create a new instance of the ICSCalendar object, allowing the creation of an calendar ICS file
+		 *
+		 * @return_object ICSCalendar core/packages/libraries/ICS/Calendar.lib.php
+		 * @return object Returns the ICS Calendar Object
+		 */
 		public function createCalendar(){
 			return new ICSCalendar();
 		}
 
+		/**
+		 * Create a new instance of the ICSEvent object, allowing the creation of an event ICS file
+		 *
+		 * @return_object ICSEvent core/packages/libraries/ICS/Event.lib.php
+		 * @return object Returns the ICS Event Object
+		 */
 		public function createEvent(){
 			return new ICSEvent();
 		}
 
-		public function loadFile($strICSFile){
+		/**
+		 * Load in an existing ICS file in to be converted into an usable ICS Event/Calendar object
+		 *
+		 * @param $dirICSFile Path of the ICS file to be imported
+		 * @return_object ICSCalendar core/packages/libraries/ICS/Calendar.lib.php
+		 * @return_object ICSEvent core/packages/libraries/ICS/Event.lib.php
+		 * @return null|object Returns NULL or either the ICS Event or Calendar Object
+		 */
+		public function loadFile($dirICSFile){
 
 			$resObject = null;
 
-			if(file_exists($strICSFile) || strstr($strICSFile,'http')){
-				$strRawData = file_get_contents($strICSFile);
+			if(file_exists($dirICSFile) || strstr($dirICSFile,'http')){
+				$strRawData = file_get_contents($dirICSFile);
 				$resObject = $this->parseRawData($strRawData);
 			}
 
 			return $resObject;
 		}
 
+		/**
+		 * Turns the raw ICS data into an object and returns
+		 *
+		 * @param $strRawData
+		 * @return_object ICSCalendar core/packages/libraries/ICS/Calendar.lib.php
+		 * @return_object ICSEvent core/packages/libraries/ICS/Event.lib.php
+		 * @return null|object Returns NULL or either the ICS Event or Calendar Object
+		 */
 		protected function parseRawData($strRawData){
 
 			//Clean up the line breaks

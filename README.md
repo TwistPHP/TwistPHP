@@ -129,6 +129,8 @@ require_once 'twist/framework.php';
 
 ##Documentation
 
+This framework includes [basic documentation](docs/README.md), including examples.
+
 Full documentation of the framework can be found on the [TwistPHP site](https://twistphp.com/docs).
 
 ##Issues

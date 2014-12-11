@@ -17,7 +17,7 @@
 	*
 	* @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
 	* @license    https://www.gnu.org/licenses/gpl.html LGPL License
-	* @link       http://twistphp.com/
+	* @link       http://twistphp.com
 	*
 	*/
 
@@ -165,7 +165,7 @@
 		 * @related prettyAge
 		 *
 		 * @param $intSeconds Time in seconds for conversion
-		 * @param $blShortLabels Set to true for short labels i.e. y,mo,w over year,month,week
+		 * @param $blShortLabels Use short labels (y, mo, w) rather than full labels (year, month, week)
 		 * @return string
 		 */
 		public function prettyTime($intSeconds,$blShortLabels = false){

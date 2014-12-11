@@ -17,7 +17,7 @@
 	 *
 	 * @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
 	 * @license    https://www.gnu.org/licenses/gpl.html LGPL License
-	 * @link       http://twistphp.com/
+	 * @link       http://twistphp.com
 	 *
 	 */
 
@@ -155,7 +155,11 @@
 
 							$arrData['data'] = json_decode($arrData['data'],true);
 							$mxdOut = ($blFullData) ? $arrData : $arrData['data'];
+						}else{
+							$this->remove($mxdUniqueID);
 						}
+					}else{
+						$this->remove($mxdUniqueID);
 					}
 				}
 			}

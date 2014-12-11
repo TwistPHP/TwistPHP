@@ -17,7 +17,7 @@
 	 *
 	 * @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
 	 * @license    https://www.gnu.org/licenses/gpl.html LGPL License
-	 * @link       http://twistphp.com/
+	 * @link       http://twistphp.com
 	 *
 	 */
 
@@ -146,7 +146,8 @@
 		}
 
 		/**
-		 * Run the query on the database, optionally pass the query in as a raw sprintf string "SELECT * FROM `table` WHERE `id` = %d" followed by all the parameters to fill the string. All parameters are escaped before being entered into the sprintf.
+		 * Run the query on the database, optionally pass the query in as a raw sprintf() string "SELECT * FROM `table` WHERE `id` = %d" followed by all the parameters to fill the string
+         * All parameters are escaped before being entered into the sprintf()
 		 *
 		 * @param $strQuery
 		 * @return null
@@ -219,7 +220,8 @@
 		 * Create a new database record (row) an empty object will be returned from this function, you can then populate the record and commit your changes
 		 *
 		 * @param $strTable
-		 * @return null|DatabaseRecord
+		 * @return_object DatabaseRecord core/packages/libraries/Database/Record.lib.php
+		 * @return null|object Returns and object of the database table
 		 */
 		public function createRecord($strTable){
 
@@ -238,13 +240,14 @@
 		}
 
 		/**
-		 * Get a database record as a object with the ability to updated, and delete. The where clause is generated from the second parameter, must be an array.
-		 * For example to get the user with the 'id' of 1 pass in array('id' => 1).
+		 * Get an object of a database record with the ability to update and delete
+         * A WHERE clause is generated in the form "WHERE $strField = $mxdValue", the default field being "id"
 		 *
 		 * @param $strTable
 		 * @param $mxdValue
 		 * @param string $strField
-		 * @return null|DatabaseRecord
+		 * @return_object DatabaseRecord core/packages/libraries/Database/Record.lib.php
+		 * @return null|object Returns and object of the database table
 		 */
 		public function getRecord($strTable,$mxdValue,$strField = 'id'){
 
@@ -266,13 +269,15 @@
 		}
 
 		/**
-		 * Get a clone of a database record as an object to be stored as a new record (auto-increment fields will be nulled). The where clause is generated from the second parameter, must be an array.
-		 * For example to get the user with the 'id' of 1 pass in array('id' => 1).
+		 * Get a clone of a database record as an object to be stored as a new record (auto-increment fields will be nulled)
+         * The where clause is generated from the second parameter, must be an array
+		 * For example to get the user with the 'id' of 1 pass in array('id' => 1)
 		 *
 		 * @param $strTable
 		 * @param $mxdValue
 		 * @param string $strField
-		 * @return null|DatabaseRecord
+		 * @return_object DatabaseRecord core/packages/libraries/Database/Record.lib.php
+		 * @return null|object Returns and object of the database table
 		 */
 		public function cloneRecord($strTable,$mxdValue,$strField = 'id'){
 
@@ -300,8 +305,8 @@
 		}
 
 		/**
-		 * Get the record (row) back as an array. The where clause is generated from the second parameter, must be an array.
-		 * For example to get the user with the 'id' of 1 pass in array('id' => 1).
+		 * Get the record (row) back as an array. The where clause is generated from the second parameter, must be an array
+		 * For example to get the user with the 'id' of 1 pass in array('id' => 1)
 		 *
 		 * @param $strTable
 		 * @param $mxdValue
@@ -327,7 +332,7 @@
 		}
 
 		/**
-		 * Get all the records from a table, this should only be used when absolutely required as is slower and you many not need all the data that is returned
+		 * Get an array of all the records in a table
 		 *
 		 * @param $strTable
 		 * @param $strOrderBy
@@ -375,8 +380,10 @@
 		}
 
 		/**
-		 * Get a count of records (rows) as an array. The where clause is generated from the second parameter, must be an array. For example to get the user with the 'id' of 1 pass in array('id' => 1) you could look for the user by email with a wild card array('email' => 'dan@%')
-		 * The where array accepts multiple parameters at a time.
+		 * Get a count of records (rows) as an array
+         * The where clause is generated from the second parameter, must be an array
+         * For example to get the user with the 'id' of 1 pass in array('id' => 1) you could look for the user by email with a wild card array('email' => 'dan@%')
+		 * The where array accepts multiple parameters at a time
 		 *
 		 * @param $strTable
 		 * @param $mxdValue
@@ -471,6 +478,7 @@
 		 *
 		 * @param $strTable Name of that table to lookup
 		 * @param $strDatabase Name of the tables database if not the current database
+		 * @return_object DatabaseTable core/packages/libraries/Database/Table.lib.php
 		 * @return object Returns and object of the database table
 		 */
 		public function table($strTable,$strDatabase = null){
