@@ -61,6 +61,7 @@ class BaseController{
 	protected function _callFunction($strCallFunctionName){
 
 		$arrControllerFunctions = array();
+		
 		foreach(get_class_methods($this) as $strFunctionName){
 			$arrControllerFunctions[strtolower($strFunctionName)] = $strFunctionName;
 		}
