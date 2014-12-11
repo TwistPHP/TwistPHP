@@ -670,7 +670,7 @@ class Route extends ModuleBase{
 
 						if(array_key_exists('twist_wildcard',$arrMatchResults['matches'])){
 							$strRouteDynamic = $arrMatchResults['matches']['twist_wildcard'];
-							$arrRouteParts = explode('/',trim($strRouteDynamic,'/'));
+							$arrRouteParts = (!in_array(trim($strRouteDynamic,'/'),array('','/'))) ? explode('/',trim($strRouteDynamic,'/')) : array();
 						}
 
 						$strCurrentURIKey = $arrMatchResults['match_uri'];
@@ -696,7 +696,7 @@ class Route extends ModuleBase{
 						$strWildCard = array_shift($arrFoundWildCard);
 
 						$strRouteDynamic = substr($strCurrentURI,strlen($strWildCard),strlen($strCurrentURI)-strlen($strWildCard));
-						$arrRouteParts = explode('/',trim($strRouteDynamic,'/'));
+						$arrRouteParts = (!in_array(trim($strRouteDynamic,'/'),array('','/'))) ? explode('/',trim($strRouteDynamic,'/')) : array();
 
 						$strCurrentURI = $strCurrentURIKey = $strWildCard;
 						$blMatched = true;
