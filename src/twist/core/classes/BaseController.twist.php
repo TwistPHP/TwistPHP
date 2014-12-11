@@ -97,21 +97,12 @@
 			return (is_null($strKeywords)) ? $_SERVER['TWIST_ROUTE_KEYWORDS'] : $_SERVER['TWIST_ROUTE_KEYWORDS'] = $strKeywords;
 		}
 
-<<<<<<< HEAD
-	protected function _var($strVarKey = null){
+		protected function _var($strVarKey = null){
 
-		if(is_null($strVarKey)){
-			return $_SERVER['TWIST_ROUTE']['vars'];
-		}else{
-			return (array_key_exists($strVarKey,$_SERVER['TWIST_ROUTE']['vars'])) ? $_SERVER['TWIST_ROUTE']['vars'][$strVarKey] : null;
-=======
-		protected function _uriParameter($strParameterKey = null){
-
-			if(is_null($strParameterKey)){
-				return $_SERVER['TWIST_ROUTE']['current']['uri_parameters'];
+			if(is_null($strVarKey)){
+				return $_SERVER['TWIST_ROUTE']['vars'];
 			}else{
-				return (array_key_exists($strParameterKey,$_SERVER['TWIST_ROUTE']['current']['uri_parameters'])) ? $_SERVER['TWIST_ROUTE']['current']['uri_parameters'][$strParameterKey] : null;
+				return (array_key_exists($strVarKey,$_SERVER['TWIST_ROUTE']['vars'])) ? $_SERVER['TWIST_ROUTE']['vars'][$strVarKey] : null;
 			}
->>>>>>> andi
 		}
 	}
