@@ -1,7 +1,5 @@
 #Installing the framework
 
-
-
 1. Get the ZIP of TwistPHP framework and extract the folder twist into your public_html directory.
 
 2. Create an index.php file in the sites root that contains:
