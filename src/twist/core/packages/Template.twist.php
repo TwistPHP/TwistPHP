@@ -667,6 +667,11 @@ class Template extends ModuleBase{
 				$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,\Twist::DateTime()->date($strReference),$strFunction);
 				break;
 
+			case'uri':
+				$urlTraversed = \Twist::framework()->tools()->traverseURI($strReference);
+				$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$urlTraversed,$strFunction);
+				break;
+
 			/**
 			 * Use custom tags, set using registerTag('tagType',array('key' => 'value'))
 			 */
