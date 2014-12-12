@@ -263,7 +263,7 @@
 			$urlCurrentURI = trim((is_null($urlStartingURI)) ? $_SERVER['REQUEST_URI'] : $urlStartingURI,'/');
 			$urlOut = rtrim($urlRelativePath,'/');
 
-			if(substr($urlOut,0,2) == './'){
+			if(substr($urlRelativePath,0,2) == './'){
 
 				//THIS
 				$urlOutTemp = trim($urlOut,'/');
@@ -276,9 +276,9 @@
 				array_pop($arrCurrentParts);
 				$urlCurrentURI = implode('/',$arrCurrentParts);
 
-				$urlOut = sprintf('%s/%s',$urlCurrentURI,$urlOutTemp);
+				$urlOut = sprintf('/%s/%s',$urlCurrentURI,$urlOutTemp);
 
-			}elseif(substr($urlOut,0,3) == '../'){
+			}elseif(substr($urlRelativePath,0,3) == '../'){
 
 				//UP
 				$urlOutTemp = trim($urlOut,'/');
@@ -286,7 +286,7 @@
 				$arrCurrentParts = (strstr($urlCurrentURI,'/')) ? explode('/',$urlCurrentURI) : array($urlCurrentURI);
 				$arrRedirectParts = (strstr($urlOutTemp,'/')) ? explode('/',$urlOutTemp) : array($urlOutTemp);
 
-				foreach($arrRedirectParts as $strEachPart){
+				foreach($arrRedirectParts as $intKey => $strEachPart){
 					if($strEachPart == '..' && count($arrCurrentParts) > 0){
 						array_pop($arrCurrentParts);
 						array_shift($arrRedirectParts);
@@ -295,10 +295,14 @@
 					}
 				}
 
+				if(count($arrRedirectParts) > 0){
+					array_pop($arrCurrentParts);
+				}
+
 				$arrUriParts = array_merge($arrCurrentParts,$arrRedirectParts);
 				$urlOut = sprintf('/%s',implode('/',$arrUriParts));
 
-			}elseif(!strstr($urlOut,':') && substr($urlOut,0,2) != '//' && substr($urlOut,0,1) != '/'){
+			}elseif(!strstr($urlRelativePath,':') && substr($urlRelativePath,0,2) != '//' && substr($urlRelativePath,0,1) != '/'){
 
 				//CHILD
 				$urlOutTemp = trim($urlOut,'/');
@@ -308,8 +312,10 @@
 			//Otherwise do a full redirect
 			if(\Twist::framework()->setting('SITE_TRAILING_SLASH')){
 				$urlOut .= '/';
+			}else{
+				$urlOut = rtrim($urlOut,'/');
 			}
-			
+
 			return $urlOut;
 		}
 	}
