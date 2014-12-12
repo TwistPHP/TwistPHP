@@ -2,8 +2,6 @@
 
 TwistPHP uses its own database object to add and edit mySQL tables.
 
-
-
 ## Creating a new table
 
 To create a new table, grab a copy of the database object and use the method `table()` to return a new database table object.

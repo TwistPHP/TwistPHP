@@ -221,55 +221,7 @@
 			 */
 			public static function redirect($urlRedirect,$blPermanent = false){
 
-				$urlCurrentURI = trim($_SERVER['REQUEST_URI'],'/');
-				$urlRedirect = rtrim($urlRedirect,'/');
-
-				if(substr($urlRedirect,0,2) == './'){
-
-					//THIS
-					$urlRedirectURI = trim($urlRedirect,'/');
-
-					if(substr($urlRedirectURI,0,2) == './'){
-						$urlRedirectURI = substr($urlRedirectURI,2);
-					}
-
-					$arrCurrentParts = (strstr($urlCurrentURI,'/')) ? explode('/',$urlCurrentURI) : array($urlCurrentURI);
-					array_pop($arrCurrentParts);
-					$urlCurrentURI = implode('/',$arrCurrentParts);
-
-					$urlRedirect = sprintf('%s/%s',$urlCurrentURI,$urlRedirectURI);
-
-				}elseif(substr($urlRedirect,0,3) == '../'){
-
-					//UP
-					$urlRedirectURI = trim($urlRedirect,'/');
-
-					$arrCurrentParts = (strstr($urlCurrentURI,'/')) ? explode('/',$urlCurrentURI) : array($urlCurrentURI);
-					$arrRedirectParts = (strstr($urlRedirectURI,'/')) ? explode('/',$urlRedirectURI) : array($urlRedirectURI);
-
-					foreach($arrRedirectParts as $strEachPart){
-						if($strEachPart == '..' && count($arrCurrentParts) > 0){
-							array_pop($arrCurrentParts);
-							array_shift($arrRedirectParts);
-						}else{
-							break;
-						}
-					}
-
-					$arrUriParts = array_merge($arrCurrentParts,$arrRedirectParts);
-					$urlRedirect = sprintf('/%s',implode('/',$arrUriParts));
-
-				}elseif(!strstr($urlRedirect,':') && substr($urlRedirect,0,2) != '//' && substr($urlRedirect,0,1) != '/'){
-
-					//CHILD
-					$urlRedirectURI = trim($urlRedirect,'/');
-					$urlRedirect = sprintf('/%s/%s',$urlCurrentURI,$urlRedirectURI);
-				}
-
-				//Otherwise do a full redirect
-				if(Twist::framework()->setting('SITE_TRAILING_SLASH')){
-					$urlRedirect .= '/';
-				}
+				$urlRedirect = \Twist::framework()->tools()->traverseURI($urlRedirect);
 
 				header(sprintf('Location: %s',$urlRedirect),true,($blPermanent) ? 301 : 302);
 				die();
