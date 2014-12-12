@@ -251,4 +251,65 @@
 			call_user_func_array('var_dump',func_get_args());
 			return ob_get_clean();
 		}
+
+		/**
+		 * Traverse the current URI in $_SERVER['REQUEST_URI'] or pass in a starting URI
+		 * @param $urlRelativePath
+		 * @param $urlStartingURI
+		 * @return string Return the traversed URI
+		 */
+		public function traverseURI($urlRelativePath,$urlStartingURI = null){
+
+			$urlCurrentURI = trim((is_null($urlStartingURI)) ? $_SERVER['REQUEST_URI'] : $urlStartingURI,'/');
+			$urlOut = rtrim($urlRelativePath,'/');
+
+			if(substr($urlOut,0,2) == './'){
+
+				//THIS
+				$urlOutTemp = trim($urlOut,'/');
+
+				if(substr($urlOutTemp,0,2) == './'){
+					$urlOutTemp = substr($urlOutTemp,2);
+				}
+
+				$arrCurrentParts = (strstr($urlCurrentURI,'/')) ? explode('/',$urlCurrentURI) : array($urlCurrentURI);
+				array_pop($arrCurrentParts);
+				$urlCurrentURI = implode('/',$arrCurrentParts);
+
+				$urlOut = sprintf('%s/%s',$urlCurrentURI,$urlOutTemp);
+
+			}elseif(substr($urlOut,0,3) == '../'){
+
+				//UP
+				$urlOutTemp = trim($urlOut,'/');
+
+				$arrCurrentParts = (strstr($urlCurrentURI,'/')) ? explode('/',$urlCurrentURI) : array($urlCurrentURI);
+				$arrRedirectParts = (strstr($urlOutTemp,'/')) ? explode('/',$urlOutTemp) : array($urlOutTemp);
+
+				foreach($arrRedirectParts as $strEachPart){
+					if($strEachPart == '..' && count($arrCurrentParts) > 0){
+						array_pop($arrCurrentParts);
+						array_shift($arrRedirectParts);
+					}else{
+						break;
+					}
+				}
+
+				$arrUriParts = array_merge($arrCurrentParts,$arrRedirectParts);
+				$urlOut = sprintf('/%s',implode('/',$arrUriParts));
+
+			}elseif(!strstr($urlOut,':') && substr($urlOut,0,2) != '//' && substr($urlOut,0,1) != '/'){
+
+				//CHILD
+				$urlOutTemp = trim($urlOut,'/');
+				$urlOut = sprintf('/%s/%s',$urlCurrentURI,$urlOutTemp);
+			}
+
+			//Otherwise do a full redirect
+			if(\Twist::framework()->setting('SITE_TRAILING_SLASH')){
+				$urlOut .= '/';
+			}
+			
+			return $urlOut;
+		}
 	}
