@@ -629,31 +629,71 @@ class File extends ModuleBase{
 	}
 
 	/**
+	 * Output the HTML upload form and relevant javascript
+	 *
+	 * Template Tags:
+	 * upload
+	 * upload-html
+	 * upload-init
+	 * upload-js
+	 *
+	 * Parameter Order:
+	 * {file:upload}
+	 * {file:upload,name}
+	 * {file:upload,name,multiple}
+	 * {file:upload,name,multiple,id}
+	 *
+	 * Parameter Contents:
+	 * name = string
+	 * multiple = 0|1
+	 * id = unique string
+	 *
+	 * Parameter Defaults:
+	 * name = file
+	 * multiple = 0
+	 * id = uniqid()
+	 *
 	 * @param $strReference
 	 * @return string
 	 */
 	public function templateExtension($strReference){
 
 		$strOut = '';
-		$arrParams = array();
+		$arrParams = array(
+			'reference' => $strReference,
+			'name' => 'file',
+			'multiple' => 0,
+			'id' => uniqid()
+		);
 
 		if(strstr($strReference,',')){
-			$arrParams = explode(',',$strReference);
-		}else{
-			$arrParams[0] = $strReference;
-			$arrParams[1] = 'file';
-			$arrParams[2] = $strReference;
+
+			$arrTempParams = explode(',',$strReference);
+			$arrParams['reference'] = $arrTempParams[0];
+
+			if(count($arrTempParams) == 2){
+				$arrParams['name'] = $arrTempParams[1];
+			}elseif(count($arrTempParams) == 3){
+				$arrParams['name'] = $arrTempParams[1];
+				$arrParams['multiple'] = $arrTempParams[2];
+			}elseif(count($arrTempParams) == 4){
+				$arrParams['name'] = $arrTempParams[1];
+				$arrParams['multiple'] = $arrTempParams[2];
+				$arrParams['id'] = $arrTempParams[3];
+			}
 		}
 
-		switch($arrParams[0]){
+		switch($arrParams['reference']){
 
 			case'upload':
+			case'asset-upload':
 
 				$arrTags = array(
-					'uniqid' => uniqid(),
-					'name' => $arrParams[1],
-					'type' => (array_key_exists(2,$arrParams)) ? $arrParams[2] : 'file',
+					'uniqid' => $arrParams['id'],
+					'name' => $arrParams['name'],
+					'type' => ($arrParams['reference'] == 'asset-upload') ? 'asset' : 'file',
 					'include-js' => (is_null(\Twist::Cache()->retrieve('asset-js-include'))) ? 1 : 0,
+					'multiple' => ($arrParams['multiple'] == 1 || $arrParams['multiple'] == 'true') ? 1 : 0,
 				);
 
 				//Store a temp session for js output
@@ -663,11 +703,12 @@ class File extends ModuleBase{
 				break;
 
 			case'upload-html':
+			case'asset-upload-html':
 
 				$arrTags = array(
-					'uniqid' => uniqid(),
-					'name' => $arrParams[1],
-					'type' => (array_key_exists(2,$arrParams)) ? $arrParams[2] : 'file',
+					'uniqid' => $arrParams['id'],
+					'name' => $arrParams['name'],
+					'type' => ($arrParams['reference'] == 'asset-upload-html') ? 'asset' : 'file',
 					'include-js' => (is_null(\Twist::Cache()->retrieve('asset-js-include'))) ? 1 : 0,
 				);
 
@@ -678,17 +719,19 @@ class File extends ModuleBase{
 				break;
 
 			case'upload-init':
+			case'asset-upload-init':
 
 				$arrTags = array(
-					'uniqid' => uniqid(),
-					'name' => $arrParams[1],
-					'type' => (array_key_exists(2,$arrParams)) ? $arrParams[2] : 'file'
+					'uniqid' => $arrParams['id'],
+					'name' => $arrParams['name'],
+					'type' => ($arrParams['reference'] == 'asset-upload-init') ? 'asset' : 'file',
 				);
 
 				$strOut = $this->resTemplate->build('upload-init.tpl',$arrTags);
 				break;
 
 			case'upload-js':
+			case'asset-upload-js':
 
 				$strOut = '';
 
