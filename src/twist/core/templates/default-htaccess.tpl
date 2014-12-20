@@ -8,11 +8,11 @@
 	# ================================================================================
 	RewriteEngine on
 
-	# WWW. redirect when enable in the settings
+	# www redirect when enable in the settings
 	{setting:SITE_WWW==true?'':'#'}RewriteCond %{HTTP_HOST} !^www\.
 	{setting:SITE_WWW==true?'':'#'}RewriteRule ^(.*)$ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-	# HTTPS redirect when enable in the settings
+	# HTTPS redirect when enabled in the settings
 	{setting:SITE_PROTOCOL_FORCE==true?'':'#'}RewriteCond %{HTTPS} off
 	{setting:SITE_PROTOCOL_FORCE==true?'':'#'}RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 

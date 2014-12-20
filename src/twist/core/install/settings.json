@@ -58,7 +58,7 @@
 	"SITE_WWW":{
 		"title":"Site Use WWW",
 		"description":"Redirect the user to WWW. if they are not already on that sub-doamin. Also used when building the full site URL",
-		"default":"1",
+		"default":"0",
 		"type":"boolean",
 		"options":"",
 		"null":0
@@ -82,7 +82,7 @@
 	"SITE_PROTOCOL_FORCE":{
 		"title":"Force Site Protocol",
 		"description":"Redirect the user to the selected SITE_PROTOCOL",
-		"default":"1",
+		"default":"0",
 		"type":"boolean",
 		"options":"",
 		"null":0
