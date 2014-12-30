@@ -118,29 +118,33 @@
 
             protected static function coreResources(){
 
+	            $strResourcesURI = sprintf('%score/resources/',FRAMEWORK_URI);
+
                 $arrResources = array(
-                    'arable' => sprintf('%scss/arable.min.css',DIR_FRAMEWORK_RESOURCES),
-                    'font-awesome' => sprintf('%scss/font-awesome/css/font-awesome.min.css',DIR_FRAMEWORK_RESOURCES),
-                    'jquery' => sprintf('%sjs/jquery-2.1.3.min.js',DIR_FRAMEWORK_RESOURCES),
-                    'jquery-legacy' => sprintf('%sjs/jquery-1.11.2.min.js',DIR_FRAMEWORK_RESOURCES),
-	                'logo' => sprintf('%slogos/logo.png',DIR_FRAMEWORK_RESOURCES),
-	                'logo-favicon' => sprintf('%slogos/favicon.ico',DIR_FRAMEWORK_RESOURCES),
-	                'logo-32' => sprintf('%slogos/logo-32.ico',DIR_FRAMEWORK_RESOURCES),
-	                'logo-64' => sprintf('%slogos/logo-64.ico',DIR_FRAMEWORK_RESOURCES),
-	                'logo-128' => sprintf('%slogos/logo-128.ico',DIR_FRAMEWORK_RESOURCES),
-	                'logo-256' => sprintf('%slogos/logo-256.ico',DIR_FRAMEWORK_RESOURCES),
-	                'logo-512' => sprintf('%slogos/logo-512.ico',DIR_FRAMEWORK_RESOURCES),
-	                'logo-640' => sprintf('%slogos/logo-640.ico',DIR_FRAMEWORK_RESOURCES),
-	                'logo-800' => sprintf('%slogos/logo-800.ico',DIR_FRAMEWORK_RESOURCES),
-	                'logo-1024' => sprintf('%slogos/logo-1024.ico',DIR_FRAMEWORK_RESOURCES),
-	                'logo-large' => sprintf('%slogos/logo-512.png',DIR_FRAMEWORK_RESOURCES),
-	                'logo-small' => sprintf('%slogos/logo-32.png',DIR_FRAMEWORK_RESOURCES),
-                    'modernizr' => sprintf('%sjs/modernizr-2.8.3.min.js',DIR_FRAMEWORK_RESOURCES),
-	                'shadow-css' => sprintf('%scss/shadow-css.min.css',DIR_FRAMEWORK_RESOURCES),
-	                'shadow-css-reset' => sprintf('%scss/shadow-css-reset.min.css',DIR_FRAMEWORK_RESOURCES),
-                    'shadow-js' => sprintf('%sjs/shadow-js.min.js',DIR_FRAMEWORK_RESOURCES),
-	                'unsemantic' => sprintf('%scss/unsemantic-grid-responsive-tablet-no-ie7.css',DIR_FRAMEWORK_RESOURCES),
-	                'uri' => DIR_FRAMEWORK_RESOURCES
+                    'arable' => sprintf('%scss/arable.min.css',$strResourcesURI),
+                    'font-awesome' => sprintf('%scss/font-awesome/css/font-awesome.min.css',$strResourcesURI),
+                    'jquery' => sprintf('%sjs/jquery-2.1.3.min.js',$strResourcesURI),
+                    'jquery-legacy' => sprintf('%sjs/jquery-1.11.2.min.js',$strResourcesURI),
+	                'logo' => sprintf('%slogos/logo.png',$strResourcesURI),
+	                'logo-favicon' => sprintf('%slogos/favicon.ico',$strResourcesURI),
+	                'logo-32' => sprintf('%slogos/logo-32.ico',$strResourcesURI),
+	                'logo-64' => sprintf('%slogos/logo-64.ico',$strResourcesURI),
+	                'logo-128' => sprintf('%slogos/logo-128.ico',$strResourcesURI),
+	                'logo-256' => sprintf('%slogos/logo-256.ico',$strResourcesURI),
+	                'logo-512' => sprintf('%slogos/logo-512.ico',$strResourcesURI),
+	                'logo-640' => sprintf('%slogos/logo-640.ico',$strResourcesURI),
+	                'logo-800' => sprintf('%slogos/logo-800.ico',$strResourcesURI),
+	                'logo-1024' => sprintf('%slogos/logo-1024.ico',$strResourcesURI),
+	                'logo-large' => sprintf('%slogos/logo-512.png',$strResourcesURI),
+	                'logo-small' => sprintf('%slogos/logo-32.png',$strResourcesURI),
+                    'modernizr' => sprintf('%sjs/modernizr-2.8.3.min.js',$strResourcesURI),
+                    'rummage' => sprintf('%sjs/rummage.min.js',$strResourcesURI),
+	                'shadow-css' => sprintf('%scss/shadow-css.min.css',$strResourcesURI),
+	                'shadow-css-reset' => sprintf('%scss/shadow-css-reset.min.css',$strResourcesURI),
+                    'shadow-js' => sprintf('%sjs/shadow-js.min.js',$strResourcesURI),
+	                'unsemantic' => sprintf('%scss/unsemantic-grid-responsive-tablet-no-ie7.css',$strResourcesURI),
+	                'resources_uri' => $strResourcesURI,
+	                'uri' => FRAMEWORK_URI
                 );
 
                 Twist::framework() -> module() -> extend('Template','core',$arrResources);
