@@ -119,17 +119,28 @@
             protected static function coreResources(){
 
                 $arrResources = array(
-                    'uri' => FRAMEWORK_URI,
-                    'shadow-css' => sprintf('%score/resources/css/shadow-css.min.css',FRAMEWORK_URI),
-                    'shadow-css-reset' => sprintf('%score/resources/css/shadow-css-reset.min.css',FRAMEWORK_URI),
-                    'unsemantic' => sprintf('%score/resources/css/unsemantic-grid-responsive-tablet-no-ie7.css',FRAMEWORK_URI),
-                    'jquery' => sprintf('%score/resources/js/jquery-2.1.1.min.js',FRAMEWORK_URI),
-                    'modernizr' => sprintf('%score/resources/js/modernizr-2.8.3.min.js',FRAMEWORK_URI),
-                    'shadow-js' => sprintf('%score/resources/js/shadow-js.min.js',FRAMEWORK_URI),
-                    'logo' => sprintf('%score/resources/logos/logo.png',FRAMEWORK_URI),
-                    'logo-favicon' => sprintf('%score/resources/logos/favicon.ico',FRAMEWORK_URI),
-                    'logo-small' => sprintf('%score/resources/logos/logo-small.png',FRAMEWORK_URI),
-                    'logo-large' => sprintf('%score/resources/logos/logo-large.png',FRAMEWORK_URI)
+                    'arable' => sprintf('%scss/arable.min.css',DIR_FRAMEWORK_RESOURCES),
+                    'font-awesome' => sprintf('%scss/font-awesome/css/font-awesome.min.css',DIR_FRAMEWORK_RESOURCES),
+                    'jquery' => sprintf('%sjs/jquery-2.1.3.min.js',DIR_FRAMEWORK_RESOURCES),
+                    'jquery-legacy' => sprintf('%sjs/jquery-1.11.2.min.js',DIR_FRAMEWORK_RESOURCES),
+	                'logo' => sprintf('%slogos/logo.png',DIR_FRAMEWORK_RESOURCES),
+	                'logo-favicon' => sprintf('%slogos/favicon.ico',DIR_FRAMEWORK_RESOURCES),
+	                'logo-32' => sprintf('%slogos/logo-32.ico',DIR_FRAMEWORK_RESOURCES),
+	                'logo-64' => sprintf('%slogos/logo-64.ico',DIR_FRAMEWORK_RESOURCES),
+	                'logo-128' => sprintf('%slogos/logo-128.ico',DIR_FRAMEWORK_RESOURCES),
+	                'logo-256' => sprintf('%slogos/logo-256.ico',DIR_FRAMEWORK_RESOURCES),
+	                'logo-512' => sprintf('%slogos/logo-512.ico',DIR_FRAMEWORK_RESOURCES),
+	                'logo-640' => sprintf('%slogos/logo-640.ico',DIR_FRAMEWORK_RESOURCES),
+	                'logo-800' => sprintf('%slogos/logo-800.ico',DIR_FRAMEWORK_RESOURCES),
+	                'logo-1024' => sprintf('%slogos/logo-1024.ico',DIR_FRAMEWORK_RESOURCES),
+	                'logo-large' => sprintf('%slogos/logo-512.png',DIR_FRAMEWORK_RESOURCES),
+	                'logo-small' => sprintf('%slogos/logo-32.png',DIR_FRAMEWORK_RESOURCES),
+                    'modernizr' => sprintf('%sjs/modernizr-2.8.3.min.js',DIR_FRAMEWORK_RESOURCES),
+	                'shadow-css' => sprintf('%scss/shadow-css.min.css',DIR_FRAMEWORK_RESOURCES),
+	                'shadow-css-reset' => sprintf('%scss/shadow-css-reset.min.css',DIR_FRAMEWORK_RESOURCES),
+                    'shadow-js' => sprintf('%sjs/shadow-js.min.js',DIR_FRAMEWORK_RESOURCES),
+	                'unsemantic' => sprintf('%scss/unsemantic-grid-responsive-tablet-no-ie7.css',DIR_FRAMEWORK_RESOURCES),
+	                'uri' => DIR_FRAMEWORK_RESOURCES
                 );
 
                 Twist::framework() -> module() -> extend('Template','core',$arrResources);
