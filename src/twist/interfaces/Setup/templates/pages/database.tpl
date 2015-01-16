@@ -14,19 +14,19 @@
 
     <label>Address
         <br><small>Leave blank for localhost</small></label>
-    <input type="text" name="host" placeholder="Database server host address" value="{session:twist-setup/database/details/host}">
+    <input type="text" name="host" placeholder="Database server host address" value="{session:twist-setup/database/details/host}" autocomplete="off" autocapitalize="on">
 
     <label>Username</label>
-    <input type="text" name="username" placeholder="Database connection username" value="{session:twist-setup/database/details/username}">
+    <input type="text" name="username" placeholder="Database connection username" value="{session:twist-setup/database/details/username}" autocomplete="off" autocapitalize="on">
 
     <label>Password</label>
-    <input type="text" name="password" placeholder="Database connection password" value="{session:twist-setup/database/details/password}">
+    <input type="text" name="password" placeholder="Database connection password" value="{session:twist-setup/database/details/password}" autocomplete="off" autocapitalize="on">
 
     <label>Database</label>
-    <input type="text" name="database" placeholder="Database name" value="{session:twist-setup/database/details/name}">
+    <input type="text" name="database" placeholder="Database name" value="{session:twist-setup/database/details/name}" autocomplete="off" autocapitalize="on">
 
 	<label>Table Prefix</label>
-	<input type="text" name="table_prefix" placeholder="Table prefix such as 'twist_'" value="{session:twist-setup/database/details/table_prefix}">
+	<input type="text" name="table_prefix" placeholder="Table prefix such as 'twist_'" value="{session:twist-setup/database/details/table_prefix}" autocomplete="off" autocapitalize="on">
 
     <button type="submit">Next</button>
     <div class="clear"></div>

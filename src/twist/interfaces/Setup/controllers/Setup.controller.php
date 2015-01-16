@@ -345,7 +345,7 @@ class Setup extends BaseController{
 		foreach($_POST as $strKey => $arrValue){
 			if(strstr($strKey,'interface-') && array_key_exists('install',$arrValue)){
 				\Twist::framework()->upgrade()->updateInterface($arrValue['repo'],$arrValue['package'],$arrValue['package-version']);
-				$arrInterfaces[] = sprintf("Twist::Route() -> ui('/%s','%s');",strtolower($arrValue['package']),$arrValue['package']);
+				$arrInterfaces[] = sprintf("Twist::Route() -> ui('/%s/%%','%s');",strtolower($arrValue['package']),$arrValue['package']);
 			}
 		}
 

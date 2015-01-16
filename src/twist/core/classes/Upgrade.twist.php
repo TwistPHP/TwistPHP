@@ -185,7 +185,7 @@
 					curl_setopt($resCurl, CURLOPT_SSL_VERIFYHOST, 0);
 					curl_setopt($resCurl, CURLOPT_SSL_VERIFYPEER, 0);
 					curl_setopt($resCurl, CURLOPT_RETURNTRANSFER, 1);
-					curl_setopt($resCurl, CURLOPT_TIMEOUT, 5);
+					curl_setopt($resCurl, CURLOPT_TIMEOUT, 60);
 
 					if($this->arrRepositories[$strRepoKey]['licence'] != ''){
 						curl_setopt($resCurl, CURLOPT_HTTPHEADER, array('Request-Key: '.$this->arrRepositories[$strRepoKey]['licence']));
@@ -229,6 +229,7 @@
 			}
 
 			if(array_key_exists('error',$arrOut)){
+				$this->_debug($arrOut['error'],$this->strHexRed);
 				$this->arrErrors[] = $arrOut['error'];
 				$arrOut = array();
 			}

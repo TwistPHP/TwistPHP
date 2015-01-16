@@ -284,7 +284,7 @@ class UserObject{
 	protected function sendWelcomeEmail(){
 
 		$strLoginURL = $this->resParentClass->loginURL();
-		$strTempPass = (is_null($this->strTempPassword)) ? 'Specified when registered' : $this->strTempPassword;
+		$strTempPass = (is_null($this->strTempPassword)) ? '[specified on registration]' : $this->strTempPassword;
 
 		$strSiteName = \Twist::framework()->setting('SITE_NAME');
 		$strSiteHost = \Twist::framework()->setting('SITE_HOST');
@@ -318,7 +318,7 @@ class UserObject{
 			$strVerificationLink = sprintf('http://%s/%s?verify=%s',$strSiteHost,ltrim($strLoginURL,'/'),$strVerificationString);
 			$arrTags['verification_link'] = $strVerificationLink;
 
-			$arrTags['verification'] = sprintf('<p>You must verify the email address registered to your account before you can login.<br />To verify your account, <a href="%s">click here</a>.<br /><br />If you have a problem with this link, you can copy the below link into your borwser and proceed to login.<br /><a href="%s">%s</a><br /></p>',
+			$arrTags['verification'] = sprintf('<p><strong>Your account must be verified before you can login.</strong><br />To verify your account, <a href="%s">click here</a>.</p><p>If you have a problem with this link, please copy and paste the below link into your browser and proceed to login:<br /><a href="%s">%s</a></p>',
 				$strVerificationLink,
 				$strVerificationLink,
 				$strVerificationLink
