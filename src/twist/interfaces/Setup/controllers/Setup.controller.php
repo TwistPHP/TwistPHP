@@ -69,7 +69,6 @@ class Setup extends BaseController{
 	public function checks(){
 
 		$arrSession = \Twist::Session()->data('twist-setup');
-		$blPassChecks = false;
 
 		$blVersion = (version_compare(PHP_VERSION, '5.3.0') >= 0);
 		$blPermissions = (is_dir(DIR_FRAMEWORK) && is_writable(DIR_FRAMEWORK) && is_dir(DIR_FRAMEWORK_CONFIG) && is_writable(DIR_FRAMEWORK_CONFIG));
@@ -78,9 +77,7 @@ class Setup extends BaseController{
 		$blZip = (function_exists('ZipArchive') || class_exists('ZipArchive'));
 		$blCookies = (is_array($_COOKIE) && array_key_exists('twist_setup_test',$_COOKIE));
 
-		if($blVersion && $blPermissions && $blCurl && $blMysql && $blZip && $blCookies){
-			$blPassChecks = true;
-		}
+		$blPassChecks = ($blVersion && $blPermissions && $blCurl && $blMysql && $blZip && $blCookies);
 
 		$arrChecks = array(
 			'php_version' => ($blVersion) ? 'success' : 'error',
