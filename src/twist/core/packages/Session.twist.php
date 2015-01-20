@@ -87,7 +87,10 @@
 		}
 
 		/**
-		 * Set and get the twist session data, passing only a key will return the data stored against that key. Pass in a value as well will set and return the result. Null is returned upon error.
+		 * Set and get the Twist session data
+		 * Passing only a key will return the data stored against that key, pass in a value as well will set and return the result
+		 * NULL is returned upon error
+		 * You can pass multidimensional keys, but this will not be able to change an existing value from a non-array value to an array value
 		 * @param $strKey The key for the item to be returned
 		 * @param $mxdValue The value to be set against the provided key, passing null will not set any data
 		 * @return mixed Return the data that is contained in the provided key (if any exists otherwise NULL)
@@ -95,20 +98,31 @@
 		public function data($strKey,$mxdValue = null){
 
 			if(!is_null($mxdValue)){
-				$_SESSION['twist-session'][$strKey] = $mxdValue;
+				if(strstr($strKey,'/')){
+					$newValue = \Twist::framework() -> tools() -> ghostArray( $strKey, '/', $mxdValue );
+					$_SESSION['twist-session'] = \Twist::framework() -> tools() -> arrayMergeRecursive( $_SESSION['twist-session'], $newValue );
+				} else {
+					$_SESSION['twist-session'][$strKey] = $mxdValue;
+				}
 			}
 
-			return (array_key_exists($strKey,$_SESSION['twist-session'])) ? $_SESSION['twist-session'][$strKey] : null;
+			return \Twist::framework()->tools()->arrayParse($strKey,$_SESSION['twist-session']);
 		}
 
 		/**
-		 * Null a value in the seesion array
+		 * Null a value in the session array
+		 * You can pass multidimensional keys
 		 * @param $strKey The key for the item to be nulled
 		 * @return void
 		 */
 		public function nullData($strKey){
 
-			$_SESSION['twist-session'][$strKey] = null;
+			if(strstr($strKey,'/')){
+				$newValue = \Twist::framework() -> tools() -> ghostArray( $strKey, '/', null );
+				$_SESSION['twist-session'] = \Twist::framework() -> tools() -> arrayMergeRecursive( $_SESSION['twist-session'], $newValue );
+			} else {
+				$_SESSION['twist-session'][$strKey] = null;
+			}
 		}
 
 		/**

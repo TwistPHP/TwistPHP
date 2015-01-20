@@ -211,6 +211,21 @@
 		}
 
 		/**
+		 * Create a blank multidimensional array using a URI-style string and populate the last item with a value
+		 * @param $strStructure
+		 * @param string $strSplit
+		 * @param null $strFinalValue
+		 * @return array|null
+		 */
+		public function ghostArray( $strStructure, $strSplit = '/', $strFinalValue = null ) {
+			foreach( array_reverse( explode( $strSplit, $strStructure ) ) as $strPart ) {
+				$strFinalValue = array( $strPart => $strFinalValue );
+			}
+
+			return $strFinalValue;
+		}
+
+		/**
 		 * @param $arrStructure
 		 * @param string $strIDField
 		 * @param string $strParentIDField
@@ -246,7 +261,7 @@
 			return $arrTempTree;
 		}
 
-		function varDump(){
+		public function varDump(){
 			ob_start();
 			call_user_func_array('var_dump',func_get_args());
 			return ob_get_clean();
