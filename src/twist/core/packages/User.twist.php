@@ -103,6 +103,20 @@ class User extends ModuleBase{
 		return ($this->intUserID > 0) ? true : false;
 	}
 
+	/**
+	 * Return data about the logged in user
+	 * @param null $strKey
+	 * @return array|mixed
+	 */
+	public function loggedInData($strKey = null){
+
+		if($this->blUserValidatedSession && !is_null($this->resCurrentUser)){
+			return $this->resCurrentUser->get($strKey);
+		} else {
+			return null;
+		}
+	}
+
 	public function authenticate($strEmailAddress = null,$strPassword = null,$strLoginUrl = null,$blIgnoreProcess = false){
 
 		$this->strOverrideUrl = $strLoginUrl;
@@ -326,7 +340,6 @@ class User extends ModuleBase{
 			$this->verifyEmail($_GET['verify']);
 		}
 	}
-
 
 	/**
 	 * Restrict access to the PHP file this function was called form, if the user is not logged in they
@@ -705,6 +718,8 @@ class User extends ModuleBase{
 		if(!file_exists($strTemplateLocation)){
 			$strTemplateLocation = trim($strTemplateLocation,'/').'/';
 			$strTemplateLocation = sprintf('%s/%s',BASE_LOCATION,$strTemplateLocation);
+		} else {
+			$strTemplateLocation = rtrim($strTemplateLocation,'/').'/';
 		}
 
 		$this->strTemplateLocation = $strTemplateLocation;
@@ -804,6 +819,18 @@ class User extends ModuleBase{
 				}
 
 				$strData = $this->resTemplate->build( 'devices.tpl', array( 'login_page' => $strLoginPage, 'device_list' => $strDeviceList ),true );
+				break;
+
+			case'id':
+				$strData = $this->currentID();
+				break;
+
+			case'level':
+				$strData = $this->loggedInData('level');
+				break;
+
+			case'email':
+				$strData = $this->loggedInData('email');
 				break;
 		}
 
