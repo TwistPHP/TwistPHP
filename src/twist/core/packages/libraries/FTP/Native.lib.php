@@ -57,7 +57,7 @@
 		 * @return bool
 		 */
 		public function login($strUsername,$strPassword){
-			return (@ftp_login($this->resConnection, $strUsername, $strPassword)) ? true : false;
+			return @ftp_login($this->resConnection, $strUsername, $strPassword);
 		}
 
 		public function pasv($blEnable = true){

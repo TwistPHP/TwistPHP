@@ -93,7 +93,7 @@
 		 */
 		public function inFuture($intTimestamp){
 			$intSecondsDifference = $this->time() - $intTimestamp;
-			return ($intSecondsDifference < 0) ? true : false;
+			return $intSecondsDifference < 0;
 		}
 
 		/**
@@ -106,7 +106,7 @@
 		 */
 		public function inPast($intTimestamp){
 			$intSecondsDifference = $this->time() - $intTimestamp;
-			return ($intSecondsDifference > 0) ? true : false;
+			return $intSecondsDifference > 0;
 		}
 
 		/**

@@ -41,6 +41,7 @@ class Route extends ModuleBase{
 	protected $arrWildCards = array();
 	protected $arrRegxMatches = array();
 	protected $arrRestrict = array();
+	protected $arrUnrestrict = array();
 	protected $strBaseTemplate = null;
 	protected $strBaseURI = null;
 	protected $strInterfaceURI = null;
@@ -153,7 +154,7 @@ class Route extends ModuleBase{
 
 	protected function _restrictDefault($strURI,$strLoginURI){
 
-		$blWildCard = (strstr($strURI,'%')) ? true : false;
+		$blWildCard = strstr($strURI,'%');
 		$strURI = rtrim(str_replace('%','',$strURI),'/').'/';
 
 		if(!array_key_exists($strURI,$this->arrRestrict)){
@@ -179,6 +180,19 @@ class Route extends ModuleBase{
 
 		$strURI = $this->_restrictDefault($strURI,$strLoginURI);
 		$this->arrRestrict[$strURI]['level'] == $mxdLevel;
+	}
+
+	/**
+	 * Add an exception to the restrictions applied
+	 */
+	public function unrestrict($strURI){
+
+		$blWildCard = (strstr($strURI,'%'));
+		$strURI = rtrim(str_replace('%','',$strURI),'/').'/';
+
+		if(!array_key_exists($strURI,$this->arrRestrict)){
+			$this->arrRestrict[$strURI] = $blWildCard;
+		}
 	}
 
 	/**
@@ -777,19 +791,31 @@ class Route extends ModuleBase{
 				$blRestrictedPage = false;
 
 				foreach ($this->arrRestrict as $strRestrictURI => $arrRestrictedInfo) {
-					$strExpression = sprintf("#(%s%s)#", rtrim($strRestrictURI, '/'), ($arrRestrictedInfo['wildcard'] == '1') ? '[/\w]+?' : '[/]?');
+					$strRestrictExpression = sprintf("#(%s%s)#", rtrim($strRestrictURI, '/'), ($arrRestrictedInfo['wildcard'] == '1') ? '[/\w]+?' : '[/]?');
 
-					if (preg_match($strExpression, $arrRoute['relative_uri'], $arrMatches)) {
+					if (preg_match($strRestrictExpression, $arrRoute['relative_uri'], $arrMatches)) {
 
-						$strFullLoginURL = sprintf('%s/%s', $this->strBaseURI, ltrim($arrRestrictedInfo['login_uri'], '/'));
-						$blRestrictedPage = true;
+						$blUnestricted = false;
 
-						if ($arrRestrictedInfo['login_uri'] == $arrRoute['uri']) {
-							$blRestrictedPage = false;
-							$arrRestrictedInfo = array();
+						foreach ($this->arrUnrestrict as $strUnestrictURI => $blUnestrictURIWildcard) {
+							$strUnrestrictExpression = sprintf("#(%s%s)#", rtrim($strUnestrictURI, '/'), $blUnestrictURIWildcard ? '[/\w]+?' : '[/]?');
+							if (!preg_match($strUnrestrictExpression, $arrRoute['relative_uri'], $arrMatches)) {
+								$blUnestricted = true;
+							}
 						}
 
-						break;
+						if (!$blUnestricted) {
+
+							$strFullLoginURL = sprintf('%s/%s', $this->strBaseURI, ltrim($arrRestrictedInfo['login_uri'], '/'));
+							$blRestrictedPage = true;
+
+							if ($arrRestrictedInfo['login_uri'] == $arrRoute['uri']) {
+								$blRestrictedPage = false;
+								$arrRestrictedInfo = array();
+							}
+
+							break;
+						}
 					}
 				}
 

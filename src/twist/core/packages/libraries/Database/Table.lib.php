@@ -176,7 +176,7 @@
 						'column_name' => $strColumnName,
 						'data_type' => $strDataType,
 						'character_length' => (in_array(strtolower($strDataType),array('text','date','datetime'))) ? null : $mxdCharLength,
-						'nullable' => ($blNullable) ? true : false,
+						'nullable' => $blNullable,
 						'default_value' => $strDefaultValue,
 						'comment' => null
 					);

@@ -45,8 +45,8 @@ class UserObject{
 		$intUserID = ($this->resDatabaseRecord->get('id') == 0) ? null : $this->resDatabaseRecord->get('id');
 
 		//Get the user data record to allow for this ti be edited
+		$this->blNewAccount = is_null($intUserID);
 		$this->resDatabaseRecordData = \Twist::Database()->getRecord(sprintf('%suser_data',DATABASE_TABLE_PREFIX),$intUserID,'user_id');
-		$this->blNewAccount = (is_object($this->resDatabaseRecordData)) ? false : true;
 		$this->resDatabaseRecordData = (is_object($this->resDatabaseRecordData)) ? $this->resDatabaseRecordData : \Twist::Database()->createRecord(sprintf('%suser_data',DATABASE_TABLE_PREFIX));
 
 		$this->arrOriginalUserData = $this->resDatabaseRecordData->values();
@@ -214,7 +214,7 @@ class UserObject{
 	}
 
 	public function comparePasswordHash($strPasswordHash){
-		return ($this->resDatabaseRecord->get('password') == $strPasswordHash) ? true : false;
+		return $this->resDatabaseRecord->get('password') == $strPasswordHash;
 	}
 
 	public function password($strPassword){

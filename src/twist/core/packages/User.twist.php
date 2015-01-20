@@ -100,7 +100,7 @@ class User extends ModuleBase{
 			}
 		}
 
-		return ($this->intUserID > 0) ? true : false;
+		return $this->intUserID > 0;
 	}
 
 	/**

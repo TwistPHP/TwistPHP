@@ -150,7 +150,7 @@
 
 				$arrOut = null;
 				$strCacheKey = sprintf('%s-%s-%s-%s',$strRepoKey,$strType,$strChannel,sha1(serialize($arrPostParameters)));
-				$blUseCache = (!in_array($strType,array('download','authenticate','connect'))) ? true : false;
+				$blUseCache = !in_array($strType,array('download','authenticate','connect'));
 
 				$arrOut = null;
 				if($blUseCache){
@@ -572,7 +572,7 @@
 						case'core':
 
 							//Only update the setup interface if it has not been deleted
-							$blSetupInstalled = (file_exists(sprintf('%s/interfaces/Setup',$strFrameworkDirectory))) ? true : false;
+							$blSetupInstalled = file_exists(sprintf('%s/interfaces/Setup',$strFrameworkDirectory));
 
 							$strInstallFolder = sprintf('%s/core',$strFrameworkDirectory);
 							if(file_exists($strInstallFolder)){
