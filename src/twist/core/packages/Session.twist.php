@@ -102,6 +102,16 @@
 		}
 
 		/**
+		 * Null a value in the seesion array
+		 * @param $strKey The key for the item to be nulled
+		 * @return void
+		 */
+		public function nullData($strKey){
+
+			$_SESSION['twist-session'][$strKey] = null;
+		}
+
+		/**
 		 * Remove a single session item or clear the whole session by leaving the key field null
 		 * @param $strKey The key for the item to be removed, passing null removes all
 		 */
