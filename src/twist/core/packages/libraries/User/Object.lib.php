@@ -443,6 +443,38 @@ class UserObject{
 		return $arrOut;
 	}
 
+	public function isMember(){
+		return ($this->level() >= \Twist::framework()->setting('USER_LEVEL_MEMBER') && $this->level() < \Twist::framework()->setting('USER_LEVEL_ADVANCED'));
+	}
+
+	public function isAtLeastMember(){
+		return ($this->level() >= \Twist::framework()->setting('USER_LEVEL_MEMBER') || $this->level() == '0');
+	}
+
+	public function isAdvanced(){
+		return ($this->level() >= \Twist::framework()->setting('USER_LEVEL_ADVANCED') && $this->level() < \Twist::framework()->setting('USER_LEVEL_ADMIN'));
+	}
+
+	public function isAtLeastAdvanced(){
+		return ($this->level() >= \Twist::framework()->setting('USER_LEVEL_ADVANCED') || $this->level() == '0');
+	}
+
+	public function isAdmin(){
+		return ($this->level() >= \Twist::framework()->setting('USER_LEVEL_ADMIN') && $this->level() < \Twist::framework()->setting('USER_LEVEL_SUPERADMIN'));
+	}
+
+	public function isAtLeastSuperAdmin(){
+		return ($this->level() >= \Twist::framework()->setting('USER_LEVEL_SUPERADMIN') || $this->level() == '0');
+	}
+
+	public function isSuperAdmin(){
+		return ($this->level() >= \Twist::framework()->setting('USER_LEVEL_SUPERADMIN'));
+	}
+
+	public function isRootUser(){
+		return ($this->level() == '0');
+	}
+
 	protected function base64url_encode($strData) {
 		$strBase64 = base64_encode($strData);
 		$strBase64URL = strtr($strBase64, '+/=', '-_$');
