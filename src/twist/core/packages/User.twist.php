@@ -117,6 +117,22 @@ class User extends ModuleBase{
 		}
 	}
 
+	/**
+	 * @alias currentID
+	 * @return null
+	 */
+	public function loggedInID(){
+		return $this->currentID();
+	}
+
+	/**
+	 * @alias currentID
+	 * @return null
+	 */
+	public function loggedInLevel(){
+		return $this->currentLevel();
+	}
+
 	public function authenticate($strEmailAddress = null,$strPassword = null,$strLoginUrl = null,$blIgnoreProcess = false){
 
 		$this->strOverrideUrl = $strLoginUrl;
