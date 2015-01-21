@@ -69,18 +69,15 @@ class Setup extends BaseController{
 	public function checks(){
 
 		$arrSession = \Twist::Session()->data('twist-setup');
-		$blPassChecks = false;
 
-		$blVersion = (version_compare(PHP_VERSION, '5.3.0') >= 0) ? true : false;
-		$blPermissions = (is_dir(DIR_FRAMEWORK) && is_writable(DIR_FRAMEWORK) && is_dir(DIR_FRAMEWORK_CONFIG) && is_writable(DIR_FRAMEWORK_CONFIG)) ? true : false;
-		$blCurl = (function_exists('curl_init') || class_exists('curl_init')) ? true : false;
-		$blMysql = (function_exists('mysql_connect') || function_exists('mysqli_connect')) ? true : false;
-		$blZip = (function_exists('ZipArchive') || class_exists('ZipArchive')) ? true : false;
-		$blCookies = (is_array($_COOKIE) && array_key_exists('twist_setup_test',$_COOKIE)) ? true : false;
+		$blVersion = (version_compare(PHP_VERSION, '5.3.0') >= 0);
+		$blPermissions = (is_dir(DIR_FRAMEWORK) && is_writable(DIR_FRAMEWORK) && is_dir(DIR_FRAMEWORK_CONFIG) && is_writable(DIR_FRAMEWORK_CONFIG));
+		$blCurl = (function_exists('curl_init') || class_exists('curl_init'));
+		$blMysql = (function_exists('mysql_connect') || function_exists('mysqli_connect'));
+		$blZip = (function_exists('ZipArchive') || class_exists('ZipArchive'));
+		$blCookies = (is_array($_COOKIE) && array_key_exists('twist_setup_test',$_COOKIE));
 
-		if($blVersion && $blPermissions && $blCurl && $blMysql && $blZip && $blCookies){
-			$blPassChecks = true;
-		}
+		$blPassChecks = ($blVersion && $blPermissions && $blCurl && $blMysql && $blZip && $blCookies);
 
 		$arrChecks = array(
 			'php_version' => ($blVersion) ? 'success' : 'error',
@@ -345,7 +342,7 @@ class Setup extends BaseController{
 		foreach($_POST as $strKey => $arrValue){
 			if(strstr($strKey,'interface-') && array_key_exists('install',$arrValue)){
 				\Twist::framework()->upgrade()->updateInterface($arrValue['repo'],$arrValue['package'],$arrValue['package-version']);
-				$arrInterfaces[] = sprintf("Twist::Route() -> ui('/%s','%s');",strtolower($arrValue['package']),$arrValue['package']);
+				$arrInterfaces[] = sprintf("Twist::Route() -> ui('/%s/%%','%s');",strtolower($arrValue['package']),$arrValue['package']);
 			}
 		}
 

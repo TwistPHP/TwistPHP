@@ -41,6 +41,7 @@ class Route extends ModuleBase{
 	protected $arrWildCards = array();
 	protected $arrRegxMatches = array();
 	protected $arrRestrict = array();
+	protected $arrUnrestrict = array();
 	protected $strBaseTemplate = null;
 	protected $strBaseURI = null;
 	protected $strInterfaceURI = null;
@@ -153,7 +154,7 @@ class Route extends ModuleBase{
 
 	protected function _restrictDefault($strURI,$strLoginURI){
 
-		$blWildCard = (strstr($strURI,'%')) ? true : false;
+		$blWildCard = strstr($strURI,'%');
 		$strURI = rtrim(str_replace('%','',$strURI),'/').'/';
 
 		if(!array_key_exists($strURI,$this->arrRestrict)){
@@ -171,6 +172,7 @@ class Route extends ModuleBase{
 	/**
 	 * Restrict a page to logged in users only, place a '%' at the end of the URI will apply this restriction to all child pages as well as itself
 	 *
+	 * @note Restrict a URI without using '%' will only restrict the exact URI provided
 	 * @param $strURI
 	 * @param $strLoginURI
 	 * @param $mxdLevel
@@ -179,6 +181,19 @@ class Route extends ModuleBase{
 
 		$strURI = $this->_restrictDefault($strURI,$strLoginURI);
 		$this->arrRestrict[$strURI]['level'] == $mxdLevel;
+	}
+
+	/**
+	 * Add an exception to the restrictions applied
+	 */
+	public function unrestrict($strURI){
+
+		$blWildCard = (strstr($strURI,'%'));
+		$strURI = rtrim(str_replace('%','',$strURI),'/').'/';
+
+		if(!array_key_exists($strURI,$this->arrUnrestrict)){
+			$this->arrUnrestrict[$strURI] = $blWildCard;
+		}
 	}
 
 	/**
@@ -278,13 +293,17 @@ class Route extends ModuleBase{
 	 * @param null $strTemplatesFolder
 	 * @param null $strElementsFolder
 	 */
-	public function ajax($strURI,$strFunctionsFolder = null,$strTemplatesFolder = null,$strElementsFolder = null){
+	public function ajax($strURI,$strFunctionsFolder = null,$strTemplatesFolder = null,$strElementsFolder = null,$blUnrestrict=false){
 
 		$arrCustomFields = array(
 			'functions' => $strFunctionsFolder,
 			'templates' => $strTemplatesFolder,
 			'elements' => $strElementsFolder
 		);
+
+		if($blUnrestrict){
+			$this->unrestrict($strURI);
+		}
 
 		$this->addRoute($strURI,'ajax',null,false,false,$arrCustomFields);
 	}
@@ -670,7 +689,7 @@ class Route extends ModuleBase{
 
 						if(array_key_exists('twist_wildcard',$arrMatchResults['matches'])){
 							$strRouteDynamic = $arrMatchResults['matches']['twist_wildcard'];
-							$arrRouteParts = explode('/',trim($strRouteDynamic,'/'));
+							$arrRouteParts = (!in_array(trim($strRouteDynamic,'/'),array('','/'))) ? explode('/',trim($strRouteDynamic,'/')) : array();
 						}
 
 						$strCurrentURIKey = $arrMatchResults['match_uri'];
@@ -696,7 +715,7 @@ class Route extends ModuleBase{
 						$strWildCard = array_shift($arrFoundWildCard);
 
 						$strRouteDynamic = substr($strCurrentURI,strlen($strWildCard),strlen($strCurrentURI)-strlen($strWildCard));
-						$arrRouteParts = explode('/',trim($strRouteDynamic,'/'));
+						$arrRouteParts = (!in_array(trim($strRouteDynamic,'/'),array('','/'))) ? explode('/',trim($strRouteDynamic,'/')) : array();
 
 						$strCurrentURI = $strCurrentURIKey = $strWildCard;
 						$blMatched = true;
@@ -777,14 +796,24 @@ class Route extends ModuleBase{
 				$blRestrictedPage = false;
 
 				foreach ($this->arrRestrict as $strRestrictURI => $arrRestrictedInfo) {
-					$strExpression = sprintf("#(%s%s)#", rtrim($strRestrictURI, '/'), ($arrRestrictedInfo['wildcard'] == '1') ? '[/\w]+?' : '[/]?');
+					$strRestrictExpression = sprintf("#^(%s[\/]?)%s#", str_replace('/','\/',rtrim($strRestrictURI, '/')), $arrRestrictedInfo['wildcard'] ? '' : '$');
 
-					if (preg_match($strExpression, $arrRoute['relative_uri'], $arrMatches)) {
+					if (preg_match($strRestrictExpression, $arrRoute['relative_uri'], $arrMatches)) {
+
+						if(count($this->arrUnrestrict)){
+							foreach($this->arrUnrestrict as $strUnrestrictedURI => $blUnrestrictedWildcard){
+
+								$strUnrestrictedExpression = sprintf("#^(%s[\/]?)%s#", str_replace('/','\/',rtrim($strUnrestrictedURI,'/')), $blUnrestrictedWildcard ? '' : '$');
+								if(preg_match($strUnrestrictedExpression, $arrRoute['relative_uri'],$arrMatches)){
+									break 2;
+								}
+							}
+						}
 
 						$strFullLoginURL = sprintf('%s/%s', $this->strBaseURI, ltrim($arrRestrictedInfo['login_uri'], '/'));
 						$blRestrictedPage = true;
 
-						if ($arrRestrictedInfo['login_uri'] == $arrRoute['uri']) {
+						if($arrRestrictedInfo['login_uri'] == $arrRoute['uri']){
 							$blRestrictedPage = false;
 							$arrRestrictedInfo = array();
 						}
@@ -794,7 +823,7 @@ class Route extends ModuleBase{
 				}
 
 				$blDatabaseEnabled = \Twist::Database()->checkSettings();
-
+				\Twist::User()->authenticate();
 				if ($blDatabaseEnabled) {
 					//Set the login URL that is specified by restrict otherwise from framework settings
 					\Twist::User()->strLoginUrl = $strFullLoginURL;
@@ -806,8 +835,7 @@ class Route extends ModuleBase{
 				//redirect the user to the login page if required
 				if ($blRestrictedPage && !\Twist::User()->loggedIn()) {
 					\Twist::User()->setAfterLoginRedirect();
-					header(sprintf('Location: %s', str_replace('//', '/', $strFullLoginURL)));
-					die();
+					\Twist::redirect(str_replace('//', '/', $strFullLoginURL));
 				} elseif ($blRestrictedPage && (!\Twist::User()->loggedIn() || (!is_null($arrRestrictedInfo['level']) && \Twist::User()->currentLevel() < $arrRestrictedInfo['level']))) {
 					\Twist::respond(403);
 				} else {

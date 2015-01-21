@@ -117,7 +117,7 @@
 		 */
 		public function featureSupported($strFeature){
 			$arrFeatures = $this->featureList();
-			return (array_key_exists($strFeature,$arrFeatures)) ? true : false;
+			return array_key_exists($strFeature,$arrFeatures);
 		}
 
 		/**
@@ -146,7 +146,7 @@
 		 * @return bool Returns the status of directory
 		 */
 		public function isDirectory($strDirectory){
-			return (count($this->resLibrary->nlist($strDirectory))) ? true : false;
+			return count($this->resLibrary->nlist($strDirectory));
 		}
 
 		/**

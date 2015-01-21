@@ -85,7 +85,7 @@ class EmailSMTP{
 
 		if($this->communicate(sprintf('EHLO %s',$strEmailHost)) === 250){
 			if($this->communicate(sprintf('AUTH LOGIN')) === 334){
-				return ($this->communicate(base64_encode($strEmailAddress)) === 334 && $this->communicate(base64_encode($strPassword)) === 235) ? true : false;
+				return ($this->communicate(base64_encode($strEmailAddress)) === 334 && $this->communicate(base64_encode($strPassword)) === 235);
 			}
 		}
 
@@ -97,11 +97,11 @@ class EmailSMTP{
 	}
 
 	public function from($strFromAddress){
-		return ($this->communicate(sprintf('MAIL FROM: %s',$strFromAddress)) === 250) ? true : false;
+		return $this->communicate(sprintf('MAIL FROM: %s',$strFromAddress)) === 250;
 	}
 
 	public function to($strToAddress){
-		return ($this->communicate(sprintf('RCPT TO: %s',$strToAddress)) === 250) ? true : false;
+		return $this->communicate(sprintf('RCPT TO: %s',$strToAddress)) === 250;
 	}
 
 	public function subject($strSubject){
@@ -115,7 +115,7 @@ class EmailSMTP{
 
 	public function send($strEmailSource){
 		if($this->communicate('DATA') === 354){
-			return ($this->communicate(sprintf("%s%s.",$strEmailSource,$this->strBody)) === 250) ? true : false;
+			return $this->communicate(sprintf("%s%s.",$strEmailSource,$this->strBody)) === 250;
 		}
 	}
 

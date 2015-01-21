@@ -24,6 +24,10 @@
 namespace TwistPHP\Packages;
 use TwistPHP\ModuleBase;
 
+/**
+ * User management and control allowing users to register, login and be updated
+ * Functionality to edit, reset passwords, send welcome emails with session management for multi and single devices
+ */
 class User extends ModuleBase{
 
 	public $strLoginUrl = null;
@@ -86,8 +90,6 @@ class User extends ModuleBase{
 
 		}else{
 
-			$this->blUserValidatedSession = true;
-
 			//Validate the session if available else validate the cookie if remembered
 			if(!is_null(\Twist::Session()->data('user-session_key'))){
 				$this->intUserID = $this->objUserSession->validateCode( \Twist::Session()->data('user-session_key'), $blUpdateKey );
@@ -97,15 +99,51 @@ class User extends ModuleBase{
 
 			if($this->intUserID > 0){
 				$this->processUserSession($this->intUserID);
+				$this->blUserValidatedSession = true;
 			}
 		}
 
-		return ($this->intUserID > 0) ? true : false;
+		return $this->intUserID > 0;
+	}
+
+	/**
+	 * Return data about the logged in user
+	 * @param null $strKey
+	 * @return array|mixed
+	 */
+	public function loggedInData($strKey = null){
+
+		if($this->blUserValidatedSession && !is_null($this->resCurrentUser)){
+			return $this->resCurrentUser->get($strKey);
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * @alias currentID
+	 * @return null
+	 */
+	public function loggedInID(){
+		return $this->currentID();
+	}
+
+	/**
+	 * @alias currentID
+	 * @return null
+	 */
+	public function loggedInLevel(){
+		return $this->currentLevel();
 	}
 
 	public function authenticate($strEmailAddress = null,$strPassword = null,$strLoginUrl = null,$blIgnoreProcess = false){
 
 		$this->strOverrideUrl = $strLoginUrl;
+
+		//First of all log the user out if required
+		if(array_key_exists('logout',$_GET)){
+			$this->processLogout();
+		}
 
 		//Process any additional requests that may have been made
 		if($blIgnoreProcess == false){
@@ -327,7 +365,6 @@ class User extends ModuleBase{
 		}
 	}
 
-
 	/**
 	 * Restrict access to the PHP file this function was called form, if the user is not logged in they
 	 * will be redirected to the login page.
@@ -387,6 +424,9 @@ class User extends ModuleBase{
 		//Null the logout message
 		\Twist::Session()->data('site-login_error_message',null);
 		\Twist::Session()->data('site-login_message',null);
+
+		$this->blUserValidatedSession = false;
+		$this->resCurrentUser = null;
 
 		if(!is_null($strPage)){
 			$this->goToPage($strPage);
@@ -705,6 +745,8 @@ class User extends ModuleBase{
 		if(!file_exists($strTemplateLocation)){
 			$strTemplateLocation = trim($strTemplateLocation,'/').'/';
 			$strTemplateLocation = sprintf('%s/%s',BASE_LOCATION,$strTemplateLocation);
+		} else {
+			$strTemplateLocation = rtrim($strTemplateLocation,'/').'/';
 		}
 
 		$this->strTemplateLocation = $strTemplateLocation;
@@ -804,6 +846,30 @@ class User extends ModuleBase{
 				}
 
 				$strData = $this->resTemplate->build( 'devices.tpl', array( 'login_page' => $strLoginPage, 'device_list' => $strDeviceList ),true );
+				break;
+
+			case'id':
+				$strData = $this->currentID();
+				break;
+
+			case'level':
+				$strData = $this->loggedInData('level');
+				break;
+
+			case'email':
+				$strData = $this->loggedInData('email');
+				break;
+
+			case'name':
+				$strData = sprintf('%s %s',$this->loggedInData('firstname'),$this->loggedInData('surname'));
+				break;
+
+			case'firstname':
+				$strData = $this->loggedInData('firstname');
+				break;
+
+			case'surname':
+				$strData = $this->loggedInData('surname');
 				break;
 		}
 

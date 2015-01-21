@@ -34,7 +34,7 @@
 		var $blAutoCommit = false;
 
 		function validConnectionObject(){
-			return (!is_null($this->resLink) && is_object($this->resLink)) ? true : false;
+			return (!is_null($this->resLink) && is_object($this->resLink));
 		}
 
 		function connect($strServer,$strUsername,$strPassword,$strDatabase){
@@ -43,7 +43,7 @@
 		}
 
 		function connected(){
-			return ($this->validConnectionObject() && $this->ping()) ? true : false;
+			return ($this->validConnectionObject() && $this->ping());
 		}
 
 		function close(){

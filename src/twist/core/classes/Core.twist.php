@@ -66,7 +66,7 @@
 					 * Override the error handlers and exception handlers and turn on AJAX debugging
 					 * Note: In the future we could use this to enable the log handler instead
 					 */
-					self::define('TWIST_AJAX_REQUEST',(array_key_exists('HTTP_X_REQUESTED_WITH',$_SERVER) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') ? true : false);
+					self::define('TWIST_AJAX_REQUEST',array_key_exists('HTTP_X_REQUESTED_WITH',$_SERVER) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest');
 
 					//Register the PHP handlers
 					self::errorHandlers();
@@ -118,18 +118,33 @@
 
             protected static function coreResources(){
 
+	            $strResourcesURI = sprintf('%score/resources/',FRAMEWORK_URI);
+
                 $arrResources = array(
-                    'uri' => FRAMEWORK_URI,
-                    'shadow-css' => sprintf('%score/resources/css/shadow-css.min.css',FRAMEWORK_URI),
-                    'shadow-css-reset' => sprintf('%score/resources/css/shadow-css-reset.min.css',FRAMEWORK_URI),
-                    'unsemantic' => sprintf('%score/resources/css/unsemantic-grid-responsive-tablet-no-ie7.css',FRAMEWORK_URI),
-                    'jquery' => sprintf('%score/resources/js/jquery-2.1.1.min.js',FRAMEWORK_URI),
-                    'modernizr' => sprintf('%score/resources/js/modernizr-2.8.3.min.js',FRAMEWORK_URI),
-                    'shadow-js' => sprintf('%score/resources/js/shadow-js.min.js',FRAMEWORK_URI),
-                    'logo' => sprintf('%score/resources/logos/logo.png',FRAMEWORK_URI),
-                    'logo-favicon' => sprintf('%score/resources/logos/favicon.ico',FRAMEWORK_URI),
-                    'logo-small' => sprintf('%score/resources/logos/logo-small.png',FRAMEWORK_URI),
-                    'logo-large' => sprintf('%score/resources/logos/logo-large.png',FRAMEWORK_URI)
+                    'arable' => sprintf('%scss/arable.min.css',$strResourcesURI),
+                    'font-awesome' => sprintf('%scss/font-awesome/css/font-awesome.min.css',$strResourcesURI),
+                    'jquery' => sprintf('%sjs/jquery-2.1.3.min.js',$strResourcesURI),
+                    'jquery-legacy' => sprintf('%sjs/jquery-1.11.2.min.js',$strResourcesURI),
+	                'logo' => sprintf('%slogos/logo.png',$strResourcesURI),
+	                'logo-favicon' => sprintf('%slogos/favicon.ico',$strResourcesURI),
+	                'logo-32' => sprintf('%slogos/logo-32.ico',$strResourcesURI),
+	                'logo-64' => sprintf('%slogos/logo-64.ico',$strResourcesURI),
+	                'logo-128' => sprintf('%slogos/logo-128.ico',$strResourcesURI),
+	                'logo-256' => sprintf('%slogos/logo-256.ico',$strResourcesURI),
+	                'logo-512' => sprintf('%slogos/logo-512.ico',$strResourcesURI),
+	                'logo-640' => sprintf('%slogos/logo-640.ico',$strResourcesURI),
+	                'logo-800' => sprintf('%slogos/logo-800.ico',$strResourcesURI),
+	                'logo-1024' => sprintf('%slogos/logo-1024.ico',$strResourcesURI),
+	                'logo-large' => sprintf('%slogos/logo-512.png',$strResourcesURI),
+	                'logo-small' => sprintf('%slogos/logo-32.png',$strResourcesURI),
+                    'modernizr' => sprintf('%sjs/modernizr-2.8.3.min.js',$strResourcesURI),
+                    'rummage' => sprintf('%sjs/rummage.min.js',$strResourcesURI),
+	                'shadow-css' => sprintf('%scss/shadow-css.min.css',$strResourcesURI),
+	                'shadow-css-reset' => sprintf('%scss/shadow-css-reset.min.css',$strResourcesURI),
+                    'shadow-js' => sprintf('%sjs/shadow-js.min.js',$strResourcesURI),
+	                'unsemantic' => sprintf('%scss/unsemantic-grid-responsive-tablet-no-ie7.css',$strResourcesURI),
+	                'resources_uri' => $strResourcesURI,
+	                'uri' => FRAMEWORK_URI
                 );
 
                 Twist::framework() -> module() -> extend('Template','core',$arrResources);
@@ -221,55 +236,7 @@
 			 */
 			public static function redirect($urlRedirect,$blPermanent = false){
 
-				$urlCurrentURI = trim($_SERVER['REQUEST_URI'],'/');
-				$urlRedirect = rtrim($urlRedirect,'/');
-
-				if(substr($urlRedirect,0,2) == './'){
-
-					//THIS
-					$urlRedirectURI = trim($urlRedirect,'/');
-
-					if(substr($urlRedirectURI,0,2) == './'){
-						$urlRedirectURI = substr($urlRedirectURI,2);
-					}
-
-					$arrCurrentParts = (strstr($urlCurrentURI,'/')) ? explode('/',$urlCurrentURI) : array($urlCurrentURI);
-					array_pop($arrCurrentParts);
-					$urlCurrentURI = implode('/',$arrCurrentParts);
-
-					$urlRedirect = sprintf('%s/%s',$urlCurrentURI,$urlRedirectURI);
-
-				}elseif(substr($urlRedirect,0,3) == '../'){
-
-					//UP
-					$urlRedirectURI = trim($urlRedirect,'/');
-
-					$arrCurrentParts = (strstr($urlCurrentURI,'/')) ? explode('/',$urlCurrentURI) : array($urlCurrentURI);
-					$arrRedirectParts = (strstr($urlRedirectURI,'/')) ? explode('/',$urlRedirectURI) : array($urlRedirectURI);
-
-					foreach($arrRedirectParts as $strEachPart){
-						if($strEachPart == '..' && count($arrCurrentParts) > 0){
-							array_pop($arrCurrentParts);
-							array_shift($arrRedirectParts);
-						}else{
-							break;
-						}
-					}
-
-					$arrUriParts = array_merge($arrCurrentParts,$arrRedirectParts);
-					$urlRedirect = sprintf('/%s',implode('/',$arrUriParts));
-
-				}elseif(!strstr($urlRedirect,':') && substr($urlRedirect,0,2) != '//' && substr($urlRedirect,0,1) != '/'){
-
-					//CHILD
-					$urlRedirectURI = trim($urlRedirect,'/');
-					$urlRedirect = sprintf('/%s/%s',$urlCurrentURI,$urlRedirectURI);
-				}
-
-				//Otherwise do a full redirect
-				if(Twist::framework()->setting('SITE_TRAILING_SLASH')){
-					$urlRedirect .= '/';
-				}
+				$urlRedirect = \Twist::framework()->tools()->traverseURI($urlRedirect);
 
 				header(sprintf('Location: %s',$urlRedirect),true,($blPermanent) ? 301 : 302);
 				die();

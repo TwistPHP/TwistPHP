@@ -150,7 +150,7 @@
 
 				$arrOut = null;
 				$strCacheKey = sprintf('%s-%s-%s-%s',$strRepoKey,$strType,$strChannel,sha1(serialize($arrPostParameters)));
-				$blUseCache = (!in_array($strType,array('download','authenticate','connect'))) ? true : false;
+				$blUseCache = !in_array($strType,array('download','authenticate','connect'));
 
 				$arrOut = null;
 				if($blUseCache){
@@ -185,7 +185,7 @@
 					curl_setopt($resCurl, CURLOPT_SSL_VERIFYHOST, 0);
 					curl_setopt($resCurl, CURLOPT_SSL_VERIFYPEER, 0);
 					curl_setopt($resCurl, CURLOPT_RETURNTRANSFER, 1);
-					curl_setopt($resCurl, CURLOPT_TIMEOUT, 5);
+					curl_setopt($resCurl, CURLOPT_TIMEOUT, 60);
 
 					if($this->arrRepositories[$strRepoKey]['licence'] != ''){
 						curl_setopt($resCurl, CURLOPT_HTTPHEADER, array('Request-Key: '.$this->arrRepositories[$strRepoKey]['licence']));
@@ -229,6 +229,7 @@
 			}
 
 			if(array_key_exists('error',$arrOut)){
+				$this->_debug($arrOut['error'],$this->strHexRed);
 				$this->arrErrors[] = $arrOut['error'];
 				$arrOut = array();
 			}
@@ -571,7 +572,7 @@
 						case'core':
 
 							//Only update the setup interface if it has not been deleted
-							$blSetupInstalled = (file_exists(sprintf('%s/interfaces/Setup',$strFrameworkDirectory))) ? true : false;
+							$blSetupInstalled = file_exists(sprintf('%s/interfaces/Setup',$strFrameworkDirectory));
 
 							$strInstallFolder = sprintf('%s/core',$strFrameworkDirectory);
 							if(file_exists($strInstallFolder)){

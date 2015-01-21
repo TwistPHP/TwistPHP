@@ -189,7 +189,7 @@ class UserSession{
 	 * @return bool
 	 */
 	public function remembered(){
-		return (count($_COOKIE) && array_key_exists('remember',$_COOKIE)) ? true : false;
+		return (count($_COOKIE) && array_key_exists('remember',$_COOKIE));
 	}
 
 	/**

@@ -4,15 +4,15 @@
     <h3>Free</h3>
     <table>
         <thead>
-        <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Version</th>
-            <th>Install</th>
-        </tr>
+	        <tr>
+	            <th>Name</th>
+	            <th>Description</th>
+	            <th>Version</th>
+	            <th>Install</th>
+	        </tr>
         </thead>
         <tbody>
-		{data:interfaces}
+			{data:interfaces}
         </tbody>
     </table>
 

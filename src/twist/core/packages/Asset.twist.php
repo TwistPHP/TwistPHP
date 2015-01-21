@@ -590,19 +590,19 @@
 			switch($arrParams[0]){
 
 				case'upload':
-					$strOut = \Twist::File()->templateExtension($strReference.',asset');
+					$strOut = \Twist::File()->templateExtension(sprintf('asset-%s',$strReference));
 					break;
 
 				case'upload-html':
-					$strOut = \Twist::File()->templateExtension($strReference.',asset');
+					$strOut = \Twist::File()->templateExtension(sprintf('asset-%s',$strReference));
 					break;
 
 				case'upload-init':
-					$strOut = \Twist::File()->templateExtension($strReference.',asset');
+					$strOut = \Twist::File()->templateExtension(sprintf('asset-%s',$strReference));
 					break;
 
 				case'upload-js':
-					$strOut = \Twist::File()->templateExtension($strReference.',asset');
+					$strOut = \Twist::File()->templateExtension(sprintf('asset-%s',$strReference));
 					break;
 
 				case'uri':

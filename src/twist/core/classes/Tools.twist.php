@@ -167,6 +167,25 @@
 		}
 
 		/**
+		 * Remove an item from a multi-dimensional array using a key, the split char indicates a change in array level
+		 * @param $strKey
+		 * @param $arrData
+		 * @param string $strSplitChar
+		 * @return array Returns either the original array or the array with the item removed
+		 */
+		public function arrayParseUnset($strKey,$arrData,$strSplitChar='/'){
+
+			$arrCollapsedArray = $this->array3dTo2d($arrData,$strSplitChar);
+
+			if(array_key_exists($strKey,$arrCollapsedArray)){
+				unset($arrCollapsedArray[$strKey]);
+				$arrData = $this->array2dTo3d($arrCollapsedArray,null,$strSplitChar);
+			}
+
+			return $arrData;
+		}
+
+		/**
 		 * @param $arrData
 		 * @param $strKeyField
 		 * @param bool $blGroup
@@ -211,6 +230,21 @@
 		}
 
 		/**
+		 * Create a blank multidimensional array using a URI-style string and populate the last item with a value
+		 * @param $strStructure
+		 * @param string $strSplit
+		 * @param null $strFinalValue
+		 * @return array|null
+		 */
+		public function ghostArray( $strStructure, $strSplit = '/', $strFinalValue = null ) {
+			foreach( array_reverse( explode( $strSplit, $strStructure ) ) as $strPart ) {
+				$strFinalValue = array( $strPart => $strFinalValue );
+			}
+
+			return $strFinalValue;
+		}
+
+		/**
 		 * @param $arrStructure
 		 * @param string $strIDField
 		 * @param string $strParentIDField
@@ -246,9 +280,76 @@
 			return $arrTempTree;
 		}
 
-		function varDump(){
+		public function varDump(){
 			ob_start();
 			call_user_func_array('var_dump',func_get_args());
 			return ob_get_clean();
+		}
+
+		/**
+		 * Traverse the current URI in $_SERVER['REQUEST_URI'] or pass in a starting URI
+		 * @param $urlRelativePath
+		 * @param $urlStartingURI
+		 * @return string Return the traversed URI
+		 */
+		public function traverseURI($urlRelativePath,$urlStartingURI = null){
+
+			$urlCurrentURI = trim((is_null($urlStartingURI)) ? $_SERVER['REQUEST_URI'] : $urlStartingURI,'/');
+			$urlOut = rtrim($urlRelativePath,'/');
+
+			if(substr($urlRelativePath,0,2) == './'){
+
+				//THIS
+				$urlOutTemp = trim($urlOut,'/');
+
+				if(substr($urlOutTemp,0,2) == './'){
+					$urlOutTemp = substr($urlOutTemp,2);
+				}
+
+				$arrCurrentParts = (strstr($urlCurrentURI,'/')) ? explode('/',$urlCurrentURI) : array($urlCurrentURI);
+				array_pop($arrCurrentParts);
+				$urlCurrentURI = implode('/',$arrCurrentParts);
+
+				$urlOut = sprintf('/%s/%s',$urlCurrentURI,$urlOutTemp);
+
+			}elseif(substr($urlRelativePath,0,3) == '../'){
+
+				//UP
+				$urlOutTemp = trim($urlOut,'/');
+
+				$arrCurrentParts = (strstr($urlCurrentURI,'/')) ? explode('/',$urlCurrentURI) : array($urlCurrentURI);
+				$arrRedirectParts = (strstr($urlOutTemp,'/')) ? explode('/',$urlOutTemp) : array($urlOutTemp);
+
+				foreach($arrRedirectParts as $intKey => $strEachPart){
+					if($strEachPart == '..' && count($arrCurrentParts) > 0){
+						array_pop($arrCurrentParts);
+						array_shift($arrRedirectParts);
+					}else{
+						break;
+					}
+				}
+
+				if(count($arrRedirectParts) > 0){
+					array_pop($arrCurrentParts);
+				}
+
+				$arrUriParts = array_merge($arrCurrentParts,$arrRedirectParts);
+				$urlOut = sprintf('/%s',implode('/',$arrUriParts));
+
+			}elseif(!strstr($urlRelativePath,':') && substr($urlRelativePath,0,2) != '//' && substr($urlRelativePath,0,1) != '/'){
+
+				//CHILD
+				$urlOutTemp = trim($urlOut,'/');
+				$urlOut = sprintf('/%s/%s',$urlCurrentURI,$urlOutTemp);
+			}
+
+			//Otherwise do a full redirect
+			if(\Twist::framework()->setting('SITE_TRAILING_SLASH')){
+				$urlOut .= '/';
+			}else{
+				$urlOut = rtrim($urlOut,'/');
+			}
+
+			return $urlOut;
 		}
 	}
