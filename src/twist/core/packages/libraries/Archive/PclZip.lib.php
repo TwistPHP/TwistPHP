@@ -39,12 +39,28 @@
 			$this->resZip = new \PclZip($strZipArchive);
 		}
 
-		public function addFile($strLocalFile){
+		public function addFile($strLocalFile,$strZipPath){
+
+			//PCLZIP_OPT_REMOVE_PATH - Remove from the local file path
+			//PCLZIP_OPT_ADD_PATH - virtual folder to add the file too
+
 			$this->resZip->add($strLocalFile, PCLZIP_OPT_ADD_PATH,'install',PCLZIP_OPT_REMOVE_PATH,'dev');
 		}
 
 		public function extract($strExtractPath){
 			return ($this->resZip->extract(PCLZIP_OPT_PATH, $strExtractPath) == 0) ? false : true;
+		}
+
+		public function addEmptyDir($strDirectoryPath){
+			$this->resZip->addEmptyDir($strDirectoryPath);
+		}
+
+		public function setArchiveComment($strComment){
+			$this->resZip->setArchiveComment($strComment);
+		}
+
+		public function deleteName($strDirectoryPath){
+			$this->resZip->deleteName($strDirectoryPath);
 		}
 
 		public function close(){
