@@ -60,7 +60,6 @@ class Route extends ModuleBase{
 		if(file_exists($strControllerPath)){
 			$this->setControllerDirectory($strControllerPath);
 		}
-		//$this->framework()->register()->shutdownEvent('TwistRoutes','Twist::Route','process');
 	}
 
 	/**
