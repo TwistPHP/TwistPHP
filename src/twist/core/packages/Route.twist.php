@@ -190,8 +190,8 @@ class Route extends ModuleBase{
 		$blWildCard = (strstr($strURI,'%'));
 		$strURI = rtrim(str_replace('%','',$strURI),'/').'/';
 
-		if(!array_key_exists($strURI,$this->arrRestrict)){
-			$this->arrRestrict[$strURI] = $blWildCard;
+		if(!array_key_exists($strURI,$this->arrUnrestrict)){
+			$this->arrUnrestrict[$strURI] = $blWildCard;
 		}
 	}
 
