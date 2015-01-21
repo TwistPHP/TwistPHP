@@ -24,6 +24,10 @@
 namespace TwistPHP\Packages;
 use TwistPHP\ModuleBase;
 
+/**
+ * User management and control allowing users to register, login and be updated
+ * Functionality to edit, reset passwords, send welcome emails with session management for multi and single devices
+ */
 class User extends ModuleBase{
 
 	public $strLoginUrl = null;
