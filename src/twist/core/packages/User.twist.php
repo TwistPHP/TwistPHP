@@ -90,8 +90,6 @@ class User extends ModuleBase{
 
 		}else{
 
-			$this->blUserValidatedSession = true;
-
 			//Validate the session if available else validate the cookie if remembered
 			if(!is_null(\Twist::Session()->data('user-session_key'))){
 				$this->intUserID = $this->objUserSession->validateCode( \Twist::Session()->data('user-session_key'), $blUpdateKey );
@@ -101,6 +99,7 @@ class User extends ModuleBase{
 
 			if($this->intUserID > 0){
 				$this->processUserSession($this->intUserID);
+				$this->blUserValidatedSession = true;
 			}
 		}
 
@@ -140,6 +139,11 @@ class User extends ModuleBase{
 	public function authenticate($strEmailAddress = null,$strPassword = null,$strLoginUrl = null,$blIgnoreProcess = false){
 
 		$this->strOverrideUrl = $strLoginUrl;
+
+		//First of all log the user out if required
+		if(array_key_exists('logout',$_GET)){
+			$this->processLogout();
+		}
 
 		//Process any additional requests that may have been made
 		if($blIgnoreProcess == false){
@@ -420,6 +424,9 @@ class User extends ModuleBase{
 		//Null the logout message
 		\Twist::Session()->data('site-login_error_message',null);
 		\Twist::Session()->data('site-login_message',null);
+
+		$this->blUserValidatedSession = false;
+		$this->resCurrentUser = null;
 
 		if(!is_null($strPage)){
 			$this->goToPage($strPage);
