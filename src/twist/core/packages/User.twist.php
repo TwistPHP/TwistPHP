@@ -848,6 +848,10 @@ class User extends ModuleBase{
 			case'email':
 				$strData = $this->loggedInData('email');
 				break;
+
+			case'name':
+				$strData = sprintf('%s %s',$this->loggedInData('firstname'),$this->loggedInData('surname'));
+				break;
 		}
 
 		return $strData;
