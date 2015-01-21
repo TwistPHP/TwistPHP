@@ -284,6 +284,11 @@ class UserObject{
 	protected function sendWelcomeEmail(){
 
 		$strLoginURL = $this->resParentClass->loginURL();
+
+		if(is_null($this->resDatabaseRecord->get('password'))){
+			$this->resetPassword();
+		}
+
 		$strTempPass = (is_null($this->strTempPassword)) ? '[specified on registration]' : $this->strTempPassword;
 
 		$strSiteName = \Twist::framework()->setting('SITE_NAME');
