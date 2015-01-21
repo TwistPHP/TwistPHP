@@ -292,13 +292,17 @@ class Route extends ModuleBase{
 	 * @param null $strTemplatesFolder
 	 * @param null $strElementsFolder
 	 */
-	public function ajax($strURI,$strFunctionsFolder = null,$strTemplatesFolder = null,$strElementsFolder = null){
+	public function ajax($strURI,$strFunctionsFolder = null,$strTemplatesFolder = null,$strElementsFolder = null,$blUnrestrict=false){
 
 		$arrCustomFields = array(
 			'functions' => $strFunctionsFolder,
 			'templates' => $strTemplatesFolder,
 			'elements' => $strElementsFolder
 		);
+
+		if($blUnrestrict){
+			$this->unrestrict($strURI);
+		}
 
 		$this->addRoute($strURI,'ajax',null,false,false,$arrCustomFields);
 	}
