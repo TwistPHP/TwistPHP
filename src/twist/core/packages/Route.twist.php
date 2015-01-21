@@ -154,12 +154,12 @@ class Route extends ModuleBase{
 
 	protected function _restrictDefault($strURI,$strLoginURI){
 
-		$blWildCard = strstr($strURI,'%');
+		//$blWildCard = strstr($strURI,'%');
 		$strURI = rtrim(str_replace('%','',$strURI),'/').'/';
 
 		if(!array_key_exists($strURI,$this->arrRestrict)){
 			$this->arrRestrict[$strURI] = array(
-				'wildcard' => $blWildCard,
+				'wildcard' => false,
 				'login_uri' => '/'.ltrim(rtrim($strLoginURI,'/'),'/').'/',
 				'level' => null,
 				'group' => null
@@ -172,6 +172,7 @@ class Route extends ModuleBase{
 	/**
 	 * Restrict a page to logged in users only, place a '%' at the end of the URI will apply this restriction to all child pages as well as itself
 	 *
+	 * @note This function will restrict the full canonical URL
 	 * @param $strURI
 	 * @param $strLoginURI
 	 * @param $mxdLevel

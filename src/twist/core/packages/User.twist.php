@@ -852,6 +852,14 @@ class User extends ModuleBase{
 			case'name':
 				$strData = sprintf('%s %s',$this->loggedInData('firstname'),$this->loggedInData('surname'));
 				break;
+
+			case'firstname':
+				$strData = $this->loggedInData('firstname');
+				break;
+
+			case'surname':
+				$strData = $this->loggedInData('surname');
+				break;
 		}
 
 		return $strData;
