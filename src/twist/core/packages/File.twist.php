@@ -625,7 +625,7 @@ class File extends ModuleBase{
 			}
 		}
 
-		return (file_exists($strDirectoryPath)) ? true : false;
+		return file_exists($strDirectoryPath);
 	}
 
 	/**

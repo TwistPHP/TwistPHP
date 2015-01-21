@@ -87,7 +87,9 @@
 		}
 
 		/**
-		 * Set and get the twist session data, passing only a key will return the data stored against that key. Pass in a value as well will set and return the result. Null is returned upon error.
+		 * Set and get the Twist session data
+		 * Passing only a key will return the data stored against that key, pass in a value as well will set and return the result
+		 * @note You can pass multidimensional keys separated by '/', but this will not be able to change an existing value from a non-array value to an array value
 		 * @param $strKey The key for the item to be returned
 		 * @param $mxdValue The value to be set against the provided key, passing null will not set any data
 		 * @return mixed Return the data that is contained in the provided key (if any exists otherwise NULL)
@@ -95,19 +97,43 @@
 		public function data($strKey,$mxdValue = null){
 
 			if(!is_null($mxdValue)){
-				$_SESSION['twist-session'][$strKey] = $mxdValue;
+				if(strstr($strKey,'/')){
+					$newValue = \Twist::framework() -> tools() -> ghostArray( $strKey, '/', $mxdValue );
+					$_SESSION['twist-session'] = \Twist::framework() -> tools() -> arrayMergeRecursive( $_SESSION['twist-session'], $newValue );
+				} else {
+					$_SESSION['twist-session'][$strKey] = $mxdValue;
+				}
 			}
 
-			return (array_key_exists($strKey,$_SESSION['twist-session'])) ? $_SESSION['twist-session'][$strKey] : null;
+			return \Twist::framework()->tools()->arrayParse($strKey,$_SESSION['twist-session']);
+		}
+
+		/**
+		 * Null a value in the session array
+		 * @note You can pass multidimensional keys separated by '/'
+		 * @param $strKey The key for the item to be nulled
+		 * @return void
+		 */
+		public function nullData($strKey){
+
+			if(strstr($strKey,'/')){
+				$newValue = \Twist::framework() -> tools() -> ghostArray( $strKey, '/', null );
+				$_SESSION['twist-session'] = \Twist::framework() -> tools() -> arrayMergeRecursive( $_SESSION['twist-session'], $newValue );
+			} else {
+				$_SESSION['twist-session'][$strKey] = null;
+			}
 		}
 
 		/**
 		 * Remove a single session item or clear the whole session by leaving the key field null
+		 * @note You can pass multidimensional keys separated by '/'
 		 * @param $strKey The key for the item to be removed, passing null removes all
 		 */
 		public function remove($strKey = null){
 
-			if(!is_null($strKey) && array_key_exists($strKey,$_SESSION['twist-session'])){
+			if(!is_null($strKey) && strstr($strKey,'/')){
+				$_SESSION['twist-session'] = \Twist::framework()->tools()->arrayParseUnset($strKey,$_SESSION['twist-session'],'/');
+			}elseif(!is_null($strKey) && array_key_exists($strKey,$_SESSION['twist-session'])){
 				unset($_SESSION['twist-session'][$strKey]);
 			}elseif(is_null($strKey)){
 				$_SESSION['twist-session'] = array();

@@ -66,7 +66,7 @@
 					 * Override the error handlers and exception handlers and turn on AJAX debugging
 					 * Note: In the future we could use this to enable the log handler instead
 					 */
-					self::define('TWIST_AJAX_REQUEST',(array_key_exists('HTTP_X_REQUESTED_WITH',$_SERVER) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') ? true : false);
+					self::define('TWIST_AJAX_REQUEST',array_key_exists('HTTP_X_REQUESTED_WITH',$_SERVER) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest');
 
 					//Register the PHP handlers
 					self::errorHandlers();

@@ -40,7 +40,7 @@
 
             //Check if the framework is setup or not setup
             $strConfigFile = sprintf("%s/config/config.php",DIR_FRAMEWORK);
-            $this->blShowSetup = (!file_exists($strConfigFile)) ? true : false;
+            $this->blShowSetup = !file_exists($strConfigFile);
 
             $this->load();
         }

@@ -167,6 +167,25 @@
 		}
 
 		/**
+		 * Remove an item from a multi-dimensional array using a key, the split char indicates a change in array level
+		 * @param $strKey
+		 * @param $arrData
+		 * @param string $strSplitChar
+		 * @return array Returns either the original array or the array with the item removed
+		 */
+		public function arrayParseUnset($strKey,$arrData,$strSplitChar='/'){
+
+			$arrCollapsedArray = $this->array3dTo2d($arrData,$strSplitChar);
+
+			if(array_key_exists($strKey,$arrCollapsedArray)){
+				unset($arrCollapsedArray[$strKey]);
+				$arrData = $this->array2dTo3d($arrCollapsedArray,null,$strSplitChar);
+			}
+
+			return $arrData;
+		}
+
+		/**
 		 * @param $arrData
 		 * @param $strKeyField
 		 * @param bool $blGroup
@@ -211,6 +230,21 @@
 		}
 
 		/**
+		 * Create a blank multidimensional array using a URI-style string and populate the last item with a value
+		 * @param $strStructure
+		 * @param string $strSplit
+		 * @param null $strFinalValue
+		 * @return array|null
+		 */
+		public function ghostArray( $strStructure, $strSplit = '/', $strFinalValue = null ) {
+			foreach( array_reverse( explode( $strSplit, $strStructure ) ) as $strPart ) {
+				$strFinalValue = array( $strPart => $strFinalValue );
+			}
+
+			return $strFinalValue;
+		}
+
+		/**
 		 * @param $arrStructure
 		 * @param string $strIDField
 		 * @param string $strParentIDField
@@ -246,7 +280,7 @@
 			return $arrTempTree;
 		}
 
-		function varDump(){
+		public function varDump(){
 			ob_start();
 			call_user_func_array('var_dump',func_get_args());
 			return ob_get_clean();

@@ -44,7 +44,7 @@
 		}
 
 		function connected(){
-			return (!is_null($this->resLink) && $this->ping()) ? true : false;
+			return (!is_null($this->resLink) && $this->ping());
 		}
 
 		function connectionError(){//done

@@ -51,7 +51,7 @@ Inspired by the simplicity of CodeIgniters templating parser, we managed to crea
 		<body>
 			<h1>{data:welcome}</h1>
 			<p>The date is {date:Y-m-d} and the time is {date:H:i}.</p>
-			<p>Your IP address is: {server:remote_addr}</p>
+			<p>Your IP address is: {server:REMOTE_ADDR}</p>
 		</body>
 	</html>
 	```
@@ -106,7 +106,7 @@ The real power behind the template engine after pre-defined variables and conten
 		<body>
 			<h1>{data:welcome}</h1>
 			<p>The date is {date:Y-m-d} and the time is {date:H:i}.</p>
-			<p>Your IP address is: {server:remote_addr}</p>
+			<p>Your IP address is: {server:REMOTE_ADDR}</p>
 		</body>
 	</html>
 	```

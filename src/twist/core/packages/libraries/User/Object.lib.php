@@ -45,8 +45,8 @@ class UserObject{
 		$intUserID = ($this->resDatabaseRecord->get('id') == 0) ? null : $this->resDatabaseRecord->get('id');
 
 		//Get the user data record to allow for this ti be edited
+		$this->blNewAccount = is_null($intUserID);
 		$this->resDatabaseRecordData = \Twist::Database()->getRecord(sprintf('%suser_data',DATABASE_TABLE_PREFIX),$intUserID,'user_id');
-		$this->blNewAccount = (is_object($this->resDatabaseRecordData)) ? false : true;
 		$this->resDatabaseRecordData = (is_object($this->resDatabaseRecordData)) ? $this->resDatabaseRecordData : \Twist::Database()->createRecord(sprintf('%suser_data',DATABASE_TABLE_PREFIX));
 
 		$this->arrOriginalUserData = $this->resDatabaseRecordData->values();
@@ -214,7 +214,7 @@ class UserObject{
 	}
 
 	public function comparePasswordHash($strPasswordHash){
-		return ($this->resDatabaseRecord->get('password') == $strPasswordHash) ? true : false;
+		return $this->resDatabaseRecord->get('password') == $strPasswordHash;
 	}
 
 	public function password($strPassword){
@@ -284,6 +284,11 @@ class UserObject{
 	protected function sendWelcomeEmail(){
 
 		$strLoginURL = $this->resParentClass->loginURL();
+
+		if(is_null($this->resDatabaseRecord->get('password'))){
+			$this->resetPassword();
+		}
+
 		$strTempPass = (is_null($this->strTempPassword)) ? '[specified on registration]' : $this->strTempPassword;
 
 		$strSiteName = \Twist::framework()->setting('SITE_NAME');
@@ -441,6 +446,38 @@ class UserObject{
 		}
 
 		return $arrOut;
+	}
+
+	public function isMember(){
+		return ($this->level() >= \Twist::framework()->setting('USER_LEVEL_MEMBER') && $this->level() < \Twist::framework()->setting('USER_LEVEL_ADVANCED'));
+	}
+
+	public function isAtLeastMember(){
+		return ($this->level() >= \Twist::framework()->setting('USER_LEVEL_MEMBER') || $this->level() == '0');
+	}
+
+	public function isAdvanced(){
+		return ($this->level() >= \Twist::framework()->setting('USER_LEVEL_ADVANCED') && $this->level() < \Twist::framework()->setting('USER_LEVEL_ADMIN'));
+	}
+
+	public function isAtLeastAdvanced(){
+		return ($this->level() >= \Twist::framework()->setting('USER_LEVEL_ADVANCED') || $this->level() == '0');
+	}
+
+	public function isAdmin(){
+		return ($this->level() >= \Twist::framework()->setting('USER_LEVEL_ADMIN') && $this->level() < \Twist::framework()->setting('USER_LEVEL_SUPERADMIN'));
+	}
+
+	public function isAtLeastSuperAdmin(){
+		return ($this->level() >= \Twist::framework()->setting('USER_LEVEL_SUPERADMIN') || $this->level() == '0');
+	}
+
+	public function isSuperAdmin(){
+		return ($this->level() >= \Twist::framework()->setting('USER_LEVEL_SUPERADMIN'));
+	}
+
+	public function isRootUser(){
+		return ($this->level() == '0');
 	}
 
 	protected function base64url_encode($strData) {

@@ -535,8 +535,8 @@
 					);
 
 					foreach($arrStructureData as $arrEachItem){
-						$arrEachItem['auto_increment'] = ($arrEachItem['extra'] == 'auto_increment') ? true : false;
-						$arrEachItem['nullable'] = ($arrEachItem['nullable'] == 'YES') ? true : false;
+						$arrEachItem['auto_increment'] = ($arrEachItem['extra'] == 'auto_increment');
+						$arrEachItem['nullable'] = ($arrEachItem['nullable'] == 'YES');
 
 						//Set the data back into the structure array
 						$arrStructure['auto_increment'] = ($arrEachItem['auto_increment']) ? $arrEachItem['column_name'] : null;
@@ -710,7 +710,7 @@
 		 * @return bool Returns status of connection
 		 */
 		public function isConnected(){
-			return (is_object($this->resLibrary) && $this->resLibrary->connected()) ? true : false;
+			return (is_object($this->resLibrary) && $this->resLibrary->connected());
 		}
 
 		/**

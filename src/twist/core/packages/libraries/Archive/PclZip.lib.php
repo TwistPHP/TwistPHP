@@ -48,6 +48,7 @@
 		}
 
 		public function close(){
-			$this->resZip->close();
+			//$this->resZip->close();
+			$this->resZip = null;
 		}
 	}

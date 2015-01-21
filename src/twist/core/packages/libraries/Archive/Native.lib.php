@@ -28,13 +28,13 @@
 		protected $resZip = null;
 
 		public function create($strZipArchive){
-			$this->resZip = new ZipArchive();
-			$blStatus = $this->resZip->open($strZipArchive, ZipArchive::CREATE);
+			$this->resZip = new \ZipArchive();
+			$blStatus = $this->resZip->open($strZipArchive, \ZipArchive::CREATE);
 			return $blStatus;
 		}
 
 		public function load($strZipArchive){
-			$this->resZip = new ZipArchive();
+			$this->resZip = new \ZipArchive();
 			$blStatus = $this->resZip->open($strZipArchive);
 			return $blStatus;
 		}
@@ -49,5 +49,6 @@
 
 		public function close(){
 			$this->resZip->close();
+			$this->resZip = null;
 		}
 	}
