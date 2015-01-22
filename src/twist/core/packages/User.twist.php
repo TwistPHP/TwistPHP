@@ -342,15 +342,30 @@ class User extends ModuleBase{
 					if(\Twist::Session()->data('user-temp_password') == '0'){
 
 						if(array_key_exists('current_password',$_POST)){
+
+							$strNewPassword = $_POST['password'];
+
 							//Change the users password and re-log them in (Only for none-temp password users)
-							$this->changePassword(\Twist::Session()->data('user-id'),$_POST['password'],$_POST['current_password']);
-							$this->authenticate(\Twist::Session()->data('user-email'),$_POST['password'],$this->strLoginUrl,true);
+							$this->changePassword(\Twist::Session()->data('user-id'),$strNewPassword,$_POST['current_password']);
+
+							//Remove the two posted password vars
+							unset($_POST['password']);
+							unset($_POST['current_password']);
+
+							$this->authenticate(\Twist::Session()->data('user-email'),$strNewPassword,$this->strLoginUrl,true);
 						}
 					}else{
+
+						$strNewPassword = $_POST['password'];
+
 						//Change the users password and re-log them in
-						$this->updatePassword(\Twist::Session()->data('user-id'),$_POST['password']);
+						$this->updatePassword(\Twist::Session()->data('user-id'),$strNewPassword);
+
+						//Remove the posted password and reset the session var
+						unset($_POST['password']);
 						\Twist::Session()->data('user-temp_password','0');
-						$this->authenticate(\Twist::Session()->data('user-email'),$_POST['password'],$this->strLoginUrl,true);
+
+						$this->authenticate(\Twist::Session()->data('user-email'),$strNewPassword,$this->strLoginUrl,true);
 					}
 
 				}else{
