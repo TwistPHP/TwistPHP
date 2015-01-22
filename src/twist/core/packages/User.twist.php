@@ -518,8 +518,12 @@ class User extends ModuleBase{
 			//Just in case, remove the logout comment otherwise the redirect could log you out again
 			$strUrl = str_replace("?logout","",$strUrl);
 
-			if($strUrl != $_SERVER['request_uri']){
+			if($strUrl != $_SERVER['request_uri']
+					&& !in_array(substr($strUrl, -3), array('.js'))
+					&& !in_array(substr($strUrl, -4), array('.css','.jpg','.png','.gif','.ico'))){
 				$this->goToPage($strUrl);
+			} else {
+				$this->goToPage( sprintf('%s?change',$this->strLoginUrl), false );
 			}
 		}elseif($objSession->data('user-temp_password') == '1' && !strstr($_SERVER['REQUEST_URI'],'?change')){
 			$this->goToPage( sprintf('%s?change',$this->strLoginUrl), false );

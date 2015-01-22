@@ -70,6 +70,10 @@ class UserObject{
 		$blSendVerification = ($this->resDatabaseRecord->get('email') != $this->arrOriginalData['email'] || $this->resDatabaseRecord->get('verification_code') != $this->arrOriginalData['verification_code']);
 		$blSendPassword = ($this->resDatabaseRecord->get('password') != $this->arrOriginalData['password']);
 
+		if(is_null($this->resDatabaseRecord->get('password'))){
+			$this->resetPassword();
+		}
+
 		//Commit and grab the standard user data
 		$mxdOut = $this->resDatabaseRecord->commit();
 		$this->arrOriginalData = $this->resDatabaseRecord->values();
@@ -238,7 +242,7 @@ class UserObject{
 		//Generate a new random password and send email
 		$strPassword = $this->generatePassword(16,4);
 
-		//Store the new temp password untill the reset email is sent upon commit
+		//Store the new temp password until the reset email is sent upon commit
 		$this->strTempPassword = $strPassword;
 		$this->resDatabaseRecord->set('password',sha1($strPassword));
 		$this->resDatabaseRecord->set('temp_password',1);
@@ -284,10 +288,6 @@ class UserObject{
 	protected function sendWelcomeEmail(){
 
 		$strLoginURL = $this->resParentClass->loginURL();
-
-		if(is_null($this->resDatabaseRecord->get('password'))){
-			$this->resetPassword();
-		}
 
 		$strTempPass = (is_null($this->strTempPassword)) ? '[specified on registration]' : $this->strTempPassword;
 
