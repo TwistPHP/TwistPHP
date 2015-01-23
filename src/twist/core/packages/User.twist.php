@@ -241,6 +241,8 @@ class User extends ModuleBase{
 		unset($objSession);
 
 		$this->resCurrentUser->lastLogin($_SERVER['REMOTE_ADDR']);
+		$this->resCurrentUser->commit();
+
 		$this->intUserID = $intUserID;
 
 		$this->afterLoginRedirect();
