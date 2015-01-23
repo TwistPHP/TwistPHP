@@ -835,7 +835,7 @@ class Route extends ModuleBase{
 				if ($blRestrictedPage && !\Twist::User()->loggedIn()) {
 					\Twist::User()->setAfterLoginRedirect();
 					\Twist::redirect(str_replace('//', '/', $strFullLoginURL));
-				} elseif ($blRestrictedPage && (!\Twist::User()->loggedIn() || (!is_null($arrRestrictedInfo['level']) && \Twist::User()->currentLevel() < $arrRestrictedInfo['level']))) {
+				} elseif ($blRestrictedPage && (!\Twist::User()->loggedIn() || (!is_null($arrRestrictedInfo['level']) && \Twist::User()->currentLevel() < $arrRestrictedInfo['level'] && \Twist::User()->currentLevel() != 0))) {
 					\Twist::respond(403);
 				} else {
 
