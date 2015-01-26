@@ -490,7 +490,7 @@
 			$arrFile = \Twist::File()->upload($strFileKey,\Twist::DateTime()->time());
 
 			//Store the file as an asset
-			$intOut = $this->add($arrFile['file'],$intGroupID,$strTitle,$strDescription,$blActive);
+			$intOut = $this->add($arrFile['file']['path'],$intGroupID,$strTitle,$strDescription,$blActive);
 
 			return $intOut;
 		}
