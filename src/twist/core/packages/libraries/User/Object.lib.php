@@ -76,35 +76,38 @@ class UserObject{
 
 		//Commit and grab the standard user data
 		$mxdOut = $this->resDatabaseRecord->commit();
-		$this->arrOriginalData = $this->resDatabaseRecord->values();
 
-		//Set the new users ID into the user data record
-		if($this->blNewAccount){
-			$this->resDatabaseRecordData->set('user_id',$mxdOut);
-		}
+		if($mxdOut){
+			$this->arrOriginalData = $this->resDatabaseRecord->values();
 
-		//Commit and grab the additional user data
-		$this->resDatabaseRecordData->commit();
-		$this->arrOriginalUserData = $this->resDatabaseRecordData->values();
-
-		//@todo - add in custom data commit
-
-		if($this->blNewAccount){
-			$this->sendWelcomeEmail();
-			$this->blNewAccount = false;
-		}else{
-
-			if($blSendVerification){
-				$this->sendVerificationEmail();
+			//Set the new users ID into the user data record
+			if($this->blNewAccount){
+				$this->resDatabaseRecordData->set('user_id',$mxdOut);
 			}
 
-			if($blSendPassword){
-				$this->sendPasswordEmail();
-			}
-		}
+			//Commit and grab the additional user data
+			$this->resDatabaseRecordData->commit();
+			$this->arrOriginalUserData = $this->resDatabaseRecordData->values();
 
-		//Just to ensure the temp password is defiantly removed
-		$this->strTempPassword = null;
+			//@todo - add in custom data commit
+
+			if($this->blNewAccount){
+				$this->sendWelcomeEmail();
+				$this->blNewAccount = false;
+			}else{
+
+				if($blSendVerification){
+					$this->sendVerificationEmail();
+				}
+
+				if($blSendPassword){
+					$this->sendPasswordEmail();
+				}
+			}
+
+			//Just to ensure the temp password is defiantly removed
+			$this->strTempPassword = null;
+		}
 
 		return $mxdOut;
 	}

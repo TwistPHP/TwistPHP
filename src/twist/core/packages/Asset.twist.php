@@ -191,7 +191,7 @@
 		 */
 		public function getDefaultSupportingContent($arrAsset){
 
-			$strIconURI = str_replace(BASE_LOCATION,'',sprintf('%s/images/icons/%s',DIR_FRAMEWORK_RESOURCES,$arrAsset['type']['icon']));
+			$strIconURI = str_replace(BASE_LOCATION,'',sprintf('%sicons/%s',DIR_FRAMEWORK_RESOURCES,$arrAsset['type']['icon']));
 
 			$arrOut = array(
 				'square-thumb-256' => $strIconURI,
@@ -490,7 +490,7 @@
 			$arrFile = \Twist::File()->upload($strFileKey,\Twist::DateTime()->time());
 
 			//Store the file as an asset
-			$intOut = $this->add($arrFile['file'],$intGroupID,$strTitle,$strDescription,$blActive);
+			$intOut = $this->add($arrFile['file']['path'],$intGroupID,$strTitle,$strDescription,$blActive);
 
 			return $intOut;
 		}
