@@ -362,6 +362,7 @@ class File extends ModuleBase{
 
 						//Set the output data of the uploaded file
 						$arrOut['file']['size'] = $arrFileData['size'];
+						$arrOut['file']['original_name'] = $strNewFilename;
 						$arrOut['file']['name'] = $strFile;
 						$arrOut['file']['path'] = sprintf('%s/%s',$strUploadFolder,$strFile);
 						$arrOut['status'] = true;
