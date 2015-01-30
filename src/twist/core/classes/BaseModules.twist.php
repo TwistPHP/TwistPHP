@@ -39,6 +39,7 @@
 			}
 
 			public static function framework(){ return parent::framework(); }
+			public static function AJAX(){ return parent::AJAX(); }
 			public static function Archive(){ return parent::Archive(); }
 			public static function Asset(){ return parent::Asset(); }
 			public static function CSV(){ return parent::CSV(); }
@@ -60,13 +61,6 @@
 			public static function User(){ return parent::User(); }
 			public static function Validate(){ return parent::Validate(); }
 			public static function XML(){ return parent::XML(); }
-
-			public static function AJAX(){
-				\Twist::framework() -> module() -> load('AJAX');
-				$resTwistModule = (!Instance::isObject('modAJAX')) ? new Modules\AJAX() : Instance::retrieveObject('modAJAX');
-				Instance::storeObject('modAJAX',$resTwistModule);
-				return $resTwistModule;
-			}
 
 			public static function Amazon(){
 				\Twist::framework() -> module() -> load('Amazon');

@@ -72,6 +72,7 @@
 					self::errorHandlers();
 
 					//Register all the packages, this is to allow extensions
+					Twist::framework() -> module() -> create('AJAX',false,null,null,'TwistPackage');
 					Twist::framework() -> module() -> create('Archive',false,null,null,'TwistPackage');
 					Twist::framework() -> module() -> create('Asset',false,null,null,'TwistPackage');
 					Twist::framework() -> module() -> create('Cache',false,null,null,'TwistPackage');
@@ -97,6 +98,8 @@
 					Twist::framework() -> module() -> extend('Template','image',array('module' => 'Image','function' => 'templateExtension'));
 					Twist::framework() -> module() -> extend('Template','session',array('module' => 'Session','function' => 'templateExtension'));
 					Twist::framework() -> module() -> extend('Template','user',array('module' => 'User','function' => 'templateExtension'));
+					Twist::framework() -> module() -> extend('Template','twist-ajax',array('module' => 'AJAX','function' => 'templateExtension'));
+					Twist::framework() -> module() -> extend('Template','ajax',array('module' => 'AJAX','function' => 'templateExtension'));
 
 					//Register all the modules that have been installed in the framework
 					Twist::framework() -> register() -> modules();
