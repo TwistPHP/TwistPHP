@@ -76,7 +76,7 @@
 		 * @return bool
 		 */
 		public function login($strUsername,$strPassword){
-			return ($this->communicate(sprintf('USER %s',$strUsername)) === 331 && $this->communicate(sprintf('PASS %s',$strPassword)) === 230) ? true : false;
+			return ($this->communicate(sprintf('USER %s',$strUsername)) === 331 && $this->communicate(sprintf('PASS %s',$strPassword)) === 230);
 		}
 
 		public function pasv($blEnable = true){
@@ -176,7 +176,7 @@
 		 * @return bool
 		 */
 		public function rename($strFilename, $strNewFilename){
-			return ($this->communicate(sprintf('RNFR %s', $strFilename)) === 350 && $this->communicate(sprintf('RNTO %s', $strNewFilename)) === 250) ? true : false;
+			return ($this->communicate(sprintf('RNFR %s', $strFilename)) === 350 && $this->communicate(sprintf('RNTO %s', $strNewFilename)) === 250);
 		}
 
 		/**

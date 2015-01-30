@@ -124,7 +124,7 @@
 		/**
 		 * Register the module for use withing the system
 		 * @param $strModule
-		 * @param $mxdKey8
+		 * @param $mxdKey
 		 * @param $mxdData
 		 */
 		public function extend($strModule,$mxdKey,$mxdData){

@@ -33,6 +33,15 @@
 				return $resTwistModule;
 			}
 
+			protected static function AJAX(){
+
+				require_once sprintf('%sAJAX.twist.php',DIR_FRAMEWORK_PACKAGES);
+
+				$resTwistModule = (!Instance::isObject('pkgAJAX')) ? new Packages\AJAX() : Instance::retrieveObject('pkgAJAX');
+				Instance::storeObject('pkgAJAX',$resTwistModule);
+				return $resTwistModule;
+			}
+
 			protected static function Archive(){
 
 				require_once sprintf('%sArchive.twist.php',DIR_FRAMEWORK_PACKAGES);

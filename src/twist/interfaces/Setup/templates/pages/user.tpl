@@ -4,19 +4,19 @@
     {data:error_message}
 
     <label>Firstname</label>
-    <input type="text" name="firstname" placeholder="John" value="{session:twist-setup/user/details/firstname}" autocomplete="off">
+    <input type="text" name="firstname" placeholder="John" value="{session:twist-setup/user/details/firstname}" autocomplete="off" autocapitalize="on" autofocus>
 
     <label>Lastname</label>
-    <input type="text" name="lastname" placeholder="Smith" value="{session:twist-setup/user/details/lastname}" autocomplete="off">
+    <input type="text" name="lastname" placeholder="Smith" value="{session:twist-setup/user/details/lastname}" autocomplete="off" autocapitalize="on">
 
     <label>Email</label>
-    <input type="email" maxlength="255" name="email" placeholder="john.smith@{session:twist-setup/settings/details/site_host}" value="{session:twist-setup/user/details/email}" autocomplete="off">
+    <input type="email" maxlength="255" name="email" placeholder="john.smith@{session:twist-setup/settings/details/site_host}" value="{session:twist-setup/user/details/email}" autocomplete="off" autocapitalize="off">
 
     <label>Password</label>
-    <input type="password" name="password" placeholder="" value="" autocomplete="off">
+    <input type="password" name="password" placeholder="" value="" autocomplete="off" autocapitalize="off">
 
     <label>Confirm Password</label>
-    <input type="password" name="confirm_password" placeholder="" value="" autocomplete="off">
+    <input type="password" name="confirm_password" placeholder="" value="" autocomplete="off" autocapitalize="off">
 
     <button type="submit">Next</button>
     <div class="clear"></div>

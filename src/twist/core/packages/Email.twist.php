@@ -528,9 +528,9 @@ class Email extends ModuleBase{
 	 */
 	protected function buildBody(){
 
-		$blBodyPlain = (array_key_exists('body_plain',$this->arrEmailData) && $this->arrEmailData['body_plain'] != '') ? true : false;
-		$blBodyHTML = (array_key_exists('body_html',$this->arrEmailData) && $this->arrEmailData['body_html'] != '') ? true : false;
-		$blAttachments = (array_key_exists('attachments',$this->arrEmailData) && count($this->arrEmailData['attachments']) > 0) ? true : false;
+		$blBodyPlain = (array_key_exists('body_plain',$this->arrEmailData) && $this->arrEmailData['body_plain'] != '');
+		$blBodyHTML = (array_key_exists('body_html',$this->arrEmailData) && $this->arrEmailData['body_html'] != '');
+		$blAttachments = (array_key_exists('attachments',$this->arrEmailData) && count($this->arrEmailData['attachments']) > 0);
 
 		//If both html and plain are set then do multipart or if attachments do multipart anyway
 		if(($blBodyHTML && $blBodyPlain) || $blAttachments || $blBodyHTML){
@@ -585,7 +585,7 @@ class Email extends ModuleBase{
 		$strBoundaryMixedHeader = chr(34).$strBoundaryMixed.chr(34);
 
 		//Check if attachments are used
-		$blAttachments = (array_key_exists('attachments',$this->arrEmailData) && count($this->arrEmailData['attachments']) > 0) ? true : false;
+		$blAttachments = (array_key_exists('attachments',$this->arrEmailData) && count($this->arrEmailData['attachments']) > 0);
 
 		//tell e-mail client this e-mail contains//alternate versions
 		if($blAttachments){

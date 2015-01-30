@@ -1,10 +1,10 @@
 <?php
 
 	/* ================================================================================
-	 * TwistPHP index.php
+	 * TwistPHP - Default index.php
 	 * --------------------------------------------------------------------------------
-	 * Author:          Shadow Technologies
-	 * Documentation:   http://twistphp.com/documentation
+	 * Author:          Shadow Technologies Ltd.
+	 * Documentation:   https://twistphp.com/docs
 	 * ================================================================================
 	 */
 

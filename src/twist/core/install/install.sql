@@ -241,14 +241,14 @@ CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`asset_types` (
 --
 
 INSERT INTO /*TABLE_PREFIX*/`asset_types` (`id`, `name`, `data_description`, `data_example`, `slug`, `file_extensions`, `default_file_extension`, `template`, `icon`) VALUES
-(1, 'Image', NULL, NULL, 'image', 'png,jpg,jpeg,gif,tiff', NULL, 'image.tpl', 'photo.png'),
+(1, 'Image', NULL, NULL, 'image', 'png,jpg,jpeg,gif,tiff', NULL, 'image.tpl', 'image.png'),
 (2, 'Video', NULL, NULL, 'video', 'avi,mpg,mp4,flv,mov,mpeg,rt,webm,ogv,wmv', 'mp4', 'video.tpl', 'movie.png'),
 (3, 'PDF', NULL, NULL, 'pdf', 'pdf', NULL, 'link.tpl', 'pdf.png'),
 (4, 'Document', NULL, NULL, 'document', 'doc,docx,txt,rtf,ppt,pptx', NULL, 'link.tpl', 'word.png'),
 (5, 'Spreadsheet', NULL, NULL, 'spreadsheet', 'xls,xlsx,csv,xml', NULL, 'link.tpl', 'excel.png'),
 (6, 'Archive', NULL, NULL, 'archive', 'zip,rar,tar.gz,tar', NULL, 'link.tpl', 'compressed.png'),
 (7, 'Flash Object', NULL, NULL, 'flash', 'swf', NULL, 'flash.tpl', 'flash.png'),
-(8, 'Vector Graphic', NULL, NULL, 'vector', 'svg', NULL, 'image.tpl', 'photo.png'),
+(8, 'Vector Graphic', NULL, NULL, 'vector', 'svg', NULL, 'image.tpl', 'image.png'),
 (9, 'External Site Box', 'Site URL', 'http://www.google.co.uk/', 'iframe', NULL, NULL, 'iframe.tpl', 'html.png'),
 (10, 'Google Map', 'Coordinates', '50.346039,-3.933332', 'gmap', NULL, NULL, 'gmap.tpl', 'map.png'),
 (11, 'Google Map with Marker', 'Coordinates', '50.346039,-3.933332', 'gmap-marker', NULL, NULL, 'gmap-marker.tpl', 'map.png'),

@@ -24,6 +24,10 @@
 namespace TwistPHP\Packages;
 use TwistPHP\ModuleBase;
 
+/**
+ * User management and control allowing users to register, login and be updated
+ * Functionality to edit, reset passwords, send welcome emails with session management for multi and single devices
+ */
 class User extends ModuleBase{
 
 	public $strLoginUrl = null;
@@ -86,8 +90,6 @@ class User extends ModuleBase{
 
 		}else{
 
-			$this->blUserValidatedSession = true;
-
 			//Validate the session if available else validate the cookie if remembered
 			if(!is_null(\Twist::Session()->data('user-session_key'))){
 				$this->intUserID = $this->objUserSession->validateCode( \Twist::Session()->data('user-session_key'), $blUpdateKey );
@@ -97,15 +99,51 @@ class User extends ModuleBase{
 
 			if($this->intUserID > 0){
 				$this->processUserSession($this->intUserID);
+				$this->blUserValidatedSession = true;
 			}
 		}
 
-		return ($this->intUserID > 0) ? true : false;
+		return $this->intUserID > 0;
+	}
+
+	/**
+	 * Return data about the logged in user
+	 * @param null $strKey
+	 * @return array|mixed
+	 */
+	public function loggedInData($strKey = null){
+
+		if($this->blUserValidatedSession && !is_null($this->resCurrentUser)){
+			return $this->resCurrentUser->get($strKey);
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * @alias currentID
+	 * @return null
+	 */
+	public function loggedInID(){
+		return $this->currentID();
+	}
+
+	/**
+	 * @alias currentID
+	 * @return null
+	 */
+	public function loggedInLevel(){
+		return $this->currentLevel();
 	}
 
 	public function authenticate($strEmailAddress = null,$strPassword = null,$strLoginUrl = null,$blIgnoreProcess = false){
 
 		$this->strOverrideUrl = $strLoginUrl;
+
+		//First of all log the user out if required
+		if(array_key_exists('logout',$_GET)){
+			$this->processLogout();
+		}
 
 		//Process any additional requests that may have been made
 		if($blIgnoreProcess == false){
@@ -203,6 +241,8 @@ class User extends ModuleBase{
 		unset($objSession);
 
 		$this->resCurrentUser->lastLogin($_SERVER['REMOTE_ADDR']);
+		$this->resCurrentUser->commit();
+
 		$this->intUserID = $intUserID;
 
 		$this->afterLoginRedirect();
@@ -304,15 +344,30 @@ class User extends ModuleBase{
 					if(\Twist::Session()->data('user-temp_password') == '0'){
 
 						if(array_key_exists('current_password',$_POST)){
+
+							$strNewPassword = $_POST['password'];
+
 							//Change the users password and re-log them in (Only for none-temp password users)
-							$this->changePassword(\Twist::Session()->data('user-id'),$_POST['password'],$_POST['current_password']);
-							$this->authenticate(\Twist::Session()->data('user-email'),$_POST['password'],$this->strLoginUrl,true);
+							$this->changePassword(\Twist::Session()->data('user-id'),$strNewPassword,$_POST['current_password']);
+
+							//Remove the two posted password vars
+							unset($_POST['password']);
+							unset($_POST['current_password']);
+
+							$this->authenticate(\Twist::Session()->data('user-email'),$strNewPassword,$this->strLoginUrl,true);
 						}
 					}else{
+
+						$strNewPassword = $_POST['password'];
+
 						//Change the users password and re-log them in
-						$this->updatePassword(\Twist::Session()->data('user-id'),$_POST['password']);
+						$this->updatePassword(\Twist::Session()->data('user-id'),$strNewPassword);
+
+						//Remove the posted password and reset the session var
+						unset($_POST['password']);
 						\Twist::Session()->data('user-temp_password','0');
-						$this->authenticate(\Twist::Session()->data('user-email'),$_POST['password'],$this->strLoginUrl,true);
+
+						$this->authenticate(\Twist::Session()->data('user-email'),$strNewPassword,$this->strLoginUrl,true);
 					}
 
 				}else{
@@ -326,7 +381,6 @@ class User extends ModuleBase{
 			$this->verifyEmail($_GET['verify']);
 		}
 	}
-
 
 	/**
 	 * Restrict access to the PHP file this function was called form, if the user is not logged in they
@@ -387,6 +441,9 @@ class User extends ModuleBase{
 		//Null the logout message
 		\Twist::Session()->data('site-login_error_message',null);
 		\Twist::Session()->data('site-login_message',null);
+
+		$this->blUserValidatedSession = false;
+		$this->resCurrentUser = null;
 
 		if(!is_null($strPage)){
 			$this->goToPage($strPage);
@@ -463,8 +520,12 @@ class User extends ModuleBase{
 			//Just in case, remove the logout comment otherwise the redirect could log you out again
 			$strUrl = str_replace("?logout","",$strUrl);
 
-			if($strUrl != $_SERVER['request_uri']){
+			if($strUrl != $_SERVER['request_uri']
+					&& !in_array(substr($strUrl, -3), array('.js'))
+					&& !in_array(substr($strUrl, -4), array('.css','.jpg','.png','.gif','.ico'))){
 				$this->goToPage($strUrl);
+			} else {
+				$this->goToPage( sprintf('%s?change',$this->strLoginUrl), false );
 			}
 		}elseif($objSession->data('user-temp_password') == '1' && !strstr($_SERVER['REQUEST_URI'],'?change')){
 			$this->goToPage( sprintf('%s?change',$this->strLoginUrl), false );
@@ -705,6 +766,8 @@ class User extends ModuleBase{
 		if(!file_exists($strTemplateLocation)){
 			$strTemplateLocation = trim($strTemplateLocation,'/').'/';
 			$strTemplateLocation = sprintf('%s/%s',BASE_LOCATION,$strTemplateLocation);
+		} else {
+			$strTemplateLocation = rtrim($strTemplateLocation,'/').'/';
 		}
 
 		$this->strTemplateLocation = $strTemplateLocation;
@@ -804,6 +867,30 @@ class User extends ModuleBase{
 				}
 
 				$strData = $this->resTemplate->build( 'devices.tpl', array( 'login_page' => $strLoginPage, 'device_list' => $strDeviceList ),true );
+				break;
+
+			case'id':
+				$strData = $this->currentID();
+				break;
+
+			case'level':
+				$strData = $this->loggedInData('level');
+				break;
+
+			case'email':
+				$strData = $this->loggedInData('email');
+				break;
+
+			case'name':
+				$strData = sprintf('%s %s',$this->loggedInData('firstname'),$this->loggedInData('surname'));
+				break;
+
+			case'firstname':
+				$strData = $this->loggedInData('firstname');
+				break;
+
+			case'surname':
+				$strData = $this->loggedInData('surname');
 				break;
 		}
 

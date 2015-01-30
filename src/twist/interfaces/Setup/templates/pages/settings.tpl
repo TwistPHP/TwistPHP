@@ -3,10 +3,10 @@
 	{data:error_message}
 
     <label>Site Name</label>
-    <input type="text" name="site_name" placeholder="My Website" value="{session:twist-setup/settings/details/site_name}">
+    <input type="text" name="site_name" placeholder="My Website" value="{session:twist-setup/settings/details/site_name}" autocapitalize="on" autofocus>
 
     <label>Site Domain</label>
-    <input type="text" name="site_host" placeholder="mywebsite.com" value="{session:twist-setup/settings/details/site_host==''?server:HTTP_HOST:session:twist-setup/settings/details/site_host}">
+    <input type="text" name="site_host" placeholder="mywebsite.com" value="{session:twist-setup/settings/details/site_host==''?server:HTTP_HOST:session:twist-setup/settings/details/site_host}" autocapitalize="off">
 
     <label>Protocol</label>
     <input name="http_protocol" type="radio" id="protocol-http" checked value="http">

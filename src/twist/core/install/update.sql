@@ -22,3 +22,5 @@
 --
 -- ------------------------------------------------------
 
+-- @comment Fix the broken icons in the asset package
+UPDATE /*TABLE_PREFIX*/`asset_types` SET `icon` = `image.png` WHERE `icon` = 'photo.png';

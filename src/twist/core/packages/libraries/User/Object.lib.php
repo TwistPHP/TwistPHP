@@ -45,8 +45,8 @@ class UserObject{
 		$intUserID = ($this->resDatabaseRecord->get('id') == 0) ? null : $this->resDatabaseRecord->get('id');
 
 		//Get the user data record to allow for this ti be edited
+		$this->blNewAccount = is_null($intUserID);
 		$this->resDatabaseRecordData = \Twist::Database()->getRecord(sprintf('%suser_data',DATABASE_TABLE_PREFIX),$intUserID,'user_id');
-		$this->blNewAccount = (is_object($this->resDatabaseRecordData)) ? false : true;
 		$this->resDatabaseRecordData = (is_object($this->resDatabaseRecordData)) ? $this->resDatabaseRecordData : \Twist::Database()->createRecord(sprintf('%suser_data',DATABASE_TABLE_PREFIX));
 
 		$this->arrOriginalUserData = $this->resDatabaseRecordData->values();
@@ -70,37 +70,44 @@ class UserObject{
 		$blSendVerification = ($this->resDatabaseRecord->get('email') != $this->arrOriginalData['email'] || $this->resDatabaseRecord->get('verification_code') != $this->arrOriginalData['verification_code']);
 		$blSendPassword = ($this->resDatabaseRecord->get('password') != $this->arrOriginalData['password']);
 
+		if(is_null($this->resDatabaseRecord->get('password'))){
+			$this->resetPassword();
+		}
+
 		//Commit and grab the standard user data
 		$mxdOut = $this->resDatabaseRecord->commit();
-		$this->arrOriginalData = $this->resDatabaseRecord->values();
 
-		//Set the new users ID into the user data record
-		if($this->blNewAccount){
-			$this->resDatabaseRecordData->set('user_id',$mxdOut);
-		}
+		if($mxdOut){
+			$this->arrOriginalData = $this->resDatabaseRecord->values();
 
-		//Commit and grab the additional user data
-		$this->resDatabaseRecordData->commit();
-		$this->arrOriginalUserData = $this->resDatabaseRecordData->values();
-
-		//@todo - add in custom data commit
-
-		if($this->blNewAccount){
-			$this->sendWelcomeEmail();
-			$this->blNewAccount = false;
-		}else{
-
-			if($blSendVerification){
-				$this->sendVerificationEmail();
+			//Set the new users ID into the user data record
+			if($this->blNewAccount){
+				$this->resDatabaseRecordData->set('user_id',$mxdOut);
 			}
 
-			if($blSendPassword){
-				$this->sendPasswordEmail();
-			}
-		}
+			//Commit and grab the additional user data
+			$this->resDatabaseRecordData->commit();
+			$this->arrOriginalUserData = $this->resDatabaseRecordData->values();
 
-		//Just to ensure the temp password is defiantly removed
-		$this->strTempPassword = null;
+			//@todo - add in custom data commit
+
+			if($this->blNewAccount){
+				$this->sendWelcomeEmail();
+				$this->blNewAccount = false;
+			}else{
+
+				if($blSendVerification){
+					$this->sendVerificationEmail();
+				}
+
+				if($blSendPassword){
+					$this->sendPasswordEmail();
+				}
+			}
+
+			//Just to ensure the temp password is defiantly removed
+			$this->strTempPassword = null;
+		}
 
 		return $mxdOut;
 	}
@@ -214,7 +221,7 @@ class UserObject{
 	}
 
 	public function comparePasswordHash($strPasswordHash){
-		return ($this->resDatabaseRecord->get('password') == $strPasswordHash) ? true : false;
+		return $this->resDatabaseRecord->get('password') == $strPasswordHash;
 	}
 
 	public function password($strPassword){
@@ -238,7 +245,7 @@ class UserObject{
 		//Generate a new random password and send email
 		$strPassword = $this->generatePassword(16,4);
 
-		//Store the new temp password untill the reset email is sent upon commit
+		//Store the new temp password until the reset email is sent upon commit
 		$this->strTempPassword = $strPassword;
 		$this->resDatabaseRecord->set('password',sha1($strPassword));
 		$this->resDatabaseRecord->set('temp_password',1);
@@ -284,7 +291,8 @@ class UserObject{
 	protected function sendWelcomeEmail(){
 
 		$strLoginURL = $this->resParentClass->loginURL();
-		$strTempPass = (is_null($this->strTempPassword)) ? 'Specified when registered' : $this->strTempPassword;
+
+		$strTempPass = (is_null($this->strTempPassword)) ? '[specified on registration]' : $this->strTempPassword;
 
 		$strSiteName = \Twist::framework()->setting('SITE_NAME');
 		$strSiteHost = \Twist::framework()->setting('SITE_HOST');
@@ -318,7 +326,7 @@ class UserObject{
 			$strVerificationLink = sprintf('http://%s/%s?verify=%s',$strSiteHost,ltrim($strLoginURL,'/'),$strVerificationString);
 			$arrTags['verification_link'] = $strVerificationLink;
 
-			$arrTags['verification'] = sprintf('<p>You must verify the email address registered to your account before you can login.<br />To verify your account, <a href="%s">click here</a>.<br /><br />If you have a problem with this link, you can copy the below link into your borwser and proceed to login.<br /><a href="%s">%s</a><br /></p>',
+			$arrTags['verification'] = sprintf('<p><strong>Your account must be verified before you can login.</strong><br />To verify your account, <a href="%s">click here</a>.</p><p>If you have a problem with this link, please copy and paste the below link into your browser and proceed to login:<br /><a href="%s">%s</a></p>',
 				$strVerificationLink,
 				$strVerificationLink,
 				$strVerificationLink
@@ -441,6 +449,38 @@ class UserObject{
 		}
 
 		return $arrOut;
+	}
+
+	public function isMember(){
+		return ($this->level() >= \Twist::framework()->setting('USER_LEVEL_MEMBER') && $this->level() < \Twist::framework()->setting('USER_LEVEL_ADVANCED'));
+	}
+
+	public function isAtLeastMember(){
+		return ($this->level() >= \Twist::framework()->setting('USER_LEVEL_MEMBER') || $this->level() == '0');
+	}
+
+	public function isAdvanced(){
+		return ($this->level() >= \Twist::framework()->setting('USER_LEVEL_ADVANCED') && $this->level() < \Twist::framework()->setting('USER_LEVEL_ADMIN'));
+	}
+
+	public function isAtLeastAdvanced(){
+		return ($this->level() >= \Twist::framework()->setting('USER_LEVEL_ADVANCED') || $this->level() == '0');
+	}
+
+	public function isAdmin(){
+		return ($this->level() >= \Twist::framework()->setting('USER_LEVEL_ADMIN') && $this->level() < \Twist::framework()->setting('USER_LEVEL_SUPERADMIN'));
+	}
+
+	public function isAtLeastSuperAdmin(){
+		return ($this->level() >= \Twist::framework()->setting('USER_LEVEL_SUPERADMIN') || $this->level() == '0');
+	}
+
+	public function isSuperAdmin(){
+		return ($this->level() >= \Twist::framework()->setting('USER_LEVEL_SUPERADMIN'));
+	}
+
+	public function isRootUser(){
+		return ($this->level() == '0');
 	}
 
 	protected function base64url_encode($strData) {

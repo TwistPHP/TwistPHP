@@ -3,27 +3,26 @@
 ##Getting Started
 
 1. [Installing](getting-started/1-Installing.md)
-2. Templates
-3. Elements
-4. Routes
-5. Controllers
-6. Database
-7. Users
+2. [Templates](getting-started/2-Templates.md)
+3. [Elements](getting-started/3-Elements.md)
+4. [Routes](getting-started/4-Routes.md)
+5. [Databases](getting-started/5-Databases.md)
+6. [Users](getting-started/6-Users.md)
 
 ###Advanced
 
-8. Further Templating
-9. Redirects
-10. More Controllers
-11. Tools
+1. Further Templating
+2. Redirects (Coming soon)
+3. More Controllers (Coming soon)
+4. Tools (Coming soon)
 
 ##Examples
 
 ####Database
 
 * [Tables](examples/Database/Tables.md)
-* Routes
-* Templates
+* Routes (Coming soon)
+* Templates (Coming soon)
 
 ##Coding Conventions
 
