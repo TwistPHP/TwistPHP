@@ -64,9 +64,9 @@
 		}
 
 		/**
-		 * Stop the system from URL encoding all parameters before they are sent
+		 * Tell Curl whether to verify the Host and Peer when making requests to HTTPS urls
 		 *
-		 * @param $blEnable Determines if functionality should be used
+		 * @param $blEnable Determines if functionality should be enabled (Default setting: disabled)
 		 */
 		public function verifySSLRequest($blEnable = true){
 			$this->blVerifySSLRequest = $blEnable;
