@@ -813,7 +813,7 @@ class Route extends ModuleBase{
 						$strFullLoginURL = sprintf('%s/%s', $this->strBaseURI, ltrim($arrRestrictedInfo['login_uri'], '/'));
 						$blRestrictedPage = true;
 
-						if($arrRestrictedInfo['login_uri'] == $arrRoute['uri']){
+						if(rtrim($arrRestrictedInfo['login_uri'],'/') == rtrim($arrRoute['uri'],'/')){
 							$blRestrictedPage = false;
 							$arrRestrictedInfo = array();
 						}
