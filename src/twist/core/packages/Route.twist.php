@@ -517,6 +517,7 @@ class Route extends ModuleBase{
 			'registered_uri' => sprintf("%s%s",$this->baseURI(),str_replace('//','/',$strURI)),
 			'base_uri' => $this->baseURI(),
 			'relative_uri' => $strURI,
+			'base_url' => sprintf("%s://%s%s",$this->framework()->setting('SITE_PROTOCOL'),$this->framework()->setting('SITE_HOST'),$this->baseURI()),
 			'url' => sprintf("%s://%s%s%s",$this->framework()->setting('SITE_PROTOCOL'),$this->framework()->setting('SITE_HOST'),$this->baseURI(),str_replace('//','/',$strURI)),
 			'method' => (is_null($strRequestMethod)) ? 'ANY' : $strRequestMethod,
 			'type' => $strType,
