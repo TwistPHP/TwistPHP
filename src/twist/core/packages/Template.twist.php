@@ -794,19 +794,19 @@ class Template extends ModuleBase{
      * Additional parameters are exploded of the end of the Element var, these parameters are comma separated.
      * To retrieve the parameters use $this->getParameters(); in your element.
      *
-     * @param $strElement
+     * @param $dirElement
      * @param $arrData
      * @return string
      * @throws \Exception
      */
-    public function processElement($strElement,$arrData = null){
+    public function processElement($dirElement,$arrData = null){
 
         $strOut = '';
         $this->arrElementData = $arrData;
 
         //If their are parameters then pass them through
-        if(strstr($strElement,',')){
-            $arrParts = explode(',',$strElement);
+        if(strstr($dirElement,',')){
+            $arrParts = explode(',',$dirElement);
             $strElement = $arrParts[0];
 
             //Build the param array from the remaining parts
@@ -815,22 +815,20 @@ class Template extends ModuleBase{
         }
 
         //Check to see if it is a full path or partial path
-        if(!strstr($strElement,'/') || (!file_exists($strElement) && file_exists(sprintf('%s%s',$this->dirElements,strtolower($strElement))))){
-            $strElement = sprintf('%s%s',$this->dirElements,strtolower($strElement));
-        }
+        $dirElement = (!is_file($dirElement)) ? sprintf("%s%s",$this->dirElements,$dirElement) : $dirElement;
 
-        if(file_exists($strElement)){
+        if(file_exists($dirElement)){
 
-            if($this -> framework() -> setting('TEMPLATE_BASE_OVERRIDE') || strstr(realpath($strElement),BASE_LOCATION)){
+            if($this -> framework() -> setting('TEMPLATE_BASE_OVERRIDE') || strstr(realpath($dirElement),BASE_LOCATION)){
                 ob_start();
-                include $strElement;
+                include $dirElement;
                 $strOut = ob_get_contents();
                 ob_end_clean();
             }else{
-                throw new \Exception(sprintf("Element file '%s' is outside of your Document Root.",$strElement),11109);
+                throw new \Exception(sprintf("Element file '%s' is outside of your Document Root.",$dirElement),11109);
             }
         }else{
-            throw new \Exception(sprintf("Twist element '%s' was not found!",strtolower($strElement)));
+            throw new \Exception(sprintf("Twist element '%s' was not found!",strtolower($dirElement)));
         }
 
         return $strOut;
