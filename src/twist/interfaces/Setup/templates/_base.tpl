@@ -8,9 +8,9 @@
 	    <!--[if lt IE 9]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
 
 	    <!--================================ THIRD-PARTY RESOURCES ================================-->
-		{core:unsemantic}
-		{core:font-awesome}
-		{core:arable}
+		<link href="{core:unsemantic}" type="text/css" rel="stylesheet">
+		<link href="{core:font-awesome}" type="text/css" rel="stylesheet">
+		<link href="{core:arable}" type="text/css" rel="stylesheet">
 
 	    <!--================================ CSS ================================-->
 	    <link href="{route:interface_uri}/resources/css/base.css" type="text/css" rel="stylesheet">
