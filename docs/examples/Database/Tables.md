@@ -20,7 +20,6 @@ $resFruit = Twist::Database() -> table( 'fruit' );
 $resFruit -> addField( 'id', 'int', 11 );
 $resFruit -> addField( 'name', 'char', '64' );
 $resFruit -> addField( 'colour', 'char', '16' );
-$resFruit -> setAutoIncrement( 'id' );
 ```
 
 ### Set auto increment
