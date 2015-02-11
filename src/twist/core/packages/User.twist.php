@@ -569,8 +569,7 @@ class User extends ModuleBase{
 				$this->setAfterLoginRedirect();
 			}
 
-			header(sprintf('Location: %s',$strPageURI));
-			die();
+			\Twist::redirect($strPageURI);
 		}
 	}
 
@@ -798,6 +797,11 @@ class User extends ModuleBase{
 			$strLoginPage = $arrParts[1];
 		}
 
+		//If the user is on a temp password show the change password form
+		if(\Twist::Session()->data('user-temp_password') == '1' && $strReference == 'login_form'){
+			$strReference = 'change_password_form';
+		}
+
 		if(array_key_exists('forgotten',$_GET)){
 			$strReference = 'forgotten_password_form';
 		}elseif(array_key_exists('change',$_GET) && $this->loggedIn()){
@@ -819,8 +823,7 @@ class User extends ModuleBase{
 			case'login_form':
 
 				if($this->loggedIn()){
-					header(sprintf('Location: %s',$strLoginPage));
-					die();
+					\Twist::redirect(($strLoginPage == $_SERVER['REQUEST_URI']) ? './' : $strLoginPage);
 				}else{
 					$this->processRequests();
 
