@@ -832,7 +832,7 @@ class Route extends ModuleBase{
 			} else {
 
 				//Else proceed as normal
-				$strFullLoginURL = sprintf('%s/%s', $this->strBaseURI, ltrim($this->framework()->setting('USER_DEFAULT_LOGIN_URI'), '/'));
+				$strFullLoginURL = sprintf('%s/%s', $arrRoute['registered_uri'], ltrim($this->framework()->setting('USER_DEFAULT_LOGIN_URI'), '/'));
 
 				$arrRestrictedInfo = array();
 				$blRestrictedPage = false;
