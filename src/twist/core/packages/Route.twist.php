@@ -823,7 +823,7 @@ class Route extends ModuleBase{
 				}
 
 				$blDatabaseEnabled = \Twist::Database()->checkSettings();
-				\Twist::User()->authenticate();
+				\Twist::User()->logout();
 				if ($blDatabaseEnabled) {
 					//Set the login URL that is specified by restrict otherwise from framework settings
 					\Twist::User()->strLoginUrl = $strFullLoginURL;

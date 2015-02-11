@@ -430,6 +430,17 @@ class User extends ModuleBase{
 	}
 
 	/**
+	 * Log the user out only if the logout get param has been set
+	 */
+	public function logout(){
+
+		//First of all log the user out if required
+		if(array_key_exists('logout',$_GET)){
+			$this->processLogout();
+		}
+	}
+
+	/**
 	 * Process the users logout request and remove any session data to.
 	 * @param string $strPage
 	 */
