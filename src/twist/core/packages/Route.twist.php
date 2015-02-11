@@ -798,13 +798,13 @@ class Route extends ModuleBase{
 				foreach ($this->arrRestrict as $strRestrictURI => $arrRestrictedInfo) {
 					$strRestrictExpression = sprintf("#^(%s[\/]?)%s#", str_replace('/','\/',rtrim($strRestrictURI, '/')), $arrRestrictedInfo['wildcard'] ? '' : '$');
 
-					if (preg_match($strRestrictExpression, $arrRoute['relative_uri'], $arrMatches)) {
+					if (preg_match($strRestrictExpression, $arrRoute['uri'], $arrMatches)) {
 
 						if(count($this->arrUnrestrict)){
 							foreach($this->arrUnrestrict as $strUnrestrictedURI => $blUnrestrictedWildcard){
 
 								$strUnrestrictedExpression = sprintf("#^(%s[\/]?)%s#", str_replace('/','\/',rtrim($strUnrestrictedURI,'/')), $blUnrestrictedWildcard ? '' : '$');
-								if(preg_match($strUnrestrictedExpression, $arrRoute['relative_uri'],$arrMatches)){
+								if(preg_match($strUnrestrictedExpression, $arrRoute['uri'],$arrMatches)){
 									break 2;
 								}
 							}
