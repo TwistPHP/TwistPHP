@@ -142,6 +142,10 @@ class Route extends ModuleBase{
 	 */
 	public function purge(){
 		$this->arrRoutes = array();
+		$this->arrRoutesGET = array();
+		$this->arrRoutesPUT = array();
+		$this->arrRoutesPOST = array();
+		$this->arrRoutesDELETE = array();
 	}
 
 	/**
@@ -514,11 +518,11 @@ class Route extends ModuleBase{
 		$arrRouteData = array(
 			'regx' => $regxMatchURI,
 			'uri' => '',
-			'registered_uri' => sprintf("%s%s",$this->baseURI(),str_replace('//','/',$strURI)),
-			'base_uri' => $this->baseURI(),
+			'registered_uri' => null,
+			'base_uri' => null,
 			'relative_uri' => $strURI,
-			'base_url' => sprintf("%s://%s%s",$this->framework()->setting('SITE_PROTOCOL'),$this->framework()->setting('SITE_HOST'),$this->baseURI()),
-			'url' => sprintf("%s://%s%s%s",$this->framework()->setting('SITE_PROTOCOL'),$this->framework()->setting('SITE_HOST'),$this->baseURI(),str_replace('//','/',$strURI)),
+			'base_url' => null,
+			'url' => null,
 			'method' => (is_null($strRequestMethod)) ? 'ANY' : $strRequestMethod,
 			'type' => $strType,
 			'item' => $strItem,
@@ -526,7 +530,7 @@ class Route extends ModuleBase{
 			'base_template' => $mxdBaseTemplate,
 			'wildcard' => $blWildCard,
 			'cache' => ($mxdCache === false) ? false : true,
-			'cache_key' => str_replace('/','+',trim(sprintf("%s%s",$this->baseURI(),str_replace('//','/',$strURI)),'/')),
+			'cache_key' => null,
 			'cache_life' => ($mxdCache === true) ? $this->intCacheTime : ($mxdCache !== false) ? $mxdCache : 0
 		);
 
@@ -558,6 +562,38 @@ class Route extends ModuleBase{
 			//Add the regx matches including the regx wildcard matches
 			$this->arrRegxMatches[$strURI] = $regxMatchURI;
 			ksort($this->arrRegxMatches);
+		}
+	}
+
+	/**
+	 * Process all the routes and add in the baseURI where required
+	 */
+	protected function processRoutes(){
+		$this->processRoutesArray($this->arrRoutesGET);
+		$this->processRoutesArray($this->arrRoutesPOST);
+		$this->processRoutesArray($this->arrRoutesPUT);
+		$this->processRoutesArray($this->arrRoutesDELETE);
+		$this->processRoutesArray($this->arrRoutes);
+	}
+
+	/**
+	 * Process the routes Array by reference and adding in the current set baseURI
+	 * @param $arrRoutesDataRef
+	 */
+	protected function processRoutesArray(&$arrRoutesDataRef){
+
+		if(count($arrRoutesDataRef)){
+
+			foreach($arrRoutesDataRef as $strURI => $arrEachRoute){
+
+				$arrEachRoute['registered_uri'] = sprintf("%s%s",$this->baseURI(),str_replace('//','/',$strURI));
+				$arrEachRoute['base_uri'] = $this->baseURI();
+				$arrEachRoute['base_url'] = sprintf("%s://%s%s",$this->framework()->setting('SITE_PROTOCOL'),$this->framework()->setting('SITE_HOST'),$this->baseURI());
+				$arrEachRoute['url'] = sprintf("%s://%s%s%s",$this->framework()->setting('SITE_PROTOCOL'),$this->framework()->setting('SITE_HOST'),$this->baseURI(),str_replace('//','/',$strURI));
+				$arrEachRoute['cache_key'] = str_replace('/','+',trim(sprintf("%s%s",$this->baseURI(),str_replace('//','/',$strURI)),'/'));
+
+				$arrRoutesDataRef[$strURI] = $arrEachRoute;
+			}
 		}
 	}
 
@@ -618,17 +654,23 @@ class Route extends ModuleBase{
 	 */
 	protected function currentMethodRoutes(){
 
+		$this->processRoutesArray($this->arrRoutes);
+
 		switch(strtoupper($_SERVER['REQUEST_METHOD'])){
 			case'GET':
+				$this->processRoutesArray($this->arrRoutesGET);
 				return $this->arrRoutesGET;
 				break;
 			case'POST':
+				$this->processRoutesArray($this->arrRoutesPOST);
 				return $this->arrRoutesPOST;
 				break;
 			case'PUT':
+				$this->processRoutesArray($this->arrRoutesPUT);
 				return $this->arrRoutesPUT;
 				break;
 			case'DELETE':
+				$this->processRoutesArray($this->arrRoutesDELETE);
 				return $this->arrRoutesDELETE;
 				break;
 		}
@@ -785,8 +827,7 @@ class Route extends ModuleBase{
 
 			//First of all check for an interface and do that
 			if ($arrRoute['type'] == 'interface') {
-				$strInterfaceURI = sprintf('%s/%s', $this->strBaseURI, ltrim($arrRoute['registered_uri'], '/'));
-				\Twist::framework()->interfaces()->load($arrRoute['item'], $strInterfaceURI, $arrRoute['base_template']);
+				\Twist::framework()->interfaces()->load($arrRoute['item'], $arrRoute['registered_uri'], $arrRoute['base_template']);
 				die();
 			} else {
 
