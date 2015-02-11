@@ -1,18 +1,18 @@
-<form action="finish" method="post">
+<form class="inline foldable" action="finish" method="post">
     <h2>Official Twist Interfaces</h2>
 
     <h3>Free</h3>
     <table>
         <thead>
-	        <tr>
-	            <th>Name</th>
-	            <th>Description</th>
-	            <th>Version</th>
-	            <th>Install</th>
-	        </tr>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Version</th>
+            <th>Install</th>
+        </tr>
         </thead>
         <tbody>
-			{data:interfaces}
+        {data:interfaces}
         </tbody>
     </table>
 
