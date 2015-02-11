@@ -807,7 +807,7 @@ class Template extends ModuleBase{
         //If their are parameters then pass them through
         if(strstr($dirElement,',')){
             $arrParts = explode(',',$dirElement);
-            $strElement = $arrParts[0];
+	        $dirElement = $arrParts[0];
 
             //Build the param array from the remaining parts
             unset($arrParts[0]);

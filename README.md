@@ -1,4 +1,4 @@
-#[TwistPHP](https://twistphp.com/)
+#[TwistPHP](https://twistphp.com/) ![TwistPHP logo](http://static.twistphp.com/logo/square/32.png)
 
 ##A fresh, new open source PHP micro framework
 
