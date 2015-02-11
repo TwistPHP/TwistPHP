@@ -1,4 +1,4 @@
-<form class="twist-user-add" action="{data:login_page}" method="post">
+<form class="twist-user-add" action="{route:login_uri==undefiend?data:login_page:route:login_uri}" method="post">
 	<h6>Add a User</h6>
 	<p class="twist-user-add-error" style="display: {data:login_error_message!=null?'block':'none'};">{data:login_error_message}</p>
 	<label class="twist-user-add-email">Email</label>

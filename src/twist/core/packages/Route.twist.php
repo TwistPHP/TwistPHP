@@ -493,7 +493,7 @@ class Route extends ModuleBase{
 	protected function addRoute($strURI,$strType,$strItem,$mxdBaseTemplate=true,$mxdCache=false,$arrData=array(),$strRequestMethod = null){
 
 		$blWildCard = false;
-		if(substr($strURI,-1) == '%'){
+		if(substr($strURI,-1) == '%' || $strType == 'interface'){
 			$blWildCard = true;
 			$strURI = str_replace('%','',$strURI);
 		}
@@ -785,12 +785,13 @@ class Route extends ModuleBase{
 
 			//First of all check for an interface and do that
 			if ($arrRoute['type'] == 'interface') {
-				\Twist::framework()->interfaces()->load($arrRoute['item'], $arrRoute['registered_uri'], $arrRoute['base_template']);
+				$strInterfaceURI = sprintf('%s/%s', $this->strBaseURI, ltrim($arrRoute['registered_uri'], '/'));
+				\Twist::framework()->interfaces()->load($arrRoute['item'], $strInterfaceURI, $arrRoute['base_template']);
 				die();
 			} else {
 
 				//Else proceed as normal
-				$strFullLoginURL = $this->framework()->setting('USER_DEFAULT_LOGIN_URI');
+				$strFullLoginURL = sprintf('%s/%s', $this->strBaseURI, ltrim($this->framework()->setting('USER_DEFAULT_LOGIN_URI'), '/'));
 
 				$arrRestrictedInfo = array();
 				$blRestrictedPage = false;
@@ -826,7 +827,7 @@ class Route extends ModuleBase{
 				\Twist::User()->logout();
 				if ($blDatabaseEnabled) {
 					//Set the login URL that is specified by restrict otherwise from framework settings
-					\Twist::User()->strLoginUrl = $strFullLoginURL;
+					\Twist::User()->loginURL($strFullLoginURL);
 					\Twist::User()->authenticate();
 				} elseif ($blRestrictedPage) {
 					throw new \Exception('You must have a database connection enabled to use restricted pages');

@@ -1,4 +1,4 @@
-<form class="block" action="{data:login_page}" method="post">
+<form class="block" action="{route:login_uri==undefiend?data:login_page:route:login_uri}" method="post">
 	<h6 class="no-top-margin">Password Reset</h6>
 	<p>Enter your registered email address and a new password will be sent to you.</p>
 	<label class="shadowEmail">Email</label>

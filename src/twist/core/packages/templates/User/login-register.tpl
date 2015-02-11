@@ -1,4 +1,4 @@
-<form class="twist-user-login" action="{data:login_page}" method="post">
+<form class="twist-user-login" action="{route:login_uri==undefiend?data:login_page:route:login_uri}" method="post">
 	<h6>Log In</h6>
 	<p class="twist-user-login-error" style="display: {data:login_error_message!=null?'block':'none'};">{data:login_error_message}</p>
 	<p class="twist-user-login-message" style="display: {data:login_message!=null?'block':'none'};">{data:login_message}</p>

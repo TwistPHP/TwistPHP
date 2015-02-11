@@ -529,7 +529,7 @@ class User extends ModuleBase{
 			$this->clearAfterLoginRedirect();
 
 			//Just in case, remove the logout comment otherwise the redirect could log you out again
-			$strUrl = str_replace("?logout","",$strUrl);
+			$strUrl = str_replace(array("?logout=1","?logout"),"",$strUrl);
 
 			if($strUrl != $_SERVER['request_uri']
 					&& !in_array(substr($strUrl, -3), array('.js'))
@@ -800,13 +800,13 @@ class User extends ModuleBase{
 
 		if(array_key_exists('forgotten',$_GET)){
 			$strReference = 'forgotten_password_form';
-		}elseif(array_key_exists('change',$_GET)){
+		}elseif(array_key_exists('change',$_GET) && $this->loggedIn()){
 			$strReference = 'change_password_form';
 		}elseif(array_key_exists('verification',$_GET)){
 			$strReference = 'account_verification';
 		}elseif(array_key_exists('register',$_GET)){
 			$strReference = 'registration_form';
-		}elseif(array_key_exists('devices',$_GET)){
+		}elseif(array_key_exists('devices',$_GET) && $this->loggedIn()){
 			$strReference = 'devices_form';
 		}
 
