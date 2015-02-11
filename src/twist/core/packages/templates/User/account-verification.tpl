@@ -1,4 +1,4 @@
-<form class="block" action="{data:login_page}" method="post">
+<form class="block" action="{route:login_uri==undefiend?data:login_page:route:login_uri}" method="post">
 	<h6 class="no-top-margin">Account Verification</h6>
 	<p>Please verify your account by clicking the link in your verification email. If you cannot find your verification email you can request a new verification code below.</p>
 	<p>Remember to check your spam and junk folders.</p>

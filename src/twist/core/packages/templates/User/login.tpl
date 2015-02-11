@@ -1,4 +1,4 @@
-<form class="block" action="{data:login_page}" method="post">
+<form class="block" action="{route:login_uri==undefiend?data:login_page:route:login_uri}" method="post">
 	<h6 class="no-top-margin">Log In</h6>
 	<p class="error" style="display: {data:login_error_message!=null?'block':'none'};">{data:login_error_message}</p>
 	<p class="notice" style="display: {data:login_message!=null?'block':'none'};">{data:login_message}</p>
