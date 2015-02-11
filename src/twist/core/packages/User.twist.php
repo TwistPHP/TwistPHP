@@ -800,13 +800,13 @@ class User extends ModuleBase{
 
 		if(array_key_exists('forgotten',$_GET)){
 			$strReference = 'forgotten_password_form';
-		}elseif(array_key_exists('change',$_GET)){
+		}elseif(array_key_exists('change',$_GET) && $this->loggedIn()){
 			$strReference = 'change_password_form';
 		}elseif(array_key_exists('verification',$_GET)){
 			$strReference = 'account_verification';
 		}elseif(array_key_exists('register',$_GET)){
 			$strReference = 'registration_form';
-		}elseif(array_key_exists('devices',$_GET)){
+		}elseif(array_key_exists('devices',$_GET) && $this->loggedIn()){
 			$strReference = 'devices_form';
 		}
 
