@@ -142,6 +142,10 @@ class Route extends ModuleBase{
 	 */
 	public function purge(){
 		$this->arrRoutes = array();
+		$this->arrRoutesGET = array();
+		$this->arrRoutesPUT = array();
+		$this->arrRoutesPOST = array();
+		$this->arrRoutesDELETE = array();
 	}
 
 	/**
@@ -493,7 +497,7 @@ class Route extends ModuleBase{
 	protected function addRoute($strURI,$strType,$strItem,$mxdBaseTemplate=true,$mxdCache=false,$arrData=array(),$strRequestMethod = null){
 
 		$blWildCard = false;
-		if(substr($strURI,-1) == '%'){
+		if(substr($strURI,-1) == '%' || $strType == 'interface'){
 			$blWildCard = true;
 			$strURI = str_replace('%','',$strURI);
 		}
@@ -514,10 +518,11 @@ class Route extends ModuleBase{
 		$arrRouteData = array(
 			'regx' => $regxMatchURI,
 			'uri' => '',
-			'registered_uri' => sprintf("%s%s",$this->baseURI(),str_replace('//','/',$strURI)),
-			'base_uri' => $this->baseURI(),
+			'registered_uri' => null,
+			'base_uri' => null,
 			'relative_uri' => $strURI,
-			'url' => sprintf("%s://%s%s%s",$this->framework()->setting('SITE_PROTOCOL'),$this->framework()->setting('SITE_HOST'),$this->baseURI(),str_replace('//','/',$strURI)),
+			'base_url' => null,
+			'url' => null,
 			'method' => (is_null($strRequestMethod)) ? 'ANY' : $strRequestMethod,
 			'type' => $strType,
 			'item' => $strItem,
@@ -525,7 +530,7 @@ class Route extends ModuleBase{
 			'base_template' => $mxdBaseTemplate,
 			'wildcard' => $blWildCard,
 			'cache' => ($mxdCache === false) ? false : true,
-			'cache_key' => str_replace('/','+',trim(sprintf("%s%s",$this->baseURI(),str_replace('//','/',$strURI)),'/')),
+			'cache_key' => null,
 			'cache_life' => ($mxdCache === true) ? $this->intCacheTime : ($mxdCache !== false) ? $mxdCache : 0
 		);
 
@@ -557,6 +562,38 @@ class Route extends ModuleBase{
 			//Add the regx matches including the regx wildcard matches
 			$this->arrRegxMatches[$strURI] = $regxMatchURI;
 			ksort($this->arrRegxMatches);
+		}
+	}
+
+	/**
+	 * Process all the routes and add in the baseURI where required
+	 */
+	protected function processRoutes(){
+		$this->processRoutesArray($this->arrRoutesGET);
+		$this->processRoutesArray($this->arrRoutesPOST);
+		$this->processRoutesArray($this->arrRoutesPUT);
+		$this->processRoutesArray($this->arrRoutesDELETE);
+		$this->processRoutesArray($this->arrRoutes);
+	}
+
+	/**
+	 * Process the routes Array by reference and adding in the current set baseURI
+	 * @param $arrRoutesDataRef
+	 */
+	protected function processRoutesArray(&$arrRoutesDataRef){
+
+		if(count($arrRoutesDataRef)){
+
+			foreach($arrRoutesDataRef as $strURI => $arrEachRoute){
+
+				$arrEachRoute['registered_uri'] = sprintf("%s%s",$this->baseURI(),str_replace('//','/',$strURI));
+				$arrEachRoute['base_uri'] = $this->baseURI();
+				$arrEachRoute['base_url'] = sprintf("%s://%s%s",$this->framework()->setting('SITE_PROTOCOL'),$this->framework()->setting('SITE_HOST'),$this->baseURI());
+				$arrEachRoute['url'] = sprintf("%s://%s%s%s",$this->framework()->setting('SITE_PROTOCOL'),$this->framework()->setting('SITE_HOST'),$this->baseURI(),str_replace('//','/',$strURI));
+				$arrEachRoute['cache_key'] = str_replace('/','+',trim(sprintf("%s%s",$this->baseURI(),str_replace('//','/',$strURI)),'/'));
+
+				$arrRoutesDataRef[$strURI] = $arrEachRoute;
+			}
 		}
 	}
 
@@ -617,17 +654,23 @@ class Route extends ModuleBase{
 	 */
 	protected function currentMethodRoutes(){
 
+		$this->processRoutesArray($this->arrRoutes);
+
 		switch(strtoupper($_SERVER['REQUEST_METHOD'])){
 			case'GET':
+				$this->processRoutesArray($this->arrRoutesGET);
 				return $this->arrRoutesGET;
 				break;
 			case'POST':
+				$this->processRoutesArray($this->arrRoutesPOST);
 				return $this->arrRoutesPOST;
 				break;
 			case'PUT':
+				$this->processRoutesArray($this->arrRoutesPUT);
 				return $this->arrRoutesPUT;
 				break;
 			case'DELETE':
+				$this->processRoutesArray($this->arrRoutesDELETE);
 				return $this->arrRoutesDELETE;
 				break;
 		}
@@ -789,7 +832,7 @@ class Route extends ModuleBase{
 			} else {
 
 				//Else proceed as normal
-				$strFullLoginURL = $this->framework()->setting('USER_DEFAULT_LOGIN_URI');
+				$strFullLoginURL = sprintf('%s/%s', $arrRoute['registered_uri'], ltrim($this->framework()->setting('USER_DEFAULT_LOGIN_URI'), '/'));
 
 				$arrRestrictedInfo = array();
 				$blRestrictedPage = false;
@@ -797,13 +840,13 @@ class Route extends ModuleBase{
 				foreach ($this->arrRestrict as $strRestrictURI => $arrRestrictedInfo) {
 					$strRestrictExpression = sprintf("#^(%s[\/]?)%s#", str_replace('/','\/',rtrim($strRestrictURI, '/')), $arrRestrictedInfo['wildcard'] ? '' : '$');
 
-					if (preg_match($strRestrictExpression, $arrRoute['relative_uri'], $arrMatches)) {
+					if (preg_match($strRestrictExpression, $arrRoute['uri'], $arrMatches)) {
 
 						if(count($this->arrUnrestrict)){
 							foreach($this->arrUnrestrict as $strUnrestrictedURI => $blUnrestrictedWildcard){
 
 								$strUnrestrictedExpression = sprintf("#^(%s[\/]?)%s#", str_replace('/','\/',rtrim($strUnrestrictedURI,'/')), $blUnrestrictedWildcard ? '' : '$');
-								if(preg_match($strUnrestrictedExpression, $arrRoute['relative_uri'],$arrMatches)){
+								if(preg_match($strUnrestrictedExpression, $arrRoute['uri'],$arrMatches)){
 									break 2;
 								}
 							}
@@ -812,7 +855,7 @@ class Route extends ModuleBase{
 						$strFullLoginURL = sprintf('%s/%s', $this->strBaseURI, ltrim($arrRestrictedInfo['login_uri'], '/'));
 						$blRestrictedPage = true;
 
-						if($arrRestrictedInfo['login_uri'] == $arrRoute['uri']){
+						if(rtrim($arrRestrictedInfo['login_uri'],'/') == rtrim($arrRoute['uri'],'/')){
 							$blRestrictedPage = false;
 							$arrRestrictedInfo = array();
 						}
@@ -822,10 +865,10 @@ class Route extends ModuleBase{
 				}
 
 				$blDatabaseEnabled = \Twist::Database()->checkSettings();
-				\Twist::User()->authenticate();
+				\Twist::User()->logout();
 				if ($blDatabaseEnabled) {
 					//Set the login URL that is specified by restrict otherwise from framework settings
-					\Twist::User()->strLoginUrl = $strFullLoginURL;
+					\Twist::User()->loginURL($strFullLoginURL);
 					\Twist::User()->authenticate();
 				} elseif ($blRestrictedPage) {
 					throw new \Exception('You must have a database connection enabled to use restricted pages');

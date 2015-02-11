@@ -430,6 +430,17 @@ class User extends ModuleBase{
 	}
 
 	/**
+	 * Log the user out only if the logout get param has been set
+	 */
+	public function logout(){
+
+		//First of all log the user out if required
+		if(array_key_exists('logout',$_GET)){
+			$this->processLogout();
+		}
+	}
+
+	/**
 	 * Process the users logout request and remove any session data to.
 	 * @param string $strPage
 	 */
@@ -518,7 +529,7 @@ class User extends ModuleBase{
 			$this->clearAfterLoginRedirect();
 
 			//Just in case, remove the logout comment otherwise the redirect could log you out again
-			$strUrl = str_replace("?logout","",$strUrl);
+			$strUrl = str_replace(array("?logout=1","?logout"),"",$strUrl);
 
 			if($strUrl != $_SERVER['request_uri']
 					&& !in_array(substr($strUrl, -3), array('.js'))
@@ -558,8 +569,7 @@ class User extends ModuleBase{
 				$this->setAfterLoginRedirect();
 			}
 
-			header(sprintf('Location: %s',$strPageURI));
-			die();
+			\Twist::redirect($strPageURI);
 		}
 	}
 
@@ -787,15 +797,20 @@ class User extends ModuleBase{
 			$strLoginPage = $arrParts[1];
 		}
 
+		//If the user is on a temp password show the change password form
+		if(\Twist::Session()->data('user-temp_password') == '1' && $strReference == 'login_form'){
+			$strReference = 'change_password_form';
+		}
+
 		if(array_key_exists('forgotten',$_GET)){
 			$strReference = 'forgotten_password_form';
-		}elseif(array_key_exists('change',$_GET)){
+		}elseif(array_key_exists('change',$_GET) && $this->loggedIn()){
 			$strReference = 'change_password_form';
 		}elseif(array_key_exists('verification',$_GET)){
 			$strReference = 'account_verification';
 		}elseif(array_key_exists('register',$_GET)){
 			$strReference = 'registration_form';
-		}elseif(array_key_exists('devices',$_GET)){
+		}elseif(array_key_exists('devices',$_GET) && $this->loggedIn()){
 			$strReference = 'devices_form';
 		}
 
@@ -808,8 +823,7 @@ class User extends ModuleBase{
 			case'login_form':
 
 				if($this->loggedIn()){
-					header(sprintf('Location: %s',$strLoginPage));
-					die();
+					\Twist::redirect(($strLoginPage == $_SERVER['REQUEST_URI']) ? './' : $strLoginPage);
 				}else{
 					$this->processRequests();
 

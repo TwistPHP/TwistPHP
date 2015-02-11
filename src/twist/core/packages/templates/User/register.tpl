@@ -1,4 +1,4 @@
-<form class="twist-user-register" action="{data:login_page}" method="post">
+<form class="twist-user-register" action="{route:login_uri==undefiend?data:login_page:route:login_uri}" method="post">
 	<h6>Register</h6>
 	<p class="twist-user-register-error" style="display: {data:register_error_message!=null?'block':'none'};">{data:register_error_message}</p>
 	<label class="twist-user-register-email">Email</label>
