@@ -451,12 +451,11 @@
 				$strOrder = rtrim($strOrder,',');
 			}
 
-			$strSQL = sprintf("SELECT * FROM `%s`.`%s` WHERE `%s` %s '%s'%s%s%s",
+			$strSQL = sprintf("SELECT * FROM `%s`.`%s` WHERE `%s` %s%s%s%s",
 				$this->escapeString($this->strDatabaseName),
 				$this->escapeString($strTable),
 				$this->escapeString($strField),
-				(strstr($mxdValue,'%')) ? 'LIKE' : '=',
-				$this->escapeString($mxdValue),
+				is_array($mxdValue) ? sprintf('IN(%s)',implode(',',$mxdValue)) : sprintf(strstr($mxdValue,'%') ? "LIKE '%s'" : "= '%s'", $this->escapeString($mxdValue)),
 				$strOrder,
 				(!is_null($intLimit)) ? sprintf(' LIMIT %d',$intLimit) : '',
 				(!is_null($intLimit) && !is_null($intOffset)) ? sprintf(',%d',$intOffset) : ''
