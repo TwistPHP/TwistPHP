@@ -519,8 +519,8 @@ class Route extends ModuleBase{
 			'regx' => $regxMatchURI,
 			'uri' => '',
 			'registered_uri' => null,
+			'registered_uri_current' => $strURI,
 			'base_uri' => null,
-			'relative_uri' => $strURI,
 			'base_url' => null,
 			'url' => null,
 			'method' => (is_null($strRequestMethod)) ? 'ANY' : $strRequestMethod,
@@ -778,11 +778,11 @@ class Route extends ModuleBase{
 				$arrOut['dynamic'] = $strRouteDynamic;
 				$arrOut['parts'] = $arrRouteParts;
 
-				//Now sanitise the relative_uri and the url
+				//Now sanitise the registered_uri_current and the url
 				if(!is_null($arrOut['regx'])){
 					foreach($arrUriParameters as $strParamKey => $strParamValue){
 						$strReplaceKey = sprintf("{%s}",$strParamKey);
-						$arrOut['relative_uri'] = str_replace($strReplaceKey,$strParamValue,$arrOut['relative_uri']);
+						$arrOut['registered_uri_current'] = str_replace($strReplaceKey,$strParamValue,$arrOut['registered_uri_current']);
 						$arrOut['url'] = str_replace($strReplaceKey,$strParamValue,$arrOut['url']);
 					}
 				}
