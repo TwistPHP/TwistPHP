@@ -107,6 +107,7 @@ class FormBuilder{
 
 	public function render(){
 
+		//https://gist.github.com/ahosgood/88d474c0b811ce469bc0
 		//@todo store cache of the form, build in option to put in custom tags to allow cache form to be populated with data and pre-selects where required
 
 		$resTemplate = \Twist::Template('pkgForm');
@@ -138,10 +139,6 @@ class FormBuilder{
 
 			switch($arrField['type']){
 
-				case'textarea':
-					$arrFormTags['fields'] .= $resTemplate->build('textarea.tpl',$arrFieldTags).self::EOL;
-					break;
-
 				case'select':
 
 					$arrFieldTags['options'] = self::EOL;
@@ -153,22 +150,28 @@ class FormBuilder{
 							'attributes' => ''
 						);
 
-						$arrFieldTags['options'] .= $resTemplate->build('select-option.tpl',$arrOptionData).self::EOL;
+						$arrFieldTags['options'] .= $resTemplate->build('inputs/select-option.tpl',$arrOptionData).self::EOL;
 					}
 
-					$arrFormTags['fields'] .= $resTemplate->build('select.tpl',$arrFieldTags).self::EOL;
+					$arrFormTags['fields'] .= $resTemplate->build('inputs/select.tpl',$arrFieldTags).self::EOL;
 					break;
 
 				default:
 
 					if(!is_null($arrField['prefix'])){
-						$arrFormTags['fields'] .= $resTemplate->build('input-prefix.tpl',$arrFieldTags).self::EOL;
-					}elseif(!is_null($arrField['suffix'])){
-						$arrFormTags['fields'] .= $resTemplate->build('input-suffix.tpl',$arrFieldTags).self::EOL;
-					}else{
-						$arrFormTags['fields'] .= $resTemplate->build('input.tpl',$arrFieldTags).self::EOL;
+
+					}
+					if(!is_null($arrField['suffix'])){
+
 					}
 
+					$strTemplate = sprintf('inputs/%s.tpl',$arrField['type']);
+
+					if(!file_exists($strTemplate)){
+						$strTemplate = 'inputs/default.tpl';
+					}
+
+					$arrFormTags['fields'] .= $resTemplate->build($strTemplate,$arrFieldTags).self::EOL;
 					break;
 			}
 		}
@@ -183,9 +186,9 @@ class FormBuilder{
 		}
 
 		$arrFormTags['fields'] .= '<!-- TwistPHP required from fields -->'.self::EOL;
-		$arrFormTags['fields'] .= $resTemplate->build('input.tpl',array('name' => 'twistphp[id]','type' => 'hidden','value' => $this->arrDetails['id'],'attributes' => '')).self::EOL;
-		$arrFormTags['fields'] .= $resTemplate->build('input.tpl',array('name' => 'twistphp[redirect_success]','type' => 'hidden','value' => '','attributes' => '')).self::EOL;
-		$arrFormTags['fields'] .= $resTemplate->build('input.tpl',array('name' => 'twistphp[redirect_cancel]','type' => 'hidden','value' => '','attributes' => '')).self::EOL;
+		$arrFormTags['fields'] .= $resTemplate->build('inputs/hidden.tpl',array('name' => 'twistphp[id]','type' => 'hidden','value' => $this->arrDetails['id'],'attributes' => '')).self::EOL;
+		$arrFormTags['fields'] .= $resTemplate->build('inputs/hidden.tpl',array('name' => 'twistphp[redirect_success]','type' => 'hidden','value' => '','attributes' => '')).self::EOL;
+		$arrFormTags['fields'] .= $resTemplate->build('inputs/hidden.tpl',array('name' => 'twistphp[redirect_cancel]','type' => 'hidden','value' => '','attributes' => '')).self::EOL;
 
 		return $resTemplate->build('form.tpl',$arrFormTags);
 	}
