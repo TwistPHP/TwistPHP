@@ -294,6 +294,10 @@
 		 */
 		public function traverseURI($urlRelativePath,$urlStartingURI = null){
 
+			if($urlRelativePath == '/') {
+				return $urlRelativePath;
+			}
+
 			$urlCurrentURI = trim((is_null($urlStartingURI)) ? $_SERVER['REQUEST_URI'] : $urlStartingURI,'/');
 			$urlOut = rtrim($urlRelativePath,'/');
 
