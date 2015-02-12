@@ -107,6 +107,8 @@ class FormBuilder{
 
 	public function render(){
 
+		$this->processSubmissionData();
+
 		//https://gist.github.com/ahosgood/88d474c0b811ce469bc0
 		//@todo store cache of the form, build in option to put in custom tags to allow cache form to be populated with data and pre-selects where required
 
@@ -161,6 +163,7 @@ class FormBuilder{
 					if(!is_null($arrField['prefix'])){
 
 					}
+
 					if(!is_null($arrField['suffix'])){
 
 					}
@@ -191,6 +194,43 @@ class FormBuilder{
 		$arrFormTags['fields'] .= $resTemplate->build('inputs/hidden.tpl',array('name' => 'twistphp[redirect_cancel]','type' => 'hidden','value' => '','attributes' => '')).self::EOL;
 
 		return $resTemplate->build('form.tpl',$arrFormTags);
+	}
+
+	protected function processSubmissionData(){
+
+		//Need to detect the type POST, GET, PUT etc
+
+		//Check to see if the form has been posted
+		if(count($_POST) && array_key_exists('twistphp',$_POST) && array_key_exists('id',$_POST['twistphp']) && $_POST['twistphp']['id'] == $this->arrDetails['id']){
+
+			//The form has been posted, now run validate functionality to see what data we have been passed in.
+			$resValidator = \Twist::Validate()->createTest();
+
+			foreach($this->arrFields as $arrField){
+
+				switch($arrField['validation-type']){
+					case 'email':
+						$resValidator->checkEmail($arrField['name']);
+						break;
+					case 'text':
+						$resValidator->checkString($arrField['name']);
+						break;
+				}
+			}
+
+			$arrResults = $resValidator->test($_POST);
+
+			if($arrResults['status'] == true){
+
+				//Store Data
+				//Send to admin
+				//Send thankyou
+				//Custom function call
+				//Redirect user
+			}else{
+				//Process error output
+			}
+		}
 	}
 
 	protected function storeField($strTitle,$strName,$strType,$intMaxLength = null,$mxdValue = null,$arrAttributes = array(),$mxdGroupID = null){
