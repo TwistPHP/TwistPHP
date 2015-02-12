@@ -125,6 +125,7 @@
 
                 $arrResources = array(
                     'arable' => sprintf('%scss/arable.min.css',$strResourcesURI),
+                    'arable-reset' => sprintf('%scss/arable-reset.min.css',$strResourcesURI),
                     'font-awesome' => sprintf('%scss/font-awesome/css/font-awesome.min.css',$strResourcesURI),
                     'jquery' => sprintf('%sjs/jquery-2.1.3.min.js',$strResourcesURI),
                     'jquery-legacy' => sprintf('%sjs/jquery-1.11.2.min.js',$strResourcesURI),
@@ -142,8 +143,6 @@
 	                'logo-small' => sprintf('%slogos/logo-32.png',$strResourcesURI),
                     'modernizr' => sprintf('%sjs/modernizr-2.8.3.min.js',$strResourcesURI),
                     'rummage' => sprintf('%sjs/rummage.min.js',$strResourcesURI),
-	                'shadow-css' => sprintf('%scss/shadow-css.min.css',$strResourcesURI),
-	                'shadow-css-reset' => sprintf('%scss/shadow-css-reset.min.css',$strResourcesURI),
                     'shadow-js' => sprintf('%sjs/shadow-js.min.js',$strResourcesURI),
 	                'unsemantic' => sprintf('%scss/unsemantic-grid-responsive-tablet-no-ie7.css',$strResourcesURI),
 	                'resources_uri' => $strResourcesURI,
