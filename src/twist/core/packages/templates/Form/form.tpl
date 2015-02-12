@@ -1,0 +1,1 @@
+<form id="{data:id}" action="{data:action}" method="{data:method}" enctype="{data:enctype}">{data:fields}</form>

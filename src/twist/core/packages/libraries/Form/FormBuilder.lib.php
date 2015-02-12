@@ -30,6 +30,8 @@ class FormBuilder{
 	public $arrGroups = array();
 	public $arrOrder = array();
 
+	const EOL = "\n";
+
 	public function __construct(){
 
 		$this->arrDetails = array(
@@ -49,10 +51,10 @@ class FormBuilder{
 		$this->arrDetails['method'] = $strMethod;
 	}
 
-	public function addField($strTitle,$strName,$strType,$intMaxLength = null,$arrAttributes = array()){
+	public function addField($strTitle,$strName,$strType,$intMaxLength = null,$mxdValue = null,$arrAttributes = array()){
 
 		//TITLE, NAME, TYPE, [MAXLENGTH, [ATTRIBUTES]]
-		$this->storeField($strTitle,$strName,$strType,$intMaxLength,$arrAttributes);
+		$this->storeField($strTitle,$strName,$strType,$intMaxLength,$mxdValue,$arrAttributes);
 
 		if($strType == 'file'){
 			$this->arrDetails['encrypt'] = 'multipart/form-data';
@@ -67,10 +69,10 @@ class FormBuilder{
 		);
 	}
 
-	public function addGroupField($intGroupID,$strTitle,$strName,$strType,$intMaxLength = null,$arrAttributes = array()){
+	public function addGroupField($mxdGroupID,$strTitle,$strName,$strType,$intMaxLength = null,$mxdValue = null,$arrAttributes = array()){
 
 		//Add fields to a group - GROUP ID, TITLE, NAME, TYPE, [MAXLENGTH]
-		$this->storeField($strTitle,$strName,$strType,$intMaxLength,$arrAttributes,$intGroupID);
+		$this->storeField($strTitle,$strName,$strType,$intMaxLength,$mxdValue,$arrAttributes,$mxdGroupID);
 	}
 
 	public function requiredFields(){
@@ -104,10 +106,91 @@ class FormBuilder{
 	}
 
 	public function render(){
-		//@todo Render the form
+
+		//@todo store cache of the form, build in option to put in custom tags to allow cache form to be populated with data and pre-selects where required
+
+		$resTemplate = \Twist::Template('pkgForm');
+		$resTemplate->setTemplatesDirectory(sprintf('%s/templates/Form/',DIR_FRAMEWORK_PACKAGES));
+
+		$arrFormTags = array(
+			'id' => $this->arrDetails['id'],
+			'method' => $this->arrDetails['method'],
+			'action' => '.',
+			'encrypt' => $this->arrDetails['encrypt'],
+			'fields' => self::EOL
+		);
+
+		foreach($this->arrFields as $arrField){
+
+			//No linebreak required after label so that the input buts up to the label
+			$arrFormTags['fields'] .= $resTemplate->build('label.tpl',$arrField);
+
+			$arrFieldTags = array(
+				'name' => (is_null($arrField['group'])) ? $arrField['name'] : sprintf('%s[%s]',$arrField['group'],$arrField['name']),
+				'type' => $arrField['type'],
+				'value' => $arrField['value'],
+				'attributes' => ($arrField['required']) ? ' required' : ''
+			);
+
+			foreach($arrField['attributes'] as $strAttributeName => $strAttributeValue){
+				$arrFieldTags .= sprintf(' %s="%s"',$strAttributeName,$strAttributeValue);
+			}
+
+			switch($arrField['type']){
+
+				case'textarea':
+					$arrFormTags['fields'] .= $resTemplate->build('textarea.tpl',$arrFieldTags).self::EOL;
+					break;
+
+				case'select':
+
+					$arrFieldTags['options'] = self::EOL;
+					foreach($arrField['value'] as $strTitle => $strValue){
+
+						$arrOptionData = array(
+							'title' => $strTitle,
+							'value' => $strValue,
+							'attributes' => ''
+						);
+
+						$arrFieldTags['options'] .= $resTemplate->build('select-option.tpl',$arrOptionData).self::EOL;
+					}
+
+					$arrFormTags['fields'] .= $resTemplate->build('select.tpl',$arrFieldTags).self::EOL;
+					break;
+
+				default:
+
+					if(!is_null($arrField['prefix'])){
+						$arrFormTags['fields'] .= $resTemplate->build('input-prefix.tpl',$arrFieldTags).self::EOL;
+					}elseif(!is_null($arrField['suffix'])){
+						$arrFormTags['fields'] .= $resTemplate->build('input-suffix.tpl',$arrFieldTags).self::EOL;
+					}else{
+						$arrFormTags['fields'] .= $resTemplate->build('input.tpl',$arrFieldTags).self::EOL;
+					}
+
+					break;
+			}
+		}
+
+		//@todo look at buttons as the submit should always be present
+		if(!is_null($this->arrDetails['submit'])){
+			$arrFormTags['fields'] .= $resTemplate->build('button.tpl',$this->arrDetails['submit']).self::EOL;
+		}
+
+		if(!is_null($this->arrDetails['cancel'])){
+			$arrFormTags['fields'] .= $resTemplate->build('button.tpl',$this->arrDetails['cancel']).self::EOL;
+		}
+
+		$arrFormTags['fields'] .= '<!-- TwistPHP required from fields -->'.self::EOL;
+		$arrFormTags['fields'] .= $resTemplate->build('input.tpl',array('name' => 'twistphp[id]','type' => 'hidden','value' => $this->arrDetails['id'],'attributes' => '')).self::EOL;
+		$arrFormTags['fields'] .= $resTemplate->build('input.tpl',array('name' => 'twistphp[redirect_success]','type' => 'hidden','value' => '','attributes' => '')).self::EOL;
+		$arrFormTags['fields'] .= $resTemplate->build('input.tpl',array('name' => 'twistphp[redirect_cancel]','type' => 'hidden','value' => '','attributes' => '')).self::EOL;
+
+		return $resTemplate->build('form.tpl',$arrFormTags);
 	}
 
-	protected function storeField($strTitle,$strName,$strType,$intMaxLength = null,$arrAttributes = array(),$intGroupID = null){
+	protected function storeField($strTitle,$strName,$strType,$intMaxLength = null,$mxdValue = null,$arrAttributes = array(),$mxdGroupID = null){
 
 		$this->arrFields[] = array(
 			'title' => $strTitle,
@@ -115,7 +198,8 @@ class FormBuilder{
 			'type' => $strType,
 			'max-length' => $intMaxLength,
 			'attributes' => $arrAttributes,
-			'group' => $intGroupID,
+			'value' => $mxdValue,
+			'group' => $mxdGroupID,
 			'prefix' => null,
 			'suffix' => null,
 			'required' => 0,

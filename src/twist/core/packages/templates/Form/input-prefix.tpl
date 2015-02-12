@@ -1,0 +1,1 @@
+{data:prefix}<input type="{data:type}" name="{data:name}" value="{data:value}"{data:arttributes}>
