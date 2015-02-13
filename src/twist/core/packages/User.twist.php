@@ -223,6 +223,11 @@ class User extends ModuleBase{
 		$objSession->data('user-session_key',$strSessionKey);
 		$objSession->data('user-logged_in',\Twist::DateTime()->time());
 
+		$this->resCurrentUser->lastLogin($_SERVER['REMOTE_ADDR']);
+		$this->resCurrentUser->commit();
+
+		$this->intUserID = $intUserID;
+
 		if($this->framework()->setting('USER_PASSWORD_CHANGE') == true){
 
 			if($arrUserData['temp_password'] == '1'){
@@ -239,11 +244,6 @@ class User extends ModuleBase{
 
 		//Destroy the var
 		unset($objSession);
-
-		$this->resCurrentUser->lastLogin($_SERVER['REMOTE_ADDR']);
-		$this->resCurrentUser->commit();
-
-		$this->intUserID = $intUserID;
 
 		$this->afterLoginRedirect();
 	}
