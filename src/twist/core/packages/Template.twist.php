@@ -704,11 +704,18 @@ class Template extends ModuleBase{
 
 					}elseif(array_key_exists('class',$arrExtensions[$strType])){
 
-						$strClassName = $arrExtensions[$strType]['class'];
+						$strClassName = sprintf('\\%s',$arrExtensions[$strType]['class']);
 						$strFunctionName = $arrExtensions[$strType]['function'];
 
 						$objClass = new $strClassName();
 						$strReplacementData = $objClass -> $strFunctionName($strReference);
+
+					}elseif(array_key_exists('instance',$arrExtensions[$strType])){
+
+						$resClass = \TwistPHP\Instance::retrieveObject($arrExtensions[$strType]['instance']);
+						$strFunctionName = $arrExtensions[$strType]['function'];
+
+						$strReplacementData = $resClass -> $strFunctionName($strReference);
 
 					}elseif(array_key_exists('function',$arrExtensions[$strType])){
 

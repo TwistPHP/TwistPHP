@@ -50,6 +50,7 @@
 	require_once sprintf('%sFramework.twist.php',$strCoreDir);
 	require_once sprintf('%sInstance.twist.php',$strCoreDir);
 	require_once sprintf('%sRC4.twist.php',$strCoreDir);
+	require_once sprintf('%sResources.twist.php',$strCoreDir);
 	require_once sprintf('%sCore.twist.php',$strCoreDir);
 
 	$arrShadowCoreInfo = json_decode(file_get_contents(sprintf('%s/../info.json',dirname(__FILE__))),true);

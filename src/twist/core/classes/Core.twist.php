@@ -101,6 +101,10 @@
 					Twist::framework() -> module() -> extend('Template','twist-ajax',array('module' => 'AJAX','function' => 'templateExtension'));
 					Twist::framework() -> module() -> extend('Template','ajax',array('module' => 'AJAX','function' => 'templateExtension'));
 
+					//Register the framework resources handler into the template system
+					\TwistPHP\Instance::storeObject('twistCoreResources',new \TwistPHP\Resources());
+					Twist::framework() -> module() -> extend('Template','resource',array('instance' => 'twistCoreResources','function' => 'templateExtension'));
+
 					//Register all the modules that have been installed in the framework
 					Twist::framework() -> register() -> modules();
 					Twist::framework() -> register() -> interfaces();
@@ -124,11 +128,11 @@
 	            $strResourcesURI = sprintf('%score/resources/',FRAMEWORK_URI);
 
                 $arrResources = array(
-                    'arable' => sprintf('%scss/arable.min.css',$strResourcesURI),
-                    'arable-reset' => sprintf('%scss/arable-reset.min.css',$strResourcesURI),
-                    'font-awesome' => sprintf('%scss/font-awesome/css/font-awesome.min.css',$strResourcesURI),
-                    'jquery' => sprintf('%sjs/jquery-2.1.3.min.js',$strResourcesURI),
-                    'jquery-legacy' => sprintf('%sjs/jquery-1.11.2.min.js',$strResourcesURI),
+                    'arable' => sprintf('%sarable/arable.min.css',$strResourcesURI),
+                    'arable-reset' => sprintf('%sarable/arable-reset.min.css',$strResourcesURI),
+                    'font-awesome' => sprintf('%sfont-awesome/css/font-awesome.min.css',$strResourcesURI),
+                    'jquery' => sprintf('%sjquery/jquery-2.1.3.min.js',$strResourcesURI),
+                    'jquery-legacy' => sprintf('%sjquery/jquery-1.11.2.min.js',$strResourcesURI),
 	                'logo' => sprintf('%slogos/logo.png',$strResourcesURI),
 	                'logo-favicon' => sprintf('%slogos/favicon.ico',$strResourcesURI),
 	                'logo-32' => sprintf('%slogos/logo-32.ico',$strResourcesURI),
@@ -141,14 +145,15 @@
 	                'logo-1024' => sprintf('%slogos/logo-1024.ico',$strResourcesURI),
 	                'logo-large' => sprintf('%slogos/logo-512.png',$strResourcesURI),
 	                'logo-small' => sprintf('%slogos/logo-32.png',$strResourcesURI),
-                    'modernizr' => sprintf('%sjs/modernizr-2.8.3.min.js',$strResourcesURI),
-                    'rummage' => sprintf('%sjs/rummage.min.js',$strResourcesURI),
-                    'shadow-js' => sprintf('%sjs/shadow-js.min.js',$strResourcesURI),
-	                'unsemantic' => sprintf('%scss/unsemantic-grid-responsive-tablet-no-ie7.css',$strResourcesURI),
+                    'modernizr' => sprintf('%smodernizr/modernizr-2.8.3.min.js',$strResourcesURI),
+                    'rummage' => sprintf('%srummage/rummage.min.js',$strResourcesURI),
+                    'shadow-js' => sprintf('%sshadow-js/shadow-js.min.js',$strResourcesURI),
+	                'unsemantic' => sprintf('%sunsemantic/unsemantic-grid-responsive-tablet-no-ie7.css',$strResourcesURI),
 	                'resources_uri' => $strResourcesURI,
 	                'uri' => FRAMEWORK_URI
                 );
 
+	            //Integrate the basic core href tag support - legacy support
                 Twist::framework() -> module() -> extend('Template','core',$arrResources);
             }
 
