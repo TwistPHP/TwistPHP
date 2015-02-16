@@ -260,7 +260,7 @@ class UserObject{
 		$strSiteHost = \Twist::framework()->setting('SITE_HOST');
 		$strLoginURL = $this->resParentClass->loginURL();
 
-		$strEmailSubject = (is_null($this->strTempPassword)) ? sprintf('%s: Password Changed',$strSiteName) : sprintf('%s: Password Reset',$strSiteName);
+		$strEmailSubject = (is_null($this->strTempPassword)) ? sprintf('%s: Password Updated',$strSiteName) : sprintf('%s: Password Reset',$strSiteName);
 
 		$resEmail = \Twist::Email();
 		$resEmail->setSubject($strEmailSubject);
@@ -299,7 +299,7 @@ class UserObject{
 
 		$resEmail = \Twist::Email();
 
-		$strEmailSubject = sprintf('%s: Welcome',$strSiteName);
+		$strEmailSubject = sprintf('Welcome to %s',$strSiteName);
 
 		$resEmail->setSubject($strEmailSubject);
 		$resEmail->setFrom(sprintf('no-reply@%s',str_replace('www.','',$strSiteHost)));
@@ -359,7 +359,7 @@ class UserObject{
 
 			$resEmail = \Twist::Email();
 
-			$strEmailSubject = sprintf('%s: Email Verification',$strSiteName);
+			$strEmailSubject = sprintf('%s: Verify your Account',$strSiteName);
 
 			$resEmail->setSubject($strEmailSubject);
 			$resEmail->setFrom(sprintf('no-reply@%s',str_replace('www.','',$strSiteHost)));
