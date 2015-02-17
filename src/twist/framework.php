@@ -17,7 +17,7 @@
 	 *
 	 * @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
 	 * @license    https://www.gnu.org/licenses/gpl.html LGPL License
-	 * @link       http://twistphp.com
+	 * @link       https://twistphp.com
 	 *
 	 */
 

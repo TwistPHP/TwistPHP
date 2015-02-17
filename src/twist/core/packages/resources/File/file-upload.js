@@ -16,14 +16,16 @@
  *
  * @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
  * @license    https://www.gnu.org/licenses/gpl.html LGPL License
- * @link       http://twistphp.com
+ * @link       https://twistphp.com
  *
  */
 
 (
 	function( window, document ) {
-		var log = function( mxdData, strType ) {
-				if( window.console ) {
+		var debug = false,
+		log = function( mxdData, strType ) {
+				if( debug
+						&& window.console ) {
 					if( window.console[strType] ) {
 						window.console[strType]( mxdData );
 					} else if( window.console.log ) {
@@ -86,11 +88,13 @@
 							abortable: true,
 							clearoncomplete: true,
 							counter: true,
+							debug: false,
 							onabort: function() {},
 							oncompletefile: function() {},
 							oncompletequeue: function() {},
 							onerror: function() {},
-							onprogress: function() {}
+							onprogress: function() {},
+							verbose: false
 						},
 					thisUploader.showProgress = function() {
 							thisUploader.domInput.style.display = 'none';
@@ -175,7 +179,7 @@
 																	}
 																}
 
-																log( 'Uploaded ' + thisUploader.queueUploadedCount + ' files (' + prettySize( thisUploader.queueUploadedSize ) + ')', 'info' );
+																log( 'Finsihed uploading ' + thisUploader.queueUploadedCount + ' files (' + prettySize( thisUploader.queueUploadedSize ) + ')', 'info' );
 																thisUploader.queueCount = 0;
 																thisUploader.queueSize = 0;
 																thisUploader.queueUploadedCount = 0;
@@ -223,11 +227,12 @@
 										thisUploader.request.onprogress = function( e ) {
 												if( e.lengthComputable ) {
 													if( thisUploader.domProgress ) {
-														//if( thisUploader.queueCount > 1 ) {
-														//	thisUploader.domProgress.value = Math.round( ( ( e.loaded + thisUploader.queueUploadedSize ) / thisUploader.queueSize ) * 100 );
-														//} else {
-															thisUploader.domProgress.value = Math.round( ( e.loaded / e.total ) * 100 );
-														//}
+														var intPercentage = Math.round( ( e.loaded / e.total ) * 100 );
+														thisUploader.domProgress.value = intPercentage;
+
+														if( thisUploader.settings.verbose ) {
+															log( prettySize( e.loaded ) + '/' + prettySize( e.total ) + ' (' + intPercentage + '%)' );
+														}
 													}
 
 													thisUploader.settings.onprogress( resFile, e.loaded, e.total );
@@ -235,9 +240,7 @@
 											},
 										thisUploader.request.upload.onprogress = thisUploader.request.onprogress,
 										thisUploader.request.addEventListener( 'load',
-											function() {
-												//alert( 'LOADED' );
-											}, false
+											function() {}, false
 										),
 										thisUploader.request.addEventListener( 'error',
 											function() {
@@ -290,6 +293,8 @@
 					for( var strSetting in objSettings ) {
 						thisUploader.settings[strSetting] = objSettings[strSetting];
 					}
+
+					debug = ( thisUploader.settings.debug == true );
 
 					if( thisUploader.domCountWrapper
 							&& !thisUploader.settings.counter ) {

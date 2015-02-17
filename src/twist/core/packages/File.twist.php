@@ -672,16 +672,15 @@ class File extends ModuleBase{
 			$arrTempParams = explode(',',$strReference);
 			$arrParams['reference'] = $arrTempParams[0];
 
-			if(count($arrTempParams) == 2){
-				$arrParams['name'] = $arrTempParams[1];
-			}elseif(count($arrTempParams) == 3){
-				$arrParams['name'] = $arrTempParams[1];
-				$arrParams['multiple'] = $arrTempParams[2];
-			}elseif(count($arrTempParams) == 4){
-				$arrParams['name'] = $arrTempParams[1];
-				$arrParams['multiple'] = $arrTempParams[2];
-				$arrParams['id'] = $arrTempParams[3];
-			}
+			if(count($arrTempParams) > 1) {
+                $arrParams['name'] = $arrTempParams[1];
+                if(count($arrTempParams) > 2) {
+                    $arrParams['multiple'] = $arrTempParams[2];
+                    if(count($arrTempParams) > 3) {
+                        $arrParams['id'] = $arrTempParams[3];
+                    }
+                }
+            }
 		}
 
 		switch($arrParams['reference']){
@@ -694,7 +693,7 @@ class File extends ModuleBase{
 					'name' => $arrParams['name'],
 					'type' => ($arrParams['reference'] == 'asset-upload') ? 'asset' : 'file',
 					'include-js' => (is_null(\Twist::Cache()->retrieve('asset-js-include'))) ? 1 : 0,
-					'multiple' => ($arrParams['multiple'] == 1 || $arrParams['multiple'] == 'true') ? 1 : 0,
+					'multiple' => ($arrParams['multiple'] == 1 || $arrParams['multiple'] == 'true') ? 1 : 0
 				);
 
 				//Store a temp session for js output
@@ -711,6 +710,7 @@ class File extends ModuleBase{
 					'name' => $arrParams['name'],
 					'type' => ($arrParams['reference'] == 'asset-upload-html') ? 'asset' : 'file',
 					'include-js' => (is_null(\Twist::Cache()->retrieve('asset-js-include'))) ? 1 : 0,
+                    'multiple' => ($arrParams['multiple'] == 1 || $arrParams['multiple'] == 'true') ? 1 : 0
 				);
 
 				//Store a temp session for js output
@@ -725,7 +725,7 @@ class File extends ModuleBase{
 				$arrTags = array(
 					'uniqid' => $arrParams['id'],
 					'name' => $arrParams['name'],
-					'type' => ($arrParams['reference'] == 'asset-upload-init') ? 'asset' : 'file',
+					'type' => ($arrParams['reference'] == 'asset-upload-init') ? 'asset' : 'file'
 				);
 
 				$strOut = $this->resTemplate->build('upload-init.tpl',$arrTags);
