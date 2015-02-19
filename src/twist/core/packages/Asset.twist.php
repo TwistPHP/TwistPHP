@@ -496,6 +496,29 @@
 		}
 
 		/**
+		 * Import an asset into the system (utilises 'add' to store the asset once uploaded), the asset type will be detected automatically. An asset group must be provided.
+		 *
+		 * @related add
+		 * @param $mxdFile A filepath or URL to import
+		 * @param $intGroupID Initial group for the asset to be added
+		 * @param $strTitle Title of the asset
+		 * @param $strDescription Description for the asset
+		 * @param $blActive Default status of the asset once created in the system
+		 * @return int Returns the ID of the newly uploaded/added asset
+		 */
+
+		public function import($mxdFile,$intGroupID,$strTitle='',$strDescription='',$blActive=true){
+
+			$strTempFile = tempnam(sys_get_temp_dir(), 'asset-import');
+			file_get_contents($strTempFile,$mxdFile);
+
+			//Store the file as an asset
+			$intOut = $this->add($mxdFile,$intGroupID,$strTitle,$strDescription,$blActive);
+
+			return $intOut;
+		}
+
+		/**
 		 * Edit the title and description of an asset by its asset ID
 		 *
 		 * @param $intAssetID ID of the asset to be updated
