@@ -57,21 +57,25 @@ CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`users` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `user_data_fields`
+--
+
+CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`user_data_fields` (
+  `id` int(11) DEFAULT NULL,
+  `slug` char(64) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `user_data`
 --
 
 CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`user_data` (
   `user_id` int(11) NOT NULL,
-  `address_line1` char(255) COLLATE utf8_unicode_ci NOT NULL,
-  `address_line2` char(255) COLLATE utf8_unicode_ci NOT NULL,
-  `city` char(255) COLLATE utf8_unicode_ci NOT NULL,
-  `company_name` char(255) COLLATE utf8_unicode_ci NOT NULL,
-  `country_iso` char(2) COLLATE utf8_unicode_ci NOT NULL,
-  `phone` char(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `postcode` char(32) COLLATE utf8_unicode_ci NOT NULL,
-  `region` char(255) COLLATE utf8_unicode_ci NOT NULL,
-  `email_optin` enum('1','0') COLLATE utf8_unicode_ci NOT NULL DEFAULT '1',
-  UNIQUE KEY `user_id` (`user_id`)
+  `field_id` int(11) NOT NULL,
+  `data` text COLLATE utf8_unicode_ci,
+  UNIQUE KEY `user_id` (`user_id`,`field_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------

@@ -24,3 +24,17 @@
 
 -- @comment Fix the broken icons in the asset package
 UPDATE /*TABLE_PREFIX*/`asset_types` SET `icon` = `image.png` WHERE `icon` = 'photo.png';
+
+RENAME TABLE /*TABLE_PREFIX*/`user_data` TO /*TABLE_PREFIX*/`user_data_deprecated`;
+
+CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`user_data_fields` (
+  `id` int(11) DEFAULT NULL,
+  `slug` char(64) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`user_data` (
+  `user_id` int(11) NOT NULL,
+  `field_id` int(11) NOT NULL,
+  `data` text COLLATE utf8_unicode_ci,
+  UNIQUE KEY `user_id` (`user_id`,`field_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
