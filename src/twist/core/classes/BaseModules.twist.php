@@ -38,6 +38,11 @@
 				return $resTwistModule;
 			}
 
+			/**
+			 * @deprecated
+			 */
+			public static function Template(){ return parent::View( count(func_get_args()) ? func_get_arg(0) : 'twist' ); }
+
 			public static function framework(){ return parent::framework(); }
 			public static function AJAX(){ return parent::AJAX(); }
 			public static function Archive(){ return parent::Archive(); }
@@ -56,10 +61,10 @@
 			public static function Localisation(){ return parent::Localisation(); }
 			public static function Route(){ return parent::Route( count(func_get_args()) ? func_get_arg(0) : 'twist' ); }
 			public static function Session(){ return parent::Session(); }
-			public static function Template(){ return parent::Template( count(func_get_args()) ? func_get_arg(0) : 'twist' ); }
 			public static function Timer(){ return parent::Timer( count(func_get_args()) ? func_get_arg(0) : 'twist' ); }
 			public static function User(){ return parent::User(); }
 			public static function Validate(){ return parent::Validate(); }
+			public static function View(){ return parent::View( count(func_get_args()) ? func_get_arg(0) : 'twist' ); }
 			public static function XML(){ return parent::XML(); }
 
 			public static function Amazon(){

@@ -100,7 +100,7 @@
 		 * @param $strReference
 		 * @return mixed|string
 		 */
-		public function templateExtension($strReference){
+		public function viewExtension($strReference){
 
 			$strOut = '';
 			$arrParams = array();

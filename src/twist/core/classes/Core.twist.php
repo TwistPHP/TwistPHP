@@ -50,7 +50,7 @@
 					$strLocation = rtrim(Twist::framework() -> setting('SITE_BASE'),'/');
 
 					Twist::define('DIR_CACHE',sprintf('%s/%scache/',rtrim(DIR_BASE,'/'),($strLocation == '') ? '' : $strLocation.'/'));
-					Twist::define('DIR_TEMPLATES',sprintf('%s/%stemplates/',rtrim(DIR_BASE,'/'),($strLocation == '') ? '' : $strLocation.'/'));
+					Twist::define('DIR_VIEWS',sprintf('%s/%sviews/',rtrim(DIR_BASE,'/'),($strLocation == '') ? '' : $strLocation.'/'));
 
 					require_once sprintf('%sError.twist.php',DIR_FRAMEWORK_CLASSES);
 
@@ -87,23 +87,23 @@
 					Twist::framework() -> module() -> create('Localisation',false,null,null,'TwistPackage');
 					Twist::framework() -> module() -> create('Route',false,null,null,'TwistRoute');
 					Twist::framework() -> module() -> create('Session',false,null,null,'TwistPackage');
-					Twist::framework() -> module() -> create('Template',true,null,null,'TwistPackage');
 					Twist::framework() -> module() -> create('User',false,null,null,'TwistPackage');
 					Twist::framework() -> module() -> create('Validate',false,null,null,'TwistPackage');
+					Twist::framework() -> module() -> create('View',true,null,null,'TwistPackage');
 					Twist::framework() -> module() -> create('XML',false,null,null,'TwistPackage');
 
 					//Register the default PHP package extensions
-					Twist::framework() -> module() -> extend('Template','asset',array('module' => 'Asset','function' => 'templateExtension'));
-					Twist::framework() -> module() -> extend('Template','file',array('module' => 'File','function' => 'templateExtension'));
-					Twist::framework() -> module() -> extend('Template','image',array('module' => 'Image','function' => 'templateExtension'));
-					Twist::framework() -> module() -> extend('Template','session',array('module' => 'Session','function' => 'templateExtension'));
-					Twist::framework() -> module() -> extend('Template','user',array('module' => 'User','function' => 'templateExtension'));
-					Twist::framework() -> module() -> extend('Template','twist-ajax',array('module' => 'AJAX','function' => 'templateExtension'));
-					Twist::framework() -> module() -> extend('Template','ajax',array('module' => 'AJAX','function' => 'templateExtension'));
+					Twist::framework() -> module() -> extend('View','asset',array('module' => 'Asset','function' => 'viewExtension'));
+					Twist::framework() -> module() -> extend('View','file',array('module' => 'File','function' => 'viewExtension'));
+					Twist::framework() -> module() -> extend('View','image',array('module' => 'Image','function' => 'viewExtension'));
+					Twist::framework() -> module() -> extend('View','session',array('module' => 'Session','function' => 'viewExtension'));
+					Twist::framework() -> module() -> extend('View','user',array('module' => 'User','function' => 'viewExtension'));
+					Twist::framework() -> module() -> extend('View','twist-ajax',array('module' => 'AJAX','function' => 'viewExtension'));
+					Twist::framework() -> module() -> extend('View','ajax',array('module' => 'AJAX','function' => 'viewExtension'));
 
 					//Register the framework resources handler into the template system
 					\TwistPHP\Instance::storeObject('twistCoreResources',new \TwistPHP\Resources());
-					Twist::framework() -> module() -> extend('Template','resource',array('instance' => 'twistCoreResources','function' => 'templateExtension'));
+					Twist::framework() -> module() -> extend('View','resource',array('instance' => 'twistCoreResources','function' => 'viewExtension'));
 
 					//Register all the modules that have been installed in the framework
 					Twist::framework() -> register() -> modules();

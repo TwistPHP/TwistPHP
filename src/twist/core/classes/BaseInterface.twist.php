@@ -39,8 +39,8 @@
 			$this->resRoute = \Twist::Route($this->strInterfaceKey);
 			$this->resRoute->interfaceURI($this->strInterfaceKey);
 
-			$this->resRoute->setTemplatesDirectory(sprintf('%s/%s/templates/',rtrim(DIR_FRAMEWORK_INTERFACES,'/'),$this->strInterfaceKey));
-			$this->resRoute->setElementsDirectory(sprintf('%s/%s/templates/',rtrim(DIR_FRAMEWORK_INTERFACES,'/'),$this->strInterfaceKey));
+			$this->resRoute->setTemplatesDirectory(sprintf('%s/%s/views/',rtrim(DIR_FRAMEWORK_INTERFACES,'/'),$this->strInterfaceKey));
+			$this->resRoute->setElementsDirectory(sprintf('%s/%s/views/',rtrim(DIR_FRAMEWORK_INTERFACES,'/'),$this->strInterfaceKey));
 			$this->resRoute->setControllerDirectory(sprintf('%s/%s/controllers/',rtrim(DIR_FRAMEWORK_INTERFACES,'/'),$this->strInterfaceKey));
 		}
 

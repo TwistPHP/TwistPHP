@@ -39,7 +39,7 @@ final class Resources{
 	 * @param $strReference
 	 * @return string
 	 */
-	public function templateExtension($strReference){
+	public function viewExtension($strReference){
 
 		$strOut = '';
 		$arrParts = (strstr($strReference,',')) ? explode(',',$strReference) : array(0 => $strReference,1 => null);

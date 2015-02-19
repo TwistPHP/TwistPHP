@@ -53,7 +53,7 @@ class Setup extends BaseController{
 
 		file_put_contents($dirHTaccessFile,"# TWISTPHP\nRewriteEngine on\n# Routes Rewrite to allow for dynamic pages\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteCond %{REQUEST_FILENAME} !-d\nRewriteRule ^(.*)$ index.php [L,QSA]\n# /TWISTPHP");
 
-		return \Twist::Template()->build('pages/welcome.tpl');
+		return \Twist::View()->build('pages/welcome.tpl');
 	}
 
 	public function licence(){
@@ -63,7 +63,7 @@ class Setup extends BaseController{
 
 		$arrTags = array('licence' => $strLicenceText);
 
-		return \Twist::Template()->build('pages/licence.tpl',$arrTags);
+		return \Twist::View()->build('pages/licence.tpl',$arrTags);
 	}
 
 	public function checks(){
@@ -94,7 +94,7 @@ class Setup extends BaseController{
 
 		\Twist::Session()->data('twist-setup',$arrSession);
 
-		return \Twist::Template()->build('pages/checks.tpl',$arrChecks);
+		return \Twist::View()->build('pages/checks.tpl',$arrChecks);
 	}
 
 	public function database(){
@@ -113,7 +113,7 @@ class Setup extends BaseController{
 			\Twist::Session()->data('twist-setup',$arrSession);
 		}
 
-		return \Twist::Template()->build('pages/database.tpl',$arrTags);
+		return \Twist::View()->build('pages/database.tpl',$arrTags);
 	}
 
 	public function settings(){
@@ -172,7 +172,7 @@ class Setup extends BaseController{
 			\Twist::Session()->data('twist-setup',$arrSession);
 		}
 
-		return \Twist::Template()->build('pages/settings.tpl',$arrTags);
+		return \Twist::View()->build('pages/settings.tpl',$arrTags);
 	}
 
 	public function user(){
@@ -213,7 +213,7 @@ class Setup extends BaseController{
 			\Twist::Session()->data('twist-setup',$arrSession);
 		}
 
-		return \Twist::Template()->build('pages/user.tpl',$arrTags);
+		return \Twist::View()->build('pages/user.tpl',$arrTags);
 	}
 
 	public function interfaces(){
@@ -266,11 +266,11 @@ class Setup extends BaseController{
 				$arrEachInterface['checked'] = ($arrEachInterface['name'] == 'Manager' && $arrEachInterface['repository'] == 'twistphp') ? ' checked' : '';
 				$arrEachInterface['recommended'] = ($arrEachInterface['name'] == 'Manager' && $arrEachInterface['repository'] == 'twistphp') ? ' (Recommended)' : '';
 
-				$arrTags['interfaces'] .= \Twist::Template()->build('components/interface-each.tpl',$arrEachInterface);
+				$arrTags['interfaces'] .= \Twist::View()->build('components/interface-each.tpl',$arrEachInterface);
 			}
 		}
 
-		return \Twist::Template()->build('pages/interfaces.tpl',$arrTags);
+		return \Twist::View()->build('pages/interfaces.tpl',$arrTags);
 	}
 
 	public function finish(){
@@ -289,7 +289,7 @@ class Setup extends BaseController{
 			'database_table_prefix' => $arrSession['database']['details']['table_prefix'],
 		);
 
-		file_put_contents(sprintf('%s/config/config.php',DIR_FRAMEWORK),\Twist::Template()->build('config.tpl',$arrConfigTags));
+		file_put_contents(sprintf('%s/config/config.php',DIR_FRAMEWORK),\Twist::View()->build('config.tpl',$arrConfigTags));
 
 		if($arrSession['database']['details']['type'] == 'database'){
 
@@ -362,14 +362,14 @@ class Setup extends BaseController{
 			'serve' => 'Twist::Route() -> serve();'
 		);
 
-		file_put_contents($dirIndexFile,\Twist::Template()->build(sprintf('%s/default-index.tpl',DIR_FRAMEWORK_TEMPLATES),$arrIndexTags));
+		file_put_contents($dirIndexFile,\Twist::View()->build(sprintf('%s/default-index.tpl',DIR_FRAMEWORK_VIEWS),$arrIndexTags));
 
 		/**
 		 * Update the .htaccess file to be a TwistPHP htaccess file
 		 */
 		$dirHTaccessFile = sprintf('%s/.htaccess',DIR_BASE);
-		file_put_contents($dirHTaccessFile,\Twist::Template()->build(sprintf('%s/default-htaccess.tpl',DIR_FRAMEWORK_TEMPLATES)));
+		file_put_contents($dirHTaccessFile,\Twist::View()->build(sprintf('%s/default-htaccess.tpl',DIR_FRAMEWORK_VIEWS)));
 
-		return \Twist::Template()->build('pages/finish.tpl');
+		return \Twist::View()->build('pages/finish.tpl');
 	}
 }

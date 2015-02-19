@@ -140,7 +140,7 @@
 			}
 		}
 
-		public function templateExtension($strReference){
+		public function viewExtension($strReference){
 
 			$strData = '';
 

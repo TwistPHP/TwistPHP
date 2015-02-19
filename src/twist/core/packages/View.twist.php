@@ -26,175 +26,212 @@ use TwistPHP\ModuleBase;
 use TwistPHP\Instance;
 
 /**
- * Bring HTML to life with conditional template tags, allowing interaction with PHP without using PHP code. Include functionality of additional templates in just a fue chars
+ * Bring HTML to life with conditional tags, allowing interaction with PHP without using PHP code. Include functionality of additional views in just a fue chars
  */
-class Template extends ModuleBase{
+class View extends ModuleBase{
 
     protected $strInstanceKey = '';
-    protected $dirTemplates = '';
+    protected $dirViews = '';
     protected $dirElements = '';
     protected $arrElementData = array();
     protected $arrElementParams = array();
-    protected $dirCurrentTemplate = null;
+    protected $dirCurrentView = null;
 
     public function __construct($strInstanceKey){
         $this->strInstanceKey = $strInstanceKey;
-        $this->setTemplatesDirectory();
+        $this->setDirectory();
         $this->setElementsDirectory();
     }
 
+	/**
+	 * @deprecated
+	 * @alias get
+	 */
+	protected function getTemplateFile($strTemplate){
+		return $this->get($strTemplate);
+	}
+
+	/**
+	 * @deprecated
+	 * @alias setViewsDirectory
+	 */
+	public function setTemplatesDirectory($dirCustomTemplates = null){
+		$this->setDirectory($dirCustomTemplates);
+	}
+
+	/**
+	 * @deprecated
+	 * @alias getDirectory
+	 */
+	public function getTemplatesDirectory(){
+		return $this->dirViews;
+	}
+
+	/**
+	 * @deprecated
+	 * Set the element directory to the default or provide a new directory
+	 * @param $dirCustomElements Path to a custom elements directory
+	 */
+	public function setElementsDirectory($dirCustomElements = null){
+		$this->dirElements = (is_null($dirCustomElements)) ? $this->dirViews : $dirCustomElements;
+	}
+
+	/**
+	 * @deprecated
+	 * Get the current element directory/path that is in use by the template package
+	 * @return directory Returns the current element path
+	 */
+	public function getElementsDirectory(){
+		return $this->dirElements;
+	}
+
+	/**
+	 * @deprecated
+	 * @alias getTags
+	 */
+	public function getTemplateTags($strTemplate,$blIsFile = true,$blDiscover = false){
+		return $this->getTags($strTemplate,$blIsFile,$blDiscover);
+	}
+
+
+
+
     /**
-     * Kills the current instance of the template class, help to keep your RAM free
+     * Kills the current instance of the View class, help to keep your RAM free
      */
     public function kill(){
-        Instance::removeObject(($this->strInstanceKey == 'twist') ? 'pkgTemplate' : sprintf('pkgTemplate-%s',$this->strInstanceKey));
+        Instance::removeObject(($this->strInstanceKey == 'twist') ? 'pkgView' : sprintf('pkgView-%s',$this->strInstanceKey));
     }
 
     /**
-     * Set the template directory to default or provide a new directory
-     * @param $dirCustomTemplates Path to a custom template directory
+     * Set the View directory to default or provide a new directory
+     * @param $dirCustomViews Path to a custom View directory
      */
-    public function setTemplatesDirectory($dirCustomTemplates = null){
-        $this->dirTemplates = (is_null($dirCustomTemplates)) ? DIR_TEMPLATES : $dirCustomTemplates;
+    public function setDirectory($dirCustomViews = null){
+        $this->dirViews = (is_null($dirCustomViews)) ? DIR_VIEWS : $dirCustomViews;
     }
 
-    /**
-     * Set the element directory to the default or provide a new directory
-     * @param $dirCustomElements Path to a custom elements directory
-     */
-    public function setElementsDirectory($dirCustomElements = null){
-	    $this->dirElements = (is_null($dirCustomElements)) ? $this->dirTemplates : $dirCustomElements;
-    }
+	/**
+	 * Get the current View directory/path that is in use by the View package
+	 * @return directory Returns the current View path
+	 */
+	public function getDirectory(){
+		return $this->dirViews;
+	}
 
     /**
-     * Get the current template directory/path that is in use by the template package
-     * @return directory Returns the current template path
-     */
-    public function getTemplatesDirectory(){
-        return $this->dirTemplates;
-    }
-
-    /**
-     * Get the current element directory/path that is in use by the template package
-     * @return directory Returns the current element path
-     */
-    public function getElementsDirectory(){
-        return $this->dirElements;
-    }
-
-    /**
-     * Build the template with the array of tags supplied
+     * Build the View with the array of tags supplied
      *
-     * @param $dirTemplate
-     * @param $arrTemplateTags
+     * @param $dirView
+     * @param $arrViewTags
      * @param $blRemoveUnusedTags
      * @return string
      */
-    public function build($dirTemplate,$arrTemplateTags = null,$blRemoveUnusedTags = false) {
+    public function build($dirView,$arrViewTags = null,$blRemoveUnusedTags = false) {
 
-        $strTemplateDataOut = null;
-        $this->validDataTags($arrTemplateTags);
-	    $this->dirCurrentTemplate = $dirTemplate;
+        $strViewDataOut = null;
+        $this->validDataTags($arrViewTags);
+	    $this->dirCurrentView = $dirView;
 
-	    $dirFullTemplatePath = (!is_file($dirTemplate)) ? sprintf("%s%s",$this->dirTemplates,$dirTemplate) : $dirTemplate;
-		$strCacheKey = str_replace(array(BASE_LOCATION,'twist/interfaces','twist/core'),array('','twist-interface','twist-core'),$dirFullTemplatePath);
-		$arrTemplateData = \Twist::Cache('pkgTemplate')->retrieve($strCacheKey);
+	    $dirFullViewPath = (!is_file($dirView)) ? sprintf("%s%s",$this->dirViews,$dirView) : $dirView;
+		$strCacheKey = str_replace(array(BASE_LOCATION,'twist/interfaces','twist/core'),array('','twist-interface','twist-core'),$dirFullViewPath);
+		$arrViewData = \Twist::Cache('pkgView')->retrieve($strCacheKey);
 
 	    //Detect if the file has changed, if changed remove cache and rebuild
-	    if(!is_null($arrTemplateData) && $arrTemplateData['html_hash'] !== \Twist::File()->hash($dirFullTemplatePath,'md5')){
-		    \Twist::Cache('pkgTemplate')->remove($strCacheKey);
-		    $arrTemplateData = null;
+	    if(!is_null($arrViewData) && $arrViewData['html_hash'] !== \Twist::File()->hash($dirFullViewPath,'md5')){
+		    \Twist::Cache('pkgView')->remove($strCacheKey);
+		    $arrViewData = null;
 	    }
 
-	    if(is_null($arrTemplateData)){
-		    $arrTemplateData = array();
+	    if(is_null($arrViewData)){
+		    $arrViewData = array();
 
-		    $arrTemplateData['html_raw'] = $this->getTemplateFile($dirFullTemplatePath);
-		    $arrTemplateData['html_hash'] = \Twist::File()->hash($dirFullTemplatePath,'md5');
-		    $arrTemplateData['tags'] = $this->getTemplateTags($arrTemplateData['html_raw'],false);
+		    $arrViewData['html_raw'] = $this->get($dirFullViewPath);
+		    $arrViewData['html_hash'] = \Twist::File()->hash($dirFullViewPath,'md5');
+		    $arrViewData['tags'] = $this->getTags($arrViewData['html_raw'],false);
 
-		    \Twist::Cache('pkgTemplate')->store($strCacheKey,$arrTemplateData,$this->framework()->setting('TEMPLATE_PRE_PROCESS_CACHE'));
+		    \Twist::Cache('pkgView')->store($strCacheKey,$arrViewData,$this->framework()->setting('TEMPLATE_PRE_PROCESS_CACHE'));
 	    }
 
-        foreach($arrTemplateData['tags'] as $strEachTag){
-	        $arrTemplateData['html_raw'] = $this->processTag($arrTemplateData['html_raw'],$strEachTag,$arrTemplateTags);
+        foreach($arrViewData['tags'] as $strEachTag){
+	        $arrViewData['html_raw'] = $this->processTag($arrViewData['html_raw'],$strEachTag,$arrViewTags);
         }
 
-        //Remove all un-used template tags
+        //Remove all un-used View tags
         if($blRemoveUnusedTags){
-	        $arrTemplateData['html_raw'] = $this->removeUnusedTags($arrTemplateData['html_raw']);
+	        $arrViewData['html_raw'] = $this->removeUnusedTags($arrViewData['html_raw']);
         }
 
         if($this->framework() -> setting('DEVELOPMENT_MODE')){
-            $this->framework() -> debug() -> log('Template','usage',array('instance' => $this->strInstanceKey,'file' => $dirTemplate,'tags' => $arrTemplateData['tags']));
+            $this->framework() -> debug() -> log('View','usage',array('instance' => $this->strInstanceKey,'file' => $dirView,'tags' => $arrViewData['tags']));
         }
 
-        //$this->arrStats[] = array('file' => $strTemplate,'tags' => $arrLiveTags);
-        //$this->arrStats[] = array('file' => $strTemplate,'tags' => $arrLiveTags,'data' => $arrTemplateTags);
+        //$this->arrStats[] = array('file' => $strView,'tags' => $arrLiveTags);
+        //$this->arrStats[] = array('file' => $strView,'tags' => $arrLiveTags,'data' => $arrViewTags);
 
-        return $arrTemplateData['html_raw'];
+        return $arrViewData['html_raw'];
     }
 
     /**
-     * Replace tags in raw template data with the array of tags supplied
+     * Replace tags in raw View data with the array of tags supplied
      *
-     * @param $strRawTemplateData
-     * @param $arrTemplateTags
+     * @param $strRawViewData
+     * @param $arrViewTags
      * @param $blRemoveUnusedTags
      * @return string
      */
-    public function replace($strRawTemplateData,$arrTemplateTags = null,$blRemoveUnusedTags = false) {
+    public function replace($strRawViewData,$arrViewTags = null,$blRemoveUnusedTags = false) {
 
-        $strTemplateDataOut = null;
-        $this->validDataTags($arrTemplateTags);
-	    $this->dirCurrentTemplate = null;
+        $strViewDataOut = null;
+        $this->validDataTags($arrViewTags);
+	    $this->dirCurrentView = null;
 
-        //Check that the raw template data is not null or blank
-        if(!is_null($strRawTemplateData) && $strRawTemplateData != ''){
+        //Check that the raw View data is not null or blank
+        if(!is_null($strRawViewData) && $strRawViewData != ''){
 
-            $arrLiveTags = $this->getTemplateTags($strRawTemplateData,false);
+            $arrLiveTags = $this->getTags($strRawViewData,false);
 
             foreach($arrLiveTags as $strEachTag){
-                $strRawTemplateData = $this->processTag($strRawTemplateData,$strEachTag,$arrTemplateTags);
+                $strRawViewData = $this->processTag($strRawViewData,$strEachTag,$arrViewTags);
             }
 
-            //No tags found, return raw template data
-            $strTemplateDataOut = $strRawTemplateData;
+            //No tags found, return raw View data
+            $strViewDataOut = $strRawViewData;
 
-            //Remove all un-used template tags
+            //Remove all un-used View tags
             if($blRemoveUnusedTags){
-                $strTemplateDataOut = $this->removeUnusedTags($strTemplateDataOut);
+                $strViewDataOut = $this->removeUnusedTags($strViewDataOut);
             }
 
         }else{
 
-            throw new \Exception('Raw template data is empty.');
+            throw new \Exception('Raw View data is empty.');
         }
 
-        return $strTemplateDataOut;
+        return $strViewDataOut;
     }
 
     /**
-     * Get all the tags of a given template and return them as an array
+     * Get all the tags of a given View and return them as an array
      *
-     * @param $strTemplate
+     * @param $strView
      * @param $blIsFile
      * @param $blDiscover
      * @return array
      */
-    public function getTemplateTags($strTemplate,$blIsFile = true,$blDiscover = false){
+    public function getTags($strView,$blIsFile = true,$blDiscover = false){
 
         $arrOut = array();
 
-        //Get the raw template data
-        $strRawTemplateData = ($blIsFile) ? $this->getTemplateFile($strTemplate) : $strTemplate;
+        //Get the raw View data
+        $strRawViewData = ($blIsFile) ? $this->get($strView) : $strView;
 
-        //Grab all the tags out of the template
-        preg_match_all("#\{([^\{\}\n]+)\}#i",$strRawTemplateData,$arrTemplateTags);
+        //Grab all the tags out of the View
+        preg_match_all("#\{([^\{\}\n]+)\}#i",$strRawViewData,$arrViewTags);
 
         //Check their is an array of tags before returning them
-        if(is_array($arrTemplateTags) && count($arrTemplateTags) > 0){
-            $arrOut = $arrTemplateTags[1];
+        if(is_array($arrViewTags) && count($arrViewTags) > 0){
+            $arrOut = $arrViewTags[1];
         }
 
         //If Discovery mode is enabled, we can run through the conditional tags and pick out more tags
@@ -223,83 +260,83 @@ class Template extends ModuleBase{
     }
 
     /**
-     * Removes all tags that remain in the template after use
+     * Removes all tags that remain in the View after use
      *
-     * @param $strTemplateData
+     * @param $strViewData
      * @return string
      */
-    public function removeUnusedTags($strTemplateData){
+    public function removeUnusedTags($strViewData){
 
         $arrTags = array();
-        $arrTemplateTags = $this->getTemplateTags($strTemplateData,false);
+        $arrViewTags = $this->getTags($strViewData,false);
 
-        if(is_array($arrTemplateTags) && count($arrTemplateTags) > 0){
+        if(is_array($arrViewTags) && count($arrViewTags) > 0){
 
-            foreach($arrTemplateTags as $strTag){
-                $strTemplateData = $this->replaceTag($strTemplateData,$strTag,'');
+            foreach($arrViewTags as $strTag){
+                $strViewData = $this->replaceTag($strViewData,$strTag,'');
             }
         }
 
-        return $strTemplateData;
+        return $strViewData;
     }
-
+	
     /**
-     * Get the raw template data form teh template file
+     * Get the raw View data form the View file
      *
-     * @param $strTemplateFullPath
+     * @param $strViewFullPath
      * @return string
      */
-    protected function getTemplateFile($strTemplate){
+    protected function get($strView){
 
-        $strRawTemplateDataOut = null;
+        $strRawViewDataOut = null;
 
-        if(!is_file($strTemplate)){
-            //Try using the designated template directory
-            $strTemplate = sprintf("%s%s",$this->dirTemplates,$strTemplate);
+        if(!is_file($strView)){
+            //Try using the designated View directory
+            $strView = sprintf("%s%s",$this->dirViews,$strView);
         }
 
-        //Check to see if the template file exists
-        if(is_file($strTemplate)){
+        //Check to see if the View file exists
+        if(is_file($strView)){
 
-            if(filesize($strTemplate)){
+            if(filesize($strView)){
 
-                if($this -> framework() -> setting('TEMPLATE_BASE_OVERRIDE') || strstr(realpath($strTemplate),BASE_LOCATION)){
-                    $strRawTemplateDataOut = file_get_contents($strTemplate);
+                if($this -> framework() -> setting('TEMPLATE_BASE_OVERRIDE') || strstr(realpath($strView),BASE_LOCATION)){
+                    $strRawViewDataOut = file_get_contents($strView);
                 }else{
-                    throw new \Exception(sprintf("Template file '%s' is outside of your Document Root.",$strTemplate),11107);
+                    throw new \Exception(sprintf("View file '%s' is outside of your Document Root.",$strView),11107);
                 }
             }else{
-                $strRawTemplateDataOut = '';
-                trigger_error(sprintf("Twist [11101]: Template file '%s' contains no data.",$strTemplate), E_USER_NOTICE);
-                //throw new \Exception(sprintf("Template file '%s' contains no data.",$strTemplate),11101);
+                $strRawViewDataOut = '';
+                trigger_error(sprintf("Twist [11101]: View file '%s' contains no data.",$strView), E_USER_NOTICE);
+                //throw new \Exception(sprintf("View file '%s' contains no data.",$strView),11101);
             }
         }else{
-            throw new \Exception(sprintf("Template file '%s' was not found or does not exist.",$strTemplate),11102);
+            throw new \Exception(sprintf("View file '%s' was not found or does not exist.",$strView),11102);
         }
 
-        return $strRawTemplateDataOut;
+        return $strRawViewDataOut;
     }
 
     /**
-     * Decide weather the template data tags are valid or not
+     * Decide weather the View data tags are valid or not
      *
-     * @param $arrTemplateTags
+     * @param $arrViewTags
      * @return boolean
      */
-    protected function validDataTags($arrTemplateTags){
+    protected function validDataTags($arrViewTags){
 
         $blOut = false;
 
         //Check to see if the tags are set to null
-        if(is_null($arrTemplateTags)){
+        if(is_null($arrViewTags)){
             $blOut = true;
         }else{
 
             //If the tags contain an array then they can be used
-            if(is_array($arrTemplateTags)){
+            if(is_array($arrViewTags)){
                 $blOut = true;
             }else{
-                throw new \Exception('Template tags are an invalid format, must be and array or null.',11103);
+                throw new \Exception('View tags are an invalid format, must be and array or null.',11103);
             }
         }
 
@@ -307,14 +344,14 @@ class Template extends ModuleBase{
     }
 
     /**
-     * Process each individual tag from the template one by one
+     * Process each individual tag from the View one by one
      *
-     * @param $strRawTemplate
+     * @param $strRawView
      * @param $strTag
      * @param $arrData
      * @return mixed
      */
-    protected function processTag($strRawTemplate,$strTag,$arrData = array()){
+    protected function processTag($strRawView,$strTag,$arrData = array()){
 
         if(strstr($strTag,':')){
 
@@ -416,7 +453,7 @@ class Template extends ModuleBase{
 
                 if($arrResults[5][($blOut)?0:1] != ''){
                     $arrTagParts = explode(':',$arrResults[5][($blOut)?0:1]);
-                    $strRawTemplate = $this->runTags($strRawTemplate,$strTag,$arrTagParts[0],$arrTagParts[1],$arrData);
+                    $strRawView = $this->runTags($strRawView,$strTag,$arrTagParts[0],$arrTagParts[1],$arrData);
                 }else{
                     $intConditionResult = ($blOut)?0:1;
 
@@ -430,7 +467,7 @@ class Template extends ModuleBase{
                         $strOut = '';
                     }
 
-                    $strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$strOut);
+                    $strRawView = $this->replaceTag($strRawView,$strTag,$strOut);
                 }
 
             }else{
@@ -443,11 +480,11 @@ class Template extends ModuleBase{
                 unset($arrTagParts[0]);
                 $strReference = implode(':',$arrTagParts);
 
-                $strRawTemplate = $this->runTags($strRawTemplate,$strTag,$strType,$strReference,$arrData);
+                $strRawView = $this->runTags($strRawView,$strTag,$strType,$strReference,$arrData);
             }
         }
 
-        return $strRawTemplate;
+        return $strRawView;
     }
 
     /**
@@ -547,16 +584,16 @@ class Template extends ModuleBase{
     }
 
 	/**
-	 * Run the tag processing on each tag that was found in the template and process them accordingly (Snipit module is required to process multi-dimensional tag arrays)
+	 * Run the tag processing on each tag that was found in the View and process them accordingly (Snipit module is required to process multi-dimensional tag arrays)
 	 *
-	 * @param $strRawTemplate
+	 * @param $strRawView
 	 * @param $strTag
 	 * @param $strType
 	 * @param $strReference
 	 * @param $arrData
 	 * @return mixed
 	 */
-	public function runTags($strRawTemplate,$strTag,$strType,$strReference,$arrData = array(),$blReturnArray = false){
+	public function runTags($strRawView,$strTag,$strType,$strReference,$arrData = array(),$blReturnArray = false){
 
 		$strFunction = null;
 
@@ -573,7 +610,7 @@ class Template extends ModuleBase{
 				$arrResult = $this->processArrayItem($strReference,$arrData,$blReturnArray);
 
 				if($arrResult['status'] == true){
-					$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$arrResult['return'],$strFunction,$arrResult['return_raw']);
+					$strRawView = $this->replaceTag($strRawView,$strTag,$arrResult['return'],$strFunction,$arrResult['return_raw']);
 				}
 
 				break;
@@ -581,25 +618,26 @@ class Template extends ModuleBase{
 			case'element':
 
 				$strOut = $this->processElement($strReference,$arrData);
-				$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$strOut,$strFunction);
+				$strRawView = $this->replaceTag($strRawView,$strTag,$strOut,$strFunction);
 				break;
 
 			case'template':
+			case'view':
 
-				$strTemplate = $strReference;
+				$strView = $strReference;
 
-				//Allow the use of "structure_template" which will determine the current structure template
-				if($strReference == 'structure_template'){
+				//Allow the use of "structure_view" which will determine the current structure view
+				if($strReference == 'structure_view' || $strReference == 'structure_template'){
 					$arrStructure = \Twist::Structure() -> getCurrent();
-					$strTemplate = $arrStructure['template']['tpl_file'];
+					$strView = $arrStructure['view']['tpl_file'];
 				}
 
-				if(substr($strTemplate,0,1) == '.'){
-					$strTemplate = sprintf('%s/%s',dirname($this->dirCurrentTemplate),$strTemplate);
+				if(substr($strView,0,1) == '.'){
+					$strView = sprintf('%s/%s',dirname($this->dirCurrentView),$strView);
 				}
 
-				$strTagData = $this->build($strTemplate,$arrData);
-				$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$strTagData,$strFunction);
+				$strTagData = $this->build($strView,$arrData);
+				$strRawView = $this->replaceTag($strRawView,$strTag,$strTagData,$strFunction);
 				break;
 
 			/**
@@ -613,7 +651,7 @@ class Template extends ModuleBase{
 				if($arrResult['status'] == true){
 					//Protect against XSS attacks
 					$arrResult['return'] = ($strType == 'raw-get') ? $arrResult['return'] : htmlspecialchars($arrResult['return']);
-					$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$arrResult['return'],$strFunction,$arrResult['return_raw']);
+					$strRawView = $this->replaceTag($strRawView,$strTag,$arrResult['return'],$strFunction,$arrResult['return_raw']);
 				}
 
 				break;
@@ -626,14 +664,14 @@ class Template extends ModuleBase{
 				if($arrResult['status'] == true){
 					//Protect against XSS attacks
 					$arrResult['return'] = ($strType == 'raw-post') ? $arrResult['return'] : htmlspecialchars($arrResult['return']);
-					$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$arrResult['return'],$strFunction,$arrResult['return_raw']);
+					$strRawView = $this->replaceTag($strRawView,$strTag,$arrResult['return'],$strFunction,$arrResult['return_raw']);
 				}
 				break;
 
 			case'setting':
 
 				$strOut = \Twist::framework()->setting(strtoupper($strReference));
-				$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$strOut,$strFunction);
+				$strRawView = $this->replaceTag($strRawView,$strTag,$strOut,$strFunction);
 				break;
 
 			case'server':
@@ -641,7 +679,7 @@ class Template extends ModuleBase{
 				$arrResult = $this->processArrayItem($strReference,$_SERVER,$blReturnArray);
 
 				if($arrResult['status'] == true){
-					$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$arrResult['return'],$strFunction,$arrResult['return_raw']);
+					$strRawView = $this->replaceTag($strRawView,$strTag,$arrResult['return'],$strFunction,$arrResult['return_raw']);
 				}
 
 				break;
@@ -653,23 +691,23 @@ class Template extends ModuleBase{
 				if($arrResult['status'] == true){
 					//Protect against XSS attacks
 					$arrResult['return'] = htmlspecialchars($arrResult['return']);
-					$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$arrResult['return'],$strFunction,$arrResult['return_raw']);
+					$strRawView = $this->replaceTag($strRawView,$strTag,$arrResult['return'],$strFunction,$arrResult['return_raw']);
 				}
 				break;
 
 			case'static':
 				$strReference = trim($strReference,'"');
 				$strReference = trim($strReference,"'");
-				$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$strReference,$strFunction);
+				$strRawView = $this->replaceTag($strRawView,$strTag,$strReference,$strFunction);
 				break;
 
 			case'date':
-				$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,\Twist::DateTime()->date($strReference),$strFunction);
+				$strRawView = $this->replaceTag($strRawView,$strTag,\Twist::DateTime()->date($strReference),$strFunction);
 				break;
 
 			case'uri':
 				$urlTraversed = \Twist::framework()->tools()->traverseURI($strReference);
-				$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$urlTraversed,$strFunction);
+				$strRawView = $this->replaceTag($strRawView,$strTag,$urlTraversed,$strFunction);
 				break;
 
 			case'twist':
@@ -677,7 +715,7 @@ class Template extends ModuleBase{
 				switch($strReference){
 
 					case'version':
-						$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,TWIST_VERSION,$strFunction);
+						$strRawView = $this->replaceTag($strRawView,$strTag,TWIST_VERSION,$strFunction);
 						break;
 				}
 
@@ -733,17 +771,17 @@ class Template extends ModuleBase{
 						}
 					}
 
-					$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$strReplacementData,$strFunction);
+					$strRawView = $this->replaceTag($strRawView,$strTag,$strReplacementData,$strFunction);
 				}
 
 				//if(count($this->arrCustomTags) && array_key_exists($strType,$this->arrCustomTags) && array_key_exists($strReference,$this->arrCustomTags[$strType])){
-				//	$strRawTemplate = $this->replaceTag($strRawTemplate,$strTag,$this->arrCustomTags[$strType][$strReference]);
+				//	$strRawView = $this->replaceTag($strRawView,$strTag,$this->arrCustomTags[$strType][$strReference]);
 				//}
 				break;
 
 		}
 
-		return $strRawTemplate;
+		return $strRawView;
 	}
 
 	/**
@@ -842,16 +880,16 @@ class Template extends ModuleBase{
     }
 
     /**
-     * Replace the tag in the template data with the provided content
+     * Replace the tag in the View data with the provided content
      *
-     * @param $strRawTemplate
+     * @param $strRawView
      * @param $strTag
      * @param $strData
      * @param $strFunction
      * @param $mxdRawData
      * @return mixed
      */
-    protected function replaceTag($strRawTemplate,$strTag,$strData,$strFunction = null,$mxdRawData = array()){
+    protected function replaceTag($strRawView,$strTag,$strData,$strFunction = null,$mxdRawData = array()){
 
         if(!is_null($strFunction)){
 
@@ -897,20 +935,20 @@ class Template extends ModuleBase{
                     $strData = \Twist::File() -> bytesToSize($strData);
                 }
             }else{
-                trigger_error(sprintf("Twist Template: function '%s' is disabled",$strFunction),E_USER_NOTICE);
+                trigger_error(sprintf("Twist View: function '%s' is disabled",$strFunction),E_USER_NOTICE);
             }
         }
 
         //Build the tag replace expression
         $strExpression = sprintf("{%s}",$strTag);
 
-        //If the expression is equal to the raw template return the data as is otherwise replace the tag with the value
-        if($strExpression == $strRawTemplate){
-            $strRawTemplate = $strData;
+        //If the expression is equal to the raw View return the data as is otherwise replace the tag with the value
+        if($strExpression == $strRawView){
+            $strRawView = $strData;
         }else{
-            $strRawTemplate = str_replace($strExpression,$strData,$strRawTemplate);
+            $strRawView = str_replace($strExpression,$strData,$strRawView);
         }
 
-        return $strRawTemplate;
+        return $strRawView;
     }
 }

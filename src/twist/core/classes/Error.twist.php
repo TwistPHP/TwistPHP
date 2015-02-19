@@ -69,7 +69,7 @@
 
 			public static function handleException(\Exception $resException,$arrError = array()){
 
-                $strExceptionTemplate = sprintf("%s/system/exception-user.tpl",DIR_FRAMEWORK_TEMPLATES);
+                $strExceptionTemplate = sprintf("%s/system/exception-user.tpl",DIR_FRAMEWORK_VIEWS);
 
                 //Clean the screen output ready for an exception
                 ob_clean();
@@ -146,10 +146,10 @@
 						}
 
 						$arrTags['dump_data'] = self::debugDataOutput($mxdData);
-						$strExceptionTemplate = sprintf("%s/system/dump.tpl",DIR_FRAMEWORK_TEMPLATES);
+						$strExceptionTemplate = sprintf("%s/system/dump.tpl",DIR_FRAMEWORK_VIEWS);
 					}else{
 						$arrTags['message'] = $resException->getMessage();
-                        $strExceptionTemplate = sprintf("%s/system/exception.tpl",DIR_FRAMEWORK_TEMPLATES);
+                        $strExceptionTemplate = sprintf("%s/system/exception.tpl",DIR_FRAMEWORK_VIEWS);
 						$arrTags['dump_data'] = '';
 					}
 
@@ -603,7 +603,7 @@
 					'domain' => \Twist::framework() -> setting('SITE_HOST')
 				);
 
-                die(\Twist::Template('Exception')->build(sprintf("%s/system/error-page.tpl",DIR_FRAMEWORK_TEMPLATES),$arrTags));
+                die(\Twist::Template('Exception')->build(sprintf("%s/system/error-page.tpl",DIR_FRAMEWORK_VIEWS),$arrTags));
 			}
 
 			public static function outputLog(){

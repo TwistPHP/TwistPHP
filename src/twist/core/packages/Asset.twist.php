@@ -42,7 +42,7 @@
 		public function __construct(){
 
 			$this->resTemplate = \Twist::Template('pkgAsset');
-			$this->resTemplate->setTemplatesDirectory( sprintf('%s/templates/Asset/',DIR_FRAMEWORK_PACKAGES));
+			$this->resTemplate->setTemplatesDirectory( sprintf('%s/views/Asset/',DIR_FRAMEWORK_PACKAGES));
 
 			$this->strAssetDirectory = sprintf('%s/assets',BASE_LOCATION);
 
@@ -595,7 +595,7 @@
 		 * @param $strReference Template tag passed in from a template
 		 * @return string Formatted HTML/Markup to be output by the template package
 		 */
-		public function templateExtension($strReference){
+		public function viewExtension($strReference){
 
 			$strOut = '';
 			$arrAsset = $arrParams = array();
@@ -613,19 +613,19 @@
 			switch($arrParams[0]){
 
 				case'upload':
-					$strOut = \Twist::File()->templateExtension(sprintf('asset-%s',$strReference));
+					$strOut = \Twist::File()->viewExtension(sprintf('asset-%s',$strReference));
 					break;
 
 				case'upload-html':
-					$strOut = \Twist::File()->templateExtension(sprintf('asset-%s',$strReference));
+					$strOut = \Twist::File()->viewExtension(sprintf('asset-%s',$strReference));
 					break;
 
 				case'upload-init':
-					$strOut = \Twist::File()->templateExtension(sprintf('asset-%s',$strReference));
+					$strOut = \Twist::File()->viewExtension(sprintf('asset-%s',$strReference));
 					break;
 
 				case'upload-js':
-					$strOut = \Twist::File()->templateExtension(sprintf('asset-%s',$strReference));
+					$strOut = \Twist::File()->viewExtension(sprintf('asset-%s',$strReference));
 					break;
 
 				case'uri':

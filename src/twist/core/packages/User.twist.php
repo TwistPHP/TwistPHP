@@ -61,7 +61,7 @@ class User extends ModuleBase{
 
 		$strCustomTemplateLocation = $this->framework()->setting('USER_TEMPLATE_LOCATION');
 		if(is_null($strCustomTemplateLocation) || $strCustomTemplateLocation == ''){
-			$this->setCustomTemplateLocation(sprintf('%s/templates/User/',DIR_FRAMEWORK_PACKAGES));
+			$this->setCustomTemplateLocation(sprintf('%s/views/User/',DIR_FRAMEWORK_PACKAGES));
 		}else{
 			$this->setCustomTemplateLocation($strCustomTemplateLocation);
 		}
@@ -486,7 +486,7 @@ class User extends ModuleBase{
 	 * Get the pre-built, unbranded HTML registration form and return it as a string.
 	 */
 	public function getRegistrationForm($strLoginPage = ''){
-		return $this->templateExtension(($strLoginPage == '') ? 'registration_form' : sprintf('%s,%s','registration_form',$strLoginPage));
+		return $this->viewExtension(($strLoginPage == '') ? 'registration_form' : sprintf('%s,%s','registration_form',$strLoginPage));
 	}
 
 	/**
@@ -495,7 +495,7 @@ class User extends ModuleBase{
 	 * @return mixed
 	 */
 	public function getLoginForm($strLoginPage = ''){
-		return $this->templateExtension(($strLoginPage == '') ? 'login_form' : sprintf('%s,%s','login_form',$strLoginPage));
+		return $this->viewExtension(($strLoginPage == '') ? 'login_form' : sprintf('%s,%s','login_form',$strLoginPage));
 	}
 
 	/**
@@ -504,7 +504,7 @@ class User extends ModuleBase{
 	 * @return mixed
 	 */
 	public function getForgottenPasswordForm($strLoginPage = ''){
-		return $this->templateExtension(($strLoginPage == '') ? 'forgotten_password_form' : sprintf('%s,%s','forgotten_password_form',$strLoginPage));
+		return $this->viewExtension(($strLoginPage == '') ? 'forgotten_password_form' : sprintf('%s,%s','forgotten_password_form',$strLoginPage));
 	}
 
 	/**
@@ -513,7 +513,7 @@ class User extends ModuleBase{
 	 * @return mixed
 	 */
 	public function getChangePasswordForm($strLoginPage = ''){
-		return $this->templateExtension(($strLoginPage == '') ? 'change_password_form' : sprintf('%s,%s','change_password_form',$strLoginPage));
+		return $this->viewExtension(($strLoginPage == '') ? 'change_password_form' : sprintf('%s,%s','change_password_form',$strLoginPage));
 	}
 
 	protected function afterLoginRedirect(){
@@ -784,7 +784,7 @@ class User extends ModuleBase{
 		$this->resTemplate->setTemplatesDirectory($strTemplateLocation);
 	}
 
-	public function templateExtension($strReference){
+	public function viewExtension($strReference){
 
 		$strData = '';
 		$arrParts = explode(',',$strReference);

@@ -129,6 +129,9 @@
 		 */
 		public function extend($strModule,$mxdKey,$mxdData){
 
+			//@deprecate when remove template all traces of templates
+			$strModule = ($strModule == 'Template') ? 'View' : $strModule;
+
 			if(!array_key_exists($strModule,$this->arrModules)){
 				$this->arrModules[$strModule] = array('type' => null,'name' => null,'description' => null,'version' => null,'author' => null,'class' => null,'instances' => null,'path' => '','uri' => '','extensions' => array(),'installed' => 0);
 			}

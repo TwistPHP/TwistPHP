@@ -59,7 +59,7 @@
 			//print_r($this->arrDebugLog);
 
 			$this->resTemplate = \Twist::Template('CoreDebug');
-			$this->resTemplate->setTemplatesDirectory( sprintf('%sdebug/',DIR_FRAMEWORK_TEMPLATES));
+			$this->resTemplate->setTemplatesDirectory( sprintf('%sdebug/',DIR_FRAMEWORK_VIEWS));
 
 			$arrTags = array(
 				'errors' => '',

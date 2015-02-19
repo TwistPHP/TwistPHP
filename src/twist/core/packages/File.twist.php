@@ -38,7 +38,7 @@ class File extends ModuleBase{
 	 */
 	public function __construct(){
 		$this->resTemplate = \Twist::Template('pkgFile');
-		$this->resTemplate->setTemplatesDirectory( sprintf('%s/templates/File/',DIR_FRAMEWORK_PACKAGES));
+		$this->resTemplate->setTemplatesDirectory( sprintf('%s/views/File/',DIR_FRAMEWORK_PACKAGES));
 	}
 
 	/**
@@ -657,7 +657,7 @@ class File extends ModuleBase{
 	 * @param $strReference
 	 * @return string
 	 */
-	public function templateExtension($strReference){
+	public function viewExtension($strReference){
 
 		$strOut = '';
 		$arrParams = array(

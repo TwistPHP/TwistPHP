@@ -26,6 +26,13 @@
 	if(!class_exists('Base')){
 		class Base{
 
+			/**
+			 * @deprecated
+			 */
+			protected static function Template(){
+				return self::view((count(func_get_args())) ? func_get_arg(0) : 'twist');
+			}
+
 			protected static function framework(){
 
 				$resTwistModule = (!Instance::isObject('CoreFramework')) ? new Framework() : Instance::retrieveObject('CoreFramework');
@@ -213,24 +220,6 @@
 				return $resTwistModule;
 			}
 
-			protected static function Template(){
-
-				$strObjectKey = (count(func_get_args())) ? func_get_arg(0) : 'twist';
-				require_once sprintf('%sTemplate.twist.php',DIR_FRAMEWORK_PACKAGES);
-
-				//Could be done in 2 lines of code but PHP editors are not smart enough to auto-complete
-				if(count(func_get_args())){
-					$strInstanceKey = sprintf('pkgTemplate-%s',$strObjectKey);
-					$resTwistModule = (!Instance::isObject($strInstanceKey)) ? new Packages\Template($strObjectKey) : Instance::retrieveObject($strInstanceKey);
-					Instance::storeObject($strInstanceKey,$resTwistModule);
-				}else{
-					$resTwistModule = (!Instance::isObject('pkgTemplate')) ? new Packages\Template($strObjectKey) : Instance::retrieveObject('pkgTemplate');
-					Instance::storeObject('pkgTemplate',$resTwistModule);
-				}
-
-				return $resTwistModule;
-			}
-
 			protected static function Timer(){
 
 				$strObjectKey = (count(func_get_args())) ? func_get_arg(0) : 'twist';
@@ -264,6 +253,24 @@
 
 				$resTwistModule = (!Instance::isObject('pkgValidate')) ? new Packages\Validate() : Instance::retrieveObject('pkgValidate');
 				Instance::storeObject('pkgValidate',$resTwistModule);
+				return $resTwistModule;
+			}
+
+			protected static function View(){
+
+				$strObjectKey = (count(func_get_args())) ? func_get_arg(0) : 'twist';
+				require_once sprintf('%sView.twist.php',DIR_FRAMEWORK_PACKAGES);
+
+				//Could be done in 2 lines of code but PHP editors are not smart enough to auto-complete
+				if(count(func_get_args())){
+					$strInstanceKey = sprintf('pkgView-%s',$strObjectKey);
+					$resTwistModule = (!Instance::isObject($strInstanceKey)) ? new Packages\View($strObjectKey) : Instance::retrieveObject($strInstanceKey);
+					Instance::storeObject($strInstanceKey,$resTwistModule);
+				}else{
+					$resTwistModule = (!Instance::isObject('pkgView')) ? new Packages\View($strObjectKey) : Instance::retrieveObject('pkgView');
+					Instance::storeObject('pkgView',$resTwistModule);
+				}
+
 				return $resTwistModule;
 			}
 

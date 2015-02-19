@@ -63,7 +63,7 @@
 	Twist::define('DIR_FRAMEWORK_INTERFACES',sprintf('%sinterfaces/',DIR_FRAMEWORK));
 	Twist::define('DIR_FRAMEWORK_CLASSES',sprintf('%score/classes/',DIR_FRAMEWORK));
 	Twist::define('DIR_FRAMEWORK_PACKAGES',sprintf('%score/packages/',DIR_FRAMEWORK));
-	Twist::define('DIR_FRAMEWORK_TEMPLATES',sprintf('%score/templates/',DIR_FRAMEWORK));
+	Twist::define('DIR_FRAMEWORK_VIEWS',sprintf('%score/views/',DIR_FRAMEWORK));
 	Twist::define('DIR_FRAMEWORK_RESOURCES',sprintf('%score/resources/',DIR_FRAMEWORK));
 	Twist::define('DIR_BASE',realpath(sprintf('%s/../',DIR_FRAMEWORK)));
 

@@ -54,7 +54,7 @@ class Route extends ModuleBase{
 	public function __construct($strInstance){
 
 		$this->strInstance = $strInstance;
-		$this->resTemplate = \Twist::Template();
+		$this->resTemplate = \Twist::View();
 
 		$strControllerPath = sprintf('%s/controllers',DIR_BASE);
 		if(file_exists($strControllerPath)){

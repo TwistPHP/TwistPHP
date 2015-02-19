@@ -39,4 +39,4 @@
         )
     );
 
-    echo \Twist::Template()->build('components/tabs.tpl',$arrOptions);
+    echo \Twist::View()->build('components/tabs.tpl',$arrOptions);

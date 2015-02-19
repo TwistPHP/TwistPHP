@@ -67,11 +67,11 @@ class AJAX extends ModuleBase{
 			$this->strFunctionsDirectory = $strFunctionsDirectory;
 
 			if(!is_null($strTemplateDirectory)){
-				\Twist::Template() -> setTemplatesDirectory($strTemplateDirectory);
+				\Twist::View() -> setTemplatesDirectory($strTemplateDirectory);
 			}
 
 			if(!is_null($strElementDirectory)){
-				\Twist::Template() -> setElementsDirectory($strElementDirectory);
+				\Twist::View() -> setElementsDirectory($strElementDirectory);
 			}
 
 			ignore_user_abort( true );
@@ -226,7 +226,7 @@ class AJAX extends ModuleBase{
 	 * @param $strReference
 	 * @return string
 	 */
-	function templateExtension($strReference){
+	function viewExtension($strReference){
 
 		$strOut = "";
 		$arrData = (strstr($strReference,',')) ? explode(',',$strReference) : array($strReference,'latest');
