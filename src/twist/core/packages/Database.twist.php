@@ -86,7 +86,7 @@
 					$strDatabaseName = DATABASE_NAME;
 				}
 
-				$strLibraryClass = sprintf('\TwistPHP\Packages\Protocol%s',strtoupper($strProtocol));
+				$strLibraryClass = sprintf('\Twist\Core\Packages\Protocol%s',strtoupper($strProtocol));
 				$this->resLibrary = new $strLibraryClass();
 				$this->resLibrary->connect($strHost,$strUsername,$strPassword,$strDatabaseName);
 

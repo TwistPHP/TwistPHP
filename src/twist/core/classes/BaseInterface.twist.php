@@ -21,7 +21,7 @@
 	 *
 	 */
 
-	namespace TwistInterface;
+	namespace Twist\Core;
 
 	class BaseInterface{
 

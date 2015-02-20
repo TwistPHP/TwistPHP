@@ -21,7 +21,8 @@
 	 *
 	 */
 
-	namespace TwistInterface;
+	namespace Twist\Interfaces;
+	use \Twist\Core\BaseInterface;
 
 	class Setup extends BaseInterface{
 

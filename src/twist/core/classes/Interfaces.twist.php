@@ -66,7 +66,7 @@
 				//Get the contents of the load file
                 include_once sprintf('%s/load.php',$this->arrInterfaces[$strInterface]['path']);
 
-				$strInterfaceClass = sprintf('\Twist\Interface\%s',$strInterface);
+				$strInterfaceClass = sprintf('\Twist\Interfaces\%s',$strInterface);
 
 				//Call the interface
 				$objInterface = new $strInterfaceClass($strInterface);

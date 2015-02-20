@@ -102,7 +102,7 @@
 					Twist::framework() -> module() -> extend('View','ajax',array('module' => 'AJAX','function' => 'viewExtension'));
 
 					//Register the framework resources handler into the template system
-					\Twist\Core\Instance::storeObject('twistCoreResources',new \Twist\Core\PackagesResources());
+					\Twist\Core\Instance::storeObject('twistCoreResources',new \Twist\Core\Resources());
 					Twist::framework() -> module() -> extend('View','resource',array('instance' => 'twistCoreResources','function' => 'viewExtension'));
 
 					//Register all the modules that have been installed in the framework
