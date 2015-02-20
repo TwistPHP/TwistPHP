@@ -21,8 +21,8 @@
 	 *
 	 */
 
-	namespace TwistPHP\Packages;
-	use TwistPHP\ModuleBase;
+	namespace Twist\Core\Packages;
+	use \Twist\Core\ModuleBase;
 
 	/**
 	 * Asset management package that allows the addition and grouping of assets. Assets can be images, videos, files, links and other data that can be uploaded to a website/service.

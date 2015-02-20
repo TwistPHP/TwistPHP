@@ -21,7 +21,7 @@
 	 *
 	 */
 
-	namespace TwistPHP\Packages;
+	namespace Twist\Core\Packages;
 
 	/**
 	 * The library of MySQL, this will allow the Database class to

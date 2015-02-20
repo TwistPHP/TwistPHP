@@ -21,7 +21,7 @@
 	 *
 	 */
 
-	namespace TwistPHP;
+	namespace Twist\Core;
 
 	class Autoloader{
 

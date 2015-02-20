@@ -21,8 +21,8 @@
  *
  */
 
-namespace TwistPHP\Packages;
-use TwistPHP\ModuleBase;
+namespace Twist\Core\Packages;
+use \Twist\Core\ModuleBase;
 
 /**
  * Data validation package can validate different types of data i.e Email Address, URLS, Telephone numbers, UK Postcodes and much more.

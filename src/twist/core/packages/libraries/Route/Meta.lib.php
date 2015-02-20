@@ -21,7 +21,7 @@
 	 *
 	 */
 
-	namespace TwistPHP\Packages;
+	namespace Twist\Core\Packages;
 
 	/**
 	 * Route Meta Tag manager and template extension

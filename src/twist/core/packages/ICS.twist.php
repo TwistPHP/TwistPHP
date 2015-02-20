@@ -21,8 +21,8 @@
 	 *
 	 */
 
-	namespace TwistPHP\Packages;
-	use TwistPHP\ModuleBase;
+	namespace Twist\Core\Packages;
+	use \Twist\Core\ModuleBase;
 
 	/**
 	 * ICS Calendar and Event Handler, can import, edita nd create ics files that are compatible with Google Calendars and iCAl/Mac Calendar

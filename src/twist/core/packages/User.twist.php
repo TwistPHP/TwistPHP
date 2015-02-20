@@ -21,8 +21,8 @@
  *
  */
 
-namespace TwistPHP\Packages;
-use TwistPHP\ModuleBase;
+namespace Twist\Core\Packages;
+use \Twist\Core\ModuleBase;
 
 /**
  * User management and control allowing users to register, login and be updated

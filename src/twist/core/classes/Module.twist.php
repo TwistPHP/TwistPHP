@@ -21,7 +21,7 @@
 	 *
 	 */
 
-	namespace TwistPHP;
+	namespace Twist\Core;
 
 	/**
 	 * Handle all module/package related enquiries, for instance if you want to know if a package is installed or what version it is.

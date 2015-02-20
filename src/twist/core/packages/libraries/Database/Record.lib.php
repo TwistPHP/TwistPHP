@@ -21,7 +21,7 @@
 	 *
 	 */
 
-	namespace TwistPHP\Packages;
+	namespace Twist\Core\Packages;
 
 	/**
 	 * Simply edit/delete a mysql record from any table in an object orientated way

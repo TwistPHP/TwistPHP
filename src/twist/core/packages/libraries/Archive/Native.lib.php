@@ -21,7 +21,7 @@
 	 *
 	 */
 
-	namespace TwistPHP\Packages;
+	namespace Twist\Core\Packages;
 
 	class ArchiveNative{
 

@@ -21,7 +21,7 @@
  *
  */
 
-namespace TwistPHP\Packages;
+namespace Twist\Core\Packages;
 
 /**
  * Image object that allow the manipulation of images, adding text, inserting watermarks, applying effects, resizing and altering output quality.

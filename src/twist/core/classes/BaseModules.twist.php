@@ -21,7 +21,8 @@
 	 *
 	 */
 
-	namespace TwistPHP;
+	namespace Twist\Core;
+	use \Twist\Modules as Modules;
 
 	if(!class_exists('BaseModules')){
 		class BaseModules extends Base{
@@ -30,7 +31,7 @@
 			public static function __callStatic($strModuleName, $arrArguments){
 
 				$strObjectRef = sprintf('mod%s',$strModuleName);
-				$strModule = sprintf('\TwistPHP\Modules\%s',$strModuleName);
+				$strModule = sprintf('Modules\%s',$strModuleName);
 
 				\Twist::framework() -> module() -> load($strModuleName);
 				$resTwistModule = (!Instance::isObject($strObjectRef)) ? new $strModule() : Instance::retrieveObject($strObjectRef);

@@ -21,8 +21,8 @@
 	 *
 	 */
 
-	namespace TwistPHP\Packages;
-	use TwistPHP\ModuleBase;
+	namespace Twist\Core\Packages;
+	use \Twist\Core\ModuleBase;
 
 	/**
 	 * Timer to capture the time taken

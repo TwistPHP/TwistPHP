@@ -21,7 +21,7 @@
 	 *
 	 */
 
-	namespace TwistPHP\Packages;
+	namespace Twist\Core\Packages;
 
 	/**
 	 * The library of PDO, this will allow the Database class to

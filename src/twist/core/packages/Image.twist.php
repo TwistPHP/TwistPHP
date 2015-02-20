@@ -21,8 +21,8 @@
 	 *
 	 */
 
-	namespace TwistPHP\Packages;
-	use TwistPHP\ModuleBase;
+	namespace Twist\Core\Packages;
+	use \Twist\Core\ModuleBase;
 
 	/**
 	 * Image editing suite that allows for new images to be created and existing images to be loaded in for modification

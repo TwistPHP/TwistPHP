@@ -21,8 +21,8 @@
  *
  */
 
-namespace TwistPHP\Packages;
-use TwistPHP\ModuleBase;
+namespace Twist\Core\Packages;
+use \Twist\Core\ModuleBase;
 
 /**
  * Additional file system support that you have always needed but never had. Convert bytes into human readable format, sanitize file names, hash a directory or get its total size in bytes.
@@ -296,13 +296,13 @@ class File extends ModuleBase{
 						}
 					}else{
 						//header("HTTP/1.1 500 Internal Server Error");
-						\TwistPHP\Error::errorPage(500);
+						\Twist\Core\Error::errorPage(500);
 					}
 				}
 			}
 		}else{
 			//header("HTTP/1.1 404 Not Found");
-			\TwistPHP\Error::errorPage(404);
+			\Twist\Core\Error::errorPage(404);
 		}
 
 		die();

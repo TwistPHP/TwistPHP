@@ -21,8 +21,8 @@
  *
  */
 
-namespace TwistPHP\Packages;
-use TwistPHP\ModuleBase;
+namespace Twist\Core\Packages;
+use \Twist\Core\ModuleBase;
 
 /**
  * Execute bash command line commands on the server and get back nicely formatted result array.

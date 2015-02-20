@@ -21,7 +21,7 @@
 	 *
 	 */
 
-	namespace TwistPHP;
+	namespace Twist\Core;
 
     /**
      * Handle all interfaces related enquiries, for instance if you want to know if a package is installed or what version it is.
@@ -66,7 +66,7 @@
 				//Get the contents of the load file
                 include_once sprintf('%s/load.php',$this->arrInterfaces[$strInterface]['path']);
 
-				$strInterfaceClass = sprintf('\TwistInterface\%s',$strInterface);
+				$strInterfaceClass = sprintf('\Twist\Interface\%s',$strInterface);
 
 				//Call the interface
 				$objInterface = new $strInterfaceClass($strInterface);

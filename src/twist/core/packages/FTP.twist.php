@@ -21,8 +21,8 @@
 	*
 	*/
 
-	namespace TwistPHP\Packages;
-	use TwistPHP\ModuleBase;
+	namespace Twist\Core\Packages;
+	use \Twist\Core\ModuleBase;
 
 	/**
 	 * Connect to an FTP server via PHP with the ability to browse and create directories, upload, download and delete files.

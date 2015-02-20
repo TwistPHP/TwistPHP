@@ -21,8 +21,8 @@
  *
  */
 
-namespace TwistPHP\Packages;
-use TwistPHP\ModuleBase;
+namespace Twist\Core\Packages;
+use \Twist\Core\ModuleBase;
 
 /**
  * Simply setup a website with multiple pages in minutes. Create restricted areas with login pages and dynamic sections with wild carded URI's.

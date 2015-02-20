@@ -21,7 +21,7 @@
  *
  */
 
-namespace TwistPHP;
+namespace Twist\Core;
 
 /**
  * Core resource handler for the framework, can be extended by installing the Official Resource module

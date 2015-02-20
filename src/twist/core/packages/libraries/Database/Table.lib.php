@@ -21,7 +21,7 @@
 	 *
 	 */
 
-	namespace TwistPHP\Packages;
+	namespace Twist\Core\Packages;
 
 	/**
 	 * Simply create tables in an object orientated way with no need to write a mysql query

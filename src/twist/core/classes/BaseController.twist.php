@@ -33,12 +33,12 @@
 		}
 
 		public function _default(){
-			\TwistPHP\Error::errorPage(404);
+			\Twist\Core\Error::errorPage(404);
 			return false;
 		}
 
 		public function _fallback(){
-			\TwistPHP\Error::errorPage(404);
+			\Twist\Core\Error::errorPage(404);
 			return false;
 		}
 
@@ -72,7 +72,7 @@
 			}elseif(array_key_exists(strtolower($strCallFunctionName),$arrControllerFunctions)){
 				return $this->$arrControllerFunctions[strtolower($strCallFunctionName)]();
 			}else{
-				\TwistPHP\Error::errorPage(404);
+				\Twist\Core\Error::errorPage(404);
 				return false;
 			}
 		}

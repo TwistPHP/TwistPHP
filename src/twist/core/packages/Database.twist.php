@@ -21,9 +21,9 @@
 	 *
 	 */
 
-	namespace TwistPHP\Packages;
-	use TwistPHP\ModuleBase;
-	use TwistPHP\Instance;
+	namespace Twist\Core\Packages;
+	use \Twist\Core\ModuleBase;
+	use \Twist\Core\Instance;
 
 	/**
 	 * A package to simplify database connections for your PHP projects. Allowing connections to be made using MySQL, MySQLi and PDO.

@@ -21,7 +21,7 @@
 	 *
 	 */
 
-	namespace TwistPHP;
+	namespace Twist\Core;
 
 	/**
 	 * Usage and Performance stats of the the framework. Page load and creation timings can be accessed from here.

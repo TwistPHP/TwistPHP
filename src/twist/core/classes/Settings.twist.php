@@ -21,7 +21,7 @@
 	 *
 	 */
 	
-	namespace TwistPHP;
+	namespace Twist\Core;
 	
 	/**
 	* Get, Set and update all the framework settings. Manage the update of all default tables created by packages and modules.

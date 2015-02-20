@@ -20,7 +20,7 @@
 	 * @link       https://twistphp.com
 	 *
 	 */
-	namespace TwistPHP;
+	namespace Twist\Core;
 
 	final class Framework{
 

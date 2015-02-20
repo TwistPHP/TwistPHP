@@ -21,8 +21,8 @@
 	 *
 	 */
 
-	namespace TwistPHP\Packages;
-	use TwistPHP\ModuleBase;
+	namespace Twist\Core\Packages;
+	use \Twist\Core\ModuleBase;
 
 	/**
 	 * Simply Create, Serve and Import CSV files. Create a CSV file from and array of data, database query results can be directly exported as a CSV file with. Import CSV files into a usable indexed array of data.

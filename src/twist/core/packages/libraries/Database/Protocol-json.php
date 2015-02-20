@@ -1,5 +1,7 @@
 <?php
 
+	namespace Twist\Core\Packages;
+
 	class jsonDB{
 
 		public $intVersion = '0.1';

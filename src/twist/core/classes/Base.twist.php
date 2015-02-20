@@ -21,7 +21,7 @@
 	 *
 	 */
 
-	namespace TwistPHP;
+	namespace Twist\Core;
 
 	if(!class_exists('Base')){
 		class Base{
