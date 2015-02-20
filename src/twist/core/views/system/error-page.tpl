@@ -8,7 +8,7 @@
 		<meta name="robots" content="noindex, nofollow">
 
 		<!--================================ SHADOW RESOURCES ================================-->
-		<link href="{core:shadow-css}" type="text/css" rel="stylesheet">
+		<link href="{core:arable}" type="text/css" rel="stylesheet">
 
 		<!--================================ CSS ================================-->
 		<style type="text/css">
@@ -26,8 +26,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
 	</head>
 	<body>
-		<h1 class="no-bottom-margin align-center">Oops!</h1>
-		<h2 class="no-top-margin lightweight align-center">Error {data:code} - {data:title}</h2>
+		<h1 class="no-bottom-padding align-center">Oops!</h1>
+		<h2 class="no-top-padding lightweight align-center">Error {data:code} - {data:title}</h2>
 		<p class="align-center">{data:description}</p>
 	</body>
 </html>

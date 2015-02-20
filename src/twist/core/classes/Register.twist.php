@@ -28,6 +28,14 @@
 	 */
 	final class Register{
 
+		public function autoloaderPath($strMatch,$dirPath,$strExtension = '.php'){
+			AutoLoader::registerPath($strMatch,$dirPath,$strExtension);
+		}
+
+		public function autoloaderClass($strMatch,$strClass,$strFunction){
+			AutoLoader::registerClass($strMatch,$strClass,$strFunction);
+		}
+
 		public function handler($strType,$strClass,$strFunction){
 
 			switch($strType){
@@ -72,7 +80,6 @@
 			Shutdown::cancelEvent($strEventKey);
 		}
 
-
 		public function modules(){
 
 			//Get a list of all the installed modules
@@ -85,7 +92,6 @@
 				}
 			}
 		}
-
 
         public function interfaces(){
 

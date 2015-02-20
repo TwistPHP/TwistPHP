@@ -43,8 +43,6 @@
 				self::$resAutoLoader->arrRegisteredLoaders[ltrim($strMatch,'\\')] = array('type' => 'path','path' => $dirPath,'extension' => $strExtension);
 				krsort(self::$resAutoLoader->arrRegisteredLoaders);
 			}
-
-
 		}
 
 		public static function registerClass($strMatch,$strClass,$strFunction){

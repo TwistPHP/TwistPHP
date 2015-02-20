@@ -11,7 +11,7 @@
 		<link href="{core:unsemantic}" type="text/css" rel="stylesheet">
 
 		<!--================================ SHADOW RESOURCES ================================-->
-		<link href="{core:shadow-css}" type="text/css" rel="stylesheet">
+		<link href="{core:arable}" type="text/css" rel="stylesheet">
 
 		<!--================================ CSS ================================-->
 		<style type="text/css">
