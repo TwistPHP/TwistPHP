@@ -26,7 +26,6 @@ namespace TwistPHP\Packages;
 class UserObject{
 
 	protected $resDatabaseRecord = null;
-	protected $resDatabaseRecordData = null;
 
 	protected $arrOriginalData = array();
 	protected $arrOriginalUserData = array();
@@ -46,23 +45,34 @@ class UserObject{
 
 		//Get the user data record to allow for this ti be edited
 		$this->blNewAccount = is_null($intUserID);
-		$this->resDatabaseRecordData = \Twist::Database()->getRecord(sprintf('%suser_data',DATABASE_TABLE_PREFIX),$intUserID,'user_id');
-		$this->resDatabaseRecordData = (is_object($this->resDatabaseRecordData)) ? $this->resDatabaseRecordData : \Twist::Database()->createRecord(sprintf('%suser_data',DATABASE_TABLE_PREFIX));
 
-		$this->arrOriginalUserData = $this->resDatabaseRecordData->values();
+		$blQuery = \Twist::Database()->query("SELECT `ud`.`data`,`udf`.`slug` FROM `%suser_data` AS `ud` JOIN `%suser_data_fields` AS `udf` ON `ud`.`field_id` = `udf`.`id` WHERE `ud`.`user_id` = %d",
+			DATABASE_TABLE_PREFIX,
+			DATABASE_TABLE_PREFIX,
+			$intUserID
+		);
+
+		if($blQuery && \Twist::Database()->getNumberRows()){
+			foreach(\Twist::Database()->getFullArray() as $arrEachItem){
+				$this->arrOriginalUserData[$arrEachItem['slug']] = $arrEachItem['data'];
+			}
+		}
 	}
 
 	public function get($strField = null){
 		return (is_null($strField)) ? $this->resDatabaseRecord->values() : $this->resDatabaseRecord->get($strField);
 	}
 
-	public function custom($strField,$strValue=null){
+	public function getDetail($strField = null){
+		return (is_null($strField)) ? $this->arrOriginalUserData : $this->arrOriginalUserData[$strField];
+	}
 
-		if(!is_null($strValue)){
-			$this->arrCustomData[$strField] = $strValue;
-		}else{
-			return (array_key_exists($strField,$this->arrCustomData)) ? $this->arrCustomData[$strField] : null;
-		}
+	public function setDetail($strField,$strValue){
+		$this->arrOriginalUserData[$strField] = $strValue;
+	}
+
+	public function removeDetail($strField = null){
+		$this->arrOriginalUserData[$strField] = null;
 	}
 
 	public function commit(){
@@ -80,16 +90,34 @@ class UserObject{
 		if($mxdOut){
 			$this->arrOriginalData = $this->resDatabaseRecord->values();
 
-			//Set the new users ID into the user data record
-			if($this->blNewAccount){
-				$this->resDatabaseRecordData->set('user_id',$mxdOut);
+			foreach($this->arrOriginalUserData as $strKey => $mxdData){
+
+				$arrField = \Twist::Database()->get(sprintf('%suser_data_fields',DATABASE_TABLE_PREFIX),$strKey,'slug');
+
+				if(is_null($mxdData)){
+					if(!is_null($arrField)){
+						\Twist::Database()->query("DELETE FROM `%suser_data` WHERE `user_id` = %d AND `field_id` = %d LIMIT 1",
+							DATABASE_TABLE_PREFIX,
+							$this->resDatabaseRecord->get('id'),
+							$mxdData['id']
+						);
+					}
+				}else{
+					if(is_null($arrField)){
+						$resUserDataField = \Twist::Database()->createRecord(sprintf('%suser_data_fields',DATABASE_TABLE_PREFIX));
+						$resUserDataField->set('slug',$strKey);
+						$intFieldId = $resUserDataField->commit();
+					}else{
+						$intFieldId = $mxdData['id'];
+					}
+
+					$resUserData = \Twist::Database()->createRecord(sprintf('%suser_data',DATABASE_TABLE_PREFIX));
+					$resUserData->set('user_id',$this->resDatabaseRecord->get('id'));
+					$resUserData->set('field_id',$intFieldId);
+					$resUserData->set('data',$mxdData);
+					$resUserData->commit();
+				}
 			}
-
-			//Commit and grab the additional user data
-			$this->resDatabaseRecordData->commit();
-			$this->arrOriginalUserData = $this->resDatabaseRecordData->values();
-
-			//@todo - add in custom data commit
 
 			if($this->blNewAccount){
 				$this->sendWelcomeEmail();
@@ -155,42 +183,6 @@ class UserObject{
 
 	public function lastActive(){
 		return $this->resDatabaseRecord->set('last_active',\Twist::DateTime()->date('Y-m-d H:i:s'));
-	}
-
-	public function addressLine1($strValue = null){
-		return (is_null($strValue)) ? $this->resDatabaseRecordData->get('address_line1') : $this->resDatabaseRecordData->set('address_line1',$strValue);
-	}
-
-	public function addressLine2($strValue = null){
-		return (is_null($strValue)) ? $this->resDatabaseRecordData->get('address_line2') : $this->resDatabaseRecordData->set('address_line2',$strValue);
-	}
-
-	public function city($strValue = null){
-		return (is_null($strValue)) ? $this->resDatabaseRecordData->get('city') : $this->resDatabaseRecordData->set('city',$strValue);
-	}
-
-	public function region($strValue = null){
-		return (is_null($strValue)) ? $this->resDatabaseRecordData->get('region') : $this->resDatabaseRecordData->set('region',$strValue);
-	}
-
-	public function postcode($strValue = null){
-		return (is_null($strValue)) ? $this->resDatabaseRecordData->get('postcode') : $this->resDatabaseRecordData->set('postcode',$strValue);
-	}
-
-	public function country($strValue = null){
-		return (is_null($strValue)) ? $this->resDatabaseRecordData->get('country_iso') : $this->resDatabaseRecordData->set('country_iso',$strValue);
-	}
-
-	public function phone($strValue = null){
-		return (is_null($strValue)) ? $this->resDatabaseRecordData->get('phone') : $this->resDatabaseRecordData->set('phone',$strValue);
-	}
-
-	public function mobile($strValue = null){
-		return (is_null($strValue)) ? $this->resDatabaseRecordData->get('mobile') : $this->resDatabaseRecordData->set('mobile',$strValue);
-	}
-
-	public function emailOptIn($blValue = null){
-		return (is_null($blValue)) ? $this->resDatabaseRecordData->get('email_optin') : $this->resDatabaseRecordData->set('email_optin',($blValue == '1' || $blValue == true)  ? '1' : '0');
 	}
 
 	public function delete(){
