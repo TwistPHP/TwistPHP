@@ -42,6 +42,7 @@
 
 	$strCoreDir = sprintf('%s/classes/',dirname(__FILE__));
 
+	require_once sprintf('%sAutoloader.twist.php',$strCoreDir);
 	require_once sprintf('%sBase.twist.php',$strCoreDir);
 	require_once sprintf('%sBaseController.twist.php',$strCoreDir);
 	require_once sprintf('%sBaseInterface.twist.php',$strCoreDir);

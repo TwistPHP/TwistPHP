@@ -29,11 +29,11 @@
 	final class Register{
 
 		public function autoloaderPath($strMatch,$dirPath,$strExtension = '.php'){
-			AutoLoader::registerPath($strMatch,$dirPath,$strExtension);
+			Autoloader::registerPath($strMatch,$dirPath,$strExtension);
 		}
 
 		public function autoloaderClass($strMatch,$strClass,$strFunction){
-			AutoLoader::registerClass($strMatch,$strClass,$strFunction);
+			Autoloader::registerClass($strMatch,$strClass,$strFunction);
 		}
 
 		public function handler($strType,$strClass,$strFunction){

@@ -918,6 +918,7 @@ class Route extends ModuleBase{
 						case'controller':
 							if (is_array($arrRoute['item']) && count($arrRoute['item']) >= 1) {
 
+								/**
 								$strControllerFile = sprintf('%s/%s.controller.php', $this->strControllerDirectory, $arrRoute['item'][0]);
 								$strControllerFileLegacy = sprintf('%s/%s.class.php', $this->strControllerDirectory, $arrRoute['item'][0]);
 
@@ -931,6 +932,10 @@ class Route extends ModuleBase{
 								}
 
 								$strControllerClass = sprintf('\TwistController\\%s', $arrRoute['item'][0]);
+								**/
+
+								$strControllerClass = (!strstr($arrRoute['item'][0],'\\')) ? sprintf('\\Twist\\Controllers\\%s', $arrRoute['item'][0]) : $arrRoute['item'][0];
+
 								if (count($arrRoute['item']) > 1) {
 									$strControllerFunction = $arrRoute['item'][1];
 								} elseif(count($arrRoute['vars']) && array_key_exists('function',$arrRoute['vars'])) {

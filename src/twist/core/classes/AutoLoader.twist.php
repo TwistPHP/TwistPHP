@@ -23,7 +23,7 @@
 
 	namespace TwistPHP;
 
-	class AutoLoader{
+	class Autoloader{
 
 		public $arrRegisteredLoaders = array();
 		public static $resAutoLoader;
@@ -71,9 +71,10 @@
 					if($arrLoader['type'] == 'path'){
 
 						try{
-							set_include_path($arrLoader['path']);
-							spl_autoload_extensions($arrLoader['extension']);
-							spl_autoload($arrMatches[1]);
+							require_once sprintf('%s/%s%s',$arrLoader['path'],str_replace('\\','/',$arrMatches[1]),$arrLoader['extension']);
+							//set_include_path($arrLoader['path']);
+							//spl_autoload_extensions($arrLoader['extension']);
+							//spl_autoload($arrMatches[1]);
 						}catch(\Exception $resException){
 							$blMatchFound = false;
 						}

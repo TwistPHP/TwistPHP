@@ -109,6 +109,11 @@
 					Twist::framework() -> register() -> modules();
 					Twist::framework() -> register() -> interfaces();
 
+					\TwistPHP\Autoloader::init();
+
+					Twist::framework()->register()->autoloaderPath('\\Twist\\Controllers\\','controllers','.controller.php');
+					Twist::framework()->register()->autoloaderPath('\\Twist\\Modules\\','twist/modules','.controller.php');
+
 					//Stop tracking the framework boot time
 					Twist::Timer('TwistPageLoad') -> start();
 					Twist::Timer('TwistPageLoad') -> log('Twist Core Loaded');
