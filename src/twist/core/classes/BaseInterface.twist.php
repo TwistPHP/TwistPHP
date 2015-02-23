@@ -39,9 +39,11 @@
 			$this->resRoute = \Twist::Route($this->strInterfaceKey);
 			$this->resRoute->interfaceURI($this->strInterfaceKey);
 
-			$this->resRoute->setTemplatesDirectory(sprintf('%s/%s/views/',rtrim(DIR_FRAMEWORK_INTERFACES,'/'),$this->strInterfaceKey));
-			$this->resRoute->setElementsDirectory(sprintf('%s/%s/views/',rtrim(DIR_FRAMEWORK_INTERFACES,'/'),$this->strInterfaceKey));
-			$this->resRoute->setControllerDirectory(sprintf('%s/%s/controllers/',rtrim(DIR_FRAMEWORK_INTERFACES,'/'),$this->strInterfaceKey));
+			$arrInterfaceParams = \Twist::framework()->interfaces()->information($this->strInterfaceKey);
+
+			$this->resRoute->setTemplatesDirectory(sprintf('%s/views/',rtrim($arrInterfaceParams['path'],'/')));
+			$this->resRoute->setElementsDirectory(sprintf('%s/views/',rtrim($arrInterfaceParams['path'],'/')));
+			$this->resRoute->setControllerDirectory(sprintf('%s/controllers/',rtrim($arrInterfaceParams['path'],'/')));
 		}
 
 		public function baseURI($strBaseURI){
