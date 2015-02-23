@@ -71,7 +71,13 @@
 				//Call the interface
 				$objInterface = new $strInterfaceClass($strInterface);
 				$objInterface->baseURI($strURI);
-				$objInterface->baseTemplate($mxdBaseTemplate);
+
+	            if($mxdBaseTemplate === false || is_null($mxdBaseTemplate)){
+		            $objInterface->baseTemplateIgnore();
+	            }elseif($mxdBaseTemplate !== true){
+		            $objInterface->baseTemplate($mxdBaseTemplate);
+	            }
+
 				$objInterface->load();
 				$objInterface->serve();
             }
