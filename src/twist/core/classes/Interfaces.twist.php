@@ -84,7 +84,7 @@
          */
         public function register($strClassName,$dirInterfacePath=null){
 
-		    $strPath = sprintf('%s%s',(is_null($dirInterfacePath)) ? DIR_FRAMEWORK_INTERFACES : $dirInterfacePath,$strClassName);
+		    $strPath = (is_null($dirInterfacePath)) ? sprintf('%s%s',DIR_FRAMEWORK_INTERFACES,$strClassName) : $dirInterfacePath;
             $strURI = str_replace(BASE_LOCATION,"",$strPath);
 
             $arrInformation = json_decode(file_get_contents(sprintf('%s/info.json',$strPath)),true);
