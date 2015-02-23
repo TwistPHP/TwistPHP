@@ -290,15 +290,36 @@
 		 * Traverse the current URI in $_SERVER['REQUEST_URI'] or pass in a starting URI
 		 * @param $urlRelativePath
 		 * @param $urlStartingURI
+		 * @param $blPreserveQueryString Keep/merge the current query string with the query string of the redirect
 		 * @return string Return the traversed URI
 		 */
-		public function traverseURI($urlRelativePath,$urlStartingURI = null){
+		public function traverseURI($urlRelativePath,$urlStartingURI = null,$blPreserveQueryString = false){
 
-			if($urlRelativePath == '/') {
-				return $urlRelativePath;
+			$strQueryString = $strCurrentQueryString = '';
+
+			//Remove the query string from the redirect to help with comparisons
+			if(strstr($urlRelativePath,'?')){
+				list($urlRelativePath,$strQueryString) = explode('?',$urlRelativePath);
 			}
 
-			$urlCurrentURI = trim((is_null($urlStartingURI)) ? $_SERVER['REQUEST_URI'] : $urlStartingURI,'/');
+			//If the redirect id / no further processing required
+			if($urlRelativePath == '/') {
+				return ($strQueryString == '') ? $urlRelativePath : sprintf('%s?%s',$urlRelativePath,$strQueryString);
+			}
+
+			//Remove the query string form the users current location (may be required on redirect if enabled)
+			$urlCurrentURI = (is_null($urlStartingURI)) ? $_SERVER['REQUEST_URI'] : $urlStartingURI;
+			if(strstr($urlCurrentURI,'?')){
+				list($urlCurrentURI,$strCurrentQueryString) = explode('?',$urlCurrentURI);
+			}
+
+			//Append the old query string to the new one if enabled
+			if($blPreserveQueryString){
+				$strQueryString = ($strQueryString == '') ? $strCurrentQueryString : sprintf('%s&%s',$strCurrentQueryString,$strQueryString);
+			}
+
+			//Start processing the traversal
+			$urlCurrentURI = trim($urlCurrentURI);
 			$urlOut = rtrim($urlRelativePath,'/');
 
 			if(substr($urlRelativePath,0,2) == './'){
@@ -354,6 +375,6 @@
 				$urlOut = rtrim($urlOut,'/');
 			}
 
-			return $urlOut;
+			return ($strQueryString == '') ? $urlOut : sprintf('%s?%s',$urlOut,$strQueryString);
 		}
 	}
