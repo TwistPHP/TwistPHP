@@ -22,7 +22,7 @@
 	 */
 
 	namespace Twist\Core\Packages;
-	use \Twist\Core\ModuleBase;
+	use \Twist\Core\Classes\ModuleBase;
 
 	/**
 	 * Asset management package that allows the addition and grouping of assets. Assets can be images, videos, files, links and other data that can be uploaded to a website/service.

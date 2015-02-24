@@ -22,7 +22,7 @@
 	 */
 
 	namespace Twist\Core\Packages;
-	use \Twist\Core\ModuleBase;
+	use \Twist\Core\Classes\ModuleBase;
 
 	/**
 	 * Timer to capture the time taken

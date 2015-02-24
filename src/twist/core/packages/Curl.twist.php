@@ -22,7 +22,7 @@
 	 */
 
 	namespace Twist\Core\Packages;
-	use \Twist\Core\ModuleBase;
+	use \Twist\Core\Classes\ModuleBase;
 
 	/**
 	 * Simply make GET, POST, PUT and DELETE CURL requests, set custom headers, decode JSON responses. Transferring data via many different protocols including HTTP, HTTPS, FTP, FTPS, TELNET, LDAP and many more.

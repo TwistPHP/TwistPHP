@@ -40,19 +40,16 @@
 	date_default_timezone_set('Europe/London');
 	$_SERVER['TWIST_BOOT'] = microtime();
 
-	$strCoreDir = sprintf('%s/classes/',dirname(__FILE__));
+	require_once sprintf('%s/classes/Autoload.twist.php',dirname(__FILE__));
+	use \Twist\Core\Classes\Autoload;
 
-	require_once sprintf('%sAutoloader.twist.php',$strCoreDir);
-	require_once sprintf('%sBase.twist.php',$strCoreDir);
-	require_once sprintf('%sBaseController.twist.php',$strCoreDir);
-	require_once sprintf('%sBaseInterface.twist.php',$strCoreDir);
-	require_once sprintf('%sBaseModules.twist.php',$strCoreDir);
-	require_once sprintf('%sModuleBase.twist.php',$strCoreDir);
-	require_once sprintf('%sFramework.twist.php',$strCoreDir);
-	require_once sprintf('%sInstance.twist.php',$strCoreDir);
-	require_once sprintf('%sRC4.twist.php',$strCoreDir);
-	require_once sprintf('%sResources.twist.php',$strCoreDir);
-	require_once sprintf('%sCore.twist.php',$strCoreDir);
+	Autoload::init(realpath(sprintf('%s/../../',dirname(__FILE__))));
+	Autoload::registerPath('\\Twist\\Controllers\\','controllers','.controller.php');
+	Autoload::registerPath('\\Twist\\Modules\\','twist/modules','.controller.php');
+	Autoload::registerPath('\\Twist\\Core\\Packages\\','twist/core/packages','.twist.php');
+	Autoload::registerPath('\\Twist\\Core\\Classes\\','twist/core/classes','.twist.php');
+
+	require_once sprintf('%s/classes/Twist.twist.php',dirname(__FILE__));
 
 	$arrShadowCoreInfo = json_decode(file_get_contents(sprintf('%s/../info.json',dirname(__FILE__))),true);
 	Twist::define('TWIST_VERSION',$arrShadowCoreInfo['version']);

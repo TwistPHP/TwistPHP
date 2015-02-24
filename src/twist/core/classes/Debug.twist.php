@@ -21,7 +21,7 @@
 	 *
 	 */
 
-	namespace Twist\Core;
+	namespace Twist\Core\Classes;
 
 	/**
 	 * Debugging the framework and its modules, functionality to access debug data can be found here. Data will only be present if Debugging is enabled in your settings.
@@ -121,7 +121,7 @@
 
 			$arrTags['stats'] .= '</div> Execution Time: '.$intTotalTime;
 
-			echo $this->resTemplate->build('_base.tpl',$arrTags);
+			return $this->resTemplate->build('_base.tpl',$arrTags);
 		}
 
 	}

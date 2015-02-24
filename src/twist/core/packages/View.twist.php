@@ -22,8 +22,8 @@
  */
 
 namespace Twist\Core\Packages;
-use \Twist\Core\ModuleBase;
-use \Twist\Core\Instance;
+use \Twist\Core\Classes\ModuleBase;
+use \Twist\Core\Classes\Instance;
 
 /**
  * Bring HTML to life with conditional tags, allowing interaction with PHP without using PHP code. Include functionality of additional views in just a fue chars
@@ -750,7 +750,7 @@ class View extends ModuleBase{
 
 					}elseif(array_key_exists('instance',$arrExtensions[$strType])){
 
-						$resClass = \Twist\Core\Instance::retrieveObject($arrExtensions[$strType]['instance']);
+						$resClass = \Twist\Core\Classes\Instance::retrieveObject($arrExtensions[$strType]['instance']);
 						$strFunctionName = $arrExtensions[$strType]['function'];
 
 						$strReplacementData = $resClass -> $strFunctionName($strReference);

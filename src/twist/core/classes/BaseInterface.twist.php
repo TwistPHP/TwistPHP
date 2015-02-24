@@ -21,9 +21,10 @@
 	 *
 	 */
 
-	namespace Twist\Core;
+	namespace Twist\Core\Classes;
+	use Twist\Core\Packages\Route;
 
-	class BaseInterface{
+	class BaseInterface extends Route{
 
 		protected $strInterfaceKey = null;
 		protected $strBaseURI = null;
@@ -32,93 +33,18 @@
 
 		public function __construct($strInterfaceKey){
 
+			parent::__construct($strInterfaceKey);
+
+			//Get the current base template before it is purged
+			$this->baseTemplate(\Twist::Route()->baseTemplate());
 			\Twist::Route()->purge();
 
-			$this->strInterfaceKey = $strInterfaceKey;
+			$arrInterfaceParams = \Twist::framework()->interfaces()->information($strInterfaceKey);
 
-			$this->resRoute = $this->routeResource($this->strInterfaceKey);
-			$this->resRoute->interfaceURI($this->strInterfaceKey);
-
-			$arrInterfaceParams = \Twist::framework()->interfaces()->information($this->strInterfaceKey);
-
-			$this->resRoute->setTemplatesDirectory(sprintf('%s/views/',rtrim($arrInterfaceParams['path'],'/')));
-			$this->resRoute->setElementsDirectory(sprintf('%s/views/',rtrim($arrInterfaceParams['path'],'/')));
-			$this->resRoute->setControllerDirectory(sprintf('%s/controllers/',rtrim($arrInterfaceParams['path'],'/')));
-		}
-
-		protected function routeResource($strInterfaceKey){
-			return \Twist::Route($strInterfaceKey);
-		}
-
-		public function baseURI($strBaseURI){
-			$this->strBaseURI = trim($strBaseURI,'/');
-			$this->resRoute->baseURI($this->strBaseURI);
-		}
-
-		public function baseTemplate($strBaseTemplate){
-			$this->strBaseTemplate = $strBaseTemplate;
-			$this->resRoute->baseTemplate($strBaseTemplate);
-		}
-
-		public function baseTemplateIgnore(){
-			$this->strBaseTemplate = null;
-			$this->resRoute->baseTemplateIgnore();
-		}
-
-		protected function redirect($strURI,$strURL){
-			$this->resRoute->redirect($strURI,$strURL);
-		}
-
-		protected function restrict($strURI,$strLoginURI,$mxdLevel = null){
-			$this->resRoute->restrict($strURI,$strLoginURI,$mxdLevel);
-		}
-
-		protected function ajax($strURI,$strFunctionsFolder = null,$strTemplatesFolder = null,$strElementsFolder = null){
-			$this->resRoute->ajax($strURI,$strFunctionsFolder,$strTemplatesFolder,$strElementsFolder);
-		}
-
-		protected function template($strURI,$strTemplate,$mxdBaseTemplate = true,$mxdCache = false,$arrData = array()){
-			$this->resRoute->template($strURI,$strTemplate,$mxdBaseTemplate,$mxdCache,$arrData);
-		}
-
-		protected function getTemplate($strURI,$strTemplate,$mxdBaseTemplate = true,$mxdCache = false,$arrData = array()){
-			$this->resRoute->getTemplate($strURI,$strTemplate,$mxdBaseTemplate,$mxdCache,$arrData);
-		}
-
-		protected function postTemplate($strURI,$strTemplate,$mxdBaseTemplate = true,$mxdCache = false,$arrData = array()){
-			$this->resRoute->postTemplate($strURI,$strTemplate,$mxdBaseTemplate,$mxdCache,$arrData);
-		}
-
-		protected function putTemplate($strURI,$strTemplate,$mxdBaseTemplate = true,$mxdCache = false,$arrData = array()){
-			$this->resRoute->putTemplate($strURI,$strTemplate,$mxdBaseTemplate,$mxdCache,$arrData);
-		}
-
-		protected function deleteTemplate($strURI,$strTemplate,$mxdBaseTemplate = true,$mxdCache = false,$arrData = array()){
-			$this->resRoute->deleteTemplate($strURI,$strTemplate,$mxdBaseTemplate,$mxdCache,$arrData);
-		}
-
-		protected function element($strURI,$strElement,$mxdBaseTemplate = true,$mxdCache = false,$arrData = array()){
-			$this->resRoute->element($strURI,$strElement,$mxdBaseTemplate,$mxdCache,$arrData);
-		}
-
-		protected function getElement($strURI,$strElement,$mxdBaseTemplate = true,$mxdCache = false,$arrData = array()){
-			$this->resRoute->getElement($strURI,$strElement,$mxdBaseTemplate,$mxdCache,$arrData);
-		}
-
-		protected function postElement($strURI,$strElement,$mxdBaseTemplate = true,$mxdCache = false,$arrData = array()){
-			$this->resRoute->postElement($strURI,$strElement,$mxdBaseTemplate,$mxdCache,$arrData);
-		}
-
-		protected function putElement($strURI,$strElement,$mxdBaseTemplate = true,$mxdCache = false,$arrData = array()){
-			$this->resRoute->putElement($strURI,$strElement,$mxdBaseTemplate,$mxdCache,$arrData);
-		}
-
-		protected function deleteElement($strURI,$strElement,$mxdBaseTemplate = true,$mxdCache = false,$arrData = array()){
-			$this->resRoute->deleteElement($strURI,$strElement,$mxdBaseTemplate,$mxdCache,$arrData);
-		}
-
-		protected function controller($strURI,$mxdController,$mxdBaseTemplate = true,$mxdCache = false,$arrData = array()){
-			$this->resRoute->controller($strURI,$mxdController,$mxdBaseTemplate,$mxdCache,$arrData);
+			$this->interfaceURI($strInterfaceKey);
+			$this->setTemplatesDirectory(sprintf('%s/views/',rtrim($arrInterfaceParams['path'],'/')));
+			$this->setElementsDirectory(sprintf('%s/views/',rtrim($arrInterfaceParams['path'],'/')));
+			$this->setControllerDirectory(sprintf('%s/controllers/',rtrim($arrInterfaceParams['path'],'/')));
 		}
 
 		protected function moduleRequired($strModule){
@@ -127,10 +53,5 @@
 
 		public function load(){
 			throw new \Exception('A load function must be added to your interface class, the class must extend TwistInterface');
-		}
-
-		public function serve(){
-			//Server all the pages of the CMS when requested
-			$this->resRoute->serve();
 		}
 	}

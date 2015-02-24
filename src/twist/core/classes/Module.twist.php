@@ -21,7 +21,7 @@
 	 *
 	 */
 
-	namespace Twist\Core;
+	namespace Twist\Core\Classes;
 
 	/**
 	 * Handle all module/package related enquiries, for instance if you want to know if a package is installed or what version it is.

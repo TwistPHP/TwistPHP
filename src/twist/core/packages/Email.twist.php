@@ -22,7 +22,7 @@
  */
 
 namespace Twist\Core\Packages;
-use \Twist\Core\ModuleBase;
+use \Twist\Core\Classes\ModuleBase;
 
 /**
  * Generate and send full multi-lingual multi-part HTML emails with the ability to add attachments. Fully customisable with Char encoding, message encoding,

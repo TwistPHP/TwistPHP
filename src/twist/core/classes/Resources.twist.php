@@ -21,7 +21,7 @@
  *
  */
 
-namespace Twist\Core;
+namespace Twist\Core\Classes;
 
 /**
  * Core resource handler for the framework, can be extended by installing the Official Resource module

@@ -21,19 +21,19 @@
 	 *
 	 */
 
-	namespace Twist\Core;
+	namespace Twist\Core\Classes;
 
 	/**
 	 * Register Shutdown and Event handlers, also handlers can be canceled if required
 	 */
 	final class Register{
 
-		public function autoloaderPath($strMatch,$dirPath,$strExtension = '.php'){
-			Autoloader::registerPath($strMatch,$dirPath,$strExtension);
+		public function autoloadPath($strMatch,$dirPath,$strExtension = '.php'){
+			Autoload::registerPath($strMatch,$dirPath,$strExtension);
 		}
 
-		public function autoloaderClass($strMatch,$strClass,$strFunction){
-			Autoloader::registerClass($strMatch,$strClass,$strFunction);
+		public function autoloadClass($strMatch,$strClass,$strFunction){
+			Autoload::registerClass($strMatch,$strClass,$strFunction);
 		}
 
 		public function handler($strType,$strClass,$strFunction){

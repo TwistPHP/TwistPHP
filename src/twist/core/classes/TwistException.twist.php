@@ -21,7 +21,7 @@
 	 *
 	 */
 
-	namespace Twist\Core;
+	namespace Twist\Core\Classes;
 
 	if(!class_exists('TwistException')){
 

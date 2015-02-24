@@ -21,7 +21,7 @@
 	 *
 	 */
 
-	namespace Twist\Controllers;
+	namespace Twist\Core\Classes;
 
 	class BaseController{
 
@@ -33,12 +33,12 @@
 		}
 
 		public function _default(){
-			\Twist\Core\Error::errorPage(404);
+			Error::errorPage(404);
 			return false;
 		}
 
 		public function _fallback(){
-			\Twist\Core\Error::errorPage(404);
+			Error::errorPage(404);
 			return false;
 		}
 
@@ -72,7 +72,7 @@
 			}elseif(array_key_exists(strtolower($strCallFunctionName),$arrControllerFunctions)){
 				return $this->$arrControllerFunctions[strtolower($strCallFunctionName)]();
 			}else{
-				\Twist\Core\Error::errorPage(404);
+				Error::errorPage(404);
 				return false;
 			}
 		}

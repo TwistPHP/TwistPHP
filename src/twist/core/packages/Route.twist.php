@@ -22,7 +22,7 @@
  */
 
 namespace Twist\Core\Packages;
-use \Twist\Core\ModuleBase;
+use \Twist\Core\Classes\ModuleBase;
 
 /**
  * Simply setup a website with multiple pages in minutes. Create restricted areas with login pages and dynamic sections with wild carded URI's.
@@ -47,6 +47,7 @@ class Route extends ModuleBase{
 	protected $strInterfaceURI = null;
 	protected $strPageTitle = '';
 	protected $intCacheTime = 3600;
+	protected $blDebugMode = false;
 	protected $strInstance = '';
 	protected $resTemplate = null;
 	protected $strControllerDirectory = null;
@@ -135,6 +136,13 @@ class Route extends ModuleBase{
 	 */
 	public function baseTemplateIgnore(){
 		$this->strBaseTemplate = null;
+	}
+
+	/**
+	 * Enable debug mode, this will override the debug/development settings in Twist Settings
+	 */
+	public function debugMode($blEnabled = true){
+		$this->blDebugMode = $blEnabled;
 	}
 
 	/**
@@ -918,23 +926,16 @@ class Route extends ModuleBase{
 						case'controller':
 							if (is_array($arrRoute['item']) && count($arrRoute['item']) >= 1) {
 
-								/**
-								$strControllerFile = sprintf('%s/%s.controller.php', $this->strControllerDirectory, $arrRoute['item'][0]);
-								$strControllerFileLegacy = sprintf('%s/%s.class.php', $this->strControllerDirectory, $arrRoute['item'][0]);
+								if(!strstr($arrRoute['item'][0],'\\')){
+									$strControllerClass = sprintf('\\Twist\\Controllers\\%s', $arrRoute['item'][0]);
+									$strControllerFile = sprintf('%s/%s.controller.php',$this->strControllerDirectory,$arrRoute['item'][0]);
 
-								if (file_exists($strControllerFile)) {
-									require_once $strControllerFile;
-								} elseif (file_exists($strControllerFileLegacy)) {
-									require_once $strControllerFileLegacy;
-									trigger_error(sprintf("Deprecated controller name '%s' rename controller as '%s'", $strControllerFileLegacy, $strControllerFile), E_TWIST_DEPRECATED);
-								} else {
-									throw new \Exception(sprintf("Controller '%s' does not exists", $arrRoute['item'][0]));
+									if(file_exists($strControllerFile)){
+										require_once sprintf('%s/%s.controller.php',$this->strControllerDirectory,$arrRoute['item'][0]);
+									}
+								}else{
+									$strControllerClass = $arrRoute['item'][0];
 								}
-
-								$strControllerClass = sprintf('\TwistController\\%s', $arrRoute['item'][0]);
-								**/
-
-								$strControllerClass = (!strstr($arrRoute['item'][0],'\\')) ? sprintf('\\Twist\\Controllers\\%s', $arrRoute['item'][0]) : $arrRoute['item'][0];
 
 								if (count($arrRoute['item']) > 1) {
 									$strControllerFunction = $arrRoute['item'][1];
@@ -1036,6 +1037,15 @@ class Route extends ModuleBase{
 					//Cache the page if cache is enabled for this route
 					if($arrRoute['cache'] == true && $arrRoute['cache_life'] > 0) {
 						$this->storePageCache($arrRoute['cache_key'], $strPageOut, $arrRoute['cache_life']);
+					}
+
+					//Output the Debug window to the screen when in debug mode
+					if($this->blDebugMode){
+						if(strstr($strPageOut,'</body>')){
+							$strPageOut = str_replace('</body>',\Twist::framework()->debug()->window().'</body>',$strPageOut);
+						}else{
+							$strPageOut .= \Twist::framework()->debug()->window();
+						}
 					}
 
 					//Output the page

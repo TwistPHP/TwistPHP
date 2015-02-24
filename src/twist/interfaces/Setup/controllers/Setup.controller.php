@@ -22,6 +22,7 @@
  */
 
 namespace Twist\Controllers;
+use Twist\Core\Classes\BaseController;
 
 class Setup extends BaseController{
 

@@ -21,8 +21,10 @@
 	 *
 	 */
 
+	use Twist\Core\Classes\BaseModules;
+
 	if(!class_exists('Twist')){
-		class Twist extends Twist\Core\BaseModules{
+		class Twist extends BaseModules{
 
 			protected static $blLaunched = false;
 
@@ -102,17 +104,12 @@
 					Twist::framework() -> module() -> extend('View','ajax',array('module' => 'AJAX','function' => 'viewExtension'));
 
 					//Register the framework resources handler into the template system
-					\Twist\Core\Instance::storeObject('twistCoreResources',new \Twist\Core\Resources());
+					\Twist\Core\Classes\Instance::storeObject('twistCoreResources',new \Twist\Core\Classes\Resources());
 					Twist::framework() -> module() -> extend('View','resource',array('instance' => 'twistCoreResources','function' => 'viewExtension'));
 
 					//Register all the modules that have been installed in the framework
 					Twist::framework() -> register() -> modules();
 					Twist::framework() -> register() -> interfaces();
-
-					\Twist\Core\Autoloader::init();
-
-					Twist::framework()->register()->autoloaderPath('\\Twist\\Controllers\\','controllers','.controller.php');
-					Twist::framework()->register()->autoloaderPath('\\Twist\\Modules\\','twist/modules','.controller.php');
 
 					//Stop tracking the framework boot time
 					Twist::Timer('TwistPageLoad') -> start();
@@ -214,7 +211,7 @@
 			protected static function maintenanceMode(){
 
 				if(Twist::framework()->setting('MAINTENANCE_MODE')){
-					\Twist\Core\Error::errorPage(503);
+					\Twist\Core\Classes\Error::errorPage(503);
 				}
 			}
 
@@ -224,19 +221,19 @@
 			protected static function errorHandlers(){
 
 				if(Twist::framework()->setting('ERROR_HANDLING')){
-					Twist::framework() -> register() -> handler('error','Twist\Core\Error','handleError');
+					Twist::framework() -> register() -> handler('error','Twist\Core\Classes\Error','handleError');
 				}
 
 				if(Twist::framework()->setting('ERROR_FATAL_HANDLING')){
-					Twist::framework() -> register() -> handler('fatal','Twist\Core\Error','handleFatal');
+					Twist::framework() -> register() -> handler('fatal','Twist\Core\Classes\Error','handleFatal');
 				}
 
 				if(Twist::framework()->setting('ERROR_EXCEPTION_HANDLING')){
-					Twist::framework() -> register() -> handler('exception','Twist\Core\Error','handleException');
+					Twist::framework() -> register() -> handler('exception','Twist\Core\Classes\Error','handleException');
 				}
 
 				if(Twist::framework()->setting('ERROR_LOG')){
-					Twist::framework() -> register() -> shutdownEvent('errorLog','Twist\Core\Error','outputLog');
+					Twist::framework() -> register() -> shutdownEvent('errorLog','Twist\Core\Classes\Error','outputLog');
 				}
 			}
 
@@ -259,7 +256,7 @@
 			 * @param $intResponseCode Code of the required response i.e. 404
 			 */
 			public static function respond($intResponseCode){
-				\Twist\Core\Error::errorPage($intResponseCode);
+				\Twist\Core\Classes\Error::errorPage($intResponseCode);
 			}
 
 			/**

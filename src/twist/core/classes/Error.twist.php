@@ -21,7 +21,7 @@
 	 *
 	 */
 
-	namespace Twist\Core;
+	namespace Twist\Core\Classes;
 
 	if(!class_exists('Error')){
 
@@ -263,8 +263,6 @@
 
 				//Check if the last error was fatal (INSTANT DEATH)
 				if(self::getType($arrLastError['type'],true) == "Fatal Error"){
-
-					require_once sprintf('%s/Exception.twist.php',dirname(__FILE__));
 
 					//throw new Exception($arrLastError['message']);
 					//A fatal error has occured, throw and exception instead.

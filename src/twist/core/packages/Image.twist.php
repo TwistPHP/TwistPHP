@@ -22,7 +22,7 @@
 	 */
 
 	namespace Twist\Core\Packages;
-	use \Twist\Core\ModuleBase;
+	use \Twist\Core\Classes\ModuleBase;
 
 	/**
 	 * Image editing suite that allows for new images to be created and existing images to be loaded in for modification

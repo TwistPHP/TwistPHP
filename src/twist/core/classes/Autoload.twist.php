@@ -21,17 +21,20 @@
 	 *
 	 */
 
-	namespace Twist\Core;
+	namespace Twist\Core\Classes;
 
-	class Autoloader{
+	class Autoload{
 
 		public $arrRegisteredLoaders = array();
+		public $strBaseDir = null;
+
 		public static $resAutoLoader;
 
-		public static function init(){
+		public static function init($strBaseDir){
 
 			if(self::$resAutoLoader == NULL){
 				self::$resAutoLoader = new self();
+				self::$resAutoLoader->strBaseDir = $strBaseDir;
 			}
 
 			return self::$resAutoLoader;
@@ -40,6 +43,11 @@
 		public static function registerPath($strMatch,$dirPath,$strExtension = '.php'){
 
 			if(self::$resAutoLoader != NULL){
+
+				if(substr($dirPath,0,1) != '/'){
+					$dirPath = sprintf('%s/%s',rtrim(self::$resAutoLoader->strBaseDir,'/'),$dirPath);
+				}
+
 				self::$resAutoLoader->arrRegisteredLoaders[ltrim($strMatch,'\\')] = array('type' => 'path','path' => $dirPath,'extension' => $strExtension);
 				krsort(self::$resAutoLoader->arrRegisteredLoaders);
 			}
@@ -61,6 +69,11 @@
 
 			$blMatchFound = false;
 
+			//Fix for matches that are in 'Twist\Core\Classes' namespace
+			if(!strstr($strRequest,'\\')){
+				$strRequest = sprintf('%s\\%s',__NAMESPACE__,$strRequest);
+			}
+
 			foreach($this->arrRegisteredLoaders as $strMatch => $arrLoader){
 
 				//Find a match for the file to be auto loaded
@@ -70,12 +83,11 @@
 
 					if($arrLoader['type'] == 'path'){
 
-						try{
-							require_once sprintf('%s/%s%s',$arrLoader['path'],str_replace('\\','/',$arrMatches[1]),$arrLoader['extension']);
-							//set_include_path($arrLoader['path']);
-							//spl_autoload_extensions($arrLoader['extension']);
-							//spl_autoload($arrMatches[1]);
-						}catch(\Exception $resException){
+						$strRequireFile = sprintf('%s/%s%s',$arrLoader['path'],str_replace('\\','/',$arrMatches[1]),$arrLoader['extension']);
+
+						if(file_exists($strRequireFile)){
+							require_once $strRequireFile;
+						}else{
 							$blMatchFound = false;
 						}
 					}else{

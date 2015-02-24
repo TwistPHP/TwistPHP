@@ -21,7 +21,7 @@
 	 *
 	 */
 
-	namespace Twist\Core;
+	namespace Twist\Core\Classes;
 
 	//Called only when using this class standalone (to help make define work)
 	if(!class_exists('BaseModules') && !class_exists('\Twist')){

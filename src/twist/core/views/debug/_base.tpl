@@ -1,4 +1,5 @@
 <style>
+
 	html{
 		margin-bottom:20px;
 	}
@@ -139,7 +140,7 @@
 </style>
 <div class="twistDebug twistDebugOpen">
 	<ul>
-		<li>TwistPHP Debug</li><!--
+		<li><img src="/twist/core/resources/logos/logo-32.png" title="TwistPHP" alt="TwistPHP">Debug</li><!--
 		--><li onclick="twistDebugTab('twistTabError');">Errors</li><!--
 		--><li onclick="twistDebugTab('twistTabDatabase');">Database</li><!--
 		--><li onclick="twistDebugTab('twistTabTemplates');">Templates</li><!--

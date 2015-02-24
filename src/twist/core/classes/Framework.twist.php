@@ -20,7 +20,7 @@
 	 * @link       https://twistphp.com
 	 *
 	 */
-	namespace Twist\Core;
+	namespace Twist\Core\Classes;
 
 	final class Framework{
 
@@ -32,48 +32,36 @@
 		private $objTools = null;
 		private $objUpgrade = null;
 
-		public function __construct(){
-
-			require_once sprintf('%sSettings.twist.php',DIR_FRAMEWORK_CLASSES);
-			$this->objSettings = new Settings();
-
-			require_once sprintf('%sDebug.twist.php',DIR_FRAMEWORK_CLASSES);
-			require_once sprintf('%sInterfaces.twist.php',DIR_FRAMEWORK_CLASSES);
-			require_once sprintf('%sModule.twist.php',DIR_FRAMEWORK_CLASSES);
-			require_once sprintf('%sRegister.twist.php',DIR_FRAMEWORK_CLASSES);
-			require_once sprintf('%sShutdown.twist.php',DIR_FRAMEWORK_CLASSES);
-			require_once sprintf('%sTools.twist.php',DIR_FRAMEWORK_CLASSES);
-			require_once sprintf('%sUpgrade.twist.php',DIR_FRAMEWORK_CLASSES);
-
-			$this->objDebug = new Debug();
-			$this->objInterfaces = new Interfaces();
-			$this->objModule = new Module();
-			$this->objRegister = new Register();
-			$this->objTools = new Tools();
-			$this->objUpgrade = new Upgrade();
-		}
+		public function __construct(){ }
 
 		public function databaseDebug(){
 			return false;
 		}
 
 		public function debug(){
+			$this->objDebug = (is_null($this->objDebug)) ? new Debug() : $this->objDebug;
 			return $this->objDebug;
 		}
 
 		public function interfaces(){
+			$this->objInterfaces = (is_null($this->objInterfaces)) ? new Interfaces() : $this->objInterfaces;
 			return $this->objInterfaces;
 		}
 
 		public function module(){
+			$this->objModule = (is_null($this->objModule)) ? new Module() : $this->objModule;
 			return $this->objModule;
 		}
 
 		public function register(){
+			$this->objRegister = (is_null($this->objRegister)) ? new Register() : $this->objRegister;
 			return $this->objRegister;
 		}
 
 		public function setting($strKey,$strValue = null){
+
+			$this->objSettings = (is_null($this->objSettings)) ? new Settings() : $this->objSettings;
+
 			$mxdOut = null;
 			if(is_null($strValue)){
 				$mxdOut = $this->objSettings->get($strKey);
@@ -84,14 +72,17 @@
 		}
 
 		public function settings(){
+			$this->objSettings = (is_null($this->objSettings)) ? new Settings() : $this->objSettings;
 			return $this->objSettings;
 		}
 
 		public function tools(){
+			$this->objTools = (is_null($this->objTools)) ? new Tools() : $this->objTools;
 			return $this->objTools;
 		}
 
 		public function upgrade(){
+			$this->objUpgrade = (is_null($this->objUpgrade)) ? new Upgrade() : $this->objUpgrade;
 			return $this->objUpgrade;
 		}
 

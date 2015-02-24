@@ -22,7 +22,7 @@
  */
 
 namespace Twist\Core\Packages;
-use \Twist\Core\ModuleBase;
+use \Twist\Core\Classes\ModuleBase;
 
 /**
  * User management and control allowing users to register, login and be updated

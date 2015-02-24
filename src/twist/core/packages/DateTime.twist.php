@@ -22,7 +22,7 @@
 	*/
 
 	namespace Twist\Core\Packages;
-	use \Twist\Core\ModuleBase;
+	use \Twist\Core\Classes\ModuleBase;
 
 	/**
 	 * Simply format data and time strings, generate human readable age of any given date. For example 120 will become "2 minutes" provide a timestamp and the age can be presented as "10 minutes ago". Work with date ranges and producing on screen calendars.

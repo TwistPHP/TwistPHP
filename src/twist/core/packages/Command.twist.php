@@ -22,7 +22,7 @@
  */
 
 namespace Twist\Core\Packages;
-use \Twist\Core\ModuleBase;
+use \Twist\Core\Classes\ModuleBase;
 
 /**
  * Execute bash command line commands on the server and get back nicely formatted result array.

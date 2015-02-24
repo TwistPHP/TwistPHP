@@ -21,7 +21,7 @@
 	 *
 	 */
 
-	namespace Twist\Core;
+	namespace Twist\Core\Classes;
 
 	/**
 	 * Usage and Performance stats of the the framework. Page load and creation timings can be accessed from here.

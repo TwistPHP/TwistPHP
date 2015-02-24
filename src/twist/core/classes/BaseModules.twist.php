@@ -21,8 +21,8 @@
 	 *
 	 */
 
-	namespace Twist\Core;
-	use \Twist\Modules as Modules;
+	namespace Twist\Core\Classes;
+	use Twist\Modules as Modules;
 
 	if(!class_exists('BaseModules')){
 		class BaseModules extends Base{

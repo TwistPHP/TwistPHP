@@ -22,15 +22,16 @@
 	 */
 
 	namespace Twist\Interfaces;
-	use \Twist\Core\BaseInterface;
+	use \Twist\Core\Classes\BaseInterface;
 
 	class Setup extends BaseInterface{
 
 		public function load(){
-			
+
 			$this->baseTemplate('_base.tpl');
 			$this->baseURI(BASE_URI);
-			$this->controller('/%',array('Setup'));
+
+			$this->controller('/%','Setup');
 		}
 
 	}

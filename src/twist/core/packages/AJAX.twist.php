@@ -22,7 +22,7 @@
  */
 
 namespace Twist\Core\Packages;
-use \Twist\Core\ModuleBase;
+use \Twist\Core\Classes\ModuleBase;
 
 /**
  * AJAX server to use along with twist ajax and twist debug (optional)
@@ -188,7 +188,7 @@ class AJAX extends ModuleBase{
 	 */
 	private function attachDebugData(){
 
-		$arrResponseData['errors'] = \Twist\Core\Error::$arrErrorLog;
+		$arrResponseData['errors'] = \Twist\Core\Classes\Error::$arrErrorLog;
 	}
 
 	/**

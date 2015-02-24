@@ -22,7 +22,7 @@
  */
 
 namespace Twist\Core\Packages;
-use \Twist\Core\ModuleBase;
+use \Twist\Core\Classes\ModuleBase;
 
 /**
  * Data validation package can validate different types of data i.e Email Address, URLS, Telephone numbers, UK Postcodes and much more.

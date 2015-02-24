@@ -22,7 +22,7 @@
 	 */
 
 	namespace Twist\Core\Packages;
-	use \Twist\Core\ModuleBase;
+	use \Twist\Core\Classes\ModuleBase;
 
 	/**
 	 * ICS Calendar and Event Handler, can import, edita nd create ics files that are compatible with Google Calendars and iCAl/Mac Calendar
