@@ -1,0 +1,142 @@
+
+
+#twistDebug{
+	z-index: 1001;
+	font-family: Arial;
+	font-size: 16px;
+	color: #3d3d3d;
+	position:fixed;
+	bottom:0;
+	left:0;
+	right:0;
+
+	border-top:1px solid #333333;
+	resize: vertical;
+	height:280px;
+
+	.twistDebugHeader{
+		background-color: #003300;
+		padding: 0 10px;
+		position: relative;
+
+		a{
+			color:#FFF;
+			font-weight: bold;
+			text-decoration: none;
+			margin-top:5px;
+			height:28px;
+			display: inline-block;
+
+			img{
+				vertical-align: middle;
+			}
+
+			&.toggleButton{
+				position: absolute;
+				right:10px;
+				bottom:0;
+			}
+		}
+
+		ul{
+			display: inline-block;
+			list-style: none;
+			margin:0;
+			padding:0;
+			position: absolute;
+			right:30px;
+			bottom:0;
+
+			li{
+				display: inline-block;
+				margin:0 5px;
+				padding:4px 8px 2px 8px;
+				cursor: pointer;
+				color:#FFF;
+
+				&.current{
+					background-color: #FFF;
+					color: #003300;
+					border-radius: 5px 5px 0 0;
+				}
+
+				&:hover{
+					background-color: #FFF;
+					color: #003300;
+					border-radius: 5px 5px 0 0;
+				}
+			}
+		}
+	}
+
+	.twistTabTitle{
+		text-align: right;
+		position: relative;
+		padding: 10px;
+
+		strong{
+			text-align: left;
+			position: absolute;
+			left:10px;
+		}
+	}
+
+	.twistTabs{
+		position: absolute;
+		top:34px;
+		left:0;
+		right:0;
+		bottom:0;
+
+		overflow: auto;
+		background-color: #FFF;
+
+		>div{
+
+			&.hide{
+				display: none;
+			}
+
+			.phpError,.databaseQuery{
+				border-top:1px solid #CCC;
+				padding: 6px;
+
+				span{
+					font-size: 12px;
+					font-weight: bold;
+				}
+			}
+
+			.timer{
+				margin:auto;
+				width:90%;
+				border: 1px solid #222;
+				height:35px;
+
+				span{
+					display: inline-block;
+					vertical-align: top;
+					text-align: center;
+					color:#FFF;
+					font-weight:bold;
+					padding-top:10px;
+					height:25px;
+				}
+			}
+		}
+	}
+
+	&.minimize{
+
+		height:34px;
+
+		.twistDebugHeader {
+			ul{
+				display: none;
+			}
+		}
+		.twistTabs{
+			display: none;
+		}
+	}
+}

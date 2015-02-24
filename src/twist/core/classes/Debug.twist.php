@@ -70,11 +70,11 @@
 			);
 
 			foreach($this->arrDebugLog['Error']['php'] as $arrEachItem){
-				$arrTags['errors'] .= sprintf('<pre class="code" lang="php" title="%s: %s">%s</pre>',$arrEachItem['type'],$arrEachItem['message'],$arrEachItem['code']);
+				$arrTags['errors'] .= $this->resTemplate->build('components/php-error.tpl',$arrEachItem);
 			}
 
 			foreach($this->arrDebugLog['Database']['queries'] as $arrEachItem){
-				$arrTags['database'] .= sprintf('<strong>%s</strong> Execution time: %s<pre class="code" lang="sql" title="%s">%s</pre>',$arrEachItem['status'],$arrEachItem['time'],'SELECT',$arrEachItem['query']);
+				$arrTags['database'] .= $this->resTemplate->build('components/database-query.tpl',$arrEachItem);
 			}
 
 			foreach($this->arrDebugLog['Template']['usage'] as $arrEachItem){

@@ -1,206 +1,155 @@
-<style>
+<link href="/twist/core/resources/debug/debug.css" type="text/css" rel="stylesheet">
+<script type="text/javascript">
 
-	html{
-		margin-bottom:20px;
-	}
-	.twistDebug{
-		z-index: 1001;
-		font-size: 11px;
-		color: #3d3d3d;
-		position:fixed;
-		bottom:0;
-		left:0;
-		right:0;
-
-		min-height:20px;
-		border-top:1px solid #333333;
-
-		background-color: #CCC;
+	if(window.jQuery === undefined){
+		var headTag = document.getElementsByTagName("head")[0];
+		var jqTag = document.createElement('script');
+		jqTag.type = 'text/javascript';
+		jqTag.src = '/twist/core/resources/jquery/jquery-2.1.3.min.js';
+		headTag.appendChild(jqTag);
 	}
 
-	.twistDebug h3{
-		font-size: 1.2em;
-		margin: 5px;
+	function toggleDebug(){
+		$('#twistDebug').toggleClass('minimize');
 	}
+	function twistDebugTab(strTabID,resButton){
+		$('.twistTabs >div').removeClass('hide').addClass('hide');
+		$('#'+strTabID).toggleClass('hide');
 
-	.twistDebugOpen{
-		resize: vertical;
-		height:280px;
+		$('.twistDebugHeader li').removeClass('current');
+		$(resButton).addClass('current');
 	}
+</script>
 
-	.twistDebugOpen .twistTab{
-		position: absolute;
-		top:34px;
-		left:0;
-		right:0;
-		bottom:0;
-
-		overflow: auto;
-		background-color: #FFF;
-	}
-
-
-
-	.twistDebugOpen pre {
-		margin-bottom: 1em;
-		display: block;
-		font-family: "Courier New", Courier, monospace, mono;
-		font-size: 1.3em;
-		line-height: 1.25em;
-		white-space: pre-wrap; }
-
-	.twistDebugOpen pre.code {
-		padding: 1em;
-		position: relative;
-		overflow: auto;
-		white-space: pre;
-		background-color: #EEE;
-		border: 1px #CCC solid;
-		border-radius: 3px; }
-
-	.twistDebugOpen pre.code em {
-		font-style: normal;
-		font-weight: bold;
-		background-color: #FF0; }
-	.twistDebugOpen pre.code[title] {
-		padding-top: 2.5em; }
-	.twistDebugOpen pre.code[title]::before {
-		padding: 0 0.75em;
-		position: absolute;
-		top: 0;
-		right: 0;
-		left: 0;
-		color: #FFF;
-		font-weight: bold;
-		font-family: Helvetica, Arial, Tahoma, sans-serif;
-		line-height: 1.5em;
-		white-space: nowrap;
-		background-color: #CCC;
-		content: attr(title); }
-	.twistDebugOpen pre.code[lang]::after {
-		height: 1.5em;
-		padding: 0 0.5em;
-		position: absolute;
-		top: 0;
-		right: 0.5em;
-		color: #FFF;
-		font-family: Helvetica, Arial, Tahoma, sans-serif;
-		line-height: 1.5em;
-		text-transform: uppercase;
-		background-color: #CCC;
-		border-radius: 0 0 3px 3px;
-		content: attr(lang); }
-	.twistDebugOpen pre.code[lang][title]::after {
-		padding: 0;
-		right: 0.75em;
-		background-color: transparent; }
-
-
-
-
-	.twistDebugOpen div.hide{
-		display: none;
-	}
-
-	.twistDebug ul{
-		border-bottom:1px solid #A9A9A9;
-		margin:0;
-		padding:0;
-	}
-
-	.twistDebug ul li{
-		display: inline-block;
-		border-right:1px solid #333333;
-		list-style: none;
-		padding:6px 4px;
-		cursor: pointer;
-	}
-
-	.twistDebug ul li:hover{
-		background-color: #EAEAEA;
-	}
-
-	.timer{
-		margin:auto;
-		width:90%;
-		border: 1px solid #222;
-		height:35px;
-	}
-
-	.timer span{
-		display: inline-block;
-		vertical-align: top;
-		text-align: center;
-		color:#FFF;
-		font-weight:bold;
-		padding-top:10px;
-		height:25px;
-	}
-
-</style>
-<div class="twistDebug twistDebugOpen">
-	<ul>
-		<li><img src="/twist/core/resources/logos/logo-32.png" title="TwistPHP" alt="TwistPHP">Debug</li><!--
-		--><li onclick="twistDebugTab('twistTabError');">Errors</li><!--
-		--><li onclick="twistDebugTab('twistTabDatabase');">Database</li><!--
-		--><li onclick="twistDebugTab('twistTabTemplates');">Templates</li><!--
-		--><li onclick="twistDebugTab('twistTabStats');">Stats</li><!--
-		--><li onclick="twistDebugTab('twistTabCache');">Cache</li>
-	</ul>
-	<div class="twistTab twistTabError">
-		<h3>Errors</h3>
-		<p>List all the PHP errors that have occurred during the processing of this page</p>
-		{data:errors}
+<div id="twistDebug">
+	<div class="twistDebugHeader">
+		<a href="https://twistphp.com/docs"><img src="/twist/core/resources/logos/logo-32.png" width="20" title="TwistPHP" alt="TwistPHP"> Debug Bar</a>
+		<ul>
+			<li onclick="twistDebugTab('twistTabError',this);" class="current">PHP Errors</li><!--
+		--><li onclick="twistDebugTab('twistTabDatabase',this);">Query Log</li><!--
+		--><li onclick="twistDebugTab('twistTabRoutes',this);">Routes</li><!--
+		--><li onclick="twistDebugTab('twistTabViews',this);">Views</li><!--
+		--><li onclick="twistDebugTab('twistTabStats',this);">Stats</li><!--
+		--><li onclick="twistDebugTab('twistTabCache',this);">Cache</li>
+		</ul>
+		<a class="toggleButton" href="#" onclick="toggleDebug();">X</a>
 	</div>
-	<div class="twistTab twistTabDatabase hide">
-		<h3>Database</h3>
-		<p>List all the database queries run and status generated from processing this page</p>
-		{data:database}
-	</div>
-	<div class="twistTab twistTabTemplates hide">
-		<h3>Templates</h3>
-		<p>List all the templates, elements and routes used in the generation of this page</p>
-		<table>
-			<thead>
+	<div class="twistTabs">
+
+		<div id="twistTabError">
+			<div class="twistTabTitle"><strong>PHP Errors</strong>All the PHP errors that occurred during this page load</div>
+			<div class="phpError">
+				<p>Warning: undefined index 'title' in file.php<br><span>[Line: 402] /my/file.php</span></p>
+				<code>blah blah blah</code>
+			</div>
+			<div class="phpError">
+				<p>Warning: undefined index 'title' in file.php<br><span>[Line: 402] /my/file.php</span></p>
+				<code>blah blah blah</code>
+			</div>
+			<div class="phpError">
+				<p>Warning: undefined index 'title' in file.php<br><span>[Line: 402] /my/file.php</span></p>
+				<code>blah blah blah</code>
+			</div>
+			<div class="phpError">
+				<p>Warning: undefined index 'title' in file.php<br><span>[Line: 402] /my/file.php</span></p>
+				<code>blah blah blah</code>
+			</div>
+			{data:errors}
+		</div>
+
+		<div id="twistTabDatabase" class="hide">
+			<div class="twistTabTitle"><strong>Database Query Log</strong>All the database queries that where run during this page load</div>
+			<div class="databaseQuery">
+				<p><strong>*PASS*</strong> SELECT * FROM `database`.`table` WHERE `field` = '1';<br><span>[Run Time: 0.0243]</span></p>
+				<code>Called from [Line: 402] /my/file.php</code>
+			</div>
+			<div class="databaseQuery">
+				<p><strong>*PASS*</strong> SELECT * FROM `database`.`table` WHERE `field` = '1';<br><span>[Run Time: 0.0243]</span></p>
+				<code>Called from [Line: 402] /my/file.php</code>
+			</div>
+			<div class="databaseQuery">
+				<p><strong>*FAIL*</strong> SELECT * FROM `database`.`table` WHERE `field` = '1';<br><span>[Run Time: 0.0243]</span></p>
+				<code>Called from [Line: 402] /my/file.php</code>
+			</div>
+			<div class="databaseQuery">
+				<p><strong>*PASS*</strong> DELETE FROM `database`.`table` WHERE `field` = '4';<br><span>[Run Time: 0.0243]</span></p>
+				<code>Called from [Line: 402] /my/file.php</code>
+			</div>
+			{data:database}
+		</div>
+
+		<div id="twistTabRoutes" class="hide">
+			<div class="twistTabTitle"><strong>Routes</strong>All the routes registered in the system</div>
+			<strong>Current Route</strong><br>
+			<pre>
+				Array(
+					'relative_uri' => '/blah',
+					'item' => '/blah/{id}',
+					'description' => 'Test',
+				)
+			</pre>
+			<strong>Registered Routes</strong><br>
+			<table>
+				<thead>
+				<tr>
+					<th>URI</th>
+					<th>Method</th>
+					<th>Item</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr>
+					<th>/</th>
+					<td>GET</td>
+					<td>/%</td>
+				</tr>
+				<tr>
+					<th>/test</th>
+					<td>ANY</td>
+					<td>/test/{id}</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div id="twistTabViews" class="hide">
+			<div class="twistTabTitle"><strong>Views</strong>All the templates and elements used in this page load</div>
+			<table>
+				<thead>
 				<tr>
 					<th>Instance</th>
 					<th>File</th>
 					<th>Tags</th>
 				</tr>
-			</thead>
-			<tbody>
+				</thead>
+				<tbody>
 				{data:templates}
-			</tbody>
-		</table>
-	</div>
-	<div class="twistTab twistTabStats hide">
-		<h3>Stats</h3>
-		<p>Page load time stats, memory usage and other useful information</p>
-		{data:stats}
-	</div>
-	<div class="twistTab twistTabCache hide">
-		<h3>Cache</h3>
-		<p>Page load time stats, memory usage and other useful information</p>
-		<table>
-			<thead>
-			<tr>
-				<th>Instance</th>
-				<th>Key</th>
-				<th>Size</th>
-				<th>Expiry</th>
-				<th>Tools</th>
-			</tr>
-			</thead>
-			<tbody>
-			{data:cache}
-			</tbody>
-		</table>
+				</tbody>
+			</table>
+		</div>
+
+		<div id="twistTabStats" class="hide">
+			<div class="twistTabTitle"><strong>Performance Stats</strong>Page load time stats, memory usage and other useful information</div>
+			{data:stats}
+		</div>
+
+		<div id="twistTabCache" class="hide">
+			<div class="twistTabTitle"><strong>Cache Manager</strong>Manage the server side cache files</div>
+			<table>
+				<thead>
+				<tr>
+					<th>Instance</th>
+					<th>Key</th>
+					<th>Size</th>
+					<th>Expiry</th>
+					<th>Tools</th>
+				</tr>
+				</thead>
+				<tbody>
+				{data:cache}
+				</tbody>
+			</table>
+		</div>
+
 	</div>
 </div>
-<script type="text/javascript">
-	function twistDebugTab(strTabClass){
-		$('.twistTab').removeClass('hide').addClass('hide');
-		$('.'+strTabClass).toggleClass('hide');
-	}
-	$(".twistDebug").resizable({ handles: "s" });
-</script>
