@@ -1,4 +1,7 @@
 
+body{
+	margin-bottom:34px;
+}
 
 #twistDebug{
 	z-index: 1001;
@@ -101,9 +104,25 @@
 				border-top:1px solid #CCC;
 				padding: 6px;
 
-				span{
+				p{
+					margin-bottom:10px;
+				}
+
+				.fileInformation{
+					padding-top:10px;
+					display: inline-block;
 					font-size: 12px;
 					font-weight: bold;
+				}
+
+				code{
+					width: 96%;
+					display: inline-block;
+					padding:5px;
+					background-color: #FFFBE2;
+					font-size: 14px;
+					font-family: monospace, sans-serif;
+					white-space: pre;
 				}
 			}
 

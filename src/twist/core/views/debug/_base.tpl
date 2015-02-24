@@ -21,12 +21,13 @@
 	}
 </script>
 
-<div id="twistDebug">
+<div id="twistDebug" class="minimize">
 	<div class="twistDebugHeader">
-		<a href="https://twistphp.com/docs"><img src="/twist/core/resources/logos/logo-32.png" width="20" title="TwistPHP" alt="TwistPHP"> Debug Bar</a>
+		<a href="https://twistphp.com/docs" target="_blank"><img src="/twist/core/resources/logos/logo-32.png" width="20" title="TwistPHP" alt="TwistPHP"> Debug Bar</a>
 		<ul>
 			<li onclick="twistDebugTab('twistTabError',this);" class="current">PHP Errors</li><!--
 		--><li onclick="twistDebugTab('twistTabDatabase',this);">Query Log</li><!--
+		--><li onclick="twistDebugTab('twistTabDebug',this);">Debug/Help</li><!--
 		--><li onclick="twistDebugTab('twistTabRoutes',this);">Routes</li><!--
 		--><li onclick="twistDebugTab('twistTabViews',this);">Views</li><!--
 		--><li onclick="twistDebugTab('twistTabStats',this);">Stats</li><!--
@@ -38,22 +39,6 @@
 
 		<div id="twistTabError">
 			<div class="twistTabTitle"><strong>PHP Errors</strong>All the PHP errors that occurred during this page load</div>
-			<div class="phpError">
-				<p>Warning: undefined index 'title' in file.php<br><span>[Line: 402] /my/file.php</span></p>
-				<code>blah blah blah</code>
-			</div>
-			<div class="phpError">
-				<p>Warning: undefined index 'title' in file.php<br><span>[Line: 402] /my/file.php</span></p>
-				<code>blah blah blah</code>
-			</div>
-			<div class="phpError">
-				<p>Warning: undefined index 'title' in file.php<br><span>[Line: 402] /my/file.php</span></p>
-				<code>blah blah blah</code>
-			</div>
-			<div class="phpError">
-				<p>Warning: undefined index 'title' in file.php<br><span>[Line: 402] /my/file.php</span></p>
-				<code>blah blah blah</code>
-			</div>
 			{data:errors}
 		</div>
 
@@ -63,30 +48,24 @@
 				<p><strong>*PASS*</strong> SELECT * FROM `database`.`table` WHERE `field` = '1';<br><span>[Run Time: 0.0243]</span></p>
 				<code>Called from [Line: 402] /my/file.php</code>
 			</div>
-			<div class="databaseQuery">
-				<p><strong>*PASS*</strong> SELECT * FROM `database`.`table` WHERE `field` = '1';<br><span>[Run Time: 0.0243]</span></p>
-				<code>Called from [Line: 402] /my/file.php</code>
-			</div>
-			<div class="databaseQuery">
-				<p><strong>*FAIL*</strong> SELECT * FROM `database`.`table` WHERE `field` = '1';<br><span>[Run Time: 0.0243]</span></p>
-				<code>Called from [Line: 402] /my/file.php</code>
-			</div>
-			<div class="databaseQuery">
-				<p><strong>*PASS*</strong> DELETE FROM `database`.`table` WHERE `field` = '4';<br><span>[Run Time: 0.0243]</span></p>
-				<code>Called from [Line: 402] /my/file.php</code>
-			</div>
 			{data:database}
+		</div>
+
+		<div id="twistTabDebug" class="hide">
+			<div class="twistTabTitle"><strong>Debug Log</strong>Debug messages that have been output form this page</div>
+			<ul>
+				<li>Messages on this page</li>
+				<li>Messages on other pages</li>
+				<li>Todos in the site code</li>
+				<li>Deprecated functions used</li>
+			</ul>
 		</div>
 
 		<div id="twistTabRoutes" class="hide">
 			<div class="twistTabTitle"><strong>Routes</strong>All the routes registered in the system</div>
 			<strong>Current Route</strong><br>
 			<pre>
-				Array(
-					'relative_uri' => '/blah',
-					'item' => '/blah/{id}',
-					'description' => 'Test',
-				)
+				{data:route_current}
 			</pre>
 			<strong>Registered Routes</strong><br>
 			<table>
@@ -131,6 +110,12 @@
 		<div id="twistTabStats" class="hide">
 			<div class="twistTabTitle"><strong>Performance Stats</strong>Page load time stats, memory usage and other useful information</div>
 			{data:stats}
+			<ul>
+				<li>Page Process Time</li>
+				<li>Slow Pages</li>
+				<li>Recent Exceptions</li>
+				<li>Recent Errors (other pages)</li>
+			</ul>
 		</div>
 
 		<div id="twistTabCache" class="hide">

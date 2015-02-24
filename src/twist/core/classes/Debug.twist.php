@@ -81,6 +81,8 @@
 				$arrTags['templates'] .= sprintf("<tr><td>%s</td><td>%s</td><td>%s</td></tr>",$arrEachItem['instance'],$arrEachItem['file'],implode("<br>",$arrEachItem['tags']));
 			}
 
+			$arrTags['route_current'] = print_r(\Twist::Route()->current(),true);
+
 			/**
 			 * Process the stats timer bar graph
 			 * @todo tidy up masivley and made a function in Timer

@@ -1,4 +1,5 @@
 <div class="phpError">
-	<p>{data:type}: {data:message}<br><span>[Line: {data:line}] {data:file}</span></p>
+	<p><strong>{data:type}:</strong> {data:message}</p>
 	<code>{data:code}</code>
+	<span class="fileInformation">[Line: {data:code_line}] {data:file} <a href="#">Code View</a></span>
 </div>

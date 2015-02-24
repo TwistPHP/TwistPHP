@@ -1,3 +1,6 @@
+body {
+  margin-bottom: 34px; }
+
 #twistDebug {
   z-index: 1001;
   font-family: Arial;
@@ -70,9 +73,21 @@
     #twistDebug .twistTabs > div .phpError, #twistDebug .twistTabs > div .databaseQuery {
       border-top: 1px solid #CCC;
       padding: 6px; }
-      #twistDebug .twistTabs > div .phpError span, #twistDebug .twistTabs > div .databaseQuery span {
+      #twistDebug .twistTabs > div .phpError p, #twistDebug .twistTabs > div .databaseQuery p {
+        margin-bottom: 10px; }
+      #twistDebug .twistTabs > div .phpError .fileInformation, #twistDebug .twistTabs > div .databaseQuery .fileInformation {
+        padding-top: 10px;
+        display: inline-block;
         font-size: 12px;
         font-weight: bold; }
+      #twistDebug .twistTabs > div .phpError code, #twistDebug .twistTabs > div .databaseQuery code {
+        width: 96%;
+        display: inline-block;
+        padding: 5px;
+        background-color: #FFFBE2;
+        font-size: 14px;
+        font-family: monospace, sans-serif;
+        white-space: pre; }
     #twistDebug .twistTabs > div .timer {
       margin: auto;
       width: 90%;
