@@ -31,7 +31,6 @@ use \Twist\Core\Classes\ModuleBase;
 class User extends ModuleBase{
 
 	public $strLoginUrl = null;
-	public $strOverrideUrl = null;
 	public $strLogoutPage = null;
 
 	public $strEncryptionType = null;
@@ -228,14 +227,13 @@ class User extends ModuleBase{
 
 		$this->intUserID = $intUserID;
 
-		if($this->framework()->setting('USER_PASSWORD_CHANGE') == true){
+		if(\Twist::framework()->setting('USER_PASSWORD_CHANGE') == true){
 
 			if($arrUserData['temp_password'] == '1'){
 				$objSession->data('user-temp_password','1');
 				$objSession->remove('site-login_redirect');
 
-				$strLoginURLFull = sprintf('%s?change',(is_null( $this->strOverrideUrl ) ? $this->strLoginUrl : $this->strOverrideUrl));
-				$this->goToPage( $strLoginURLFull, false );
+				$this->goToPage( '?change', false );
 			}
 
 		}elseif($arrUserData['temp_password'] == '1'){
@@ -265,7 +263,7 @@ class User extends ModuleBase{
 				$objSession->data('user-name',sprintf('%s %s',$arrUserData['firstname'],$arrUserData['surname']));
 				$objSession->data('user-firstname',$arrUserData['firstname']);
 				$objSession->data('user-surname',$arrUserData['surname']);
-				$objSession->data('user-temp_password','0');
+				$objSession->data('user-temp_password',$arrUserData['temp_password']);
 
 				$this->loadCurrentUser();
 
@@ -273,8 +271,7 @@ class User extends ModuleBase{
 				//If the user is not verified and password is correct show verification message
 				$objSession->data('user-email',$arrUserData['email']);
 
-				$strLoginURLFull = sprintf('%s?verification',(is_null( $this->strOverrideUrl ) ? $this->strLoginUrl : $this->strOverrideUrl));
-				$this->goToPage( $strLoginURLFull, false );
+				$this->goToPage( '?verification', false );
 			}
 		}else{
 			$objSession->remove();
@@ -375,7 +372,7 @@ class User extends ModuleBase{
 
 				}else{
 					\Twist::Session()->data('site-error_message','The passwords you entered do not match');
-					$this->goToPage( sprintf('%s?change',$this->strLoginUrl), false );
+					$this->goToPage('?change',false);
 				}
 			}
 		}
@@ -542,7 +539,7 @@ class User extends ModuleBase{
 				$this->goToPage( sprintf('%s?change',$this->strLoginUrl), false );
 			}
 		}elseif($objSession->data('user-temp_password') == '1' && !strstr($_SERVER['REQUEST_URI'],'?change')){
-			$this->goToPage( sprintf('%s?change',$this->strLoginUrl), false );
+			$this->goToPage( '?change', false );
 		}
 	}
 
@@ -577,7 +574,12 @@ class User extends ModuleBase{
 	}
 
 	public function loginURL($strURL = null){
-		return (is_null($strURL)) ? $this->strLoginUrl : $this->strLoginUrl = $strURL;
+
+		if(is_null($strURL)){
+			$this->strLoginUrl = $strURL;
+		}
+
+		return $this->strLoginUrl;
 	}
 
 

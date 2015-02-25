@@ -166,6 +166,11 @@ class Route extends ModuleBase{
 
 	protected function _restrictDefault($strURI,$strLoginURI){
 
+		//Only allow page restrictions with a working database connection
+		if(!\Twist::Database()->checkSettings()){
+			throw new \Exception('TwistPHP: You must have a database connection enabled to restricted pages using Routes');
+		}
+
 		$blWildCard = strstr($strURI,'%');
 		$strURI = rtrim(str_replace('%','',$strURI),'/').'/';
 
@@ -873,15 +878,13 @@ class Route extends ModuleBase{
 					}
 				}
 
-				$blDatabaseEnabled = \Twist::Database()->checkSettings();
-				\Twist::User()->logout();
-				if ($blDatabaseEnabled) {
-					//Set the login URL that is specified by restrict otherwise from framework settings
+				//Set the login URL that is specified by restrict otherwise from framework settings
+				if($blRestrictedPage){
 					\Twist::User()->loginURL($strFullLoginURL);
-					\Twist::User()->authenticate();
-				} elseif ($blRestrictedPage) {
-					throw new \Exception('You must have a database connection enabled to use restricted pages');
 				}
+
+				\Twist::User()->logout();
+				\Twist::User()->authenticate();
 
 				//redirect the user to the login page if required
 				if ($blRestrictedPage && !\Twist::User()->loggedIn()) {
