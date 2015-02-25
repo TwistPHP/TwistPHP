@@ -44,10 +44,6 @@
 
 		<div id="twistTabDatabase" class="hide">
 			<div class="twistTabTitle"><strong>Database Query Log</strong>All the database queries that where run during this page load</div>
-			<div class="databaseQuery">
-				<p><strong>*PASS*</strong> SELECT * FROM `database`.`table` WHERE `field` = '1';<br><span>[Run Time: 0.0243]</span></p>
-				<code>Called from [Line: 402] /my/file.php</code>
-			</div>
 			{data:database}
 		</div>
 
@@ -102,7 +98,7 @@
 				</tr>
 				</thead>
 				<tbody>
-				{data:templates}
+				{data:views}
 				</tbody>
 			</table>
 		</div>

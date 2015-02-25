@@ -38,6 +38,7 @@
 		protected $blConnectionAttempt = false;
 		protected $strDatabaseName = null;
 		protected $blNoDatabase = false;
+		protected $blDebugMode = false;
 		protected $strLastRunQuery = '';
 
 		public function __construct($strConnectionKey){
@@ -46,6 +47,19 @@
 
 		public function __destruct(){
 			$this->close();
+		}
+
+		public function debugMode(){
+
+			//\Twist::framework()->setting('DATABASE_DEBUG')
+
+			if($this->blDebugMode == false && defined('TWIST_LAUNCHED')){
+				if(\Twist::framework()->setting('DEVELOPMENT_MODE') && \Twist::framework()->setting('DEVELOPMENT_DEBUG_BAR')){
+					$this->blDebugMode = true;
+				}
+			}
+
+			return $this->blDebugMode;
 		}
 
 		/**
@@ -169,7 +183,7 @@
 			$this->connected();
 			$this->strLastRunQuery = $strQuery;
 
-			return (defined('TWIST_LAUNCHED') && $this -> framework() -> setting('DATABASE_DEBUG')) ? $this->queryDebug($strQuery) : $this->queryStandard($strQuery);
+			return ($this->debugMode()) ? $this->queryDebug($strQuery) : $this->queryStandard($strQuery);
 		}
 
 		/**
@@ -180,7 +194,7 @@
 		 */
 		private function queryStandard($strQuery){
 			$this->resResult = $this->resLibrary->query($strQuery);
-			return ($this->resResult);
+			return (is_object($this->resResult) || $this->resResult);
 		}
 
 		/**
@@ -197,11 +211,13 @@
 			$arrResult = \Twist::Timer('database-query')->stop();
 
 			//Log the stats of the query
-			$this -> framework() -> debug() -> log('Database','queries',array(
+			\Twist::framework()->debug()->log('Database','queries',array(
+				'instance' => $this->strConnectionKey,
 				'query' => $strQuery,
 				'time' => $arrResult['total'],
-				'status' => ($this->resResult),
-				'result' => $this -> getNumberRows()
+				'status' => (is_object($this->resResult) || $this->resResult),
+				'result' => $this -> getNumberRows(),
+				'error' => (is_object($this->resResult) || $this->resResult) ? '' : $this->resLibrary->errorString()
 			));
 
 			return ($this->resResult);

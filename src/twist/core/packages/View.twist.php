@@ -36,11 +36,13 @@ class View extends ModuleBase{
     protected $arrElementData = array();
     protected $arrElementParams = array();
     protected $dirCurrentView = null;
+    protected $blDebugMode = false;
 
     public function __construct($strInstanceKey){
         $this->strInstanceKey = $strInstanceKey;
         $this->setDirectory();
         $this->setElementsDirectory();
+	    $this->blDebugMode = (\Twist::framework()->setting('DEVELOPMENT_MODE') && \Twist::framework()->setting('DEVELOPMENT_DEBUG_BAR'));
     }
 
 	/**
@@ -162,12 +164,9 @@ class View extends ModuleBase{
 	        $arrViewData['html_raw'] = $this->removeUnusedTags($arrViewData['html_raw']);
         }
 
-        if($this->framework() -> setting('DEVELOPMENT_MODE')){
-            $this->framework() -> debug() -> log('View','usage',array('instance' => $this->strInstanceKey,'file' => $dirView,'tags' => $arrViewData['tags']));
+        if($this->blDebugMode){
+            \Twist::framework()->debug()->log('View','usage',array('instance' => $this->strInstanceKey,'file' => $dirView,'tags' => $arrViewData['tags']));
         }
-
-        //$this->arrStats[] = array('file' => $strView,'tags' => $arrLiveTags);
-        //$this->arrStats[] = array('file' => $strView,'tags' => $arrLiveTags,'data' => $arrViewTags);
 
         return $arrViewData['html_raw'];
     }
@@ -864,11 +863,16 @@ class View extends ModuleBase{
 
         if(file_exists($dirElement)){
 
-            if($this -> framework() -> setting('TEMPLATE_BASE_OVERRIDE') || strstr(realpath($dirElement),BASE_LOCATION)){
+            if(\Twist::framework()->setting('TEMPLATE_BASE_OVERRIDE') || strstr(realpath($dirElement),BASE_LOCATION)){
                 ob_start();
                 include $dirElement;
                 $strOut = ob_get_contents();
                 ob_end_clean();
+
+	            if($this->blDebugMode){
+		            \Twist::framework()->debug()->log('View','usage',array('instance' => $this->strInstanceKey,'file' => $dirElement,'tags' => array()));
+	            }
+
             }else{
                 throw new \Exception(sprintf("Element file '%s' is outside of your Document Root.",$dirElement),11109);
             }

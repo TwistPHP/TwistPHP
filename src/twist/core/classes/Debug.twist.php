@@ -54,7 +54,7 @@
 			$this->arrDebugLog[$strSystem][$strType][] = $mxdData;
 		}
 
-		public function window(){
+		public function window($arrCurrentRoute){
 
 			//print_r($this->arrDebugLog);
 
@@ -64,7 +64,7 @@
 			$arrTags = array(
 				'errors' => '',
 				'database' => '',
-				'templates' => '',
+				'views' => '',
 				'stats' => '',
 				'cache' => ''
 			);
@@ -77,11 +77,11 @@
 				$arrTags['database'] .= $this->resTemplate->build('components/database-query.tpl',$arrEachItem);
 			}
 
-			foreach($this->arrDebugLog['Template']['usage'] as $arrEachItem){
-				$arrTags['templates'] .= sprintf("<tr><td>%s</td><td>%s</td><td>%s</td></tr>",$arrEachItem['instance'],$arrEachItem['file'],implode("<br>",$arrEachItem['tags']));
+			foreach($this->arrDebugLog['View']['usage'] as $arrEachItem){
+				$arrTags['views'] .= sprintf("<tr><td>%s</td><td>%s</td><td>%s</td></tr>",$arrEachItem['instance'],$arrEachItem['file'],implode("<br>",$arrEachItem['tags']));
 			}
 
-			$arrTags['route_current'] = print_r(\Twist::Route()->current(),true);
+			$arrTags['route_current'] = print_r($arrCurrentRoute,true);
 
 			/**
 			 * Process the stats timer bar graph

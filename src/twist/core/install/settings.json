@@ -159,6 +159,14 @@
 		"options":"1,0",
 		"null":0
 	},
+    "DEVELOPMENT_DEBUG_BAR":{
+      "title":"Development Debug Bar",
+      "description":"Display the debug bar on the site when the framework is in development mode",
+      "default":1,
+      "type":"boolean",
+      "options":"1,0",
+      "null":0
+    },
 	"MAINTENANCE_MODE":{
 		"title":"Maintenance Mode",
 		"description":"Output the 503 SEO friendly maintenance page to all visitors of the website (search engines will not index this page)",

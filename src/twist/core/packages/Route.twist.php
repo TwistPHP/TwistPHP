@@ -56,6 +56,7 @@ class Route extends ModuleBase{
 
 		$this->strInstance = $strInstance;
 		$this->resTemplate = \Twist::View();
+		$this->blDebugMode = (\Twist::framework()->setting('DEVELOPMENT_MODE') && \Twist::framework()->setting('DEVELOPMENT_DEBUG_BAR'));
 
 		$strControllerPath = sprintf('%s/controllers',DIR_BASE);
 		if(file_exists($strControllerPath)){
@@ -1042,9 +1043,9 @@ class Route extends ModuleBase{
 					//Output the Debug window to the screen when in debug mode
 					if($this->blDebugMode){
 						if(strstr($strPageOut,'</body>')){
-							$strPageOut = str_replace('</body>',\Twist::framework()->debug()->window().'</body>',$strPageOut);
+							$strPageOut = str_replace('</body>',\Twist::framework()->debug()->window($arrRoute).'</body>',$strPageOut);
 						}else{
-							$strPageOut .= \Twist::framework()->debug()->window();
+							$strPageOut .= \Twist::framework()->debug()->window($arrRoute);
 						}
 					}
 
