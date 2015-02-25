@@ -58,7 +58,7 @@
 
 			//print_r($this->arrDebugLog);
 
-			$this->resTemplate = \Twist::Template('CoreDebug');
+			$this->resTemplate = \Twist::View('TwistDebugBar');
 			$this->resTemplate->setTemplatesDirectory( sprintf('%sdebug/',DIR_FRAMEWORK_VIEWS));
 
 			$arrTags = array(
@@ -78,7 +78,10 @@
 			}
 
 			foreach($this->arrDebugLog['View']['usage'] as $arrEachItem){
-				$arrTags['views'] .= sprintf("<tr><td>%s</td><td>%s</td><td>%s</td></tr>",$arrEachItem['instance'],$arrEachItem['file'],implode("<br>",$arrEachItem['tags']));
+
+				if($arrEachItem['instance'] != 'TwistDebugBar'){
+					$arrTags['views'] .= sprintf("<tr><td>%s</td><td>%s</td><td>%s</td></tr>",$arrEachItem['instance'],$arrEachItem['file'],implode("<br>",$arrEachItem['tags']));
+				}
 			}
 
 			$arrTags['route_current'] = print_r($arrCurrentRoute,true);

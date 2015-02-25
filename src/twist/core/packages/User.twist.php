@@ -301,6 +301,7 @@ class User extends ModuleBase{
 				$resUser->commit();
 
 				\Twist::Session()->data('site-login_message','A temporary password has been emailed to you.');
+				$this->goToPage('./', false );
 			}
 		}
 
@@ -348,13 +349,14 @@ class User extends ModuleBase{
 							$strNewPassword = $_POST['password'];
 
 							//Change the users password and re-log them in (Only for none-temp password users)
-							$this->changePassword(\Twist::Session()->data('user-id'),$strNewPassword,$_POST['current_password']);
+							$this->changePassword(\Twist::Session()->data('user-id'),$strNewPassword,$_POST['current_password'],true);
 
 							//Remove the two posted password vars
 							unset($_POST['password']);
 							unset($_POST['current_password']);
 
 							$this->authenticate(\Twist::Session()->data('user-email'),$strNewPassword,$this->strLoginUrl,true);
+							$this->goToPage('./',false);
 						}
 					}else{
 
@@ -368,6 +370,7 @@ class User extends ModuleBase{
 						\Twist::Session()->data('user-temp_password','0');
 
 						$this->authenticate(\Twist::Session()->data('user-email'),$strNewPassword,$this->strLoginUrl,true);
+						$this->goToPage('./',false);
 					}
 
 				}else{

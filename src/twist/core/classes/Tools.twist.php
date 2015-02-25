@@ -297,6 +297,11 @@
 
 			$strQueryString = $strCurrentQueryString = '';
 
+			//Fix when a dot is passed in
+			if($urlRelativePath == '.'){
+				$urlRelativePath = './';
+			}
+
 			//Remove the query string from the redirect to help with comparisons
 			if(strstr($urlRelativePath,'?')){
 				list($urlRelativePath,$strQueryString) = explode('?',$urlRelativePath);
@@ -319,23 +324,16 @@
 			}
 
 			//Start processing the traversal
-			$urlCurrentURI = trim($urlCurrentURI);
+			$urlCurrentURI = trim($urlCurrentURI,'/');
 			$urlOut = rtrim($urlRelativePath,'/');
 
 			if(substr($urlRelativePath,0,2) == './'){
-
-				//THIS
-				$urlOutTemp = trim($urlOut,'/');
-
-				if(substr($urlOutTemp,0,2) == './'){
-					$urlOutTemp = substr($urlOutTemp,2);
-				}
 
 				$arrCurrentParts = (strstr($urlCurrentURI,'/')) ? explode('/',$urlCurrentURI) : array($urlCurrentURI);
 				array_pop($arrCurrentParts);
 				$urlCurrentURI = implode('/',$arrCurrentParts);
 
-				$urlOut = sprintf('/%s/%s',$urlCurrentURI,$urlOutTemp);
+				$urlOut = sprintf('/%s/%s',$urlCurrentURI,substr($urlRelativePath,2));
 
 			}elseif(substr($urlRelativePath,0,3) == '../'){
 
