@@ -1,6 +1,6 @@
 #[TwistPHP](https://twistphp.com/) ![TwistPHP logo](http://static.twistphp.com/logo/square/32.png)
 
-##A fresh, new open source PHP micro framework
+##A fresh, new open source PHP MVC micro framework
 
 We looked around for a PHP framework that suited our needs and found nothing that we were completely happy with. So we made one.
 
