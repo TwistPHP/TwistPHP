@@ -162,7 +162,7 @@
     "DEVELOPMENT_DEBUG_BAR":{
       "title":"Development Debug Bar",
       "description":"Display the debug bar on the site when the framework is in development mode",
-      "default":1,
+      "default":0,
       "type":"boolean",
       "options":"1,0",
       "null":0
