@@ -197,7 +197,7 @@ class Route extends ModuleBase{
 	public function restrict($strURI,$strLoginURI,$mxdLevel = null){
 
 		$strURI = $this->_restrictDefault($strURI,$strLoginURI);
-		$this->arrRestrict[$strURI]['level'] == $mxdLevel;
+		$this->arrRestrict[$strURI]['level'] = $mxdLevel;
 	}
 
 	/**
