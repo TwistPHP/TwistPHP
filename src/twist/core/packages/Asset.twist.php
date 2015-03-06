@@ -398,6 +398,7 @@
 					$objImage->save(sprintf('%s/%s',$strSquareThumbPath32,$strFileName));
 
 					//Generate the mandatory thumbnail
+					$strThumbPath1024 = sprintf('%s/thumb-1024',$strAssetGroupDir);
 					$strThumbPath512 = sprintf('%s/thumb-512',$strAssetGroupDir);
 					$strThumbPath256 = sprintf('%s/thumb-256',$strAssetGroupDir);
 					$strThumbPath128 = sprintf('%s/thumb-128',$strAssetGroupDir);
@@ -405,6 +406,7 @@
 					$strThumbPath32 = sprintf('%s/thumb-32',$strAssetGroupDir);
 
 					//Create the asset group directory if it not exist
+					if(!file_exists($strThumbPath1024)){ mkdir($strThumbPath1024); }
 					if(!file_exists($strThumbPath512)){ mkdir($strThumbPath512); }
 					if(!file_exists($strThumbPath256)){ mkdir($strThumbPath256); }
 					if(!file_exists($strThumbPath128)){ mkdir($strThumbPath128); }
@@ -412,6 +414,9 @@
 					if(!file_exists($strThumbPath32)){ mkdir($strThumbPath32); }
 
 					$objImage = \Twist::Image()->load($strAssetPath);
+
+					$objImage->resizeMaxDimension(1024);
+					$objImage->save(sprintf('%s/%s',$strThumbPath1024,$strFileName));
 
 					$objImage->resizeMaxDimension(512);
 					$objImage->save(sprintf('%s/%s',$strThumbPath512,$strFileName));
@@ -434,6 +439,7 @@
 						'square-thumb-128' => str_replace(BASE_LOCATION,'',sprintf('%s/%s',$strSquareThumbPath128,$strFileName)),
 						'square-thumb-64' => str_replace(BASE_LOCATION,'',sprintf('%s/%s',$strSquareThumbPath64,$strFileName)),
 						'square-thumb-32' => str_replace(BASE_LOCATION,'',sprintf('%s/%s',$strSquareThumbPath32,$strFileName)),
+						'thumb-1024' => str_replace(BASE_LOCATION,'',sprintf('%s/%s',$strThumbPath1024,$strFileName)),
 						'thumb-512' => str_replace(BASE_LOCATION,'',sprintf('%s/%s',$strThumbPath512,$strFileName)),
 						'thumb-256' => str_replace(BASE_LOCATION,'',sprintf('%s/%s',$strThumbPath256,$strFileName)),
 						'thumb-128' => str_replace(BASE_LOCATION,'',sprintf('%s/%s',$strThumbPath128,$strFileName)),
