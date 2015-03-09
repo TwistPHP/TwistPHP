@@ -41,21 +41,21 @@ class Route extends ModuleBase{
 	protected $arrWildCards = array();
 	protected $arrRegxMatches = array();
 	protected $arrRestrict = array();
-	protected $arrUnrestrict = array();
-	protected $strBaseTemplate = null;
+	protected $arrUnrestricted = array();
+	protected $strBaseView = null;
 	protected $strBaseURI = null;
 	protected $strInterfaceURI = null;
 	protected $strPageTitle = '';
 	protected $intCacheTime = 3600;
 	protected $blDebugMode = false;
 	protected $strInstance = '';
-	protected $resTemplate = null;
+	protected $resView = null;
 	protected $strControllerDirectory = null;
 
 	public function __construct($strInstance){
 
 		$this->strInstance = $strInstance;
-		$this->resTemplate = \Twist::View();
+		$this->resView = \Twist::View();
 		$this->blDebugMode = (\Twist::framework()->setting('DEVELOPMENT_MODE') && \Twist::framework()->setting('DEVELOPMENT_DEBUG_BAR'));
 
 		$strControllerPath = sprintf('%s/controllers',DIR_BASE);
@@ -65,19 +65,11 @@ class Route extends ModuleBase{
 	}
 
 	/**
-	 * Set a custom template directory to use for this routes instance, leaving blank will use the default templates directory
-	 * @param $dirTemplatePath Path to the template directory
+	 * Set a custom views directory to use for this routes instance, leaving blank will use the default views directory
+	 * @param $dirViewPath Path to the view directory
 	 */
-	public function setTemplatesDirectory($dirTemplatePath = null){
-		$this->resTemplate->setTemplatesDirectory($dirTemplatePath);
-	}
-
-	/**
-	 * Set a custom element directory to use for this routes instance, leaving blank will use the default elements directory
-	 * @param $dirElementPath Path to the element directory
-	 */
-	public function setElementsDirectory($dirElementPath = null){
-		$this->resTemplate->setElementsDirectory($dirElementPath);
+	public function setDirectory($dirViewPath = null){
+		$this->resView->setDirectory($dirViewPath);
 	}
 
 	/**
@@ -89,16 +81,16 @@ class Route extends ModuleBase{
 	}
 
 	/**
-	 * Set a path to the base template that you wish to wrap the output of the route with
-	 * @param $dirTemplateFile Path to the base template file, relative to your template directory (a full path can be used if required)
+	 * Set a path to the base view that you wish to wrap the output of the route with
+	 * @param $dirViewFile Path to the base view file, relative to your view directory (a full path can be used if required)
 	 */
-	public function baseTemplate($dirTemplateFile = null){
+	public function baseView($dirViewFile = null){
 
-		if(!is_null($dirTemplateFile)){
-			$this->strBaseTemplate = $dirTemplateFile;
+		if(!is_null($dirViewFile)){
+			$this->strBaseView = $dirViewFile;
 		}
 
-		return $this->strBaseTemplate;
+		return $this->strBaseView;
 	}
 
 	/**
@@ -133,10 +125,10 @@ class Route extends ModuleBase{
 	}
 
 	/**
-	 * Disable the use of the base template for this page (can be called during the processing of the page)
+	 * Disable the use of the base view for this page (can be called during the processing of the page)
 	 */
-	public function baseTemplateIgnore(){
-		$this->strBaseTemplate = null;
+	public function baseViewIgnore(){
+		$this->strBaseView = null;
 	}
 
 	/**
@@ -192,12 +184,12 @@ class Route extends ModuleBase{
 	 * @note Restrict a URI without using '%' will only restrict the exact URI provided
 	 * @param $strURI
 	 * @param $strLoginURI
-	 * @param $mxdLevel
+	 * @param $intLevel By default it restricts page to the lowest possible level (1)
 	 */
-	public function restrict($strURI,$strLoginURI,$mxdLevel = null){
+	public function restrict($strURI,$strLoginURI,$intLevel = 1){
 
 		$strURI = $this->_restrictDefault($strURI,$strLoginURI);
-		$this->arrRestrict[$strURI]['level'] = $mxdLevel;
+		$this->arrRestrict[$strURI]['level'] = $intLevel;
 	}
 
 	/**
@@ -208,8 +200,8 @@ class Route extends ModuleBase{
 		$blWildCard = (strstr($strURI,'%'));
 		$strURI = rtrim(str_replace('%','',$strURI),'/').'/';
 
-		if(!array_key_exists($strURI,$this->arrUnrestrict)){
-			$this->arrUnrestrict[$strURI] = $blWildCard;
+		if(!array_key_exists($strURI,$this->arrUnrestricted)){
+			$this->arrUnrestricted[$strURI] = $blWildCard;
 		}
 	}
 
@@ -275,7 +267,7 @@ class Route extends ModuleBase{
 		$strURI = $this->_restrictDefault($strURI,$strLoginURI);
 
 		if(is_null($strGroupSlug)){
-			$this->arrRestrict[$strURI]['group'] == null;
+			$this->arrRestrict[$strURI]['group'] = null;
 		}else{
 
 			if(is_null($this->arrRestrict[$strURI]['group'])){
@@ -292,13 +284,13 @@ class Route extends ModuleBase{
 	 *
 	 * @param $strURI
 	 * @param $mxdController
-	 * @param bool $mxdBaseTemplate
+	 * @param bool $mxdBaseView
 	 * @param bool $mxdCache
 	 * @param array $arrData
 	 */
-	public function controller($strURI,$mxdController,$mxdBaseTemplate = true,$mxdCache = false,$arrData = array()){
+	public function controller($strURI,$mxdController,$mxdBaseView = true,$mxdCache = false,$arrData = array()){
 		$arrController = (is_array($mxdController)) ? $mxdController : array($mxdController);
-		$this->addRoute($strURI,'controller',$arrController,$mxdBaseTemplate,$mxdCache,$arrData);
+		$this->addRoute($strURI,'controller',$arrController,$mxdBaseView,$mxdCache,$arrData);
 	}
 
 	/**
@@ -307,14 +299,14 @@ class Route extends ModuleBase{
 	 *
 	 * @param $strURI
 	 * @param null $strFunctionsFolder
-	 * @param null $strTemplatesFolder
+	 * @param null $strViewsFolder
 	 * @param null $strElementsFolder
 	 */
-	public function ajax($strURI,$strFunctionsFolder = null,$strTemplatesFolder = null,$strElementsFolder = null,$blUnrestrict=false){
+	public function ajax($strURI,$strFunctionsFolder = null,$strViewsFolder = null,$strElementsFolder = null,$blUnrestrict=false){
 
 		$arrCustomFields = array(
 			'functions' => $strFunctionsFolder,
-			'templates' => $strTemplatesFolder,
+			'views' => $strViewsFolder,
 			'elements' => $strElementsFolder
 		);
 
@@ -331,12 +323,12 @@ class Route extends ModuleBase{
 	 *
 	 * @param $strURI
 	 * @param $strInterface
-	 * @param bool $mxdBaseTemplate
+	 * @param bool $mxdBaseView
 	 * @param bool $mxdCache
 	 * @param array $arrData
 	 */
-	public function ui($strURI,$strInterface,$mxdBaseTemplate = true,$mxdCache = false,$arrData = array()){
-		$this->addRoute($strURI,'interface',$strInterface,$mxdBaseTemplate,$mxdCache,$arrData);
+	public function ui($strURI,$strInterface,$mxdBaseView = true,$mxdCache = false,$arrData = array()){
+		$this->addRoute($strURI,'interface',$strInterface,$mxdBaseView,$mxdCache,$arrData);
 	}
 
 	/**
@@ -352,77 +344,77 @@ class Route extends ModuleBase{
 	}
 
 	/**
-	 * Add a template that will be called upon a any request (HTTP METHOD) to the given URI, using this call will not take precedence over a GET,POST,PUT or DELETE route.
+	 * Add a view that will be called upon a any request (HTTP METHOD) to the given URI, using this call will not take precedence over a GET,POST,PUT or DELETE route.
 	 * The URI can be made dynamic by adding a '%' symbol at the end.
 	 *
 	 * @param $strURI
-	 * @param $strTemplate
-	 * @param bool $mxdBaseTemplate
+	 * @param $dirView
+	 * @param bool $mxdBaseView
 	 * @param bool $mxdCache
 	 * @param array $arrData
 	 */
-	public function template($strURI,$strTemplate,$mxdBaseTemplate = true,$mxdCache = false,$arrData = array()){
-		$this->addRoute($strURI,'template',$strTemplate,$mxdBaseTemplate,$mxdCache,$arrData);
+	public function view($strURI,$dirView,$mxdBaseView = true,$mxdCache = false,$arrData = array()){
+		$this->addRoute($strURI,'view',$dirView,$mxdBaseView,$mxdCache,$arrData);
 	}
 
 	/**
-	 * Add a template that will only be called upon a GET request (HTTP METHOD) to the given URI
+	 * Add a view that will only be called upon a GET request (HTTP METHOD) to the given URI
 	 *
-	 * @related template
+	 * @related view
 	 *
 	 * @param $strURI
-	 * @param $strTemplate
-	 * @param bool $mxdBaseTemplate
+	 * @param $dirView
+	 * @param bool $mxdBaseView
 	 * @param bool $mxdCache
 	 * @param array $arrData
 	 */
-	public function getTemplate($strURI,$strTemplate,$mxdBaseTemplate = true,$mxdCache = false,$arrData = array()){
-		$this->addRoute($strURI,'template',$strTemplate,$mxdBaseTemplate,$mxdCache,$arrData,'GET');
+	public function getView($strURI,$dirView,$mxdBaseView = true,$mxdCache = false,$arrData = array()){
+		$this->addRoute($strURI,'view',$dirView,$mxdBaseView,$mxdCache,$arrData,'GET');
 	}
 
 	/**
-	 * Add a template that will only be called upon a POST request (HTTP METHOD) to the given URI
+	 * Add a view that will only be called upon a POST request (HTTP METHOD) to the given URI
 	 *
-	 * @related template
+	 * @related view
 	 *
 	 * @param $strURI
-	 * @param $strTemplate
-	 * @param bool $mxdBaseTemplate
+	 * @param $dirView
+	 * @param bool $mxdBaseView
 	 * @param bool $mxdCache
 	 * @param array $arrData
 	 */
-	public function postTemplate($strURI,$strTemplate,$mxdBaseTemplate = true,$mxdCache = false,$arrData = array()){
-		$this->addRoute($strURI,'template',$strTemplate,$mxdBaseTemplate,$mxdCache,$arrData,'POST');
+	public function postView($strURI,$dirView,$mxdBaseView = true,$mxdCache = false,$arrData = array()){
+		$this->addRoute($strURI,'view',$dirView,$mxdBaseView,$mxdCache,$arrData,'POST');
 	}
 
 	/**
-	 * Add a template that will only be called upon a PUT request (HTTP METHOD) to the given URI
+	 * Add a view that will only be called upon a PUT request (HTTP METHOD) to the given URI
 	 *
-	 * @related template
+	 * @related view
 	 *
 	 * @param $strURI
-	 * @param $strTemplate
-	 * @param bool $mxdBaseTemplate
+	 * @param $dirView
+	 * @param bool $mxdBaseView
 	 * @param bool $mxdCache
 	 * @param array $arrData
 	 */
-	public function putTemplate($strURI,$strTemplate,$mxdBaseTemplate = true,$mxdCache = false,$arrData = array()){
-		$this->addRoute($strURI,'template',$strTemplate,$mxdBaseTemplate,$mxdCache,$arrData,'PUT');
+	public function putView($strURI,$dirView,$mxdBaseView = true,$mxdCache = false,$arrData = array()){
+		$this->addRoute($strURI,'view',$dirView,$mxdBaseView,$mxdCache,$arrData,'PUT');
 	}
 
 	/**
-	 * Add a template that will only be called upon a DELETE request (HTTP METHOD) to the given URI
+	 * Add a view that will only be called upon a DELETE request (HTTP METHOD) to the given URI
 	 *
-	 * @related template
+	 * @related view
 	 *
 	 * @param $strURI
-	 * @param $strTemplate
-	 * @param bool $mxdBaseTemplate
+	 * @param $dirView
+	 * @param bool $mxdBaseView
 	 * @param bool $mxdCache
 	 * @param array $arrData
 	 */
-	public function deleteTemplate($strURI,$strTemplate,$mxdBaseTemplate = true,$mxdCache = false,$arrData = array()){
-		$this->addRoute($strURI,'template',$strTemplate,$mxdBaseTemplate,$mxdCache,$arrData,'DELETE');
+	public function deleteView($strURI,$dirView,$mxdBaseView = true,$mxdCache = false,$arrData = array()){
+		$this->addRoute($strURI,'view',$dirView,$mxdBaseView,$mxdCache,$arrData,'DELETE');
 	}
 
 	/**
@@ -431,12 +423,12 @@ class Route extends ModuleBase{
 	 *
 	 * @param $strURI
 	 * @param $strElement
-	 * @param bool $mxdBaseTemplate
+	 * @param bool $mxdBaseView
 	 * @param bool $mxdCache
 	 * @param array $arrData
 	 */
-	public function element($strURI,$strElement,$mxdBaseTemplate = true,$mxdCache = false,$arrData = array()){
-		$this->addRoute($strURI,'element',$strElement,$mxdBaseTemplate,$mxdCache,$arrData);
+	public function element($strURI,$strElement,$mxdBaseView = true,$mxdCache = false,$arrData = array()){
+		$this->addRoute($strURI,'element',$strElement,$mxdBaseView,$mxdCache,$arrData);
 	}
 
 	/**
@@ -446,12 +438,12 @@ class Route extends ModuleBase{
 	 *
 	 * @param $strURI
 	 * @param $strElement
-	 * @param bool $mxdBaseTemplate
+	 * @param bool $mxdBaseView
 	 * @param bool $mxdCache
 	 * @param array $arrData
 	 */
-	public function getElement($strURI,$strElement,$mxdBaseTemplate = true,$mxdCache = false,$arrData = array()){
-		$this->addRoute($strURI,'element',$strElement,$mxdBaseTemplate,$mxdCache,$arrData,'GET');
+	public function getElement($strURI,$strElement,$mxdBaseView = true,$mxdCache = false,$arrData = array()){
+		$this->addRoute($strURI,'element',$strElement,$mxdBaseView,$mxdCache,$arrData,'GET');
 	}
 
 	/**
@@ -461,12 +453,12 @@ class Route extends ModuleBase{
 	 *
 	 * @param $strURI
 	 * @param $strElement
-	 * @param bool $mxdBaseTemplate
+	 * @param bool $mxdBaseView
 	 * @param bool $mxdCache
 	 * @param array $arrData
 	 */
-	public function postElement($strURI,$strElement,$mxdBaseTemplate = true,$mxdCache = false,$arrData = array()){
-		$this->addRoute($strURI,'element',$strElement,$mxdBaseTemplate,$mxdCache,$arrData,'POST');
+	public function postElement($strURI,$strElement,$mxdBaseView = true,$mxdCache = false,$arrData = array()){
+		$this->addRoute($strURI,'element',$strElement,$mxdBaseView,$mxdCache,$arrData,'POST');
 	}
 
 	/**
@@ -476,12 +468,12 @@ class Route extends ModuleBase{
 	 *
 	 * @param $strURI
 	 * @param $strElement
-	 * @param bool $mxdBaseTemplate
+	 * @param bool $mxdBaseView
 	 * @param bool $mxdCache
 	 * @param array $arrData
 	 */
-	public function putElement($strURI,$strElement,$mxdBaseTemplate = true,$mxdCache = false,$arrData = array()){
-		$this->addRoute($strURI,'element',$strElement,$mxdBaseTemplate,$mxdCache,$arrData,'PUT');
+	public function putElement($strURI,$strElement,$mxdBaseView = true,$mxdCache = false,$arrData = array()){
+		$this->addRoute($strURI,'element',$strElement,$mxdBaseView,$mxdCache,$arrData,'PUT');
 	}
 
 	/**
@@ -491,12 +483,12 @@ class Route extends ModuleBase{
 	 *
 	 * @param $strURI
 	 * @param $strElement
-	 * @param bool $mxdBaseTemplate
+	 * @param bool $mxdBaseView
 	 * @param bool $mxdCache
 	 * @param array $arrData
 	 */
-	public function deleteElement($strURI,$strElement,$mxdBaseTemplate = true,$mxdCache = false,$arrData = array()){
-		$this->addRoute($strURI,'element',$strElement,$mxdBaseTemplate,$mxdCache,$arrData,'DELETE');
+	public function deleteElement($strURI,$strElement,$mxdBaseView = true,$mxdCache = false,$arrData = array()){
+		$this->addRoute($strURI,'element',$strElement,$mxdBaseView,$mxdCache,$arrData,'DELETE');
 	}
 
 	/**
@@ -508,7 +500,7 @@ class Route extends ModuleBase{
 	 * @param $arrData
 	 * @param bool $mxdCache
 	 */
-	protected function addRoute($strURI,$strType,$strItem,$mxdBaseTemplate=true,$mxdCache=false,$arrData=array(),$strRequestMethod = null){
+	protected function addRoute($strURI,$strType,$strItem,$mxdBaseView=true,$mxdCache=false,$arrData=array(),$strRequestMethod = null){
 
 		$blWildCard = false;
 		if(substr($strURI,-1) == '%' || $strType == 'interface'){
@@ -541,7 +533,7 @@ class Route extends ModuleBase{
 			'type' => $strType,
 			'item' => $strItem,
 			'data' => $arrData,
-			'base_template' => $mxdBaseTemplate,
+			'base_view' => $mxdBaseView,
 			'wildcard' => $blWildCard,
 			'cache' => ($mxdCache === false) ? false : true,
 			'cache_key' => null,
@@ -806,6 +798,108 @@ class Route extends ModuleBase{
 		return $arrOut;
 	}
 
+	public function currentRestriction($strCurrentURI){
+
+		$blRestrict = false;
+		$arrFoundMatched = $arrMatch = array();
+
+		\Twist::User()->logout();
+		\Twist::User()->authenticate();
+
+		$blLoggedIn = \Twist::User()->loggedIn();
+		$intCurrentUserLevel = \Twist::User()->currentLevel();
+		$strCurrentURI = ($this->strBaseURI == '/') ? $strCurrentURI : str_replace($this->strBaseURI,'',$strCurrentURI);
+		$strFullLoginURI = str_replace('//','/',sprintf('%s/login',$this->strBaseURI));
+
+		//$strFullLoginURL = sprintf('%s/%s', $arrRoute['registered_uri'], ltrim($this->framework()->setting('USER_DEFAULT_LOGIN_URI'), '/'));
+
+		foreach($this->arrRestrict as $strRestrictURI => $arrRestrictedInfo){
+
+			$strRestrictExpression = sprintf("#^(%s[\/]?)%s#", str_replace('/','\/',rtrim($strRestrictURI, '/')), $arrRestrictedInfo['wildcard'] ? '' : '$');
+
+			//Check for an exact match
+			if(rtrim($strRestrictURI,'/') == rtrim($strCurrentURI,'/')){
+
+				$arrMatch = $arrRestrictedInfo;
+				$blRestrict = true;
+				break;
+
+			}elseif(preg_match($strRestrictExpression, $strCurrentURI, $arrMatches)){
+				$arrFoundMatched[] = $arrRestrictedInfo;
+			}
+
+			//Log all login pages to be un-restricted
+			$this->arrUnrestricted[rtrim($arrRestrictedInfo['login_uri'],'/')] = true;
+		}
+
+		//No exact mach found and there is an array to be processed
+		if($blRestrict == false && count($arrFoundMatched)){
+
+			if(count($arrFoundMatched) == 1){
+				$blRestrict = true;
+				$arrMatch = $arrFoundMatched[0];
+			}else{
+
+				//Process Multi-Matches, find the highest level from the found matches, user must match or exceed this level (0 is God)
+				$intHighestLevel = 0;
+				foreach($arrFoundMatched as $arrEachMatch){
+					if($arrEachMatch['level'] == 0 || $arrEachMatch['level'] > $intHighestLevel){
+						$intHighestLevel = $arrEachMatch['level'];
+						$arrMatch = $arrEachMatch;
+						$blRestrict = true;
+
+						if($intHighestLevel == 0){
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		//If a match is found
+		if($blRestrict){
+
+			$strFullLoginURI = str_replace('//','/',sprintf('%s/%s',$this->strBaseURI,ltrim($arrMatch['login_uri'],'/')));
+
+			if(array_key_exists(rtrim($strCurrentURI,'/'),$this->arrUnrestricted)){
+				$arrMatch = array(
+					'login_required' => false,
+					'allow_access' => true,
+					'login_uri' => $strFullLoginURI,
+					'status' => 'Ignored, unrestricted page'
+				);
+			}else{
+
+				if($blLoggedIn){
+					if($arrMatch['level'] > 0 && $intCurrentUserLevel >= $arrMatch['level'] || $intCurrentUserLevel == 0){
+						$arrMatch['login_required'] = false;
+						$arrMatch['allow_access'] = true;
+						$arrMatch['status'] = 'User level sufficient, allow Access';
+					}else{
+						$arrMatch['login_required'] = false;
+						$arrMatch['allow_access'] = false;
+						$arrMatch['status'] = 'User level insufficient, Deny Access';
+					}
+				}else{
+					$arrMatch['login_required'] = true;
+					$arrMatch['allow_access'] = false;
+					$arrMatch['status'] = 'User must be logged in to access restricted page';
+				}
+			}
+
+			$arrMatch['login_uri'] = $strFullLoginURI;
+		}else{
+			$arrMatch = array(
+				'login_required' => false,
+				'allow_access' => true,
+				'login_uri' => $strFullLoginURI,
+				'status' => 'No restriction found'
+			);
+		}
+
+		return $arrMatch;
+	}
+
 	public function getID($strURI){
 
 		$intOut = null;
@@ -840,59 +934,21 @@ class Route extends ModuleBase{
 		if (count($arrRoute)) {
 
 			//First of all check for an interface and do that
-			if ($arrRoute['type'] == 'interface') {
-				\Twist::framework()->interfaces()->load($arrRoute['item'], $arrRoute['registered_uri'], $arrRoute['base_template']);
+			if($arrRoute['type'] == 'interface'){
+				\Twist::framework()->interfaces()->load($arrRoute['item'], $arrRoute['registered_uri'], $arrRoute['base_view']);
 				die();
-			} else {
+			}else{
 
-				//Else proceed as normal
-				$strFullLoginURL = sprintf('%s/%s', $arrRoute['registered_uri'], ltrim($this->framework()->setting('USER_DEFAULT_LOGIN_URI'), '/'));
+				$arrRestriction = $this->currentRestriction($arrRoute['uri']);
 
-				$arrRestrictedInfo = array();
-				$blRestrictedPage = false;
+				\Twist::User()->loginURL($arrRestriction['login_uri']);
 
-				foreach ($this->arrRestrict as $strRestrictURI => $arrRestrictedInfo) {
-					$strRestrictExpression = sprintf("#^(%s[\/]?)%s#", str_replace('/','\/',rtrim($strRestrictURI, '/')), $arrRestrictedInfo['wildcard'] ? '' : '$');
-
-					if (preg_match($strRestrictExpression, $arrRoute['uri'], $arrMatches)) {
-
-						if(count($this->arrUnrestrict)){
-							foreach($this->arrUnrestrict as $strUnrestrictedURI => $blUnrestrictedWildcard){
-
-								$strUnrestrictedExpression = sprintf("#^(%s[\/]?)%s#", str_replace('/','\/',rtrim($strUnrestrictedURI,'/')), $blUnrestrictedWildcard ? '' : '$');
-								if(preg_match($strUnrestrictedExpression, $arrRoute['uri'],$arrMatches)){
-									break 2;
-								}
-							}
-						}
-
-						$strFullLoginURL = sprintf('%s/%s', $this->strBaseURI, ltrim($arrRestrictedInfo['login_uri'], '/'));
-						$blRestrictedPage = true;
-
-						if(rtrim($arrRestrictedInfo['login_uri'],'/') == rtrim($arrRoute['uri'],'/')){
-							$blRestrictedPage = false;
-							$arrRestrictedInfo = array();
-						}
-
-						break;
-					}
-				}
-
-				//Set the login URL that is specified by restrict otherwise from framework settings
-				if($blRestrictedPage){
-					\Twist::User()->loginURL($strFullLoginURL);
-				}
-
-				\Twist::User()->logout();
-				\Twist::User()->authenticate();
-
-				//redirect the user to the login page if required
-				if ($blRestrictedPage && !\Twist::User()->loggedIn()) {
+				if($arrRestriction['login_required']){
 					\Twist::User()->setAfterLoginRedirect();
-					\Twist::redirect(str_replace('//', '/', $strFullLoginURL));
-				} elseif ($blRestrictedPage && (!\Twist::User()->loggedIn() || (!is_null($arrRestrictedInfo['level']) && \Twist::User()->currentLevel() < $arrRestrictedInfo['level'] && \Twist::User()->currentLevel() != 0))) {
+					\Twist::redirect(str_replace('//', '/', $arrRestriction['login_uri']));
+				}elseif($arrRestriction['allow_access'] == false){
 					\Twist::respond(403);
-				} else {
+				}else{
 
 					//Pass all the current route info to the global server array
 					$_SERVER['TWIST_ROUTE'] = $arrRoute;
@@ -918,14 +974,14 @@ class Route extends ModuleBase{
 					$arrTags['base_uri'] = $this->strBaseURI;
 					$arrTags['interface_uri'] = $this->strInterfaceURI;
 
-					$this->framework()->module()->extend('Template', 'route', $arrTags);
+					$this->framework()->module()->extend('View', 'route', $arrTags);
 
 					switch ($arrRoute['type']) {
-						case'template':
-							$arrTags['response'] .= $this->resTemplate->build($arrRoute['item'], $arrRoute['data']);
+						case'view':
+							$arrTags['response'] .= $this->resView->build($arrRoute['item'], $arrRoute['data']);
 							break;
 						case'element':
-							$arrTags['response'] .= $this->resTemplate->processElement($arrRoute['item'], $arrRoute['data']);
+							$arrTags['response'] .= $this->resView->processElement($arrRoute['item'], $arrRoute['data']);
 							break;
 						case'controller':
 							if (is_array($arrRoute['item']) && count($arrRoute['item']) >= 1) {
@@ -998,8 +1054,7 @@ class Route extends ModuleBase{
 							if (TWIST_AJAX_REQUEST) {
 								\Twist::AJAX()->server(
 									$arrRoute['data']['functions'],
-									$arrRoute['data']['templates'],
-									$arrRoute['data']['elements']
+									$arrRoute['data']['views']
 								);
 							} else {
 								\Twist::respond(405);
@@ -1021,18 +1076,18 @@ class Route extends ModuleBase{
 					$arrTags['author'] = $_SERVER['TWIST_ROUTE_AUTHOR'];
 					$arrTags['keywords'] = $_SERVER['TWIST_ROUTE_KEYWORDS'];
 
-					$this->framework()->module()->extend('Template', 'route', $arrTags);
+					$this->framework()->module()->extend('View', 'route', $arrTags);
 
-					if (!is_null($this->strBaseTemplate) && $arrRoute['base_template'] === true) {
+					if (!is_null($this->strBaseView) && $arrRoute['base_view'] === true) {
 
-						$strPageOut = $this->resTemplate->build($this->strBaseTemplate, $arrRoute['data']);
-					} elseif (!is_bool($arrRoute['base_template'])) {
+						$strPageOut = $this->resView->build($this->strBaseView, $arrRoute['data']);
+					} elseif (!is_bool($arrRoute['base_view'])) {
 
-						$strCustomTemplate = sprintf('%s/%s', $this->resTemplate->getTemplatesDirectory(), $arrRoute['base_template']);
-						if (file_exists($strCustomTemplate)) {
-							$strPageOut = $this->resTemplate->build($arrRoute['base_template'], $arrRoute['data']);
+						$strCustomView = sprintf('%s/%s', $this->resView->getDirectory(), $arrRoute['base_view']);
+						if (file_exists($strCustomView)) {
+							$strPageOut = $this->resView->build($arrRoute['base_view'], $arrRoute['data']);
 						} else {
-							throw new \Exception(sprintf("The custom base template (%s) for the route %s '%s' does not exist", $arrRoute['base_template'], $arrRoute['type'], $arrRoute['uri']));
+							throw new \Exception(sprintf("The custom base view (%s) for the route %s '%s' does not exist", $arrRoute['base_view'], $arrRoute['type'], $arrRoute['uri']));
 						}
 					} else {
 						$strPageOut = $arrTags['response'];

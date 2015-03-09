@@ -651,7 +651,7 @@ class User extends ModuleBase{
 	 * @return array
 	 */
 	public function getLevel($intLevelID){
-		return \Twist::Database()->get(sprintf('%suser_levels',DATABASE_TABLE_PREFIX),$intLevelID);
+		return \Twist::Database()->get(sprintf('%suser_levels',DATABASE_TABLE_PREFIX),$intLevelID,'level');
 	}
 
 	/**
@@ -894,6 +894,11 @@ class User extends ModuleBase{
 
 			case'level':
 				$strData = $this->loggedInData('level');
+				break;
+
+			case'level_description':
+				$arrLevelData = $this->getLevel($this->currentLevel());
+				$strData = $arrLevelData['description'];
 				break;
 
 			case'email':

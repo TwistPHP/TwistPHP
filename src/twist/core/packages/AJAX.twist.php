@@ -54,10 +54,9 @@ class AJAX extends ModuleBase{
 	 * ensure you send the POST parameters. 1. function, the function to call in the ajax system 2. oncomplete, the url to direct the
 	 * to once function complete.
 	 * @param $strFunctionsDirectory
-	 * @param null $strTemplateDirectory
-	 * @param null $strElementDirectory
+	 * @param null $dirView
 	 */
-	public function server($strFunctionsDirectory,$strTemplateDirectory = null,$strElementDirectory = null){
+	public function server($strFunctionsDirectory,$dirView = null){
 
 		//ob_start(array('TwistAJAX','obHandler'));
 
@@ -66,12 +65,8 @@ class AJAX extends ModuleBase{
 
 			$this->strFunctionsDirectory = $strFunctionsDirectory;
 
-			if(!is_null($strTemplateDirectory)){
-				\Twist::View() -> setTemplatesDirectory($strTemplateDirectory);
-			}
-
-			if(!is_null($strElementDirectory)){
-				\Twist::View() -> setElementsDirectory($strElementDirectory);
+			if(!is_null($dirView)){
+				\Twist::View() -> setDirectory($dirView);
 			}
 
 			ignore_user_abort( true );
