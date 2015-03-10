@@ -44,7 +44,7 @@
 			$this->resTemplate = \Twist::Template('pkgAsset');
 			$this->resTemplate->setTemplatesDirectory( sprintf('%s/views/Asset/',DIR_FRAMEWORK_PACKAGES));
 
-			$this->strAssetDirectory = sprintf('%s/assets',BASE_LOCATION);
+			$this->strAssetDirectory = DIR_APP_ASSETS;
 
 			//Create the asset directory if it not exist
 			if(!file_exists($this->strAssetDirectory)){

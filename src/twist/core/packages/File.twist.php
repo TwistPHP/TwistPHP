@@ -407,7 +407,7 @@ class File extends ModuleBase{
 		);
 
 		//Create an upload directory for uploaded files
-		$strUploadFolder = sprintf('%s/uploads',BASE_LOCATION);
+		$strUploadFolder = DIR_APP_UPLOADS;
 
 		if(!is_dir($strUploadFolder)){
 			mkdir($strUploadFolder);

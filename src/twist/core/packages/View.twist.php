@@ -110,7 +110,7 @@ class View extends ModuleBase{
      * @param $dirCustomViews Path to a custom View directory
      */
     public function setDirectory($dirCustomViews = null){
-        $this->dirViews = (is_null($dirCustomViews)) ? DIR_VIEWS : $dirCustomViews;
+        $this->dirViews = (is_null($dirCustomViews)) ? DIR_APP_VIEWS : $dirCustomViews;
     }
 
 	/**

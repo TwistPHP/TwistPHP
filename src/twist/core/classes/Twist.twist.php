@@ -51,8 +51,12 @@
 					date_default_timezone_set( Twist::framework() -> setting('TIMEZONE') );
 					$strLocation = rtrim(Twist::framework() -> setting('SITE_BASE'),'/');
 
-					Twist::define('DIR_CACHE',sprintf('%s/%scache/',rtrim(DIR_BASE,'/'),($strLocation == '') ? '' : $strLocation.'/'));
-					Twist::define('DIR_VIEWS',sprintf('%s/%sviews/',rtrim(DIR_BASE,'/'),($strLocation == '') ? '' : $strLocation.'/'));
+					Twist::define('DIR_APP',sprintf('%s/%sapplications/',rtrim(DIR_BASE,'/'),($strLocation == '') ? '' : $strLocation.'/'));
+					Twist::define('DIR_APP_ASSETS',sprintf('%s/assets/',rtrim(DIR_APP,'/')));
+					Twist::define('DIR_APP_CACHE',sprintf('%s/cache/',rtrim(DIR_APP,'/')));
+					Twist::define('DIR_APP_CONTROLLERS',sprintf('%s/controllers/',rtrim(DIR_APP,'/')));
+					Twist::define('DIR_APP_UPLOADS',sprintf('%s/uploads/',rtrim(DIR_APP,'/')));
+					Twist::define('DIR_APP_VIEWS',sprintf('%s/views/',rtrim(DIR_APP,'/')));
 
 					require_once sprintf('%sError.twist.php',DIR_FRAMEWORK_CLASSES);
 

@@ -47,7 +47,7 @@
 		public function __construct($strInstanceKey){
 
 			$this->strInstanceKey = $strInstanceKey;
-			$this->strStorageLocation = DIR_CACHE;
+			$this->strStorageLocation = DIR_APP_CACHE;
 
 			//Create the default cache folder
 			if(!file_exists($this->strStorageLocation)){

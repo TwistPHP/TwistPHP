@@ -58,7 +58,7 @@ class Route extends ModuleBase{
 		$this->resView = \Twist::View();
 		$this->blDebugMode = (\Twist::framework()->setting('DEVELOPMENT_MODE') && \Twist::framework()->setting('DEVELOPMENT_DEBUG_BAR'));
 
-		$strControllerPath = sprintf('%s/controllers',DIR_BASE);
+		$strControllerPath = DIR_APP_CONTROLLERS;
 		if(file_exists($strControllerPath)){
 			$this->setControllerDirectory($strControllerPath);
 		}
