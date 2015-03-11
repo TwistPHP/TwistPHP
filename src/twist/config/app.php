@@ -22,11 +22,15 @@
  */
 
 /**
- * Folder path(s) relative to the twist folder
- * DIR_ROOT - The relative path to the root of your site, usually your public_html folder
- * DIR_APP - The relative path to your app folder, usually placed in your public_html folder
- * DIR_PACKAGES - The relative path to your packages folder, usually placed in your public_html folder
+ * All paths are relative to the location of the twist folder
+ *
+ * DIR_PUBLIC_ROOT - Path to the public root of your site, usually your public_html folder "*"
+ * DIR_APP - Path to your app folder, usually placed in your public_html folder
+ * DIR_PACKAGES - Path to your packages folder, usually placed in your public_html folder
+ *
+ * "*" If twist is installed in your public_html folder the DIR_PUBLIC_ROOT would be '/'
+ * "*" If twist is installed above your public_html folder the DIR_PUBLIC_ROOT would be '/public_html'
  */
-Twist::define('DIR_ROOT','/');
+Twist::define('DIR_PUBLIC_ROOT','/');
 Twist::define('DIR_APP','/app');
 Twist::define('DIR_PACKAGES','/packages');
