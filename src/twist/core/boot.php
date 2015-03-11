@@ -65,7 +65,13 @@
 	Twist::define('DIR_FRAMEWORK_RESOURCES',sprintf('%score/resources/',DIR_FRAMEWORK));
 	Twist::define('DIR_BASE',realpath(sprintf('%s/../',DIR_FRAMEWORK)));
 
-	//Include the config file
-	if(file_exists(sprintf('%s/../config/config.php',dirname(__FILE__)))){
-		require_once sprintf('%s/../config/config.php',dirname(__FILE__));
+	if(file_exists(sprintf('%s/../config/app.php',dirname(__FILE__)))){
+		require_once sprintf('%s/../config/app.php',dirname(__FILE__));
 	}
+
+	//Include the config file
+	if(file_exists(sprintf('%s/../config/default.php',dirname(__FILE__)))){
+		require_once sprintf('%s/../config/default.php',dirname(__FILE__));
+	}
+
+
