@@ -45,9 +45,10 @@
 
 	Autoload::init(realpath(sprintf('%s/../../',dirname(__FILE__))));
 	Autoload::registerPath('\\Twist\\Controllers\\','controllers','.controller.php');
-	Autoload::registerPath('\\Twist\\Modules\\','twist/modules','.controller.php');
+	Autoload::registerPath('\\Twist\\Packages\\','twist/modules','.controller.php');
 	Autoload::registerPath('\\Twist\\Core\\Packages\\','twist/core/packages','.twist.php');
 	Autoload::registerPath('\\Twist\\Core\\Classes\\','twist/core/classes','.twist.php');
+	Autoload::registerPath('\\Twist\\Core\\Controllers\\','twist/core/controllers','.controller.php');
 
 	require_once sprintf('%s/classes/Twist.twist.php',dirname(__FILE__));
 
@@ -57,16 +58,28 @@
 	//Get the base location of the site, based on this config file (should be in the doc_root)
 	Twist::define('DIR_FRAMEWORK',realpath(sprintf('%s/../',dirname(__FILE__))).'/');
 	Twist::define('DIR_FRAMEWORK_CONFIG',sprintf('%sconfig/',DIR_FRAMEWORK));
-	Twist::define('DIR_FRAMEWORK_MODULES',sprintf('%smodules/',DIR_FRAMEWORK));
-	Twist::define('DIR_FRAMEWORK_INTERFACES',sprintf('%sinterfaces/',DIR_FRAMEWORK));
 	Twist::define('DIR_FRAMEWORK_CLASSES',sprintf('%score/classes/',DIR_FRAMEWORK));
 	Twist::define('DIR_FRAMEWORK_PACKAGES',sprintf('%score/packages/',DIR_FRAMEWORK));
 	Twist::define('DIR_FRAMEWORK_VIEWS',sprintf('%score/views/',DIR_FRAMEWORK));
 	Twist::define('DIR_FRAMEWORK_RESOURCES',sprintf('%score/resources/',DIR_FRAMEWORK));
-	Twist::define('DIR_BASE',realpath(sprintf('%s/../',DIR_FRAMEWORK)));
+	Twist::define('DIR_FRAMEWORK_INSTALL',sprintf('%sinstall/',DIR_FRAMEWORK));
+	Twist::define('DIR_BASE',realpath(sprintf('%s/../',DIR_FRAMEWORK)).'/');
 
 	if(file_exists(sprintf('%s/../config/app.php',dirname(__FILE__)))){
 		require_once sprintf('%s/../config/app.php',dirname(__FILE__));
+
+		Twist::define('DIR_APP_AJAX',sprintf('%s/ajax/',rtrim(DIR_APP,'/')));
+		Twist::define('DIR_APP_ASSETS',sprintf('%s/assets/',rtrim(DIR_APP,'/')));
+		Twist::define('DIR_APP_CACHE',sprintf('%s/cache/',rtrim(DIR_APP,'/')));
+		Twist::define('DIR_APP_CONFIG',sprintf('%s/config/',rtrim(DIR_APP,'/')));
+		Twist::define('DIR_APP_CONTROLLERS',sprintf('%s/controllers/',rtrim(DIR_APP,'/')));
+		Twist::define('DIR_APP_MODELS',sprintf('%s/models/',rtrim(DIR_APP,'/')));
+		Twist::define('DIR_APP_UPLOADS',sprintf('%s/uploads/',rtrim(DIR_APP,'/')));
+		Twist::define('DIR_APP_VIEWS',sprintf('%s/views/',rtrim(DIR_APP,'/')));
+	}
+
+	if(defined('DIR_APP_CONFIG') && file_exists(sprintf('%sconfig.php',DIR_APP_CONFIG))){
+		require_once sprintf('%sconfig.php',DIR_APP_CONFIG);
 	}
 
 	//Include the config file

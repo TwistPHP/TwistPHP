@@ -22,7 +22,7 @@
 	 */
 
 	namespace Twist\Core\Packages;
-	use \Twist\Core\Classes\ModuleBase;
+	use \Twist\Core\Classes\PackageBase;
 
 	/**
 	 * Cache data using a simple store and retrieve process, all cached data must be assigned a unique key. Each cache can be given a life time in seconds, when the cache expires it will no longer be returned.
@@ -31,7 +31,7 @@
 	 *
 	 * @instanceable
 	 */
-	class Cache extends ModuleBase{
+	class Cache extends PackageBase{
 
 		protected $strFileExtension = 'twi';
 		protected $strStorageLocation = '';
@@ -46,32 +46,35 @@
 		 */
 		public function __construct($strInstanceKey){
 
-			$this->strInstanceKey = $strInstanceKey;
-			$this->strStorageLocation = DIR_APP_CACHE;
-
-			//Create the default cache folder
-			if(!file_exists($this->strStorageLocation)){
-				mkdir($this->strStorageLocation);
-			}
-
-			//Check that it has been protected
-			if(!file_exists($this->strStorageLocation.'.htaccess')){
-				file_put_contents($this->strStorageLocation.'.htaccess',"Deny from all");
-			}
-
-			//Create the instance cache folder
-			$this->strStorageLocation = sprintf('%s%s/',$this->strStorageLocation,$strInstanceKey);
-
-			if(!file_exists($this->strStorageLocation)){
-				mkdir($this->strStorageLocation);
-			}
-
 			//Get the status of the cache system, disabled cache wil return null for all requests (no data will be stored)
-			$this->blCacheEnabled = $this->framework()->setting('CACHE_ENABLED');
+			$this->blCacheEnabled = ($this->framework()->setting('CACHE_ENABLED') && !\Twist::framework() -> settings() -> showSetup());
 
-			//Probability it set between 1-10 set to 0
-			if(mt_rand(1, 10) <= $this->framework()->setting('CACHE_GB_PROBABILITY')){
-				$this->clean();
+			if($this->blCacheEnabled){
+
+				$this->strInstanceKey = $strInstanceKey;
+				$this->strStorageLocation = DIR_APP_CACHE;
+
+				//Create the default cache folder
+				if(!file_exists($this->strStorageLocation)){
+					mkdir($this->strStorageLocation);
+				}
+
+				//Check that it has been protected
+				if(!file_exists($this->strStorageLocation.'.htaccess')){
+					file_put_contents($this->strStorageLocation.'.htaccess',"Deny from all");
+				}
+
+				//Create the instance cache folder
+				$this->strStorageLocation = sprintf('%s%s/',$this->strStorageLocation,$strInstanceKey);
+
+				if(!file_exists($this->strStorageLocation)){
+					mkdir($this->strStorageLocation);
+				}
+
+				//Probability it set between 1-10 set to 0
+				if(mt_rand(1, 10) <= $this->framework()->setting('CACHE_GB_PROBABILITY')){
+					$this->clean();
+				}
 			}
 		}
 

@@ -22,9 +22,9 @@
 	 */
 
 	namespace Twist\Core\Packages;
-	use \Twist\Core\Classes\ModuleBase;
+	use \Twist\Core\Classes\PackageBase;
 
-	class XML extends ModuleBase{
+	class XML extends PackageBase{
 
 		protected $resDOM = null;
 		protected $strRawXML = '';

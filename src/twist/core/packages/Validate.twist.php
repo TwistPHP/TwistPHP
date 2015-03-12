@@ -22,14 +22,14 @@
  */
 
 namespace Twist\Core\Packages;
-use \Twist\Core\Classes\ModuleBase;
+use \Twist\Core\Classes\PackageBase;
 
 /**
  * Data validation package can validate different types of data i.e Email Address, URLS, Telephone numbers, UK Postcodes and much more.
  * Also includes a testing suite that allows testing of an array of data providing detailed results, very useful for HTML form validation.
  * @package TwistPHP\Packages
  */
-class Validate extends ModuleBase{
+class Validate extends PackageBase{
 
 	public function __construct(){
 		require_once sprintf('%s/libraries/Validate/Validator.lib.php',DIR_FRAMEWORK_PACKAGES);

@@ -22,13 +22,13 @@
 	 */
 
 	namespace Twist\Core\Packages;
-	use \Twist\Core\Classes\ModuleBase;
+	use \Twist\Core\Classes\PackageBase;
 
 	/**
 	 * Image editing suite that allows for new images to be created and existing images to be loaded in for modification
 	 * @package TwistPHP\Packages
 	 */
-	class Image extends ModuleBase{
+	class Image extends PackageBase{
 
 		/**
 		 * Checked that the PHP GD library is installed and loads in the image object library

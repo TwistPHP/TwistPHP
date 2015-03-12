@@ -22,13 +22,13 @@
 	*/
 
 	namespace Twist\Core\Packages;
-	use \Twist\Core\Classes\ModuleBase;
+	use \Twist\Core\Classes\PackageBase;
 
 	/**
 	 * Connect to an FTP server via PHP with the ability to browse and create directories, upload, download and delete files.
 	 * The ability to choose Passive and Active connection mode is also present if using Native support.
 	 */
-	class FTP extends ModuleBase{
+	class FTP extends PackageBase{
 
 		protected $resLibrary = null;
 		protected $intTimeout = 90;

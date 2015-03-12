@@ -22,13 +22,13 @@
  */
 
 namespace Twist\Core\Packages;
-use \Twist\Core\Classes\ModuleBase;
+use \Twist\Core\Classes\PackageBase;
 
 /**
  * Additional file system support that you have always needed but never had. Convert bytes into human readable format, sanitize file names, hash a directory or get its total size in bytes.
  * Recursive file and folder manipulation and the ability to serve files even apply download speed restrictions when running a high traffic site and bandwidth is precious.
  */
-class File extends ModuleBase{
+class File extends PackageBase{
 
 	protected $resTemplate = null;
 	protected $strAssetDirectory = null;
@@ -37,8 +37,8 @@ class File extends ModuleBase{
 	 * Load up an instance of the template class for when it is required
 	 */
 	public function __construct(){
-		$this->resTemplate = \Twist::Template('pkgFile');
-		$this->resTemplate->setTemplatesDirectory( sprintf('%s/views/File/',DIR_FRAMEWORK_PACKAGES));
+		$this->resTemplate = \Twist::View('pkgFile');
+		$this->resTemplate->setDirectory( sprintf('%s/file/',DIR_FRAMEWORK_VIEWS));
 	}
 
 	/**
@@ -140,6 +140,68 @@ class File extends ModuleBase{
 		}
 
 		return $strFile;
+	}
+
+	/**
+	 * Get the content type of a file by its file extension.
+	 *
+	 * @param $dirFile Full path to file including file name
+	 * @return string Returns the content type
+	 */
+	public function contentType($dirFile){
+
+		$strFileExtension = $this->extension($dirFile);
+
+		$arrMimeTypes = array(
+			'txt' => 'text/plain',
+			'htm' => 'text/html',
+			'html' => 'text/html',
+			'php' => 'text/html',
+			'css' => 'text/css',
+			'js' => 'application/javascript',
+			'json' => 'application/json',
+			'xml' => 'application/xml',
+			'swf' => 'application/x-shockwave-flash',
+			'flv' => 'video/x-flv',
+			// images
+			'png' => 'image/png',
+			'jpe' => 'image/jpeg',
+			'jpeg' => 'image/jpeg',
+			'jpg' => 'image/jpeg',
+			'gif' => 'image/gif',
+			'bmp' => 'image/bmp',
+			'ico' => 'image/vnd.microsoft.icon',
+			'tiff' => 'image/tiff',
+			'tif' => 'image/tiff',
+			'svg' => 'image/svg+xml',
+			'svgz' => 'image/svg+xml',
+			// archives
+			'zip' => 'application/zip',
+			'rar' => 'application/x-rar-compressed',
+			'exe' => 'application/x-msdownload',
+			'msi' => 'application/x-msdownload',
+			'cab' => 'application/vnd.ms-cab-compressed',
+			// audio/video
+			'mp3' => 'audio/mpeg',
+			'qt' => 'video/quicktime',
+			'mov' => 'video/quicktime',
+			// adobe
+			'pdf' => 'application/pdf',
+			'psd' => 'image/vnd.adobe.photoshop',
+			'ai' => 'application/postscript',
+			'eps' => 'application/postscript',
+			'ps' => 'application/postscript',
+			// ms office
+			'doc' => 'application/msword',
+			'rtf' => 'application/rtf',
+			'xls' => 'application/vnd.ms-excel',
+			'ppt' => 'application/vnd.ms-powerpoint',
+			// open office
+			'odt' => 'application/vnd.oasis.opendocument.text',
+			'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
+		);
+
+		return (array_key_exists($strFileExtension,$arrMimeTypes)) ? $arrMimeTypes[$strFileExtension] : 'application/octet-stream';
 	}
 
 	/**

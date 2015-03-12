@@ -46,6 +46,12 @@ final class Resources{
 
 		$strAsyncType = null;
 		$blInline = false;
+		$strModuleURI = sprintf('%score/resources/',FRAMEWORK_URI);
+		$strModulePath = sprintf('%score/resources/',DIR_FRAMEWORK);
+
+		if($arrParts[0] == 'core-uri'){
+			return $strModuleURI;
+		}
 
 		if( count( $arrParts ) > 1 ) {
 			if( $arrParts[count( $arrParts ) - 1] === 'inline' ) {
@@ -69,8 +75,6 @@ final class Resources{
 		}
 
 		$arrResource = $this->getFromLibrary($arrParts[0],$arrParts[1]);
-		$strModuleURI = sprintf('%score/resources/',FRAMEWORK_URI);
-		$strModulePath = sprintf('%score/resources/',DIR_FRAMEWORK);
 
 		//If the count is bigger than 0 then output the data
 		if(count($arrResource)){

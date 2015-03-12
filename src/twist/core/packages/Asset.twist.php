@@ -22,13 +22,13 @@
 	 */
 
 	namespace Twist\Core\Packages;
-	use \Twist\Core\Classes\ModuleBase;
+	use \Twist\Core\Classes\PackageBase;
 
 	/**
 	 * Asset management package that allows the addition and grouping of assets. Assets can be images, videos, files, links and other data that can be uploaded to a website/service.
 	 * @package TwistPHP\Packages
 	 */
-	class Asset extends ModuleBase{
+	class Asset extends PackageBase{
 
 		protected $resTemplate = null;
 		protected $strAssetDirectory = null;
@@ -41,8 +41,8 @@
 
 		public function __construct(){
 
-			$this->resTemplate = \Twist::Template('pkgAsset');
-			$this->resTemplate->setTemplatesDirectory( sprintf('%s/views/Asset/',DIR_FRAMEWORK_PACKAGES));
+			$this->resTemplate = \Twist::View('pkgAsset');
+			$this->resTemplate->setDirectory( sprintf('%s/asset/',DIR_FRAMEWORK_VIEWS));
 
 			$this->strAssetDirectory = DIR_APP_ASSETS;
 

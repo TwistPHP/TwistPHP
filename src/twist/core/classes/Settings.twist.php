@@ -39,9 +39,7 @@
         public function __construct(){
 
             //Check if the framework is setup or not setup
-            $strConfigFile = sprintf("%s/config/config.php",DIR_FRAMEWORK);
-            $this->blShowSetup = !file_exists($strConfigFile);
-
+            $this->blShowSetup = !(defined('DIR_APP_CONFIG') && file_exists(sprintf("%sconfig.php",DIR_APP_CONFIG)));
             $this->load();
         }
 
@@ -68,7 +66,7 @@
 						$this->blFileConfig = true;
 
 						//Get the settings from a json settings file
-						$strSettingsFile = sprintf('%s/config/settings.json',DIR_FRAMEWORK);
+						$strSettingsFile = defined('DIR_APP_CONFIG') ? sprintf('%ssettings.json',DIR_APP_CONFIG) : null;
 
 						if(file_exists($strSettingsFile)){
 							$jsonData = file_get_contents($strSettingsFile);
@@ -106,7 +104,7 @@
 		protected function loadTempSettings(){
 
 			//Process the core settings of the framework
-			$strCoreJSON = sprintf('%score/install/settings.json',DIR_FRAMEWORK);
+			$strCoreJSON = sprintf('%ssettings.json',DIR_FRAMEWORK_INSTALL);
 
 			$jsonData = file_get_contents($strCoreJSON);
 			$this->arrSettingsInfo = json_decode($jsonData,true);
@@ -133,7 +131,7 @@
                     $this->arrSettings[$strKey] = $mxdData;
 
                     //Export the settings back to the setting file
-                    file_put_contents(sprintf('%s/config/settings.json',DIR_FRAMEWORK),json_encode($this->arrSettingsInfo));
+                    file_put_contents(sprintf('%ssettings.json',DIR_APP_CONFIG),json_encode($this->arrSettingsInfo));
                     $blOut = true;
                 }
             }else{

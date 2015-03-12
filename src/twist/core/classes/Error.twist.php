@@ -177,7 +177,7 @@
 
                     die(json_encode($arrTags));
                 }else{
-                    die(\Twist::Template('Exception')->build($strExceptionTemplate,$arrTags));
+                    die(\Twist::View('Exception')->build($strExceptionTemplate,$arrTags));
                 }
 			}
 
@@ -601,7 +601,7 @@
 					'domain' => \Twist::framework() -> setting('SITE_HOST')
 				);
 
-                die(\Twist::Template('Exception')->build(sprintf("%s/system/error-page.tpl",DIR_FRAMEWORK_VIEWS),$arrTags));
+                die(\Twist::View('Exception')->build(sprintf("%s/system/error-page.tpl",DIR_FRAMEWORK_VIEWS),$arrTags));
 			}
 
 			public static function outputLog(){

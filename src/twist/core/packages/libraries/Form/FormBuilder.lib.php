@@ -112,8 +112,8 @@ class FormBuilder{
 		//https://gist.github.com/ahosgood/88d474c0b811ce469bc0
 		//@todo store cache of the form, build in option to put in custom tags to allow cache form to be populated with data and pre-selects where required
 
-		$resTemplate = \Twist::Template('pkgForm');
-		$resTemplate->setTemplatesDirectory(sprintf('%s/views/Form/',DIR_FRAMEWORK_PACKAGES));
+		$resTemplate = \Twist::View('pkgForm');
+		$resTemplate->setDirectory(sprintf('%s/form/',DIR_FRAMEWORK_VIEWS));
 
 		$arrFormTags = array(
 			'id' => $this->arrDetails['id'],

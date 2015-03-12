@@ -22,13 +22,13 @@
  */
 
 namespace Twist\Core\Packages;
-use \Twist\Core\Classes\ModuleBase;
+use \Twist\Core\Classes\PackageBase;
 
 /**
  * Simply setup a website with multiple pages in minutes. Create restricted areas with login pages and dynamic sections with wild carded URI's.
  * Just a couple lines of code and you will be up and running.
  */
-class Route extends ModuleBase{
+class Route extends PackageBase{
 
 	protected $bl404 = true;
 
@@ -803,91 +803,101 @@ class Route extends ModuleBase{
 		$blRestrict = false;
 		$arrFoundMatched = $arrMatch = array();
 
-		\Twist::User()->logout();
-		\Twist::User()->authenticate();
-
-		$blLoggedIn = \Twist::User()->loggedIn();
-		$intCurrentUserLevel = \Twist::User()->currentLevel();
 		$strCurrentURI = ($this->strBaseURI == '/') ? $strCurrentURI : str_replace($this->strBaseURI,'',$strCurrentURI);
 		$strFullLoginURI = str_replace('//','/',sprintf('%s/login',$this->strBaseURI));
-
 		//$strFullLoginURL = sprintf('%s/%s', $arrRoute['registered_uri'], ltrim($this->framework()->setting('USER_DEFAULT_LOGIN_URI'), '/'));
 
-		foreach($this->arrRestrict as $strRestrictURI => $arrRestrictedInfo){
+		if(\Twist::Database()->checkSettings()){
 
-			$strRestrictExpression = sprintf("#^(%s[\/]?)%s#", str_replace('/','\/',rtrim($strRestrictURI, '/')), $arrRestrictedInfo['wildcard'] ? '' : '$');
+			\Twist::User()->logout();
+			\Twist::User()->authenticate();
 
-			//Check for an exact match
-			if(rtrim($strRestrictURI,'/') == rtrim($strCurrentURI,'/')){
+			$blLoggedIn = \Twist::User()->loggedIn();
+			$intCurrentUserLevel = \Twist::User()->currentLevel();
 
-				$arrMatch = $arrRestrictedInfo;
-				$blRestrict = true;
-				break;
+			foreach($this->arrRestrict as $strRestrictURI => $arrRestrictedInfo){
 
-			}elseif(preg_match($strRestrictExpression, $strCurrentURI, $arrMatches)){
-				$arrFoundMatched[] = $arrRestrictedInfo;
+				$strRestrictExpression = sprintf("#^(%s[\/]?)%s#", str_replace('/','\/',rtrim($strRestrictURI, '/')), $arrRestrictedInfo['wildcard'] ? '' : '$');
+
+				//Check for an exact match
+				if(rtrim($strRestrictURI,'/') == rtrim($strCurrentURI,'/')){
+
+					$arrMatch = $arrRestrictedInfo;
+					$blRestrict = true;
+					break;
+
+				}elseif(preg_match($strRestrictExpression, $strCurrentURI, $arrMatches)){
+					$arrFoundMatched[] = $arrRestrictedInfo;
+				}
+
+				//Log all login pages to be un-restricted
+				$this->arrUnrestricted[rtrim($arrRestrictedInfo['login_uri'],'/')] = true;
 			}
 
-			//Log all login pages to be un-restricted
-			$this->arrUnrestricted[rtrim($arrRestrictedInfo['login_uri'],'/')] = true;
-		}
+			//No exact mach found and there is an array to be processed
+			if($blRestrict == false && count($arrFoundMatched)){
 
-		//No exact mach found and there is an array to be processed
-		if($blRestrict == false && count($arrFoundMatched)){
+				if(count($arrFoundMatched) == 1){
+					$blRestrict = true;
+					$arrMatch = $arrFoundMatched[0];
+				}else{
 
-			if(count($arrFoundMatched) == 1){
-				$blRestrict = true;
-				$arrMatch = $arrFoundMatched[0];
-			}else{
+					//Process Multi-Matches, find the highest level from the found matches, user must match or exceed this level (0 is God)
+					$intHighestLevel = 0;
+					foreach($arrFoundMatched as $arrEachMatch){
+						if($arrEachMatch['level'] == 0 || $arrEachMatch['level'] > $intHighestLevel){
+							$intHighestLevel = $arrEachMatch['level'];
+							$arrMatch = $arrEachMatch;
+							$blRestrict = true;
 
-				//Process Multi-Matches, find the highest level from the found matches, user must match or exceed this level (0 is God)
-				$intHighestLevel = 0;
-				foreach($arrFoundMatched as $arrEachMatch){
-					if($arrEachMatch['level'] == 0 || $arrEachMatch['level'] > $intHighestLevel){
-						$intHighestLevel = $arrEachMatch['level'];
-						$arrMatch = $arrEachMatch;
-						$blRestrict = true;
-
-						if($intHighestLevel == 0){
-							break;
+							if($intHighestLevel == 0){
+								break;
+							}
 						}
 					}
 				}
 			}
-		}
 
-		//If a match is found
-		if($blRestrict){
+			//If a match is found
+			if($blRestrict){
 
-			$strFullLoginURI = str_replace('//','/',sprintf('%s/%s',$this->strBaseURI,ltrim($arrMatch['login_uri'],'/')));
+				$strFullLoginURI = str_replace('//','/',sprintf('%s/%s',$this->strBaseURI,ltrim($arrMatch['login_uri'],'/')));
 
-			if(array_key_exists(rtrim($strCurrentURI,'/'),$this->arrUnrestricted)){
+				if(array_key_exists(rtrim($strCurrentURI,'/'),$this->arrUnrestricted)){
+					$arrMatch = array(
+						'login_required' => false,
+						'allow_access' => true,
+						'login_uri' => $strFullLoginURI,
+						'status' => 'Ignored, unrestricted page'
+					);
+				}else{
+
+					if($blLoggedIn){
+						if($arrMatch['level'] > 0 && $intCurrentUserLevel >= $arrMatch['level'] || $intCurrentUserLevel == 0){
+							$arrMatch['login_required'] = false;
+							$arrMatch['allow_access'] = true;
+							$arrMatch['status'] = 'User level sufficient, allow Access';
+						}else{
+							$arrMatch['login_required'] = false;
+							$arrMatch['allow_access'] = false;
+							$arrMatch['status'] = 'User level insufficient, Deny Access';
+						}
+					}else{
+						$arrMatch['login_required'] = true;
+						$arrMatch['allow_access'] = false;
+						$arrMatch['status'] = 'User must be logged in to access restricted page';
+					}
+				}
+
+				$arrMatch['login_uri'] = $strFullLoginURI;
+			}else{
 				$arrMatch = array(
 					'login_required' => false,
 					'allow_access' => true,
 					'login_uri' => $strFullLoginURI,
-					'status' => 'Ignored, unrestricted page'
+					'status' => 'No restriction found'
 				);
-			}else{
-
-				if($blLoggedIn){
-					if($arrMatch['level'] > 0 && $intCurrentUserLevel >= $arrMatch['level'] || $intCurrentUserLevel == 0){
-						$arrMatch['login_required'] = false;
-						$arrMatch['allow_access'] = true;
-						$arrMatch['status'] = 'User level sufficient, allow Access';
-					}else{
-						$arrMatch['login_required'] = false;
-						$arrMatch['allow_access'] = false;
-						$arrMatch['status'] = 'User level insufficient, Deny Access';
-					}
-				}else{
-					$arrMatch['login_required'] = true;
-					$arrMatch['allow_access'] = false;
-					$arrMatch['status'] = 'User must be logged in to access restricted page';
-				}
 			}
-
-			$arrMatch['login_uri'] = $strFullLoginURI;
 		}else{
 			$arrMatch = array(
 				'login_required' => false,
@@ -921,12 +931,25 @@ class Route extends ModuleBase{
 		return $intOut;
 	}
 
+	/*
+	 * Register the resource server if the twist folder is installed above the document root
+	 */
+	protected function resourceServer(){
+
+		if(TWIST_ABOVE_DOCUMENT_ROOT){
+			$this->controller('/twist/%','Twist\Core\Controllers\Resources',false);
+		}
+	}
+
 	/**
 	 * Serve is used to active the routes system after all routes have been set
 	 * @param $blExitOnComplete Exit script once the page has been served
 	 * @throws \Exception
 	 */
 	public function serve($blExitOnComplete = true){
+
+		//Register the resource server if and when required
+		$this->resourceServer();
 
 		\Twist::Timer('TwistPageLoad')->log('Routes Prepared');
 

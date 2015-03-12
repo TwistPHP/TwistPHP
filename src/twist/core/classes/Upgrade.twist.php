@@ -85,7 +85,22 @@
 		}
 
 		private function _databaseConnect(){
-			require_once sprintf('%s/../../config/config.php',dirname(__FILE__));
+
+			$strDefaultApp = sprintf('%s/../../config/app.php',dirname(__FILE__));
+			$strAppConfig = sprintf('%sconfig.php',DIR_APP_CONFIG);
+			$strDefaultConfig = sprintf('%s/../../config/default.php',dirname(__FILE__));
+
+			if(file_exists($strDefaultApp)){
+				require_once $strDefaultApp;
+			}
+
+			if(file_exists($strAppConfig)){
+				require_once $strAppConfig;
+			}
+
+			if(file_exists($strDefaultConfig)){
+				require_once $strDefaultConfig;
+			}
 
 			if(DATABASE_PROTOCOL != 'none'){
 
@@ -742,7 +757,7 @@
 
 			$blOut = true;
 
-			$strInstallFile = sprintf('%s/../install/install.sql',dirname(__FILE__));
+			$strInstallFile = sprintf('%sinstall.sql',DIR_FRAMEWORK_INSTALL);
 			if(file_exists($strInstallFile)){
 
 				$this->_debug("Installing core database tables");
@@ -778,7 +793,7 @@
 		public function updateCoreTables($strPreviousVersion){
 
 			$blOut = true;
-			$strUpdateDir = sprintf('%s/../install/updates',dirname(__FILE__));
+			$strUpdateDir = sprintf('%supdates',DIR_FRAMEWORK_INSTALL);
 
 			if(file_exists($strUpdateDir)){
 
@@ -846,7 +861,7 @@
 		public function updateCoreSettings(){
 
 			//Process the core settings of the framework
-			$strCoreJSON = sprintf('%s/../install/settings.json',dirname(__FILE__));
+			$strCoreJSON = sprintf('%ssettings.json',DIR_FRAMEWORK_INSTALL);
 			if(file_exists($strCoreJSON)){
 
 				$this->_debug("Updating core settings");

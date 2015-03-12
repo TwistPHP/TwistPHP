@@ -22,14 +22,14 @@
 	 */
 
 	namespace Twist\Core\Packages;
-	use \Twist\Core\Classes\ModuleBase;
+	use \Twist\Core\Classes\PackageBase;
 	use \Twist\Core\Classes\Instance;
 
 	/**
 	 * A package to simplify database connections for your PHP projects. Allowing connections to be made using MySQL, MySQLi and PDO.
 	 * Connections to multiple database servers can be created and used side by site with this unique instanceable package.
 	 */
-	class Database extends ModuleBase{
+	class Database extends PackageBase{
 
 		public $version = "3.0";
 		protected $resLibrary = null;

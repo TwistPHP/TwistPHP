@@ -22,13 +22,13 @@
  */
 
 namespace Twist\Core\Packages;
-use \Twist\Core\Classes\ModuleBase;
+use \Twist\Core\Classes\PackageBase;
 
 /**
  * User management and control allowing users to register, login and be updated
  * Functionality to edit, reset passwords, send welcome emails with session management for multi and single devices
  */
-class User extends ModuleBase{
+class User extends PackageBase{
 
 	public $strLoginUrl = null;
 	public $strLogoutPage = null;
@@ -56,11 +56,11 @@ class User extends ModuleBase{
 		$this->strEncryptionType = $this->framework()->setting('USER_PASSWORD_ENCRYPTION');
 		$this->strPasswordHash = $this->framework()->setting('USER_PASSWORD_HASH');
 
-		$this->resTemplate = \Twist::Template('pkgUser');
+		$this->resTemplate = \Twist::View('pkgUser');
 
 		$strCustomTemplateLocation = $this->framework()->setting('USER_TEMPLATE_LOCATION');
 		if(is_null($strCustomTemplateLocation) || $strCustomTemplateLocation == ''){
-			$this->setCustomTemplateLocation(sprintf('%s/views/User/',DIR_FRAMEWORK_PACKAGES));
+			$this->setCustomTemplateLocation(sprintf('%s/user/',DIR_FRAMEWORK_VIEWS));
 		}else{
 			$this->setCustomTemplateLocation($strCustomTemplateLocation);
 		}
@@ -786,7 +786,7 @@ class User extends ModuleBase{
 		}
 
 		$this->strTemplateLocation = $strTemplateLocation;
-		$this->resTemplate->setTemplatesDirectory($strTemplateLocation);
+		$this->resTemplate->setDirectory($strTemplateLocation);
 	}
 
 	public function viewExtension($strReference){

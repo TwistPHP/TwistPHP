@@ -45,21 +45,33 @@
 
 					//Get the base location of the site, based on apaches report fo the document root minus a trailing slash
 					self::define('BASE_LOCATION',rtrim($_SERVER['DOCUMENT_ROOT'],'/'));
-					self::define('FRAMEWORK_URI','/'.ltrim(str_replace(BASE_LOCATION,"",DIR_FRAMEWORK),'/'));
-					self::define('BASE_URI','/'.ltrim(str_replace(BASE_LOCATION,"",DIR_BASE),'/'));
+
+					$blAboveDocumentRoot = false;
+
+					if(rtrim(DIR_BASE,'/') == dirname($_SERVER['SCRIPT_FILENAME'])){
+						$strSiteRoot = '/';
+					}elseif(strstr(rtrim(DIR_BASE,'/'),dirname($_SERVER['SCRIPT_FILENAME']))){
+						$strSiteRoot = '/'.ltrim(str_replace(dirname($_SERVER['SCRIPT_FILENAME']),"",rtrim(DIR_BASE,'/')),'/');
+					}else{
+						$strSiteRoot = '/'.ltrim(str_replace(rtrim(DIR_BASE,'/'),"",dirname($_SERVER['SCRIPT_FILENAME'])),'/');
+						$blAboveDocumentRoot = true;
+					}
+
+					$strBaseURI = str_replace('//','','/'.trim(str_replace(BASE_LOCATION,"",dirname($_SERVER['SCRIPT_FILENAME'])),'/').'/');
+
+					if(strstr(DIR_FRAMEWORK,BASE_LOCATION)){
+						$strFrameworkURI = '/'.ltrim(str_replace(BASE_LOCATION,"",DIR_FRAMEWORK),'/');
+					}else{
+						$strFrameworkURI = sprintf('%stwist/',$strBaseURI);
+					}
+
+					self::define('FRAMEWORK_URI',$strFrameworkURI);
+					self::define('TWIST_ABOVE_DOCUMENT_ROOT',$blAboveDocumentRoot);
+					self::define('BASE_PATH',$strSiteRoot);
+					self::define('BASE_URI',$strBaseURI);
 
 					date_default_timezone_set( Twist::framework() -> setting('TIMEZONE') );
 					$strLocation = rtrim(Twist::framework() -> setting('SITE_BASE'),'/');
-
-					//Twist::define('DIR_APP',sprintf('%s/%sapplication/',rtrim(DIR_BASE,'/'),($strLocation == '') ? '' : $strLocation.'/'));
-					Twist::define('DIR_APP_AJAX',sprintf('%s/ajax/',rtrim(DIR_APP,'/')));
-					Twist::define('DIR_APP_ASSETS',sprintf('%s/assets/',rtrim(DIR_APP,'/')));
-					Twist::define('DIR_APP_CACHE',sprintf('%s/cache/',rtrim(DIR_APP,'/')));
-					Twist::define('DIR_APP_CONFIG',sprintf('%s/config/',rtrim(DIR_APP,'/')));
-					Twist::define('DIR_APP_CONTROLLERS',sprintf('%s/controllers/',rtrim(DIR_APP,'/')));
-					Twist::define('DIR_APP_MODELS',sprintf('%s/models/',rtrim(DIR_APP,'/')));
-					Twist::define('DIR_APP_UPLOADS',sprintf('%s/uploads/',rtrim(DIR_APP,'/')));
-					Twist::define('DIR_APP_VIEWS',sprintf('%s/views/',rtrim(DIR_APP,'/')));
 
 					require_once sprintf('%sError.twist.php',DIR_FRAMEWORK_CLASSES);
 
@@ -173,15 +185,11 @@
 
 				if(Twist::framework() -> settings() -> showSetup()){
 
-					//Check that the setup interface exists before outputting the setup page
-					if(Twist::framework()->interfaces()->exists('Setup')){
-						Twist::Route()->purge();
-						Twist::Route()->baseURI(BASE_URI);
-						Twist::Route()->ui('/%','Setup');
-						Twist::Route()->serve();
-					}else{
-						throw new Exception("TwistPHP has not been setup, please consult the documentation or install the 'Setup' interface");
-					}
+					Twist::Route()->purge();
+					Twist::Route()->setDirectory(sprintf('%ssetup/',DIR_FRAMEWORK_VIEWS));
+					Twist::Route()->baseView('_base.tpl');
+					Twist::Route()->baseURI(BASE_URI);
+					Twist::Route()->controller('/%','\Twist\Core\Controllers\Setup');
 				}
 			}
 

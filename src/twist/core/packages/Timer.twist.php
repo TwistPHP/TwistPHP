@@ -22,12 +22,12 @@
 	 */
 
 	namespace Twist\Core\Packages;
-	use \Twist\Core\Classes\ModuleBase;
+	use \Twist\Core\Classes\PackageBase;
 
 	/**
 	 * Timer to capture the time taken
 	 */
-	class Timer extends ModuleBase{
+	class Timer extends PackageBase{
 
 		protected $strInstanceKey = '';
 		protected $arrTimer = array();

@@ -22,13 +22,13 @@
  */
 
 namespace Twist\Core\Packages;
-use \Twist\Core\Classes\ModuleBase;
+use \Twist\Core\Classes\PackageBase;
 use \Twist\Core\Classes\Instance;
 
 /**
  * Bring HTML to life with conditional tags, allowing interaction with PHP without using PHP code. Include functionality of additional views in just a fue chars
  */
-class View extends ModuleBase{
+class View extends PackageBase{
 
     protected $strInstanceKey = '';
     protected $dirViews = '';
@@ -111,6 +111,7 @@ class View extends ModuleBase{
      */
     public function setDirectory($dirCustomViews = null){
         $this->dirViews = (is_null($dirCustomViews)) ? DIR_APP_VIEWS : $dirCustomViews;
+	    $this->dirElements =  $this->dirViews;
     }
 
 	/**
@@ -299,11 +300,11 @@ class View extends ModuleBase{
 
             if(filesize($strView)){
 
-                if($this -> framework() -> setting('TEMPLATE_BASE_OVERRIDE') || strstr(realpath($strView),BASE_LOCATION)){
+                //if($this -> framework() -> setting('TEMPLATE_BASE_OVERRIDE') || strstr(realpath($strView),BASE_LOCATION)){
                     $strRawViewDataOut = file_get_contents($strView);
-                }else{
-                    throw new \Exception(sprintf("View file '%s' is outside of your Document Root.",$strView),11107);
-                }
+                //}else{
+               //     throw new \Exception(sprintf("View file '%s' is outside of your Document Root.",$strView),11107);
+               // }
             }else{
                 $strRawViewDataOut = '';
                 trigger_error(sprintf("Twist [11101]: View file '%s' contains no data.",$strView), E_USER_NOTICE);
@@ -863,7 +864,7 @@ class View extends ModuleBase{
 
         if(file_exists($dirElement)){
 
-            if(\Twist::framework()->setting('TEMPLATE_BASE_OVERRIDE') || strstr(realpath($dirElement),BASE_LOCATION)){
+            //if(\Twist::framework()->setting('TEMPLATE_BASE_OVERRIDE') || strstr(realpath($dirElement),BASE_LOCATION)){
                 ob_start();
                 include $dirElement;
                 $strOut = ob_get_contents();
@@ -873,9 +874,9 @@ class View extends ModuleBase{
 		            \Twist::framework()->debug()->log('View','usage',array('instance' => $this->strInstanceKey,'file' => $dirElement,'tags' => array()));
 	            }
 
-            }else{
-                throw new \Exception(sprintf("Element file '%s' is outside of your Document Root.",$dirElement),11109);
-            }
+            //}else{
+            //    throw new \Exception(sprintf("Element file '%s' is outside of your Document Root.",$dirElement),11109);
+            //}
         }else{
             throw new \Exception(sprintf("Twist element '%s' was not found!",strtolower($dirElement)));
         }

@@ -36,14 +36,13 @@
 			parent::__construct($strInterfaceKey);
 
 			//Get the current base template before it is purged
-			$this->baseTemplate(\Twist::Route()->baseTemplate());
+			$this->baseView(\Twist::Route()->baseView());
 			\Twist::Route()->purge();
 
 			$arrInterfaceParams = \Twist::framework()->interfaces()->information($strInterfaceKey);
 
 			$this->interfaceURI($strInterfaceKey);
-			$this->setTemplatesDirectory(sprintf('%s/views/',rtrim($arrInterfaceParams['path'],'/')));
-			$this->setElementsDirectory(sprintf('%s/views/',rtrim($arrInterfaceParams['path'],'/')));
+			$this->setDirectory(sprintf('%s/views/',rtrim($arrInterfaceParams['path'],'/')));
 			$this->setControllerDirectory(sprintf('%s/controllers/',rtrim($arrInterfaceParams['path'],'/')));
 		}
 
