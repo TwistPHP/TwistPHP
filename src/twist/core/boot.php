@@ -74,7 +74,6 @@
 		Twist::define('DIR_APP_CONFIG',sprintf('%s/config/',rtrim(DIR_APP,'/')));
 		Twist::define('DIR_APP_CONTROLLERS',sprintf('%s/controllers/',rtrim(DIR_APP,'/')));
 		Twist::define('DIR_APP_MODELS',sprintf('%s/models/',rtrim(DIR_APP,'/')));
-		Twist::define('DIR_APP_UPLOADS',sprintf('%s/uploads/',rtrim(DIR_APP,'/')));
 		Twist::define('DIR_APP_VIEWS',sprintf('%s/views/',rtrim(DIR_APP,'/')));
 	}
 

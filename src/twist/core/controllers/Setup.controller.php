@@ -78,15 +78,15 @@ class Setup extends BaseController{
 		$blZip = (function_exists('ZipArchive') || class_exists('ZipArchive'));
 		$blCookies = (is_array($_COOKIE) && array_key_exists('twist_setup_test',$_COOKIE));
 
-		$blPassChecks = ($blVersion && $blPermissions && $blCurl && $blMysql && $blZip && $blCookies);
+		$blPassChecks = ($blVersion && $blPermissions);
 
 		$arrChecks = array(
 			'php_version' => ($blVersion) ? 'success' : 'error',
 			'file_permissions' => ($blPermissions) ? 'success' : 'error',
-			'php_curl' => ($blCurl) ? 'success' : 'error',
-			'php_mysql' => ($blMysql) ? 'success' : 'error',
-			'php_zip' => ($blZip) ? 'success' : 'error',
-			'php_cookies' => ($blCookies) ? 'success' : 'error',
+			'php_curl' => ($blCurl) ? 'success' : 'warning',
+			'php_mysql' => ($blMysql) ? 'success' : 'warning',
+			'php_zip' => ($blZip) ? 'success' : 'warning',
+			'php_cookies' => ($blCookies) ? 'success' : 'warning',
 			'continue_status' => ($blPassChecks) ? '' : ' hidden'
 		);
 
@@ -178,7 +178,8 @@ class Setup extends BaseController{
 			'relative_path' => rtrim(DIR_BASE,'/').'/',
 			'site_root' => ltrim($strSiteRoot,'/'),
 			'app_path' => ($strSiteRoot == '/') ? '' : ltrim($strSiteRoot,'/').'/app',
-			'package_path' => ($strSiteRoot == '/') ? '' : ltrim($strSiteRoot,'/').'/packages',
+			'packages_path' => ($strSiteRoot == '/') ? '' : ltrim($strSiteRoot,'/').'/packages',
+			'uploads_path' => ($strSiteRoot == '/') ? '' : ltrim($strSiteRoot,'/').'/uploads',
 		);
 
 		if(array_key_exists($arrSession['settings']['details'],'site_root')){
@@ -189,8 +190,12 @@ class Setup extends BaseController{
 			$arrTags['app_path'] = $arrSession['settings']['details']['app_path'];
 		}
 
-		if(array_key_exists($arrSession['settings']['details'],'package_path')){
-			$arrTags['package_path'] = $arrSession['settings']['details']['package_path'];
+		if(array_key_exists($arrSession['settings']['details'],'packages_path')){
+			$arrTags['packages_path'] = $arrSession['settings']['details']['packages_path'];
+		}
+
+		if(array_key_exists($arrSession['settings']['details'],'uploads_path')){
+			$arrTags['uploads_path'] = $arrSession['settings']['details']['uploads_path'];
 		}
 
 		if(array_key_exists('message',$arrSession['settings'])){
@@ -211,12 +216,15 @@ class Setup extends BaseController{
 			$arrSession['settings']['details'] = array(
 				'site_name' => $_POST['site_name'],
 				'site_host' => $_POST['site_host'],
+				'site_www' => (array_key_exists('site_www',$_POST)) ? $_POST['site_www'] : '0',
 				'http_protocol' => $_POST['http_protocol'],
+				'http_protocol_force' => (array_key_exists('http_protocol_force',$_POST)) ? $_POST['http_protocol_force'] : '0',
 				'timezone' => $_POST['timezone'],
 				'relative_path' => $_POST['relative_path'],
 				'site_root' => trim($_POST['site_root'],'/'),
 				'app_path' => ($_POST['app_path'] == '') ? 'app' :  trim($_POST['app_path'],'/'),
-				'package_path' => ($_POST['package_path'] == '') ? 'package' : trim($_POST['package_path'],'/'),
+				'packages_path' => ($_POST['packages_path'] == '') ? 'packages' : trim($_POST['packages_path'],'/'),
+				'uploads_path' => ($_POST['uploads_path'] == '') ? 'uploads' : trim($_POST['uploads_path'],'/')
 			);
 
 			if($arrSession['settings']['details']['site_name'] != '' &&
@@ -332,14 +340,14 @@ class Setup extends BaseController{
 		$strApplicationPath = sprintf('%s%s/',$arrSession['settings']['details']['relative_path'],$arrSession['settings']['details']['app_path']);
 
 		$resFile = \Twist::File();
-		$resFile->recursiveCreate(sprintf('%s%s',$arrSession['settings']['details']['relative_path'],$arrSession['settings']['details']['package_path']));
+		$resFile->recursiveCreate(sprintf('%s%s',$arrSession['settings']['details']['relative_path'],$arrSession['settings']['details']['packages_path']));
+		$resFile->recursiveCreate(sprintf('%s%s',$arrSession['settings']['details']['relative_path'],$arrSession['settings']['details']['uploads_path']));
 		$resFile->recursiveCreate(sprintf('%sajax',$strApplicationPath));
 		$resFile->recursiveCreate(sprintf('%sassets',$strApplicationPath));
 		$resFile->recursiveCreate(sprintf('%scache',$strApplicationPath));
 		$resFile->recursiveCreate(sprintf('%sconfig',$strApplicationPath));
 		$resFile->recursiveCreate(sprintf('%scontrollers',$strApplicationPath));
 		$resFile->recursiveCreate(sprintf('%smodels',$strApplicationPath));
-		$resFile->recursiveCreate(sprintf('%suploads',$strApplicationPath));
 		$resFile->recursiveCreate(sprintf('%sviews',$strApplicationPath));
 
 		//Create the config in the apps/config folder
@@ -359,7 +367,8 @@ class Setup extends BaseController{
 		$arrAppTags = array(
 			'site_root' => $arrSession['settings']['details']['site_root'],
 			'app_path' => $arrSession['settings']['details']['app_path'],
-			'package_path' => $arrSession['settings']['details']['package_path'],
+			'packages_path' => $arrSession['settings']['details']['packages_path'],
+			'uploads_path' => $arrSession['settings']['details']['uploads_path'],
 		);
 
 		//Create the apps config in the twist/config folder
@@ -367,7 +376,8 @@ class Setup extends BaseController{
 
 		\Twist::define('DIR_SITE_ROOT',DIR_BASE.$arrSession['settings']['details']['site_root']);
 		\Twist::define('DIR_APP',DIR_BASE.$arrSession['settings']['details']['app_path']);
-		\Twist::define('DIR_PACKAGES',DIR_BASE.$arrSession['settings']['details']['package_path']);
+		\Twist::define('DIR_PACKAGES',DIR_BASE.$arrSession['settings']['details']['packages_path']);
+		\Twist::define('DIR_UPLOADS',DIR_BASE.$arrSession['settings']['details']['uploads_path']);
 
 		if($arrSession['database']['details']['type'] == 'database'){
 
@@ -396,7 +406,9 @@ class Setup extends BaseController{
 		//Add new settings to the chosen settings storage method
 		\Twist::framework()->setting('SITE_NAME',$arrSession['settings']['details']['site_name']);
 		\Twist::framework()->setting('SITE_HOST',$arrSession['settings']['details']['site_host']);
+		\Twist::framework()->setting('SITE_WWW',$arrSession['settings']['details']['site_www']);
 		\Twist::framework()->setting('SITE_PROTOCOL',$arrSession['settings']['details']['http_protocol']);
+		\Twist::framework()->setting('SITE_PROTOCOL_FORCE',$arrSession['settings']['details']['http_protocol_force']);
 		\Twist::framework()->setting('TIMEZONE',$arrSession['settings']['details']['timezone']);
 
 		//Create the level 0 user into the system - this will only occur is a database connection is present

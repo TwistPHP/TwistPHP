@@ -396,7 +396,7 @@ class File extends PackageBase{
 		);
 
 		//Create an upload directory for uploaded files
-		$strUploadFolder = sprintf('%s/uploads',BASE_LOCATION);
+		$strUploadFolder = DIR_UPLOADS;
 
 		if(!is_dir($strUploadFolder)){
 			mkdir($strUploadFolder);
@@ -469,7 +469,7 @@ class File extends PackageBase{
 		);
 
 		//Create an upload directory for uploaded files
-		$strUploadFolder = DIR_APP_UPLOADS;
+		$strUploadFolder = DIR_UPLOADS;
 
 		if(!is_dir($strUploadFolder)){
 			mkdir($strUploadFolder);
