@@ -1,4 +1,11 @@
 {
+	"ajax": {
+		"3.0.0": {
+			"default": true,
+			"css": ["css/twist-ajax.css"],
+			"js": ["js/twist-ajax.min.js"]
+		}
+	},
 	"arable": {
 		"5.0.0": {
 			"default": true,
@@ -11,6 +18,20 @@
 			"default": true,
 			"css": ["arable-reset.min.css"],
 			"js": []
+		}
+	},
+	"debug": {
+		"standard": {
+			"default": true,
+			"css": ["debug.min.css"],
+			"js": []
+		}
+	},
+	"file": {
+		"standard": {
+			"default": true,
+			"css": [],
+			"js": ["file-upload.min.js"]
 		}
 	},
 	"font-awesome": {
@@ -51,6 +72,13 @@
 			"default": true,
 			"css": [],
 			"js": ["rummage.min.js"]
+		}
+	},
+	"setup": {
+		"standard": {
+			"default": true,
+			"css": ["base.css"],
+			"js": []
 		}
 	},
 	"shadow-js": {

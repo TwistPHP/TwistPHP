@@ -214,57 +214,6 @@ class AJAX extends PackageBase{
 			$this->arrResponse['output'] .= $mxdData."\n\n-----\n\n";
 		}
 	}
-
-	/**
-	 * At the moment only supports 'latest' or a 'static' version
-	 * {shadow-ajax:css,3.0.2} or {shadow-ajax:js,3.0.2} [Version not required]
-	 * @param $strReference
-	 * @return string
-	 */
-	function viewExtension($strReference){
-
-		$strOut = "";
-		$arrData = (strstr($strReference,',')) ? explode(',',$strReference) : array($strReference,'latest');
-
-		//$strModuleBase = $this->__uri();
-
-		switch($arrData[0]){
-
-			case'javascript':
-			case'js':
-				//$strFile = \Twist::File() -> findVersion(sprintf('%s/js/',$strModuleBase),'twist-ajax',$arrData[1]);
-				//$strFile = (file_exists(BASE_LOCATION.str_replace('.js','.min.js',$strFile))) ? str_replace('.js','.min.js',$strFile) : $strFile;
-				//$strOut = sprintf('<script src="/%s"></script>',$strFile);
-
-				$strOut = '<script src="/twist/core/packages/resources/AJAX/js/twist-ajax.min.js"></script>';
-				break;
-
-			case'js-dev':
-				$strOut = '<script src="/twist/core/packages/resources/AJAX/js/twist-ajax.js"></script>';
-				break;
-
-			case'css':
-				//$strFile = \Twist::File() -> findVersion(sprintf('%s/css/',$strModuleBase),'twist-ajax',$arrData[1]);
-				//$strOut = sprintf('<link href="/%s" type="text/css" rel="stylesheet">',$strFile);
-
-				$strOut = '<link href="/twist/core/packages/resources/AJAX/css/twist-ajax.css" type="text/css" rel="stylesheet">';
-				break;
-
-			case'resources':
-				//$strFile = \Twist::File() -> findVersion(sprintf('%s/js/',$strModuleBase),'twist-ajax',$arrData[1]);
-				//$strFile = (file_exists(BASE_LOCATION.str_replace('.js','.min.js',$strFile))) ? str_replace('.js','.min.js',$strFile) : $strFile;
-				//$strOut = sprintf('<script src="/%s"></script>',$strFile);
-
-				//$strFile = \Twist::File() -> findVersion(sprintf('%s/css/',$strModuleBase),'twist-ajax',$arrData[1]);
-				//$strOut .= sprintf('<link href="/%s" type="text/css" rel="stylesheet">',$strFile);
-
-				$strOut = '<script src="/twist/core/packages/resources/AJAX/js/twist-ajax.min.js"></script>';
-				$strOut .= '<link href="/twist/core/packages/resources/AJAX/css/twist-ajax.css" type="text/css" rel="stylesheet">';
-				break;
-		}
-
-		return $strOut;
-	}
 }
 
 class AjaxRequest{

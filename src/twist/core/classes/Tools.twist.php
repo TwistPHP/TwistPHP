@@ -371,6 +371,10 @@
 				$urlOut .= '/';
 			}else{
 				$urlOut = rtrim($urlOut,'/');
+
+				if($urlOut == ''){
+					$urlOut = '/';
+				}
 			}
 
 			return ($strQueryString == '') ? $urlOut : sprintf('%s?%s',$urlOut,$strQueryString);

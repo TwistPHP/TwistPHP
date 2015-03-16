@@ -276,94 +276,8 @@
 			//Start the function off by outputting the XML dom header
 			$strXml = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 
-			/**
-			 * Process the Attributes where they exist
-			 */
-			function processAttributes(&$arrData){
-
-				$strParameters = '';
-
-				if(array_key_exists('@attributes',$arrData)){
-					foreach($arrData['@attributes'] as $strKey => $strValue){
-						$strParameters .= sprintf(' %s="%s"',$strKey,$strValue);
-					}
-					unset($arrData['@attributes']);
-				}
-
-				return $strParameters;
-			}
-
-			/**
-			 * Process the Comment attribute where they exist
-			 */
-			function processComment(&$arrData){
-
-				//Remove the comment from the array, only allow comments in the root node
-				$strComment = '';
-
-				if(array_key_exists('@comment',$arrData)){
-					$strComment = sprintf("<!-- %s -->\n",$arrData['@comment']);
-					unset($arrData['@comment']);
-				}
-
-				return $strComment;
-			}
-
-			/**
-			 * Recursively go through the array and process each item
-			 */
-			function processEachItem($arrData,$strTab="\t",$strPreviousKey=""){
-
-				$strXml = "";
-
-				foreach($arrData as $strKey => $mxdData){
-
-					$strParameters = processAttributes($mxdData);
-					$strComment = processComment($mxdData);
-
-					//Detect for empty rows
-					if(!is_array($mxdData) && $mxdData == ""){
-						$strXml .= sprintf("%s<%s%s/>\n",$strTab,$strKey,$strParameters);
-					}else{
-
-						//If this is a key of 0-9 use the previous key
-						if(preg_match("#([0-9]+)#",$strKey,$arrResults)){
-
-							$strXml .= sprintf("%s<%s%s>%s%s%s</%s>\n",
-								$strTab,
-								$strPreviousKey,
-								$strParameters,
-								$strTab,
-								(is_array($mxdData)) ? "\n".processEachItem($mxdData,$strTab."\t",$strKey) : $mxdData,
-								$strTab,
-								$strPreviousKey
-							);
-
-						}else{
-
-							//If the next array is a 0-9 key then do not contain the items
-							if(is_array($mxdData) && array_key_exists('0',$mxdData)){
-								$strXml .= sprintf("%s",processEachItem($mxdData,$strTab,$strKey));
-							}else{
-
-								//Use standard output
-								$strXml .= sprintf("%s<%s%s>%s</%s>\n",
-									$strTab,
-									$strKey,
-									$strParameters,
-									(is_array($mxdData)) ? "\n".processEachItem($mxdData,$strTab."\t",$strKey) : $mxdData,
-									$strKey
-								);
-							}
-						}
-					}
-				}
-
-				return $strXml;
-			}
-
-			$strParameters = processAttributes($arrData);
-			$strComment = processComment($arrData);
+			$strParameters = $this->processAttributes($arrData);
+			$strComment = $this->processComment($arrData);
 
 			$strXml .= sprintf("<%s%s>\n%s%s</%s>",
 				$strRootNode,
@@ -372,6 +286,92 @@
 				processEachItem($arrData),
 				$strRootNode
 			);
+
+			return $strXml;
+		}
+
+		/**
+		 * Process the Attributes where they exist
+		 */
+		protected function processAttributes(&$arrData){
+
+			$strParameters = '';
+
+			if(array_key_exists('@attributes',$arrData)){
+				foreach($arrData['@attributes'] as $strKey => $strValue){
+					$strParameters .= sprintf(' %s="%s"',$strKey,$strValue);
+				}
+				unset($arrData['@attributes']);
+			}
+
+			return $strParameters;
+		}
+
+		/**
+		 * Process the Comment attribute where they exist
+		 */
+		protected function processComment(&$arrData){
+
+			//Remove the comment from the array, only allow comments in the root node
+			$strComment = '';
+
+			if(array_key_exists('@comment',$arrData)){
+				$strComment = sprintf("<!-- %s -->\n",$arrData['@comment']);
+				unset($arrData['@comment']);
+			}
+
+			return $strComment;
+		}
+
+		/**
+		 * Recursively go through the array and process each item
+		 */
+		protected function processEachItem($arrData,$strTab="\t",$strPreviousKey=""){
+
+			$strXml = "";
+
+			foreach($arrData as $strKey => $mxdData){
+
+				$strParameters = $this->processAttributes($mxdData);
+				$strComment = $this->processComment($mxdData);
+
+				//Detect for empty rows
+				if(!is_array($mxdData) && $mxdData == ""){
+					$strXml .= sprintf("%s<%s%s/>\n",$strTab,$strKey,$strParameters);
+				}else{
+
+					//If this is a key of 0-9 use the previous key
+					if(preg_match("#([0-9]+)#",$strKey,$arrResults)){
+
+						$strXml .= sprintf("%s<%s%s>%s%s%s</%s>\n",
+							$strTab,
+							$strPreviousKey,
+							$strParameters,
+							$strTab,
+							(is_array($mxdData)) ? "\n".$this->processEachItem($mxdData,$strTab."\t",$strKey) : $mxdData,
+							$strTab,
+							$strPreviousKey
+						);
+
+					}else{
+
+						//If the next array is a 0-9 key then do not contain the items
+						if(is_array($mxdData) && array_key_exists('0',$mxdData)){
+							$strXml .= sprintf("%s",$this->processEachItem($mxdData,$strTab,$strKey));
+						}else{
+
+							//Use standard output
+							$strXml .= sprintf("%s<%s%s>%s</%s>\n",
+								$strTab,
+								$strKey,
+								$strParameters,
+								(is_array($mxdData)) ? "\n".$this->processEachItem($mxdData,$strTab."\t",$strKey) : $mxdData,
+								$strKey
+							);
+						}
+					}
+				}
+			}
 
 			return $strXml;
 		}
