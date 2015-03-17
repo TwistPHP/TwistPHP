@@ -38,7 +38,7 @@
 
 			//Decide which library to use
 			$strLibrary = $this->framework()->setting('FTP_LIBRARY'); //Can be set to either 'ftpnative' or 'ftpsocket'
-			$strLibraryFile = sprintf('%s/libraries/FTP/%s.lib.php',DIR_FRAMEWORK_PACKAGES,ucwords(strtolower($strLibrary)));
+			$strLibraryFile = sprintf('%s/models/FTP/%s.model.php',DIR_FRAMEWORK_PACKAGES,ucwords(strtolower($strLibrary)));
 
 			if(!file_exists($strLibraryFile)){
 				throw new \Exception(sprintf("Error, FTP protocol library '%s' is not installed or supported",$strLibrary));

@@ -49,13 +49,13 @@
 			switch($this->strHandler){
 
 				case'pclzip';
-					require_once sprintf('%s/libraries/Archive/PclZip.lib.php',DIR_FRAMEWORK_PACKAGES);
+					require_once sprintf('%s/models/Archive/PclZip.model.php',DIR_FRAMEWORK_PACKAGES);
 					$this->resHandler = new ArchivePclZip();
 					break;
 
 				case'native';
 				default:
-					require_once sprintf('%s/libraries/Archive/Native.lib.php',DIR_FRAMEWORK_PACKAGES);
+					require_once sprintf('%s/models/Archive/Native.model.php',DIR_FRAMEWORK_PACKAGES);
 					$this->resHandler = new ArchiveNative();
 					break;
 			}

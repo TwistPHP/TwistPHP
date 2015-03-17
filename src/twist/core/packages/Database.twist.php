@@ -80,7 +80,7 @@
 					$strProtocol = DATABASE_PROTOCOL;
 				}
 
-				$strProtocolFile = sprintf('%s/libraries/Database/Protocol-%s.lib.php',DIR_FRAMEWORK_PACKAGES,strtolower($strProtocol));
+				$strProtocolFile = sprintf('%s/models/Database/Protocol-%s.model.php',DIR_FRAMEWORK_PACKAGES,strtolower($strProtocol));
 
 				if(!file_exists($strProtocolFile)){
 					throw new \Exception(sprintf("Database protocol library '%s' is not installed or supported",$strProtocol));
@@ -236,12 +236,12 @@
 		 * Create a new database record (row) an empty object will be returned from this function, you can then populate the record and commit your changes
 		 *
 		 * @param $strTable
-		 * @return_object DatabaseRecord core/packages/libraries/Database/Record.lib.php
+		 * @return_object DatabaseRecord core/packages/models/Database/Record.model.php
 		 * @return null|object Returns and object of the database table
 		 */
 		public function createRecord($strTable){
 
-			require_once sprintf('%s/libraries/Database/Record.lib.php',DIR_FRAMEWORK_PACKAGES);
+			require_once sprintf('%s/models/Database/Record.model.php',DIR_FRAMEWORK_PACKAGES);
 
 			$resRecord = null;
 
@@ -262,12 +262,12 @@
 		 * @param $strTable
 		 * @param $mxdValue
 		 * @param string $strField
-		 * @return_object DatabaseRecord core/packages/libraries/Database/Record.lib.php
+		 * @return_object DatabaseRecord core/packages/models/Database/Record.model.php
 		 * @return null|object Returns and object of the database table
 		 */
 		public function getRecord($strTable,$mxdValue,$strField = 'id'){
 
-			require_once sprintf('%s/libraries/Database/Record.lib.php',DIR_FRAMEWORK_PACKAGES);
+			require_once sprintf('%s/models/Database/Record.model.php',DIR_FRAMEWORK_PACKAGES);
 			$resRecord = null;
 
 			//Get the structure of the table
@@ -292,12 +292,12 @@
 		 * @param $strTable
 		 * @param $mxdValue
 		 * @param string $strField
-		 * @return_object DatabaseRecord core/packages/libraries/Database/Record.lib.php
+		 * @return_object DatabaseRecord core/packages/models/Database/Record.model.php
 		 * @return null|object Returns and object of the database table
 		 */
 		public function cloneRecord($strTable,$mxdValue,$strField = 'id'){
 
-			require_once sprintf('%s/libraries/Database/Record.lib.php',DIR_FRAMEWORK_PACKAGES);
+			require_once sprintf('%s/models/Database/Record.model.php',DIR_FRAMEWORK_PACKAGES);
 			$resRecord = null;
 
 			//Get the structure of the table
@@ -493,7 +493,7 @@
 		 *
 		 * @param $strTable Name of that table to lookup
 		 * @param $strDatabase Name of the tables database if not the current database
-		 * @return_object DatabaseTable core/packages/libraries/Database/Table.lib.php
+		 * @return_object DatabaseTable core/packages/models/Database/Table.model.php
 		 * @return object Returns and object of the database table
 		 */
 		public function table($strTable,$strDatabase = null){
@@ -501,7 +501,7 @@
 			$resTable = null;
 			$strDatabaseName = (is_null($strDatabase)) ? $this->strDatabaseName : $strDatabase;
 
-			require_once sprintf('%s/libraries/Database/Table.lib.php',DIR_FRAMEWORK_PACKAGES);
+			require_once sprintf('%s/models/Database/Table.model.php',DIR_FRAMEWORK_PACKAGES);
 			$resTable = new DatabaseTable($strDatabaseName,$strTable);
 
 			return $resTable;

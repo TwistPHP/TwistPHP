@@ -39,7 +39,7 @@
 				throw new \Exception('Required extension GD is not loaded.');
 			}
 
-            require_once sprintf('%s/libraries/Image/Object.lib.php',DIR_FRAMEWORK_PACKAGES);
+            require_once sprintf('%s/models/Image/Object.model.php',DIR_FRAMEWORK_PACKAGES);
 		}
 
 		/**
@@ -47,7 +47,7 @@
 		 * Once all changes have been made you can then export the image as a file or serve to the screen.
 		 *
 		 * @param $mxdImage
-		 * @return_object ImageObject core/packages/libraries/Image/Object.lib.php
+		 * @return_object ImageObject core/packages/models/Image/Object.model.php
 		 * @return object Returns an object of the loaded Image
 		 */
 		public function load($mxdImage){
@@ -61,7 +61,7 @@
 		 * @param $intWidth
 		 * @param $intHeight
 		 * @param $strFillColour
-		 * @return_object ImageObject core/packages/libraries/Image/Object.lib.php
+		 * @return_object ImageObject core/packages/models/Image/Object.model.php
 		 * @return object Returns an object of the new Image
 		 */
 		public function create($intWidth,$intHeight,$strFillColour){

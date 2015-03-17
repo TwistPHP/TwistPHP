@@ -46,7 +46,7 @@ class Email extends PackageBase{
 		switch($this->strProtocol){
 
 			case'smtp';
-				require_once sprintf('%s/libraries/Email/Protocol-smtp.lib.php',DIR_FRAMEWORK_PACKAGES);
+				require_once sprintf('%s/models/Email/Protocol-smtp.model.php',DIR_FRAMEWORK_PACKAGES);
 				$this->resProtocol = new EmailSMTP();
 
 				$this->arrSettingsSMTP = array(
@@ -60,7 +60,7 @@ class Email extends PackageBase{
 
 			case'native';
 			default:
-				require_once sprintf('%s/libraries/Email/Protocol-native.lib.php',DIR_FRAMEWORK_PACKAGES);
+				require_once sprintf('%s/models/Email/Protocol-native.model.php',DIR_FRAMEWORK_PACKAGES);
 				$this->resProtocol = new EmailNATIVE();
 				break;
 		}
@@ -72,7 +72,7 @@ class Email extends PackageBase{
 
 		$this->strProtocol = 'smtp';
 
-		require_once sprintf('%s/libraries/Email/Protocol-smtp.lib.php',DIR_FRAMEWORK_PACKAGES);
+		require_once sprintf('%s/models/Email/Protocol-smtp.model.php',DIR_FRAMEWORK_PACKAGES);
 		$this->resProtocol = new EmailSMTP();
 
 		$this->arrSettingsSMTP = array(

@@ -34,14 +34,14 @@
 		 * Loads in the two returnable object classes
 		 */
 		public function __construct(){
-			require_once sprintf('%s/libraries/ICS/Calendar.lib.php',DIR_FRAMEWORK_PACKAGES);
-			require_once sprintf('%s/libraries/ICS/Event.lib.php',DIR_FRAMEWORK_PACKAGES);
+			require_once sprintf('%s/models/ICS/Calendar.model.php',DIR_FRAMEWORK_PACKAGES);
+			require_once sprintf('%s/models/ICS/Event.model.php',DIR_FRAMEWORK_PACKAGES);
 		}
 
 		/**
 		 * Create a new instance of the ICSCalendar object, allowing the creation of an calendar ICS file
 		 *
-		 * @return_object ICSCalendar core/packages/libraries/ICS/Calendar.lib.php
+		 * @return_object ICSCalendar core/packages/models/ICS/Calendar.model.php
 		 * @return object Returns the ICS Calendar Object
 		 */
 		public function createCalendar(){
@@ -51,7 +51,7 @@
 		/**
 		 * Create a new instance of the ICSEvent object, allowing the creation of an event ICS file
 		 *
-		 * @return_object ICSEvent core/packages/libraries/ICS/Event.lib.php
+		 * @return_object ICSEvent core/packages/models/ICS/Event.model.php
 		 * @return object Returns the ICS Event Object
 		 */
 		public function createEvent(){
@@ -62,8 +62,8 @@
 		 * Load in an existing ICS file in to be converted into an usable ICS Event/Calendar object
 		 *
 		 * @param $dirICSFile Path of the ICS file to be imported
-		 * @return_object ICSCalendar core/packages/libraries/ICS/Calendar.lib.php
-		 * @return_object ICSEvent core/packages/libraries/ICS/Event.lib.php
+		 * @return_object ICSCalendar core/packages/models/ICS/Calendar.model.php
+		 * @return_object ICSEvent core/packages/models/ICS/Event.model.php
 		 * @return null|object Returns NULL or either the ICS Event or Calendar Object
 		 */
 		public function loadFile($dirICSFile){
@@ -82,8 +82,8 @@
 		 * Turns the raw ICS data into an object and returns
 		 *
 		 * @param $strRawData
-		 * @return_object ICSCalendar core/packages/libraries/ICS/Calendar.lib.php
-		 * @return_object ICSEvent core/packages/libraries/ICS/Event.lib.php
+		 * @return_object ICSCalendar core/packages/models/ICS/Calendar.model.php
+		 * @return_object ICSEvent core/packages/models/ICS/Event.model.php
 		 * @return null|object Returns NULL or either the ICS Event or Calendar Object
 		 */
 		protected function parseRawData($strRawData){

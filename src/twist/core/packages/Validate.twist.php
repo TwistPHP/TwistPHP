@@ -32,13 +32,13 @@ use \Twist\Core\Classes\PackageBase;
 class Validate extends PackageBase{
 
 	public function __construct(){
-		require_once sprintf('%s/libraries/Validate/Validator.lib.php',DIR_FRAMEWORK_PACKAGES);
+		require_once sprintf('%s/models/Validate/Validator.model.php',DIR_FRAMEWORK_PACKAGES);
 	}
 
 	/**
 	 * Get a validator object, form here you can define all your validator checks and then test your data against the checks
 	 *
-	 * @return_object Validator core/packages/libraries/Validator/Validator.lib.php
+	 * @return_object Validator core/packages/models/Validator/Validator.model.php
 	 * @return object Returns an object of the Validator tool
 	 */
 	public function createTest(){

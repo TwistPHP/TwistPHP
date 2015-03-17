@@ -30,7 +30,7 @@
 	class Form extends PackageBase{
 
 		public function __construct(){
-			require_once sprintf('%s/libraries/Form/FormBuilder.lib.php',DIR_FRAMEWORK_PACKAGES);
+			require_once sprintf('%s/models/Form/FormBuilder.model.php',DIR_FRAMEWORK_PACKAGES);
 		}
 
 		public function create(){

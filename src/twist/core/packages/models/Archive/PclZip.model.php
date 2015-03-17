@@ -28,7 +28,7 @@
 		protected $resZip = null;
 
 		public function __construct(){
-			require_once sprintf('%s/libraries/Archive/PclZip.class.php',DIR_FRAMEWORK_PACKAGES);
+			require_once sprintf('%s/models/Archive/PclZip.class.php',DIR_FRAMEWORK_PACKAGES);
 		}
 
 		public function create($strZipArchive){

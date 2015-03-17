@@ -41,17 +41,17 @@
 			switch($this->strHandler){
 
 				case'file';
-					require_once sprintf('%s/libraries/Session/File.lib.php',DIR_FRAMEWORK_PACKAGES);
+					require_once sprintf('%s/models/Session/File.model.php',DIR_FRAMEWORK_PACKAGES);
 					$this->resHandler = new SessionFile();
 					break;
 
 				case'memcache';
-					require_once sprintf('%s/libraries/Session/Memcache.lib.php',DIR_FRAMEWORK_PACKAGES);
+					require_once sprintf('%s/models/Session/Memcache.model.php',DIR_FRAMEWORK_PACKAGES);
 					$this->resHandler = new SessionMemcache();
 					break;
 
 				case'mysql';
-					require_once sprintf('%s/libraries/Session/Mysql.lib.php',DIR_FRAMEWORK_PACKAGES);
+					require_once sprintf('%s/models/Session/Mysql.model.php',DIR_FRAMEWORK_PACKAGES);
 					$this->resHandler = new SessionMysql();
 					break;
 

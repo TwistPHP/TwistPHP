@@ -40,7 +40,7 @@
 		 */
 		public function __construct(){
 
-			$jsonLanguage = file_get_contents(sprintf('%score/packages/resources/Localisation/languages.json',DIR_FRAMEWORK));
+			$jsonLanguage = file_get_contents(sprintf('%score/data/Localisation/languages.json',DIR_FRAMEWORK));
 			$arrLanguages = json_decode($jsonLanguage,true);
 
 			//Build the array of languages to include those with variants
@@ -54,14 +54,14 @@
 				}
 			}
 
-			$jsonCountries = file_get_contents(sprintf('%score/packages/resources/Localisation/countries.json',DIR_FRAMEWORK));
+			$jsonCountries = file_get_contents(sprintf('%score/data/Localisation/countries.json',DIR_FRAMEWORK));
 			$arrCountries = json_decode($jsonCountries,true);
 
 			foreach($arrCountries as $arrEachCountry){
 				$this->arrCountries[strtolower($arrEachCountry['iso'])] = $arrEachCountry;
 			}
 
-			$jsonTimezones = file_get_contents(sprintf('%score/packages/resources/Localisation/timezones.json',DIR_FRAMEWORK));
+			$jsonTimezones = file_get_contents(sprintf('%score/data/Localisation/timezones.json',DIR_FRAMEWORK));
 			$this->arrTimezones = json_decode($jsonTimezones,true);
 		}
 

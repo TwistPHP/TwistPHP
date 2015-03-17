@@ -65,7 +65,7 @@ class User extends PackageBase{
 			$this->setCustomTemplateLocation($strCustomTemplateLocation);
 		}
 
-		require_once sprintf('%s/libraries/User/Session.lib.php',DIR_FRAMEWORK_PACKAGES);
+		require_once sprintf('%s/models/User/Session.model.php',DIR_FRAMEWORK_PACKAGES);
 		$this->objUserSession = new UserSession();
 
 		//Set the remember me life span in seconds
@@ -591,12 +591,12 @@ class User extends PackageBase{
 	 * @return UserObject
 	 */
 	public function get($intUserID){
-		require_once sprintf('%s/libraries/User/Object.lib.php',dirname(__FILE__));
+		require_once sprintf('%s/models/User/Object.model.php',dirname(__FILE__));
 		return new UserObject(\Twist::Database()->getRecord(sprintf('%susers',DATABASE_TABLE_PREFIX),$intUserID),$this);
 	}
 
 	public function create(){
-		require_once sprintf('%s/libraries/User/Object.lib.php',dirname(__FILE__));
+		require_once sprintf('%s/models/User/Object.model.php',dirname(__FILE__));
 		return new UserObject(\Twist::Database()->createRecord(sprintf('%susers',DATABASE_TABLE_PREFIX)),$this);
 	}
 
