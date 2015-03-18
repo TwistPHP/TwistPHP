@@ -319,6 +319,14 @@
 		"options":"1,0",
 		"null":0
 	},
+    "USER_PASSWORD_CHANGE_EMAIL":{
+      "title":"Password Change Email",
+      "description":"Determine if an email should be send when a user changes their account password (Excludes password reset)",
+      "default":0,
+      "type":"boolean",
+      "options":"1,0",
+      "null":0
+    },
 	"USER_PASSWORD_HASH":{
 		"title":"Strong Password Encryption",
 		"description":"Hash the passwords, this function requires PHP MCRYPT to be installed, More secure and reliable than SHA1",

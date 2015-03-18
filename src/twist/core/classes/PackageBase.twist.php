@@ -31,26 +31,26 @@
 			}
 
 			protected function __info(){
-				return $this->framework() -> module() -> information($this->__calledClass());
+				return $this->framework() -> package() -> information($this->__calledClass());
 			}
 
 			protected function __version(){
-				$arrData = $this->framework() -> module() -> information($this->__calledClass());
+				$arrData = $this->framework() -> package() -> information($this->__calledClass());
 				return $arrData['version'];
 			}
 
 			protected function __uri(){
-				$arrData = $this->framework() -> module() -> information($this->__calledClass());
+				$arrData = $this->framework() -> package() -> information($this->__calledClass());
 				return $arrData['uri'];
 			}
 
 			protected function __path(){
-				$arrData = $this->framework() -> module() -> information($this->__calledClass());
+				$arrData = $this->framework() -> package() -> information($this->__calledClass());
 				return $arrData['path'];
 			}
 
 			protected function __extensions(){
-				$arrData = $this->framework() -> module() -> information($this->__calledClass());
+				$arrData = $this->framework() -> package() -> information($this->__calledClass());
 				return $arrData['extensions'];
 			}
 

@@ -21,10 +21,10 @@
 	 *
 	 */
 
-	use Twist\Core\Classes\BaseModules;
+	use Twist\Core\Classes\BasePackages;
 
 	if(!class_exists('Twist')){
-		class Twist extends BaseModules{
+		class Twist extends BasePackages{
 
 			protected static $blLaunched = false;
 
@@ -93,36 +93,36 @@
 					self::errorHandlers();
 
 					//Register all the packages, this is to allow extensions
-					Twist::framework() -> module() -> create('AJAX',false,null,null,'TwistPackage');
-					Twist::framework() -> module() -> create('Archive',false,null,null,'TwistPackage');
-					Twist::framework() -> module() -> create('Asset',false,null,null,'TwistPackage');
-					Twist::framework() -> module() -> create('Cache',false,null,null,'TwistPackage');
-					Twist::framework() -> module() -> create('CSV',false,null,null,'TwistPackage');
-					Twist::framework() -> module() -> create('Curl',false,null,null,'TwistPackage');
-					Twist::framework() -> module() -> create('Database',true,null,null,'TwistPackage');
-					Twist::framework() -> module() -> create('DateTime',false,null,null,'TwistPackage');
-					Twist::framework() -> module() -> create('Email',false,null,null,'TwistPackage');
-					Twist::framework() -> module() -> create('File',false,null,null,'TwistPackage');
-					Twist::framework() -> module() -> create('FTP',false,null,null,'TwistPackage');
-					Twist::framework() -> module() -> create('Image',false,null,null,'TwistPackage');
-					Twist::framework() -> module() -> create('Localisation',false,null,null,'TwistPackage');
-					Twist::framework() -> module() -> create('Route',false,null,null,'TwistRoute');
-					Twist::framework() -> module() -> create('Session',false,null,null,'TwistPackage');
-					Twist::framework() -> module() -> create('User',false,null,null,'TwistPackage');
-					Twist::framework() -> module() -> create('Validate',false,null,null,'TwistPackage');
-					Twist::framework() -> module() -> create('View',true,null,null,'TwistPackage');
-					Twist::framework() -> module() -> create('XML',false,null,null,'TwistPackage');
+					Twist::framework() -> package() -> create('AJAX',false,null,null,'TwistPackage');
+					Twist::framework() -> package() -> create('Archive',false,null,null,'TwistPackage');
+					Twist::framework() -> package() -> create('Asset',false,null,null,'TwistPackage');
+					Twist::framework() -> package() -> create('Cache',false,null,null,'TwistPackage');
+					Twist::framework() -> package() -> create('CSV',false,null,null,'TwistPackage');
+					Twist::framework() -> package() -> create('Curl',false,null,null,'TwistPackage');
+					Twist::framework() -> package() -> create('Database',true,null,null,'TwistPackage');
+					Twist::framework() -> package() -> create('DateTime',false,null,null,'TwistPackage');
+					Twist::framework() -> package() -> create('Email',false,null,null,'TwistPackage');
+					Twist::framework() -> package() -> create('File',false,null,null,'TwistPackage');
+					Twist::framework() -> package() -> create('FTP',false,null,null,'TwistPackage');
+					Twist::framework() -> package() -> create('Image',false,null,null,'TwistPackage');
+					Twist::framework() -> package() -> create('Localisation',false,null,null,'TwistPackage');
+					Twist::framework() -> package() -> create('Route',false,null,null,'TwistRoute');
+					Twist::framework() -> package() -> create('Session',false,null,null,'TwistPackage');
+					Twist::framework() -> package() -> create('User',false,null,null,'TwistPackage');
+					Twist::framework() -> package() -> create('Validate',false,null,null,'TwistPackage');
+					Twist::framework() -> package() -> create('View',true,null,null,'TwistPackage');
+					Twist::framework() -> package() -> create('XML',false,null,null,'TwistPackage');
 
 					//Register the default PHP package extensions
-					Twist::framework() -> module() -> extend('View','asset',array('module' => 'Asset','function' => 'viewExtension'));
-					Twist::framework() -> module() -> extend('View','file',array('module' => 'File','function' => 'viewExtension'));
-					Twist::framework() -> module() -> extend('View','image',array('module' => 'Image','function' => 'viewExtension'));
-					Twist::framework() -> module() -> extend('View','session',array('module' => 'Session','function' => 'viewExtension'));
-					Twist::framework() -> module() -> extend('View','user',array('module' => 'User','function' => 'viewExtension'));
+					Twist::framework() -> package() -> extend('View','asset',array('module' => 'Asset','function' => 'viewExtension'));
+					Twist::framework() -> package() -> extend('View','file',array('module' => 'File','function' => 'viewExtension'));
+					Twist::framework() -> package() -> extend('View','image',array('module' => 'Image','function' => 'viewExtension'));
+					Twist::framework() -> package() -> extend('View','session',array('module' => 'Session','function' => 'viewExtension'));
+					Twist::framework() -> package() -> extend('View','user',array('module' => 'User','function' => 'viewExtension'));
 
 					//Register the framework resources handler into the template system
 					\Twist\Core\Classes\Instance::storeObject('twistCoreResources',new \Twist\Core\Classes\Resources());
-					Twist::framework() -> module() -> extend('View','resource',array('instance' => 'twistCoreResources','function' => 'viewExtension'));
+					Twist::framework() -> package() -> extend('View','resource',array('instance' => 'twistCoreResources','function' => 'viewExtension'));
 
 					//Register all the external packages that have been installed
 					Twist::framework() -> register() -> packages();
@@ -172,7 +172,7 @@
                 );
 
 	            //Integrate the basic core href tag support - legacy support
-                Twist::framework() -> module() -> extend('Template','core',$arrResources);
+                Twist::framework() -> package() -> extend('Template','core',$arrResources);
             }
 
 			/**
@@ -182,12 +182,12 @@
 
 				if(Twist::framework() -> settings() -> showSetup()){
 
-					Twist::Route()->purge();
-					Twist::Route()->setDirectory(sprintf('%ssetup/',DIR_FRAMEWORK_VIEWS));
-					Twist::Route()->baseView('_base.tpl');
-					Twist::Route()->baseURI(BASE_URI);
-					Twist::Route()->controller('/%','\Twist\Core\Controllers\Setup');
-					Twist::Route()->serve();
+					self::Route()->purge();
+					self::Route()->setDirectory(sprintf('%ssetup/',DIR_FRAMEWORK_VIEWS));
+					self::Route()->baseView('_base.tpl');
+					self::Route()->baseURI(BASE_URI);
+					self::Route()->controller('/%','\Twist\Core\Controllers\Setup');
+					self::Route()->serve();
 				}
 			}
 

@@ -318,17 +318,17 @@ class Route extends PackageBase{
 	}
 
 	/**
-	 * Add a UI (User Interface) that will be called upon a any request (HTTP METHOD) to the given URI.
+	 * Add a UI (User Interface provided by an installed package) that will be called upon a any request (HTTP METHOD) to the given URI.
 	 * The URI can be made dynamic by adding a '%' symbol at the end.
 	 *
 	 * @param $strURI
-	 * @param $strInterface
+	 * @param $strPackage
 	 * @param bool $mxdBaseView
 	 * @param bool $mxdCache
 	 * @param array $arrData
 	 */
-	public function ui($strURI,$strInterface,$mxdBaseView = true,$mxdCache = false,$arrData = array()){
-		$this->addRoute($strURI,'interface',$strInterface,$mxdBaseView,$mxdCache,$arrData);
+	public function ui($strURI,$strPackage,$mxdBaseView = true,$mxdCache = false,$arrData = array()){
+		$this->addRoute($strURI,'package',$strPackage,$mxdBaseView,$mxdCache,$arrData);
 	}
 
 	/**
@@ -956,9 +956,9 @@ class Route extends PackageBase{
 		$arrRoute = $this->current();
 		if (count($arrRoute)) {
 
-			//First of all check for an interface and do that
-			if($arrRoute['type'] == 'interface'){
-				\Twist::framework()->interfaces()->load($arrRoute['item'], $arrRoute['registered_uri'], $arrRoute['base_view']);
+			//First of all check for a package interface and do that
+			if($arrRoute['type'] == 'package'){
+				\Twist::framework()->package()->route($arrRoute['item'], $arrRoute['registered_uri'], $arrRoute['base_view']);
 				die();
 			}else{
 
@@ -997,7 +997,7 @@ class Route extends PackageBase{
 					$arrTags['base_uri'] = $this->strBaseURI;
 					$arrTags['interface_uri'] = $this->strInterfaceURI;
 
-					$this->framework()->module()->extend('View', 'route', $arrTags);
+					$this->framework()->package()->extend('View', 'route', $arrTags);
 
 					switch ($arrRoute['type']) {
 						case'view':
@@ -1099,7 +1099,7 @@ class Route extends PackageBase{
 					$arrTags['author'] = $_SERVER['TWIST_ROUTE_AUTHOR'];
 					$arrTags['keywords'] = $_SERVER['TWIST_ROUTE_KEYWORDS'];
 
-					$this->framework()->module()->extend('View', 'route', $arrTags);
+					$this->framework()->package()->extend('View', 'route', $arrTags);
 
 					if (!is_null($this->strBaseView) && $arrRoute['base_view'] === true) {
 

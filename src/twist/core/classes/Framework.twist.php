@@ -25,8 +25,7 @@
 	final class Framework{
 
 		private $objDebug = null;
-		private $objInterfaces = null;
-		private $objModule = null;
+		private $objPackage = null;
 		private $objRegister = null;
 		private $objSettings = null;
 		private $objTools = null;
@@ -43,14 +42,9 @@
 			return $this->objDebug;
 		}
 
-		public function interfaces(){
-			$this->objInterfaces = (is_null($this->objInterfaces)) ? new Interfaces() : $this->objInterfaces;
-			return $this->objInterfaces;
-		}
-
-		public function module(){
-			$this->objModule = (is_null($this->objModule)) ? new Module() : $this->objModule;
-			return $this->objModule;
+		public function package(){
+			$this->objPackage = (is_null($this->objPackage)) ? new Package() : $this->objPackage;
+			return $this->objPackage;
 		}
 
 		public function register(){

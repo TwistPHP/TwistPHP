@@ -78,10 +78,11 @@ class UserObject{
 	public function commit(){
 
 		$blSendVerification = ($this->resDatabaseRecord->get('email') != $this->arrOriginalData['email'] || $this->resDatabaseRecord->get('verification_code') != $this->arrOriginalData['verification_code']);
-		$blSendPassword = ($this->resDatabaseRecord->get('password') != $this->arrOriginalData['password']);
+		$blSendPassword = (\Twist::framework()->setting('USER_PASSWORD_CHANGE_EMAIL') && $this->resDatabaseRecord->get('password') != $this->arrOriginalData['password']);
 
 		if(is_null($this->resDatabaseRecord->get('password'))){
 			$this->resetPassword();
+			$blSendPassword = true;
 		}
 
 		//Commit and grab the standard user data
