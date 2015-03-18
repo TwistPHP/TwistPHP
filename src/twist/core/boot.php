@@ -44,8 +44,7 @@
 	use \Twist\Core\Classes\Autoload;
 
 	Autoload::init(realpath(sprintf('%s/../../',dirname(__FILE__))));
-	Autoload::registerPath('\\Twist\\Controllers\\','controllers','.controller.php');
-	Autoload::registerPath('\\Twist\\Packages\\','twist/modules','.controller.php');
+	//Autoload::registerPath('\\Twist\\Packages\\','twist/modules','.controller.php');
 	Autoload::registerPath('\\Twist\\Core\\Packages\\','twist/core/packages','.twist.php');
 	Autoload::registerPath('\\Twist\\Core\\Classes\\','twist/core/classes','.twist.php');
 	Autoload::registerPath('\\Twist\\Core\\Controllers\\','twist/core/controllers','.controller.php');
@@ -75,6 +74,9 @@
 		Twist::define('DIR_APP_CONTROLLERS',sprintf('%s/controllers/',rtrim(DIR_APP,'/')));
 		Twist::define('DIR_APP_MODELS',sprintf('%s/models/',rtrim(DIR_APP,'/')));
 		Twist::define('DIR_APP_VIEWS',sprintf('%s/views/',rtrim(DIR_APP,'/')));
+
+		Autoload::registerPath('\\Twist\\Controllers\\',DIR_APP_CONTROLLERS,'.controller.php');
+		Autoload::registerPath('\\Twist\\Models\\',DIR_APP_MODELS,'.model.php');
 	}
 
 	if(defined('DIR_APP_CONFIG') && file_exists(sprintf('%sconfig.php',DIR_APP_CONFIG))){

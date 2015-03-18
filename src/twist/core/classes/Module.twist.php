@@ -64,7 +64,7 @@
 
 		public function register($strClassName){
 
-			$strPath = sprintf('%s%s',DIR_FRAMEWORK_MODULES,$strClassName);
+			$strPath = sprintf('%s/%s',DIR_PACKAGES,$strClassName);
 			$strURI = '/'.ltrim(str_replace(BASE_LOCATION,"",$strPath),'/');
 
 			$arrInformation = json_decode(file_get_contents(sprintf('%s/info.json',$strPath)),true);
@@ -104,7 +104,7 @@
 				$strPath = DIR_FRAMEWORK_PACKAGES;
 				$strURI = str_replace(BASE_LOCATION,"",$strPath);
 			}else{
-				$strPath = sprintf('%s%s',DIR_FRAMEWORK_MODULES,$strClassName);
+				$strPath = sprintf('%s/%s',DIR_PACKAGES,$strClassName);
 				$strURI = str_replace(BASE_LOCATION,"",$strPath);
 			}
 

@@ -64,7 +64,7 @@
 		"2.8.3": {
 			"default": true,
 			"css": [],
-			"js": ["modernizr.min.js"]
+			"js": ["modernizr-2.8.3.min.js"]
 		}
 	},
 	"rummage": {

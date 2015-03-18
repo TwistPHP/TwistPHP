@@ -46,11 +46,9 @@ final class Resources{
 
 		$strAsyncType = null;
 		$blInline = false;
-		$strModuleURI = sprintf('%score/resources/',FRAMEWORK_URI);
-		$strModulePath = sprintf('%score/resources/',DIR_FRAMEWORK);
 
 		if($arrParts[0] == 'core-uri'){
-			return $strModuleURI;
+			return sprintf('%score/resources/',FRAMEWORK_URI);
 		}
 
 		if( count( $arrParts ) > 1 ) {
@@ -78,6 +76,9 @@ final class Resources{
 
 		//If the count is bigger than 0 then output the data
 		if(count($arrResource)){
+
+			$strModuleURI = $arrResource['uri'];
+			$strModulePath = $arrResource['path'];
 
 			if(count($arrResource['css'])){
 				foreach($arrResource['css'] as $strEachItem){
@@ -147,6 +148,13 @@ final class Resources{
 		//Get the resource libraries
 		$strJSON = file_get_contents(sprintf('%score/resources/manifest.json',DIR_FRAMEWORK));
 		$this->arrLibraries = json_decode($strJSON,true);
+
+		//Pre-process the paths and uris into the libraries
+		foreach($this->arrLibraries as $strKey => $arrOptions){
+			foreach($arrOptions as $strOptionKey => $arrOptionParameters){
+				$this->arrLibraries[$strKey][$strOptionKey] = $this->applyPath($arrOptionParameters,sprintf('%score/resources/',DIR_FRAMEWORK));
+			}
+		}
 	}
 
 	/**
@@ -175,5 +183,50 @@ final class Resources{
 		}
 
 		return $arrOut;
+	}
+
+	protected function applyPath($arrParameters,$dirResourcePath){
+
+		$arrParameters['path'] = rtrim($dirResourcePath,'/');
+		$arrParameters['uri'] = rtrim(BASE_PATH.str_replace(DIR_BASE,'',$dirResourcePath),'/');
+
+		return $arrParameters;
+	}
+
+	public function extendLibrary($dirManifest,$dirResourcePath){
+
+		if(file_exists($dirManifest)){
+			if(is_dir($dirResourcePath)){
+
+				//Get the resource libraries
+				$strJSON = file_get_contents($dirManifest);
+				$arrExtendedLibraries = json_decode($strJSON,true);
+
+				foreach($arrExtendedLibraries as $strKey => $arrOptions){
+					if(array_key_exists($strKey,$this->arrLibraries)){
+
+						foreach($arrOptions as $strSubKey => $arrParameters){
+							if(array_key_exists($strSubKey,$this->arrLibraries[$strKey])){
+								//@todo Decide if to keep original or overwrite - currently keeps original
+							}else{
+								$this->arrLibraries[$strKey][$strSubKey] = $this->applyPath($arrParameters,$dirResourcePath);
+							}
+						}
+					}else{
+
+						//Pre-process the paths and uris into the libraries
+						foreach($arrOptions as $strOptionKey => $arrOptionParameters){
+							$arrOptions[$strOptionKey] = $this->applyPath($arrOptionParameters,$dirResourcePath);
+						}
+
+						$this->arrLibraries[$strKey] = $arrOptions;
+					}
+				}
+			}else{
+				throw new \Exception(sprintf("TwistPHP: Error, extension resource directory '%s' does not exists loading",$dirManifest));
+			}
+		}else{
+			throw new \Exception(sprintf("TwistPHP: Error loading resource manifest '%s' of and extension library",$dirManifest));
+		}
 	}
 }

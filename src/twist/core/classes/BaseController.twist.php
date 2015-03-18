@@ -105,4 +105,14 @@
 				return (array_key_exists($strVarKey,$_SERVER['TWIST_ROUTE']['vars'])) ? $_SERVER['TWIST_ROUTE']['vars'][$strVarKey] : null;
 			}
 		}
+
+		protected function _model($strModelPath, &$resModel=null){
+			$strModelPath = (strstr($strModelPath,'\\')) ? $strModelPath : sprintf('Twist\\Models\\%s',$strModelPath);
+			$resModel = new $strModelPath();
+			return $resModel;
+		}
+
+		protected function _view($dirView,$arrViewTags = null,$blRemoveUnusedTags = false){
+			return \Twist::View()->build($dirView,$arrViewTags,$blRemoveUnusedTags);
+		}
 	}

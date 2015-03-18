@@ -119,16 +119,13 @@
 					Twist::framework() -> module() -> extend('View','image',array('module' => 'Image','function' => 'viewExtension'));
 					Twist::framework() -> module() -> extend('View','session',array('module' => 'Session','function' => 'viewExtension'));
 					Twist::framework() -> module() -> extend('View','user',array('module' => 'User','function' => 'viewExtension'));
-					Twist::framework() -> module() -> extend('View','twist-ajax',array('module' => 'AJAX','function' => 'viewExtension'));
-					Twist::framework() -> module() -> extend('View','ajax',array('module' => 'AJAX','function' => 'viewExtension'));
 
 					//Register the framework resources handler into the template system
 					\Twist\Core\Classes\Instance::storeObject('twistCoreResources',new \Twist\Core\Classes\Resources());
 					Twist::framework() -> module() -> extend('View','resource',array('instance' => 'twistCoreResources','function' => 'viewExtension'));
 
-					//Register all the modules that have been installed in the framework
-					Twist::framework() -> register() -> modules();
-					Twist::framework() -> register() -> interfaces();
+					//Register all the external packages that have been installed
+					Twist::framework() -> register() -> packages();
 
 					//Stop tracking the framework boot time
 					Twist::Timer('TwistPageLoad') -> start();
@@ -190,6 +187,7 @@
 					Twist::Route()->baseView('_base.tpl');
 					Twist::Route()->baseURI(BASE_URI);
 					Twist::Route()->controller('/%','\Twist\Core\Controllers\Setup');
+					Twist::Route()->serve();
 				}
 			}
 

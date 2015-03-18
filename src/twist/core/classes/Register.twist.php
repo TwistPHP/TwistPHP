@@ -80,29 +80,16 @@
 			Shutdown::cancelEvent($strEventKey);
 		}
 
-		public function modules(){
+		public function packages(){
 
 			//Get a list of all the installed modules
-			$arrModuleFolders = scandir(DIR_FRAMEWORK_MODULES);
+			$arrPackageFolders = scandir(DIR_PACKAGES);
 
 			//Go through each module one by one and setup each ready to be used
-			foreach($arrModuleFolders as $strEachModule){
-				if(!in_array($strEachModule,array('.','..'))){
-					include_once sprintf('%s/%s/register.php',DIR_FRAMEWORK_MODULES,$strEachModule);
+			foreach($arrPackageFolders as $strEachPackage){
+				if(!in_array($strEachPackage,array('.','..')) && is_dir(sprintf('%s/%s',DIR_PACKAGES,$strEachPackage))){
+					include_once sprintf('%s/%s/register.php',DIR_PACKAGES,$strEachPackage);
 				}
 			}
 		}
-
-        public function interfaces(){
-
-            //Get a list of all the installed modules
-            $arrInterfaceFolders = scandir(DIR_FRAMEWORK_INTERFACES);
-
-            //Go through each module one by one and setup each ready to be used
-            foreach($arrInterfaceFolders as $strEachInterface){
-                if(!in_array($strEachInterface,array('.','..'))){
-                    include_once sprintf('%s/%s/register.php',DIR_FRAMEWORK_INTERFACES,$strEachInterface);
-                }
-            }
-        }
 	}
