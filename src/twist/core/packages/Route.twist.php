@@ -305,7 +305,7 @@ class Route extends PackageBase{
 	public function ajax($strURI,$strFunctionsFolder = null,$strViewsFolder = null,$strElementsFolder = null,$blUnrestrict=false){
 
 		$arrCustomFields = array(
-			'functions' => $strFunctionsFolder,
+			'functions' => (is_null($strFunctionsFolder)) ? DIR_APP_AJAX : $strFunctionsFolder,
 			'views' => $strViewsFolder,
 			'elements' => $strElementsFolder
 		);

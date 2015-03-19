@@ -1,1 +1,1 @@
-{data:include-js==1?'<script src="/twist/core/packages/resources/File/file-upload.js"></script>':''}
+{data:include-js==1?resource:file:''}
