@@ -12,11 +12,8 @@
 		{resource:font-awesome}
 		{resource:arable}
 
-		<!--================================ CSS ================================-->
-		<link href="{resource:core-uri}setup/css/base.css" type="text/css" rel="stylesheet">
-
-	    <!--================================ JAVASCRIPT ================================-->
-		<!--<script src="{resource:core-uri}/setup/js/base.js"></script>-->
+		<!--================================ INTERFACE RESOURCES ================================-->
+		{resource:twist/setup}
 
 	    <!--================================ LINKED DOCUMENTS ================================-->
 	    <link rel="shortcut icon" type="image/x-icon" href="{core:logo-favicon}">

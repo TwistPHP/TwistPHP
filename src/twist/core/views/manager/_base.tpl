@@ -12,11 +12,8 @@
 		{resource:arable}
 		{resource:jquery}
 
-		<!--================================ CSS ================================-->
-		<link href="{resource:core-uri}manager/css/base.css" type="text/css" rel="stylesheet">
-
-		<!--================================ JAVASCRIPT ================================-->
-		<!--<script src="{route:interface_uri}/resources/js/base.js"></script>-->
+		<!--================================ INTERFACE RESOURCES ================================-->
+		{resource:twist/manager}
 
 		<!--================================ LINKED DOCUMENTS ================================-->
 		<link rel="shortcut icon" type="image/x-icon" href="{core:logo-favicon}">

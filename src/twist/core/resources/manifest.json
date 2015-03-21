@@ -1,11 +1,4 @@
 {
-	"ajax": {
-		"3.0.0": {
-			"default": true,
-			"css": ["css/twist-ajax.css"],
-			"js": ["js/twist-ajax.min.js"]
-		}
-	},
 	"arable": {
 		"5.0.0": {
 			"default": true,
@@ -18,20 +11,6 @@
 			"default": true,
 			"css": ["arable-reset.min.css"],
 			"js": []
-		}
-	},
-	"debug": {
-		"standard": {
-			"default": true,
-			"css": ["debug.min.css"],
-			"js": []
-		}
-	},
-	"file": {
-		"standard": {
-			"default": true,
-			"css": [],
-			"js": ["file-upload.min.js"]
 		}
 	},
 	"font-awesome": {
@@ -74,18 +53,46 @@
 			"js": ["rummage.min.js"]
 		}
 	},
-	"setup": {
-		"standard": {
-			"default": true,
-			"css": ["base.css"],
-			"js": []
-		}
-	},
 	"shadow-js": {
 		"1.16.0": {
 			"default": true,
 			"css": [],
 			"js": ["shadow-js.min.js"]
+		}
+	},
+	"twist/ajax": {
+		"standard": {
+			"default": true,
+			"css": ["twist/ajax/css/twist-ajax.css"],
+			"js": ["twist/ajax/js/twist-ajax.min.js"]
+		}
+	},
+	"twist/debug": {
+		"standard": {
+			"default": true,
+			"css": ["twist/debug/css/debug.min.css"],
+			"js": []
+		}
+	},
+	"twist/file-upload": {
+		"standard": {
+			"default": true,
+			"css": [],
+			"js": ["twist/file-upload/js/file-upload.min.js"]
+		}
+	},
+	"twist/manager": {
+		"standard": {
+			"default": true,
+			"css": ["twist/manager/css/base.css"],
+			"js": []
+		}
+	},
+	"twist/setup": {
+		"standard": {
+			"default": true,
+			"css": ["twist/setup/css/base.css"],
+			"js": []
 		}
 	},
 	"unsemantic": {
