@@ -46,10 +46,10 @@ class Setup extends BaseController{
 		/**
 		 * Update the .htaccess file to be a TwistPHP htaccess file
 		 */
-		$dirHTaccessFile = sprintf('%s/.htaccess',DIR_BASE);
+		$dirHTaccessFile = sprintf('%s/.htaccess',dirname($_SERVER['SCRIPT_FILENAME']));
 
 		if(file_exists($dirHTaccessFile)){
-			\Twist::File()->move($dirHTaccessFile,sprintf('%s/old.htaccess',DIR_BASE));
+			\Twist::File()->move($dirHTaccessFile,sprintf('%s/old.htaccess',dirname($_SERVER['SCRIPT_FILENAME'])));
 		}
 
 		file_put_contents($dirHTaccessFile,"# TWISTPHP\nRewriteEngine on\n# Routes Rewrite to allow for dynamic pages\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteCond %{REQUEST_FILENAME} !-d\nRewriteRule ^(.*)$ index.php [L,QSA]\n# /TWISTPHP");
@@ -311,6 +311,9 @@ class Setup extends BaseController{
 
 		if($arrSession['user']['status'] == false){
 			header('Location: user');
+		}else{
+			//@todo Skip the interfaces step for the time being, it will become packages when ready
+			header('Location: finish');
 		}
 
 		$arrTags = array('interfaces' => '');
@@ -376,6 +379,7 @@ class Setup extends BaseController{
 
 		\Twist::define('DIR_SITE_ROOT',DIR_BASE.$arrSession['settings']['details']['site_root']);
 		\Twist::define('DIR_APP',DIR_BASE.$arrSession['settings']['details']['app_path']);
+		\Twist::define('DIR_APP_CONFIG',DIR_APP.'/config/');
 		\Twist::define('DIR_PACKAGES',DIR_BASE.$arrSession['settings']['details']['packages_path']);
 		\Twist::define('DIR_UPLOADS',DIR_BASE.$arrSession['settings']['details']['uploads_path']);
 
@@ -395,6 +399,15 @@ class Setup extends BaseController{
 
 			//Disable file config as we are using database
 			\Twist::framework()->settings()->fileConfigOverride(false);
+
+			\Twist::framework()->upgrade()->databaseSettings(
+				$arrSession['database']['details']['protocol'],
+				$arrSession['database']['details']['host'],
+				$arrSession['database']['details']['name'],
+				$arrSession['database']['details']['username'],
+				$arrSession['database']['details']['password'],
+				$arrSession['database']['details']['table_prefix']
+			);
 
 			//Install the core tables - Database Only
 			\Twist::framework()->upgrade()->installCoreTables();
@@ -439,14 +452,15 @@ class Setup extends BaseController{
 		/**
 		 * Update the index.php file to be a TwistPHP index file
 		 */
-		$dirIndexFile = sprintf('%s/index.php',DIR_BASE);
+		$dirIndexFile = sprintf('%s/index.php',DIR_SITE_ROOT);
 
 		if(file_exists($dirIndexFile)){
-			\Twist::File()->move($dirIndexFile,sprintf('%s/old-index.php',DIR_BASE));
+			\Twist::File()->move($dirIndexFile,sprintf('%s/old-index.php',DIR_SITE_ROOT));
 		}
 
 		//Later on we can add in example templates etc if required
 		$arrIndexTags = array(
+			'framework_path' => DIR_FRAMEWORK,
 			'interfaces' => implode("\n\t\t",$arrInterfaces),
 			'routes' => '',
 			'serve' => 'Twist::Route() -> serve();'
@@ -457,7 +471,7 @@ class Setup extends BaseController{
 		/**
 		 * Update the .htaccess file to be a TwistPHP htaccess file
 		 */
-		$dirHTaccessFile = sprintf('%s/.htaccess',DIR_BASE);
+		$dirHTaccessFile = sprintf('%s/.htaccess',DIR_SITE_ROOT);
 		file_put_contents($dirHTaccessFile,\Twist::View()->build(sprintf('%s/default-htaccess.tpl',DIR_FRAMEWORK_VIEWS)));
 
 		return \Twist::View()->build('pages/finish.tpl');

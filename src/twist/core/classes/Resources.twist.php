@@ -188,7 +188,13 @@ final class Resources{
 	protected function applyPath($arrParameters,$dirResourcePath){
 
 		$arrParameters['path'] = rtrim($dirResourcePath,'/');
-		$arrParameters['uri'] = rtrim(BASE_PATH.str_replace(DIR_BASE,'',$dirResourcePath),'/');
+
+		//Detect if the resource path is outside of the document root, then process the URI accordingly
+		if(rtrim(DIR_BASE,'/') == dirname($dirResourcePath) || strstr(rtrim(DIR_BASE,'/'),dirname($dirResourcePath))){
+			$arrParameters['uri'] = rtrim(BASE_PATH.str_replace(DIR_BASE,'',$dirResourcePath),'/');
+		}else{
+			$arrParameters['uri'] = '/'.rtrim(str_replace(DIR_BASE,'',$dirResourcePath),'/');
+		}
 
 		return $arrParameters;
 	}

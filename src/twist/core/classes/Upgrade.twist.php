@@ -24,10 +24,10 @@
 	namespace Twist\Core\Classes;
 
 	//Called only when using this class standalone (to help make define work)
-	if(!class_exists('BaseModules') && !class_exists('\Twist')){
+	if(!class_exists('BasePackages') && !class_exists('\Twist')){
 		require_once sprintf('%s/Base.twist.php',dirname(__FILE__));
-		require_once sprintf('%s/BaseModules.twist.php',dirname(__FILE__));
-		require_once sprintf('%s/Core.twist.php',dirname(__FILE__));
+		require_once sprintf('%s/BasePackages.twist.php',dirname(__FILE__));
+		require_once sprintf('%s/Twist.twist.php',dirname(__FILE__));
 	}
 
 	class Upgrade{
@@ -84,6 +84,21 @@
 			return $this->arrDebugData;
 		}
 
+		/**
+		 * Set custom database settings to over-ride the defaults used by the script
+		 */
+		public function databaseSettings($strProtocol,$strHost,$strDatabaseName,$strUsername,$strPassword,$strTablePrefix){
+
+			$this->arrDatabaseCustomSettings = array(
+				'protocol' => $strProtocol,
+				'host' => $strHost,
+				'name' => $strDatabaseName,
+				'username' => $strUsername,
+				'password' => $strPassword,
+				'table_prefix' => $strTablePrefix
+			);
+		}
+
 		private function _databaseConnect(){
 
 			$strDefaultApp = sprintf('%s/../../config/app.php',dirname(__FILE__));
@@ -102,10 +117,15 @@
 				require_once $strDefaultConfig;
 			}
 
-			if(DATABASE_PROTOCOL != 'none'){
+			if(count($this->arrDatabaseCustomSettings) && $this->arrDatabaseCustomSettings['protocol'] != 'none'){
+
+				$this->resDatabase = mysqli_connect($this->arrDatabaseCustomSettings['host'], $this->arrDatabaseCustomSettings['username'], $this->arrDatabaseCustomSettings['password'], $this->arrDatabaseCustomSettings['name']);
+				mysqli_select_db($this->resDatabase, $this->arrDatabaseCustomSettings['name']);
+
+			}elseif(DATABASE_PROTOCOL != 'none') {
 
 				$this->resDatabase = mysqli_connect(DATABASE_HOST, DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_NAME);
-				mysqli_select_db($this->resDatabase,DATABASE_NAME);
+				mysqli_select_db($this->resDatabase, DATABASE_NAME);
 			}
 		}
 
@@ -476,7 +496,7 @@
 
 			}else{
 
-				require_once sprintf('%s/../packages/libraries/Archive/PclZip.class.php',dirname(__FILE__));
+				require_once sprintf('%s/../packages/models/Archive/PclZip.class.php',dirname(__FILE__));
 				$resArchive = new \PclZip($strZipFile);
 
 				if($resArchive->extract(PCLZIP_OPT_PATH, $strExtractLocation) == 0){
@@ -770,7 +790,8 @@
 
 				foreach($arrQueries as $strQuery){
 					if(trim($strQuery) != ''){
-						$strQuery = str_replace('/*TABLE_PREFIX*/`','`'.DATABASE_TABLE_PREFIX,$strQuery);
+						$strPrefix = (count($this->arrDatabaseCustomSettings)) ? $this->arrDatabaseCustomSettings['table_prefix'] : DATABASE_TABLE_PREFIX;
+						$strQuery = str_replace('/*TABLE_PREFIX*/`','`'.$strPrefix,$strQuery);
 
 						if(!$this->_databaseQuery($strQuery)){
 							$blOut = false;
@@ -832,7 +853,8 @@
 
 								foreach($arrQueries as $strQuery){
 									if(trim($strQuery) != ''){
-										$strQuery = str_replace('/*TABLE_PREFIX*/`','`'.DATABASE_TABLE_PREFIX,$strQuery);
+										$strPrefix = (count($this->arrDatabaseCustomSettings)) ? $this->arrDatabaseCustomSettings['table_prefix'] : DATABASE_TABLE_PREFIX;
+										$strQuery = str_replace('/*TABLE_PREFIX*/`','`'.$strPrefix,$strQuery);
 
 										if(!$this->_databaseQuery($strQuery)){
 											$blOut = false;
@@ -908,7 +930,8 @@
 
 				foreach($arrQueries as $strQuery){
 					if(trim($strQuery) != ''){
-						$strQuery = str_replace('/*TABLE_PREFIX*/`','`'.DATABASE_TABLE_PREFIX,$strQuery);
+						$strPrefix = (count($this->arrDatabaseCustomSettings)) ? $this->arrDatabaseCustomSettings['table_prefix'] : DATABASE_TABLE_PREFIX;
+						$strQuery = str_replace('/*TABLE_PREFIX*/`','`'.$strPrefix,$strQuery);
 
 						if(!$this->_databaseQuery($strQuery)){
 							$blOut = false;
@@ -970,7 +993,8 @@
 
 								foreach($arrQueries as $strQuery){
 									if(trim($strQuery) != ''){
-										$strQuery = str_replace('/*TABLE_PREFIX*/`','`'.DATABASE_TABLE_PREFIX,$strQuery);
+										$strPrefix = (count($this->arrDatabaseCustomSettings)) ? $this->arrDatabaseCustomSettings['table_prefix'] : DATABASE_TABLE_PREFIX;
+										$strQuery = str_replace('/*TABLE_PREFIX*/`','`'.$strPrefix,$strQuery);
 
 										if(!$this->_databaseQuery($strQuery)){
 											$blOut = false;
@@ -1033,7 +1057,7 @@
 
 		protected function storeSetting($strPackage,$strGroup,$strKey,$mxdValue,$strTitle,$strDescription,$strDefault,$strType,$strOptions,$blNull = false){
 
-			if(DATABASE_PROTOCOL == 'none'){
+			if((count($this->arrDatabaseCustomSettings) && $this->arrDatabaseCustomSettings['protocol'] == 'none') || DATABASE_PROTOCOL == 'none'){
 
 				$strSettingsJSON = sprintf('%s/../../config/settings.json',dirname(__FILE__));
 
@@ -1081,6 +1105,9 @@
 				return true;
 			}else{
 
+				$strDatabaseName = (count($this->arrDatabaseCustomSettings)) ? $this->arrDatabaseCustomSettings['name'] : DATABASE_NAME;
+				$strPrefix = (count($this->arrDatabaseCustomSettings)) ? $this->arrDatabaseCustomSettings['table_prefix'] : DATABASE_TABLE_PREFIX;
+
 				$strSQL = sprintf("INSERT INTO `%s`.`%ssettings`
 									SET `package` = '%s',
 										`group` = '%s',
@@ -1101,8 +1128,8 @@
 										`options` = '%s',
 										`null` = '%s',
 										`deprecated` = '0'",
-					DATABASE_NAME,
-					DATABASE_TABLE_PREFIX,
+					$strDatabaseName,
+					$strPrefix,
 					$this->_databaseEscape($strPackage),
 					$this->_databaseEscape(strtolower($strGroup)),
 					$this->_databaseEscape(strtoupper($strKey)),

@@ -8,7 +8,7 @@
 	 * ================================================================================
 	 */
 
-	 require_once 'twist/framework.php';
+	 require_once '{data:framework_path}framework.php';
 
 	//TWISTPHP Interfaces
 	{data:interfaces}

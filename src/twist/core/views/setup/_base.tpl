@@ -26,7 +26,7 @@
 	<body>
 	    <div class="grid-container">
 	    <div class="grid-100 tablet-grid-100 mobile-grid-100">
-	        <h1 class="no-top-margin"><img src="{resource:core-uri}logos/logo.png">TwistPHP Setup</h1>
+	        <h1 class="no-top-margin"><img src="{resource:core-uri}twist/logos/logo.png">TwistPHP Setup</h1>
 	    </div>
 	    <ul class="tabs">
 	        {element:components/tabs.php}
