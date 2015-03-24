@@ -22,13 +22,13 @@
  */
 
 namespace Twist\Core\Packages;
-use \Twist\Core\Classes\PackageBase;
+use \Twist\Core\Classes\BasePackage;
 
 /**
  * Additional file system support that you have always needed but never had. Convert bytes into human readable format, sanitize file names, hash a directory or get its total size in bytes.
  * Recursive file and folder manipulation and the ability to serve files even apply download speed restrictions when running a high traffic site and bandwidth is precious.
  */
-class File extends PackageBase{
+class File extends BasePackage{
 
 	protected $resTemplate = null;
 	protected $strAssetDirectory = null;

@@ -72,71 +72,106 @@
 		 * @param $strPackage
 		 * @throws \Exception
 		 */
-		public function route($strPackage,$strRegisteredURI,$mxdBaseView){
-			if($this->exists($strPackage,true)){
-				require_once sprintf('%s/route.php',$this->arrPackages[$strPackage]['path']);
+		public function route($strPackageRoute,$strRegisteredURI,$mxdBaseView){
 
-				//@todo - work out how to pass in the URI and Base View
+			if(array_key_exists($strPackageRoute,$this->arrRoutes)){
+				$strPackage = $this->arrRoutes[$strPackageRoute];
+
+				if($this->exists($strPackage,true)){
+					require_once sprintf('%s/route.php',$this->arrPackages[$strPackage]['path']);
+
+					$strRouteClass = sprintf('\Twist\Packages\Routes\%s',$strPackageRoute);
+
+					if(class_exists($strRouteClass)){
+
+						//Call the interface
+						$objInterface = new $strRouteClass($strPackage);
+						$objInterface->baseURI($strRegisteredURI);
+
+						if($mxdBaseView === false || is_null($mxdBaseView)){
+							$objInterface->baseViewIgnore();
+						}elseif($mxdBaseView !== true){
+							$objInterface->baseView($mxdBaseView);
+						}
+
+						$objInterface->load();
+						$objInterface->serve();
+					}else{
+						throw new \Exception(sprintf("TwistPHP: The route '%s' for the package '%s' cannot be found",$strPackageRoute,$strPackage));
+					}
+				}
+			}else{
+				throw new \Exception(sprintf("TwistPHP: There is no registered package route '%s'",$strPackageRoute));
 			}
 		}
 
-		public function register($strClassName){
+		public function register($strPackage){
 
-			$strPath = sprintf('%s/%s',DIR_PACKAGES,$strClassName);
+			$strPath = sprintf('%s/%s',DIR_PACKAGES,$strPackage);
 			$strURI = '/'.ltrim(str_replace(BASE_LOCATION,"",$strPath),'/');
 
 			$arrInformation = json_decode(file_get_contents(sprintf('%s/info.json',$strPath)),true);
 
-			if(!array_key_exists($strClassName,$this->arrPackages)){
-				$this->arrPackages[$strClassName] = array('type' => null,'name' => null,'description' => null,'version' => null,'author' => null,'class' => null,'instances' => null,'path' => '','uri' => '','extensions' => array(),'installed' => 0);
+			if(!array_key_exists($strPackage,$this->arrPackages)){
+				$this->arrPackages[$strPackage] = array('type' => null,'name' => null,'description' => null,'version' => null,'author' => null,'class' => null,'instances' => null,'path' => '','uri' => '','routes' => array(),'extensions' => array(),'installed' => 0);
 			}
 
 			//Register the package for use withing the system
-			$this->arrPackages[$strClassName]['type'] = 'Package';
-			$this->arrPackages[$strClassName]['name'] = $arrInformation['name'];
-			$this->arrPackages[$strClassName]['description'] = $arrInformation['description'];
-			$this->arrPackages[$strClassName]['version'] = $arrInformation['version'];
-			$this->arrPackages[$strClassName]['author'] = $arrInformation['author'];
-			$this->arrPackages[$strClassName]['class'] = $strClassName;
-			$this->arrPackages[$strClassName]['instances'] = false;//Too do later
-			$this->arrPackages[$strClassName]['path'] = $strPath;
-			$this->arrPackages[$strClassName]['uri'] = $strURI;
-			$this->arrPackages[$strClassName]['installed'] = 1;
+			$this->arrPackages[$strPackage]['type'] = 'Package';
+			$this->arrPackages[$strPackage]['name'] = $arrInformation['name'];
+			$this->arrPackages[$strPackage]['description'] = $arrInformation['description'];
+			$this->arrPackages[$strPackage]['version'] = $arrInformation['version'];
+			$this->arrPackages[$strPackage]['author'] = $arrInformation['author'];
+			$this->arrPackages[$strPackage]['class'] = $strPackage;
+			$this->arrPackages[$strPackage]['instances'] = false;//Too do later
+			$this->arrPackages[$strPackage]['path'] = $strPath;
+			$this->arrPackages[$strPackage]['uri'] = $strURI;
+			$this->arrPackages[$strPackage]['installed'] = 1;
+		}
+
+		public function registerRoute($strPackage,$strRouteName){
+
+			if(!array_key_exists($strPackage,$this->arrPackages)){
+				$this->arrPackages[$strPackage] = array('type' => null,'name' => null,'description' => null,'version' => null,'author' => null,'class' => null,'instances' => null,'path' => '','uri' => '','routes' => array(),'extensions' => array(),'installed' => 0);
+			}
+
+			$this->arrPackages[$strPackage]['routes'][$strRouteName] = $strRouteName;
+			$this->arrRoutes[$strRouteName] = $strPackage;
 		}
 
 		/**
 		 * Create the package record for use within the system
-		 * @param $strClassName
+		 * @param $strPackage
 		 * @param bool $blAllowInstances
 		 * @param $strPackageName
 		 * @param $strVersion
 		 * @param $strAuthor
 		 */
-		public function create($strClassName,$blAllowInstances = false,$strPackageName,$strVersion,$strAuthor){
+		public function create($strPackage,$blAllowInstances = false,$strPackageName,$strVersion,$strAuthor){
 
-			if(!array_key_exists($strClassName,$this->arrPackages)){
-				$this->arrPackages[$strClassName] = array('type' => null,'name' => null,'description' => null,'version' => null,'author' => null,'class' => null,'instances' => null,'path' => '','uri' => '','extensions' => array(),'installed' => 0);
+			if(!array_key_exists($strPackage,$this->arrPackages)){
+				$this->arrPackages[$strPackage] = array('type' => null,'name' => null,'description' => null,'version' => null,'author' => null,'class' => null,'instances' => null,'path' => '','uri' => '','routes' => array(),'extensions' => array(),'installed' => 0);
 			}
 
 			if($strAuthor == 'TwistPackage'){
 				$strPath = DIR_FRAMEWORK_PACKAGES;
 				$strURI = str_replace(BASE_LOCATION,"",$strPath);
 			}else{
-				$strPath = sprintf('%s/%s',DIR_PACKAGES,$strClassName);
+				$strPath = sprintf('%s/%s',DIR_PACKAGES,$strPackage);
 				$strURI = str_replace(BASE_LOCATION,"",$strPath);
 			}
 
 			//Register the package for use withing the system
-			$this->arrPackages[$strClassName]['type'] = ($strAuthor == 'TwistPackage') ? 'CorePackage' : 'Package';
-			$this->arrPackages[$strClassName]['name'] = ($strAuthor == 'TwistPackage') ? $strClassName : $strPackageName;
-			$this->arrPackages[$strClassName]['description'] = '';
-			$this->arrPackages[$strClassName]['version'] = ($strAuthor == 'TwistPackage') ? '-' : $strVersion;
-			$this->arrPackages[$strClassName]['author'] = ($strAuthor == 'TwistPackage') ? 'Shadow Technologies' : $strAuthor;
-			$this->arrPackages[$strClassName]['class'] = $strClassName;
-			$this->arrPackages[$strClassName]['instances'] = $blAllowInstances;
-			$this->arrPackages[$strClassName]['path'] = $strPath;
-			$this->arrPackages[$strClassName]['uri'] = $strURI;
-			$this->arrPackages[$strClassName]['installed'] = 1;
+			$this->arrPackages[$strPackage]['type'] = ($strAuthor == 'TwistPackage') ? 'CorePackage' : 'Package';
+			$this->arrPackages[$strPackage]['name'] = ($strAuthor == 'TwistPackage') ? $strPackage : $strPackageName;
+			$this->arrPackages[$strPackage]['description'] = '';
+			$this->arrPackages[$strPackage]['version'] = ($strAuthor == 'TwistPackage') ? '-' : $strVersion;
+			$this->arrPackages[$strPackage]['author'] = ($strAuthor == 'TwistPackage') ? 'Shadow Technologies' : $strAuthor;
+			$this->arrPackages[$strPackage]['class'] = $strPackage;
+			$this->arrPackages[$strPackage]['instances'] = $blAllowInstances;
+			$this->arrPackages[$strPackage]['path'] = $strPath;
+			$this->arrPackages[$strPackage]['uri'] = $strURI;
+			$this->arrPackages[$strPackage]['installed'] = 1;
 		}
 
 		/**
@@ -151,7 +186,7 @@
 			$strPackage = ($strPackage == 'Template') ? 'View' : $strPackage;
 
 			if(!array_key_exists($strPackage,$this->arrPackages)){
-				$this->arrPackages[$strPackage] = array('type' => null,'name' => null,'description' => null,'version' => null,'author' => null,'class' => null,'instances' => null,'path' => '','uri' => '','extensions' => array(),'installed' => 0);
+				$this->arrPackages[$strPackage] = array('type' => null,'name' => null,'description' => null,'version' => null,'author' => null,'class' => null,'instances' => null,'path' => '','uri' => '','routes' => array(),'extensions' => array(),'installed' => 0);
 			}
 
 			$this->arrPackages[$strPackage]['extensions'][$mxdKey] = $mxdData;

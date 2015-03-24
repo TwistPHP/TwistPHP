@@ -23,8 +23,8 @@
 
 	namespace Twist\Core\Classes;
 
-	if(!class_exists('PackageBase')){
-		class PackageBase{
+	if(!class_exists('BasePackage')){
+		class BasePackage{
 
 			protected function __calledClass(){
 				return (function_exists('get_called_class')) ? get_called_class() : get_class($this);

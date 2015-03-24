@@ -22,7 +22,7 @@
 	 */
 
 	namespace Twist\Core\Packages;
-	use \Twist\Core\Classes\PackageBase;
+	use \Twist\Core\Classes\BasePackage;
 
 	/**
 	 * Cache data using a simple store and retrieve process, all cached data must be assigned a unique key. Each cache can be given a life time in seconds, when the cache expires it will no longer be returned.
@@ -31,7 +31,7 @@
 	 *
 	 * @instanceable
 	 */
-	class Cache extends PackageBase{
+	class Cache extends BasePackage{
 
 		protected $strFileExtension = 'twi';
 		protected $strStorageLocation = '';

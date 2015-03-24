@@ -22,13 +22,13 @@
  */
 
 namespace Twist\Core\Packages;
-use \Twist\Core\Classes\PackageBase;
+use \Twist\Core\Classes\BasePackage;
 
 /**
  * User management and control allowing users to register, login and be updated
  * Functionality to edit, reset passwords, send welcome emails with session management for multi and single devices
  */
-class User extends PackageBase{
+class User extends BasePackage{
 
 	public $strLoginUrl = null;
 	public $strLogoutPage = null;

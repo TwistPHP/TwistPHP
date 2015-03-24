@@ -23,8 +23,8 @@
 
 	namespace Twist\Core\Classes;
 
-	if(!class_exists('BasePackages')){
-		class BasePackages extends Base{
+	if(!class_exists('CoreBasePackages')){
+		class CoreBasePackages extends CoreBase{
 
 			//Used when calling modules that are not 3rd party
 			public static function __callStatic($strModuleName, $arrArguments){

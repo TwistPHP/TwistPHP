@@ -22,7 +22,7 @@
 	 */
 
 	namespace Twist\Core\Packages;
-	use \Twist\Core\Classes\PackageBase;
+	use \Twist\Core\Classes\BasePackage;
 
 	/**
 	 * Create ZIP archives of compressed files, easily zip up whole directories and single files. Default handler is PHP's native ZipArchive, the option to use the thrid party class PclZip can be selected in the framework settings.
@@ -30,7 +30,7 @@
 	 * @package TwistPHP\Packages
 	 * @reference http://www.phpconcept.net/pclzip/ PclZip Package included as fallback option
 	 */
-	class Archive extends PackageBase{
+	class Archive extends BasePackage{
 
 		var $resZip = null;
 		var $root = null;

@@ -24,8 +24,8 @@
 	namespace Twist\Core\Classes;
 	use Twist\Core\Packages as Packages;
 
-	if(!class_exists('Base')){
-		class Base{
+	if(!class_exists('CoreBase')){
+		class CoreBase{
 
 			/**
 			 * @deprecated

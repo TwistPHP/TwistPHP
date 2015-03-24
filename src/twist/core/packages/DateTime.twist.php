@@ -22,12 +22,12 @@
 	*/
 
 	namespace Twist\Core\Packages;
-	use \Twist\Core\Classes\PackageBase;
+	use \Twist\Core\Classes\BasePackage;
 
 	/**
 	 * Simply format data and time strings, generate human readable age of any given date. For example 120 will become "2 minutes" provide a timestamp and the age can be presented as "10 minutes ago". Work with date ranges and producing on screen calendars.
 	 */
-	class DateTime extends PackageBase{
+	class DateTime extends BasePackage{
 
 		protected $fltYearDays = 356.2425;
 		protected $strTimeSource = null;

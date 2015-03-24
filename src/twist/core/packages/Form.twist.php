@@ -22,12 +22,12 @@
 	 */
 
 	namespace Twist\Core\Packages;
-	use \Twist\Core\Classes\PackageBase;
+	use \Twist\Core\Classes\BasePackage;
 
 	/**
 	 * Simply Form Builder Package
 	 */
-	class Form extends PackageBase{
+	class Form extends BasePackage{
 
 		public function __construct(){
 			require_once sprintf('%s/models/Form/FormBuilder.model.php',DIR_FRAMEWORK_PACKAGES);

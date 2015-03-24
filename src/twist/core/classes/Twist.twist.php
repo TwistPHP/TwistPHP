@@ -21,10 +21,10 @@
 	 *
 	 */
 
-	use Twist\Core\Classes\BasePackages;
+	use Twist\Core\Classes\CoreBasePackages;
 
 	if(!class_exists('Twist')){
-		class Twist extends BasePackages{
+		class Twist extends CoreBasePackages{
 
 			protected static $blLaunched = false;
 

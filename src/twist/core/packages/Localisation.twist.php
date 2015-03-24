@@ -22,13 +22,13 @@
 	 */
 
 	namespace Twist\Core\Packages;
-	use \Twist\Core\Classes\PackageBase;
+	use \Twist\Core\Classes\BasePackage;
 
 	/**
 	 * Localisation of websites is becoming a necessity, the ability to list counties, languages and there relationship is essential.
 	 * Get a full list of countries and their ISO codes. Get the native spoken language of a country by its ISO code. Get the name of a language by its ISO language code.
 	 */
-	class Localisation extends PackageBase{
+	class Localisation extends BasePackage{
 
 		protected $arrLanguages = array();
 		protected $arrLanguagesLocalised = array();

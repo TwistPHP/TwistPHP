@@ -22,13 +22,13 @@
  */
 
 namespace Twist\Core\Packages;
-use \Twist\Core\Classes\PackageBase;
+use \Twist\Core\Classes\BasePackage;
 
 /**
  * Simply setup a website with multiple pages in minutes. Create restricted areas with login pages and dynamic sections with wild carded URI's.
  * Just a couple lines of code and you will be up and running.
  */
-class Route extends PackageBase{
+class Route extends BasePackage{
 
 	protected $bl404 = true;
 
@@ -44,7 +44,7 @@ class Route extends PackageBase{
 	protected $arrUnrestricted = array();
 	protected $strBaseView = null;
 	protected $strBaseURI = null;
-	protected $strInterfaceURI = null;
+	protected $strPackageURI = null;
 	protected $strPageTitle = '';
 	protected $intCacheTime = 3600;
 	protected $blDebugMode = false;
@@ -111,17 +111,17 @@ class Route extends PackageBase{
 	}
 
 	/**
-	 * Set/Get the interface URI, used only when creating or working with an framework interface
+	 * Set/Get the package URI, used only when creating or working with an framework interface
 	 * @param $strInterface
 	 */
-	public function interfaceURI($strInterface = null){
+	public function packageURI($strPackage = null){
 
-		if(!is_null($strInterface)){
-			$strPath = sprintf('%s%s',DIR_FRAMEWORK_INTERFACES,$strInterface);
-			$this->strInterfaceURI = '/'.ltrim(rtrim(str_replace(BASE_LOCATION,"",$strPath),'/'),'/');
+		if(!is_null($strPackage)){
+			$strPath = sprintf('%s/%s',DIR_PACKAGES,$strPackage);
+			$this->strPackageURI = '/'.ltrim(rtrim(str_replace(BASE_LOCATION,"",$strPath),'/'),'/');
 		}
 
-		return $this->strInterfaceURI;
+		return $this->strPackageURI;
 	}
 
 	/**
@@ -503,7 +503,7 @@ class Route extends PackageBase{
 	protected function addRoute($strURI,$strType,$strItem,$mxdBaseView=true,$mxdCache=false,$arrData=array(),$strRequestMethod = null){
 
 		$blWildCard = false;
-		if(substr($strURI,-1) == '%' || $strType == 'interface'){
+		if(substr($strURI,-1) == '%' || $strType == 'package'){
 			$blWildCard = true;
 			$strURI = str_replace('%','',$strURI);
 		}
@@ -995,7 +995,7 @@ class Route extends PackageBase{
 					$arrTags['request_item'] = ltrim($arrRoute['dynamic'], '/');
 
 					$arrTags['base_uri'] = $this->strBaseURI;
-					$arrTags['interface_uri'] = $this->strInterfaceURI;
+					$arrTags['package_uri'] = $this->strPackageURI;
 
 					$this->framework()->package()->extend('View', 'route', $arrTags);
 
@@ -1083,7 +1083,7 @@ class Route extends PackageBase{
 								\Twist::respond(405);
 							}
 							break;
-						case'interface':
+						case'package':
 							//Should never get here -- See at the top of this function call (more efficient)
 							break;
 						case'redirect-permanent':

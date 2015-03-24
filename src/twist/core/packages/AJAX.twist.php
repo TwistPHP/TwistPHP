@@ -22,14 +22,14 @@
  */
 
 namespace Twist\Core\Packages;
-use \Twist\Core\Classes\PackageBase;
+use \Twist\Core\Classes\BasePackage;
 
 /**
  * AJAX server to use along with twist ajax and twist debug (optional)
  * Class AJAX
  * @package Twist\Core\Packages
  */
-class AJAX extends PackageBase{
+class AJAX extends BasePackage{
 
 	var $arrResponse = array(
 		'status' => true,
