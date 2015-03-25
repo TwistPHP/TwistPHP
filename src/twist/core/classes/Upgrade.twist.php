@@ -24,9 +24,9 @@
 	namespace Twist\Core\Classes;
 
 	//Called only when using this class standalone (to help make define work)
-	if(!class_exists('BasePackages') && !class_exists('\Twist')){
+	if(!class_exists('BasePackage') && !class_exists('\Twist')){
 		require_once sprintf('%s/Base.twist.php',dirname(__FILE__));
-		require_once sprintf('%s/BasePackages.twist.php',dirname(__FILE__));
+		require_once sprintf('%s/BasePackage.twist.php',dirname(__FILE__));
 		require_once sprintf('%s/Twist.twist.php',dirname(__FILE__));
 	}
 
