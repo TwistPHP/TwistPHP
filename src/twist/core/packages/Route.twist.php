@@ -932,6 +932,28 @@ class Route extends BasePackage{
 	}
 
 	/*
+	 * Register the upload server
+	 */
+	public function upload($strURI = '/upload/%'){
+		\Twist::define('UPLOAD_ROUTE_URI',$strURI);
+		$this->controller($strURI,'Twist\Core\Controllers\Upload',false);
+	}
+
+	/*
+	 * Register the server manager
+	 */
+	public function manager($strURI = '/manager/%'){
+		$this->controller($strURI,'Twist\Core\Controllers\Manager','_base.tpl');
+	}
+
+	/*
+	 * Register the placholder server
+	 */
+	public function placeholder($strURI = '/placeholder/%'){
+		$this->controller($strURI,'Twist\Core\Controllers\Placeholder',false);
+	}
+
+	/*
 	 * Register the resource server if the twist folder is installed above the document root
 	 */
 	protected function resourceServer(){

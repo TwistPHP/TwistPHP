@@ -26,6 +26,11 @@ use Twist\Core\Classes\BaseController;
 
 class Manager extends BaseController{
 
+		public function __construct(){
+
+			\Twist::Route()->setDirectory(sprintf('%smanager/',DIR_FRAMEWORK_VIEWS));
+		}
+
 		public function _default(){
 			return $this->dashboard();
 		}
@@ -38,14 +43,14 @@ class Manager extends BaseController{
 			$arrCore = \Twist::framework()->upgrade()->getCore();
 
 			$arrTags = array();
-			$arrTags['update-information'] = ($arrCore['update'] == '1') ? \Twist::Template()->build('components/dashboard/update.tpl',$arrCore) : \Twist::Template()->build('components/dashboard/no-update.tpl',$arrCore);
+			$arrTags['update-information'] = ($arrCore['update'] == '1') ? $this->_view('components/dashboard/update.tpl',$arrCore) : $this->_view('components/dashboard/no-update.tpl',$arrCore);
 
 			$arrTags['development-mode'] = (\Twist::framework()->setting('DEVELOPMENT_MODE') == '1') ? 'On' : 'Off';
 			$arrTags['maintenance-mode'] = (\Twist::framework()->setting('MAINTENANCE_MODE') == '1') ? 'On' : 'Off';
 			$arrTags['release-channel'] = \Twist::framework()->setting('RELEASE_CHANNEL');
 			$arrTags['database-debug'] = (\Twist::framework()->setting('DATABASE_DEBUG') == '1') ? 'On' : 'Off';
 
-			return \Twist::Template()->build('pages/dashboard.tpl',$arrTags);
+			return $this->_view('pages/dashboard.tpl',$arrTags);
 		}
 
 		public function settings(){
@@ -90,7 +95,7 @@ class Manager extends BaseController{
 				//Output the original settings in hidden inputs
 				$arrEachItem['input'] .= sprintf('<input type="hidden" name="original[%s]" value="%s">',$arrEachItem['key'],$arrEachItem['value']);
 
-				$arrOption[$arrEachItem['package']] .= \Twist::Template() -> build( 'components/settings/each-setting.tpl', $arrEachItem );
+				$arrOption[$arrEachItem['package']] .= $this->_view('components/settings/each-setting.tpl', $arrEachItem );
 			}
 
 			$arrTags = array();
@@ -98,11 +103,11 @@ class Manager extends BaseController{
 
 				//if($strKey != 'Core'){
 					$arrListTags = array('title' => $strKey, 'list' => $strList);
-					$arrTags['settings'] .= \Twist::Template() -> build( 'components/settings/group.tpl', $arrListTags );
+					$arrTags['settings'] .= $this->_view('components/settings/group.tpl', $arrListTags );
 				//}
 			}
 
-			return \Twist::Template()->build('pages/settings.tpl',$arrTags);
+			return $this->_view('pages/settings.tpl',$arrTags);
 		}
 
 		public function postSettings(){
@@ -166,14 +171,14 @@ class Manager extends BaseController{
 				}
 
 				if($strRepoKey == 'twistphp'){
-					$arrTags['static'] = \Twist::Template() -> build( 'components/repositories/each-repo-static.tpl', $arrEachRepo );
+					$arrTags['static'] = $this->_view('components/repositories/each-repo-static.tpl', $arrEachRepo );
 				}else{
-					$arrTags['third-party'] .= \Twist::Template() -> build( 'components/repositories/each-repo.tpl', $arrEachRepo );
+					$arrTags['third-party'] .= $this->_view('components/repositories/each-repo.tpl', $arrEachRepo );
 				}
 
 			}
 
-			return \Twist::Template()->build('pages/repositories.tpl',$arrTags);
+			return $this->_view('pages/repositories.tpl',$arrTags);
 		}
 
 		public function postRepositories(){
@@ -227,7 +232,7 @@ class Manager extends BaseController{
                 }
             }
 
-            return \Twist::Template()->build('pages/repository_manage.tpl',$arrTags);
+            return $this->_view('pages/repository_manage.tpl',$arrTags);
         }
 
 		public function postRepository(){
@@ -265,7 +270,7 @@ class Manager extends BaseController{
 					$arrTags['repo'] = $strRepo;
 					$arrTags['type'] = ucfirst($strType);
 
-					return \Twist::Template()->build('pages/package_information.tpl',$arrTags);
+					return $this->_view('pages/package_information.tpl',$arrTags);
 				}
 			}
 
@@ -289,12 +294,12 @@ class Manager extends BaseController{
 			foreach($arrModules as $arrEachModule){
 
 				if($arrEachModule['installed'] == '1'){
-					$arrTags['modules_installed'] .= \Twist::Template()->build('components/modules/each-installed.tpl',$arrEachModule);
+					$arrTags['modules_installed'] .= $this->_view('components/modules/each-installed.tpl',$arrEachModule);
 				}else{
 					if($arrEachModule['repository'] == 'twistphp'){
-						$arrTags['modules_official_available'] .= \Twist::Template()->build('components/modules/each-available.tpl',$arrEachModule);
+						$arrTags['modules_official_available'] .= $this->_view('components/modules/each-available.tpl',$arrEachModule);
 					}else{
-						$arrTags['modules_thirdparty_available'] .= \Twist::Template()->build('components/modules/each-available.tpl',$arrEachModule);
+						$arrTags['modules_thirdparty_available'] .= $this->_view('components/modules/each-available.tpl',$arrEachModule);
 					}
 				}
 			}
@@ -318,17 +323,17 @@ class Manager extends BaseController{
 			foreach($arrInterfaces as $arrEachInterface){
 
 				if($arrEachInterface['installed'] == '1'){
-					$arrTags['interfaces_installed'] .= \Twist::Template()->build('components/interfaces/each-installed.tpl',$arrEachInterface);
+					$arrTags['interfaces_installed'] .= $this->_view('components/interfaces/each-installed.tpl',$arrEachInterface);
 				}else{
 					if($arrEachInterface['repository'] == 'twistphp'){
-						$arrTags['interfaces_official_available'] .= \Twist::Template()->build('components/interfaces/each-available.tpl',$arrEachInterface);
+						$arrTags['interfaces_official_available'] .= $this->_view('components/interfaces/each-available.tpl',$arrEachInterface);
 					}else{
-						$arrTags['interfaces_thirdparty_available'] .= \Twist::Template()->build('components/interfaces/each-available.tpl',$arrEachInterface);
+						$arrTags['interfaces_thirdparty_available'] .= $this->_view('components/interfaces/each-available.tpl',$arrEachInterface);
 					}
 				}
 			}
 
-			return \Twist::Template()->build('pages/interfaces.tpl',$arrTags);
+			return $this->_view('pages/interfaces.tpl',$arrTags);
 		}
 
 		public function processUpdate(){
@@ -370,7 +375,7 @@ class Manager extends BaseController{
 
 		public function update(){
 			$arrTags = array();
-			return \Twist::Template()->build('_update.tpl',$arrTags);
+			return $this->_view('_update.tpl',$arrTags);
 		}
 
 		public function progress(){

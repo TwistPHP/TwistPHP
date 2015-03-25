@@ -1,4 +1,4 @@
-<link href="/twist/core/resources/debug/debug.css" type="text/css" rel="stylesheet">
+{resource:twist/debug}
 <script type="text/javascript">
 
 	if(window.jQuery === undefined){
