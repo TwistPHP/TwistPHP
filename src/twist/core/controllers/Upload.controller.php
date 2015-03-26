@@ -28,11 +28,44 @@ class Upload extends BaseController{
 
 	public function _default(){
 
+		$arrRoute = $this->_route();
+
+		//@todo finish this part of the upload script
+		$arrFunctions = array('test','test2');
+
+		//First of all check that the third party function exists
+		if(in_array($arrRoute['dynamic'][0],$arrFunctions)){
+
+			//Accept the uploaded file to the server
+			$arrOut = json_decode($this->file());
+
+			//We can then pass on the data to a third party function
+			if($arrOut['status'] == true){
+
+			}
+
+			//We then return the output
+			return json_encode($arrOut);
+		}else{
+			//Invalid function call, return fallback (404 page by default)
+			return $this->_fallback();
+		}
+	}
+
+	public function file(){
+
 		if(is_array($_FILES) && count($_FILES)){
 			$arrOut = \Twist::File()->upload('');
 		}else{
 			$arrOut = \Twist::File()->uploadPUT();
 		}
+
+		return json_encode($arrOut);
+	}
+
+	public function asset(){
+
+		$arrOut = json_decode($this->file());
 
 		//Now if the file upload was successful process the asset (if required)
 		if($arrOut['status'] == true && (array_key_exists('HTTP_TWIST_PROCESS',$_SERVER) && $_SERVER['HTTP_TWIST_PROCESS'] == 'asset' || array_key_exists('twist_process',$_GET) && $_GET['twist_process'] == 'asset')){

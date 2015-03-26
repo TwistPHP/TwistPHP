@@ -943,13 +943,16 @@ class Route extends BasePackage{
 	 * Register the server manager
 	 */
 	public function manager($strURI = '/manager/%'){
+		\Twist::define('MANAGER_ROUTE_URI',$strURI);
 		$this->controller($strURI,'Twist\Core\Controllers\Manager','_base.tpl');
+		$this->restrictSuperAdmin($strURI,rtrim(str_replace('%','',$strURI),'/').'/login');
 	}
 
 	/*
 	 * Register the placholder server
 	 */
 	public function placeholder($strURI = '/placeholder/%'){
+		\Twist::define('PLACEHOLDER_ROUTE_URI',$strURI);
 		$this->controller($strURI,'Twist\Core\Controllers\Placeholder',false);
 	}
 

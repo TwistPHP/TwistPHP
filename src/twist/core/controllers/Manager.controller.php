@@ -27,12 +27,28 @@ use Twist\Core\Classes\BaseController;
 class Manager extends BaseController{
 
 		public function __construct(){
-
 			\Twist::Route()->setDirectory(sprintf('%smanager/',DIR_FRAMEWORK_VIEWS));
 		}
 
 		public function _default(){
 			return $this->dashboard();
+		}
+
+		public function login(){
+			\Twist::Route()->baseViewIgnore();
+			return $this->_view('_login.tpl');
+		}
+
+		public function update(){
+			\Twist::Route()->baseViewIgnore();
+			return $this->_view('_update.tpl');
+		}
+
+		public function progress(){
+			\Twist::Route()->baseViewIgnore();
+			header('Content-Type: application/json');
+			$strJsonFile = sprintf('%s/../progress.json',dirname(__FILE__));
+			return (file_exists($strJsonFile)) ? file_get_contents($strJsonFile) : json_encode(array());
 		}
 
 		public function dashboard(){
@@ -371,16 +387,5 @@ class Manager extends BaseController{
 
             //Send the user to the update page
 			header(sprintf('Location: %s/update',$_SERVER['TWIST_ROUTE']['base_uri']));
-		}
-
-		public function update(){
-			$arrTags = array();
-			return $this->_view('_update.tpl',$arrTags);
-		}
-
-		public function progress(){
-			header('Content-Type: application/json');
-			$strJsonFile = sprintf('%s/../progress.json',dirname(__FILE__));
-			return (file_exists($strJsonFile)) ? file_get_contents($strJsonFile) : json_encode(array());
 		}
 	}

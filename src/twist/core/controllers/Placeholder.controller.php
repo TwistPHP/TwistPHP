@@ -65,7 +65,7 @@ class Placeholder extends BaseController{
 		$objImage->string($intPadding + $intThickness + 4, $intPadding + $intThickness, sprintf( '%dx%d PLACEHOLDER', $intWidth, $intHeight ), $strBGColour);
 
 		$objImage->rectangle($intPadding + $intThickness, $intPadding + $intThickness + 17, 165, 46, $strLineColour);
-		$objImage->string($intPadding + $intThickness + 4, $intPadding + $intThickness + 17, 'http://twistphp.com/', $strBGColour);
+		$objImage->string($intPadding + $intThickness + 4, $intPadding + $intThickness + 17, 'https://twistphp.com/', $strBGColour);
 
 		$objImage->rectangle($intPadding + $intThickness, $intPadding + $intThickness + 34, 207, 63, $strLineColour);
 		$objImage->string($intPadding + $intThickness + 4, $intPadding + $intThickness + 34, sprintf( 'Copyright %s TwistPHP.', date( 'Y' ) ), $strBGColour);
