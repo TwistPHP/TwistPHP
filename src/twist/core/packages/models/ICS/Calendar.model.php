@@ -63,6 +63,63 @@
 			return (array_key_exists('VERSION',$this->arrData)) ? $this->arrData['VERSION'] : null;
 		}
 
+		/**
+		 * Set the default name for the calendar feed
+		 * @param string $strName
+		 * @return null
+		 */
+		public function name($strName = null){
+
+			if(!is_null($strName)){
+				$this->arrData['NAME'] = $this->sanitizeRawData($strName);
+				$this->arrData['X-WR-CALNAME'] = $this->sanitizeRawData($strName);
+			}
+
+			return (array_key_exists('NAME',$this->arrData)) ? $this->arrData['NAME'] : null;
+		}
+
+		public function description($strDescription = null){
+
+			if(!is_null($strDescription)){
+				$this->arrData['DESCRIPTION'] = $this->sanitizeRawData($strDescription);
+				$this->arrData['X-WR-CALDESC'] = $this->sanitizeRawData($strDescription);
+			}
+
+			return (array_key_exists('DESCRIPTION',$this->arrData)) ? $this->arrData['DESCRIPTION'] : null;
+		}
+
+		/**
+		 * Set the refresh interval for the feed (Experimental, may ot work)
+		 * Options: PT5M, PT15M, PT1H, PT12H, PT1D, PT1W
+		 * @param string $strInterval
+		 * @return null
+		 */
+		public function refreshInterval($strInterval = 'PT1D'){
+
+			if(!is_null($strInterval)){
+				$this->arrData['REFRESH-INTERVAL;VALUE=DURATION'] = $this->sanitizeRawData($strInterval);
+				$this->arrData['X-PUBLISHED-TTL'] = $this->sanitizeRawData($strInterval);
+			}
+
+			return (array_key_exists('REFRESH-INTERVAL;VALUE=DURATION',$this->arrData)) ? $this->arrData['REFRESH-INTERVAL;VALUE=DURATION'] : null;
+		}
+
+		/**
+		 * Set the color for the calendar (Experimental, may ot work)
+		 * @param null $intR
+		 * @param null $intG
+		 * @param null $intB
+		 * @return null
+		 */
+		public function color($intR = null,$intG = null,$intB = null){
+
+			if(!is_null($intR) && !is_null($intG) && !is_null($intB)){
+				$this->arrData['COLOR'] = sprintf('%d:%d:%d',$this->sanitizeRawData($intR),$this->sanitizeRawData($intG),$this->sanitizeRawData($intB));
+			}
+
+			return (array_key_exists('COLOR',$this->arrData)) ? $this->arrData['COLOR'] : null;
+		}
+
 		public function event($intUID = null){
 
 			$arrEvents = $this->arrEvents;
@@ -130,12 +187,14 @@
 			$this->arrData[strtoupper(trim($strKey))] = $this->sanitizeRawData($mxdData);
 		}
 
-		protected function serve(){
+		public function serve($strFileName = 'calendar'){
 
-			$strFilename = '';
+			$strFileName = \Twist::File()->sanitizeName($strFileName);
 
 			header("Content-type: text/calendar");
-			header('Content-Disposition: attachment; filename="' . $strFilename . '"');
-		}
+			header(sprintf('Content-Disposition: inline; filename="%s.ics"',$strFileName));
 
+			echo $this->getRaw();
+			die();
+		}
 	}

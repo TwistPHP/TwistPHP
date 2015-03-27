@@ -53,6 +53,17 @@
 			return (array_key_exists('UID',$this->arrData)) ? $this->arrData['UID'] : null;
 		}
 
+		public function allDay($strDate = null){
+
+			if(!is_null($strDate)){
+				$this->arrData['DTSTART;TZID=ALLDAY;VALUE=DATE'] = gmstrftime("%Y%m%d", $strDate);
+				$this->arrData['DTEND;TZID=ALLDAY;VALUE=DATE'] = gmstrftime("%Y%m%d", $strDate);
+				$this->lastModified();
+			}
+
+			return (array_key_exists('DTSTART;TZID=ALLDAY;VALUE=DATE',$this->arrData)) ? $this->arrData['DTSTART;TZID=ALLDAY;VALUE=DATE'] : null;
+		}
+
 		public function startDate($strStartDate = null){
 
 			if(!is_null($strStartDate)){
@@ -101,6 +112,16 @@
 			}
 
 			return (array_key_exists('LOCATION',$this->arrData)) ? $this->arrData['LOCATION'] : null;
+		}
+
+		public function url($strURL = null){
+
+			if(!is_null($strURL)){
+				$this->arrData['URL'] = $this->sanitizeRawData($strURL);
+				$this->lastModified();
+			}
+
+			return (array_key_exists('URL',$this->arrData)) ? $this->arrData['URL'] : null;
 		}
 
 		public function creationDate($strCreationDate = null){
@@ -161,11 +182,11 @@
 				$blValidEvent = false;
 			}
 
-			if(!array_key_exists('DTSTART',$this->arrData) || $this->arrData['DTSTART'] == ''){
+			if(!array_key_exists('DTSTART;TZID=ALLDAY;VALUE=DATE',$this->arrData) && (!array_key_exists('DTSTART',$this->arrData) || $this->arrData['DTSTART'] == '')){
 				$blValidEvent = false;
 			}
 
-			if(!array_key_exists('DTEND',$this->arrData) || $this->arrData['DTEND'] == ''){
+			if(!array_key_exists('DTEND;TZID=ALLDAY;VALUE=DATE',$this->arrData) && (!array_key_exists('DTEND',$this->arrData) || $this->arrData['DTEND'] == '')){
 				$blValidEvent = false;
 			}
 
@@ -180,11 +201,14 @@
 			$this->arrData[strtoupper(trim($strKey))] = $this->sanitizeRawData($mxdData);
 		}
 
-		protected function serve(){
+		public function serve($strFileName = 'event'){
 
-			$strFilename = '';
+			$strFileName = \Twist::File()->sanitizeName($strFileName);
 
 			header("Content-type: text/calendar");
-			header('Content-Disposition: attachment; filename="' . $strFilename . '"');
+			header(sprintf('Content-Disposition: inline; filename="%s.ics"',$strFileName));
+
+			echo $this->getRaw();
+			die();
 		}
 	}
