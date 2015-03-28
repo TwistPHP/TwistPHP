@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`settings` (
   `null` enum('0','1') COLLATE utf8_unicode_ci NOT NULL DEFAULT '1',
   `deprecated` enum('0','1') COLLATE utf8_unicode_ci NOT NULL DEFAULT '0' COMMENT 'Set to ''1'' if the setting is no longer used by the framework',
   UNIQUE KEY `key` (`key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
