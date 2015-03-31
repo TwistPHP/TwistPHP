@@ -223,6 +223,7 @@ class User extends BasePackage{
 		$objSession->data('user-logged_in',\Twist::DateTime()->time());
 
 		$this->resCurrentUser->lastLogin($_SERVER['REMOTE_ADDR']);
+		$this->resCurrentUser->lastActive();
 		$this->resCurrentUser->commit();
 
 		$this->intUserID = $intUserID;
