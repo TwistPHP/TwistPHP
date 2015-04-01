@@ -1,13 +1,13 @@
 {
 	"arable": {
-		"5.0.0": {
+		"5.2.0": {
 			"default": true,
 			"css": ["arable.min.css"],
 			"js": []
 		}
 	},
 	"arable-reset": {
-		"5.0.0": {
+		"5.2.0": {
 			"default": true,
 			"css": ["arable-reset.min.css"],
 			"js": []
@@ -37,6 +37,13 @@
 			"default": true,
 			"css": [],
 			"js": ["jquery-2.1.3.min.js"]
+		}
+	},
+	"material-design-color-palette": {
+		"1.0.0": {
+			"default": true,
+			"css": ["material-design-color-palette.min.css"],
+			"js": []
 		}
 	},
 	"modernizr": {
