@@ -85,6 +85,7 @@ class User extends BasePackage{
 
 			if(!is_null($this->resCurrentUser)){
 				$this->intUserID = $this->resCurrentUser->id();
+                $this->resCurrentUser->lastActive();
 			}
 
 		}else{
