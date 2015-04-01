@@ -69,8 +69,8 @@ Navigate to the new contact page of your website in your browser '/contact', all
 
 ### Capturing the POST data
 
-To capture the POST data in the controller we can now create a new function called 'postContact' the function will only be called when you are on the '/contact' page with POST data.
-Processing the POST data can be done using a model that which can be created in the app/model directory.
+To capture the POST data in the controller, create a new function called 'postContact' the function will only be called when you are on the '/contact' page with POST data.
+Processing the POST data can be done using a model, which can be created in the app/model directory.
 
 ```php
 namespace Twist\Models;
@@ -95,7 +95,7 @@ Add the below 'postContact' function into your controller.
 ```php
 public function postContact(){
 
-	$resContact = new Contact();
+	$resContact = $this->_model('Contact');
 	$resContact->send($_POST['name'],$_POST['email'],$_POST['message']);
 	
 	return '<h1>Thank you for message!</h1>';
