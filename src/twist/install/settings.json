@@ -319,6 +319,14 @@
 		"options":"1,0",
 		"null":0
 	},
+    "RANDOM_STRING_LENGTH":{
+      "title":"Random String Length",
+      "description":"Set the default length for the output of the Tools()->randomString() function call",
+      "default":16,
+      "type":"integer",
+      "options":"",
+      "null":0
+    },
     "USER_PASSWORD_CHANGE_EMAIL":{
       "title":"Password Change Email",
       "description":"Determine if an email should be send when a user changes their account password (Excludes password reset)",

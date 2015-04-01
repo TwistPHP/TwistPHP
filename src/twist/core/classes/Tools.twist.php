@@ -379,4 +379,33 @@
 
 			return ($strQueryString == '') ? $urlOut : sprintf('%s?%s',$urlOut,$strQueryString);
 		}
+
+		/**
+		 * Generate a random string, default length is set in the framework settings
+		 * @param $intStringLength The default value is set in "RANDOM_STRING_LENGTH" setting
+		 * @param $mxdCharset
+		 * @return string
+		 */
+		public function randomString($intStringLength=null, $mxdCharset=null){
+
+			$strOut = '';
+			$intStringLength = (!is_null($intStringLength) && $intStringLength > 0) ? $intStringLength : \Twist::framework()->setting('RANDOM_STRING_LENGTH');
+
+			$strChars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz';
+
+			if($mxdCharset === true){
+				$strChars .= '!@£$%^&*()_-=+[]{};:|<>?/';
+			}elseif(!is_null($mxdCharset)){
+				$strChars = $mxdCharset;
+			}
+
+			$arrChars = preg_split('//u', $strChars, -1, PREG_SPLIT_NO_EMPTY);
+
+			for($intChar = 0; $intChar < $intStringLength; $intChar++){
+				$intRand = mt_rand(0,count($arrChars)-1);
+				$strOut .= $arrChars[$intRand];
+			}
+
+			return $strOut;
+		}
 	}

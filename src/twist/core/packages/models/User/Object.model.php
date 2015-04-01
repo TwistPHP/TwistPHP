@@ -204,7 +204,7 @@ class UserObject{
 		if(\Twist::framework()->setting('USER_EMAIL_VERIFICATION')){
 
 			//Generate a verification code
-			$strVerificationCode = $this->generatePassword(16,3);
+			$strVerificationCode = \Twist::framework()->Tools()->randomString(16);
 
 			$this->resDatabaseRecord->set('verified','0');
 			$this->resDatabaseRecord->set('verification_code',$strVerificationCode);
@@ -240,7 +240,7 @@ class UserObject{
 	public function resetPassword(){
 
 		//Generate a new random password and send email
-		$strPassword = $this->generatePassword(16,4);
+		$strPassword = \Twist::framework()->Tools()->randomString(16);
 
 		//Store the new temp password until the reset email is sent upon commit
 		$this->strTempPassword = $strPassword;
@@ -381,38 +381,6 @@ class UserObject{
 		}
 
 		return $blOut;
-	}
-
-	/**
-	 * Generate a secure password, default length is 9 characters and standard strength.
-	 * @param int $intLength
-	 * @param int $intStrength
-	 * @return string
-	 */
-	protected function generatePassword($intLength = 9, $intStrength = 0){
-
-		$strVowels = 'aeuy';
-		$strConsonants = 'bdghjmnpqrstvz';
-
-		$strConsonants .=  ($intStrength > 0) ? 'BDGHJLMNPQRSTVWXZ' : '';
-		$strVowels .=  ($intStrength > 1) ? 'AEUY' : '';
-		$strConsonants .=  ($intStrength > 2) ? '23456789' : '';
-		$strConsonants .=  ($intStrength > 3) ? '@#$%' : '';
-
-		$strPassword = '';
-		$intAlt = \Twist::DateTime()->time() % 2;
-
-		for($intCount = 0; $intCount < $intLength; $intCount++){
-			if($intAlt == 1){
-				$strPassword .= $strConsonants[(rand() % strlen($strConsonants))];
-				$intAlt = 0;
-			} else{
-				$strPassword .= $strVowels[(rand() % strlen($strVowels))];
-				$intAlt = 1;
-			}
-		}
-
-		return $strPassword;
 	}
 
 	protected function allowPassword($strPassword){
