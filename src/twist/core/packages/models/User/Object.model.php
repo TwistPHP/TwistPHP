@@ -185,9 +185,7 @@ class UserObject{
 	}
 
 	public function lastActive(){
-        $resUser = \Twist::Database()->getRecord(sprintf('%suser_data_fields',DATABASE_TABLE_PREFIX),$this->id(),'id');
-        $resUser->set('last_active',\Twist::DateTime()->date('Y-m-d H:i:s'));
-        return $resUser->commit();
+		return $this->resDatabaseRecord->set('last_active',\Twist::DateTime()->date('Y-m-d H:i:s'));
 	}
 
 	public function delete(){
