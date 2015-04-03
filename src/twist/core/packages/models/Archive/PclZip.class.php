@@ -1745,11 +1745,11 @@ class PclZip
 				case PCLZIP_CB_PRE_ADD :
 				case PCLZIP_CB_POST_ADD :
 					/* for futur use
-        case PCLZIP_CB_PRE_DELETE :
-        case PCLZIP_CB_POST_DELETE :
-        case PCLZIP_CB_PRE_LIST :
-        case PCLZIP_CB_POST_LIST :
-        */
+	    case PCLZIP_CB_PRE_DELETE :
+	    case PCLZIP_CB_POST_DELETE :
+	    case PCLZIP_CB_PRE_LIST :
+	    case PCLZIP_CB_POST_LIST :
+	    */
 					// ----- Check the number of parameters
 					if (($i+1) >= $p_size) {
 						// ----- Error log
@@ -2540,13 +2540,13 @@ class PclZip
 
 		// ----- Look for a stored different filename 
 		/* TBC : Removed
-    if (isset($p_filedescr['stored_filename'])) {
-      $v_stored_filename = $p_filedescr['stored_filename'];
-    }
-    else {
-      $v_stored_filename = $p_filedescr['stored_filename'];
-    }
-    */
+	if (isset($p_filedescr['stored_filename'])) {
+	  $v_stored_filename = $p_filedescr['stored_filename'];
+	}
+	else {
+	  $v_stored_filename = $p_filedescr['stored_filename'];
+	}
+	*/
 
 		// ----- Set the file properties
 		clearstatcache();
@@ -3390,14 +3390,14 @@ class PclZip
 			// ----- Look for extract by ereg rule
 			// ereg() is deprecated with PHP 5.3
 			/* 
-      else if (   (isset($p_options[PCLZIP_OPT_BY_EREG]))
-               && ($p_options[PCLZIP_OPT_BY_EREG] != "")) {
+	  else if (   (isset($p_options[PCLZIP_OPT_BY_EREG]))
+	           && ($p_options[PCLZIP_OPT_BY_EREG] != "")) {
 
-          if (ereg($p_options[PCLZIP_OPT_BY_EREG], $v_header['stored_filename'])) {
-              $v_extract = true;
-          }
-      }
-      */
+	      if (ereg($p_options[PCLZIP_OPT_BY_EREG], $v_header['stored_filename'])) {
+	          $v_extract = true;
+	      }
+	  }
+	  */
 
 			// ----- Look for extract by preg rule
 			else if (   (isset($p_options[PCLZIP_OPT_BY_PREG]))
@@ -3842,9 +3842,9 @@ class PclZip
 						$v_read_size = ($v_size < PCLZIP_READ_BLOCK_SIZE ? $v_size : PCLZIP_READ_BLOCK_SIZE);
 						$v_buffer = @fread($this->zip_fd, $v_read_size);
 						/* Try to speed up the code
-            $v_binary_data = pack('a'.$v_read_size, $v_buffer);
-            @fwrite($v_dest_file, $v_binary_data, $v_read_size);
-            */
+	        $v_binary_data = pack('a'.$v_read_size, $v_buffer);
+	        @fwrite($v_dest_file, $v_binary_data, $v_read_size);
+	        */
 						@fwrite($v_dest_file, $v_buffer, $v_read_size);
 						$v_size -= $v_read_size;
 					}
@@ -4771,14 +4771,14 @@ class PclZip
 			// ----- Look for extract by ereg rule
 			// ereg() is deprecated with PHP 5.3
 			/*
-      else if (   (isset($p_options[PCLZIP_OPT_BY_EREG]))
-               && ($p_options[PCLZIP_OPT_BY_EREG] != "")) {
+	  else if (   (isset($p_options[PCLZIP_OPT_BY_EREG]))
+	           && ($p_options[PCLZIP_OPT_BY_EREG] != "")) {
 
-          if (ereg($p_options[PCLZIP_OPT_BY_EREG], $v_header_list[$v_nb_extracted]['stored_filename'])) {
-              $v_found = true;
-          }
-      }
-      */
+	      if (ereg($p_options[PCLZIP_OPT_BY_EREG], $v_header_list[$v_nb_extracted]['stored_filename'])) {
+	          $v_found = true;
+	      }
+	  }
+	  */
 
 			// ----- Look for extract by preg rule
 			else if (   (isset($p_options[PCLZIP_OPT_BY_PREG]))

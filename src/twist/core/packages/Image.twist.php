@@ -39,7 +39,7 @@
 				throw new \Exception('Required extension GD is not loaded.');
 			}
 
-            require_once sprintf('%s/models/Image/Object.model.php',DIR_FRAMEWORK_PACKAGES);
+	        require_once sprintf('%s/models/Image/Object.model.php',DIR_FRAMEWORK_PACKAGES);
 		}
 
 		/**

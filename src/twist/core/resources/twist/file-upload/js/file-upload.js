@@ -48,7 +48,7 @@
 				intDP = ( typeof intDP !== 'number' ) ? 0 : intDP;
 				return intDP === 0 ? parseInt( Math.round( intNumber * Math.pow( 10, intDP ) ) / Math.pow( 10, intDP ) ) : parseFloat( Math.round( intNumber * Math.pow( 10, intDP ) ) / Math.pow( 10, intDP ) );
 			},
-		uploader = function( strInputID, strProcess, objSettings ) {
+		uploader = function( strInputID, strUri, objSettings ) {
 				try {
 					var thisUploader = this;
 
@@ -77,7 +77,6 @@
 								thisUploader.domCancelUpload.removeEventListener( 'click', thisUploader.cancelUpload );
 							}
 						},
-					thisUploader.process = strProcess,
 					thisUploader.queue = [],
 					thisUploader.queueCount = 0,
 					thisUploader.queueSize = 0,
@@ -276,19 +275,20 @@
 												}
 											}, false
 										),
-										thisUploader.request.open( 'PUT', '/twist/core/scripts/upload.php', true ),
+										thisUploader.request.open( 'PUT', thisUploader.uri, true ),
 										thisUploader.request.setRequestHeader( 'Accept', '"text/plain; charset=iso-8859-1", "Content-Type": "text/plain; charset=iso-8859-1"' ),
 										thisUploader.request.setRequestHeader( 'Twist-File', strFileName ),
 										thisUploader.request.setRequestHeader( 'Twist-Length', intFileSize ),
 										thisUploader.request.setRequestHeader( 'Twist-UID', thisUploader.uid ),
-										thisUploader.request.setRequestHeader( 'Twist-Process', thisUploader.process ),
+										//thisUploader.request.setRequestHeader( 'Twist-Process', thisUploader.process ),
 										thisUploader.request.send( resFileReader.result );
 									}, false
 								);
 
 								resFileReader.readAsArrayBuffer( resFile );
 							}
-						};
+						},
+					thisUploader.uri = '/' + strUri.replace( /^\//, '' ).replace( /\/$/, '' );
 
 					for( var strSetting in objSettings ) {
 						thisUploader.settings[strSetting] = objSettings[strSetting];
@@ -319,8 +319,8 @@
 				}
 			};
 
-		window.twistUploader = function( strInputID, strProcess, objSettings ) {
-			return new uploader( strInputID, strProcess, objSettings );
-		}
+		window.twistUploader = function( strInputID, strUri, objSettings ) {
+				return new uploader( strInputID, strUri, objSettings );
+			};
 	}
 )( window, document );

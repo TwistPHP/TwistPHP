@@ -122,8 +122,8 @@ class UserObject{
 
 			if($this->blNewAccount){
 				$this->sendWelcomeEmail();
-                $this->resDatabaseRecord->set('joined',\Twist::DateTime()->date('Y-m-d H:i:s'));
-                $this->resDatabaseRecord->commit();
+	            $this->resDatabaseRecord->set('joined',\Twist::DateTime()->date('Y-m-d H:i:s'));
+	            $this->resDatabaseRecord->commit();
 				$this->blNewAccount = false;
 			}else{
 

@@ -65,7 +65,7 @@ class Upload extends BaseController{
 
 	public function asset(){
 
-		$arrOut = json_decode($this->file());
+		$arrOut = json_decode($this->file(),true);
 
 		//Now if the file upload was successful process the asset (if required)
 		if($arrOut['status'] == true && (array_key_exists('HTTP_TWIST_PROCESS',$_SERVER) && $_SERVER['HTTP_TWIST_PROCESS'] == 'asset' || array_key_exists('twist_process',$_GET) && $_GET['twist_process'] == 'asset')){

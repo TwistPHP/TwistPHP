@@ -724,9 +724,10 @@ class File extends BasePackage{
 		$strOut = '';
 		$arrParams = array(
 			'reference' => $strReference,
+			'uri' => '/upload',
 			'name' => 'file',
-			'multiple' => 0,
-			'id' => uniqid()
+			'id' => uniqid(),
+			'multiple' => 0
 		);
 
 		if(strstr($strReference,',')){
@@ -734,26 +735,46 @@ class File extends BasePackage{
 			$arrTempParams = explode(',',$strReference);
 			$arrParams['reference'] = $arrTempParams[0];
 
+			switch($arrParams['reference']){
+
+				case 'upload':
+				case 'upload-html':
+				case 'upload-init':
+				case 'upload-js':
+					$arrParams['uri'] = '/upload/file';
+					break;
+
+				case 'asset-upload':
+				case 'asset-upload-html':
+				case 'asset-upload-init':
+				case 'asset-upload-js':
+					$arrParams['uri'] = '/upload/asset';
+					break;
+			}
+
 			if(count($arrTempParams) > 1) {
-                $arrParams['name'] = $arrTempParams[1];
-                if(count($arrTempParams) > 2) {
-                    $arrParams['multiple'] = $arrTempParams[2];
-                    if(count($arrTempParams) > 3) {
-                        $arrParams['id'] = $arrTempParams[3];
-                    }
-                }
-            }
+	            $arrParams['uri'] = $arrTempParams[1];
+	            if(count($arrTempParams) > 2) {
+	                $arrParams['name'] = $arrTempParams[2];
+	                if(count($arrTempParams) > 3) {
+	                    $arrParams['id'] = $arrTempParams[3];
+	                    if(count($arrTempParams) > 4) {
+		                    $arrParams['multiple'] = $arrTempParams[4];
+	                    }
+	                }
+	            }
+	        }
 		}
 
 		switch($arrParams['reference']){
 
-			case'upload':
-			case'asset-upload':
+			case 'upload':
+			case 'asset-upload':
 
 				$arrTags = array(
 					'uniqid' => $arrParams['id'],
 					'name' => $arrParams['name'],
-					'type' => ($arrParams['reference'] == 'asset-upload') ? 'asset' : 'file',
+					'uri' => $arrParams['uri'],
 					'include-js' => (is_null(\Twist::Cache()->retrieve('asset-js-include'))) ? 1 : 0,
 					'multiple' => ($arrParams['multiple'] == 1 || $arrParams['multiple'] == 'true') ? 1 : 0
 				);
@@ -764,15 +785,15 @@ class File extends BasePackage{
 				$strOut = $this->resTemplate->build('upload.tpl',$arrTags);
 				break;
 
-			case'upload-html':
-			case'asset-upload-html':
+			case 'upload-html':
+			case 'asset-upload-html':
 
 				$arrTags = array(
 					'uniqid' => $arrParams['id'],
 					'name' => $arrParams['name'],
-					'type' => ($arrParams['reference'] == 'asset-upload-html') ? 'asset' : 'file',
+					'uri' => $arrParams['uri'],
 					'include-js' => (is_null(\Twist::Cache()->retrieve('asset-js-include'))) ? 1 : 0,
-                    'multiple' => ($arrParams['multiple'] == 1 || $arrParams['multiple'] == 'true') ? 1 : 0
+	                'multiple' => ($arrParams['multiple'] == 1 || $arrParams['multiple'] == 'true') ? 1 : 0
 				);
 
 				//Store a temp session for js output
@@ -781,20 +802,21 @@ class File extends BasePackage{
 				$strOut = $this->resTemplate->build('upload-html.tpl',$arrTags);
 				break;
 
-			case'upload-init':
-			case'asset-upload-init':
+			case 'upload-init':
+			case 'asset-upload-init':
 
 				$arrTags = array(
 					'uniqid' => $arrParams['id'],
 					'name' => $arrParams['name'],
-					'type' => ($arrParams['reference'] == 'asset-upload-init') ? 'asset' : 'file'
+					'uri' => $arrParams['uri'],
+					'function' => ($arrParams['reference'] == 'asset-upload-init') ? 'asset' : 'file'
 				);
 
 				$strOut = $this->resTemplate->build('upload-init.tpl',$arrTags);
 				break;
 
-			case'upload-js':
-			case'asset-upload-js':
+			case 'upload-js':
+			case 'asset-upload-js':
 
 				$strOut = '';
 

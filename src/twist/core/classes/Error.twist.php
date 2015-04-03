@@ -33,102 +33,102 @@
 
 			}
 
-            protected static function apacheRequestHeaders() {
-                $arh = array();
-                $rx_http = '/\AHTTP_/';
-                foreach($_SERVER as $key => $val) {
-                    if( preg_match($rx_http, $key) ) {
-                        $arh_key = preg_replace($rx_http, '', $key);
-                        $rx_matches = array();
-                        // do some nasty string manipulations to restore the original letter case
-                        // this should work in most cases
-                        $rx_matches = explode('_', $arh_key);
-                        if( count($rx_matches) > 0 and strlen($arh_key) > 2 ) {
-                            foreach($rx_matches as $ak_key => $ak_val) $rx_matches[$ak_key] = ucfirst($ak_val);
-                            $arh_key = implode('-', $rx_matches);
-                        }
-                        $arh[$arh_key] = $val;
-                    }
-                }
-                return( $arh );
-            }
+	        protected static function apacheRequestHeaders() {
+	            $arh = array();
+	            $rx_http = '/\AHTTP_/';
+	            foreach($_SERVER as $key => $val) {
+	                if( preg_match($rx_http, $key) ) {
+	                    $arh_key = preg_replace($rx_http, '', $key);
+	                    $rx_matches = array();
+	                    // do some nasty string manipulations to restore the original letter case
+	                    // this should work in most cases
+	                    $rx_matches = explode('_', $arh_key);
+	                    if( count($rx_matches) > 0 and strlen($arh_key) > 2 ) {
+	                        foreach($rx_matches as $ak_key => $ak_val) $rx_matches[$ak_key] = ucfirst($ak_val);
+	                        $arh_key = implode('-', $rx_matches);
+	                    }
+	                    $arh[$arh_key] = $val;
+	                }
+	            }
+	            return( $arh );
+	        }
 
-            protected static function serverInformation(){
+	        protected static function serverInformation(){
 
-                $arrOut = array();
+	            $arrOut = array();
 
-                foreach($_SERVER as $strKey => $mxdValue){
-                    if(strstr($strKey,'SERVER_') || in_array($strKey,array('','','','',''))){
-                        $strKey = str_replace('SERVER_','',$strKey);
-                        $arrOut[$strKey] = $mxdValue;
-                    }
-                }
+	            foreach($_SERVER as $strKey => $mxdValue){
+	                if(strstr($strKey,'SERVER_') || in_array($strKey,array('','','','',''))){
+	                    $strKey = str_replace('SERVER_','',$strKey);
+	                    $arrOut[$strKey] = $mxdValue;
+	                }
+	            }
 
-                return $arrOut;
-            }
+	            return $arrOut;
+	        }
 
 			public static function handleException(\Exception $resException,$arrError = array()){
 
-                $strExceptionTemplate = sprintf("%s/system/exception-user.tpl",DIR_FRAMEWORK_VIEWS);
+	            $strExceptionTemplate = sprintf("%s/system/exception-user.tpl",DIR_FRAMEWORK_VIEWS);
 
-                //Clean the screen output ready for an exception
-                ob_clean();
+	            //Clean the screen output ready for an exception
+	            ob_clean();
 
-                try{
-                    $strName = \Twist::framework() -> setting('SITE_NAME');
-                    $strHost = \Twist::framework() -> setting('SITE_HOST');
-                }catch(\Exception $resException){
-                    $strName = 'Twist Framework';
-                    $strHost = $_SERVER['HTTP_HOST'];
-                }
+	            try{
+	                $strName = \Twist::framework() -> setting('SITE_NAME');
+	                $strHost = \Twist::framework() -> setting('SITE_HOST');
+	            }catch(\Exception $resException){
+	                $strName = 'Twist Framework';
+	                $strHost = $_SERVER['HTTP_HOST'];
+	            }
 
-                $arrTags = array(
-                    'name' => $strName,
-                    'code' => $resException->getCode(),
-                    'php_code' => 'No debug found',
-                    'server' => self::debugDataOutput($_SERVER),
-                    'post' => self::debugDataOutput($_POST),
-                    'get' => self::debugDataOutput($_GET),
-                    'cookie' => self::debugDataOutput($_COOKIE),
-                    'session' => self::debugDataOutput($_SESSION),
-                    'message' => '',
-                    'domain' => $strHost,
-                    'dump_data' => '',
-                    'request_headers' => '',
-                    'server_vars' => ''
-                );
+	            $arrTags = array(
+	                'name' => $strName,
+	                'code' => $resException->getCode(),
+	                'php_code' => 'No debug found',
+	                'server' => self::debugDataOutput($_SERVER),
+	                'post' => self::debugDataOutput($_POST),
+	                'get' => self::debugDataOutput($_GET),
+	                'cookie' => self::debugDataOutput($_COOKIE),
+	                'session' => self::debugDataOutput($_SESSION),
+	                'message' => '',
+	                'domain' => $strHost,
+	                'dump_data' => '',
+	                'request_headers' => '',
+	                'server_vars' => ''
+	            );
 
-                if(is_array($arrError) && count($arrError) > 0){
-                    $arrTags['type'] = 'PHP Fatal Error';
-                    $arrTags['line'] = $arrError['line'];
-                    $arrTags['file'] = $arrError['file'];
-                    $arrTags['type_code'] = E_ERROR;
-                }else{
-                    $arrTags['type'] = 'PHP Exception';
-                    $arrTags['line'] = $resException->getLine();
-                    $arrTags['file'] = $resException->getFile();
-                    $arrTags['type_code'] = 'php-exception';
-                }
+	            if(is_array($arrError) && count($arrError) > 0){
+	                $arrTags['type'] = 'PHP Fatal Error';
+	                $arrTags['line'] = $arrError['line'];
+	                $arrTags['file'] = $arrError['file'];
+	                $arrTags['type_code'] = E_ERROR;
+	            }else{
+	                $arrTags['type'] = 'PHP Exception';
+	                $arrTags['line'] = $resException->getLine();
+	                $arrTags['file'] = $resException->getFile();
+	                $arrTags['type_code'] = 'php-exception';
+	            }
 
 				if(\Twist::framework()->setting('DEVELOPMENT_MODE') == true){
 
-                    $arrRequestHeaders = self::apacheRequestHeaders();
-                    $arrServerVars = self::serverInformation();
+	                $arrRequestHeaders = self::apacheRequestHeaders();
+	                $arrServerVars = self::serverInformation();
 
-                    if(TWIST_AJAX_REQUEST){
-                        $arrTags['request_headers'] = $arrRequestHeaders;
-                        $arrTags['server_vars'] = $arrServerVars;
-                    }else{
-                        $arrTags['request_headers'] = '';
-                        foreach($arrRequestHeaders as $strKey => $mxdValue){
-                            $arrTags['request_headers'] .= sprintf('<dt>%s</dt><dd>%s</dd>',$strKey,$mxdValue);
-                        }
+	                if(TWIST_AJAX_REQUEST){
+	                    $arrTags['request_headers'] = $arrRequestHeaders;
+	                    $arrTags['server_vars'] = $arrServerVars;
+	                }else{
+	                    $arrTags['request_headers'] = '';
+	                    foreach($arrRequestHeaders as $strKey => $mxdValue){
+	                        $arrTags['request_headers'] .= sprintf('<dt>%s</dt><dd>%s</dd>',$strKey,$mxdValue);
+	                    }
 
-                        $arrTags['server_vars'] = '';
-                        foreach($arrServerVars as $strKey => $mxdValue){
-                            $arrTags['server_vars'] .= sprintf('<dt>%s</dt><dd>%s</dd>',$strKey,$mxdValue);
-                        }
-                    }
+	                    $arrTags['server_vars'] = '';
+	                    foreach($arrServerVars as $strKey => $mxdValue){
+	                        $arrTags['server_vars'] .= sprintf('<dt>%s</dt><dd>%s</dd>',$strKey,$mxdValue);
+	                    }
+	                }
 
 					if($resException->getCode() == 1200){
 						//Dump Data call from core
@@ -149,7 +149,7 @@
 						$strExceptionTemplate = sprintf("%s/system/dump.tpl",DIR_FRAMEWORK_VIEWS);
 					}else{
 						$arrTags['message'] = $resException->getMessage();
-                        $strExceptionTemplate = sprintf("%s/system/exception.tpl",DIR_FRAMEWORK_VIEWS);
+	                    $strExceptionTemplate = sprintf("%s/system/exception.tpl",DIR_FRAMEWORK_VIEWS);
 						$arrTags['dump_data'] = '';
 					}
 
@@ -168,17 +168,17 @@
 					self::handleError($arrTags['type_code'],$arrTags['message'],$arrTags['file'],$arrTags['line']);
 				}
 
-                if(TWIST_AJAX_REQUEST){
+	            if(TWIST_AJAX_REQUEST){
 
-                    header( 'Cache-Control: no-cache, must-revalidate' );
-                    header( 'Expires: Wed, 24 Sep 1986 14:20:00 GMT' );
-                    header( 'Content-type: application/json' );
-                    header( sprintf('Content-length: %d', mb_strlen(json_encode($arrTags))) );
+	                header( 'Cache-Control: no-cache, must-revalidate' );
+	                header( 'Expires: Wed, 24 Sep 1986 14:20:00 GMT' );
+	                header( 'Content-type: application/json' );
+	                header( sprintf('Content-length: %d', mb_strlen(json_encode($arrTags))) );
 
-                    die(json_encode($arrTags));
-                }else{
-                    die(\Twist::View('Exception')->build($strExceptionTemplate,$arrTags));
-                }
+	                die(json_encode($arrTags));
+	            }else{
+	                die(\Twist::View('Exception')->build($strExceptionTemplate,$arrTags));
+	            }
 			}
 
 			protected static function codeOutput($strFile,$strLine,$intLinesAboveBelow = 3){
@@ -601,7 +601,7 @@
 					'domain' => \Twist::framework() -> setting('SITE_HOST')
 				);
 
-                die(\Twist::View('Exception')->build(sprintf("%s/system/error-page.tpl",DIR_FRAMEWORK_VIEWS),$arrTags));
+	            die(\Twist::View('Exception')->build(sprintf("%s/system/error-page.tpl",DIR_FRAMEWORK_VIEWS),$arrTags));
 			}
 
 			public static function outputLog(){

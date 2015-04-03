@@ -161,7 +161,7 @@
 
 		/**
 		 * Run the query on the database, optionally pass the query in as a raw sprintf() string "SELECT * FROM `table` WHERE `id` = %d" followed by all the parameters to fill the string
-         * All parameters are escaped before being entered into the sprintf()
+	     * All parameters are escaped before being entered into the sprintf()
 		 *
 		 * @param $strQuery
 		 * @return null
@@ -257,7 +257,7 @@
 
 		/**
 		 * Get an object of a database record with the ability to update and delete
-         * A WHERE clause is generated in the form "WHERE $strField = $mxdValue", the default field being "id"
+	     * A WHERE clause is generated in the form "WHERE $strField = $mxdValue", the default field being "id"
 		 *
 		 * @param $strTable
 		 * @param $mxdValue
@@ -286,7 +286,7 @@
 
 		/**
 		 * Get a clone of a database record as an object to be stored as a new record (auto-increment fields will be nulled)
-         * The where clause is generated from the second parameter, must be an array
+	     * The where clause is generated from the second parameter, must be an array
 		 * For example to get the user with the 'id' of 1 pass in array('id' => 1)
 		 *
 		 * @param $strTable
@@ -397,8 +397,8 @@
 
 		/**
 		 * Get a count of records (rows) as an array
-         * The where clause is generated from the second parameter, must be an array
-         * For example to get the user with the 'id' of 1 pass in array('id' => 1) you could look for the user by email with a wild card array('email' => 'dan@%')
+	     * The where clause is generated from the second parameter, must be an array
+	     * For example to get the user with the 'id' of 1 pass in array('id' => 1) you could look for the user by email with a wild card array('email' => 'dan@%')
 		 * The where array accepts multiple parameters at a time
 		 *
 		 * @param $strTable

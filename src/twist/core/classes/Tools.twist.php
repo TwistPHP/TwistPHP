@@ -27,7 +27,7 @@
 
 		/**
 		 * Similar to print_r but corrects issues such as booleans, also give more useful information about the data
-         *
+	     *
 		 * @param $arrData
 		 * @param string $strIndent
 		 * @return string
@@ -53,8 +53,8 @@
 		}
 
 		/**
-         * Transform an associative array into a multidimensional array using a key to define the structure
-         *
+	     * Transform an associative array into a multidimensional array using a key to define the structure
+	     *
 		 * @param $arrIn Array to transform
 		 * @param null $strMultiDimensionalKey Key in the array to use to define a structure
 		 * @param string $strSplitChar Structure separator
@@ -86,8 +86,8 @@
 		}
 
 		/**
-         * Collapse a multidimensional array into a single associative array
-         *
+	     * Collapse a multidimensional array into a single associative array
+	     *
 		 * @param $arrIn Array to transform
 		 * @param string $strJoinChar Structure separator
 		 * @param null $mxdPreviousKey Previous key encountered (used in the recursive process)
@@ -112,8 +112,8 @@
 		}
 
 		/**
-         * Fully merge two multidimensional arrays
-         *
+	     * Fully merge two multidimensional arrays
+	     *
 		 * @param $arrPrimary Primary array
 		 * @param $arrSecondary Secondary array
 		 * @return mixed
@@ -141,7 +141,7 @@
 
 		/**
 		 * Return a value in an array using multi dimensional key to parse the structure of the array
-         *
+	     *
 		 * @param $strKey Location of the value in the array
 		 * @param $arrData Array to parse
 		 * @param string $strSplitChar Structure separator

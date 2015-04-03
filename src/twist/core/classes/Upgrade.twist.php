@@ -412,14 +412,14 @@
 
 		protected function _debugComplete($blStatus = false){
 
-            $arrParts = explode($_SERVER['REQUEST_URI'],'/');
-            array_pop($arrParts);
-            $arrParts[] = 'modules';
+	        $arrParts = explode($_SERVER['REQUEST_URI'],'/');
+	        array_pop($arrParts);
+	        $arrParts[] = 'modules';
 
 			$this->arrDebugData['manager_url'] = implode($arrParts,'/');
 			$this->arrDebugData['complete'] = $blStatus;
 
-            $this->_debugUpdateFile();
+	        $this->_debugUpdateFile();
 		}
 
 		protected function _debugSuccess($blStatus = false){
@@ -458,10 +458,10 @@
 				$strInformation = sprintf("\n%s",$strInformation);
 			}
 
-            if($this->arrDebugData['html'] == ''){
-                $strHTMLInformation = str_replace("<br>","",$strHTMLInformation);
-                $strInformation = str_replace("\n","",$strInformation);
-            }
+	        if($this->arrDebugData['html'] == ''){
+	            $strHTMLInformation = str_replace("<br>","",$strHTMLInformation);
+	            $strInformation = str_replace("\n","",$strInformation);
+	        }
 
 			$this->arrDebugData['html'] .= $strHTMLInformation;
 			$this->arrDebugData['plain'] .= $strInformation;

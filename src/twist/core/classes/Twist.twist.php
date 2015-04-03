@@ -141,16 +141,16 @@
 				}
 			}
 
-            protected static function coreResources(){
+	        protected static function coreResources(){
 
 	            $strResourcesURI = sprintf('%score/resources/',FRAMEWORK_URI);
 
-                $arrResources = array(
-                    'arable' => sprintf('%sarable/arable.min.css',$strResourcesURI),
-                    'arable-reset' => sprintf('%sarable/arable-reset.min.css',$strResourcesURI),
-                    'font-awesome' => sprintf('%sfont-awesome/css/font-awesome.min.css',$strResourcesURI),
-                    'jquery' => sprintf('%sjquery/jquery-2.1.3.min.js',$strResourcesURI),
-                    'jquery-legacy' => sprintf('%sjquery/jquery-1.11.2.min.js',$strResourcesURI),
+	            $arrResources = array(
+	                'arable' => sprintf('%sarable/arable.min.css',$strResourcesURI),
+	                'arable-reset' => sprintf('%sarable/arable-reset.min.css',$strResourcesURI),
+	                'font-awesome' => sprintf('%sfont-awesome/css/font-awesome.min.css',$strResourcesURI),
+	                'jquery' => sprintf('%sjquery/jquery-2.1.3.min.js',$strResourcesURI),
+	                'jquery-legacy' => sprintf('%sjquery/jquery-1.11.2.min.js',$strResourcesURI),
 	                'logo' => sprintf('%stwist/logos/logo.png',$strResourcesURI),
 	                'logo-favicon' => sprintf('%stwist/logos/favicon.ico',$strResourcesURI),
 	                'logo-32' => sprintf('%stwist/logos/logo-32.ico',$strResourcesURI),
@@ -170,17 +170,17 @@
 	                'logo-1024' => sprintf('%stwist/logos/logo-1024.ico',$strResourcesURI),
 	                'logo-large' => sprintf('%stwist/logos/logo-512.png',$strResourcesURI),
 	                'logo-small' => sprintf('%stwist/logos/logo-32.png',$strResourcesURI),
-                    'modernizr' => sprintf('%smodernizr/modernizr-2.8.3.min.js',$strResourcesURI),
-                    'rummage' => sprintf('%srummage/rummage.min.js',$strResourcesURI),
-                    'shadow-js' => sprintf('%sshadow-js/shadow-js.min.js',$strResourcesURI),
+	                'modernizr' => sprintf('%smodernizr/modernizr-2.8.3.min.js',$strResourcesURI),
+	                'rummage' => sprintf('%srummage/rummage.min.js',$strResourcesURI),
+	                'shadow-js' => sprintf('%sshadow-js/shadow-js.min.js',$strResourcesURI),
 	                'unsemantic' => sprintf('%sunsemantic/unsemantic-grid-responsive-tablet-no-ie7.css',$strResourcesURI),
 	                'resources_uri' => $strResourcesURI,
 	                'uri' => FRAMEWORK_URI
-                );
+	            );
 
 	            //Integrate the basic core href tag support - legacy support
-                Twist::framework() -> package() -> extend('Template','core',$arrResources);
-            }
+	            Twist::framework() -> package() -> extend('Template','core',$arrResources);
+	        }
 
 			/**
 			 * Show the setup process if required

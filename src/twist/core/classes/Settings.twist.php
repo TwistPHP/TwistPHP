@@ -28,20 +28,20 @@
 	*/
 	class Settings{
 	
-        public $arrSettings = array();
-        public $arrSettingsInfo = array();
-        public $intStatus = 0;
+	    public $arrSettings = array();
+	    public $arrSettingsInfo = array();
+	    public $intStatus = 0;
 
-        protected $blFileConfig = true;
-        protected $blShowSetup = false;
-        protected $blLoaded = false;
+	    protected $blFileConfig = true;
+	    protected $blShowSetup = false;
+	    protected $blLoaded = false;
 
-        public function __construct(){
+	    public function __construct(){
 
-            //Check if the framework is setup or not setup
-            $this->blShowSetup = !(defined('DIR_APP_CONFIG') && file_exists(sprintf("%sconfig.php",DIR_APP_CONFIG)));
-            $this->load();
-        }
+	        //Check if the framework is setup or not setup
+	        $this->blShowSetup = !(defined('DIR_APP_CONFIG') && file_exists(sprintf("%sconfig.php",DIR_APP_CONFIG)));
+	        $this->load();
+	    }
 
 		public function showSetup(){
 			return $this->blShowSetup;
@@ -51,9 +51,9 @@
 			$this->blFileConfig = $blFileConfig;
 		}
 
-        protected function load(){
+	    protected function load(){
 
-            if($this->blLoaded == false){
+	        if($this->blLoaded == false){
 
 				$this->arrSettings = $this->arrSettingsInfo = array();
 
@@ -78,28 +78,28 @@
 
 						$this->arrSettingsInfo = \Twist::Database()->getAll(sprintf('%ssettings',DATABASE_TABLE_PREFIX));
 					}
-                }
+	            }
 
-                if(count($this->arrSettingsInfo)){
+	            if(count($this->arrSettingsInfo)){
 
-                    foreach($this->arrSettingsInfo as $arrEachSetting){
+	                foreach($this->arrSettingsInfo as $arrEachSetting){
 
-                        //Set the output types of boolean,integer and floats to their correct data types
-                        if($arrEachSetting['type'] == 'boolean'){
-                            $arrEachSetting['value'] = ($arrEachSetting['value'] == '1' || $arrEachSetting['value'] == 1);
-                        }elseif($arrEachSetting['type'] == 'float' && preg_match('#^[0-9]+\.[0-9]+$#',$arrEachSetting['value'])){
-                            settype( $arrEachSetting['value'] , 'float' );
-                        }elseif($arrEachSetting['type'] == 'integer' && is_numeric($arrEachSetting['value'])){
-                            settype( $arrEachSetting['value'] , 'integer' );
-                        }
+	                    //Set the output types of boolean,integer and floats to their correct data types
+	                    if($arrEachSetting['type'] == 'boolean'){
+	                        $arrEachSetting['value'] = ($arrEachSetting['value'] == '1' || $arrEachSetting['value'] == 1);
+	                    }elseif($arrEachSetting['type'] == 'float' && preg_match('#^[0-9]+\.[0-9]+$#',$arrEachSetting['value'])){
+	                        settype( $arrEachSetting['value'] , 'float' );
+	                    }elseif($arrEachSetting['type'] == 'integer' && is_numeric($arrEachSetting['value'])){
+	                        settype( $arrEachSetting['value'] , 'integer' );
+	                    }
 
-                        $this->arrSettings[$arrEachSetting['key']] = $arrEachSetting['value'];
-                    }
-                }
+	                    $this->arrSettings[$arrEachSetting['key']] = $arrEachSetting['value'];
+	                }
+	            }
 
-                $this->blLoaded = true;
-            }
-        }
+	            $this->blLoaded = true;
+	        }
+	    }
 
 		protected function loadTempSettings(){
 
@@ -116,46 +116,46 @@
 			}
 		}
 
-        public function get($strKey){
-            return (array_key_exists($strKey,$this->arrSettings)) ? $this->arrSettings[$strKey] : null;
-        }
+	    public function get($strKey){
+	        return (array_key_exists($strKey,$this->arrSettings)) ? $this->arrSettings[$strKey] : null;
+	    }
 
-        public function set($strKey,$mxdData){
+	    public function set($strKey,$mxdData){
 
-            $blOut = false;
+	        $blOut = false;
 
-            if($this->blFileConfig){
+	        if($this->blFileConfig){
 
-                if(array_key_exists($strKey,$this->arrSettings)){
-                    $this->arrSettingsInfo[$strKey]['value'] = $mxdData;
-                    $this->arrSettings[$strKey] = $mxdData;
+	            if(array_key_exists($strKey,$this->arrSettings)){
+	                $this->arrSettingsInfo[$strKey]['value'] = $mxdData;
+	                $this->arrSettings[$strKey] = $mxdData;
 
-                    //Export the settings back to the setting file
-                    file_put_contents(sprintf('%ssettings.json',DIR_APP_CONFIG),json_encode($this->arrSettingsInfo));
-                    $blOut = true;
-                }
-            }else{
+	                //Export the settings back to the setting file
+	                file_put_contents(sprintf('%ssettings.json',DIR_APP_CONFIG),json_encode($this->arrSettingsInfo));
+	                $blOut = true;
+	            }
+	        }else{
 
-                $objDB = \Twist::Database();
+	            $objDB = \Twist::Database();
 
-                //Only update the setting in the table if the key exists
-                $strSQL = sprintf("UPDATE `%s`.`%ssettings`
-                                    SET `value` = '%s'
-                                    WHERE `key` = '%s'
-                                    LIMIT 1",
-                    DATABASE_NAME,
-                    DATABASE_TABLE_PREFIX,
-                    $objDB->escapeString($mxdData),
-                    $objDB->escapeString(strtoupper($strKey))
-                );
+	            //Only update the setting in the table if the key exists
+	            $strSQL = sprintf("UPDATE `%s`.`%ssettings`
+	                                SET `value` = '%s'
+	                                WHERE `key` = '%s'
+	                                LIMIT 1",
+	                DATABASE_NAME,
+	                DATABASE_TABLE_PREFIX,
+	                $objDB->escapeString($mxdData),
+	                $objDB->escapeString(strtoupper($strKey))
+	            );
 
-                if($objDB->query($strSQL) && $objDB->getAffectedRows()){
-                    $this->arrSettings[$strKey] = $mxdData;
+	            if($objDB->query($strSQL) && $objDB->getAffectedRows()){
+	                $this->arrSettings[$strKey] = $mxdData;
 					$this->arrSettingsInfo[$strKey]['value'] = $mxdData;
-                    $blOut = true;
-                }
-            }
+	                $blOut = true;
+	            }
+	        }
 
-            return $blOut;
-        }
+	        return $blOut;
+	    }
 	}

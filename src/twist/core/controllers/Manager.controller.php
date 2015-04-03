@@ -215,41 +215,41 @@ class Manager extends BaseController{
 			header(sprintf('Location: %s/repositories',$_SERVER['TWIST_ROUTE']['base_uri']));
 		}
 
-        public function repository(){
+	    public function repository(){
 
-            $arrTags = array();
+	        $arrTags = array();
 
 			if(array_key_exists('repo-key',$_GET) && array_key_exists('repo-enable',$_GET)){
 				\Twist::framework()->upgrade()->enableRepository($_GET['repo-key'],$_GET['repo-enable']);
 			}
 
-            \Twist::framework()->upgrade()->channel(\Twist::framework()->setting('RELEASE_CHANNEL'));
-            $arrRepositories = \Twist::framework()->upgrade()->getRepositories();
+	        \Twist::framework()->upgrade()->channel(\Twist::framework()->setting('RELEASE_CHANNEL'));
+	        $arrRepositories = \Twist::framework()->upgrade()->getRepositories();
 
-            if(array_key_exists('repo-key',$_GET) && array_key_exists($_GET['repo-key'],$arrRepositories)){
+	        if(array_key_exists('repo-key',$_GET) && array_key_exists($_GET['repo-key'],$arrRepositories)){
 
-                $arrInterfaces = \Twist::framework()->upgrade()->getInterfaces();
-                $arrModules = \Twist::framework()->upgrade()->getModules();
+	            $arrInterfaces = \Twist::framework()->upgrade()->getInterfaces();
+	            $arrModules = \Twist::framework()->upgrade()->getModules();
 
-                $arrTags = $arrRepositories[$_GET['repo-key']];
+	            $arrTags = $arrRepositories[$_GET['repo-key']];
 
-                $arrTags['interfaces'] = 0;
-                foreach($arrInterfaces as $arrEachInterface){
-                    if($arrEachInterface['repository'] == $_GET['repo-key'] && count($arrEachInterface['available'])){
-                        $arrTags['interfaces']++;
-                    }
-                }
+	            $arrTags['interfaces'] = 0;
+	            foreach($arrInterfaces as $arrEachInterface){
+	                if($arrEachInterface['repository'] == $_GET['repo-key'] && count($arrEachInterface['available'])){
+	                    $arrTags['interfaces']++;
+	                }
+	            }
 
-                $arrTags['modules'] = 0;
-                foreach($arrModules as $arrEachModule){
-                    if($arrEachModule['repository'] == $_GET['repo-key'] && count($arrEachModule['available'])){
-                        $arrTags['modules']++;
-                    }
-                }
-            }
+	            $arrTags['modules'] = 0;
+	            foreach($arrModules as $arrEachModule){
+	                if($arrEachModule['repository'] == $_GET['repo-key'] && count($arrEachModule['available'])){
+	                    $arrTags['modules']++;
+	                }
+	            }
+	        }
 
-            return $this->_view('pages/repository_manage.tpl',$arrTags);
-        }
+	        return $this->_view('pages/repository_manage.tpl',$arrTags);
+	    }
 
 		public function postRepository(){
 
@@ -354,16 +354,16 @@ class Manager extends BaseController{
 
 		public function processUpdate(){
 
-            $arrActions = array();
+	        $arrActions = array();
 
-            if(count($_POST)){
-                foreach($_POST as $strKey => $arrPosts){
-                    if($arrPosts['install'] == '1'){
+	        if(count($_POST)){
+	            foreach($_POST as $strKey => $arrPosts){
+	                if($arrPosts['install'] == '1'){
 						$arrPosts['channel'] = strtolower(\Twist::framework()->setting('RELEASE_CHANNEL'));
-                        $arrActions[] = $arrPosts;
-                    }
-                }
-            }elseif(array_key_exists('action',$_GET) && array_key_exists('repo',$_GET) && array_key_exists('package',$_GET) && array_key_exists('package-type',$_GET) && array_key_exists('package-version',$_GET)){
+	                    $arrActions[] = $arrPosts;
+	                }
+	            }
+	        }elseif(array_key_exists('action',$_GET) && array_key_exists('repo',$_GET) && array_key_exists('package',$_GET) && array_key_exists('package-type',$_GET) && array_key_exists('package-version',$_GET)){
 
 				$arrActions = array(
 					0 => array(
@@ -378,14 +378,14 @@ class Manager extends BaseController{
 			}
 
 
-            $strJsonFile = sprintf('%s/../update-actions.json',dirname(__FILE__));
-            if(count($arrActions)){
-                file_put_contents($strJsonFile,json_encode($arrActions));
-            }else{
-                unlink($strJsonFile);
-            }
+	        $strJsonFile = sprintf('%s/../update-actions.json',dirname(__FILE__));
+	        if(count($arrActions)){
+	            file_put_contents($strJsonFile,json_encode($arrActions));
+	        }else{
+	            unlink($strJsonFile);
+	        }
 
-            //Send the user to the update page
+	        //Send the user to the update page
 			header(sprintf('Location: %s/update',$_SERVER['TWIST_ROUTE']['base_uri']));
 		}
 	}
