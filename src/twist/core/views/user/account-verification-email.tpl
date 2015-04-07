@@ -5,12 +5,11 @@
         <title>{data:subject}</title>
     </head>
     <body>
-        <table>
+        <table width="600" style="margin: 20px auto;">
             <tr>
-                <td><p><strong>Hi {data:firstname},</strong></p></td>
-            </tr>
-            <tr>
-                <td><p>&nbsp;</p></td>
+                <td>
+                    <p>Hi {data:firstname},</p>
+                </td>
             </tr>
             <tr>
                 <td>
@@ -21,10 +20,8 @@
                 </td>
             </tr>
             <tr>
-                <td><p>&nbsp;</p></td>
-            </tr>
-            <tr>
                 <td>
+                    <p>-- </p>
                     <p><strong>{data:site_name}</strong>
                         <br /><em><a href="{data:url}">{data:url}</a></em></p>
                 </td>
