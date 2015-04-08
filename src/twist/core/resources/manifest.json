@@ -20,13 +20,6 @@
 			"js": []
 		}
 	},
-	"font-awesome-dev": {
-		"4.3.0": {
-			"default": true,
-			"css": ["css/font-awesome.css"],
-			"js": []
-		}
-	},
 	"jquery": {
 		"1.11.2": {
 			"default": false,
