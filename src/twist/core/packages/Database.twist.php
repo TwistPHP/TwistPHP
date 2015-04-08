@@ -520,7 +520,7 @@
 			$arrStructure = null;
 			$strDatabaseName = (is_null($strDatabase)) ? $this->strDatabaseName : $strDatabase;
 
-			$arrStructure = \Twist::Cache('pkgDatabase') -> retrieve(sprintf('dbStructure-%s+%s',$strDatabaseName,$strTable));
+			$arrStructure = \Twist::Cache('twist/packages/database') -> retrieve(sprintf('dbStructure-%s+%s',$strDatabaseName,$strTable));
 
 			if(is_null($arrStructure)){
 
@@ -559,7 +559,7 @@
 					}
 
 					//PHP session cache only expire when page is loaded
-					\Twist::Cache('pkgDatabase') -> store(sprintf('dbStructure-%s+%s',$strDatabaseName,$strTable),$arrStructure,0);
+					\Twist::Cache('twist/packages/database') -> store(sprintf('dbStructure-%s+%s',$strDatabaseName,$strTable),$arrStructure,0);
 				}
 			}
 

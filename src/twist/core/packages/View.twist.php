@@ -138,11 +138,11 @@ class View extends BasePackage{
 
 	    $dirFullViewPath = (!is_file($dirView)) ? sprintf("%s%s",$this->dirViews,$dirView) : $dirView;
 		$strCacheKey = str_replace(array(BASE_LOCATION,'twist/interfaces','twist/core'),array('','twist-interface','twist-core'),$dirFullViewPath);
-		$arrViewData = \Twist::Cache('pkgView')->retrieve($strCacheKey);
+		$arrViewData = \Twist::Cache('twist/packages/views')->retrieve($strCacheKey);
 
 	    //Detect if the file has changed, if changed remove cache and rebuild
 	    if(!is_null($arrViewData) && $arrViewData['html_hash'] !== \Twist::File()->hash($dirFullViewPath,'md5')){
-		    \Twist::Cache('pkgView')->remove($strCacheKey);
+		    \Twist::Cache('twist/packages/views')->remove($strCacheKey);
 		    $arrViewData = null;
 	    }
 
@@ -153,7 +153,7 @@ class View extends BasePackage{
 		    $arrViewData['html_hash'] = \Twist::File()->hash($dirFullViewPath,'md5');
 		    $arrViewData['tags'] = $this->getTags($arrViewData['html_raw'],false);
 
-		    \Twist::Cache('pkgView')->store($strCacheKey,$arrViewData,$this->framework()->setting('TEMPLATE_PRE_PROCESS_CACHE'));
+		    \Twist::Cache('twist/packages/views')->store($strCacheKey,$arrViewData,$this->framework()->setting('TEMPLATE_PRE_PROCESS_CACHE'));
 	    }
 
 	    foreach($arrViewData['tags'] as $strEachTag){

@@ -610,7 +610,7 @@ class Route extends BasePackage{
 	protected function loadPageCache($strPageCacheKey){
 
 		//Get the page cache if exists
-		$arrCacheInfo = \Twist::Cache('pkgRoute')->retrieve($strPageCacheKey,true);
+		$arrCacheInfo = \Twist::Cache('twist/packages/route')->retrieve($strPageCacheKey,true);
 
 		if(!is_null($arrCacheInfo)){
 
@@ -651,7 +651,7 @@ class Route extends BasePackage{
 		header("Last-Modified: $mxdModifiedTime");
 		header("ETag: \"{$strEtag}\"");
 
-		\Twist::Cache('pkgRoute')->store($strPageCacheKey,$strPageData,$intCacheTime);
+		\Twist::Cache('twist/packages/route')->store($strPageCacheKey,$strPageData,$intCacheTime);
 	}
 
 	/**

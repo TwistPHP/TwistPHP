@@ -189,7 +189,7 @@
 
 				$arrOut = null;
 				if($blUseCache){
-					$arrOut = \Twist::Cache('twistUpgrade')->retrieve($strCacheKey);
+					$arrOut = \Twist::Cache('twist/classes/upgrade')->retrieve($strCacheKey);
 				}
 
 				if(is_null($arrOut)){
@@ -246,7 +246,7 @@
 							}
 
 							if($blUseCache){
-								\Twist::Cache('twistUpgrade')->store($strCacheKey,$arrOut,86400);
+								\Twist::Cache('twist/classes/upgrade')->store($strCacheKey,$arrOut,86400);
 							}
 
 						}else{
