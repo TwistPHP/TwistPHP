@@ -4,7 +4,6 @@ TwistPHP comes with some integrated packages which are part of the frameworks co
 Packages can extend the framework in one or many ways, the options are framework functionality, additional controllers, pre-configured set of routes or resources.
 
 ## Create you package folder
-___
 
 In /packages create a folder with your desired package name, in this example we will be calling our package Twitter. The contents of the package folder must contain some required files and folders, below is a manifest of what is optional and required.
 
@@ -25,7 +24,6 @@ In /packages create a folder with your desired package name, in this example we 
 | /views          | optional      | Folder for views that can be output by controllers                        |
 
 ## Creating the required files
-___
 
 There are some required files that all packages need in order to work within TwistPHP (marked as **required** in above table).
 First create the file /packages/Twitter/info.json in your package folder and fill in the JSON fields as required, all fields are required even if left blank.
@@ -68,7 +66,6 @@ Next create the file /packages/Twitter/uninstall.php in your package folder, thi
 Additional code can be place in this file, this code will be run upon uninstalling the package. For example you might want to remove some database tables or back up the data contained in them.
 
 ## Creating the optional package files
-___
 
 Adding functionality into the package is simple, you can add any combination of the below options. Each of the options you choose will then become available in your application once the package has been installed.
 For more detail on any of the below options view the more detail documentation for the required option.
