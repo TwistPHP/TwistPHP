@@ -130,7 +130,7 @@ Extending core and custom packages can be achieved by creating the file /package
 ```php
 <?php
 
-	Twist::framework()->register()->extend('View','Twitter');
+	Twist::framework()->register()->extend('View','twitter',json_decode(file_get_contents('./info.json'),true));
 ```
 
 ### Resources
@@ -168,6 +168,12 @@ Now we need to create the Twitter CSS file /packages/Twitter/resources/twitter/c
 	border-bottom:1px solid #CCC;
 }
 
+```
+
+Including this CSS file in any views throughout the package or your app use the new view tag show below.
+
+```html
+{resource:twitter}
 ```
 
 ### Routes
