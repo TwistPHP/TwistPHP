@@ -125,7 +125,7 @@ The controller must now be registered as a functional block, to do this create t
 
 ### Extend
 
-Extending core and custom packages can be achieved by creating the file /packages/Twitter/extend.php
+Extending core and custom packages can be achieved by creating the file /packages/Twitter/extend.php and add the following line of code.
 
 ```php
 <?php
