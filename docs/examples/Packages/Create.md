@@ -9,9 +9,9 @@ In /packages create a folder with your desired package name, in this example we 
 
 | Folders         | Required      | Description                                                               |
 | --------------- |:-------------:| ------------------------------------------------------------------------- |
-| /info.json      | required      | Contains key information about the package                                |
-| /install.php    | required      | Script called upon installation of the package                            |
-| /uninstall.php  | required      | Script called upon un-installation of the package                         |
+| /info.json      | **required**  | Contains key information about the package                                |
+| /install.php    | **required**  | Script called upon installation of the package                            |
+| /uninstall.php  | **required**  | Script called upon un-installation of the package                         |
 | /blocks.php     | optional      | Register blocks into the framework                                        |
 | /extend.php     | optional      | Register extensions to other packages or Twist                            |
 | /resource.json  | optional      | Manifest of all the resources (CSS,JS,Images) provided by this package    |
