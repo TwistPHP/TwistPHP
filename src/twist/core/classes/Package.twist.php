@@ -29,6 +29,127 @@
 	final class Package{
 
 		protected $arrPackages = array();
+		protected $arrInstalledPackages = array();
+
+		/**
+		 * Get an array of all the packages that are in the packages folder but have not been installed
+		 * @return array
+		 */
+		public function getUninstalled(){
+
+			$arrOut = array();
+			$arrPackages = $this->getInstalled();
+
+			//Find Packages
+			foreach(scandir(DIR_PACKAGES) as $strFile){
+
+				$dirPackage = sprintf('%s/%s',DIR_PACKAGES,$strFile);
+
+				if(!in_array($strFile,array('.','..')) && is_dir($dirPackage)){
+
+					$strPackageSlug = strtolower(basename($dirPackage));
+
+					if(!array_key_exists($strPackageSlug,$arrPackages)){
+						if(is_file(sprintf('%s/info.json',$dirPackage)) &&
+							is_file(sprintf('%s/install.php',$dirPackage)) &&
+							is_file(sprintf('%s/uninstall.php',$dirPackage))){
+
+							$rawJson = file_get_contents(sprintf('%s/info.json',$dirPackage));
+							$arrDetails = json_decode($rawJson,true);
+
+							$arrOut[] = array(
+								'slug' => $strPackageSlug,
+								'path' => $dirPackage,
+								'install' => sprintf('%s/install.php',$dirPackage),
+								'uninstall' => sprintf('%s/uninstall.php',$dirPackage),
+								'package' => $arrDetails
+							);
+						}
+					}
+				}
+			}
+
+			return $arrOut;
+		}
+
+		/**
+		 * Get an array of all the installed packages on the system
+		 * @return array|bool
+		 */
+		public function getInstalled(){
+
+			$arrPackages = \Twist::Database()->getAll(DATABASE_PREFIX.'packages');
+			$this->arrInstalledPackages = \Twist::framework()->tools()->arrayReindex($arrPackages,'slug');
+
+			return $this->arrInstalledPackages;
+		}
+
+		/**
+		 * Install the package into the framework
+		 */
+		public function install(){
+
+			$arrBacktrace = debug_backtrace();
+
+			if(count($arrBacktrace)){
+
+				$dirInstallFile = $arrBacktrace[0]['file'];
+				$dirPackage = dirname($dirInstallFile);
+
+				$rawJson = file_get_contents(sprintf('%s/info.json',$dirPackage));
+				$arrDetails = json_decode($rawJson,true);
+
+				$resPackage = \Twist::Database()->createRecord(DATABASE_PREFIX.'packages');
+
+				$resPackage->set('slug',strtolower(basename($dirPackage)));
+				$resPackage->set('path',$dirPackage);
+				$resPackage->set('name',$arrDetails['name']);
+				$resPackage->set('version',$arrDetails['version']);
+				$resPackage->set('resources',(is_file(sprintf('%s/resources.json',$dirPackage)) && count(scandir(sprintf('%s/resources',$dirPackage))) > 2) ? '1' : '0');
+				$resPackage->set('routes',(is_dir(sprintf('%s/routes',$dirPackage)) && count(scandir(sprintf('%s/routes',$dirPackage))) > 2) ? '1' : '0');
+
+				return $resPackage->commit();
+			}
+
+			return false;
+		}
+
+		/**
+		 * Uninstall the package from the framework
+		 */
+		public function uninstall(){
+
+			$arrBacktrace = debug_backtrace();
+
+			if(count($arrBacktrace)){
+
+				$dirInstallFile = $arrBacktrace[0]['file'];
+				$dirPackage = dirname($dirInstallFile);
+
+				$rawJson = file_get_contents(sprintf('%s/info.json',$dirPackage));
+				$arrDetails = json_decode($rawJson,true);
+
+				$arrUninstall = array(
+					'slug' => strtolower(basename($dirPackage)),
+					'path' => $dirPackage,
+					'name' => $arrDetails['name'],
+					'version' => $arrDetails['version'],
+					'resources' => (is_file(sprintf('%s/resources.json',$dirPackage)) && count(scandir(sprintf('%s/resources',$dirPackage))) > 2) ? '1' : '0',
+					'routes' => (is_dir(sprintf('%s/routes',$dirPackage)) && count(scandir(sprintf('%s/routes',$dirPackage))) > 2) ? '1' : '0'
+				);
+
+				//Write the code to un-install the package
+			}
+		}
+
+		/**
+		 * Check to see if a package is installed on the framework by its package slug (lowercase package folder name)
+		 * @param $strPackageSlug
+		 * @return bool
+		 */
+		public function isInstalled($strPackageSlug){
+			return (count(\Twist::Database()->get(DATABASE_PREFIX.'packages',$strPackageSlug,'slug'))) ? true : false;
+		}
 
 		/**
 		 * Check to see that a package is installed and usable, optional throw an exception of the package dosnt exist

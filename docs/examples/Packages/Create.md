@@ -12,14 +12,15 @@ In /packages create a folder with your desired package name, in this example we 
 | /info.json      | **required**  | Contains key information about the package                                |
 | /install.php    | **required**  | Script called upon installation of the package                            |
 | /uninstall.php  | **required**  | Script called upon un-installation of the package                         |
+| /blocks         | optional      | Folder to contain system blocks                                           |
 | /blocks.php     | optional      | Register blocks into the framework                                        |
-| /extend.php     | optional      | Register extensions to other packages or Twist                            |
-| /resource.json  | optional      | Manifest of all the resources (CSS,JS,Images) provided by this package    |
-| /route.php      | optional      | Pre-configured routes for the creation of an interface                    |
+| /classes        | optional      | Folder for miscellaneous classes that can be used to support your package |
 | /controllers    | optional      | Folder to contain PHP controllers                                         |
+| /extend.php     | optional      | Register extensions to other packages or Twist                            |
 | /models         | optional      | Folder to contain PHP models                                              |
 | /resources      | optional      | Folder to contain all the CSS, JS, Images and other resources             |
-| /classes        | optional      | Folder for miscellaneous classes that can be used to support your package |
+| /resource.json  | optional      | Manifest of all the resources (CSS,JS,Images) provided by this package    |
+| /routes         | optional      | Folder to contain all the pre-configured routes                           |
 | /thirdparty     | optional      | Folder for 3rd party code such as pre-written classes or scripts          |
 | /views          | optional      | Folder for views that can be output by controllers                        |
 
@@ -36,7 +37,9 @@ First create the file /packages/Twitter/info.json in your package folder and fil
     "author": {
         "name": "Joe Blogs",
         "website": "https://twistphp.com",
-        "email": "contact@twistphp.com"
+        "email": "contact@twistphp.com",
+		"git": "",
+		"bugs": ""
     },
     "thirdparty": {
         "info": "Thanks to twitter for the API example code used in this package",
@@ -78,38 +81,43 @@ First create the block controller, the controller must contain some required fun
 ```php
 <?php
 
-	namespace Twist\Block;
+	namespace Twist\Packages\Twitter\Block;
 	use Twist\Core\Classes\BaseBlock;
 
-	class Twitter extends BaseBlock{
+	class TwitterView extends BaseBlock{
 
 		public function render(){
-
-			return '';
+		
+			$arrTags = array('tweets' => '');
+		
+			$resTwitter = new \Twist\Packages\Twitter\Model\Twitter();
+			$resTwitter->getTweets(5);
+		
+			foreach($resTwitter->getTweets(5) as $arrEachTweet){
+				$arrTags['tweets'] .= $this->view('block/tweet.tpl');
+			}
+		
+			return $this->view('block/render.tpl',$arrTags);
 		}
 
 		public function create(){
-
-        	return '<form></form>';
+        	return $this->view('block/create.tpl');
         }
 
 		public function postCreate(){
-
-            return '';
+			$arrOptions = $_POST['options']
+			return $objBlock->create('Twitter',$_POST['slug'],$arrOptions);
         }
 
 		public function remove(){
-
-        	return '';
+        	return $this->view('block/remove.tpl');
         }
 
 		public function postRemove(){
-
-        	return '';
+			return $objBlock->remove('TwitterView',$_POST['slug']);
         }
 
 		public function details(){
-
         	return array();
         }
 	}
@@ -120,7 +128,44 @@ The controller must now be registered as a functional block, to do this create t
 ```php
 <?php
 
-	Twist::framework()->register()->block('Twitter');
+	Twist::framework()->register()->block('TwitterView');
+```
+
+Next create the views required to make the block work, we need to create a view for render, tweet, create and remove. Example files are below:
+
+**Create /packages/Twitter/views/block/render.tpl**
+```html
+{resource:twitter}
+<div class="twitterWindow">
+	{data:tweets}
+</div>
+```
+
+**Create /packages/Twitter/views/block/tweet.tpl**
+```html
+<div class="tweet">
+	{data:message}
+</div>
+```
+
+**Create /packages/Twitter/views/block/create.tpl**
+```html
+<form action="." method="post" class="inline">
+	<label>Block Slug</label>
+	<input type="text" name="block_slug" value="">
+	
+	<label>Display Tweets</label>
+    <input type="text" name="display" value="5">
+	
+	<button type="submit">Create</button>
+</form>
+```
+
+**Create /packages/Twitter/views/block/remove.tpl**
+```html
+<h3>Remove Twitter Block</h3>
+<p>You are about to remove the twitter block, if you are still using the block on your site it will be replaced with a holding message.</p>
+<button type="submit">Remove Block</button>
 ```
 
 ### Extend
@@ -178,15 +223,49 @@ Including this CSS file in any views throughout the package or your app use the 
 
 ### Routes
 
-Creating a set of pre-defined routes, all of these routes will be called through a single wildcard URI. Create the file /packages/Twitter/route.php in your package folder.
+Creating a set of pre-defined routes, all of these routes will be called through a single wildcard URI. Create the file /packages/Twitter/routes/Admin.php in your package folder.
 
 ```php
 <?php
 
-	$resRoute = Twist::Route();
+	namespace Twist\Package\Twitter\Route;
+	use Twist\Core\Classes\BaseRoute;
+	
+	class Admin extends BaseRoute{
+	
+		public function load(){
+        
+			$this->baseURI('/');
 
-	$resRoute->controller('/%','Twitter');
-	$resRoute->restrict('/%');
+			$this->controller('/%','Twist\Packages\Twitter\Controllers\Admin');
+			$this->restrict('/%','/login');
+		}
+	}
 ```
 
-Create relevant controllers and views. -- todo finish writing
+Create the admin controller that will allow the user to edit the settings for the twitter module. Create the file /packages/Twitter/controllers/Admin.controller.php in your package folder.
+
+```php
+<?php
+
+	namespace Twist\Packages\Twitter\Controller;
+	use Twist\Core\Classes\BaseController;
+
+	class Admin extends BaseController{
+
+		public function _default(){
+			return $this->view('settings.tpl');
+		}
+
+		public function login(){
+        	return $this->view('login.tpl');
+        }
+
+		public function postSave(){
+
+			//Save the settings and redirect back to _default
+
+            \Twist::redirect('./');
+        }
+	}
+```
