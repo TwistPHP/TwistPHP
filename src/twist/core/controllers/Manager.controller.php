@@ -293,63 +293,49 @@ class Manager extends BaseController{
 			header(sprintf('Location: %s',$_SERVER['TWIST_ROUTE']['base_uri']));
 		}
 
-		public function modules(){
+		public function packages(){
 
 			$arrTags = array();
 
 			//Set the release channel
 			\Twist::framework()->upgrade()->channel(\Twist::framework()->setting('RELEASE_CHANNEL'));
 
-			$arrModules = \Twist::framework()->upgrade()->getModules();
+			$arrModules = \Twist::framework()->package()->getAll();
 
-			//print_r($arrModules);
+			$arrTags['packages_installed'] = '';
+			$arrTags['packages_available'] = '';
 
-			$arrTags['modules_installed'] = '';
-			$arrTags['modules_official_available'] = '';
-			$arrTags['modules_thirdparty_available'] = '';
 			foreach($arrModules as $arrEachModule){
 
-				if($arrEachModule['installed'] == '1'){
-					$arrTags['modules_installed'] .= $this->_view('components/modules/each-installed.tpl',$arrEachModule);
-				}else{
-					if($arrEachModule['repository'] == 'twistphp'){
-						$arrTags['modules_official_available'] .= $this->_view('components/modules/each-available.tpl',$arrEachModule);
+				if(array_key_exists('name',$arrEachModule)){
+
+					if(array_key_exists('installed',$arrEachModule)){
+						$arrTags['packages_installed'] .= $this->_view('components/packages/each-installed.tpl',$arrEachModule);
 					}else{
-						$arrTags['modules_thirdparty_available'] .= $this->_view('components/modules/each-available.tpl',$arrEachModule);
+						$arrTags['packages_available'] .= $this->_view('components/packages/each-available.tpl',$arrEachModule);
 					}
 				}
 			}
 
-			return \Twist::Template()->build('pages/modules.tpl',$arrTags);
+			if($arrTags['packages_installed'] == ''){
+				$arrTags['packages_installed'] = '<tr><td colspan="6">No packages installed</td></tr>';
+			}
+
+			if($arrTags['packages_available'] == ''){
+				$arrTags['packages_available'] = '<tr><td colspan="4">No packages to install</td></tr>';
+			}
+
+			return $this->_view('pages/packages.tpl',$arrTags);
 		}
 
-		public function interfaces(){
+		public function install(){
 
-			$arrTags = array();
-
-			//Set the release channel
-			\Twist::framework()->upgrade()->channel(\Twist::framework()->setting('RELEASE_CHANNEL'));
-
-			$arrInterfaces = \Twist::framework()->upgrade()->getInterfaces();
-			//print_r($arrInterfaces);
-
-			$arrTags['interfaces_installed'] = '';
-			$arrTags['interfaces_official_available'] = '';
-			$arrTags['interfaces_thirdparty_available'] = '';
-			foreach($arrInterfaces as $arrEachInterface){
-
-				if($arrEachInterface['installed'] == '1'){
-					$arrTags['interfaces_installed'] .= $this->_view('components/interfaces/each-installed.tpl',$arrEachInterface);
-				}else{
-					if($arrEachInterface['repository'] == 'twistphp'){
-						$arrTags['interfaces_official_available'] .= $this->_view('components/interfaces/each-available.tpl',$arrEachInterface);
-					}else{
-						$arrTags['interfaces_thirdparty_available'] .= $this->_view('components/interfaces/each-available.tpl',$arrEachInterface);
-					}
-				}
+			//Run the package installer
+			if(array_key_exists('package',$_GET)){
+				\Twist::framework()->package()->installer($_GET['package']);
 			}
 
-			return $this->_view('pages/interfaces.tpl',$arrTags);
+			\Twist::redirect('./packages');
 		}
 
 		public function processUpdate(){

@@ -79,17 +79,4 @@
 		public function cancelShutdownEvent($strEventKey){
 			Shutdown::cancelEvent($strEventKey);
 		}
-
-		public function packages(){
-
-			//Get a list of all the installed modules
-			$arrPackageFolders = scandir(DIR_PACKAGES);
-
-			//Go through each module one by one and setup each ready to be used
-			foreach($arrPackageFolders as $strEachPackage){
-				if(!in_array($strEachPackage,array('.','..')) && is_dir(sprintf('%s/%s',DIR_PACKAGES,$strEachPackage))){
-					include_once sprintf('%s/%s/register.php',DIR_PACKAGES,$strEachPackage);
-				}
-			}
-		}
 	}

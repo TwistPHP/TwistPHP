@@ -32,8 +32,7 @@
 				<li {route:request=='/'?'class="current"':''}><a href="{route:registered_uri}">Dashboard<i class="fa fa-tachometer"></i></a></li><!--
 				--><li {route:request=='/settings'?'class="current"':''}><a href="{route:registered_uri}/settings">Settings<i class="fa fa-cogs"></i></a></li><!--
 				--><li {route:request=='/repositories'?'class="current"':''}><a href="{route:registered_uri}/repositories">Repositories<i class="fa fa-cubes"></i></a></li><!--
-				--><li {route:request=='/modules'?'class="current"':''}><a href="{route:registered_uri}/modules">Modules<i class="fa fa-puzzle-piece"></i></a></li><!--
-				--><li {route:request=='/interfaces'?'class="current"':''}><a href="{route:registered_uri}/interfaces">Interfaces<i class="fa fa-flask"></i></a></li><!--
+				--><li {route:request=='/packages'?'class="current"':''}><a href="{route:registered_uri}/packages">Packages<i class="fa fa-puzzle-piece"></i></a></li><!--
 				--><li><a href="{route:registered_uri}?logout">Logout<i class="fa fa-sign-out"></i></a></li>
 			</ul>
 			<div class="grid-80 prefix-10 tablet-grid-90 tablet-prefix-5 mobile-grid-90 mobile-prefix-5 grid-parent">

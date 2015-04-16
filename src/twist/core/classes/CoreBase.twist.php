@@ -28,48 +28,64 @@
 		class CoreBase{
 
 			/**
+			 * Used when calling 3rd Party framework packages
+			 * @param $strModuleName
+			 * @param $arrArguments
+			 * @return mixed
+			 */
+			public static function __callStatic($strModuleName, $arrArguments){
+
+				$strObjectRef = sprintf('pkg%s',$strModuleName);
+				$strModule = sprintf('\Twist\Packages\%s',$strModuleName);
+
+				$resTwistModule = (!Instance::isObject($strObjectRef)) ? new $strModule() : Instance::retrieveObject($strObjectRef);
+				Instance::storeObject($strObjectRef,$resTwistModule);
+				return $resTwistModule;
+			}
+
+			/**
 			 * @deprecated
 			 */
-			protected static function Template(){
+			public static function Template(){
 				return self::view((count(func_get_args())) ? func_get_arg(0) : 'twist');
 			}
 
-			protected static function framework(){
+			public static function framework(){
 
 				$resTwistModule = (!Instance::isObject('CoreFramework')) ? new Framework() : Instance::retrieveObject('CoreFramework');
 				Instance::storeObject('CoreFramework',$resTwistModule);
 				return $resTwistModule;
 			}
 
-			protected static function AJAX(){
+			public static function AJAX(){
 
 				$resTwistModule = (!Instance::isObject('pkgAJAX')) ? new Packages\AJAX() : Instance::retrieveObject('pkgAJAX');
 				Instance::storeObject('pkgAJAX',$resTwistModule);
 				return $resTwistModule;
 			}
 
-			protected static function Archive(){
+			public static function Archive(){
 
 				$resTwistModule = (!Instance::isObject('pkgArchive')) ? new Packages\Archive() : Instance::retrieveObject('pkgArchive');
 				Instance::storeObject('pkgArchive',$resTwistModule);
 				return $resTwistModule;
 			}
 
-			protected static function Asset(){
+			public static function Asset(){
 
 				$resTwistModule = (!Instance::isObject('pkgAsset')) ? new Packages\Asset() : Instance::retrieveObject('pkgAsset');
 				Instance::storeObject('pkgAsset',$resTwistModule);
 				return $resTwistModule;
 			}
 
-			protected static function CSV(){
+			public static function CSV(){
 
 				$resTwistModule = (!Instance::isObject('pkgCSV')) ? new Packages\CSV() : Instance::retrieveObject('pkgCSV');
 				Instance::storeObject('pkgCSV',$resTwistModule);
 				return $resTwistModule;
 			}
 
-			protected static function Cache(){
+			public static function Cache(){
 
 				$strObjectKey = (count(func_get_args())) ? func_get_arg(0) : 'twist';
 
@@ -86,21 +102,21 @@
 				return $resTwistModule;
 			}
 
-			protected static function Command(){
+			public static function Command(){
 
 				$resTwistModule = (!Instance::isObject('pkgCommand')) ? new Packages\Command() : Instance::retrieveObject('pkgCommand');
 				Instance::storeObject('pkgCommand',$resTwistModule);
 				return $resTwistModule;
 			}
 
-			protected static function Curl(){
+			public static function Curl(){
 
 				$resTwistModule = (!Instance::isObject('pkgCurl')) ? new Packages\Curl() : Instance::retrieveObject('pkgCurl');
 				Instance::storeObject('pkgCurl',$resTwistModule);
 				return $resTwistModule;
 			}
 
-			protected static function Database(){
+			public static function Database(){
 
 				$strObjectKey = (count(func_get_args())) ? func_get_arg(0) : 'twist';
 
@@ -117,56 +133,56 @@
 				return $resTwistModule;
 			}
 
-			protected static function DateTime(){
+			public static function DateTime(){
 
 				$resTwistModule = (!Instance::isObject('pkgDateTime')) ? new Packages\DateTime() : Instance::retrieveObject('pkgDateTime');
 				Instance::storeObject('pkgDateTime',$resTwistModule);
 				return $resTwistModule;
 			}
 
-			protected static function Email(){
+			public static function Email(){
 
 				$resTwistModule = (!Instance::isObject('pkgEmail')) ? new Packages\Email() : Instance::retrieveObject('pkgEmail');
 				Instance::storeObject('pkgEmail',$resTwistModule);
 				return $resTwistModule;
 			}
 
-			protected static function File(){
+			public static function File(){
 
 				$resTwistModule = (!Instance::isObject('pkgFile')) ? new Packages\File() : Instance::retrieveObject('pkgFile');
 				Instance::storeObject('pkgFile',$resTwistModule);
 				return $resTwistModule;
 			}
 
-			protected static function FTP(){
+			public static function FTP(){
 
 				$resTwistModule = (!Instance::isObject('pkgFTP')) ? new Packages\FTP() : Instance::retrieveObject('pkgFTP');
 				Instance::storeObject('pkgFTP',$resTwistModule);
 				return $resTwistModule;
 			}
 
-			protected static function ICS(){
+			public static function ICS(){
 
 				$resTwistModule = (!Instance::isObject('pkgICS')) ? new Packages\ICS() : Instance::retrieveObject('pkgICS');
 				Instance::storeObject('pkgICS',$resTwistModule);
 				return $resTwistModule;
 			}
 
-			protected static function Image(){
+			public static function Image(){
 
 				$resTwistModule = (!Instance::isObject('pkgImage')) ? new Packages\Image() : Instance::retrieveObject('pkgImage');
 				Instance::storeObject('pkgImage',$resTwistModule);
 				return $resTwistModule;
 			}
 
-			protected static function Localisation(){
+			public static function Localisation(){
 
 				$resTwistModule = (!Instance::isObject('pkgLocalisation')) ? new Packages\Localisation() : Instance::retrieveObject('pkgLocalisation');
 				Instance::storeObject('pkgLocalisation',$resTwistModule);
 				return $resTwistModule;
 			}
 
-			protected static function Route(){
+			public static function Route(){
 
 				$strObjectKey = (count(func_get_args())) ? func_get_arg(0) : 'twist';
 
@@ -183,14 +199,14 @@
 				return $resTwistModule;
 			}
 
-			protected static function Session(){
+			public static function Session(){
 
 				$resTwistModule = (!Instance::isObject('pkgSession')) ? new Packages\Session() : Instance::retrieveObject('pkgSession');
 				Instance::storeObject('pkgSession',$resTwistModule);
 				return $resTwistModule;
 			}
 
-			protected static function Timer(){
+			public static function Timer(){
 
 				$strObjectKey = (count(func_get_args())) ? func_get_arg(0) : 'twist';
 
@@ -207,21 +223,21 @@
 				return $resTwistModule;
 			}
 
-			protected static function User(){
+			public static function User(){
 
 				$resTwistModule = (!Instance::isObject('pkgUser')) ? new Packages\User() : Instance::retrieveObject('pkgUser');
 				Instance::storeObject('pkgUser',$resTwistModule);
 				return $resTwistModule;
 			}
 
-			protected static function Validate(){
+			public static function Validate(){
 
 				$resTwistModule = (!Instance::isObject('pkgValidate')) ? new Packages\Validate() : Instance::retrieveObject('pkgValidate');
 				Instance::storeObject('pkgValidate',$resTwistModule);
 				return $resTwistModule;
 			}
 
-			protected static function View(){
+			public static function View(){
 
 				$strObjectKey = (count(func_get_args())) ? func_get_arg(0) : 'twist';
 
@@ -238,7 +254,7 @@
 				return $resTwistModule;
 			}
 
-			protected static function XML(){
+			public static function XML(){
 
 				$resTwistModule = (!Instance::isObject('pkgXML')) ? new Packages\XML() : Instance::retrieveObject('pkgXML');
 				Instance::storeObject('pkgXML',$resTwistModule);

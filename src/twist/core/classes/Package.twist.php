@@ -29,7 +29,14 @@
 	final class Package{
 
 		protected $arrPackages = array();
-		protected $arrInstalledPackages = array();
+
+		public function getAll(){
+
+			$arrOut = array_merge($this->getUninstalled(),$this->getInstalled());
+			ksort($arrOut);
+
+			return $arrOut;
+		}
 
 		/**
 		 * Get an array of all the packages that are in the packages folder but have not been installed
@@ -38,7 +45,7 @@
 		public function getUninstalled(){
 
 			$arrOut = array();
-			$arrPackages = $this->getInstalled();
+			$this->getInstalled();
 
 			//Find Packages
 			foreach(scandir(DIR_PACKAGES) as $strFile){
@@ -49,7 +56,9 @@
 
 					$strPackageSlug = strtolower(basename($dirPackage));
 
-					if(!array_key_exists($strPackageSlug,$arrPackages)){
+					//Check to see if the package is already installed
+					if(!array_key_exists($strPackageSlug,$this->arrPackages)){
+
 						if(is_file(sprintf('%s/info.json',$dirPackage)) &&
 							is_file(sprintf('%s/install.php',$dirPackage)) &&
 							is_file(sprintf('%s/uninstall.php',$dirPackage))){
@@ -59,10 +68,11 @@
 
 							$arrOut[] = array(
 								'slug' => $strPackageSlug,
-								'path' => $dirPackage,
-								'install' => sprintf('%s/install.php',$dirPackage),
-								'uninstall' => sprintf('%s/uninstall.php',$dirPackage),
-								'package' => $arrDetails
+								'name' => $arrDetails['name'],
+								'version' => $arrDetails['version'],
+								'folder' => basename($dirPackage),
+								'package' => 1,
+								'details' => $arrDetails
 							);
 						}
 					}
@@ -76,12 +86,71 @@
 		 * Get an array of all the installed packages on the system
 		 * @return array|bool
 		 */
-		public function getInstalled(){
+		public function getInstalled($blRebuild = false){
 
-			$arrPackages = \Twist::Database()->getAll(DATABASE_PREFIX.'packages');
-			$this->arrInstalledPackages = \Twist::framework()->tools()->arrayReindex($arrPackages,'slug');
+			if(!count($this->arrPackages) || $blRebuild){
 
-			return $this->arrInstalledPackages;
+				$this->arrPackages = array();
+
+				$arrPackages = \Twist::Database()->getAll(DATABASE_TABLE_PREFIX.'packages');
+				$arrPackages = \Twist::framework()->tools()->arrayReindex($arrPackages,'slug');
+
+				foreach($arrPackages as $strSlug => $arrPackageData){
+					$this->load($strSlug,$arrPackageData);
+				}
+			}
+
+			return $this->arrPackages;
+		}
+
+		/**
+		 * Load the package into the framework for us
+		 * @param $strSlug
+		 * @param $arrPackageData
+		 */
+		protected function load($strSlug,$arrPackageData){
+
+			if(!array_key_exists($strSlug,$this->arrPackages)){
+				$this->arrPackages[$strSlug] = $arrPackageData;
+			}
+
+			$dirPath = sprintf('%s/%s',DIR_PACKAGES,$arrPackageData['folder']);
+
+			$rawJson = file_get_contents(sprintf('%s/info.json',$dirPath));
+			$arrDetails = json_decode($rawJson,true);
+
+			//Add the details from the info JSON file
+			$this->arrPackages[$strSlug]['details'] = $arrDetails;
+
+			//Add the URI to the package here
+			$this->arrPackages[$strSlug]['uri'] = '';
+
+			//Register any resources into the framework from the package
+			if(file_exists(sprintf('%s/resources.json',$dirPath))){
+				$resCoreResources = Instance::retrieveObject('twistCoreResources');
+				$resCoreResources->extendLibrary(sprintf('%s/resources.json',$dirPath),sprintf('%s/resources',$dirPath));
+			}
+
+			//Expand the JSON data
+			$this->arrPackages[$strSlug]['resources'] = ($arrPackageData['resources'] != '') ?  json_decode($arrPackageData['resources'],true) : array();
+			$this->arrPackages[$strSlug]['routes'] = ($arrPackageData['routes'] != '') ?  json_decode($arrPackageData['routes'],true) : array();
+			$this->arrPackages[$strSlug]['blocks'] = ($arrPackageData['blocks'] != '') ?  json_decode($arrPackageData['blocks'],true) : array();
+			$this->arrPackages[$strSlug]['extensions'] = ($arrPackageData['extensions'] != '') ?  json_decode($arrPackageData['extensions'],true) : array();
+		}
+
+		public function installer($strInstallSlug){
+
+			$blOut = false;
+
+			foreach($this->getUninstalled() as $strSlug => $arrEachPackage){
+				if($strInstallSlug == $strSlug){
+					include sprintf('%s/%s/install.php',DIR_PACKAGES,$arrEachPackage['folder']);
+					$blOut = true;
+					break;
+				}
+			}
+
+			return $blOut;
 		}
 
 		/**
@@ -99,16 +168,41 @@
 				$rawJson = file_get_contents(sprintf('%s/info.json',$dirPackage));
 				$arrDetails = json_decode($rawJson,true);
 
-				$resPackage = \Twist::Database()->createRecord(DATABASE_PREFIX.'packages');
+				$strSlug = strtolower(basename($dirPackage));
 
-				$resPackage->set('slug',strtolower(basename($dirPackage)));
-				$resPackage->set('path',$dirPackage);
+				if(is_file(sprintf('%s/resources.json',$dirPackage)) && count(scandir(sprintf('%s/resources',$dirPackage))) > 2){
+
+				}
+
+				if(is_dir(sprintf('%s/routes',$dirPackage)) && count(scandir(sprintf('%s/routes',$dirPackage))) > 2){
+
+				}
+
+				if(is_dir(sprintf('%s/blocks',$dirPackage)) && count(scandir(sprintf('%s/blocks',$dirPackage))) > 2){
+
+				}
+
+				$arrResources = $arrRoutes = $arrBlocks = $arrExtensions = array();
+
+				$resPackage = \Twist::Database()->createRecord(DATABASE_TABLE_PREFIX.'packages');
+
+				$resPackage->set('slug',$strSlug);
 				$resPackage->set('name',$arrDetails['name']);
 				$resPackage->set('version',$arrDetails['version']);
-				$resPackage->set('resources',(is_file(sprintf('%s/resources.json',$dirPackage)) && count(scandir(sprintf('%s/resources',$dirPackage))) > 2) ? '1' : '0');
-				$resPackage->set('routes',(is_dir(sprintf('%s/routes',$dirPackage)) && count(scandir(sprintf('%s/routes',$dirPackage))) > 2) ? '1' : '0');
+				$resPackage->set('folder',basename($dirPackage));
+				$resPackage->set('package',(is_file(sprintf('%s/package.php',$dirPackage))) ? '1' : '0');
+				$resPackage->set('installed',date('Y-m-d H:i:s'));
+				$resPackage->set('resources',json_encode($arrResources));
+				$resPackage->set('routes',json_encode($arrRoutes));
+				$resPackage->set('blocks',json_encode($arrBlocks));
+				$resPackage->set('extensions',json_encode($arrExtensions));
 
-				return $resPackage->commit();
+				$intPackage = $resPackage->commit();
+
+				//Update the list of installed packages
+				$this->load($strSlug,$resPackage->values());
+
+				return $intPackage;
 			}
 
 			return false;
@@ -157,14 +251,56 @@
 		 * @param $blThrowException
 		 * @return bool
 		 */
-		public function exists($strPackage,$blThrowException = false){
+		public function exists($strPackageSlug,$blThrowException = false){
 
-			if($blThrowException && !array_key_exists($strPackage,$this->arrPackages)){
+			$blInstalled = $this->isInstalled($strPackageSlug);
+
+			if($blThrowException && !$blInstalled){
 				throw new \Exception(sprintf("The package '%s' has not been installed or does not exist",$strPackage));
 			}
 
-			return (array_key_exists($strPackage,$this->arrPackages));
+			return $blInstalled;
 		}
+
+		/**
+		 * Get the details of an installed package and return them as an array
+		 * @param $strPackageSlug
+		 * @return array
+		 */
+		public function get($strPackageSlug){
+			return (array_key_exists($strPackageSlug,$this->arrPackages)) ? $this->arrPackages[$strPackageSlug] : array();
+		}
+
+		/**
+		 * Register the package for use withing the system
+		 * @param $strPackage
+		 * @param $mxdKey
+		 * @param $mxdData
+		 */
+		public function extend($strPackage,$mxdKey,$mxdData){
+
+			//@deprecate when remove template all traces of templates
+			$strPackage = ($strPackage == 'Template') ? 'View' : $strPackage;
+
+			if(!array_key_exists($strPackage,$this->arrPackages)){
+				$this->arrPackages[$strPackage] = array('resources' => array(),'routes' => array(),'blocks' => array(),'extensions' => array());
+			}
+
+			$this->arrPackages[$strPackage]['extensions'][$mxdKey] = $mxdData;
+		}
+
+		/**
+		 * Get the array of extensions for the requested package
+		 * @param $strPackage
+		 * @return array
+		 */
+		public function extensions($strPackage){
+			return (array_key_exists($strPackage,$this->arrPackages)) ? $this->arrPackages[$strPackage]['extensions'] : array();
+		}
+
+
+
+
 
 		/**
 		 * Get all the current information for any installed package
@@ -175,17 +311,6 @@
 			$arrParts = explode('\\',$strPackage);
 			$strPackage = array_pop($arrParts);
 			return (array_key_exists($strPackage,$this->arrPackages)) ? $this->arrPackages[$strPackage] : array();
-		}
-
-		/**
-		 * Load the controller the package class that extends the framework
-		 * @param $strPackage
-		 * @throws \Exception
-		 */
-		public function load($strPackage){
-			if($this->exists($strPackage,true)){
-				require_once sprintf('%s/load.php',$this->arrPackages[$strPackage]['path']);
-			}
 		}
 
 		/**
@@ -226,30 +351,6 @@
 			}
 		}
 
-		public function register($strPackage){
-
-			$strPath = sprintf('%s/%s',DIR_PACKAGES,$strPackage);
-			$strURI = '/'.ltrim(str_replace(BASE_LOCATION,"",$strPath),'/');
-
-			$arrInformation = json_decode(file_get_contents(sprintf('%s/info.json',$strPath)),true);
-
-			if(!array_key_exists($strPackage,$this->arrPackages)){
-				$this->arrPackages[$strPackage] = array('type' => null,'name' => null,'description' => null,'version' => null,'author' => null,'class' => null,'instances' => null,'path' => '','uri' => '','routes' => array(),'extensions' => array(),'installed' => 0);
-			}
-
-			//Register the package for use withing the system
-			$this->arrPackages[$strPackage]['type'] = 'Package';
-			$this->arrPackages[$strPackage]['name'] = $arrInformation['name'];
-			$this->arrPackages[$strPackage]['description'] = $arrInformation['description'];
-			$this->arrPackages[$strPackage]['version'] = $arrInformation['version'];
-			$this->arrPackages[$strPackage]['author'] = $arrInformation['author'];
-			$this->arrPackages[$strPackage]['class'] = $strPackage;
-			$this->arrPackages[$strPackage]['instances'] = false;//Too do later
-			$this->arrPackages[$strPackage]['path'] = $strPath;
-			$this->arrPackages[$strPackage]['uri'] = $strURI;
-			$this->arrPackages[$strPackage]['installed'] = 1;
-		}
-
 		public function registerRoute($strPackage,$strRouteName){
 
 			if(!array_key_exists($strPackage,$this->arrPackages)){
@@ -258,75 +359,5 @@
 
 			$this->arrPackages[$strPackage]['routes'][$strRouteName] = $strRouteName;
 			$this->arrRoutes[$strRouteName] = $strPackage;
-		}
-
-		/**
-		 * Create the package record for use within the system
-		 * @param $strPackage
-		 * @param bool $blAllowInstances
-		 * @param $strPackageName
-		 * @param $strVersion
-		 * @param $strAuthor
-		 */
-		public function create($strPackage,$blAllowInstances = false,$strPackageName,$strVersion,$strAuthor){
-
-			if(!array_key_exists($strPackage,$this->arrPackages)){
-				$this->arrPackages[$strPackage] = array('type' => null,'name' => null,'description' => null,'version' => null,'author' => null,'class' => null,'instances' => null,'path' => '','uri' => '','routes' => array(),'extensions' => array(),'installed' => 0);
-			}
-
-			if($strAuthor == 'TwistPackage'){
-				$strPath = DIR_FRAMEWORK_PACKAGES;
-				$strURI = str_replace(BASE_LOCATION,"",$strPath);
-			}else{
-				$strPath = sprintf('%s/%s',DIR_PACKAGES,$strPackage);
-				$strURI = str_replace(BASE_LOCATION,"",$strPath);
-			}
-
-			//Register the package for use withing the system
-			$this->arrPackages[$strPackage]['type'] = ($strAuthor == 'TwistPackage') ? 'CorePackage' : 'Package';
-			$this->arrPackages[$strPackage]['name'] = ($strAuthor == 'TwistPackage') ? $strPackage : $strPackageName;
-			$this->arrPackages[$strPackage]['description'] = '';
-			$this->arrPackages[$strPackage]['version'] = ($strAuthor == 'TwistPackage') ? '-' : $strVersion;
-			$this->arrPackages[$strPackage]['author'] = ($strAuthor == 'TwistPackage') ? 'Shadow Technologies' : $strAuthor;
-			$this->arrPackages[$strPackage]['class'] = $strPackage;
-			$this->arrPackages[$strPackage]['instances'] = $blAllowInstances;
-			$this->arrPackages[$strPackage]['path'] = $strPath;
-			$this->arrPackages[$strPackage]['uri'] = $strURI;
-			$this->arrPackages[$strPackage]['installed'] = 1;
-		}
-
-		/**
-		 * Register the package for use withing the system
-		 * @param $strPackage
-		 * @param $mxdKey
-		 * @param $mxdData
-		 */
-		public function extend($strPackage,$mxdKey,$mxdData){
-
-			//@deprecate when remove template all traces of templates
-			$strPackage = ($strPackage == 'Template') ? 'View' : $strPackage;
-
-			if(!array_key_exists($strPackage,$this->arrPackages)){
-				$this->arrPackages[$strPackage] = array('type' => null,'name' => null,'description' => null,'version' => null,'author' => null,'class' => null,'instances' => null,'path' => '','uri' => '','routes' => array(),'extensions' => array(),'installed' => 0);
-			}
-
-			$this->arrPackages[$strPackage]['extensions'][$mxdKey] = $mxdData;
-		}
-
-		/**
-		 * Get the array of extensions for the requested package
-		 * @param $strPackage
-		 * @return array
-		 */
-		public function extensions($strPackage){
-			return (array_key_exists($strPackage,$this->arrPackages)) ? $this->arrPackages[$strPackage]['extensions'] : array();
-		}
-
-		/**
-		 * Get an array of all the registered packages/packages in the system
-		 * @return array
-		 */
-		public function getAll(){
-			return $this->arrPackages;
 		}
 	}

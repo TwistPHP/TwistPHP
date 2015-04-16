@@ -38,3 +38,20 @@ CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`user_data` (
   `data` text COLLATE utf8_unicode_ci,
   UNIQUE KEY `user_id` (`user_id`,`field_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`packages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique ID for this installation',
+  `slug` char(64) COLLATE utf8_unicode_ci NOT NULL,
+  `name` char(128) COLLATE utf8_unicode_ci NOT NULL,
+  `version` char(16) COLLATE utf8_unicode_ci NOT NULL,
+  `folder` char(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `package` ENUM('0','1') NOT NULL DEFAULT '0' COMMENT 'Set to 1 if this package extends the framework directly',
+  `resources` text COLLATE utf8_unicode_ci COMMENT 'JSON array of resources that are provided',
+  `routes` text COLLATE utf8_unicode_ci COMMENT 'JSON array of routes that are provided',
+  `blocks` text COLLATE utf8_unicode_ci COMMENT 'JSON array of blocks that are provided',
+  `extensions` text COLLATE utf8_unicode_ci COMMENT 'JSON array of packages that are extended',
+  `installed` datetime DEFAULT NULL COMMENT 'Date the package was installed',
+  `updated` datetime DEFAULT NULL COMMENT 'Date the package was updated',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `slug` (`slug`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;

@@ -21,10 +21,10 @@
 	 *
 	 */
 
-	use Twist\Core\Classes\CoreBasePackages;
+	use Twist\Core\Classes\CoreBase;
 
 	if(!class_exists('Twist')){
-		class Twist extends CoreBasePackages{
+		class Twist extends CoreBase{
 
 			protected static $blLaunched = false;
 
@@ -92,26 +92,11 @@
 					//Register the PHP handlers
 					self::errorHandlers();
 
-					//Register all the packages, this is to allow extensions
-					Twist::framework() -> package() -> create('AJAX',false,null,null,'TwistPackage');
-					Twist::framework() -> package() -> create('Archive',false,null,null,'TwistPackage');
-					Twist::framework() -> package() -> create('Asset',false,null,null,'TwistPackage');
-					Twist::framework() -> package() -> create('Cache',false,null,null,'TwistPackage');
-					Twist::framework() -> package() -> create('CSV',false,null,null,'TwistPackage');
-					Twist::framework() -> package() -> create('Curl',false,null,null,'TwistPackage');
-					Twist::framework() -> package() -> create('Database',true,null,null,'TwistPackage');
-					Twist::framework() -> package() -> create('DateTime',false,null,null,'TwistPackage');
-					Twist::framework() -> package() -> create('Email',false,null,null,'TwistPackage');
-					Twist::framework() -> package() -> create('File',false,null,null,'TwistPackage');
-					Twist::framework() -> package() -> create('FTP',false,null,null,'TwistPackage');
-					Twist::framework() -> package() -> create('Image',false,null,null,'TwistPackage');
-					Twist::framework() -> package() -> create('Localisation',false,null,null,'TwistPackage');
-					Twist::framework() -> package() -> create('Route',false,null,null,'TwistRoute');
-					Twist::framework() -> package() -> create('Session',false,null,null,'TwistPackage');
-					Twist::framework() -> package() -> create('User',false,null,null,'TwistPackage');
-					Twist::framework() -> package() -> create('Validate',false,null,null,'TwistPackage');
-					Twist::framework() -> package() -> create('View',true,null,null,'TwistPackage');
-					Twist::framework() -> package() -> create('XML',false,null,null,'TwistPackage');
+					//Initalise the resource handler
+					\Twist\Core\Classes\Instance::storeObject('twistCoreResources',new \Twist\Core\Classes\Resources());
+
+					//Register all the installed packages
+					Twist::framework() -> package() -> getInstalled();
 
 					//Register the default PHP package extensions
 					Twist::framework() -> package() -> extend('View','asset',array('module' => 'Asset','function' => 'viewExtension'));
@@ -121,11 +106,7 @@
 					Twist::framework() -> package() -> extend('View','user',array('module' => 'User','function' => 'viewExtension'));
 
 					//Register the framework resources handler into the template system
-					\Twist\Core\Classes\Instance::storeObject('twistCoreResources',new \Twist\Core\Classes\Resources());
 					Twist::framework() -> package() -> extend('View','resource',array('instance' => 'twistCoreResources','function' => 'viewExtension'));
-
-					//Register all the external packages that have been installed
-					Twist::framework() -> register() -> packages();
 
 					//Stop tracking the framework boot time
 					Twist::Timer('TwistPageLoad') -> start();

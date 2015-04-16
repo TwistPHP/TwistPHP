@@ -181,7 +181,7 @@ Extending core and custom packages can be achieved by creating the file /package
 ### Resources
 
 Adding additional resources into the frameworks {resource:} tag, these resources can be unique for the package or for general use through out the developers app.
-The resources are added as JSON in a json file and must follow the syntax laid out below.
+The resources are added as JSON in a json file /packages/Twitter/resources.json and must follow the syntax laid out below.
 
 ```json
 {
