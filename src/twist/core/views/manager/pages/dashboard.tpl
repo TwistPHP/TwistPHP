@@ -13,7 +13,7 @@
 <div class="clear"></div>
 <div class="grid-100 tablet-grid-100 mobile-grid-100">
 	<h3>Application Summary</h3>
-	<dl>
+	<dl class="inline">
 		<dt>Cache Size</dt>
 			<dd>32M (300 Files)</dd>
 		<dt>Routes</dt>
