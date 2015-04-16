@@ -12,73 +12,14 @@
 </div>
 <div class="clear"></div>
 <div class="grid-100 tablet-grid-100 mobile-grid-100">
-	<h3>Site Summary</h3>
-	<!--<dl class="inline">
-		<dt>PHP</dt>
-		<dd>6 files, 2,380 lines, 2,347,155 characters</dd>
-		<dt>HTML</dt>
-		<dd>6 files, 2,380 lines, 2,347,155 characters</dd>
-		<dt>CSS</dt>
-		<dd>6 files, 2,380 lines, 2,347,155 characters</dd>
-		<dt>JavaScript</dt>
-		<dd>6 files, 2,380 lines, 2,347,155 characters</dd>
-		<dt>Other</dt>
-		<dd>6 files, 2,380 lines, 2,347,155 characters</dd>
-	</dl>-->
-	<table>
-		<thead>
-		<tr>
-			<th>File Type</th>
-			<th>File Extensions</th>
-			<th>Files</th>
-			<th>Lines</th>
-			<th>Characters</th>
-		</tr>
-		</thead>
-		<tfoot>
-		<tr>
-			<th colspan="2">Total</th>
-			<td>6</td>
-			<td>2,342</td>
-			<td>983,357</td>
-		</tr>
-		</tfoot>
-		<tbody>
-		<tr>
-			<th>PHP</th>
-			<td>.php, .php4, .php5</td>
-			<td>6</td>
-			<td>2,342</td>
-			<td>983,357</td>
-		</tr>
-		<tr>
-			<th>HTML</th>
-			<td>.html, .htm, .tpl</td>
-			<td>6</td>
-			<td>2,342</td>
-			<td>983,357</td>
-		</tr>
-		<tr>
-			<th>CSS</th>
-			<td>.css, .scss, .sass</td>
-			<td>6</td>
-			<td>2,342</td>
-			<td>983,357</td>
-		</tr>
-		<tr>
-			<th>JavaScript</th>
-			<td>.js</td>
-			<td>6</td>
-			<td>2,342</td>
-			<td>983,357</td>
-		</tr>
-		<tr>
-			<th colspan="2">Other</th>
-			<td>6</td>
-			<td>2,342</td>
-			<td>983,357</td>
-		</tr>
-		</tbody>
-	</table>
+	<h3>Application Summary</h3>
+	<dl>
+		<dt>Cache Size</dt>
+			<dd>32M (300 Files)</dd>
+		<dt>Routes</dt>
+			<dd>27 Registered</dd>
+		<dt>User Accounts</dt>
+			<dd>3</dd>
+	</dl>
 </div>
 <div class="clear"></div>
