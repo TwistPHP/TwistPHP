@@ -159,5 +159,98 @@
 	        return $blOut;
 	    }
 
+		public function install($strPackage,$strGroup,$strKey,$mxdValue,$strTitle,$strDescription,$strDefault,$strType,$strOptions,$blNull = false){
 
+			if(DATABASE_PROTOCOL == 'none'){
+
+				$strSettingsJSON = sprintf('%s/../../config/settings.json',dirname(__FILE__));
+
+				if(is_writable(sprintf('%s/../../config/',dirname(__FILE__)))){
+					if(!file_exists($strSettingsJSON)){
+						file_put_contents($strSettingsJSON,'{}');
+					}
+				}else{
+					throw new \Exception("Error, Twist Framework could not setup its core settings file. Please ensure that the twist/config folder is writable");
+				}
+
+				$rawJSON = file_get_contents($strSettingsJSON);
+				$arrSettings = json_decode($rawJSON,true);
+
+				if(array_key_exists($strKey,$arrSettings)){
+
+					$arrSettings[$strKey] = array(
+						'title' => $strTitle,
+						'description' => $strDescription,
+						'default' => $strDefault,
+						'type' => $strType,
+						'options' => $strOptions,
+						'null' => ($blNull) ? 1 : 0,
+						`deprecated` => 0
+					);
+				}else{
+
+					$arrSettings[$strKey] = array(
+						'package' => $strPackage,
+						'group' => strtolower($strGroup),
+						'key' => $strKey,
+						'value' => $mxdValue,
+						'title' => $strTitle,
+						'description' => $strDescription,
+						'default' => $strDefault,
+						'type' => $strType,
+						'options' => $strOptions,
+						'null' => ($blNull) ? 1 : 0,
+						`deprecated` => 0
+					);
+				}
+
+				file_put_contents($strSettingsJSON,json_encode($arrSettings));
+				return true;
+			}else{
+
+				$resDatabase = \Twist::Database();
+
+				$strSQL = sprintf("INSERT INTO `%s`.`%ssettings`
+									SET `package` = '%s',
+										`group` = '%s',
+										`key` = '%s',
+										`value` = '%s',
+										`title` = '%s',
+										`description` = '%s',
+										`default` = '%s',
+										`type` = '%s',
+										`options` = '%s',
+										`null` = '%s',
+										`deprecated` = '0'
+								ON DUPLICATE KEY UPDATE
+										`title` = '%s',
+										`description` = '%s',
+										`default` = '%s',
+										`type` = '%s',
+										`options` = '%s',
+										`null` = '%s',
+										`deprecated` = '0'",
+					DATABASE_NAME,
+					DATABASE_TABLE_PREFIX,
+					$resDatabase->escape($strPackage),
+					$resDatabase->escape(strtolower($strGroup)),
+					$resDatabase->escape(strtoupper($strKey)),
+					$resDatabase->escape($mxdValue),
+					$resDatabase->escape($strTitle),
+					$resDatabase->escape($strDescription),
+					$resDatabase->escape($strDefault),
+					$resDatabase->escape($strType),
+					$resDatabase->escape($strOptions),
+					($blNull) ? '1' : '0',
+					$resDatabase->escape($strTitle),
+					$resDatabase->escape($strDescription),
+					$resDatabase->escape($strDefault),
+					$resDatabase->escape($strType),
+					$resDatabase->escape($strOptions),
+					($blNull) ? '1' : '0'
+				);
+
+				return \Twist::Database()->query($strSQL);
+			}
+		}
 	}

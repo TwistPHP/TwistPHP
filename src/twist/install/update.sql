@@ -55,3 +55,5 @@ CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`packages` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `slug` (`slug`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+ALTER TABLE /*TABLE_PREFIX*/`settings` CHANGE `group` `group` ENUM( 'core', 'package' ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL

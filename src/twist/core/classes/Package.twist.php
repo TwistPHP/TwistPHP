@@ -253,7 +253,7 @@
 
 						foreach($arrSettings as $strKey => $arrOptions){
 
-							\Twist::framework()->upgrade()->storeSetting(
+							\Twist::framework()->settings()->install(
 								$strSlug,
 								'package',
 								$strKey,

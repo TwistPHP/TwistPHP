@@ -16,7 +16,7 @@
 
 CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`settings` (
   `package` char(64) COLLATE utf8_unicode_ci NOT NULL,
-  `group` enum('core','module','interface') COLLATE utf8_unicode_ci NOT NULL,
+  `group` enum('core','package') COLLATE utf8_unicode_ci NOT NULL,
   `key` char(32) COLLATE utf8_unicode_ci NOT NULL,
   `value` text COLLATE utf8_unicode_ci NOT NULL,
   `title` char(128) COLLATE utf8_unicode_ci NOT NULL,
