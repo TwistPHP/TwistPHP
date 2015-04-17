@@ -66,7 +66,7 @@
 							$rawJson = file_get_contents(sprintf('%s/info.json',$dirPackage));
 							$arrDetails = json_decode($rawJson,true);
 
-							$arrOut[] = array(
+							$arrOut[$strPackageSlug] = array(
 								'slug' => $strPackageSlug,
 								'name' => $arrDetails['name'],
 								'version' => $arrDetails['version'],

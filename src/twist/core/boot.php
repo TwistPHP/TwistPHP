@@ -49,6 +49,8 @@
 	Autoload::registerPath('\\Twist\\Core\\Classes\\','twist/core/classes','.twist.php');
 	Autoload::registerPath('\\Twist\\Core\\Controllers\\','twist/core/controllers','.controller.php');
 
+
+
 	require_once sprintf('%s/classes/Twist.twist.php',dirname(__FILE__));
 
 	$arrShadowCoreInfo = json_decode(file_get_contents(sprintf('%s/../info.json',dirname(__FILE__))),true);
@@ -75,8 +77,13 @@
 		Twist::define('DIR_APP_MODELS',sprintf('%s/models/',rtrim(DIR_APP,'/')));
 		Twist::define('DIR_APP_VIEWS',sprintf('%s/views/',rtrim(DIR_APP,'/')));
 
-		Autoload::registerPath('\\Twist\\Controllers\\',DIR_APP_CONTROLLERS,'.controller.php');
-		Autoload::registerPath('\\Twist\\Models\\',DIR_APP_MODELS,'.model.php');
+		Autoload::registerPath('\\App\\Controllers\\',DIR_APP_CONTROLLERS,'.controller.php');
+		Autoload::registerPath('\\App\\Models\\',DIR_APP_MODELS,'.model.php');
+
+		Autoload::registerPath('\\Package\\{class}',DIR_PACKAGES.'/{class}/{class}','.package.php');
+		Autoload::registerPath('\\Packages\\{package}\\Controller\\{class}',DIR_PACKAGES.'/{package}/controllers/{class}','.controller.php');
+		Autoload::registerPath('\\Packages\\{package}\\Model\\{class}',DIR_PACKAGES.'/{package}/models/{class}','.model.php');
+		Autoload::registerPath('\\Packages\\{package}\\Route\\{class}',DIR_PACKAGES.'/{package}/routes/{class}','.route.php');
 	}
 
 	if(defined('DIR_APP_CONFIG') && file_exists(sprintf('%sconfig.php',DIR_APP_CONFIG))){

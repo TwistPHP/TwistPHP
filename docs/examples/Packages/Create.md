@@ -87,7 +87,7 @@ First create the block controller, the controller must contain some required fun
 ```php
 <?php
 
-	namespace Twist\Packages\Twitter\Block;
+	namespace Packages\Twitter\Block;
 	use Twist\Core\Classes\BaseBlock;
 
 	class TwitterView extends BaseBlock{
@@ -234,7 +234,7 @@ Creating a set of pre-defined routes, all of these routes will be called through
 ```php
 <?php
 
-	namespace Twist\Package\Twitter\Route;
+	namespace Packages\Twitter\Route;
 	use Twist\Core\Classes\BaseRoute;
 	
 	class Admin extends BaseRoute{
@@ -254,7 +254,7 @@ Create the admin controller that will allow the user to edit the settings for th
 ```php
 <?php
 
-	namespace Twist\Packages\Twitter\Controller;
+	namespace Packages\Twitter\Controller;
 	use Twist\Core\Classes\BaseController;
 
 	class Admin extends BaseController{

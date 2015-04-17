@@ -76,14 +76,35 @@
 
 			foreach($this->arrRegisteredLoaders as $strMatch => $arrLoader){
 
+				$regxMatchURI = null;
+				if(strstr($strMatch,'{') && strstr($strMatch,'}')){
+					$regxMatchNamespace = sprintf("#^(?<autoload_reg>%s)#i",str_replace(array('*',"\\","{","}"),array(".+","\\\\","(?<al_",">[^\\\\]+)",""),$strMatch));
+				}else{
+					$regxMatchNamespace = sprintf("#^%s(.*)#",str_replace(array('*','\\'),array('.+','\\\\'),$strMatch));
+				}
+
 				//Find a match for the file to be auto loaded
-				if(preg_match(sprintf("#^%s(.*)#",str_replace(array('*','\\'),array('.+','\\\\'),$strMatch)),$strRequest,$arrMatches)){
+				if(preg_match($regxMatchNamespace,$strRequest,$arrMatches)){
 
 					$blMatchFound = true;
 
 					if($arrLoader['type'] == 'path'){
 
-						$strRequireFile = sprintf('%s/%s%s',$arrLoader['path'],str_replace('\\','/',$arrMatches[1]),$arrLoader['extension']);
+						//This is abit messy but allow {brackets} in auto loaders as replacements from the match to the string
+						//Using this method the file name must be caught at the end in a tag and place at the end of the path
+						if(array_key_exists('autoload_reg',$arrMatches)){
+
+							foreach($arrMatches as $strKey => $strValue){
+								if(substr($strKey,0,3) == 'al_'){
+									$strFind = "{".trim(substr($strKey,3))."}";
+									$arrLoader['path'] = str_replace($strFind,$strValue,$arrLoader['path']);
+								}
+							}
+
+							$strRequireFile = sprintf('%s%s',$arrLoader['path'],$arrLoader['extension']);
+						}else{
+							$strRequireFile = sprintf('%s/%s%s',$arrLoader['path'],str_replace('\\','/',$arrMatches[1]),$arrLoader['extension']);
+						}
 
 						if(file_exists($strRequireFile)){
 							require_once $strRequireFile;

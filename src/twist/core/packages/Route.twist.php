@@ -1049,7 +1049,7 @@ class Route extends BasePackage{
 							if (is_array($arrRoute['item']) && count($arrRoute['item']) >= 1) {
 
 								if(!strstr($arrRoute['item'][0],'\\')){
-									$strControllerClass = sprintf('\\Twist\\Controllers\\%s', $arrRoute['item'][0]);
+									$strControllerClass = sprintf('\\App\\Controllers\\%s', $arrRoute['item'][0]);
 									$strControllerFile = sprintf('%s/%s.controller.php',$this->strControllerDirectory,$arrRoute['item'][0]);
 
 									if(file_exists($strControllerFile)){

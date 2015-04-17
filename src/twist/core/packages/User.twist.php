@@ -895,6 +895,11 @@ class User extends BasePackage{
 				$strData = $this->currentID();
 				break;
 
+			case'logged_in':
+				$strData = $this->loggedIn();
+				break;
+
+
 			case'level':
 				$strData = $this->loggedInData('level');
 				break;

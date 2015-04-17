@@ -36,7 +36,7 @@
 			public static function __callStatic($strModuleName, $arrArguments){
 
 				$strObjectRef = sprintf('pkg%s',$strModuleName);
-				$strModule = sprintf('\Twist\Packages\%s',$strModuleName);
+				$strModule = sprintf('\Package\%s',$strModuleName);
 
 				$resTwistModule = (!Instance::isObject($strObjectRef)) ? new $strModule() : Instance::retrieveObject($strObjectRef);
 				Instance::storeObject($strObjectRef,$resTwistModule);
