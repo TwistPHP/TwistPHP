@@ -305,7 +305,7 @@
 		 * @return bool
 		 */
 		public function isInstalled($strPackageSlug){
-			return (count(\Twist::Database()->get(DATABASE_PREFIX.'packages',$strPackageSlug,'slug'))) ? true : false;
+			return (count(\Twist::Database()->get(DATABASE_TABLE_PREFIX.'packages',$strPackageSlug,'slug'))) ? true : false;
 		}
 
 		/**
@@ -319,7 +319,7 @@
 			$blInstalled = $this->isInstalled($strPackageSlug);
 
 			if($blThrowException && !$blInstalled){
-				throw new \Exception(sprintf("The package '%s' has not been installed or does not exist",$strPackage));
+				throw new \Exception(sprintf("The package '%s' has not been installed or does not exist",$strPackageSlug));
 			}
 
 			return $blInstalled;
@@ -383,34 +383,29 @@
 		 */
 		public function route($strPackageRoute,$strRegisteredURI,$mxdBaseView){
 
-			if(array_key_exists($strPackageRoute,$this->arrRoutes)){
-				$strPackage = $this->arrRoutes[$strPackageRoute];
+			$arrParts = explode('\\',$strPackageRoute);
 
-				if($this->exists($strPackage,true)){
-					require_once sprintf('%s/route.php',$this->arrPackages[$strPackage]['path']);
+			if($this->isInstalled(strtolower($arrParts[0]))){
 
-					$strRouteClass = sprintf('\Twist\Packages\Routes\%s',$strPackageRoute);
+				$strRouteClass = sprintf('\Packages\%s',str_replace('\\','\\Route\\',$strPackageRoute));
 
-					if(class_exists($strRouteClass)){
+				//Call the interface
+				$objInterface = new $strRouteClass($arrParts[0]);
+				$objInterface->baseURI($strRegisteredURI);
 
-						//Call the interface
-						$objInterface = new $strRouteClass($strPackage);
-						$objInterface->baseURI($strRegisteredURI);
+				//Set the view directory to the one in the package
+				$objInterface->setDirectory(sprintf('%s/%s/views/',DIR_PACKAGES,$arrParts[0]));
 
-						if($mxdBaseView === false || is_null($mxdBaseView)){
-							$objInterface->baseViewIgnore();
-						}elseif($mxdBaseView !== true){
-							$objInterface->baseView($mxdBaseView);
-						}
-
-						$objInterface->load();
-						$objInterface->serve();
-					}else{
-						throw new \Exception(sprintf("TwistPHP: The route '%s' for the package '%s' cannot be found",$strPackageRoute,$strPackage));
-					}
+				if($mxdBaseView === false || is_null($mxdBaseView)){
+					$objInterface->baseViewIgnore();
+				}elseif($mxdBaseView !== true){
+					$objInterface->baseView($mxdBaseView);
 				}
+
+				$objInterface->load();
+				$objInterface->serve();
 			}else{
-				throw new \Exception(sprintf("TwistPHP: There is no registered package route '%s'",$strPackageRoute));
+				throw new \Exception(sprintf("TwistPHP: There is no registered package route '%s'",$arrParts[0]));
 			}
 		}
 
