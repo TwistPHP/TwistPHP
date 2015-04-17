@@ -1055,7 +1055,7 @@
 			}
 		}
 
-		protected function storeSetting($strPackage,$strGroup,$strKey,$mxdValue,$strTitle,$strDescription,$strDefault,$strType,$strOptions,$blNull = false){
+		public function storeSetting($strPackage,$strGroup,$strKey,$mxdValue,$strTitle,$strDescription,$strDefault,$strType,$strOptions,$blNull = false){
 
 			if((count($this->arrDatabaseCustomSettings) && $this->arrDatabaseCustomSettings['protocol'] == 'none') || DATABASE_PROTOCOL == 'none'){
 

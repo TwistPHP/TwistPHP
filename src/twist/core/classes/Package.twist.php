@@ -241,6 +241,7 @@
 
 				$dirInstallFile = $arrBacktrace[0]['file'];
 				$dirPackage = dirname($dirInstallFile);
+				$strSlug = strtolower(basename($dirPackage));
 
 				//Install the SQL tables when required
 				$dirSettingsJSON = sprintf('%s/%s', $dirPackage, $dirSettingsJSON);
@@ -250,8 +251,20 @@
 					$arrSettings = json_decode(file_get_contents($dirSettingsJSON),true);
 					if(count($arrSettings)){
 
-						foreach($arrSettings as $arrEachSetting){
+						foreach($arrSettings as $strKey => $arrOptions){
 
+							\Twist::framework()->upgrade()->storeSetting(
+								$strSlug,
+								'package',
+								$strKey,
+								$arrOptions['default'],
+								$arrOptions['title'],
+								$arrOptions['description'],
+								$arrOptions['default'],
+								$arrOptions['type'],
+								$arrOptions['options'],
+								$arrOptions['null']
+							);
 						}
 					}
 				}
