@@ -78,4 +78,21 @@ class Command extends BasePackage{
 
 		return $arrOut;
 	}
+
+	public function isEnabled(){
+
+		if(ini_get('safe_mode')){
+			return false;
+		}else{
+			$strDisabled = ini_get('disable_functions');
+
+			if($strDisabled != ''){
+				$arrDisabled = explode(',', $strDisabled);
+				$arrDisabled = array_map('trim', $arrDisabled);
+				return !in_array('proc_open', $arrDisabled);
+			}
+		}
+
+		return true;
+	}
 }

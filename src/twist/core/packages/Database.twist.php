@@ -160,6 +160,41 @@
 		}
 
 		/**
+		 * Import the contents of an SQL file '.sql' directly into your database, providing a database name will allow you to deviate from the default if required
+		 * @param $dirSQLFile Full local path to the SQL file
+		 * @param $strDatabaseName Name of the database to import into
+		 * @return bool|null
+		 */
+		public function importSQL($dirSQLFile,$strDatabaseName = null){
+
+			$blOut = false;
+
+			if($dirSQLFile){
+
+				if(\Twist::Command()->isEnabled()){
+
+					//Run the MYSQL import command on command line
+					$strCommand = sprintf('mysql -h%s -u%s -p%s %s < %s',
+						DATABASE_HOST,
+						DATABASE_USERNAME,
+						DATABASE_PASSWORD,
+						(is_null($strDatabaseName)) ? DATABASE_NAME : trim($strDatabaseName),
+						$dirSQLFile
+					);
+
+					$blOut = \Twist::Command()->execute($strCommand);
+				}else{
+
+					//Run the import using the query function. May want to do some sanitation here?
+					$strSQLData = file_get_contents($dirSQLFile);
+					$blOut = $this->query($strSQLData);
+				}
+			}
+
+			return $blOut;
+		}
+
+		/**
 		 * Run the query on the database, optionally pass the query in as a raw sprintf() string "SELECT * FROM `table` WHERE `id` = %d" followed by all the parameters to fill the string
 	     * All parameters are escaped before being entered into the sprintf()
 		 *

@@ -156,7 +156,7 @@
 		/**
 		 * Install the package into the framework
 		 */
-		public function install(){
+		public function install($dirInstallSQL = null){
 
 			$arrBacktrace = debug_backtrace();
 
@@ -201,6 +201,24 @@
 
 				//Update the list of installed packages
 				$this->load($strSlug,$resPackage->values());
+
+				//Install the SQL tables when required
+				if(!is_null($dirInstallSQL)){
+
+					$dirInstallSQL = sprintf('%s/%s',$dirPackage,$dirInstallSQL);
+					if(file_exists($dirInstallSQL)){
+
+						//Create a temp file with all the required table pre-fixes
+						$dirImportFile = tempnam(sys_get_temp_dir(), 'twist-import');
+						file_put_contents($dirImportFile,str_replace('/*TABLE_PREFIX*/`',sprintf('`%s',DATABASE_TABLE_PREFIX),file_get_contents($dirInstallSQL)));
+
+						//Import the SQL form the temp file
+						\Twist::Database()->importSQL($dirImportFile);
+
+						//Remove the temp file form the system
+						unlink($dirImportFile);
+					}
+				}
 
 				return $intPackage;
 			}
