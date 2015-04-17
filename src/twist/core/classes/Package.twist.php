@@ -88,7 +88,7 @@
 		 */
 		public function getInstalled($blRebuild = false){
 
-			if(!count($this->arrPackages) || $blRebuild){
+			if(\Twist::Database()->checkSettings() && !count($this->arrPackages) || $blRebuild){
 
 				$this->arrPackages = array();
 

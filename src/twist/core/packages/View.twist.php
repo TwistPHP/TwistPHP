@@ -616,28 +616,33 @@ class View extends BasePackage{
 				break;
 
 			case'element':
-
-				$strOut = $this->processElement($strReference,$arrData);
-				$strRawView = $this->replaceTag($strRawView,$strTag,$strOut,$strFunction);
-				break;
-
 			case'template':
+				//Log an error for the two deprecated template tags
+				trigger_error(sprintf('TwistPHP, use of deprecated template tag "%s" in %s',$strType,$this->dirCurrentView),E_USER_DEPRECATED);
+
 			case'view':
 
 				$strView = $strReference;
 
-				//Allow the use of "structure_view" which will determine the current structure view
-				if($strReference == 'structure_view' || $strReference == 'structure_template'){
-					$arrStructure = \Twist::Structure() -> getCurrent();
-					$strView = $arrStructure['view']['tpl_file'];
+				if(strstr($strReference,',')){
+					$arrParts = explode(',',$strReference);
+					$strView = $arrParts[0];
 				}
 
-				if(substr($strView,0,1) == '.'){
-					$strView = sprintf('%s/%s',dirname($this->dirCurrentView),$strView);
+				if(substr($strView,-4) == '.php'){
+
+					$strOut = $this->processElement($strReference,$arrData);
+					$strRawView = $this->replaceTag($strRawView,$strTag,$strOut,$strFunction);
+				}else{
+
+					if(substr($strView,0,1) == '.'){
+						$strView = sprintf('%s/%s',dirname($this->dirCurrentView),$strView);
+					}
+
+					$strTagData = $this->build($strView,$arrData);
+					$strRawView = $this->replaceTag($strRawView,$strTag,$strTagData,$strFunction);
 				}
 
-				$strTagData = $this->build($strView,$arrData);
-				$strRawView = $this->replaceTag($strRawView,$strTag,$strTagData,$strFunction);
 				break;
 
 			/**
@@ -859,8 +864,12 @@ class View extends BasePackage{
 	        $this->arrElementParams = array_values( $arrParts );
 	    }
 
-	    //Check to see if it is a full path or partial path
-	    $dirElement = (!is_file($dirElement)) ? sprintf("%s%s",$this->dirElements,$dirElement) : $dirElement;
+		if(substr($dirElement,0,1) == '.'){
+			$dirElement = sprintf('%s/%s',dirname($this->dirCurrentView),$dirElement);
+		}else{
+			//Check to see if it is a full path or partial path
+			$dirElement = (!is_file($dirElement)) ? sprintf("%s%s",$this->dirElements,$dirElement) : $dirElement;
+		}
 
 	    if(file_exists($dirElement)){
 
