@@ -26,7 +26,7 @@
 <body>
 	<div class="grid-container">
 		<div class="grid-100 tablet-grid-100 mobile-grid-100">
-			<h1 class="no-top-margin"><img src="{route:interface_uri}/resources/images/logo.png">TwistPHP</h1>
+			<h1 class="no-top-margin"><img src="{resource:core-uri}twist/logos/logo.png">TwistPHP</h1>
 		</div>
 		<div class="grid-80 prefix-10 tablet-grid-90 tablet-prefix-5 mobile-grid-90 mobile-prefix-5 grid-parent">
 			{user:login_form,/manager}

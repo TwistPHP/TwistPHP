@@ -1140,18 +1140,18 @@ class Route extends BasePackage{
 
 					$this->framework()->package()->extend('View', 'route', $arrTags);
 
-					if (!is_null($this->strBaseView) && $arrRoute['base_view'] === true) {
+					if(!is_null($this->strBaseView) && $arrRoute['base_view'] === true){
 
 						$strPageOut = $this->resView->build($this->strBaseView, $arrRoute['data']);
-					} elseif (!is_bool($arrRoute['base_view'])) {
+					}elseif(!is_null($this->strBaseView) && !is_bool($arrRoute['base_view'])){
 
 						$strCustomView = sprintf('%s/%s', $this->resView->getDirectory(), $arrRoute['base_view']);
-						if (file_exists($strCustomView)) {
+						if(file_exists($strCustomView)){
 							$strPageOut = $this->resView->build($arrRoute['base_view'], $arrRoute['data']);
-						} else {
+						}else{
 							throw new \Exception(sprintf("The custom base view (%s) for the route %s '%s' does not exist", $arrRoute['base_view'], $arrRoute['type'], $arrRoute['uri']));
 						}
-					} else {
+					}else{
 						$strPageOut = $arrTags['response'];
 					}
 

@@ -69,6 +69,26 @@ class Manager extends BaseController{
 			return $this->_view('pages/dashboard.tpl',$arrTags);
 		}
 
+		public function cache(){
+
+			$arrTags = array();
+			$arrFiles = scandir(DIR_APP_CACHE);
+
+			foreach($arrFiles as $strEachCache){
+				if(!in_array($strEachCache,array('.','..')) && is_dir(DIR_APP_CACHE.'/'.$strEachCache)){
+
+					$arrFileTags = array(
+						'file' => $strEachCache,
+						'size' => \Twist::File()->directorySize(DIR_APP_CACHE.'/'.$strEachCache)
+					);
+
+					$arrTags['cache'] .= $this->_view('components/cache/each-file.tpl',$arrFileTags);
+				}
+			}
+
+			return $this->_view('pages/cache.tpl',$arrTags);
+		}
+
 		public function settings(){
 
 			$arrSettings = \Twist::framework() -> settings() -> arrSettingsInfo;

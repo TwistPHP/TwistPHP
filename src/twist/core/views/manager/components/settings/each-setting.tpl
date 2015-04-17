@@ -1,2 +1,2 @@
-<label>{data:title}<i class="fa fa-question-circle float-right" title="{data:description}"></i></label>
+<label title="{data:description}">{data:title}</label>
 {data:input}
