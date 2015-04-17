@@ -48,12 +48,18 @@ First create the file /packages/Twitter/info.json in your package folder and fil
 }
 ```
 
-Next create the file /packages/Twitter/install.php in your package folder, this file will be called upon installation of your package.
+Next create the file /packages/Twitter/install.php in your package folder, this file will be called upon installation of your package. In this example we are also creating a database table and adding two new settings.
 
 ```php
 <?php
 
 	Twist::framework()->package()->install();
+	
+	//Optional Line: Add this line if you are adding database tables
+	Twist::framework()->package()->importSQL('install/twitter.sql');
+
+	//Optional Line: Add this line if you are adding framework settings
+	Twist::framework()->package()->importSettings('install/settings.json');
 ```
 
 Further code can be placed in this file, this code will be run upon installation of the package. For example you might want to create some database tables or folders.
