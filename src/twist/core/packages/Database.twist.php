@@ -396,7 +396,7 @@
 			$strSQL = sprintf("SELECT * FROM `%s`.`%s`%s",
 				$this->escapeString($this->strDatabaseName),
 				$this->escapeString($strTable),
-				is_null($strOrderBy) ? '' : sprintf(' ORDER BY `%s` %s',$strOrderBy,$strDirection)
+				is_null($strOrderBy) ? '' : sprintf(' ORDER BY `%s` %s',$this->escapeString($strOrderBy),$this->escapeString($strDirection))
 			);
 
 			if($this->query($strSQL) && $this->getNumberRows()){
@@ -420,7 +420,7 @@
 				$strTable,
 				$this->escapeString($strField),
 				$this->escapeString($mxdValue),
-				($intLimit == 0) ? '' : sprintf(' LIMIT %d',$intLimit)
+				($intLimit == 0) ? '' : sprintf(' LIMIT %d',$this->escapeString($intLimit))
 			);
 
 			if($this->query($strSQL)){
@@ -497,7 +497,7 @@
 				$arrOrder = (strstr($strOrderBy,',')) ? explode(',',$strOrderBy) : array($strOrderBy);
 				$strOrder = ' ORDER BY';
 				foreach($arrOrder as $strEachOrder){
-					$strOrder .= sprintf(' `%s` %s,',$strEachOrder,$strDirection);
+					$strOrder .= sprintf(' `%s` %s,',$this->escapeString($strEachOrder),$this->escapeString($strDirection));
 				}
 				$strOrder = rtrim($strOrder,',');
 			}
@@ -508,8 +508,8 @@
 				$this->escapeString($strField),
 				(is_array($mxdValue) && count($mxdValue)) ? sprintf('IN(%s)',implode(',',$mxdValue)) : sprintf(strstr($mxdValue,'%') ? "LIKE '%s'" : "= '%s'", $this->escapeString($mxdValue)),
 				$strOrder,
-				(!is_null($intLimit)) ? sprintf(' LIMIT %d',$intLimit) : '',
-				(!is_null($intLimit) && !is_null($intOffset)) ? sprintf(',%d',$intOffset) : ''
+				(!is_null($intLimit)) ? sprintf(' LIMIT %d',$this->escapeString($intLimit)) : '',
+				(!is_null($intLimit) && !is_null($intOffset)) ? sprintf(',%d',$this->escapeString($intOffset)) : ''
 			);
 
 			if($this->query($strSQL)){
