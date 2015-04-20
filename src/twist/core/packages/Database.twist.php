@@ -389,14 +389,14 @@
 		 * @param $strOrderBy
 		 * @return array
 		 */
-		public function getAll($strTable,$strOrderBy = null){
+		public function getAll($strTable,$strOrderBy = null,$strDirection = 'ASC'){
 
 			$arrOut = array();
 
 			$strSQL = sprintf("SELECT * FROM `%s`.`%s`%s",
 				$this->escapeString($this->strDatabaseName),
 				$this->escapeString($strTable),
-				is_null($strOrderBy) ? '' : sprintf(' ORDER BY `%s` ASC',$strOrderBy)
+				is_null($strOrderBy) ? '' : sprintf(' ORDER BY `%s` %s',$strOrderBy,$strDirection)
 			);
 
 			if($this->query($strSQL) && $this->getNumberRows()){
@@ -488,7 +488,7 @@
 		 * @return array
 		 * @throws \Exception
 		 */
-		public function find($strTable,$mxdValue,$strField,$strOrderBy = null,$intLimit = null,$intOffset = null){
+		public function find($strTable,$mxdValue,$strField,$strOrderBy = null,$strDirection = 'ASC',$intLimit = null,$intOffset = null){
 
 			$arrRecord = array();
 
@@ -497,7 +497,7 @@
 				$arrOrder = (strstr($strOrderBy,',')) ? explode(',',$strOrderBy) : array($strOrderBy);
 				$strOrder = ' ORDER BY';
 				foreach($arrOrder as $strEachOrder){
-					$strOrder .= sprintf(' `%s` ASC,',$strEachOrder);
+					$strOrder .= sprintf(' `%s` %s,',$strEachOrder,$strDirection);
 				}
 				$strOrder = rtrim($strOrder,',');
 			}
