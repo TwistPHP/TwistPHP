@@ -791,6 +791,8 @@
 				foreach($arrQueries as $strQuery){
 					if(trim($strQuery) != ''){
 						$strPrefix = (count($this->arrDatabaseCustomSettings)) ? $this->arrDatabaseCustomSettings['table_prefix'] : DATABASE_TABLE_PREFIX;
+						$strDatabase = (count($this->arrDatabaseCustomSettings)) ? $this->arrDatabaseCustomSettings['database'] : DATABASE_NAME;
+						$strQuery = str_replace('/*DATABASE_NAME*/',$strDatabase,$strQuery);
 						$strQuery = str_replace('/*TABLE_PREFIX*/`','`'.$strPrefix,$strQuery);
 
 						if(!$this->_databaseQuery($strQuery)){
