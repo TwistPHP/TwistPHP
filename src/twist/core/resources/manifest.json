@@ -61,9 +61,19 @@
 		}
 	},
 	"twist/ajax": {
-		"standard": {
+		"all": {
 			"default": true,
 			"css": ["css/twist-ajax.css"],
+			"js": ["js/twist-ajax.min.js"]
+		},
+		"css": {
+			"default": false,
+			"css": ["css/twist-ajax.css"],
+			"js": []
+		},
+		"js": {
+			"default": false,
+			"css": [],
 			"js": ["js/twist-ajax.min.js"]
 		}
 	},
