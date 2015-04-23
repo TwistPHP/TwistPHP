@@ -319,7 +319,7 @@ class User extends BasePackage{
 			if($intUserID > 0){
 				\Twist::Session()->data('site-login_message','Thank you for your registration, your password has been emailed to you');
 			}else{
-				\Twist::Session()->data('site-login_error_message','Failed to register user');
+				\Twist::Session()->data('site-register_error_message','Failed to register user');
 			}
 		}
 
@@ -826,8 +826,6 @@ class User extends BasePackage{
 
 		switch($strReference){
 
-			case'login_register_form':
-				$strDefaultLogin = 'login-register.tpl';
 			case'login_form':
 
 				if($this->loggedIn()){
@@ -874,7 +872,15 @@ class User extends BasePackage{
 				break;
 
 			case'registration_form':
-				$strData = $this->resTemplate->build( 'register.tpl', array( 'login_page' => $strLoginPage ),true );
+                $arrTags = array(
+                    'login_page' => $strLoginPage,
+                    'register_error_message' => \Twist::Session()->data('site-register_error_message')
+                );
+
+                //Remove the registration error
+                \Twist::Session()->data('site-register_error_message',null);
+
+				$strData = $this->resTemplate->build( 'register.tpl', $arrTags, true );
 				break;
 
 			case'devices_form':
