@@ -690,7 +690,7 @@ class Route extends BasePackage{
 	 *
 	 * @return array Returns an array of data relating to the current route
 	 */
-	public function current(){
+	public function current($strReturnKey = null){
 
 		$arrOut = $arrUriParameters = array();
 		$arrMethodRoutes = $this->currentMethodRoutes();
@@ -795,7 +795,7 @@ class Route extends BasePackage{
 			}
 		}
 
-		return $arrOut;
+		return ( !is_null( $strReturnKey ) && array_key_exists( $strReturnKey, $arrOut ) ) ? $arrOut[$strReturnKey] : $arrOut;
 	}
 
 	public function currentRestriction($strCurrentURI){

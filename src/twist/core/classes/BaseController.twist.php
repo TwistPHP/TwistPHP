@@ -77,8 +77,8 @@
 			}
 		}
 
-		protected function _route(){
-			return $_SERVER['TWIST_ROUTE'];
+		protected function _route($strReturnKey = null){
+			return array_key_exists($strReturnKey, $_SERVER['TWIST_ROUTE']) ? $_SERVER['TWIST_ROUTE'][$strReturnKey] : $_SERVER['TWIST_ROUTE'];
 		}
 
 		protected function _title($strTitle = null){
@@ -100,9 +100,9 @@
 		protected function _var($strVarKey = null){
 
 			if(is_null($strVarKey)){
-				return $_SERVER['TWIST_ROUTE']['vars'];
+				return $this->_route('vars');
 			}else{
-				return (array_key_exists($strVarKey,$_SERVER['TWIST_ROUTE']['vars'])) ? $_SERVER['TWIST_ROUTE']['vars'][$strVarKey] : null;
+				return (array_key_exists($strVarKey,$this->_route('vars'))) ? $_SERVER['TWIST_ROUTE']['vars'][$strVarKey] : null;
 			}
 		}
 
