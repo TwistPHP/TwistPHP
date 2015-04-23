@@ -4,6 +4,6 @@
 	<p>Remember to check your spam and junk folders.</p>
 	<p>Email: <strong>{session:user/email}</strong></p>
 	<input type="hidden" required name="verification_email" value="{session:user/email}" size="255">
-	<button type="submit" tabindex="1">Resend Verification Email</button>
+	<button type="submit" tabindex="501">Resend Verification Email</button>
 	<div class="clear"></div>
 </form>

@@ -2,11 +2,11 @@
 	<h6 class="no-top-padding">Change Your Password</h6>
 	<p class="error" style="display: {data:error_message!=null?'block':'none'};">{data:error_message}</p>
 	<label class="shadowCurrentPassword">Your Current Password</label>
-	<input type="password" name="current_password" value="" tabindex="1" size="255" placeholder="Current Password" required autocomplete="off">
+	<input type="password" name="current_password" value="" tabindex="401" size="255" placeholder="Current Password" required autocomplete="off">
 	<label class="shadowPassword">Choose New Password</label>
-	<input type="password" name="password" value="" tabindex="2" size="255" placeholder="New Password" required autocomplete="off">
+	<input type="password" name="password" value="" tabindex="402" size="255" placeholder="New Password" required autocomplete="off">
 	<label class="shadowConfirm">Confirm New Password</label>
-	<input type="password" name="confirm_password" value="" tabindex="3" size="255" placeholder="Confirm Password" required autocomplete="off">
-	<button type="submit" tabindex="3">Change Password</button>
+	<input type="password" name="confirm_password" value="" tabindex="403" size="255" placeholder="Confirm Password" required autocomplete="off">
+	<button type="submit" tabindex="404">Change Password</button>
 	<div class="clear"></div>
 </form>

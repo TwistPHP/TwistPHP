@@ -44,6 +44,7 @@ class User extends BasePackage{
 
 	protected $blUserValidatedSession = false;
 	protected $intUserID = 0;
+    private $blRequestsProcessed = false;
 
 	public function __construct(){
 
@@ -289,100 +290,108 @@ class User extends BasePackage{
 
 	protected function processRequests(){
 
-		//Process the forgotten password request
-		if(array_key_exists('forgotten_email',$_POST) && $_POST['forgotten_email'] != ''){
-			$arrUserData = $this->getByEmail($_POST['forgotten_email']);
+        if( !$this->blRequestsProcessed ) {
+            //Process the forgotten password request
+            if(array_key_exists('forgotten_email',$_POST) && $_POST['forgotten_email'] != ''){
+                $arrUserData = $this->getByEmail($_POST['forgotten_email']);
 
-			//Now if the email exists send out the reset password email.
-			if(is_array($arrUserData) && count($arrUserData) > 0){
+                //Now if the email exists send out the reset password email.
+                if(is_array($arrUserData) && count($arrUserData) > 0){
 
-				$resUser = $this->get($arrUserData['id']);
-				$resUser->resetPassword();
-				$resUser->commit();
+                    $resUser = $this->get($arrUserData['id']);
+                    $resUser->resetPassword();
+                    $resUser->commit();
 
-				\Twist::Session()->data('site-login_message','A temporary password has been emailed to you.');
-				$this->goToPage('./', false );
-			}
-		}
+                    \Twist::Session()->data('site-login_message','A temporary password has been emailed to you.');
+                    $this->goToPage('./', false );
+                }
+            }
 
-		//Process the register user request
-		if(array_key_exists('register',$_POST) && $_POST['register'] != ''){
+            //Process the register user request
+            if(array_key_exists('register',$_POST) && $_POST['register'] != ''){
 
-			$resUser = $this->create();
-			$resUser->email($_POST['email']);
-			$resUser->firstname($_POST['firstname']);
-			$resUser->surname($_POST['lastname']);
-			$resUser->level(10);
-			$resUser->resetPassword();
-			$intUserID = $resUser->commit();
+                $resUser = $this->create();
+                $resUser->email($_POST['email']);
+                $resUser->firstname($_POST['firstname']);
+                $resUser->surname($_POST['lastname']);
+                $resUser->level(10);
+                $resUser->resetPassword();
+                $intUserID = $resUser->commit();
 
-			if($intUserID > 0){
-				\Twist::Session()->data('site-login_message','Thank you for your registration, your password has been emailed to you');
-			}else{
-				\Twist::Session()->data('site-register_error_message','Failed to register user');
-			}
-		}
+                if($intUserID > 0){
+                    \Twist::Session()->data('site-register_message','Thank you for your registration, your password has been emailed to you');
+                    unset( $_POST['email'] );
+                    unset( $_POST['firstname'] );
+                    unset( $_POST['lastname'] );
+                    unset( $_POST['register'] );
+                }else{
+                    \Twist::Session()->data('site-register_error_message','Failed to register user');
+                }
+            }
 
-		//Resend a new verification code
-		if(array_key_exists('verification_email',$_POST) && $_POST['verification_email'] != ''){
-			$arrUserData = $this->getByEmail($_POST['verification_email']);
+            //Resend a new verification code
+            if(array_key_exists('verification_email',$_POST) && $_POST['verification_email'] != ''){
+                $arrUserData = $this->getByEmail($_POST['verification_email']);
 
-			//Now if the email exists send out the reset password email.
-			if(is_array($arrUserData) && count($arrUserData) > 0){
+                //Now if the email exists send out the reset password email.
+                if(is_array($arrUserData) && count($arrUserData) > 0){
 
-				$resUser = $this->get($arrUserData['id']);
-				$resUser->requireVerification();
-				$resUser->commit();
-			}
-		}
+                    $resUser = $this->get($arrUserData['id']);
+                    $resUser->requireVerification();
+                    $resUser->commit();
+                }
+            }
 
-		if(array_key_exists('password',$_POST) && array_key_exists('confirm_password',$_POST)){
+            if(array_key_exists('password',$_POST) && array_key_exists('confirm_password',$_POST)){
 
-			if($this->loggedIn()){
+                if($this->loggedIn()){
 
-				if($_POST['password'] == $_POST['confirm_password']){
+                    if($_POST['password'] == $_POST['confirm_password']){
 
-					if(\Twist::Session()->data('user-temp_password') == '0'){
+                        if(\Twist::Session()->data('user-temp_password') == '0'){
 
-						if(array_key_exists('current_password',$_POST)){
+                            if(array_key_exists('current_password',$_POST)){
 
-							$strNewPassword = $_POST['password'];
+                                $strNewPassword = $_POST['password'];
 
-							//Change the users password and re-log them in (Only for none-temp password users)
-							$this->changePassword(\Twist::Session()->data('user-id'),$strNewPassword,$_POST['current_password'],true);
+                                //Change the users password and re-log them in (Only for none-temp password users)
+                                $this->changePassword(\Twist::Session()->data('user-id'),$strNewPassword,$_POST['current_password'],true);
 
-							//Remove the two posted password vars
-							unset($_POST['password']);
-							unset($_POST['current_password']);
+                                //Remove the two posted password vars
+                                unset($_POST['password']);
+                                unset($_POST['current_password']);
 
-							$this->authenticate(\Twist::Session()->data('user-email'),$strNewPassword,$this->strLoginUrl,true);
-							$this->goToPage('./',false);
-						}
-					}else{
+                                $this->authenticate(\Twist::Session()->data('user-email'),$strNewPassword,$this->strLoginUrl,true);
+                                $this->goToPage('./',false);
+                            }
+                        }else{
 
-						$strNewPassword = $_POST['password'];
+                            $strNewPassword = $_POST['password'];
 
-						//Change the users password and re-log them in
-						$this->updatePassword(\Twist::Session()->data('user-id'),$strNewPassword);
+                            //Change the users password and re-log them in
+                            $this->updatePassword(\Twist::Session()->data('user-id'),$strNewPassword);
 
-						//Remove the posted password and reset the session var
-						unset($_POST['password']);
-						\Twist::Session()->data('user-temp_password','0');
+                            //Remove the posted password and reset the session var
+                            unset($_POST['password']);
+                            \Twist::Session()->data('user-temp_password','0');
 
-						$this->authenticate(\Twist::Session()->data('user-email'),$strNewPassword,$this->strLoginUrl,true);
-						$this->goToPage('./',false);
-					}
+                            $this->authenticate(\Twist::Session()->data('user-email'),$strNewPassword,$this->strLoginUrl,true);
+                            $this->goToPage('./',false);
+                        }
 
-				}else{
-					\Twist::Session()->data('site-error_message','The passwords you entered do not match');
-					$this->goToPage('?change',false);
-				}
-			}
-		}
+                    }else{
+                        \Twist::Session()->data('site-error_message','The passwords you entered do not match');
+                        $this->goToPage('?change',false);
+                    }
+                }
+            }
 
-		if(array_key_exists('verify',$_GET) && array_key_exists('verify',$_GET) && $_GET['verify'] != ''){
-			$this->verifyEmail($_GET['verify']);
-		}
+            if(array_key_exists('verify',$_GET) && array_key_exists('verify',$_GET) && $_GET['verify'] != ''){
+                $this->verifyEmail($_GET['verify']);
+            }
+
+            $this->blRequestsProcessed = true;
+        }
 	}
 
 	/**
@@ -453,8 +462,10 @@ class User extends BasePackage{
 		\Twist::Session()->remove();
 
 		//Null the logout message
-		\Twist::Session()->data('site-login_error_message',null);
-		\Twist::Session()->data('site-login_message',null);
+		\Twist::Session()->remove('site-login_error_message');
+		\Twist::Session()->remove('site-login_message');
+		\Twist::Session()->remove('site-register_error_message');
+		\Twist::Session()->remove('site-register_message');
 
 		$this->blUserValidatedSession = false;
 		$this->resCurrentUser = null;
@@ -836,12 +847,12 @@ class User extends BasePackage{
 					$arrTags = array(
 						'login_page' => $strLoginPage,
 						'login_error_message' => \Twist::Session()->data('site-login_error_message'),
-						'login_message' => \Twist::Session()->data('site-login_message'),
+						'login_message' => \Twist::Session()->data('site-login_message')
 					);
 
 					//Remove the login error
-					\Twist::Session()->data('site-login_message',null);
-					\Twist::Session()->data('site-login_error_message',null);
+					\Twist::Session()->remove('site-login_message');
+					\Twist::Session()->remove('site-login_error_message');
 
 					$strData = $this->resTemplate->build( $strDefaultLogin, $arrTags );
 				}
@@ -874,11 +885,13 @@ class User extends BasePackage{
 			case'registration_form':
                 $arrTags = array(
                     'login_page' => $strLoginPage,
-                    'register_error_message' => \Twist::Session()->data('site-register_error_message')
+                    'register_error_message' => \Twist::Session()->data('site-register_error_message'),
+                    'register_message' => \Twist::Session()->data('site-register_message')
                 );
 
                 //Remove the registration error
-                \Twist::Session()->data('site-register_error_message',null);
+                \Twist::Session()->remove('site-register_message');
+                \Twist::Session()->remove('site-register_error_message');
 
 				$strData = $this->resTemplate->build( 'register.tpl', $arrTags, true );
 				break;
