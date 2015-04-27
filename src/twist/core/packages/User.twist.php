@@ -299,7 +299,7 @@ class User extends BasePackage{
                 if(is_array($arrUserData) && count($arrUserData) > 0){
 
                     $resUser = $this->get($arrUserData['id']);
-                    $resUser->resetPassword();
+                    $resUser->resetPassword(true);
                     $resUser->commit();
 
                     \Twist::Session()->data('site-login_message','A temporary password has been emailed to you.');

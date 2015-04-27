@@ -33,6 +33,7 @@ class UserObject{
 	protected $arrCustomData = array();
 	protected $resParentClass = null;
 	protected $blNewAccount = false;
+	protected $blOverrideSendPasswordEmail = false;
 
 	private $strTempPassword = null;
 
@@ -78,7 +79,7 @@ class UserObject{
 	public function commit(){
 
 		$blSendVerification = ($this->resDatabaseRecord->get('email') != $this->arrOriginalData['email'] || $this->resDatabaseRecord->get('verification_code') != $this->arrOriginalData['verification_code']);
-		$blSendPassword = (\Twist::framework()->setting('USER_PASSWORD_CHANGE_EMAIL') && $this->resDatabaseRecord->get('password') != $this->arrOriginalData['password']);
+		$blSendPassword = (\Twist::framework()->setting('USER_PASSWORD_CHANGE_EMAIL') && $this->resDatabaseRecord->get('password') != $this->arrOriginalData['password']) || $this->blOverrideSendPasswordEmail;
 
 		if(is_null($this->resDatabaseRecord->get('password'))){
 			$this->resetPassword();
@@ -121,9 +122,9 @@ class UserObject{
 			}
 
 			if($this->blNewAccount){
-				$this->sendWelcomeEmail();
 	            $this->resDatabaseRecord->set('joined',\Twist::DateTime()->date('Y-m-d H:i:s'));
 	            $this->resDatabaseRecord->commit();
+				$this->sendWelcomeEmail();
 				$this->blNewAccount = false;
 			}else{
 
@@ -132,6 +133,7 @@ class UserObject{
 				}
 
 				if($blSendPassword){
+					$this->blOverrideSendPasswordEmail = false;
 					$this->sendPasswordEmail();
 				}
 			}
@@ -233,9 +235,11 @@ class UserObject{
 
 	/**
 	 * When the user has forgotten their password this function will easily allow a new password to be generated and and email with the users new temp password to be sent to their address.
-	 * @return bool
+	 * @param bool $blOverrideSendEmail
+	 * @return string
+	 * @throws \Exception
 	 */
-	public function resetPassword(){
+	public function resetPassword($blOverrideSendEmail = false){
 
 		//Generate a new random password and send email
 		$strPassword = \Twist::framework()->Tools()->randomString(16);
@@ -244,6 +248,9 @@ class UserObject{
 		$this->strTempPassword = $strPassword;
 		$this->resDatabaseRecord->set('password',sha1($strPassword));
 		$this->resDatabaseRecord->set('temp_password',1);
+
+		//Set this var so that when a functionality like forgotten password is used as password email will be sent regardless of the USER_PASSWORD_CHANGE_EMAIL setting.
+		$this->blOverrideSendPasswordEmail = $blOverrideSendEmail;
 
 		return $strPassword;
 	}
