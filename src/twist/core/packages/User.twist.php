@@ -207,10 +207,10 @@ class User extends BasePackage{
 
 						$this->processUserLoginSession($intUserID,$strSessionKey);
 					}else{
-						\Twist::Session()->data('site-login_error_message','Invalid login credentials, please try again.');
+						\Twist::Session()->data('site-login_error_message','Invalid login credentials, please try again');
 					}
 				}else{
-					\Twist::Session()->data('site-login_error_message','Invalid login credentials, please try again.');
+					\Twist::Session()->data('site-login_error_message','Invalid login credentials, please try again');
 				}
 			}
 		}
@@ -279,7 +279,7 @@ class User extends BasePackage{
 			}
 		}else{
 			$objSession->remove();
-			$objSession->data('site-login_error_message','Your account has been disabled.');
+			$objSession->data('site-login_error_message','Your account has been disabled');
 		}
 
 		//Destroy the var
@@ -302,7 +302,7 @@ class User extends BasePackage{
                     $resUser->resetPassword(true);
                     $resUser->commit();
 
-                    \Twist::Session()->data('site-login_message','A temporary password has been emailed to you.');
+                    \Twist::Session()->data('site-login_message','A temporary password has been emailed to you');
                     $this->goToPage('./', false );
                 }
             }
@@ -702,7 +702,7 @@ class User extends BasePackage{
 
 				if(\Twist::Database()->query($strSQL) && \Twist::Database()->getAffectedRows()){
 					$blOut = true;
-					\Twist::Session()->data('site-login_message','Your account has been verified.');
+					\Twist::Session()->data('site-login_message','Your account has been verified');
 				}
 			}
 		}
