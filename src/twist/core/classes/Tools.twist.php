@@ -450,12 +450,6 @@
         function zipStrings( $strString1, $strString2 ) {
             $strOut = '';
 
-            echo $strString1;
-            echo '<br>';
-            echo $strString2;
-            echo '<br>';
-
-
             $arrString1Chars = str_split( $strString1 );
             $arrString2Chars = str_split( $strString2 );
 
