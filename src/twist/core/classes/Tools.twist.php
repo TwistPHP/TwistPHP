@@ -408,4 +408,36 @@
 
 			return $strOut;
 		}
+
+		/**
+		 * Generate a URL-friendly slug of a string
+		 * @param string $strRaw The input string
+		 * @param array $arrExistingSlugs Array of existing slugs to avoid collisions with
+		 * @param null $intMaxLength Max length for the returned slug
+		 * @return mixed|string
+		 */
+		public function slug($strRaw, $arrExistingSlugs = array(), $intMaxLength = null) {
+			$strSlug = preg_replace('~[^\\pL\d]+~u', '-', $strRaw);
+			while(strstr($strSlug, '--' )){
+				$strSlug = str_replace('--', '-', $strSlug);
+			}
+			$strSlug = iconv('utf-8', 'us-ascii//TRANSLIT',  trim($strSlug, '-'));
+			$strSlug = preg_replace('~[^-\w]+~', '', strtolower($strSlug));
+			$strSlug = strlen($strSlug) ? $strSlug : '-';
+
+			if(!is_null($intMaxLength)){
+				$strSlug = substr($strSlug, 0, $intMaxLength);
+			}
+
+			if(in_array($strSlug, $arrExistingSlugs)){
+                $intUniq = 1;
+                do{
+                    $intUniq++;
+                    $strTestSlug = sprintf('%s-%d', (is_null($intMaxLength) ? $strSlug : substr($strSlug, 0, -(strlen($intUniq) + 1))), $intUniq);
+                }while(in_array($strTestSlug, $arrExistingSlugs));
+                $strSlug = $strTestSlug;
+			}
+
+			return $strSlug;
+		}
 	}
