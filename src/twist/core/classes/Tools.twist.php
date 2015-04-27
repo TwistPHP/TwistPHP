@@ -440,4 +440,39 @@
 
 			return $strSlug;
 		}
+
+        /**
+         * Create a 'zipped' string of characters (useful for sha1() + uniqid() to avoid similar-looking uniqid()'s)
+         * @param $strString1
+         * @param $strString2
+         * @return string
+         */
+        function zipStrings( $strString1, $strString2 ) {
+            $strOut = '';
+
+            echo $strString1;
+            echo '<br>';
+            echo $strString2;
+            echo '<br>';
+
+
+            $arrString1Chars = str_split( $strString1 );
+            $arrString2Chars = str_split( $strString2 );
+
+            if( count( $arrString1Chars ) < count( $arrString2Chars ) ) {
+                $intSmallerArray = count( $arrString1Chars );
+                $arrLargerArray = $arrString2Chars;
+            } else {
+                $intSmallerArray = count( $arrString2Chars );
+                $arrLargerArray = $arrString1Chars;
+            }
+
+            for( $intChar = 0; $intChar < $intSmallerArray; $intChar++ ) {
+                $strOut .= $arrString1Chars[$intChar] . $arrString2Chars[$intChar];
+            }
+
+            $strOut .= substr( implode( '', $arrLargerArray ), $intSmallerArray );
+
+            return $strOut;
+        }
 	}
