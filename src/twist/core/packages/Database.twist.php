@@ -174,7 +174,7 @@
 				if(\Twist::Command()->isEnabled()){
 
 					//Run the MYSQL import command on command line
-					$strCommand = sprintf('mysql -h%s -u%s -p%s %s < %s',
+					$strCommand = sprintf('/usr/bin/mysql -h%s -u%s -p%s %s < %s',
 						DATABASE_HOST,
 						DATABASE_USERNAME,
 						DATABASE_PASSWORD,
