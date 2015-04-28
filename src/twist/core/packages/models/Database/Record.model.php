@@ -160,6 +160,15 @@
 
 				if(substr($strSQL,0,6) == 'INSERT'){
 					$mxdOut = $objDatabase->getInsertID();
+
+					//Find an auto increment field and update the ID in the record
+					foreach($this->arrStructure['columns'] as $strField => $arrOptions){
+						if($arrOptions['auto_increment'] == '1'){
+							$this->arrOriginalRecord[$strField] = $mxdOut;
+							$this->arrRecord[$strField] = $mxdOut;
+							break;
+						}
+					}
 				}else{
 					if($objDatabase->getAffectedRows() == 0){
 						$mxdOut = true;
