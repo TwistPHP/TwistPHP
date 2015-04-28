@@ -28,7 +28,7 @@
 		protected $arrAliasURIs = array();
 		protected $arrReplaceURIs = array();
 
-		public function _extended(){
+		final public function _extended(){
 			return true;
 		}
 
@@ -42,23 +42,23 @@
 			return false;
 		}
 
-		protected function _aliasURI($strURI,$strFunctionName){
+        final protected function _aliasURI($strURI,$strFunctionName){
 			$this->arrAliasURIs[$strURI] = $strFunctionName;
 		}
 
-		public function _getAliases(){
+        final public function _getAliases(){
 			return $this->arrAliasURIs;
 		}
 
-		protected function _replaceURI($strURI,$strFunctionName){
+        final protected function _replaceURI($strURI,$strFunctionName){
 			$this->arrReplaceURIs[$strFunctionName] = $strURI;
 		}
 
-		public function _getReplacements(){
+        final public function _getReplacements(){
 			return $this->arrReplaceURIs;
 		}
 
-		protected function _callFunction($strCallFunctionName){
+        final protected function _callFunction($strCallFunctionName){
 
 			$arrControllerFunctions = array();
 			foreach(get_class_methods($this) as $strFunctionName){
@@ -77,27 +77,27 @@
 			}
 		}
 
-		protected function _route($strReturnKey = null){
+        final protected function _route($strReturnKey = null){
 			return array_key_exists($strReturnKey, $_SERVER['TWIST_ROUTE']) ? $_SERVER['TWIST_ROUTE'][$strReturnKey] : $_SERVER['TWIST_ROUTE'];
 		}
 
-		protected function _title($strTitle = null){
+        final protected function _title($strTitle = null){
 			return (is_null($strTitle)) ? $_SERVER['TWIST_ROUTE_TITLE'] : $_SERVER['TWIST_ROUTE_TITLE'] = $strTitle;
 		}
 
-		protected function _description($strDescription = null){
+        final protected function _description($strDescription = null){
 			return (is_null($strDescription)) ? $_SERVER['TWIST_ROUTE_DESCRIPTION'] : $_SERVER['TWIST_ROUTE_DESCRIPTION'] = $strDescription;
 		}
 
-		protected function _author($strAuthor = null){
+        final protected function _author($strAuthor = null){
 			return (is_null($strAuthor)) ? $_SERVER['TWIST_ROUTE_AUTHOR'] : $_SERVER['TWIST_ROUTE_AUTHOR'] = $strAuthor;
 		}
 
-		protected function _keywords($strKeywords = null){
+        final protected function _keywords($strKeywords = null){
 			return (is_null($strKeywords)) ? $_SERVER['TWIST_ROUTE_KEYWORDS'] : $_SERVER['TWIST_ROUTE_KEYWORDS'] = $strKeywords;
 		}
 
-		protected function _var($strVarKey = null){
+        final protected function _var($strVarKey = null){
 
 			if(is_null($strVarKey)){
 				return $this->_route('vars');
@@ -106,13 +106,11 @@
 			}
 		}
 
-		protected function _model($strModelPath, &$resModel=null){
-			$strModelPath = (strstr($strModelPath,'\\')) ? $strModelPath : sprintf('Twist\\Models\\%s',$strModelPath);
-			$resModel = new $strModelPath();
-			return $resModel;
+        final protected function _view($dirView,$arrViewTags = null,$blRemoveUnusedTags = false){
+			return \Twist::View()->build($dirView,$arrViewTags,$blRemoveUnusedTags);
 		}
 
-		protected function _view($dirView,$arrViewTags = null,$blRemoveUnusedTags = false){
-			return \Twist::View()->build($dirView,$arrViewTags,$blRemoveUnusedTags);
+        final protected function _render($dirView,$arrViewTags = null,$blRemoveUnusedTags = false){
+			return $this->_view($dirView,$arrViewTags,$blRemoveUnusedTags);
 		}
 	}
