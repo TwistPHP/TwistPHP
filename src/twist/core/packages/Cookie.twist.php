@@ -70,7 +70,7 @@
 		 * @param string $domain
 		 * @return bool
 		 */
-		public function set($strName, $mxdValue, $intExpiry = self::OneYear, $strPath = '/', $strDomain = false){
+		public function set($strName, $mxdValue, $intExpiry = self::ONEWYEAR, $strPath = '/', $strDomain = false){
 
 			$blOut = false;
 
