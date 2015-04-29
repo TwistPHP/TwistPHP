@@ -30,14 +30,6 @@
 	 */
 	class Cookie extends BasePackage{
 
-		const SESSION = null;
-		const ONEDAY = 86400;
-		const SEVENDAYS = 604800;
-		const THRITYDAYS = 2592000;
-		const SIXMONTHS = 15811200;
-		const ONEYEAR = 31536000;
-		const LIFETIME = -1; // 2030-01-01 00:00:00
-
 		/**
 		 * Returns true if there is a cookie with this name.
 		 *
@@ -70,7 +62,7 @@
 		 * @param string $domain
 		 * @return bool
 		 */
-		public function set($strName, $mxdValue, $intExpiry = self::ONEWYEAR, $strPath = '/', $strDomain = false){
+		public function set($strName, $mxdValue, $intExpiry = null, $strPath = '/', $strDomain = false){
 
 			$blOut = false;
 
@@ -81,7 +73,7 @@
 				}
 
 				if($intExpiry === -1){
-					$intExpiry = 1893456000; // Lifetime = 2030-01-01 00:00:00
+					$intExpiry = strtotime('+99 Years');
 				}elseif (is_numeric($intExpiry)){
 					$intExpiry += time();
 				}else{

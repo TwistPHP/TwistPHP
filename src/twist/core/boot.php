@@ -49,8 +49,6 @@
 	Autoload::registerPath('\\Twist\\Core\\Classes\\','twist/core/classes','.twist.php');
 	Autoload::registerPath('\\Twist\\Core\\Controllers\\','twist/core/controllers','.controller.php');
 
-
-
 	require_once sprintf('%s/classes/Twist.twist.php',dirname(__FILE__));
 
 	$arrShadowCoreInfo = json_decode(file_get_contents(sprintf('%s/../info.json',dirname(__FILE__))),true);

@@ -103,6 +103,14 @@
 		"options":"",
 		"null":0
 	},
+	"DEFAULT_CURRENCY":{
+		"title":"Default Currency",
+		"description":"Set to the default currency ISO code of your site",
+		"default":"GBP",
+		"type":"currency_iso",
+		"options":"",
+		"null":0
+	},
 	"LANGUAGE_FALLBACK":{
 		"title":"Language Fallback",
 		"description":"If no content is available in the selected language fall back to default language",
