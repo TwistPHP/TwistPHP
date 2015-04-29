@@ -476,7 +476,7 @@ class User extends BasePackage{
 	}
 
 	/**
-	 * Get the current users User ID
+	 * Get the current users user ID
 	 * @return null
 	 */
 	public function currentID(){
@@ -484,7 +484,7 @@ class User extends BasePackage{
 	}
 
 	/**
-	 * Get the current users User Level
+	 * Get the current users user level
 	 * @return null
 	 */
 	public function currentLevel(){
@@ -494,6 +494,17 @@ class User extends BasePackage{
 	protected function loadCurrentUser(){
 		$intUserID = $this->currentID();
 		$this->resCurrentUser = (!is_null($intUserID) && $intUserID > 0) ? $this->get($intUserID) : null;
+	}
+
+    /**
+     * Get an object of the current user
+     * @return null
+     */
+	public function current(){
+        if(is_null($this->resCurrentUser)) {
+            $this->loadCurrentUser();
+        }
+		return $this->resCurrentUser;
 	}
 
 	/**
