@@ -184,6 +184,11 @@
 			 */
 			protected static function autoAuthenticate(){
 
+				//Check for rouge sessions and kill if required
+				if(Twist::User()->currentID() && !Twist::User()->loggedIn()){
+					Twist::User()->processLogout(null);
+				}
+
 				//If auto authenticate is enabled then authenticate the user at this point
 				if(Twist::framework()->setting('USER_AUTO_AUTHENTICATE')){
 					Twist::User()->authenticate();

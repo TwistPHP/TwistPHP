@@ -99,7 +99,7 @@ class User extends BasePackage{
 				$this->intUserID = $this->objUserSession->validateCookie($blUpdateKey);
 			}
 
-			if($this->intUserID > 0){
+			if($this->intUserID > 0) {
 				$this->processUserSession($this->intUserID);
 				$this->blUserValidatedSession = true;
 			}
