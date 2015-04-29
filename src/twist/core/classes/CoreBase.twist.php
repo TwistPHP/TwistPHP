@@ -78,6 +78,13 @@
 				return $resTwistModule;
 			}
 
+			public static function Cookie(){
+
+				$resTwistModule = (!Instance::isObject('pkgCookie')) ? new Packages\Cookie() : Instance::retrieveObject('pkgCookie');
+				Instance::storeObject('pkgCookie',$resTwistModule);
+				return $resTwistModule;
+			}
+
 			public static function CSV(){
 
 				$resTwistModule = (!Instance::isObject('pkgCSV')) ? new Packages\CSV() : Instance::retrieveObject('pkgCSV');
