@@ -37,6 +37,10 @@
 			return false;
 		}
 
+		public function _index(){
+			return $this->_default();
+		}
+
 		public function _fallback(){
 			Error::errorPage(404);
 			return false;
