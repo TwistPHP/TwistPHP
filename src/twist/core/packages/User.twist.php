@@ -909,13 +909,27 @@ class User extends BasePackage{
 
 			case'devices_form':
 
+				if(array_key_exists('save-device',$_GET) && array_key_exists('device-name',$_POST)){
+					$this->objUserSession->editDevice($this->currentID(),$_GET['save-device'],$_POST['device-name']);
+				}
+
+				if(array_key_exists('forget-device',$_GET)){
+					$this->objUserSession->forgetDevice($this->currentID(),$_GET['forget-device']);
+				}
+
+				$arrCurrentDevices = $this->objUserSession->getCurrentDevice($this->currentID());
 				$arrDevices = $this->objUserSession->getDeviceList($this->currentID());
+
 				$strDeviceList = '';
 				foreach($arrDevices as $arrEachDevice){
-					$strDeviceList .= sprintf('<dt>%s</dt><dd>%s</dd><dd><a href="">forget</a></dd>',
-						($arrEachDevice['device_name'] == '') ? 'Untitled' : $arrEachDevice['device_name'],
-						\Twist::DateTime()->prettyAge($arrEachDevice['last_login'])
-					);
+
+					$arrEachDevice['current'] = ($arrCurrentDevices['id'] == $arrEachDevice['id']) ? true : false;
+
+					if(array_key_exists('edit-device',$_GET) && $arrEachDevice['device'] == $_GET['edit-device']){
+						$strDeviceList .= $this->resTemplate->build('device-each-edit.tpl',$arrEachDevice);
+					}else{
+						$strDeviceList .= $this->resTemplate->build('device-each.tpl',$arrEachDevice);
+					}
 				}
 
 				$strData = $this->resTemplate->build( 'devices.tpl', array( 'login_page' => $strLoginPage, 'device_list' => $strDeviceList ),true );

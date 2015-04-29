@@ -172,6 +172,49 @@ class UserSession{
 	}
 
 	/**
+	 * Edit the name of a given device
+	 */
+	public function editDevice($intUserID,$mxdDevice,$strDeviceName){
+
+		$objDB = \Twist::Database();
+
+		$strSQL = sprintf("UPDATE `%s`.`%suser_sessions`
+							SET `device_name` = '%s'
+							WHERE `device` = '%s'
+							AND `user_id` = %d",
+			DATABASE_NAME,
+			DATABASE_TABLE_PREFIX,
+			$objDB->escapeString($strDeviceName),
+			$objDB->escapeString($mxdDevice),
+			$objDB->escapeString($intUserID)
+		);
+
+		$objDB->query($strSQL);
+	}
+
+	/**
+	 * Forget a device and if it is current device log the user out.
+	 */
+	public function forgetDevice($intUserID,$mxdDevice){
+
+		$arrCurrent = $this->getCurrentDevice($intUserID);
+		$objDB = \Twist::Database();
+
+		$strSQL = sprintf("DELETE FROM `%s`.`%suser_sessions`
+								WHERE `device` = '%s'
+								AND `user_id` = %d",
+			DATABASE_NAME,
+			DATABASE_TABLE_PREFIX,
+			$objDB->escapeString($mxdDevice),
+			$objDB->escapeString($intUserID)
+		);
+
+		if($objDB->query($strSQL) && $objDB->getAffectedRows() && $arrCurrent['device'] == $mxdDevice){
+			$this->forget();
+		}
+	}
+
+	/**
 	 * Forget the user, nolonger remeber the user
 	 */
 	public function forget(){
