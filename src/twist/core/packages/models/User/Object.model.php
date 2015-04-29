@@ -84,6 +84,10 @@ class UserObject{
 		$this->arrOriginalUserData[$strField] = null;
 	}
 
+	public function deleteData($strField = null){
+		$this->nullData($strField);
+	}
+
 	public function commit(){
 
 		$blSendVerification = ($this->resDatabaseRecord->get('email') != $this->arrOriginalData['email'] || $this->resDatabaseRecord->get('verification_code') != $this->arrOriginalData['verification_code']);
