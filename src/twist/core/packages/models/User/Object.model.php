@@ -64,15 +64,23 @@ class UserObject{
 		return (is_null($strField)) ? $this->resDatabaseRecord->values() : $this->resDatabaseRecord->get($strField);
 	}
 
-	public function getDetail($strField = null){
+	public function data($strField = null,$mxdValue = null){
+        if(is_null($mxdValue)){
+            return $this -> getData($strField);
+        } else {
+            return $this -> setData($strField,$mxdValue);
+        }
+    }
+
+	private function getData($strField = null){
 		return (is_null($strField)) ? $this->arrOriginalUserData : $this->arrOriginalUserData[$strField];
 	}
 
-	public function setDetail($strField,$strValue){
-		$this->arrOriginalUserData[$strField] = $strValue;
+    private function setData($strField,$mxdValue){
+		$this->arrOriginalUserData[$strField] = $mxdValue;
 	}
 
-	public function removeDetail($strField = null){
+	public function nullData($strField = null){
 		$this->arrOriginalUserData[$strField] = null;
 	}
 
