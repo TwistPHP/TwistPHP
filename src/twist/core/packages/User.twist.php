@@ -909,8 +909,8 @@ class User extends BasePackage{
 
 			case'devices_form':
 
-				if(array_key_exists('save-device',$_GET) && array_key_exists('device-name',$_POST)){
-					$this->objUserSession->editDevice($this->currentID(),$_GET['save-device'],$_POST['device-name']);
+				if(array_key_exists('save-device',$_GET) && array_key_exists('device-name',$_GET)){
+					$this->objUserSession->editDevice($this->currentID(),$_GET['save-device'],$_GET['device-name']);
 				}
 
 				if(array_key_exists('forget-device',$_GET)){
