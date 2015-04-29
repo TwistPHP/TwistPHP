@@ -29,7 +29,8 @@ RENAME TABLE /*TABLE_PREFIX*/`user_data` TO /*TABLE_PREFIX*/`user_data_deprecate
 
 CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`user_data_fields` (
   `id` int(11) DEFAULT NULL,
-  `slug` char(64) COLLATE utf8_unicode_ci NOT NULL
+  `slug` char(64) COLLATE utf8_unicode_ci NOT NULL,
+  UNIQUE KEY `slug` (`slug`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`user_data` (
