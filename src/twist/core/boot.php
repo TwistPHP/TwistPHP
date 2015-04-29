@@ -30,7 +30,7 @@
 		header('X-Powered-By: TwistPHP');
 
 		//Set twist session cookie
-		setcookie('twist_session',sha1(time().rand(1,9999)),time()+3600);
+		setcookie('twist_session',sha1(time().rand(1,9999)),time()+3600,'/');
 	}
 
 	error_reporting(E_ALL);
