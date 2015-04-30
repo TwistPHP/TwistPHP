@@ -47,14 +47,6 @@ class View extends BasePackage{
 
 	/**
 	 * @deprecated
-	 * @alias get
-	 */
-	protected function getTemplateFile($strTemplate){
-		return $this->get($strTemplate);
-	}
-
-	/**
-	 * @deprecated
 	 * @alias setViewsDirectory
 	 */
 	public function setTemplatesDirectory($dirCustomTemplates = null){
@@ -134,10 +126,13 @@ class View extends BasePackage{
 
 	    $strViewDataOut = null;
 	    $this->validDataTags($arrViewTags);
-	    $this->dirCurrentView = $dirView;
 
-	    $dirFullViewPath = (!is_file($dirView)) ? sprintf("%s%s",$this->dirViews,$dirView) : $dirView;
-		$strCacheKey = str_replace(array(BASE_LOCATION,'twist/interfaces','twist/core'),array('','twist-interface','twist-core'),$dirFullViewPath);
+		//Backup current view path
+		$strTempCurrentView = $this->dirCurrentView;
+
+		$dirFullViewPath = $this->parseViewPath($dirView);
+
+		$strCacheKey = ltrim(str_replace(array(DIR_FRAMEWORK_VIEWS,DIR_PACKAGES,DIR_APP),array('core','packages','app'),$dirFullViewPath),'/');
 		$arrViewData = \Twist::Cache('twist/packages/views')->retrieve($strCacheKey);
 
 	    //Detect if the file has changed, if changed remove cache and rebuild
@@ -169,6 +164,9 @@ class View extends BasePackage{
 	        \Twist::framework()->debug()->log('View','usage',array('instance' => $this->strInstanceKey,'file' => $dirView,'tags' => $arrViewData['tags']));
 	    }
 
+		//Restore the current view path
+		$this->dirCurrentView = $strTempCurrentView;
+
 	    return $arrViewData['html_raw'];
 	}
 
@@ -184,6 +182,9 @@ class View extends BasePackage{
 
 	    $strViewDataOut = null;
 	    $this->validDataTags($arrViewTags);
+
+		//Backup current view path
+		$strTempCurrentView = $this->dirCurrentView;
 	    $this->dirCurrentView = null;
 
 	    //Check that the raw View data is not null or blank
@@ -202,11 +203,12 @@ class View extends BasePackage{
 	        if($blRemoveUnusedTags){
 	            $strViewDataOut = $this->removeUnusedTags($strViewDataOut);
 	        }
-
 	    }else{
-
 	        throw new \Exception('Raw View data is empty.');
 	    }
+
+		//Restore the current view path
+		$this->dirCurrentView = $strTempCurrentView;
 
 	    return $strViewDataOut;
 	}
@@ -219,12 +221,17 @@ class View extends BasePackage{
 	 * @param $blDiscover
 	 * @return array
 	 */
-	public function getTags($strView,$blIsFile = true,$blDiscover = false){
+	public function getTags($mxdView,$blIsFile = true,$blDiscover = false){
 
 	    $arrOut = array();
 
-	    //Get the raw View data
-	    $strRawViewData = ($blIsFile) ? $this->get($strView) : $strView;
+		//Get the raw View data
+		if($blIsFile){
+			$mxdView = $this->parseViewPath($mxdView);
+			$strRawViewData = $this->get($mxdView);
+		}else{
+			$strRawViewData = $mxdView;
+		}
 
 	    //Grab all the tags out of the View
 	    preg_match_all("#\{([^\{\}\n]+)\}#i",$strRawViewData,$arrViewTags);
@@ -279,6 +286,39 @@ class View extends BasePackage{
 
 	    return $strViewData;
 	}
+
+	protected function parseViewPath($dirView){
+
+		if(substr($dirView,0,2) == './'){
+			$dirFullViewPath = (is_null($this->dirCurrentView)) ? sprintf('%s/%s',rtrim($this->dirViews,'/'),substr($dirView,2)) : sprintf('%s/%s',dirname($this->dirCurrentView),substr($dirView,2));
+		}else{
+			$dirFullViewPath = (!is_file($dirView) && substr($dirView,0,1) != '/') ? sprintf("%s/%s",rtrim($this->dirViews,'/'),ltrim($dirView,'/')) : $dirView;
+		}
+
+		if(is_file($dirFullViewPath)){
+
+			//Set the current view to the original full path before using a replacement
+			$this->dirCurrentView = $dirFullViewPath;
+
+			if(substr($dirFullViewPath,0,strlen(DIR_FRAMEWORK_VIEWS)) == DIR_FRAMEWORK_VIEWS){
+
+				//Framework View - check DIR_APP/twist/core/view
+				$strOverridePath = sprintf('%s/twist/core/view/%s',rtrim(DIR_APP,'/'),ltrim(substr($dirFullViewPath,strlen(DIR_FRAMEWORK_VIEWS)-1),'/'));
+				$dirFullViewPath = (is_file($strOverridePath)) ? $strOverridePath : $dirFullViewPath;
+
+			}elseif(substr($dirFullViewPath,0,strlen(DIR_PACKAGES)) == DIR_PACKAGES){
+
+				//Packages View - check DIR_APP/packages
+				$strOverridePath = sprintf('%s/packages/%s',rtrim(DIR_APP,'/'),ltrim(substr($dirFullViewPath,strlen(DIR_PACKAGES)-1),'/'));
+				$dirFullViewPath = (is_file($strOverridePath)) ? $strOverridePath : $dirFullViewPath;
+			}
+
+			return $dirFullViewPath;
+		}else{
+			//File not exist
+			throw new \Exception(sprintf("View file '%s' was not found or does not exist.",$dirFullViewPath),11102);
+		}
+	}
 	
 	/**
 	 * Get the raw View data form the View file
@@ -289,11 +329,6 @@ class View extends BasePackage{
 	protected function get($strView){
 
 	    $strRawViewDataOut = null;
-
-	    if(!is_file($strView)){
-	        //Try using the designated View directory
-	        $strView = sprintf("%s%s",$this->dirViews,$strView);
-	    }
 
 	    //Check to see if the View file exists
 	    if(is_file($strView)){
@@ -625,15 +660,9 @@ class View extends BasePackage{
 				}
 
 				if(substr($strView,-4) == '.php'){
-
 					$strOut = $this->processElement($strReference,$arrData);
 					$strRawView = $this->replaceTag($strRawView,$strTag,$strOut,$strFunction);
 				}else{
-
-					if(substr($strView,0,1) == '.'){
-						$strView = sprintf('%s/%s',dirname($this->dirCurrentView),$strView);
-					}
-
 					$strTagData = $this->build($strView,$arrData);
 					$strRawView = $this->replaceTag($strRawView,$strTag,$strTagData,$strFunction);
 				}
@@ -859,25 +888,16 @@ class View extends BasePackage{
 	        $this->arrElementParams = array_values( $arrParts );
 	    }
 
-		if(substr($dirElement,0,1) == '.'){
-			$dirElement = sprintf('%s/%s',dirname($this->dirCurrentView),$dirElement);
-		}else{
-			//Check to see if it is a full path or partial path
-			$dirElement = (!is_file($dirElement)) ? sprintf("%s%s",$this->dirElements,$dirElement) : $dirElement;
-		}
+		$dirElement = $this->parseViewPath($dirElement);
 
-	    if(file_exists($dirElement)){
-            ob_start();
-            include $dirElement;
-            $strOut = ob_get_contents();
-            ob_end_clean();
+        ob_start();
+        include $dirElement;
+        $strOut = ob_get_contents();
+        ob_end_clean();
 
-            if($this->blDebugMode){
-	            \Twist::framework()->debug()->log('View','usage',array('instance' => $this->strInstanceKey,'file' => $dirElement,'tags' => array()));
-            }
-	    }else{
-	        throw new \Exception(sprintf("Twist element '%s' was not found!",strtolower($dirElement)));
-	    }
+        if($this->blDebugMode){
+            \Twist::framework()->debug()->log('View','usage',array('instance' => $this->strInstanceKey,'file' => $dirElement,'tags' => array()));
+        }
 
 	    return $strOut;
 	}

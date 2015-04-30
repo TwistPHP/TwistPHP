@@ -56,7 +56,7 @@
 
 				//Create the default cache folder
 				if(!file_exists($this->strStorageLocation)){
-					mkdir($this->strStorageLocation);
+					mkdir($this->strStorageLocation,0777,true);
 				}
 
 				//Check that it has been protected
@@ -65,10 +65,10 @@
 				}
 
 				//Create the instance cache folder
-				$this->strStorageLocation = sprintf('%s%s/',$this->strStorageLocation,$strInstanceKey);
+				$this->strStorageLocation = sprintf('%s/%s/',rtrim($this->strStorageLocation,'/'),ltrim($strInstanceKey,'/'));
 
 				if(!file_exists($this->strStorageLocation)){
-					mkdir($this->strStorageLocation);
+					\Twist::File()->recursiveCreate($this->strStorageLocation);
 				}
 
 				//Probability it set between 1-10 set to 0
@@ -129,7 +129,7 @@
 					//If life of store is '0' the use the temp storage (Current PHP session only)
 					$this->arrRuntimeSessionCache[$strCacheName] = $strCacheData;
 				}else{
-					$dirCacheFile = sprintf("%s%s",$this->strStorageLocation,$strCacheName);
+					$dirCacheFile = sprintf("%s/%s",rtrim($this->strStorageLocation,'/'),ltrim($strCacheName,'/'));
 					\Twist::File()->recursiveCreate(dirname($dirCacheFile));
 					file_put_contents($dirCacheFile,$strCacheData);
 				}
@@ -182,7 +182,7 @@
 
 			//Build the cache files location
 			$strCacheName = sprintf("%s.%s",$mxdUniqueID,$this->strFileExtension);
-			$strCacheFile = sprintf("%s%s",$this->strStorageLocation,$strCacheName);
+			$strCacheFile = sprintf("%s/%s",rtrim($this->strStorageLocation,'/'),ltrim($strCacheName,'/'));
 
 			if(is_null($mxdUniqueID)){
 				\Twist::File()->recursiveRemove($this->strStorageLocation);
@@ -256,7 +256,7 @@
 
 			//Build the cache files location
 			$strCacheName = sprintf("%s.%s",$mxdUniqueID,$this->strFileExtension);
-			$strCacheFile = sprintf("%s%s",$this->strStorageLocation,$strCacheName);
+			$strCacheFile = sprintf("%s/%s",rtrim($this->strStorageLocation,'/'),ltrim($strCacheName,'/'));
 
 			if(array_key_exists($strCacheName,$this->arrRuntimeSessionCache)){
 				$strCacheData = $this->arrRuntimeSessionCache[$strCacheName];
