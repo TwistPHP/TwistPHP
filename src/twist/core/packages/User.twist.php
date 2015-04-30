@@ -31,7 +31,6 @@ use \Twist\Core\Classes\BasePackage;
 class User extends BasePackage{
 
 	public $strLoginUrl = null;
-	public $strLogoutPage = null;
 
 	public $strEncryptionType = null;
 	public $strPasswordHash = null;
@@ -52,19 +51,14 @@ class User extends BasePackage{
 		\Twist::Session()->start();
 
 		//Set the main user settings from the database
-		$this->strLoginUrl = $this->framework()->setting('USER_DEFAULT_LOGIN_URI');
-		$this->strLogoutPage = $this->framework()->setting('USER_DEFAULT_LOGOUT_URI');
+		$this->strLoginUrl = '/login';
 		$this->strEncryptionType = $this->framework()->setting('USER_PASSWORD_ENCRYPTION');
 		$this->strPasswordHash = $this->framework()->setting('USER_PASSWORD_HASH');
 
 		$this->resTemplate = \Twist::View('pkgUser');
 
-		$strCustomTemplateLocation = $this->framework()->setting('USER_TEMPLATE_LOCATION');
-		if(is_null($strCustomTemplateLocation) || $strCustomTemplateLocation == ''){
-			$this->setCustomTemplateLocation(sprintf('%s/user/',DIR_FRAMEWORK_VIEWS));
-		}else{
-			$this->setCustomTemplateLocation($strCustomTemplateLocation);
-		}
+		//@todo setup the template override in the apps folder
+		$this->setCustomTemplateLocation(sprintf('%s/user/',DIR_FRAMEWORK_VIEWS));
 
 		require_once sprintf('%s/models/User/Session.model.php',DIR_FRAMEWORK_PACKAGES);
 		$this->objUserSession = new UserSession();

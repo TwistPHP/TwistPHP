@@ -90,7 +90,7 @@ class AJAX extends BasePackage{
 
 		if(!\Twist::User() -> loggedIn()){
 
-			$this->redirect((defined('USER_DEFAULT_LOGIN_URI')) ? USER_DEFAULT_LOGIN_URI : '/login.php');
+			$this->redirect('/login');
 			$this->errorResponse("Error: Login required to run this script");
 
 			$this->attachDebugData();

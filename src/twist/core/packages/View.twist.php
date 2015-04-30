@@ -153,7 +153,7 @@ class View extends BasePackage{
 		    $arrViewData['html_hash'] = \Twist::File()->hash($dirFullViewPath,'md5');
 		    $arrViewData['tags'] = $this->getTags($arrViewData['html_raw'],false);
 
-		    \Twist::Cache('twist/packages/views')->store($strCacheKey,$arrViewData,$this->framework()->setting('TEMPLATE_PRE_PROCESS_CACHE'));
+		    \Twist::Cache('twist/packages/views')->store($strCacheKey,$arrViewData,$this->framework()->setting('VIEW_PRE_PROCESS_CACHE'));
 	    }
 
 	    foreach($arrViewData['tags'] as $strEachTag){
@@ -299,12 +299,7 @@ class View extends BasePackage{
 	    if(is_file($strView)){
 
 	        if(filesize($strView)){
-
-	            //if($this -> framework() -> setting('TEMPLATE_BASE_OVERRIDE') || strstr(realpath($strView),BASE_LOCATION)){
-	                $strRawViewDataOut = file_get_contents($strView);
-	            //}else{
-	           //     throw new \Exception(sprintf("View file '%s' is outside of your Document Root.",$strView),11107);
-	           // }
+		        $strRawViewDataOut = file_get_contents($strView);
 	        }else{
 	            $strRawViewDataOut = '';
 	            trigger_error(sprintf("Twist [11101]: View file '%s' contains no data.",$strView), E_USER_NOTICE);
@@ -872,20 +867,14 @@ class View extends BasePackage{
 		}
 
 	    if(file_exists($dirElement)){
+            ob_start();
+            include $dirElement;
+            $strOut = ob_get_contents();
+            ob_end_clean();
 
-	        //if(\Twist::framework()->setting('TEMPLATE_BASE_OVERRIDE') || strstr(realpath($dirElement),BASE_LOCATION)){
-	            ob_start();
-	            include $dirElement;
-	            $strOut = ob_get_contents();
-	            ob_end_clean();
-
-	            if($this->blDebugMode){
-		            \Twist::framework()->debug()->log('View','usage',array('instance' => $this->strInstanceKey,'file' => $dirElement,'tags' => array()));
-	            }
-
-	        //}else{
-	        //    throw new \Exception(sprintf("Element file '%s' is outside of your Document Root.",$dirElement),11109);
-	        //}
+            if($this->blDebugMode){
+	            \Twist::framework()->debug()->log('View','usage',array('instance' => $this->strInstanceKey,'file' => $dirElement,'tags' => array()));
+            }
 	    }else{
 	        throw new \Exception(sprintf("Twist element '%s' was not found!",strtolower($dirElement)));
 	    }

@@ -25,14 +25,18 @@
 	use \Twist\Core\Classes\BasePackage;
 
 	/**
-	 * Localisation of websites is becoming a necessity, the ability to list counties, languages and there relationship is essential.
-	 * Get a full list of countries and their ISO codes. Get the native spoken language of a country by its ISO code. Get the name of a language by its ISO language code.
+	 * Localisation of websites is becoming a necessity, the ability to list counties, currencies, timezones, languages and there relationship is essential.
+	 * Get a full list of countries and their ISO codes.
+	 * Get the native spoken language of a country by its ISO code.
+	 * Get the name of a language by its ISO language code.
+	 * Get the official currency by its ISO currency code.
 	 */
 	class Localisation extends BasePackage{
 
 		protected $arrLanguages = array();
 		protected $arrLanguagesLocalised = array();
 		protected $arrCountries = array();
+		protected $arrCurrencies = array();
 		protected $arrTimezones = array();
 
 		/**
@@ -47,22 +51,25 @@
 			foreach($arrLanguages as $arrEachLanguage){
 				if(!is_null($arrEachLanguage['variant'])){
 					$strKey = sprintf("%s-%s",$arrEachLanguage['iso'],$arrEachLanguage['variant']);
-					$this->arrLanguagesLocalised[strtolower($strKey)] = $arrEachLanguage;
+					$this->arrLanguagesLocalised[strtoupper($strKey)] = $arrEachLanguage;
 				}else{
-					$this->arrLanguagesLocalised[strtolower($arrEachLanguage['iso'])] = $arrEachLanguage;
-					$this->arrLanguages[strtolower($arrEachLanguage['iso'])] = $arrEachLanguage;
+					$this->arrLanguagesLocalised[strtoupper($arrEachLanguage['iso'])] = $arrEachLanguage;
+					$this->arrLanguages[strtoupper($arrEachLanguage['iso'])] = $arrEachLanguage;
 				}
 			}
 
 			$jsonCountries = file_get_contents(sprintf('%score/data/Localisation/countries.json',DIR_FRAMEWORK));
-			$arrCountries = json_decode($jsonCountries,true);
+			$this->arrCountries = json_decode($jsonCountries,true);
 
-			foreach($arrCountries as $arrEachCountry){
-				$this->arrCountries[strtolower($arrEachCountry['iso'])] = $arrEachCountry;
-			}
+			$jsonCountries = file_get_contents(sprintf('%score/data/Localisation/currencies.json',DIR_FRAMEWORK));
+			$this->arrCurrencies = json_decode($jsonCountries,true);
 
 			$jsonTimezones = file_get_contents(sprintf('%score/data/Localisation/timezones.json',DIR_FRAMEWORK));
-			$this->arrTimezones = json_decode($jsonTimezones,true);
+			$arrTimezones = json_decode($jsonTimezones,true);
+
+			foreach($arrTimezones as $arrEachTimezone){
+				$this->arrTimezones[strtoupper($arrEachTimezone['code'])] = $arrEachTimezone;
+			}
 		}
 
 		/**
@@ -72,7 +79,7 @@
 		 * @return array Returns a single-dimensional language array
 		 */
 		public function getLanguage($strLanguageISO){
-			$strLanguageISO = strtolower($strLanguageISO);
+			$strLanguageISO = strtoupper($strLanguageISO);
 			return (array_key_exists($strLanguageISO,$this->arrLanguagesLocalised)) ? $this->arrLanguagesLocalised[$strLanguageISO] : array();
 		}
 
@@ -88,13 +95,25 @@
 		}
 
 		/**
-		 * Get a single-dimensional array country information by its 2 Character ISO country code.
+		 * Get the official language of any given country by 2 character ISO country code.
+		 *
+		 * @related getLanguage
+		 * @param $strCountryISO 2 Character ISO code
+		 * @return array Returns an single-dimensional language array
+		 */
+		public function getOfficialLanguage($strCountryISO){
+			$arrCountry = $this->getCountry($strCountryISO);
+			return (count($arrCountry)) ? $this->getLanguage($arrCountry['official_language_iso']) : array();
+		}
+
+		/**
+		 * Get a single-dimensional array of country information by its 2 Character ISO country code.
 		 *
 		 * @param $strCountryISO 2 Character ISO code
 		 * @return array Returns an single-dimensional country array
 		 */
 		public function getCountry($strCountryISO){
-			$strCountryISO = strtolower($strCountryISO);
+			$strCountryISO = strtoupper($strCountryISO);
 			return (array_key_exists($strCountryISO,$this->arrCountries)) ? $this->arrCountries[$strCountryISO] : array();
 		}
 
@@ -109,14 +128,54 @@
 		}
 
 		/**
-		 * Get the official language of any given country by 2 character ISO country code.
+		 * Get a single-dimensional array of currency information by its 3 Character ISO currency code.
 		 *
-		 * @related getLanguage
+		 * @param $strCurrencyISO 3 Character ISO code
+		 * @return array Returns an single-dimensional country array
+		 */
+		public function getCurrency($strCurrencyISO){
+			$strCurrencyISO = strtoupper($strCurrencyISO);
+			return (array_key_exists($strCurrencyISO,$this->arrCurrencies)) ? $this->arrCurrencies[$strCurrencyISO] : array();
+		}
+
+		/**
+		 * Get an array of all currencies names, ISO codes and Symbols.
+		 * @return array
+		 */
+		public function getCurrencies(){
+			return $this->arrCurrencies;
+		}
+
+		/**
+		 * Get the official currency of any given country by 2 character ISO country code.
+		 *
+		 * @related getCurrency
 		 * @param $strCountryISO 2 Character ISO code
 		 * @return array Returns an single-dimensional language array
 		 */
-		public function getOfficialLanguage($strCountryISO){
+		public function getOfficialCurrency($strCountryISO){
 			$arrCountry = $this->getCountry($strCountryISO);
-			return (count($arrCountry)) ? $this->getLanguage($arrCountry['official_language_iso']) : array();
+			return (count($arrCountry)) ? $this->getCurrency($arrCountry['official_currency_iso']) : array();
+		}
+
+		/**
+		 * Get a single-dimensional array of timezone information related to the provided timezone code.
+		 *
+		 * @param $strTimezoneCode Timezone code i.e 'Europe/London'
+		 * @return array Returns a single-dimensional language array
+		 */
+		public function getTimezone($strTimezoneCode){
+			$strTimezoneCode = strtoupper($strTimezoneCode);
+			return (array_key_exists($strTimezoneCode,$this->arrTimezones)) ? $this->arrTimezones[$strTimezoneCode] : array();
+		}
+
+		/**
+		 * Get multi-dimensional array of all timezones.
+		 *
+		 * @related getTimezone
+		 * @return array Returns a multi-dimensional array of timezones
+		 */
+		public function getTimezones(){
+			return $this->arrTimezones;
 		}
 	}

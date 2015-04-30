@@ -111,14 +111,6 @@
 		"options":"",
 		"null":0
 	},
-	"LANGUAGE_FALLBACK":{
-		"title":"Language Fallback",
-		"description":"If no content is available in the selected language fall back to default language",
-		"default":1,
-		"type":"boolean",
-		"options":"1,0",
-		"null":0
-	},
 	"ERROR_LOG":{
 		"title":"Log Errors to File",
 		"description":"Log Errors to File",
@@ -207,17 +199,9 @@
 		"options":"1M,2M,5M,10M,20M,30M,50M,100M,250M,375M,500M,750M,1000M",
 		"null":0
 	},
-	"TEMPLATE_BASE_OVERRIDE":{
-		"title":"Override Base Dir",
-		"description":"Allow template and element files the are located outside of your base location (doc root) to be loaded",
-		"default":0,
-		"type":"boolean",
-		"options":"1,0",
-		"null":0
-	},
-	"TEMPLATE_PRE_PROCESS_CACHE":{
+	"VIEW_PRE_PROCESS_CACHE":{
 		"title":"PreProcess Cache Life",
-		"description":"The amount of time to store a Pre Processed template cache, this cache helps speed up the processing of template",
+		"description":"The amount of time to store a Pre Processed view cache, this cache helps speed up the processing of views",
 		"default":84600,
 		"type":"integer",
 		"options":"",
@@ -336,7 +320,7 @@
       "null":0
     },
     "USER_PASSWORD_CHANGE_EMAIL":{
-      "title":"Password Change Email",
+      "title":"Send Password Change Email",
       "description":"Determine if an email should be send when a user changes their account password (Excludes password reset)",
       "default":0,
       "type":"boolean",
@@ -367,30 +351,6 @@
 		"options":"1,0",
 		"null":0
 	},
-	"USER_DEFAULT_LOGIN_URI":{
-		"title":"Login URI",
-		"description":"Set the URI to your login page",
-		"default":"/login",
-		"type":"string",
-		"options":"",
-		"null":0
-	},
-	"USER_DEFAULT_MEMBER_URI":{
-		"title":"Member Page URI",
-		"description":"Set the URI to the first page you come to when logging in",
-		"default":"/members",
-		"type":"string",
-		"options":"",
-		"null":0
-	},
-	"USER_DEFAULT_LOGOUT_URI":{
-		"title":"Logout URI",
-		"description":"Set the URI to your logout page (for example this could be your homepage or you login page)",
-		"default":"/",
-		"type":"string",
-		"options":"",
-		"null":0
-	},
 	"USER_MIN_PASSWORD_LENGTH":{
 		"title":"Min Password Length",
 		"description":"Set the minimum password length to allow",
@@ -416,8 +376,8 @@
 		"null":0
 	},
 	"USER_PASSWORD_CHANGE":{
-		"title":"Password Change",
-		"description":"Require an initial password change upon first login",
+		"title":"Force Temporary Password Change",
+		"description":"Require a user to change there password upon login (if the password is a temporary one)",
 		"default":1,
 		"type":"boolean",
 		"options":"1,0",
@@ -428,14 +388,6 @@
 		"description":"Set the time in Hours (Default: 168, which is 7 Days in Hours)",
 		"default":168,
 		"type":"integer",
-		"options":"",
-		"null":0
-	},
-	"USER_TEMPLATE_LOCATION":{
-		"title":"Custom Templates",
-		"description":"Optionally you can set the location for custom user templates",
-		"default":"",
-		"type":"string",
 		"options":"",
 		"null":0
 	},

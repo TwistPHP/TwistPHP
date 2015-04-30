@@ -805,7 +805,6 @@ class Route extends BasePackage{
 
 		$strCurrentURI = ($this->strBaseURI == '/') ? $strCurrentURI : str_replace($this->strBaseURI,'',$strCurrentURI);
 		$strFullLoginURI = str_replace('//','/',sprintf('%s/login',$this->strBaseURI));
-		//$strFullLoginURL = sprintf('%s/%s', $arrRoute['registered_uri'], ltrim($this->framework()->setting('USER_DEFAULT_LOGIN_URI'), '/'));
 
 		if(\Twist::Database()->checkSettings()){
 

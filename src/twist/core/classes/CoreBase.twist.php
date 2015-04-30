@@ -28,26 +28,19 @@
 		class CoreBase{
 
 			/**
-			 * Used when calling 3rd Party framework packages
-			 * @param $strModuleName
-			 * @param $arrArguments
+			 * Call 3rd parky packages in the framework located in your packages folder
+			 * Alternatively packages can be called '$resMyPackage = new Package\MyPackage();'
+			 * @param $strPackageName
 			 * @return mixed
 			 */
-			public static function __callStatic($strModuleName, $arrArguments){
+			public static function package($strPackageName){
 
-				$strObjectRef = sprintf('pkg%s',$strModuleName);
-				$strModule = sprintf('\Package\%s',$strModuleName);
+				$strObjectRef = sprintf('userPackage_%s',$strPackageName);
+				$strPackage = sprintf('\Package\%s',$strPackageName);
 
-				$resTwistModule = (!Instance::isObject($strObjectRef)) ? new $strModule() : Instance::retrieveObject($strObjectRef);
-				Instance::storeObject($strObjectRef,$resTwistModule);
-				return $resTwistModule;
-			}
-
-			/**
-			 * @deprecated
-			 */
-			public static function Template(){
-				return self::view((count(func_get_args())) ? func_get_arg(0) : 'twist');
+				$resPackage = (!Instance::isObject($strObjectRef)) ? new $strPackage() : Instance::retrieveObject($strObjectRef);
+				Instance::storeObject($strObjectRef,$resPackage);
+				return $resPackage;
 			}
 
 			public static function framework(){
