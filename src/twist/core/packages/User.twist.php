@@ -309,18 +309,40 @@ class User extends BasePackage{
                 $resUser->firstname($_POST['firstname']);
                 $resUser->surname($_POST['lastname']);
                 $resUser->level(10);
-                $resUser->resetPassword();
-                $intUserID = $resUser->commit();
 
-                if($intUserID > 0){
-                    \Twist::Session()->data('site-register_message','Thank you for your registration, your password has been emailed to you');
-                    unset( $_POST['email'] );
-                    unset( $_POST['firstname'] );
-                    unset( $_POST['lastname'] );
-                    unset( $_POST['register'] );
-                }else{
-                    \Twist::Session()->data('site-register_error_message','Failed to register user');
-                }
+	            $blContinue = true;
+
+	            if(\Twist::framework()->setting('USER_REGISTER_PASSWORD')){
+
+		            if($_POST['password'] == $_POST['confirm_password']){
+			            $arrResponse = $resUser->password($_POST['password']);
+
+			            if($arrResponse['status'] == false){
+				            \Twist::Session()->data('site-register_error_message',$arrResponse['message']);
+				            $blContinue = false;
+			            }
+		            }else{
+			            \Twist::Session()->data('site-register_error_message','Your password and confirm password do not match');
+			            $blContinue = false;
+		            }
+	            }else{
+		            $resUser->resetPassword();
+	            }
+
+	            //If the password configuration has passed all checks then continue
+	            if($blContinue){
+		            $intUserID = $resUser->commit();
+
+		            if($intUserID > 0){
+			            \Twist::Session()->data('site-register_message','Thank you for your registration, your password has been emailed to you');
+			            unset( $_POST['email'] );
+			            unset( $_POST['firstname'] );
+			            unset( $_POST['lastname'] );
+			            unset( $_POST['register'] );
+		            }else{
+			            \Twist::Session()->data('site-register_error_message','Failed to register user');
+		            }
+	            }
             }
 
             //Resend a new verification code
@@ -888,6 +910,7 @@ class User extends BasePackage{
 				break;
 
 			case'registration_form':
+
                 $arrTags = array(
                     'login_page' => $strLoginPage,
                     'register_error_message' => \Twist::Session()->data('site-register_error_message'),
@@ -898,7 +921,7 @@ class User extends BasePackage{
                 \Twist::Session()->remove('site-register_message');
                 \Twist::Session()->remove('site-register_error_message');
 
-				$strData = $this->resTemplate->build( 'register.tpl', $arrTags, true );
+				$strData = $this->resTemplate->build((\Twist::framework()->setting('USER_REGISTER_PASSWORD')) ? 'register-password.tpl' : 'register.tpl', $arrTags, true );
 				break;
 
 			case'devices_form':

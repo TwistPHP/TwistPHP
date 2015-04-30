@@ -257,7 +257,7 @@ class View extends BasePackage{
 			if(substr($dirFullViewPath,0,strlen(DIR_FRAMEWORK_VIEWS)) == DIR_FRAMEWORK_VIEWS){
 
 				//Framework View - check DIR_APP/twist/core/view
-				$strOverridePath = sprintf('%s/twist/core/view/%s',rtrim(DIR_APP,'/'),ltrim(substr($dirFullViewPath,strlen(DIR_FRAMEWORK_VIEWS)-1),'/'));
+				$strOverridePath = sprintf('%s/twist/core/views/%s',rtrim(DIR_APP,'/'),ltrim(substr($dirFullViewPath,strlen(DIR_FRAMEWORK_VIEWS)-1),'/'));
 				$dirFullViewPath = (is_file($strOverridePath)) ? $strOverridePath : $dirFullViewPath;
 
 			}elseif(substr($dirFullViewPath,0,strlen(DIR_PACKAGES)) == DIR_PACKAGES){

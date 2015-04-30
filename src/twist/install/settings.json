@@ -15,30 +15,30 @@
 		"options":"",
 		"null":0
 	},
-    "SITE_DESCRIPTION":{
-        "title":"Site Description",
-        "description":"Enter the default meta description for your website",
-        "default":"",
-        "type":"string",
-        "options":"",
-        "null":0
-    },
-    "SITE_KEYWORDS":{
-        "title":"Site Keywords",
-        "description":"Enter the default set of keywords for your website",
-        "default":"",
-        "type":"string",
-        "options":"",
-        "null":0
-    },
-    "SITE_AUTHOR":{
-        "title":"Site Author",
-        "description":"Enter the default author of your website",
-        "default":"",
-        "type":"string",
-        "options":"",
-        "null":0
-    },
+	"SITE_DESCRIPTION":{
+		"title":"Site Description",
+		"description":"Enter the default meta description for your website",
+		"default":"",
+		"type":"string",
+		"options":"",
+		"null":0
+	},
+	"SITE_KEYWORDS":{
+		"title":"Site Keywords",
+		"description":"Enter the default set of keywords for your website",
+		"default":"",
+		"type":"string",
+		"options":"",
+		"null":0
+	},
+	"SITE_AUTHOR":{
+		"title":"Site Author",
+		"description":"Enter the default author of your website",
+		"default":"",
+		"type":"string",
+		"options":"",
+		"null":0
+	},
 	"SITE_HOST":{
 		"title":"Site Host",
 		"description":"Enter the HTTP Host name of the website for instance http://www.example.com/index.php would be 'example.com'",
@@ -159,14 +159,14 @@
 		"options":"1,0",
 		"null":0
 	},
-    "DEVELOPMENT_DEBUG_BAR":{
-      "title":"Development Debug Bar",
-      "description":"Display the debug bar on the site when the framework is in development mode",
-      "default":0,
-      "type":"boolean",
-      "options":"1,0",
-      "null":0
-    },
+	"DEVELOPMENT_DEBUG_BAR":{
+		"title":"Development Debug Bar",
+		"description":"Display the debug bar on the site when the framework is in development mode",
+		"default":0,
+		"type":"boolean",
+		"options":"1,0",
+		"null":0
+	},
 	"MAINTENANCE_MODE":{
 		"title":"Maintenance Mode",
 		"description":"Output the 503 SEO friendly maintenance page to all visitors of the website (search engines will not index this page)",
@@ -311,22 +311,30 @@
 		"options":"1,0",
 		"null":0
 	},
-    "RANDOM_STRING_LENGTH":{
-      "title":"Random String Length",
-      "description":"Set the default length for the output of the Tools()->randomString() function call",
-      "default":16,
-      "type":"integer",
-      "options":"",
-      "null":0
-    },
-    "USER_PASSWORD_CHANGE_EMAIL":{
-      "title":"Send Password Change Email",
-      "description":"Determine if an email should be send when a user changes their account password (Excludes password reset)",
-      "default":0,
-      "type":"boolean",
-      "options":"1,0",
-      "null":0
-    },
+	"RANDOM_STRING_LENGTH":{
+		"title":"Random String Length",
+		"description":"Set the default length for the output of the Tools()->randomString() function call",
+		"default":16,
+		"type":"integer",
+		"options":"",
+		"null":0
+	},
+	"USER_REGISTER_PASSWORD":{
+		"title":"User Register Password",
+		"description":"The user must enter a password during the registration process (enables a password field on registration form)",
+		"default":0,
+		"type":"boolean",
+		"options":"1,0",
+		"null":0
+	},
+	"USER_PASSWORD_CHANGE_EMAIL":{
+		"title":"Send Password Change Email",
+		"description":"Determine if an email should be send when a user changes their account password (Excludes password reset)",
+		"default":0,
+		"type":"boolean",
+		"options":"1,0",
+		"null":0
+	},
 	"USER_PASSWORD_HASH":{
 		"title":"Strong Password Encryption",
 		"description":"Hash the passwords, this function requires PHP MCRYPT to be installed, More secure and reliable than SHA1",
