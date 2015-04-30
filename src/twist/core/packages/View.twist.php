@@ -41,54 +41,8 @@ class View extends BasePackage{
 	public function __construct($strInstanceKey){
 	    $this->strInstanceKey = $strInstanceKey;
 	    $this->setDirectory();
-	    $this->setElementsDirectory();
 	    $this->blDebugMode = (\Twist::framework()->setting('DEVELOPMENT_MODE') && \Twist::framework()->setting('DEVELOPMENT_DEBUG_BAR'));
 	}
-
-	/**
-	 * @deprecated
-	 * @alias setViewsDirectory
-	 */
-	public function setTemplatesDirectory($dirCustomTemplates = null){
-		$this->setDirectory($dirCustomTemplates);
-	}
-
-	/**
-	 * @deprecated
-	 * @alias getDirectory
-	 */
-	public function getTemplatesDirectory(){
-		return $this->dirViews;
-	}
-
-	/**
-	 * @deprecated
-	 * Set the element directory to the default or provide a new directory
-	 * @param $dirCustomElements Path to a custom elements directory
-	 */
-	public function setElementsDirectory($dirCustomElements = null){
-		$this->dirElements = (is_null($dirCustomElements)) ? $this->dirViews : $dirCustomElements;
-	}
-
-	/**
-	 * @deprecated
-	 * Get the current element directory/path that is in use by the template package
-	 * @return directory Returns the current element path
-	 */
-	public function getElementsDirectory(){
-		return $this->dirElements;
-	}
-
-	/**
-	 * @deprecated
-	 * @alias getTags
-	 */
-	public function getTemplateTags($strTemplate,$blIsFile = true,$blDiscover = false){
-		return $this->getTags($strTemplate,$blIsFile,$blDiscover);
-	}
-
-
-
 
 	/**
 	 * Kills the current instance of the View class, help to keep your RAM free
