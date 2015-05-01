@@ -28,10 +28,11 @@ UPDATE /*TABLE_PREFIX*/`asset_types` SET `icon` = `image.png` WHERE `icon` = 'ph
 RENAME TABLE /*TABLE_PREFIX*/`user_data` TO /*TABLE_PREFIX*/`user_data_deprecated`;
 
 CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`user_data_fields` (
-  `id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `slug` char(64) COLLATE utf8_unicode_ci NOT NULL,
+  KEY `id` (`id`),
   UNIQUE KEY `slug` (`slug`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`user_data` (
   `user_id` int(11) NOT NULL,
