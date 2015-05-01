@@ -22,13 +22,20 @@
 	 */
 
 	namespace Twist\Core\Classes;
+	use Twist\Core\Models\Route\Meta;
 
 	class BaseController{
 
 		protected $arrAliasURIs = array();
 		protected $arrReplaceURIs = array();
+		protected $resMeta = null;
+		protected $arrRoute = array();
 
-		final public function _extended(){
+		final public function _extended($arrRoute,Meta &$resMeta = null){
+
+			$this->arrRoute = $arrRoute;
+			$this->resMeta = $resMeta;
+
 			return true;
 		}
 
@@ -82,23 +89,47 @@
 		}
 
         final protected function _route($strReturnKey = null){
-			return array_key_exists($strReturnKey, $_SERVER['TWIST_ROUTE']) ? $_SERVER['TWIST_ROUTE'][$strReturnKey] : $_SERVER['TWIST_ROUTE'];
+			return array_key_exists($strReturnKey, $this->arrRoute) ? $this->arrRoute[$strReturnKey] : $this->arrRoute;
 		}
 
-        final protected function _title($strTitle = null){
-			return (is_null($strTitle)) ? $_SERVER['TWIST_ROUTE_TITLE'] : $_SERVER['TWIST_ROUTE_TITLE'] = $strTitle;
+		/**
+		 * Meta object that
+		 * @return Meta
+		 */
+        final protected function _meta(){
+			return $this->resMeta;
 		}
 
-        final protected function _description($strDescription = null){
-			return (is_null($strDescription)) ? $_SERVER['TWIST_ROUTE_DESCRIPTION'] : $_SERVER['TWIST_ROUTE_DESCRIPTION'] = $strDescription;
+		/**
+		 * @deprecated
+		 * @param $strTitle
+		 */
+        final protected function _title($strTitle){
+			$this->_meta()->title($strTitle);
 		}
 
-        final protected function _author($strAuthor = null){
-			return (is_null($strAuthor)) ? $_SERVER['TWIST_ROUTE_AUTHOR'] : $_SERVER['TWIST_ROUTE_AUTHOR'] = $strAuthor;
+		/**
+		 * @deprecated
+		 * @param $strDescription
+		 */
+        final protected function _description($strDescription){
+			$this->_meta()->title($strDescription);
 		}
 
-        final protected function _keywords($strKeywords = null){
-			return (is_null($strKeywords)) ? $_SERVER['TWIST_ROUTE_KEYWORDS'] : $_SERVER['TWIST_ROUTE_KEYWORDS'] = $strKeywords;
+		/**
+		 * @deprecated
+		 * @param $strAuthor
+		 */
+        final protected function _author($strAuthor){
+			$this->_meta()->title($strAuthor);
+		}
+
+		/**
+		 * @deprecated
+		 * @param $strKeywords
+		 */
+        final protected function _keywords($strKeywords){
+			return (is_null($strKeywords)) ? $_SERVER['TWIST_ROUTE_KEYWORDS'] : $this->_meta()->title($strKeywords);
 		}
 
         final protected function _var($strVarKey = null){

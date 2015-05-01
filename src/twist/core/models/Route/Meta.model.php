@@ -39,6 +39,31 @@
 			);
 		}
 
+		public function getTags(){
+
+			$arrOut = array();
+
+			//Output all the items as plain text in a usable format
+			foreach($this->arrTags as $arrEachItem){
+
+				if($arrEachItem['type'] == $arrEachItem['name']){
+					$arrOut[$arrEachItem['type']] = $arrEachItem['value'];
+				}else{
+
+					if(!array_key_exists($arrEachItem['type'],$arrOut)){
+						$arrOut[$arrEachItem['type']] = array();
+					}
+
+					$arrOut[$arrEachItem['type']][$arrEachItem['name']] = $arrEachItem['value'];
+				}
+			}
+
+			//Generate the HTML tags to be output
+			$arrOut['tags'] = $this->generate();
+
+			return $arrOut;
+		}
+
 		public function title($strValue){
 			$this->add('title','title',$strValue);
 		}

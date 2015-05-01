@@ -23,6 +23,7 @@
 
 namespace Twist\Core\Packages;
 use \Twist\Core\Classes\BasePackage;
+use \Twist\Core\Models\Route\Meta;
 
 /**
  * Simply setup a website with multiple pages in minutes. Create restricted areas with login pages and dynamic sections with wild carded URI's.
@@ -57,6 +58,7 @@ class Route extends BasePackage{
 
 		$this->strInstance = $strInstance;
 		$this->resView = \Twist::View();
+		$this->resMeta = new Meta();
 		$this->blDebugMode = (\Twist::framework()->setting('DEVELOPMENT_MODE') && \Twist::framework()->setting('DEVELOPMENT_DEBUG_BAR'));
 
 		$strControllerPath = DIR_APP_CONTROLLERS;
@@ -1012,15 +1014,10 @@ class Route extends BasePackage{
 					\Twist::respond(403);
 				}else{
 
-					//Pass all the current route info to the global server array
-					$_SERVER['TWIST_ROUTE'] = $arrRoute;
-					$_SERVER['TWIST_ROUTE_DYNAMIC'] = $arrRoute['dynamic'];
-					$_SERVER['TWIST_ROUTE_PARTS'] = $arrRoute['parts'];
-					$_SERVER['TWIST_ROUTE_URI'] = $arrRoute['uri'];
-					$_SERVER['TWIST_ROUTE_TITLE'] = \Twist::framework()->setting('SITE_NAME');
-					$_SERVER['TWIST_ROUTE_DESCRIPTION'] = \Twist::framework()->setting('SITE_DESCRIPTION');
-					$_SERVER['TWIST_ROUTE_AUTHOR'] = \Twist::framework()->setting('SITE_AUTHOR');
-					$_SERVER['TWIST_ROUTE_KEYWORDS'] = \Twist::framework()->setting('SITE_KEYWORDS');
+					$this->resMeta->title(\Twist::framework()->setting('SITE_NAME'));
+					$this->resMeta->description(\Twist::framework()->setting('SITE_DESCRIPTION'));
+					$this->resMeta->author(\Twist::framework()->setting('SITE_AUTHOR'));
+					$this->resMeta->keywords(\Twist::framework()->setting('SITE_KEYWORDS'));
 
 					//Load the page from cache
 					$this->loadPageCache($arrRoute['cache_key']);
@@ -1036,9 +1033,10 @@ class Route extends BasePackage{
 					$arrTags['base_uri'] = $this->strBaseURI;
 					$arrTags['package_uri'] = $this->strPackageURI;
 
+					$this->framework()->package()->extend('View', 'meta', $this->resMeta->getTags());
 					$this->framework()->package()->extend('View', 'route', $arrTags);
 
-					switch ($arrRoute['type']) {
+					switch($arrRoute['type']){
 						case'view':
 							$arrTags['response'] .= $this->resView->build($arrRoute['item'], $arrRoute['data']);
 							break;
@@ -1046,7 +1044,7 @@ class Route extends BasePackage{
 							$arrTags['response'] .= $this->resView->processElement($arrRoute['item'], $arrRoute['data']);
 							break;
 						case'controller':
-							if (is_array($arrRoute['item']) && count($arrRoute['item']) >= 1) {
+							if(is_array($arrRoute['item']) && count($arrRoute['item']) >= 1){
 
 								if(!strstr($arrRoute['item'][0],'\\')){
 									$strControllerClass = sprintf('\\App\\Controllers\\%s', $arrRoute['item'][0]);
@@ -1059,26 +1057,29 @@ class Route extends BasePackage{
 									$strControllerClass = $arrRoute['item'][0];
 								}
 
-								if (count($arrRoute['item']) > 1) {
+								if(count($arrRoute['item']) > 1){
 									$strControllerFunction = $arrRoute['item'][1];
-								} elseif(count($arrRoute['vars']) && array_key_exists('function',$arrRoute['vars'])) {
+								}elseif(count($arrRoute['vars']) && array_key_exists('function',$arrRoute['vars'])){
 									$strControllerFunction = $arrRoute['vars']['function'];
-								} else {
+								}else{
 									$strControllerFunction = (count($arrRoute['parts'])) ? $arrRoute['parts'][0] : '_default';
 								}
 
 								$objController = new $strControllerClass();
 
-								if (in_array("_extended", get_class_methods($objController))) {
+								if(in_array("_extended", get_class_methods($objController))){
+
+									//Register the route data and meta model
+									$objController->_extended($arrRoute,$this->resMeta);
 
 									$arrAliases = $objController->_getAliases();
 									$arrReplacements = $objController->_getReplacements();
 
 									$arrControllerFunctions = array();
-									foreach (get_class_methods($objController) as $strFunctionName) {
-										if (array_key_exists($strFunctionName, $arrReplacements)) {
+									foreach(get_class_methods($objController) as $strFunctionName){
+										if(array_key_exists($strFunctionName, $arrReplacements)){
 											$arrControllerFunctions[strtolower($arrReplacements[$strFunctionName])] = $strFunctionName;
-										} else {
+										}else{
 											$arrControllerFunctions[strtolower($strFunctionName)] = $strFunctionName;
 										}
 									}
@@ -1089,36 +1090,34 @@ class Route extends BasePackage{
 									$strRequestMethodFunction = sprintf('%s%s', strtolower($_SERVER['REQUEST_METHOD']), strtolower($strControllerFunction));
 									$strControllerFunction = strtolower($strControllerFunction);
 
-									if (array_key_exists($strRequestMethodFunction, $arrControllerFunctions)) {
+									if(array_key_exists($strRequestMethodFunction, $arrControllerFunctions)){
 
 										$strControllerFunction = $arrControllerFunctions[$strRequestMethodFunction];
 										$arrTags['response'] .= $objController->$strControllerFunction();
 
-									} elseif (array_key_exists($strControllerFunction, $arrControllerFunctions)) {
+									}elseif(array_key_exists($strControllerFunction, $arrControllerFunctions)){
 
 										$strControllerFunction = $arrControllerFunctions[$strControllerFunction];
 										$arrTags['response'] .= $objController->$strControllerFunction();
-
-									} else {
-
+									}else{
 										$strControllerFunction = '_fallback';
 										$arrTags['response'] .= $objController->$strControllerFunction();
 									}
-								} else {
+								}else{
 									throw new \Exception(sprintf("Controller '%s' must extend BaseController", $strControllerClass));
 								}
-							} else {
+							}else{
 								\Twist::respond(500);
 							}
 							break;
 						case'ajax':
 							//Only allow ajax to make these requests
-							if (TWIST_AJAX_REQUEST) {
+							if (TWIST_AJAX_REQUEST){
 								\Twist::AJAX()->server(
 									$arrRoute['data']['functions'],
 									$arrRoute['data']['views']
 								);
-							} else {
+							}else{
 								\Twist::respond(405);
 							}
 							break;
@@ -1133,22 +1132,8 @@ class Route extends BasePackage{
 							break;
 					}
 
-					$arrMeta = array(
-						'tags' => '',
-						'data' => array(
-							'title' => $_SERVER['TWIST_ROUTE_TITLE'],
-							'description' => $_SERVER['TWIST_ROUTE_DESCRIPTION'],
-							'author' => $_SERVER['TWIST_ROUTE_AUTHOR'],
-							'keywords' => $_SERVER['TWIST_ROUTE_KEYWORDS']
-						)
-					);
-
-					$arrTags['title'] = $_SERVER['TWIST_ROUTE_TITLE'];
-					$arrTags['description'] = $_SERVER['TWIST_ROUTE_DESCRIPTION'];
-					$arrTags['author'] = $_SERVER['TWIST_ROUTE_AUTHOR'];
-					$arrTags['keywords'] = $_SERVER['TWIST_ROUTE_KEYWORDS'];
-
-					$this->framework()->package()->extend('View', 'meta', $arrTags);
+					//Update the Meta and Route tags to be used in the base template
+					$this->framework()->package()->extend('View', 'meta', $this->resMeta->getTags());
 					$this->framework()->package()->extend('View', 'route', $arrTags);
 
 					if(!is_null($this->strBaseView) && $arrRoute['base_view'] === true){
