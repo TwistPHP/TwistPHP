@@ -23,6 +23,8 @@
 
 namespace Twist\Core\Packages;
 use \Twist\Core\Classes\BasePackage;
+use \Twist\Core\Models\Email\Native;
+use \Twist\Core\Models\Email\SMTP;
 
 /**
  * Generate and send full multi-lingual multi-part HTML emails with the ability to add attachments. Fully customisable with Char encoding, message encoding,
@@ -46,8 +48,7 @@ class Email extends BasePackage{
 		switch($this->strProtocol){
 
 			case'smtp';
-				require_once sprintf('%s/models/Email/Protocol-smtp.model.php',DIR_FRAMEWORK_PACKAGES);
-				$this->resProtocol = new EmailSMTP();
+				$this->resProtocol = new SMTP();
 
 				$this->arrSettingsSMTP = array(
 					'host' => $this->framework()->setting('EMAIL_SMTP_HOST'),
@@ -60,8 +61,7 @@ class Email extends BasePackage{
 
 			case'native';
 			default:
-				require_once sprintf('%s/models/Email/Protocol-native.model.php',DIR_FRAMEWORK_PACKAGES);
-				$this->resProtocol = new EmailNATIVE();
+				$this->resProtocol = new Native();
 				break;
 		}
 
@@ -71,9 +71,7 @@ class Email extends BasePackage{
 	public function useSMTP($strHost,$intPort,$strUsername,$strPassword){
 
 		$this->strProtocol = 'smtp';
-
-		require_once sprintf('%s/models/Email/Protocol-smtp.model.php',DIR_FRAMEWORK_PACKAGES);
-		$this->resProtocol = new EmailSMTP();
+		$this->resProtocol = new SMTP();
 
 		$this->arrSettingsSMTP = array(
 			'host' => $strHost,

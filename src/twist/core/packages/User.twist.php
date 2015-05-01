@@ -23,6 +23,8 @@
 
 namespace Twist\Core\Packages;
 use \Twist\Core\Classes\BasePackage;
+use \Twist\Core\Models\User\User as UserObject;
+use \Twist\Core\Models\User\Session;
 
 /**
  * User management and control allowing users to register, login and be updated
@@ -56,12 +58,10 @@ class User extends BasePackage{
 		$this->strPasswordHash = $this->framework()->setting('USER_PASSWORD_HASH');
 
 		$this->resTemplate = \Twist::View('pkgUser');
+		$this->objUserSession = new Session();
 
 		//@todo setup the template override in the apps folder
 		$this->setCustomTemplateLocation(sprintf('%s/user/',DIR_FRAMEWORK_VIEWS));
-
-		require_once sprintf('%s/models/User/Session.model.php',DIR_FRAMEWORK_PACKAGES);
-		$this->objUserSession = new UserSession();
 
 		//Set the remember me life span in seconds
 		if($this->framework()->setting('USER_REMEMBER_LENGTH') > 0){
@@ -632,12 +632,10 @@ class User extends BasePackage{
 	 * @return UserObject
 	 */
 	public function get($intUserID){
-		require_once sprintf('%s/models/User/Object.model.php',dirname(__FILE__));
 		return new UserObject(\Twist::Database()->getRecord(sprintf('%susers',DATABASE_TABLE_PREFIX),$intUserID),$this);
 	}
 
 	public function create(){
-		require_once sprintf('%s/models/User/Object.model.php',dirname(__FILE__));
 		return new UserObject(\Twist::Database()->createRecord(sprintf('%susers',DATABASE_TABLE_PREFIX)),$this);
 	}
 

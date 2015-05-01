@@ -77,8 +77,8 @@
 	<body>
 		<div class="grid-container">
 			<div class="grid-100 tablet-grid-100 mobile-grid-100">
-				<h1 class="no-top-margin no-bottom-margin">TwistPHP</h1>
-				<h2 class="lightweight no-top-margin">{data:type}</h2>
+				<h1 class="no-bottom-padding">TwistPHP</h1>
+				<h2 class="lightweight no-top-padding">{data:type}</h2>
 			</div>
 			<div class="grid-80 prefix-10 tablet-grid-90 tablet-prefix-5 mobile-grid-90 mobile-prefix-5">
 				<pre class="code" title="var_dump()">{data:var_dump}</pre>

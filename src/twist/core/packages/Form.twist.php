@@ -23,31 +23,28 @@
 
 	namespace Twist\Core\Packages;
 	use \Twist\Core\Classes\BasePackage;
+	use \Twist\Core\Models\Form\Builder;
 
 	/**
 	 * Simply Form Builder Package
 	 */
 	class Form extends BasePackage{
 
-		public function __construct(){
-			require_once sprintf('%s/models/Form/FormBuilder.model.php',DIR_FRAMEWORK_PACKAGES);
-		}
-
 		public function create(){
-			return new FormBuilder();
+			return new Builder();
 		}
 
 		public function get($intFormID){
-			return new FormBuilder($intFormID);
+			return new Builder($intFormID);
 		}
 
 		public function process($intFormID){
-			$resForm = new FormBuilder($intFormID);
+			$resForm = new Builder($intFormID);
 			$resForm->process();
 		}
 
 		public function render($intFormID){
-			$resForm = new FormBuilder($intFormID);
+			$resForm = new Builder($intFormID);
 			return $resForm->render();
 		}
 	}

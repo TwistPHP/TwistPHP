@@ -137,7 +137,12 @@
 						$arrTags['message'] = 'System Process Dump';
 
 						$mxdData = json_decode($resException->getMessage(),true);
-						$arrTags['var_dump'] = \Twist::framework()->tools()->varDump($mxdData);
+
+						if(is_object($mxdData) || is_resource($mxdData)){
+							$arrTags['var_dump'] = \Twist::framework()->tools()->varDump($mxdData);
+						}else{
+							$arrTags['var_dump'] = print_r($mxdData,true);
+						}
 
 						if($mxdData == null){
 							$mxdData = array();

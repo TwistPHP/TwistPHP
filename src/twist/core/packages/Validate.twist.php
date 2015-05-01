@@ -23,6 +23,7 @@
 
 namespace Twist\Core\Packages;
 use \Twist\Core\Classes\BasePackage;
+use \Twist\Core\Models\Validate\Validator;
 
 /**
  * Data validation package can validate different types of data i.e Email Address, URLS, Telephone numbers, UK Postcodes and much more.
@@ -30,10 +31,6 @@ use \Twist\Core\Classes\BasePackage;
  * @package TwistPHP\Packages
  */
 class Validate extends BasePackage{
-
-	public function __construct(){
-		require_once sprintf('%s/models/Validate/Validator.model.php',DIR_FRAMEWORK_PACKAGES);
-	}
 
 	/**
 	 * Get a validator object, form here you can define all your validator checks and then test your data against the checks
@@ -94,6 +91,18 @@ class Validate extends BasePackage{
 	public function ip($mxdIPAddress,$blValidateIPV6 = false){
 		$strFilterFlag = ($this->boolean($blValidateIPV6)) ? FILTER_FLAG_IPV6 : FILTER_FLAG_IPV4;
 		return filter_var($mxdIPAddress, FILTER_VALIDATE_IP,$strFilterFlag);
+	}
+
+	public function timestring($strTime) {
+		return $this->regx($strTime,"/^([1-9]|[0,1]\d|2[0-3]):[0-5]\d(:[0-5]\d)?$/");
+	}
+
+	public function datestring($strDate) {
+		return $this->regx($strDate,"/^\d{4}\-([1-9]|1[0-2])\-([1-9]|[0,1,2]\d|3[0-1])$/");
+	}
+
+	public function datetime($strDatetime) {
+		return $this->regx($strDatetime,"/^\d{4}\-(0[1-9]|1[0-2])\-(0[1-9]|[0,1,2]\d|3[0-1]) (0[1-9]|[0,1]\d|2[0-3]):[0-5]\d:[0-5]\d$/");
 	}
 
 	/**

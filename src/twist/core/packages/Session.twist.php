@@ -23,6 +23,9 @@
 
 	namespace Twist\Core\Packages;
 	use \Twist\Core\Classes\BasePackage;
+	use \Twist\Core\Models\Session\File;
+	use \Twist\Core\Models\Session\Memcache;
+	use \Twist\Core\Models\Session\Mysql;
 
 	/**
 	 * Easy session management allowing the use of a user and site array of data. All stored using the PHP session.
@@ -41,18 +44,15 @@
 			switch($this->strHandler){
 
 				case'file';
-					require_once sprintf('%s/models/Session/File.model.php',DIR_FRAMEWORK_PACKAGES);
-					$this->resHandler = new SessionFile();
+					$this->resHandler = new File();
 					break;
 
 				case'memcache';
-					require_once sprintf('%s/models/Session/Memcache.model.php',DIR_FRAMEWORK_PACKAGES);
-					$this->resHandler = new SessionMemcache();
+					$this->resHandler = new Memcache();
 					break;
 
 				case'mysql';
-					require_once sprintf('%s/models/Session/Mysql.model.php',DIR_FRAMEWORK_PACKAGES);
-					$this->resHandler = new SessionMysql();
+					$this->resHandler = new Mysql();
 					break;
 
 				case'native';

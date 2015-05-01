@@ -36,6 +36,7 @@ class View extends BasePackage{
 	protected $arrElementData = array();
 	protected $arrElementParams = array();
 	protected $dirCurrentView = null;
+	protected $strCurrentTag = null;
 	protected $blDebugMode = false;
 
 	public function __construct($strInstanceKey){
@@ -269,8 +270,13 @@ class View extends BasePackage{
 
 			return $dirFullViewPath;
 		}else{
-			//File not exist
-			throw new \Exception(sprintf("View file '%s' was not found or does not exist.",$dirFullViewPath),11102);
+
+			if(!is_null($this->dirCurrentView)){
+				$intLineNo = $this->locateTag($this->dirCurrentView,$this->strCurrentTag);
+				throw new \Twist\Core\Classes\TwistException(sprintf("View file <em>%s</em> was not found or does not exist in <em>%s</em>",str_replace(DIR_BASE,'/',$dirFullViewPath),str_replace(DIR_BASE,'/',$this->dirCurrentView)),11102,$this->dirCurrentView,$intLineNo);
+			}else{
+				throw new \Twist\Core\Classes\TwistException(sprintf("View file <em>%s</em> was not found or does not exist%s",str_replace(DIR_BASE,'/',$dirFullViewPath)),11102);
+			}
 		}
 	}
 	
@@ -299,6 +305,27 @@ class View extends BasePackage{
 	    }
 
 	    return $strRawViewDataOut;
+	}
+
+	/**
+	 * Locate the line number that a particular tag falls on
+	 * @param $dirViewFile
+	 * @param $strTag
+	 * @return int|null|string
+	 * @throws \Exception
+	 */
+	protected function locateTag($dirViewFile,$strTag){
+
+		$intLineNo = null;
+		$arrCode = explode("\n",$this->get($dirViewFile));
+
+		foreach($arrCode as $intLineNo => $strLine){
+			if(strstr($strLine,$strTag)){
+				break;
+			}
+		}
+
+		return ($intLineNo+1);
 	}
 
 	/**
@@ -580,6 +607,7 @@ class View extends BasePackage{
 	public function runTags($strRawView,$strTag,$strType,$strReference,$arrData = array(),$blReturnArray = false){
 
 		$strFunction = null;
+		$this->strCurrentTag = $strTag;
 
 		if(preg_match("#(.*)\[(.*)\:(.*)\]#",$strTag,$srtMatchResults)){
 			$strFunction = $srtMatchResults[1];
@@ -764,6 +792,8 @@ class View extends BasePackage{
 
 		}
 
+		$this->strCurrentTag = null;
+
 		return $strRawView;
 	}
 
@@ -842,6 +872,9 @@ class View extends BasePackage{
 	        $this->arrElementParams = array_values( $arrParts );
 	    }
 
+		//Backup current view path
+		$strTempCurrentView = $this->dirCurrentView;
+
 		$dirElement = $this->parseViewPath($dirElement);
 
         ob_start();
@@ -853,7 +886,10 @@ class View extends BasePackage{
             \Twist::framework()->debug()->log('View','usage',array('instance' => $this->strInstanceKey,'file' => $dirElement,'tags' => array()));
         }
 
-	    return $strOut;
+		//Restore the current view path
+		$this->dirCurrentView = $strTempCurrentView;
+
+		return $strOut;
 	}
 
 	/**

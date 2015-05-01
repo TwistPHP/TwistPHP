@@ -50,6 +50,7 @@ class Route extends BasePackage{
 	protected $blDebugMode = false;
 	protected $strInstance = '';
 	protected $resView = null;
+	protected $resMeta = null;
 	protected $strControllerDirectory = null;
 
 	public function __construct($strInstance){
@@ -1132,11 +1133,22 @@ class Route extends BasePackage{
 							break;
 					}
 
+					$arrMeta = array(
+						'tags' => '',
+						'data' => array(
+							'title' => $_SERVER['TWIST_ROUTE_TITLE'],
+							'description' => $_SERVER['TWIST_ROUTE_DESCRIPTION'],
+							'author' => $_SERVER['TWIST_ROUTE_AUTHOR'],
+							'keywords' => $_SERVER['TWIST_ROUTE_KEYWORDS']
+						)
+					);
+
 					$arrTags['title'] = $_SERVER['TWIST_ROUTE_TITLE'];
 					$arrTags['description'] = $_SERVER['TWIST_ROUTE_DESCRIPTION'];
 					$arrTags['author'] = $_SERVER['TWIST_ROUTE_AUTHOR'];
 					$arrTags['keywords'] = $_SERVER['TWIST_ROUTE_KEYWORDS'];
 
+					$this->framework()->package()->extend('View', 'meta', $arrTags);
 					$this->framework()->package()->extend('View', 'route', $arrTags);
 
 					if(!is_null($this->strBaseView) && $arrRoute['base_view'] === true){

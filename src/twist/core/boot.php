@@ -45,9 +45,10 @@
 
 	Autoload::init(realpath(sprintf('%s/../../',dirname(__FILE__))));
 	//Autoload::registerPath('\\Twist\\Packages\\','twist/modules','.controller.php');
-	Autoload::registerPath('\\Twist\\Core\\Packages\\','twist/core/packages','.twist.php');
 	Autoload::registerPath('\\Twist\\Core\\Classes\\','twist/core/classes','.twist.php');
 	Autoload::registerPath('\\Twist\\Core\\Controllers\\','twist/core/controllers','.controller.php');
+	Autoload::registerPath('\\Twist\\Core\\Models\\{package}\\{class}','twist/core/models/{package}/{class}','.model.php');
+	Autoload::registerPath('\\Twist\\Core\\Packages\\','twist/core/packages','.twist.php');
 
 	require_once sprintf('%s/classes/Twist.twist.php',dirname(__FILE__));
 
@@ -58,6 +59,7 @@
 	Twist::define('DIR_FRAMEWORK',realpath(sprintf('%s/../',dirname(__FILE__))).'/');
 	Twist::define('DIR_FRAMEWORK_CONFIG',sprintf('%sconfig/',DIR_FRAMEWORK));
 	Twist::define('DIR_FRAMEWORK_CLASSES',sprintf('%score/classes/',DIR_FRAMEWORK));
+	Twist::define('DIR_FRAMEWORK_MODELS',sprintf('%score/models/',DIR_FRAMEWORK));
 	Twist::define('DIR_FRAMEWORK_PACKAGES',sprintf('%score/packages/',DIR_FRAMEWORK));
 	Twist::define('DIR_FRAMEWORK_VIEWS',sprintf('%score/views/',DIR_FRAMEWORK));
 	Twist::define('DIR_FRAMEWORK_RESOURCES',sprintf('%score/resources/',DIR_FRAMEWORK));

@@ -36,16 +36,12 @@
 
 		public function __construct(){
 
-			//Decide which library to use
-			$strLibrary = $this->framework()->setting('FTP_LIBRARY'); //Can be set to either 'ftpnative' or 'ftpsocket'
-			$strLibraryFile = sprintf('%s/models/FTP/%s.model.php',DIR_FRAMEWORK_PACKAGES,ucwords(strtolower($strLibrary)));
+			$strLibraryClass = sprintf('\Twist\Core\Models\FTP\%s',strtolower($this->framework()->setting('FTP_LIBRARY'))); //Can be set to either 'ftpnative' or 'ftpsocket'
 
-			if(!file_exists($strLibraryFile)){
-				throw new \Exception(sprintf("Error, FTP protocol library '%s' is not installed or supported",$strLibrary));
+			if(!class_exists($strLibraryClass)){
+				throw new \Exception(sprintf("Error, FTP protocol library '%s' is not installed or supported",$this->framework()->setting('FTP_LIBRARY')));
 			}
 
-			require_once $strLibraryFile;
-			$strLibraryClass = sprintf('\TwistPHP\Packages\FTP%s',ucwords(strtolower($strLibrary)));
 			$this->resLibrary = new $strLibraryClass();
 		}
 

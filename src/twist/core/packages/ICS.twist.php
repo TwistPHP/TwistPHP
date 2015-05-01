@@ -23,6 +23,8 @@
 
 	namespace Twist\Core\Packages;
 	use \Twist\Core\Classes\BasePackage;
+	use \Twist\Core\Models\ICS\Calendar;
+	use \Twist\Core\Models\ICS\Event;
 
 	/**
 	 * ICS Calendar and Event Handler, can import, edita nd create ics files that are compatible with Google Calendars and iCAl/Mac Calendar
@@ -31,21 +33,13 @@
 	class ICS extends BasePackage{
 
 		/**
-		 * Loads in the two returnable object classes
-		 */
-		public function __construct(){
-			require_once sprintf('%s/models/ICS/Calendar.model.php',DIR_FRAMEWORK_PACKAGES);
-			require_once sprintf('%s/models/ICS/Event.model.php',DIR_FRAMEWORK_PACKAGES);
-		}
-
-		/**
 		 * Create a new instance of the ICSCalendar object, allowing the creation of an calendar ICS file
 		 *
 		 * @return_object ICSCalendar core/packages/models/ICS/Calendar.model.php
 		 * @return object Returns the ICS Calendar Object
 		 */
 		public function createCalendar(){
-			return new ICSCalendar();
+			return new Calendar();
 		}
 
 		/**
@@ -55,7 +49,7 @@
 		 * @return object Returns the ICS Event Object
 		 */
 		public function createEvent(){
-			return new ICSEvent();
+			return new Event();
 		}
 
 		/**

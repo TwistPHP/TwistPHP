@@ -23,6 +23,7 @@
 
 	namespace Twist\Core\Packages;
 	use \Twist\Core\Classes\BasePackage;
+	use \Twist\Core\Models\Image\Image as ImageObject;
 
 	/**
 	 * Image editing suite that allows for new images to be created and existing images to be loaded in for modification
@@ -35,11 +36,10 @@
 		 * @throws \Exception
 		 */
 		public function __construct(){
+
 			if(!extension_loaded('gd')){
 				throw new \Exception('Required extension GD is not loaded.');
 			}
-
-	        require_once sprintf('%s/models/Image/Object.model.php',DIR_FRAMEWORK_PACKAGES);
 		}
 
 		/**

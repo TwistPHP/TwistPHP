@@ -80,13 +80,11 @@
 					$strProtocol = DATABASE_PROTOCOL;
 				}
 
-				$strProtocolFile = sprintf('%s/models/Database/Protocol-%s.model.php',DIR_FRAMEWORK_PACKAGES,strtolower($strProtocol));
+				$strLibraryClass = sprintf('\Twist\Core\Models\Database\Protocol%s',strtoupper($strProtocol));
 
-				if(!file_exists($strProtocolFile)){
+				if(!class_exists($strLibraryClass)){
 					throw new \Exception(sprintf("Database protocol library '%s' is not installed or supported",$strProtocol));
 				}
-
-				require_once $strProtocolFile;
 
 				if(!is_null($strHost) || !is_null($strUsername) || !is_null($strPassword) || !is_null($strDatabaseName)){
 					if( !( !is_null($strHost) && !is_null($strUsername) && !is_null($strPassword) && !is_null($strDatabaseName) ) ){
@@ -100,7 +98,6 @@
 					$strDatabaseName = DATABASE_NAME;
 				}
 
-				$strLibraryClass = sprintf('\Twist\Core\Packages\Protocol%s',strtoupper($strProtocol));
 				$this->resLibrary = new $strLibraryClass();
 				$this->resLibrary->connect($strHost,$strUsername,$strPassword,$strDatabaseName);
 
@@ -276,15 +273,13 @@
 		 */
 		public function createRecord($strTable){
 
-			require_once sprintf('%s/models/Database/Record.model.php',DIR_FRAMEWORK_PACKAGES);
-
 			$resRecord = null;
 
 			//Get the structure of the table
 			$arrStructure = $this->getStructure($strTable,$this->strDatabaseName);
 
 			if(!is_null($arrStructure)){
-				$resRecord = new DatabaseRecord($this->strDatabaseName,$strTable,$arrStructure,array());
+				$resRecord = new \Twist\Core\Models\Database\Record($this->strDatabaseName,$strTable,$arrStructure,array());
 			}
 
 			return $resRecord;
@@ -302,7 +297,6 @@
 		 */
 		public function getRecord($strTable,$mxdValue,$strField = 'id'){
 
-			require_once sprintf('%s/models/Database/Record.model.php',DIR_FRAMEWORK_PACKAGES);
 			$resRecord = null;
 
 			//Get the structure of the table
@@ -312,7 +306,7 @@
 
 				$arrRecord = $this->get($strTable,$mxdValue,$strField);
 				if(count($arrRecord)){
-					$resRecord = new DatabaseRecord($this->strDatabaseName,$strTable,$arrStructure,$arrRecord);
+					$resRecord = new \Twist\Core\Models\Database\Record($this->strDatabaseName,$strTable,$arrStructure,$arrRecord);
 				}
 			}
 
@@ -332,7 +326,6 @@
 		 */
 		public function cloneRecord($strTable,$mxdValue,$strField = 'id'){
 
-			require_once sprintf('%s/models/Database/Record.model.php',DIR_FRAMEWORK_PACKAGES);
 			$resRecord = null;
 
 			//Get the structure of the table
@@ -348,7 +341,7 @@
 						$arrRecord[$arrStructure['auto_increment']] = null;
 					}
 
-					$resRecord = new DatabaseRecord($this->strDatabaseName,$strTable,$arrStructure,$arrRecord,true);
+					$resRecord = new \Twist\Core\Models\Database\Record($this->strDatabaseName,$strTable,$arrStructure,$arrRecord,true);
 				}
 			}
 
@@ -536,8 +529,7 @@
 			$resTable = null;
 			$strDatabaseName = (is_null($strDatabase)) ? $this->strDatabaseName : $strDatabase;
 
-			require_once sprintf('%s/models/Database/Table.model.php',DIR_FRAMEWORK_PACKAGES);
-			$resTable = new DatabaseTable($strDatabaseName,$strTable);
+			$resTable = new \Twist\Core\Models\Database\Table($strDatabaseName,$strTable);
 
 			return $resTable;
 		}

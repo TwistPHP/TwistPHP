@@ -77,13 +77,11 @@
 	<body>
 		<div class="grid-container">
 			<div class="grid-100 tablet-grid-100 mobile-grid-100">
-				<h1 class="no-top-margin no-bottom-margin">{data:type} ({data:code})</h1>
-				<h2 class="lightweight no-top-margin">{data:message}</h2>
+				<h1 class="no-bottom-padding">{data:type} ({data:code})</h1>
+				<h2 class="lightweight no-top-padding">{data:message}</h2>
 			</div>
 			<div class="grid-80 prefix-10 tablet-grid-90 tablet-prefix-5 mobile-grid-90 mobile-prefix-5 grid-parent">
 				<div class="grid-100 tablet-grid-100 mobile-grid-100">
-					<p class="warning">A {data:type} has occurred whilst loading this page, the issue has been logged and a bug report has been automatically logged.
-						<br>Please <a href="javascript:window.location.reload( true );">refresh</a> the page to try again. If this problem persists please contact the site administrator.</p>
 					<pre class="code" title="{data:file}">{data:php_code}</pre>
 					{data:trace}
 				</div>
@@ -171,6 +169,7 @@
 					</table>
 				</div>
 				<div class="clear"></div>
+				<hr>
 				<p class="grid-100 tablet-grid-100 mobile-grid-100"><small><a href="{setting:site_protocol}://{setting:site_host}" target="_blank">{setting:site_name}</a> is powered by <a href="https://github.com/Shadow-Technologies/TwistPHP" target="_blank">TwistPHP</a>.</small></p>
 			</div>
 		</div>
