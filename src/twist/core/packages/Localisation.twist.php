@@ -178,4 +178,69 @@
 		public function getTimezones(){
 			return $this->arrTimezones;
 		}
+
+		/**
+		 * Convert an amount between two Currency ISO codes
+		 * @param $strFromISO
+		 * @param $strToISO
+		 * @param $fltAmount
+		 * @param bool $blFormat
+		 * @return string
+		 * @throws \Exception
+		 */
+		public function convertCurrency($strFromISO,$strToISO,$fltAmount,$blFormat = true){
+
+			$intConversionRate = $this->currencyConversionRate($strFromISO,$strToISO);
+			$fltConverted = ($fltAmount * $intConversionRate);
+
+			return ($blFormat) ? number_format($fltConverted,2,'.','') : $fltConverted;
+		}
+
+		/**
+		 * Get the conversion rate between two provided currency ISO codes.
+		 * @param $strFromISO
+		 * @param $strToISO
+		 * @return \SimpleXMLElement
+		 * @throws \Exception
+		 */
+		public function currencyConversionRate($strFromISO,$strToISO){
+
+			$fltConversionRate = false;
+
+			switch(strtolower(\Twist::framework()->setting('CURRENCY_CONVERSION_API'))){
+
+				case 'yahooapis':
+
+					//Yahoo Currency API
+					$arrParameters = array(
+						'q' => urlencode(sprintf('select * from yahoo.finance.xchange where pair in ("%s%s")',$strFromISO,$strToISO)),
+						'format' => 'json',
+						'env' => urlencode('://datatables.org/alltableswithkeys'),
+					);
+
+					$strResult = \Twist::Curl()->get('http://query.yahooapis.com/v1/public/yql',$arrParameters);
+
+					$arrResult = json_decode($strResult,true);
+					$fltConversionRate = (is_array($arrResult) && array_key_exists('rate',$arrResult['query']['results'])) ? $arrResult['query']['results']['rate']['Rate'] : false;
+					break;
+
+				case 'webservicex.net':
+					//webservicex.net
+					$arrParameters = array(
+						'FromCurrency' => $strFromISO,
+						'ToCurrency' => $strToISO
+					);
+
+					$strResult = \Twist::Curl()->get('http://www.webservicex.net/CurrencyConvertor.asmx/ConversionRate',$arrParameters);
+
+					$fltConversionRate = simplexml_load_string($strResult,"SimpleXMLElement",LIBXML_NOCDATA);
+					break;
+			}
+
+			if($fltConversionRate === false){
+				throw new \Exception(sprintf('TwistPHP Error: Unable to retrieve currency conversion rate for %s to %s',$strFromISO,$strToISO));
+			}
+
+			return $fltConversionRate;
+		}
 	}
