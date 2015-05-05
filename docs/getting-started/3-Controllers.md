@@ -35,7 +35,8 @@ Routing requests through a controller allows you to create responses to URIs. By
 				return $this -> _view( 'pages/home.tpl', $arrContent );
 			}
 
-			// This method is declared in the BaseController, but let's redeclare it
+			// The _fallback() function is called when no other function matches
+			// (This method is declared in the BaseController, but let's redeclare it)
 			public function _fallback() {
 				// ...how amusing!
 				Error::errorPage( 418 );
@@ -80,7 +81,8 @@ Routing requests through a controller allows you to create responses to URIs. By
 
 		// Set the 'base' view for the site to insert the response into
 		Twist::Route() -> baseView( 'base.tpl' );
-		// Call the Site controller when any URI is requested - the % is the dynamic part of the request that calls a method
+		// Call the Site controller when any URI is requested
+		// (The % is the dynamic part of the request that calls a method)
 		Twist::Route() -> controller( '/%', 'Site' );
 		// Allow the TwistPHP Manager to be used when you go to /manager
 		Twist::Route() -> manager();
