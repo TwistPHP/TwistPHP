@@ -330,7 +330,7 @@
 	"USER_REGISTER_PASSWORD":{
 		"title":"User Register Password",
 		"description":"The user must enter a password during the registration process (enables a password field on registration form)",
-		"default":0,
+		"default":1,
 		"type":"boolean",
 		"options":"1,0",
 		"null":0
@@ -361,11 +361,11 @@
 	},
 	"USER_AUTO_AUTHENTICATE":{
 		"title":"Auto Authenticate",
-		"description":"Automatically try and authenticate the user when the correct post parameters are present",
+		"description":"Automatically log the user in upon successful registration. This will only work if USER_EMAIL_VERIFICATION is 'off' and USER_REGISTER_PASSWORD is 'on'",
 		"default":0,
 		"type":"boolean",
 		"options":"1,0",
-		"null":0
+		"null":1
 	},
 	"USER_MIN_PASSWORD_LENGTH":{
 		"title":"Min Password Length",
