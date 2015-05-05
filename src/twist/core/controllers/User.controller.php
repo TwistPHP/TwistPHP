@@ -37,7 +37,7 @@ class User extends BaseController{
 	}
 
 	public function postLogin(){
-
+		$this->resUser->authenticate();
 	}
 
 	public function register(){
@@ -83,9 +83,11 @@ class User extends BaseController{
 					//AUTO_LOGIN
 					if(\Twist::framework()->setting('USER_REGISTER_PASSWORD') && \Twist::framework()->setting('USER_EMAIL_VERIFICATION') == false && \Twist::framework()->setting('USER_AUTO_AUTHENTICATE')){
 
+						//@todo redirect - test or work out best way of doing this
+						//$this->resUser->afterLoginRedirect(); --- set the value that this function uses, authenticate will do the redirect
+
 						//Authenticate the user (log them in)
-						//@todo only if verify account is disabled
-						$this->resUser->authenticate($_POST['email'],$_POST['password'],$this->resUser->strLoginUrl,true);
+						$this->resUser->authenticate($_POST['email'],$_POST['password']);
 
 						//@todo redirect - test or work out best way of doing this
 						$this->resUser->afterLoginRedirect();
