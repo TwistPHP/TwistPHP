@@ -217,7 +217,7 @@
 
 			$strKeyList = $this->generatePrimaryKey();
 			$strKeyList .= $this->generateUniqueKey();
-			$strKeyList .= $this->generateIndexs();
+			$strKeyList .= $this->generateIndexes();
 
 			$strKeyList = ($strKeyList != '') ? substr($strKeyList,0,-2)."\n" : '';
 
@@ -287,7 +287,7 @@
 		 * Generate the indexes that can be used in the create query
 		 * @return string
 		 */
-		protected function generateIndexs(){
+		protected function generateIndexes(){
 
 			$strOut = '';
 
