@@ -213,9 +213,9 @@
 
 					//Yahoo Currency API
 					$arrParameters = array(
-						'q' => urlencode(sprintf('select * from yahoo.finance.xchange where pair in ("%s%s")',$strFromISO,$strToISO)),
+						'q' => sprintf('select * from yahoo.finance.xchange where pair in ("%s%s")',$strFromISO,$strToISO),
 						'format' => 'json',
-						'env' => urlencode('://datatables.org/alltableswithkeys'),
+						'env' => 'store://datatables.org/alltableswithkeys',
 					);
 
 					$strResult = \Twist::Curl()->get('http://query.yahooapis.com/v1/public/yql',$arrParameters);
@@ -225,15 +225,19 @@
 					break;
 
 				case 'webservicex.net':
+
 					//webservicex.net
 					$arrParameters = array(
 						'FromCurrency' => $strFromISO,
 						'ToCurrency' => $strToISO
 					);
 
-					$strResult = \Twist::Curl()->get('http://www.webservicex.net/CurrencyConvertor.asmx/ConversionRate',$arrParameters);
+					$strResult = \Twist::Curl()->post('http://www.webservicex.net/CurrencyConvertor.asmx/ConversionRate',$arrParameters);
 
-					$fltConversionRate = simplexml_load_string($strResult,"SimpleXMLElement",LIBXML_NOCDATA);
+					\Twist::XML()->loadRawData($strResult);
+					$arrData = \Twist::XML()->getArray();
+
+					$fltConversionRate = (is_array($arrData) && count($arrData)) ? $arrData['data'][0]['content'][0] : false;
 					break;
 			}
 

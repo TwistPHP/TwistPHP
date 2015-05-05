@@ -1139,7 +1139,7 @@ class Route extends BasePackage{
 					if(!is_null($this->strBaseView) && $arrRoute['base_view'] === true){
 
 						$strPageOut = $this->resView->build($this->strBaseView, $arrRoute['data']);
-					}elseif(!is_null($this->strBaseView) && !is_bool($arrRoute['base_view'])){
+					}elseif(!is_bool($arrRoute['base_view'])){
 
 						$strCustomView = sprintf('%s/%s', $this->resView->getDirectory(), $arrRoute['base_view']);
 						if(file_exists($strCustomView)){

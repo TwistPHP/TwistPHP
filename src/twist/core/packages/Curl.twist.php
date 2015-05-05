@@ -159,7 +159,7 @@
 		 * @return mixed Returns the results of the request, will be an array if 'decodeResponseJSON' is enabled
 		 */
 		public function post($strURL,$mxdRequestData = array(),$arrHeaders = array()){
-			return $this->makePostRequest($strURL,$mxdRequestData,$arrHeaders,'delete');
+			return $this->makePostRequest($strURL,$mxdRequestData,$arrHeaders,'post');
 		}
 
 		/**
@@ -189,7 +189,7 @@
 		 * @return mixed Returns the results of the request, will be an array if 'decodeResponseJSON' is enabled
 		 */
 		public function patch($strURL,$mxdRequestData = array(),$arrHeaders = array()){
-			return $this->makePostRequest($strURL,$mxdRequestData,$arrHeaders,'delete');
+			return $this->makePostRequest($strURL,$mxdRequestData,$arrHeaders,'patch');
 		}
 
 		/**

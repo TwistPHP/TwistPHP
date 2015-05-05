@@ -114,7 +114,7 @@
 	"CURRENCY_CONVERSION_API":{
 		"title":"Currency Conversion API",
 		"description":"Set the currency converter to use either Yahoo Currency API or WebserviceX.net Currency API both of which are free to use.",
-		"default":"WebserviceX.net",
+		"default":"YahooAPIs",
 		"type":"options",
 		"options":"WebserviceX.net,YahooAPIs",
 		"null":0
