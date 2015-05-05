@@ -21,26 +21,27 @@
  *
  */
 
-namespace Twist\Core\Controllers;
-use Twist\Core\Classes\BaseController;
+namespace Twist\Core\Classes;
 
-class User extends BaseController{
+class BaseControllerUser extends BaseController{
 
 	protected $resUser = null;
 
 	public function __construct(){
+
 		$this->resUser = \Twist::User();
+
+		$this -> _aliasURI( 'change-password', 'changePassword' );
+		$this -> _aliasURI( 'forgotten-password', 'forgottenPassword' );
+		$this -> _aliasURI( 'verify-account', 'verifyAccount' );
+		$this -> _aliasURI( 'device-manager', 'deviceManager' );
 	}
 
-	public function __default(){
-		return $this->resUser->templateExtension('login_form');
-	}
-
-	public function forgotten(){
+	public function forgottenPassword(){
 		return $this->resUser->templateExtension('forgotten_password_form');
 	}
 
-	public function postForgotten(){
+	public function postForgottenPassword(){
 
 		//Process the forgotten password request
 		if(array_key_exists('forgotten_email',$_POST) && $_POST['forgotten_email'] != ''){
@@ -59,11 +60,11 @@ class User extends BaseController{
 		}
 	}
 
-	public function change(){
+	public function changePassword(){
 		return $this->resUser->templateExtension('change_password_form');
 	}
 
-	public function postChange(){
+	public function postChangePassword(){
 
 		if(array_key_exists('password',$_POST) && array_key_exists('confirm_password',$_POST)){
 
@@ -110,11 +111,11 @@ class User extends BaseController{
 		}
 	}
 
-	public function verify(){
+	public function verifyAccount(){
 		return $this->resUser->templateExtension('account_verification');
 	}
 
-	public function postVerify(){
+	public function postVerifyAccount(){
 
 		//Resend a new verification code
 		if(array_key_exists('verification_email',$_POST) && $_POST['verification_email'] != ''){
@@ -134,62 +135,11 @@ class User extends BaseController{
 		}
 	}
 
-	public function register(){
-		return $this->resUser->templateExtension('registration_form');
-	}
-
-	public function postRegister(){
-
-		//Process the register user request
-		if(array_key_exists('register',$_POST) && $_POST['register'] != ''){
-
-			$resUser = $this->resUser->create();
-			$resUser->email($_POST['email']);
-			$resUser->firstname($_POST['firstname']);
-			$resUser->surname($_POST['lastname']);
-			$resUser->level(10);
-
-			$blContinue = true;
-
-			if(\Twist::framework()->setting('USER_REGISTER_PASSWORD')){
-
-				if($_POST['password'] == $_POST['confirm_password']){
-					$arrResponse = $resUser->password($_POST['password']);
-
-					if($arrResponse['status'] == false){
-						\Twist::Session()->data('site-register_error_message',$arrResponse['message']);
-						$blContinue = false;
-					}
-				}else{
-					\Twist::Session()->data('site-register_error_message','Your password and confirm password do not match');
-					$blContinue = false;
-				}
-			}else{
-				$resUser->resetPassword();
-			}
-
-			//If the password configuration has passed all checks then continue
-			if($blContinue){
-				$intUserID = $resUser->commit();
-
-				if($intUserID > 0){
-					\Twist::Session()->data('site-register_message','Thank you for your registration, your password has been emailed to you');
-					unset( $_POST['email'] );
-					unset( $_POST['firstname'] );
-					unset( $_POST['lastname'] );
-					unset( $_POST['register'] );
-				}else{
-					\Twist::Session()->data('site-register_error_message','Failed to register user');
-				}
-			}
-		}
-	}
-
-	public function devices(){
+	public function deviceManager(){
 		return $this->resUser->templateExtension('devices_form');
 	}
 
-	public function postDevices(){
+	public function postDeviceManager(){
 
 		if(array_key_exists('save-device',$_GET) && array_key_exists('device-name',$_GET)){
 			$this->resUser->objUserSession->editDevice($this->resUser->currentID(),$_GET['save-device'],$_GET['device-name']);
