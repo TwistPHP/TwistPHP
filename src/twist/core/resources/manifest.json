@@ -80,8 +80,18 @@
 	"twist/debug": {
 		"standard": {
 			"default": true,
-			"css": ["css/debug.min.css"],
+			"css": ["css/twist-debug.min.css"],
+			"js": ["js/twist-debug.js"]
+		},
+		"css": {
+			"default": true,
+			"css": ["css/twist-debug.min.css"],
 			"js": []
+		},
+		"js": {
+			"default": true,
+			"css": [],
+			"js": ["js/twist-debug.js"]
 		}
 	},
 	"twist/file-upload": {
