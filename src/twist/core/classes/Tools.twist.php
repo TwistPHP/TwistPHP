@@ -23,41 +23,114 @@
 
 	namespace Twist\Core\Classes;
 
-	final class Tools{
+	final class Tools {
 
 		/**
 		 * Similar to print_r but corrects issues such as booleans, also give more useful information about the data
-	     *
-		 * @param $arrData
+		 *
+		 * @param        $arrData
 		 * @param string $strIndent
 		 * @return string
 		 */
-		public function arrayPrint($arrData,$strIndent = ''){
+		public function arrayPrint( $arrData, $strIndent = '' ) {
 
 			$strOut = "";
 
-			foreach($arrData as $strKey => $mxdValue){
-				if(is_array($mxdValue)){
-					$strOut .= $strIndent."[".$strKey."] => Array\n";
-					$strOut .= $strIndent."(\n";
-					$strOut .= $this->arrayPrint($mxdValue,$strIndent."\t");
-					$strOut .= $strIndent.")";
+			foreach( $arrData as $strKey => $mxdValue ) {
+				if( is_array( $mxdValue ) ) {
+					$strOut .= $strIndent . "[" . $strKey . "] => Array\n";
+					$strOut .= $strIndent . "(\n";
+					$strOut .= $this -> arrayPrint( $mxdValue, $strIndent . "\t" );
+					$strOut .= $strIndent . ")";
 					$strOut .= "\n";
-				}else{
-					$strOut .= $strIndent."[".$strKey."] => ".((is_bool($mxdValue)) ? sprintf("%b",$mxdValue) : $mxdValue);
+				} else {
+					$strOut .= $strIndent . "[" . $strKey . "] => " . ( is_bool( $mxdValue ) ? sprintf( "%b", $mxdValue ) : $mxdValue );
 					$strOut .= "\n";
 				}
 			}
 
-			return ($strIndent == '') ? sprintf('<pre>%s</pre>',$strOut) : $strOut;
+			return ( $strIndent == '' ) ? sprintf( '<pre>%s</pre>', $strOut ) : $strOut;
 		}
 
 		/**
-	     * Transform an associative array into a multidimensional array using a key to define the structure
-	     *
-		 * @param $arrIn Array to transform
-		 * @param null $strMultiDimensionalKey Key in the array to use to define a structure
+		 * Return a value in an array using multi dimensional key to parse the structure of the array
+		 *
+		 * @param        $strKey       Location of the value in the array
+		 * @param        $arrData      Array to parse
 		 * @param string $strSplitChar Structure separator
+		 * @return null $mxdOut
+		 */
+		public function arrayParse( $strKey, $arrData, $strSplitChar = '/' ) {
+
+			$mxdOut = null;
+			$arrParts = explode( $strSplitChar, $strKey );
+
+			$strKey = array_shift( $arrParts );
+
+			if( array_key_exists( $strKey, $arrData ) ) {
+
+				if( count( $arrParts ) ) {
+					$mxdOut = $this -> arrayParse( implode( $strSplitChar, $arrParts ), $arrData[$strKey] );
+				} else {
+					$mxdOut = $arrData[$strKey];
+				}
+			}
+
+			return $mxdOut;
+		}
+
+		/**
+		 * Remove an item from a multi-dimensional array using a key, the split char indicates a change in array level
+		 *
+		 * @param        $strKey
+		 * @param        $arrData
+		 * @param string $strSplitChar
+		 * @return array Returns either the original array or the array with the item removed
+		 */
+		public function arrayParseUnset( $strKey, $arrData, $strSplitChar = '/' ) {
+
+			$arrCollapsedArray = $this -> array3dTo2d( $arrData, $strSplitChar );
+
+			if( array_key_exists( $strKey, $arrCollapsedArray ) ) {
+				unset( $arrCollapsedArray[$strKey] );
+				$arrData = $this -> array2dTo3d( $arrCollapsedArray, null, $strSplitChar );
+			}
+
+			return $arrData;
+		}
+
+		/**
+		 * Collapse a multidimensional array into a single associative array
+		 *
+		 * @param        $arrIn          Array to transform
+		 * @param string $strJoinChar    Structure separator
+		 * @param null   $mxdPreviousKey Previous key encountered (used in the recursive process)
+		 * @return array
+		 */
+		public function array3dTo2d( $arrIn, $strJoinChar = '/', $mxdPreviousKey = null ) {
+
+			$arrOut = array();
+
+			foreach( $arrIn as $mxdKey => $mxdValue ) {
+				$mxdCurrentKey = ( !is_null( $mxdPreviousKey ) ) ? $mxdPreviousKey . $strJoinChar . $mxdKey : $mxdKey;
+
+				if( is_array( $mxdValue ) ) {
+					$arrMoreData = $this -> array3dTo2d( $mxdValue, $strJoinChar, $mxdCurrentKey );
+					$arrOut = array_merge( $arrOut, $arrMoreData );
+				} else {
+					$arrOut[$mxdCurrentKey] = $mxdValue;
+				}
+			}
+
+			return $arrOut;
+		}
+
+		/**
+		 * Transform an associative array into a multidimensional array using a key to define the structure
+		 *
+		 * @param        $arrIn                  Array to transform
+		 * @param null   $strMultiDimensionalKey Key in the array to use to define a structure
+		 * @param string $strSplitChar           Structure separator
 		 * @return array
 		 */
 		public function array2dTo3d( $arrIn, $strMultiDimensionalKey = null, $strSplitChar = '/' ) {
@@ -86,52 +159,26 @@
 		}
 
 		/**
-	     * Collapse a multidimensional array into a single associative array
-	     *
-		 * @param $arrIn Array to transform
-		 * @param string $strJoinChar Structure separator
-		 * @param null $mxdPreviousKey Previous key encountered (used in the recursive process)
-		 * @return array
-		 */
-		public function array3dTo2d( $arrIn, $strJoinChar = '/', $mxdPreviousKey = null ) {
-
-			$arrOut = array();
-
-			foreach( $arrIn as $mxdKey => $mxdValue ) {
-				$mxdCurrentKey = ( !is_null( $mxdPreviousKey ) ) ? $mxdPreviousKey . $strJoinChar . $mxdKey : $mxdKey;
-
-				if( is_array( $mxdValue ) ) {
-					$arrMoreData = $this -> array3dTo2d( $mxdValue, $strJoinChar, $mxdCurrentKey );
-					$arrOut = array_merge( $arrOut, $arrMoreData );
-				} else {
-					$arrOut[$mxdCurrentKey] = $mxdValue;
-				}
-			}
-
-			return $arrOut;
-		}
-
-		/**
-	     * Fully merge two multidimensional arrays
-	     *
-		 * @param $arrPrimary Primary array
+		 * Fully merge two multidimensional arrays
+		 *
+		 * @param $arrPrimary   Primary array
 		 * @param $arrSecondary Secondary array
 		 * @return mixed
 		 */
-		public function arrayMergeRecursive($arrPrimary,$arrSecondary){
+		public function arrayMergeRecursive( $arrPrimary, $arrSecondary ) {
 
-			foreach($arrSecondary as $strKey => $mxdValue){
+			foreach( $arrSecondary as $strKey => $mxdValue ) {
 
-				if(array_key_exists($strKey,$arrPrimary)){
+				if( array_key_exists( $strKey, $arrPrimary ) ) {
 
-					if(is_array($mxdValue)){
+					if( is_array( $mxdValue ) ) {
 
 						//Only time anything is different is when we process a sub-array
-						$arrPrimary[$strKey] = $this->arrayMergeRecursive($arrPrimary[$strKey],$mxdValue);
-					}else{
+						$arrPrimary[$strKey] = $this -> arrayMergeRecursive( $arrPrimary[$strKey], $mxdValue );
+					} else {
 						$arrPrimary[$strKey] = $mxdValue;
 					}
-				}else{
+				} else {
 					$arrPrimary[$strKey] = $mxdValue;
 				}
 			}
@@ -140,54 +187,8 @@
 		}
 
 		/**
-		 * Return a value in an array using multi dimensional key to parse the structure of the array
-	     *
-		 * @param $strKey Location of the value in the array
-		 * @param $arrData Array to parse
-		 * @param string $strSplitChar Structure separator
-		 * @return null $mxdOut
-		 */
-		public function arrayParse($strKey,$arrData,$strSplitChar='/'){
-
-			$mxdOut = null;
-			$arrParts = explode($strSplitChar,$strKey);
-
-			$strKey = array_shift($arrParts);
-
-			if(array_key_exists($strKey,$arrData)){
-
-				if(count($arrParts)){
-					$mxdOut = $this->arrayParse( implode( $strSplitChar, $arrParts ), $arrData[$strKey] );
-				}else{
-					$mxdOut = $arrData[$strKey];
-				}
-			}
-
-			return $mxdOut;
-		}
-
-		/**
-		 * Remove an item from a multi-dimensional array using a key, the split char indicates a change in array level
-		 * @param $strKey
-		 * @param $arrData
-		 * @param string $strSplitChar
-		 * @return array Returns either the original array or the array with the item removed
-		 */
-		public function arrayParseUnset($strKey,$arrData,$strSplitChar='/'){
-
-			$arrCollapsedArray = $this->array3dTo2d($arrData,$strSplitChar);
-
-			if(array_key_exists($strKey,$arrCollapsedArray)){
-				unset($arrCollapsedArray[$strKey]);
-				$arrData = $this->array2dTo3d($arrCollapsedArray,null,$strSplitChar);
-			}
-
-			return $arrData;
-		}
-
-		/**
-		 * @param $arrData
-		 * @param $strKeyField
+		 * @param      $arrData
+		 * @param      $strKeyField
 		 * @param bool $blGroup
 		 * @return array|bool
 		 */
@@ -207,7 +208,7 @@
 								$arrOut[] = $arrEachItem;
 							} else {
 								$strNewKey = $arrEachItem[$strKeyField];
-								if( $blGroup ){
+								if( $blGroup ) {
 									if( !array_key_exists( $strNewKey, $arrOut ) ) {
 										$arrOut[$strNewKey] = array();
 									}
@@ -231,9 +232,10 @@
 
 		/**
 		 * Create a blank multidimensional array using a URI-style string and populate the last item with a value
-		 * @param $strStructure
+		 *
+		 * @param        $strStructure
 		 * @param string $strSplit
-		 * @param null $strFinalValue
+		 * @param null   $strFinalValue
 		 * @return array|null
 		 */
 		public function ghostArray( $strStructure, $strSplit = '/', $strFinalValue = null ) {
@@ -245,7 +247,7 @@
 		}
 
 		/**
-		 * @param $arrStructure
+		 * @param        $arrStructure
 		 * @param string $strIDField
 		 * @param string $strParentIDField
 		 * @param string $strChildrenKey
@@ -263,7 +265,7 @@
 				}
 			}
 
-			return $this->buildRelationalTree( $arrTree, $arrTree[0], $strIDField, $strChildrenKey );
+			return $this -> buildRelationalTree( $arrTree, $arrTree[0], $strIDField, $strChildrenKey );
 		}
 
 		private function buildRelationalTree( &$arrList, $arrParents, $strIDField, $strChildrenKey ) {
@@ -272,7 +274,7 @@
 
 			foreach( $arrParents as $arrChild ) {
 				if( isset( $arrList[$arrChild[$strIDField]] ) ) {
-					$arrChild[$strChildrenKey] = $this->buildRelationalTree( $arrList, $arrList[$arrChild[$strIDField]], $strIDField, $strChildrenKey );
+					$arrChild[$strChildrenKey] = $this -> buildRelationalTree( $arrList, $arrList[$arrChild[$strIDField]], $strIDField, $strChildrenKey );
 				}
 				$arrTempTree[] = $arrChild;
 			}
@@ -280,129 +282,132 @@
 			return $arrTempTree;
 		}
 
-		public function varDump(){
+		public function varDump() {
 			ob_start();
-			call_user_func_array('var_dump',func_get_args());
+			call_user_func_array( 'var_dump', func_get_args() );
+
 			return ob_get_clean();
 		}
 
 		/**
 		 * Traverse the current URI in $_SERVER['REQUEST_URI'] or pass in a starting URI
+		 *
 		 * @param $urlRelativePath
 		 * @param $urlStartingURI
 		 * @param $blPreserveQueryString Keep/merge the current query string with the query string of the redirect
 		 * @return string Return the traversed URI
 		 */
-		public function traverseURI($urlRelativePath,$urlStartingURI = null,$blPreserveQueryString = false){
+		public function traverseURI( $urlRelativePath, $urlStartingURI = null, $blPreserveQueryString = false ) {
 
 			$strQueryString = $strCurrentQueryString = '';
 
 			//Fix when a dot is passed in
-			if($urlRelativePath == '.'){
+			if( $urlRelativePath == '.' ) {
 				$urlRelativePath = './';
 			}
 
 			//Remove the query string from the redirect to help with comparisons
-			if(strstr($urlRelativePath,'?')){
-				list($urlRelativePath,$strQueryString) = explode('?',$urlRelativePath);
+			if( strstr( $urlRelativePath, '?' ) ) {
+				list( $urlRelativePath, $strQueryString ) = explode( '?', $urlRelativePath );
 			}
 
 			//If the redirect id / no further processing required
-			if($urlRelativePath == '/') {
-				return ($strQueryString == '') ? $urlRelativePath : sprintf('%s?%s',$urlRelativePath,$strQueryString);
+			if( $urlRelativePath == '/' ) {
+				return ( $strQueryString == '' ) ? $urlRelativePath : sprintf( '%s?%s', $urlRelativePath, $strQueryString );
 			}
 
 			//Remove the query string form the users current location (may be required on redirect if enabled)
-			$urlCurrentURI = (is_null($urlStartingURI)) ? $_SERVER['REQUEST_URI'] : $urlStartingURI;
-			if(strstr($urlCurrentURI,'?')){
-				list($urlCurrentURI,$strCurrentQueryString) = explode('?',$urlCurrentURI);
+			$urlCurrentURI = ( is_null( $urlStartingURI ) ) ? $_SERVER['REQUEST_URI'] : $urlStartingURI;
+			if( strstr( $urlCurrentURI, '?' ) ) {
+				list( $urlCurrentURI, $strCurrentQueryString ) = explode( '?', $urlCurrentURI );
 			}
 
 			//Append the old query string to the new one if enabled
-			if($blPreserveQueryString){
-				$strQueryString = ($strQueryString == '') ? $strCurrentQueryString : sprintf('%s&%s',$strCurrentQueryString,$strQueryString);
+			if( $blPreserveQueryString ) {
+				$strQueryString = ( $strQueryString == '' ) ? $strCurrentQueryString : sprintf( '%s&%s', $strCurrentQueryString, $strQueryString );
 			}
 
 			//Start processing the traversal
-			$urlCurrentURI = trim($urlCurrentURI,'/');
-			$urlOut = rtrim($urlRelativePath,'/');
+			$urlCurrentURI = trim( $urlCurrentURI, '/' );
+			$urlOut = rtrim( $urlRelativePath, '/' );
 
-			if(substr($urlRelativePath,0,2) == './'){
+			if( substr( $urlRelativePath, 0, 2 ) == './' ) {
 
-				$arrCurrentParts = (strstr($urlCurrentURI,'/')) ? explode('/',$urlCurrentURI) : array($urlCurrentURI);
-				array_pop($arrCurrentParts);
-				$urlCurrentURI = implode('/',$arrCurrentParts);
+				$arrCurrentParts = ( strstr( $urlCurrentURI, '/' ) ) ? explode( '/', $urlCurrentURI ) : array( $urlCurrentURI );
+				array_pop( $arrCurrentParts );
+				$urlCurrentURI = implode( '/', $arrCurrentParts );
 
-				$urlOut = sprintf('/%s/%s',$urlCurrentURI,substr($urlRelativePath,2));
+				$urlOut = sprintf( '/%s/%s', $urlCurrentURI, substr( $urlRelativePath, 2 ) );
 
-			}elseif(substr($urlRelativePath,0,3) == '../'){
+			} elseif( substr( $urlRelativePath, 0, 3 ) == '../' ) {
 
 				//UP
-				$urlOutTemp = trim($urlOut,'/');
+				$urlOutTemp = trim( $urlOut, '/' );
 
-				$arrCurrentParts = (strstr($urlCurrentURI,'/')) ? explode('/',$urlCurrentURI) : array($urlCurrentURI);
-				$arrRedirectParts = (strstr($urlOutTemp,'/')) ? explode('/',$urlOutTemp) : array($urlOutTemp);
+				$arrCurrentParts = ( strstr( $urlCurrentURI, '/' ) ) ? explode( '/', $urlCurrentURI ) : array( $urlCurrentURI );
+				$arrRedirectParts = ( strstr( $urlOutTemp, '/' ) ) ? explode( '/', $urlOutTemp ) : array( $urlOutTemp );
 
-				foreach($arrRedirectParts as $intKey => $strEachPart){
-					if($strEachPart == '..' && count($arrCurrentParts) > 0){
-						array_pop($arrCurrentParts);
-						array_shift($arrRedirectParts);
-					}else{
+				foreach( $arrRedirectParts as $intKey => $strEachPart ) {
+					if( $strEachPart == '..' && count( $arrCurrentParts ) > 0 ) {
+						array_pop( $arrCurrentParts );
+						array_shift( $arrRedirectParts );
+					} else {
 						break;
 					}
 				}
 
-				if(count($arrRedirectParts) > 0){
-					array_pop($arrCurrentParts);
+				if( count( $arrRedirectParts ) > 0 ) {
+					array_pop( $arrCurrentParts );
 				}
 
-				$arrUriParts = array_merge($arrCurrentParts,$arrRedirectParts);
-				$urlOut = sprintf('/%s',implode('/',$arrUriParts));
+				$arrUriParts = array_merge( $arrCurrentParts, $arrRedirectParts );
+				$urlOut = sprintf( '/%s', implode( '/', $arrUriParts ) );
 
-			}elseif(!strstr($urlRelativePath,':') && substr($urlRelativePath,0,2) != '//' && substr($urlRelativePath,0,1) != '/'){
+			} elseif( !strstr( $urlRelativePath, ':' ) && substr( $urlRelativePath, 0, 2 ) != '//' && substr( $urlRelativePath, 0, 1 ) != '/' ) {
 
 				//CHILD
-				$urlOutTemp = trim($urlOut,'/');
-				$urlOut = sprintf('/%s/%s',$urlCurrentURI,$urlOutTemp);
+				$urlOutTemp = trim( $urlOut, '/' );
+				$urlOut = sprintf( '/%s/%s', $urlCurrentURI, $urlOutTemp );
 			}
 
 			//Otherwise do a full redirect
-			if(\Twist::framework()->setting('SITE_TRAILING_SLASH')){
+			if( \Twist::framework() -> setting( 'SITE_TRAILING_SLASH' ) ) {
 				$urlOut .= '/';
-			}else{
-				$urlOut = rtrim($urlOut,'/');
+			} else {
+				$urlOut = rtrim( $urlOut, '/' );
 
-				if($urlOut == ''){
+				if( $urlOut == '' ) {
 					$urlOut = '/';
 				}
 			}
 
-			return ($strQueryString == '') ? $urlOut : sprintf('%s?%s',$urlOut,$strQueryString);
+			return ( $strQueryString == '' ) ? $urlOut : sprintf( '%s?%s', $urlOut, $strQueryString );
 		}
 
 		/**
 		 * Generate a random string, default length is set in the framework settings
+		 *
 		 * @param $intStringLength The default value is set in "RANDOM_STRING_LENGTH" setting
 		 * @param $mxdCharset
 		 * @return string
 		 */
-		public function randomString($intStringLength=null, $mxdCharset=null){
+		public function randomString( $intStringLength = null, $mxdCharset = null ) {
 
 			$strOut = '';
-			$intStringLength = (!is_null($intStringLength) && $intStringLength > 0) ? $intStringLength : \Twist::framework()->setting('RANDOM_STRING_LENGTH');
+			$intStringLength = ( !is_null( $intStringLength ) && $intStringLength > 0 ) ? $intStringLength : \Twist::framework() -> setting( 'RANDOM_STRING_LENGTH' );
 
 			$strChars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz';
 
-			if($mxdCharset === true){
+			if( $mxdCharset === true ) {
 				$strChars .= '!@£$%^&*()_-=+[]{};:|<>?/';
-			}elseif(!is_null($mxdCharset)){
+			} elseif( !is_null( $mxdCharset ) ) {
 				$strChars = $mxdCharset;
 			}
 
-			$arrChars = preg_split('//u', $strChars, -1, PREG_SPLIT_NO_EMPTY);
+			$arrChars = preg_split( '//u', $strChars, -1, PREG_SPLIT_NO_EMPTY );
 
-			for($intChar = 0; $intChar < $intStringLength; $intChar++){
-				$intRand = mt_rand(0,count($arrChars)-1);
+			for( $intChar = 0; $intChar < $intStringLength; $intChar++ ) {
+				$intRand = mt_rand( 0, count( $arrChars ) - 1 );
 				$strOut .= $arrChars[$intRand];
 			}
 
@@ -411,62 +416,64 @@
 
 		/**
 		 * Generate a URL-friendly slug of a string
-		 * @param string $strRaw The input string
-		 * @param array $arrExistingSlugs Array of existing slugs to avoid collisions with
-		 * @param null $intMaxLength Max length for the returned slug
+		 *
+		 * @param string $strRaw           The input string
+		 * @param array  $arrExistingSlugs Array of existing slugs to avoid collisions with
+		 * @param null   $intMaxLength     Max length for the returned slug
 		 * @return mixed|string
 		 */
-		public function slug($strRaw, $arrExistingSlugs = array(), $intMaxLength = null) {
-			$strSlug = preg_replace('~[^\\pL\d]+~u', '-', $strRaw);
-			while(strstr($strSlug, '--' )){
-				$strSlug = str_replace('--', '-', $strSlug);
+		public function slug( $strRaw, $arrExistingSlugs = array(), $intMaxLength = null ) {
+			$strSlug = preg_replace( '~[^\\pL\d]+~u', '-', $strRaw );
+			while( strstr( $strSlug, '--' ) ) {
+				$strSlug = str_replace( '--', '-', $strSlug );
 			}
-			$strSlug = iconv('utf-8', 'us-ascii//TRANSLIT',  trim($strSlug, '-'));
-			$strSlug = preg_replace('~[^-\w]+~', '', strtolower($strSlug));
-			$strSlug = strlen($strSlug) ? $strSlug : '-';
+			$strSlug = iconv( 'utf-8', 'us-ascii//TRANSLIT', trim( $strSlug, '-' ) );
+			$strSlug = preg_replace( '~[^-\w]+~', '', strtolower( $strSlug ) );
+			$strSlug = strlen( $strSlug ) ? $strSlug : '-';
 
-			if(!is_null($intMaxLength)){
-				$strSlug = substr($strSlug, 0, $intMaxLength);
+			if( !is_null( $intMaxLength ) ) {
+				$strSlug = substr( $strSlug, 0, $intMaxLength );
 			}
 
-			if(in_array($strSlug, $arrExistingSlugs)){
-                $intUniq = 1;
-                do{
-                    $intUniq++;
-                    $strTestSlug = sprintf('%s-%d', (is_null($intMaxLength) ? $strSlug : substr($strSlug, 0, -(strlen($intUniq) + 1))), $intUniq);
-                }while(in_array($strTestSlug, $arrExistingSlugs));
-                $strSlug = $strTestSlug;
+			if( in_array( $strSlug, $arrExistingSlugs ) ) {
+				$intUniq = 1;
+				do {
+					$intUniq++;
+					$strTestSlug = sprintf( '%s-%d', ( is_null( $intMaxLength ) ? $strSlug : substr( $strSlug, 0, -( strlen( $intUniq ) + 1 ) ) ), $intUniq );
+				} while( in_array( $strTestSlug, $arrExistingSlugs ) );
+				$strSlug = $strTestSlug;
 			}
 
 			return $strSlug;
 		}
 
-        /**
-         * Create a 'zipped' string of characters (useful for sha1() + uniqid() to avoid similar-looking uniqid()'s)
-         * @param $strString1
-         * @param $strString2
-         * @return string
-         */
-        function zipStrings( $strString1, $strString2 ) {
-            $strOut = '';
+		/**
+		 * Create a 'zipped' string of characters (useful for sha1() + uniqid() to avoid similar-looking uniqid()'s)
+		 *
+		 * @param $strString1
+		 * @param $strString2
+		 * @return string
+		 */
+		function zipStrings( $strString1, $strString2 ) {
+			$strOut = '';
 
-            $arrString1Chars = str_split( $strString1 );
-            $arrString2Chars = str_split( $strString2 );
+			$arrString1Chars = str_split( $strString1 );
+			$arrString2Chars = str_split( $strString2 );
 
-            if( count( $arrString1Chars ) < count( $arrString2Chars ) ) {
-                $intSmallerArray = count( $arrString1Chars );
-                $arrLargerArray = $arrString2Chars;
-            } else {
-                $intSmallerArray = count( $arrString2Chars );
-                $arrLargerArray = $arrString1Chars;
-            }
+			if( count( $arrString1Chars ) < count( $arrString2Chars ) ) {
+				$intSmallerArray = count( $arrString1Chars );
+				$arrLargerArray = $arrString2Chars;
+			} else {
+				$intSmallerArray = count( $arrString2Chars );
+				$arrLargerArray = $arrString1Chars;
+			}
 
-            for( $intChar = 0; $intChar < $intSmallerArray; $intChar++ ) {
-                $strOut .= $arrString1Chars[$intChar] . $arrString2Chars[$intChar];
-            }
+			for( $intChar = 0; $intChar < $intSmallerArray; $intChar++ ) {
+				$strOut .= $arrString1Chars[$intChar] . $arrString2Chars[$intChar];
+			}
 
-            $strOut .= substr( implode( '', $arrLargerArray ), $intSmallerArray );
+			$strOut .= substr( implode( '', $arrLargerArray ), $intSmallerArray );
 
-            return $strOut;
-        }
+			return $strOut;
+		}
 	}

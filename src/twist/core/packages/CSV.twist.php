@@ -45,7 +45,7 @@
 		 */
 		public function export( $strLocalFile, $arrData, $strDelimiter = ',', $strEnclosure = '"' ) {
 
-			$mxdOut = $this->generateCSV( $arrData, $strDelimiter, $strEnclosure );
+			$mxdOut = $this -> generateCSV( $arrData, $strDelimiter, $strEnclosure );
 
 			//Create the CSV file on the server
 			file_put_contents( $strLocalFile, $mxdOut );
@@ -63,7 +63,7 @@
 		 */
 		public function serve( $strFileName, $arrData, $strDelimiter = ',', $strEnclosure = '"' ) {
 
-			$strOut = $this->generateCSV( $arrData, $strDelimiter, $strEnclosure );
+			$strOut = $this -> generateCSV( $arrData, $strDelimiter, $strEnclosure );
 
 			header( "Content-type: text/csv" );
 			header( "Cache-Control: no-store, no-cache" );
