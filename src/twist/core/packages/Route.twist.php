@@ -44,6 +44,7 @@ class Route extends BasePackage{
 	protected $arrRestrict = array();
 	protected $arrUnrestricted = array();
 	protected $strBaseView = null;
+	protected $blIgnoreBaseView = false;
 	protected $strBaseURI = null;
 	protected $strPackageURI = null;
 	protected $strPageTitle = '';
@@ -131,7 +132,7 @@ class Route extends BasePackage{
 	 * Disable the use of the base view for this page (can be called during the processing of the page)
 	 */
 	public function baseViewIgnore(){
-		$this->strBaseView = null;
+		$this->blIgnoreBaseView = true;
 	}
 
 	/**
@@ -781,7 +782,7 @@ class Route extends BasePackage{
 
 				$arrOut['cache_key'] = $strPageCacheKey;
 
-				$arrOut['title'] = (is_null($arrOut['title'])) ? $this->framework() -> setting('SITE_NAME') : $arrOut['title'];
+				$arrOut['title'] = $this->framework() -> setting('SITE_NAME');
 				$arrOut['uri'] = sprintf('%s/%s',rtrim($strCurrentURI,'/'),ltrim($strRouteDynamic,'/'));
 				$arrOut['vars'] = $arrUriParameters;
 				$arrOut['dynamic'] = $strRouteDynamic;
@@ -991,8 +992,7 @@ class Route extends BasePackage{
 
 		//Register the resource server if and when required
 		$this->resourceServer();
-
-		\Twist::Timer('TwistPageLoad')->log('Routes Prepared');
+		\Twist::recordEvent('Routes Prepared');
 
 		$arrRoute = $this->current();
 		if (count($arrRoute)) {
@@ -1103,6 +1103,9 @@ class Route extends BasePackage{
 										$strControllerFunction = '_fallback';
 										$arrTags['response'] .= $objController->$strControllerFunction();
 									}
+
+									//Return the meta object back to routes
+									$this->resMeta = $objController->_meta();
 								}else{
 									throw new \Exception(sprintf("Controller '%s' must extend BaseController", $strControllerClass));
 								}
@@ -1136,10 +1139,12 @@ class Route extends BasePackage{
 					$this->framework()->package()->extend('View', 'meta', $this->resMeta->getTags());
 					$this->framework()->package()->extend('View', 'route', $arrTags);
 
-					if(!is_null($this->strBaseView) && $arrRoute['base_view'] === true){
+					if($this->blIgnoreBaseView){
+						$strPageOut = $arrTags['response'];
+					}elseif(!is_null($this->strBaseView) && $arrRoute['base_view'] === true){
 
 						$strPageOut = $this->resView->build($this->strBaseView, $arrRoute['data']);
-					}elseif(!is_bool($arrRoute['base_view'])){
+					}elseif(!is_null($arrRoute['base_view']) && !is_bool($arrRoute['base_view'])){
 
 						$strCustomView = sprintf('%s/%s', $this->resView->getDirectory(), $arrRoute['base_view']);
 						if(file_exists($strCustomView)){
@@ -1167,6 +1172,7 @@ class Route extends BasePackage{
 
 					//Output the page
 					echo $strPageOut;
+					\Twist::recordEvent('Route Served');
 
 					//Exit the script, no further processing will be done
 					if($blExitOnComplete){

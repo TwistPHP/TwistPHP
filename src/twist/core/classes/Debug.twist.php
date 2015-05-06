@@ -90,8 +90,8 @@
 			 * Process the stats timer bar graph
 			 * @todo tidy up masivley and made a function in Timer
 			 */
-			\Twist::Timer('TwistPageLoad')->stop();
-			$arrTimer = \Twist::Timer('TwistPageLoad')->results();
+
+			$arrTimer = \Twist::getEvents(true);
 
 			$intTotalTime = $arrTimer['end']-$arrTimer['start'];
 			$intOnePercent = $intTotalTime/100;

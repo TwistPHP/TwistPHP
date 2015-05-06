@@ -32,7 +32,11 @@
 		protected $arrTags = array();
 
 		protected function add($strType,$strName,$strValue){
-			$this->arrTags[] = array(
+
+			$strType = strtolower($strType);
+			$strName = strtolower($strName);
+
+			$this->arrTags[sprintf('%s-%s',$strType,$strName)] = array(
 				'type' => $strType,
 				'name' => $strName,
 				'value' => $strValue
@@ -153,8 +157,8 @@
 						$strOut .= sprintf('<meta property="og:%s" content="%s">', $arrEachTag['name'], $arrEachTag['value']);
 						break;
 				}
-
-				return $strOut;
 			}
+
+			return $strOut;
 		}
 	}

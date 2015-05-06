@@ -57,7 +57,7 @@
 	},
 	"SITE_WWW":{
 		"title":"Site Use WWW",
-		"description":"Redirect the user to WWW. if they are not already on that sub-doamin. Also used when building the full site URL",
+		"description":"Redirect the user to WWW. if they are not already on that sub-domain. Also used when building the full site URL",
 		"default":"0",
 		"type":"boolean",
 		"options":"",
@@ -65,7 +65,7 @@
 	},
 	"SITE_TRAILING_SLASH":{
 		"title":"Site Trailing Slash",
-		"description":"URIs and URLs in Routes and Structure will have a trailing slash '/' sufix",
+		"description":"URIs and URLs in Routes and Structure will have a trailing slash '/' suffix",
 		"default":"0",
 		"type":"boolean",
 		"options":"",
@@ -89,7 +89,7 @@
 	},
 	"TIMEZONE":{
 		"title":"Timezone",
-		"description":"Set the timzone of your website",
+		"description":"Set the timezone of your website",
 		"default":"Europe/London",
 		"type":"string",
 		"options":"",
@@ -171,6 +171,14 @@
 		"title":"Development Debug Bar",
 		"description":"Display the debug bar on the site when the framework is in development mode",
 		"default":0,
+		"type":"boolean",
+		"options":"1,0",
+		"null":0
+	},
+	"DEVELOPMENT_EVENT_RECORDER":{
+		"title":"Development Event Recorder",
+		"description":"Record loading times of various parts for the framework, the results can be seen in Debug Bar and on the exception/Inspector page. (Only works when the framework is in development mode)",
+		"default":1,
 		"type":"boolean",
 		"options":"1,0",
 		"null":0

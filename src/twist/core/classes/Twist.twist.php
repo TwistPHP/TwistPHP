@@ -27,6 +27,7 @@
 		class Twist extends CoreBase{
 
 			protected static $blLaunched = false;
+			protected static $blRecordEvents = false;
 
 			public function __construct(){
 				throw new Exception("Twist Framework can only be called statically, please refer to documentation for more details");
@@ -73,6 +74,8 @@
 					date_default_timezone_set( Twist::framework() -> setting('TIMEZONE') );
 					$strLocation = rtrim(Twist::framework() -> setting('SITE_BASE'),'/');
 
+					self::$blRecordEvents = (self::framework() -> setting('DEVELOPMENT_MODE') && self::framework() -> setting('DEVELOPMENT_EVENT_RECORDER'));
+
 					require_once sprintf('%sError.twist.php',DIR_FRAMEWORK_CLASSES);
 
 					self::define('E_TWIST_NOTICE',E_USER_NOTICE);
@@ -108,15 +111,16 @@
 					//Register the framework resources handler into the template system
 					Twist::framework() -> package() -> extend('View','resource',array('instance' => 'twistCoreResources','function' => 'viewExtension'));
 
-					//Stop tracking the framework boot time
-					Twist::Timer('TwistPageLoad') -> start();
-					Twist::Timer('TwistPageLoad') -> log('Twist Core Loaded');
+					//Log the framework boot time, this is the point in which the framework code was required
+					Twist::Timer('TwistEventRecorder')->start($_SERVER['TWIST_BOOT']);
 
 					self::coreResources();
 					self::showSetup();
 					self::phpSettings();
 					self::maintenanceMode();
 					self::autoAuthenticate();
+
+					self::recordEvent('Core Loaded');
 
 					self::define('TWIST_LAUNCHED',1);
 				}
@@ -192,7 +196,7 @@
 				//If auto authenticate is enabled then authenticate the user at this point
 				if(Twist::framework()->setting('USER_AUTO_AUTHENTICATE')){
 					Twist::User()->authenticate();
-					Twist::Timer('TwistPageLoad') -> log('User Authenticated');
+					self::recordEvent('User Authenticated');
 				}
 			}
 
@@ -272,6 +276,20 @@
 			 */
 			public static function dump($mxdData = null){
 				throw new \Exception(json_encode($mxdData),1200);
+			}
+
+			/**
+			 * Record events on for the current page load can be logged and a timeline produced, helps with debugging
+			 * @param $strEventName
+			 */
+			public static function recordEvent($strEventName){
+				if(self::$blRecordEvents){
+					Twist::Timer('TwistEventRecorder')->log($strEventName);
+				}
+			}
+
+			public function getEvents($blStopTimer = false){
+				return (self::$blRecordEvents) ? (($blStopTimer) ? \Twist::Timer('TwistEventRecorder')->stop() : \Twist::Timer('TwistEventRecorder')->results()) : array();
 			}
 		}
 	}

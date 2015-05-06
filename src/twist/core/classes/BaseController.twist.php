@@ -31,7 +31,7 @@
 		protected $resMeta = null;
 		protected $arrRoute = array();
 
-		final public function _extended($arrRoute,Meta &$resMeta = null){
+		final public function _extended($arrRoute,Meta $resMeta = null){
 
 			$this->arrRoute = $arrRoute;
 			$this->resMeta = $resMeta;
@@ -96,7 +96,7 @@
 		 * Meta object that
 		 * @return Meta
 		 */
-        final protected function _meta(){
+        final public function _meta(){
 			return $this->resMeta;
 		}
 
@@ -113,7 +113,7 @@
 		 * @param $strDescription
 		 */
         final protected function _description($strDescription){
-			$this->_meta()->title($strDescription);
+			$this->_meta()->description($strDescription);
 		}
 
 		/**
@@ -121,7 +121,7 @@
 		 * @param $strAuthor
 		 */
         final protected function _author($strAuthor){
-			$this->_meta()->title($strAuthor);
+			$this->_meta()->author($strAuthor);
 		}
 
 		/**
@@ -129,7 +129,7 @@
 		 * @param $strKeywords
 		 */
         final protected function _keywords($strKeywords){
-			return (is_null($strKeywords)) ? $_SERVER['TWIST_ROUTE_KEYWORDS'] : $this->_meta()->title($strKeywords);
+			return (is_null($strKeywords)) ? $_SERVER['TWIST_ROUTE_KEYWORDS'] : $this->_meta()->keywords($strKeywords);
 		}
 
         final protected function _var($strVarKey = null){

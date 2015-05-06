@@ -45,21 +45,16 @@
 
 		/**
 		 * Start a new timer, pass in a unique key to reference the timer with
-		 * @param $strReference
+		 * @param $intStartMicroTime Start time to use if not current time
 		 */
-		public function start(){
-
-			//if(count($this->arrTimer)){
-			//	trigger_error(sprintf("Error, Timer for '%s' already started",$this->strInstanceKey),E_TWIST_NOTICE);
-			//}else{
-				$this->arrTimer = array(
-					'time' => \Twist::DateTime()->time(),
-					'start' => $this->getMicroTime( (in_array($this->strInstanceKey,array('TwistPageLoad'))) ? $_SERVER['TWIST_BOOT'] : null ),
-					'end' => 0,
-					'total' => 0,
-					'log' => array()
-				);
-			//}
+		public function start($intStartMicroTime = null){
+			$this->arrTimer = array(
+				'time' => \Twist::DateTime()->time(),
+				'start' => $this->getMicroTime($intStartMicroTime),
+				'end' => 0,
+				'total' => 0,
+				'log' => array()
+			);
 		}
 
 		/**
