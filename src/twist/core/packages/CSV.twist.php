@@ -30,7 +30,8 @@
 	 */
 	class CSV extends BasePackage {
 
-		public function __construct() {}
+		public function __construct() {
+		}
 
 		/**
 		 * Create a CSV file on the server, pass in a multi-dimensional array of data containing keys and values, the keys will be used as the field names and the values will be each for in the CSV. By default the Delimiter, Enclosure and Escape are already set.
@@ -109,12 +110,12 @@
 		 *
 		 * @return array Returns Multi-dimensional array of the CSV data
 		 */
-		public function import( $strLocalFile, $strLineDelimiter = "\n", $intFieldDelimiter = ',', $strEnclosure = '"', $strEscape = '\\', $blUseFirstRowAsKeys = false ) {
+		public function import( $strLocalFile, $strLineDelimiter = "\n", $intFieldDelimiter = ',', $strEnclosure = '"', $strEscape = '\\', $blUseFirstRowAsKeys = false, $strEncoding = 'UTF-8' ) {
 
 			$arrOut = $arrHeaders = array();
 
-			foreach( str_getcsv( file_get_contents( $strLocalFile ), $strLineDelimiter ) as $intRow => $strRow ) {
-				$arrRow = str_getcsv( $strRow, $intFieldDelimiter, $strEnclosure, $strEscape );
+			foreach( str_getcsv( mb_convert_encoding( file_get_contents( $strLocalFile ), $strEncoding ), $strLineDelimiter ) as $intRow => $strRow ) {
+				$arrRow = str_getcsv( mb_convert_encoding( $strRow, $strEncoding ), $intFieldDelimiter, $strEnclosure, $strEscape );
 				if( $blUseFirstRowAsKeys ) {
 					if( $intRow === 0 ) {
 						$arrHeaders = $arrRow;
