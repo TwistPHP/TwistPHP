@@ -110,16 +110,17 @@
 
 					//Stop tracking the framework boot time
 					Twist::Timer('TwistPageLoad') -> start();
-					Twist::Timer('TwistPageLoad') -> log('Twist Core Loaded');
+					Twist::Timer('TwistPageLoad') -> log('Launching');
 
 					self::coreResources();
-					self::showSetup();
-					self::phpSettings();
-					self::maintenanceMode();
-					self::autoAuthenticate();
+                    self::showSetup();
+                    self::phpSettings();
+                    self::maintenanceMode();
+                    self::autoAuthenticate();
 
-					self::define('TWIST_LAUNCHED',1);
-				}
+                    self::define('TWIST_LAUNCHED',1);
+                    Twist::Timer('TwistPageLoad') -> log('Framework ready');
+                }
 			}
 
 	        protected static function coreResources(){
@@ -192,7 +193,7 @@
 				//If auto authenticate is enabled then authenticate the user at this point
 				if(Twist::framework()->setting('USER_AUTO_AUTHENTICATE')){
 					Twist::User()->authenticate();
-					Twist::Timer('TwistPageLoad') -> log('User Authenticated');
+					Twist::Timer('TwistPageLoad') -> log('User authenticated');
 				}
 			}
 

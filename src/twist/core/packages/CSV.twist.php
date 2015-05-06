@@ -99,99 +99,34 @@
 		 * Pass in the local file path to a CSV file, the CSV file will be parsed and turned into an array. By default the Delimiter, Enclosure and Escape are already set.
 		 *
 		 * @param $strLocalFile Full path to the local CSV file that will be imported
-		 * @param $strDelimiter Expected delimiter used in the imported CSV
+		 * @param $strLineDelimiter Expected delimiter for each line used in the CSV
+		 * @param $intFieldDelimiter Expected delimiter for each field used in the CSV
 		 * @param $strEnclosure Expected enclosure to be used in creation of CSV data
 		 * @param $strEscape String used to escape the CSV data
 		 * @return array Returns Multi-dimensional array of the CSV data
 		 */
-		public function import($strLocalFile,$strDelimiter = ',',$strEnclosure = '"',$strEscape = '\\'){
+		public function import($strLocalFile, $strLineDelimiter = "\n", $intFieldDelimiter = ',', $strEnclosure = '"', $strEscape = '\\', $blUseFirstRowAsKeys = false){
 
-			$arrOut = array();
-			$strCSVData = file_get_contents($strLocalFile);
+			$arrOut = $arrHeaders = array();
 
-			$arrOut = $this->csvToArray($strCSVData,$strDelimiter,$strEnclosure,$strEscape);
-
-			if(function_exists('str_getcsv')){
-				//$arrOut = str_getcsv($strCSVData,$strDelimiter,$strEnclosure,$strEscape);
+			foreach(str_getcsv(file_get_contents($strLocalFile), $strLineDelimiter) as $intRow => $strRow){
+				$arrRow = str_getcsv($strRow, $intFieldDelimiter, $strEnclosure, $strEscape);
+				if($blUseFirstRowAsKeys) {
+					if($intRow === 0) {
+						$arrHeaders = $arrRow;
+					} else {
+                        $arrRowIndexed=array();
+						foreach($arrRow as $intField => $mxdField){
+                            $arrRowIndexed[$arrHeaders[$intField]] = $mxdField;
+                        }
+                        $arrOut[] = $arrRowIndexed;
+					}
+				} else {
+					$arrOut[] = $arrRow;
+				}
 			}
 
 			return $arrOut;
 		}
 
-		/**
-		 * Process the imported CSV data into an array
-		 *
-		 * @note This function needs to be looked at further, possibly to be re-written
-		 *
-		 * @param $fileContent
-		 * @param string $delimiter
-		 * @param string $enclosure
-		 * @param string $escape
-		 * @return array
-		 */
-		protected function csvToArray($fileContent, $delimiter = ';', $enclosure = '"', $escape = '\\'){
-
-			$lines = array();
-			$fields = array();
-
-			if($escape == $enclosure){
-				$escape = '\\';
-				$fileContent = str_replace(array('\\', $enclosure . $enclosure, "\r\n", "\r"),
-					array('\\\\', $escape . $enclosure, "\\n", "\\n"), $fileContent);
-			}else{
-				$fileContent = str_replace(array("\r\n", "\r"), array("\\n", "\\n"), $fileContent);
-			}
-
-			$nb = strlen($fileContent);
-			$field = '';
-			$inEnclosure = false;
-			$previous = '';
-
-			for($i = 0; $i < $nb; $i++){
-				$c = $fileContent[$i];
-
-				if($c === $enclosure){
-
-					if($previous !== $escape){
-						$inEnclosure ^= true;
-					}else{
-						$field .= $enclosure;
-					}
-
-				}elseif($c === $escape){
-					$next = $fileContent[$i + 1];
-
-					if($next != $enclosure && $next != $escape){
-						$field .= $escape;
-					}
-
-				}elseif($c === $delimiter){
-
-					if($inEnclosure){
-						$field .= $delimiter;
-					}else{
-						//end of the field
-						$fields[] = $field;
-						$field = '';
-					}
-
-				}elseif($c === "\n"){
-					$fields[] = $field;
-					$field = '';
-					$lines[] = $fields;
-					$fields = array();
-				}else{
-					$field .= $c;
-				}
-
-				$previous = $c;
-			}
-			//we add the last element
-			if(true || $field !== ''){
-				$fields[] = $field;
-				$lines[] = $fields;
-			}
-
-			return $lines;
-		}
 	}
