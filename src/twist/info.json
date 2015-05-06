@@ -1,1 +1,14 @@
-{"name":"twist","version":"2.3.2","release":"","description":"TwistPHP is a OpenSource PHP Framework that can be used in powerful bespoke web applications and websites.","licenced":"0","author":"TwistPHP","repository":"twistphp","github-repository":"","bugs":"http:\/\/twistphp.com\/bugs","homepage":"http:\/\/twistphp.com\/","additional":[]}
+{
+	"name": "twist",
+	"version": "2.3.2",
+	"release": "",
+	"description": "TwistPHP is a OpenSource PHP Framework that can be used in powerful bespoke web applications and websites",
+	"licenced": "0",
+	"author": "TwistPHP",
+	"repository": "twistphp",
+	"github-repository": "",
+	"homepage": "https://twistphp.com",
+	"documentation": "https://twistphp.com/docs",
+	"bugs": "https://github.com/Shadow-Technologies/TwistPHP/issues",
+	"additional": []
+}

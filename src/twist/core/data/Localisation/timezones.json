@@ -1,786 +1,786 @@
 [
 	{
-		"code":"Pacific/Midway",
-		"full_name":"(GMT-11:00) Midway Island",
-		"name":"Midway Island",
-		"timezone":"Pacific",
-		"time":"-11:00"
+		"code": "Pacific/Midway",
+		"full_name": "(GMT-11:00) Midway Island",
+		"name": "Midway Island",
+		"timezone": "Pacific",
+		"time": "-11:00"
 	},
 	{
-		"code":"US/Samoa",
-		"full_name":"(GMT-11:00) Samoa",
-		"name":"Samoa",
-		"timezone":"US",
-		"time":"-11:00"
+		"code": "US/Samoa",
+		"full_name": "(GMT-11:00) Samoa",
+		"name": "Samoa",
+		"timezone": "US",
+		"time": "-11:00"
 	},
 	{
-		"code":"US/Hawaii",
-		"full_name":"(GMT-10:00) Hawaii",
-		"name":"Hawaii",
-		"timezone":"US",
-		"time":"-10:00"
+		"code": "US/Hawaii",
+		"full_name": "(GMT-10:00) Hawaii",
+		"name": "Hawaii",
+		"timezone": "US",
+		"time": "-10:00"
 	},
 	{
-		"code":"US/Alaska",
-		"full_name":"(GMT-09:00) Alaska",
-		"name":"Alaska",
-		"timezone":"US",
-		"time":"-09:00"
+		"code": "US/Alaska",
+		"full_name": "(GMT-09:00) Alaska",
+		"name": "Alaska",
+		"timezone": "US",
+		"time": "-09:00"
 	},
 	{
-		"code":"US/Pacific",
-		"full_name":"(GMT-08:00) Pacific Time (US &amp; Canada)",
-		"name":"Pacific Time (US &amp; Canada)",
-		"timezone":"US",
-		"time":"-08:00"
+		"code": "US/Pacific",
+		"full_name": "(GMT-08:00) Pacific Time (US &amp; Canada)",
+		"name": "Pacific Time (US &amp; Canada)",
+		"timezone": "US",
+		"time": "-08:00"
 	},
 	{
-		"code":"America/Tijuana",
-		"full_name":"(GMT-08:00) Tijuana",
-		"name":"Tijuana",
-		"timezone":"America",
-		"time":"-08:00"
+		"code": "America/Tijuana",
+		"full_name": "(GMT-08:00) Tijuana",
+		"name": "Tijuana",
+		"timezone": "America",
+		"time": "-08:00"
 	},
 	{
-		"code":"US/Arizona",
-		"full_name":"(GMT-07:00) Arizona",
-		"name":"Arizona",
-		"timezone":"US",
-		"time":"-07:00"
+		"code": "US/Arizona",
+		"full_name": "(GMT-07:00) Arizona",
+		"name": "Arizona",
+		"timezone": "US",
+		"time": "-07:00"
 	},
 	{
-		"code":"US/Mountain",
-		"full_name":"(GMT-07:00) Mountain Time (US &amp; Canada)",
-		"name":"Mountain Time (US &amp; Canada)",
-		"timezone":"US",
-		"time":"-07:00"
+		"code": "US/Mountain",
+		"full_name": "(GMT-07:00) Mountain Time (US &amp; Canada)",
+		"name": "Mountain Time (US &amp; Canada)",
+		"timezone": "US",
+		"time": "-07:00"
 	},
 	{
-		"code":"America/Chihuahua",
-		"full_name":"(GMT-07:00) Chihuahua",
-		"name":"Chihuahua",
-		"timezone":"America",
-		"time":"-07:00"
+		"code": "America/Chihuahua",
+		"full_name": "(GMT-07:00) Chihuahua",
+		"name": "Chihuahua",
+		"timezone": "America",
+		"time": "-07:00"
 	},
 	{
-		"code":"America/Mazatlan",
-		"full_name":"(GMT-07:00) Mazatlan",
-		"name":"Mazatlan",
-		"timezone":"America",
-		"time":"-07:00"
+		"code": "America/Mazatlan",
+		"full_name": "(GMT-07:00) Mazatlan",
+		"name": "Mazatlan",
+		"timezone": "America",
+		"time": "-07:00"
 	},
 	{
-		"code":"America/Mexico_City",
-		"full_name":"(GMT-06:00) Mexico City",
-		"name":"Mexico City",
-		"timezone":"America",
-		"time":"-06:00"
+		"code": "America/Mexico_City",
+		"full_name": "(GMT-06:00) Mexico City",
+		"name": "Mexico City",
+		"timezone": "America",
+		"time": "-06:00"
 	},
 	{
-		"code":"America/Monterrey",
-		"full_name":"(GMT-06:00) Monterrey",
-		"name":"Monterrey",
-		"timezone":"America",
-		"time":"-06:00"
+		"code": "America/Monterrey",
+		"full_name": "(GMT-06:00) Monterrey",
+		"name": "Monterrey",
+		"timezone": "America",
+		"time": "-06:00"
 	},
 	{
-		"code":"Canada/Saskatchewan",
-		"full_name":"(GMT-06:00) Saskatchewan",
-		"name":"Saskatchewan",
-		"timezone":"Canada",
-		"time":"-06:00"
+		"code": "Canada/Saskatchewan",
+		"full_name": "(GMT-06:00) Saskatchewan",
+		"name": "Saskatchewan",
+		"timezone": "Canada",
+		"time": "-06:00"
 	},
 	{
-		"code":"US/Central",
-		"full_name":"(GMT-06:00) Central Time (US &amp; Canada)",
-		"name":"Central Time (US &amp; Canada)",
-		"timezone":"US",
-		"time":"-06:00"
+		"code": "US/Central",
+		"full_name": "(GMT-06:00) Central Time (US &amp; Canada)",
+		"name": "Central Time (US &amp; Canada)",
+		"timezone": "US",
+		"time": "-06:00"
 	},
 	{
-		"code":"US/Eastern",
-		"full_name":"(GMT-05:00) Eastern Time (US &amp; Canada)",
-		"name":"Eastern Time (US &amp; Canada)",
-		"timezone":"US",
-		"time":"-05:00"
+		"code": "US/Eastern",
+		"full_name": "(GMT-05:00) Eastern Time (US &amp; Canada)",
+		"name": "Eastern Time (US &amp; Canada)",
+		"timezone": "US",
+		"time": "-05:00"
 	},
 	{
-		"code":"US/East-Indiana",
-		"full_name":"(GMT-05:00) Indiana (East)",
-		"name":"Indiana (East)",
-		"timezone":"US",
-		"time":"-05:00"
+		"code": "US/East-Indiana",
+		"full_name": "(GMT-05:00) Indiana (East)",
+		"name": "Indiana (East)",
+		"timezone": "US",
+		"time": "-05:00"
 	},
 	{
-		"code":"America/Bogota",
-		"full_name":"(GMT-05:00) Bogota",
-		"name":"Bogota",
-		"timezone":"America",
-		"time":"-05:00"
+		"code": "America/Bogota",
+		"full_name": "(GMT-05:00) Bogota",
+		"name": "Bogota",
+		"timezone": "America",
+		"time": "-05:00"
 	},
 	{
-		"code":"America/Lima",
-		"full_name":"(GMT-05:00) Lima",
-		"name":"Lima",
-		"timezone":"America",
-		"time":"-05:00"
+		"code": "America/Lima",
+		"full_name": "(GMT-05:00) Lima",
+		"name": "Lima",
+		"timezone": "America",
+		"time": "-05:00"
 	},
 	{
-		"code":"America/Caracas",
-		"full_name":"(GMT-04:30) Caracas",
-		"name":"Caracas",
-		"timezone":"America",
-		"time":"-05:30"
+		"code": "America/Caracas",
+		"full_name": "(GMT-04:30) Caracas",
+		"name": "Caracas",
+		"timezone": "America",
+		"time": "-05:30"
 	},
 	{
-		"code":"Canada/Atlantic",
-		"full_name":"(GMT-04:00) Atlantic Time (Canada)",
-		"name":"Atlantic Time (Canada)",
-		"timezone":"Canada",
-		"time":"-04:00"
+		"code": "Canada/Atlantic",
+		"full_name": "(GMT-04:00) Atlantic Time (Canada)",
+		"name": "Atlantic Time (Canada)",
+		"timezone": "Canada",
+		"time": "-04:00"
 	},
 	{
-		"code":"America/La_Paz",
-		"full_name":"(GMT-04:00) La Paz",
-		"name":"La Paz",
-		"timezone":"America",
-		"time":"-04:00"
+		"code": "America/La_Paz",
+		"full_name": "(GMT-04:00) La Paz",
+		"name": "La Paz",
+		"timezone": "America",
+		"time": "-04:00"
 	},
 	{
-		"code":"America/Santiago",
-		"full_name":"(GMT-04:00) Santiago",
-		"name":"Santiago",
-		"timezone":"America",
-		"time":"-04:00"
+		"code": "America/Santiago",
+		"full_name": "(GMT-04:00) Santiago",
+		"name": "Santiago",
+		"timezone": "America",
+		"time": "-04:00"
 	},
 	{
-		"code":"Canada/Newfoundland",
-		"full_name":"(GMT-03:30) Newfoundland",
-		"name":"Newfoundland",
-		"timezone":"Canada",
-		"time":"-03:30"
+		"code": "Canada/Newfoundland",
+		"full_name": "(GMT-03:30) Newfoundland",
+		"name": "Newfoundland",
+		"timezone": "Canada",
+		"time": "-03:30"
 	},
 	{
-		"code":"America/Buenos_Aires",
-		"full_name":"(GMT-03:00) Buenos Aires",
-		"name":"Buenos Aires",
-		"timezone":"America",
-		"time":"-03:00"
+		"code": "America/Buenos_Aires",
+		"full_name": "(GMT-03:00) Buenos Aires",
+		"name": "Buenos Aires",
+		"timezone": "America",
+		"time": "-03:00"
 	},
 	{
-		"code":"Greenland",
-		"full_name":"(GMT-03:00) Greenland",
-		"name":"Greenland",
-		"timezone":"Greenland",
-		"time":"-03:00"
+		"code": "Greenland",
+		"full_name": "(GMT-03:00) Greenland",
+		"name": "Greenland",
+		"timezone": "Greenland",
+		"time": "-03:00"
 	},
 	{
-		"code":"Atlantic/Stanley",
-		"full_name":"(GMT-02:00) Stanley",
-		"name":"Stanley",
-		"timezone":"Atlantic",
-		"time":"-02:00"
+		"code": "Atlantic/Stanley",
+		"full_name": "(GMT-02:00) Stanley",
+		"name": "Stanley",
+		"timezone": "Atlantic",
+		"time": "-02:00"
 	},
 	{
-		"code":"Atlantic/Azores",
-		"full_name":"(GMT-01:00) Azores",
-		"name":"Azores",
-		"timezone":"Atlantic",
-		"time":"-01:00"
+		"code": "Atlantic/Azores",
+		"full_name": "(GMT-01:00) Azores",
+		"name": "Azores",
+		"timezone": "Atlantic",
+		"time": "-01:00"
 	},
 	{
-		"code":"Atlantic/Cape_Verde",
-		"full_name":"(GMT-01:00) Cape Verde Is.",
-		"name":"Cape Verde Is.",
-		"timezone":"Atlantic",
-		"time":"-01:00"
+		"code": "Atlantic/Cape_Verde",
+		"full_name": "(GMT-01:00) Cape Verde Is.",
+		"name": "Cape Verde Is.",
+		"timezone": "Atlantic",
+		"time": "-01:00"
 	},
 	{
-		"code":"Africa/Casablanca",
-		"full_name":"(GMT) Casablanca",
-		"name":"Casablanca",
-		"timezone":"Africa",
-		"time":"00:00"
+		"code": "Africa/Casablanca",
+		"full_name": "(GMT) Casablanca",
+		"name": "Casablanca",
+		"timezone": "Africa",
+		"time": "00:00"
 	},
 	{
-		"code":"Europe/Dublin",
-		"full_name":"(GMT) Dublin",
-		"name":"Dublin",
-		"timezone":"Europe",
-		"time":"00:00"
+		"code": "Europe/Dublin",
+		"full_name": "(GMT) Dublin",
+		"name": "Dublin",
+		"timezone": "Europe",
+		"time": "00:00"
 	},
 	{
-		"code":"Europe/Lisbon",
-		"full_name":"(GMT) Lisbon",
-		"name":"Lisbon",
-		"timezone":"Europe",
-		"time":"00:00"
+		"code": "Europe/Lisbon",
+		"full_name": "(GMT) Lisbon",
+		"name": "Lisbon",
+		"timezone": "Europe",
+		"time": "00:00"
 	},
 	{
-		"code":"Europe/London",
-		"full_name":"(GMT) London",
-		"name":"London",
-		"timezone":"Europe",
-		"time":"00:00"
+		"code": "Europe/London",
+		"full_name": "(GMT) London",
+		"name": "London",
+		"timezone": "Europe",
+		"time": "00:00"
 	},
 	{
-		"code":"Africa/Monrovia",
-		"full_name":"(GMT) Monrovia",
-		"name":"Monrovia",
-		"timezone":"Africa",
-		"time":"00:00"
+		"code": "Africa/Monrovia",
+		"full_name": "(GMT) Monrovia",
+		"name": "Monrovia",
+		"timezone": "Africa",
+		"time": "00:00"
 	},
 	{
-		"code":"Europe/Amsterdam",
-		"full_name":"(GMT+01:00) Amsterdam",
-		"name":"Amsterdam",
-		"timezone":"Europe",
-		"time":"+01:00"
+		"code": "Europe/Amsterdam",
+		"full_name": "(GMT+01:00) Amsterdam",
+		"name": "Amsterdam",
+		"timezone": "Europe",
+		"time": "+01:00"
 	},
 	{
-		"code":"Europe/Belgrade",
-		"full_name":"(GMT+01:00) Belgrade",
-		"name":"Belgrade",
-		"timezone":"Europe",
-		"time":"+01:00"
+		"code": "Europe/Belgrade",
+		"full_name": "(GMT+01:00) Belgrade",
+		"name": "Belgrade",
+		"timezone": "Europe",
+		"time": "+01:00"
 	},
 	{
-		"code":"Europe/Berlin",
-		"full_name":"(GMT+01:00) Berlin",
-		"name":"Berlin",
-		"timezone":"Europe",
-		"time":"+01:00"
+		"code": "Europe/Berlin",
+		"full_name": "(GMT+01:00) Berlin",
+		"name": "Berlin",
+		"timezone": "Europe",
+		"time": "+01:00"
 	},
 	{
-		"code":"Europe/Bratislava",
-		"full_name":"(GMT+01:00) Bratislava",
-		"name":"Bratislava",
-		"timezone":"Europe",
-		"time":"+01:00"
+		"code": "Europe/Bratislava",
+		"full_name": "(GMT+01:00) Bratislava",
+		"name": "Bratislava",
+		"timezone": "Europe",
+		"time": "+01:00"
 	},
 	{
-		"code":"Europe/Brussels",
-		"full_name":"(GMT+01:00) Brussels",
-		"name":"Brussels",
-		"timezone":"Europe",
-		"time":"+01:00"
+		"code": "Europe/Brussels",
+		"full_name": "(GMT+01:00) Brussels",
+		"name": "Brussels",
+		"timezone": "Europe",
+		"time": "+01:00"
 	},
 	{
-		"code":"Europe/Budapest",
-		"full_name":"(GMT+01:00) Budapest",
-		"name":"Budapest",
-		"timezone":"Europe",
-		"time":"+01:00"
+		"code": "Europe/Budapest",
+		"full_name": "(GMT+01:00) Budapest",
+		"name": "Budapest",
+		"timezone": "Europe",
+		"time": "+01:00"
 	},
 	{
-		"code":"Europe/Copenhagen",
-		"full_name":"(GMT+01:00) Copenhagen",
-		"name":"Copenhagen",
-		"timezone":"Europe",
-		"time":"+01:00"
+		"code": "Europe/Copenhagen",
+		"full_name": "(GMT+01:00) Copenhagen",
+		"name": "Copenhagen",
+		"timezone": "Europe",
+		"time": "+01:00"
 	},
 	{
-		"code":"Europe/Ljubljana",
-		"full_name":"(GMT+01:00) Ljubljana",
-		"name":"Ljubljana",
-		"timezone":"Europe",
-		"time":"+01:00"
+		"code": "Europe/Ljubljana",
+		"full_name": "(GMT+01:00) Ljubljana",
+		"name": "Ljubljana",
+		"timezone": "Europe",
+		"time": "+01:00"
 	},
 	{
-		"code":"Europe/Madrid",
-		"full_name":"(GMT+01:00) Madrid",
-		"name":"Madrid",
-		"timezone":"Europe",
-		"time":"+01:00"
+		"code": "Europe/Madrid",
+		"full_name": "(GMT+01:00) Madrid",
+		"name": "Madrid",
+		"timezone": "Europe",
+		"time": "+01:00"
 	},
 	{
-		"code":"Europe/Paris",
-		"full_name":"(GMT+01:00) Paris",
-		"name":"Paris",
-		"timezone":"Europe",
-		"time":"+01:00"
+		"code": "Europe/Paris",
+		"full_name": "(GMT+01:00) Paris",
+		"name": "Paris",
+		"timezone": "Europe",
+		"time": "+01:00"
 	},
 	{
-		"code":"Europe/Prague",
-		"full_name":"(GMT+01:00) Prague",
-		"name":"Prague",
-		"timezone":"Europe",
-		"time":"+01:00"
+		"code": "Europe/Prague",
+		"full_name": "(GMT+01:00) Prague",
+		"name": "Prague",
+		"timezone": "Europe",
+		"time": "+01:00"
 	},
 	{
-		"code":"Europe/Rome",
-		"full_name":"(GMT+01:00) Rome",
-		"name":"Rome",
-		"timezone":"Europe",
-		"time":"+01:00"
+		"code": "Europe/Rome",
+		"full_name": "(GMT+01:00) Rome",
+		"name": "Rome",
+		"timezone": "Europe",
+		"time": "+01:00"
 	},
 	{
-		"code":"Europe/Sarajevo",
-		"full_name":"(GMT+01:00) Sarajevo",
-		"name":"Sarajevo",
-		"timezone":"Europe",
-		"time":"+01:00"
+		"code": "Europe/Sarajevo",
+		"full_name": "(GMT+01:00) Sarajevo",
+		"name": "Sarajevo",
+		"timezone": "Europe",
+		"time": "+01:00"
 	},
 	{
-		"code":"Europe/Skopje",
-		"full_name":"(GMT+01:00) Skopje",
-		"name":"Skopje",
-		"timezone":"Europe",
-		"time":"+01:00"
+		"code": "Europe/Skopje",
+		"full_name": "(GMT+01:00) Skopje",
+		"name": "Skopje",
+		"timezone": "Europe",
+		"time": "+01:00"
 	},
 	{
-		"code":"Europe/Stockholm",
-		"full_name":"(GMT+01:00) Stockholm",
-		"name":"Stockholm",
-		"timezone":"Europe",
-		"time":"+01:00"
+		"code": "Europe/Stockholm",
+		"full_name": "(GMT+01:00) Stockholm",
+		"name": "Stockholm",
+		"timezone": "Europe",
+		"time": "+01:00"
 	},
 	{
-		"code":"Europe/Vienna",
-		"full_name":"(GMT+01:00) Vienna",
-		"name":"Vienna",
-		"timezone":"Europe",
-		"time":"+01:00"
+		"code": "Europe/Vienna",
+		"full_name": "(GMT+01:00) Vienna",
+		"name": "Vienna",
+		"timezone": "Europe",
+		"time": "+01:00"
 	},
 	{
-		"code":"Europe/Warsaw",
-		"full_name":"(GMT+01:00) Warsaw",
-		"name":"Warsaw",
-		"timezone":"Europe",
-		"time":"+01:00"
+		"code": "Europe/Warsaw",
+		"full_name": "(GMT+01:00) Warsaw",
+		"name": "Warsaw",
+		"timezone": "Europe",
+		"time": "+01:00"
 	},
 	{
-		"code":"Europe/Zagreb",
-		"full_name":"(GMT+01:00) Zagreb",
-		"name":"Zagreb",
-		"timezone":"Europe",
-		"time":"+01:00"
+		"code": "Europe/Zagreb",
+		"full_name": "(GMT+01:00) Zagreb",
+		"name": "Zagreb",
+		"timezone": "Europe",
+		"time": "+01:00"
 	},
 	{
-		"code":"Europe/Athens",
-		"full_name":"(GMT+02:00) Athens",
-		"name":"Athens",
-		"timezone":"Europe",
-		"time":"+02:00"
+		"code": "Europe/Athens",
+		"full_name": "(GMT+02:00) Athens",
+		"name": "Athens",
+		"timezone": "Europe",
+		"time": "+02:00"
 	},
 	{
-		"code":"Europe/Bucharest",
-		"full_name":"(GMT+02:00) Bucharest",
-		"name":"Bucharest",
-		"timezone":"Europe",
-		"time":"+02:00"
+		"code": "Europe/Bucharest",
+		"full_name": "(GMT+02:00) Bucharest",
+		"name": "Bucharest",
+		"timezone": "Europe",
+		"time": "+02:00"
 	},
 	{
-		"code":"Africa/Cairo",
-		"full_name":"(GMT+02:00) Cairo",
-		"name":"Cairo",
-		"timezone":"Africa",
-		"time":"+02:00"
+		"code": "Africa/Cairo",
+		"full_name": "(GMT+02:00) Cairo",
+		"name": "Cairo",
+		"timezone": "Africa",
+		"time": "+02:00"
 	},
 	{
-		"code":"Africa/Harare",
-		"full_name":"(GMT+02:00) Harare",
-		"name":"Harare",
-		"timezone":"Africa",
-		"time":"+02:00"
+		"code": "Africa/Harare",
+		"full_name": "(GMT+02:00) Harare",
+		"name": "Harare",
+		"timezone": "Africa",
+		"time": "+02:00"
 	},
 	{
-		"code":"Europe/Helsinki",
-		"full_name":"(GMT+02:00) Helsinki",
-		"name":"Helsinki",
-		"timezone":"Europe",
-		"time":"+02:00"
+		"code": "Europe/Helsinki",
+		"full_name": "(GMT+02:00) Helsinki",
+		"name": "Helsinki",
+		"timezone": "Europe",
+		"time": "+02:00"
 	},
 	{
-		"code":"Europe/Istanbul",
-		"full_name":"(GMT+02:00) Istanbul",
-		"name":"Istanbul",
-		"timezone":"Europe",
-		"time":"+02:00"
+		"code": "Europe/Istanbul",
+		"full_name": "(GMT+02:00) Istanbul",
+		"name": "Istanbul",
+		"timezone": "Europe",
+		"time": "+02:00"
 	},
 	{
-		"code":"Asia/Jerusalem",
-		"full_name":"(GMT+02:00) Jerusalem",
-		"name":"Jerusalem",
-		"timezone":"Asia",
-		"time":"+02:00"
+		"code": "Asia/Jerusalem",
+		"full_name": "(GMT+02:00) Jerusalem",
+		"name": "Jerusalem",
+		"timezone": "Asia",
+		"time": "+02:00"
 	},
 	{
-		"code":"Europe/Kiev",
-		"full_name":"(GMT+02:00) Kyiv",
-		"name":"Kyiv",
-		"timezone":"Europe",
-		"time":"+02:00"
+		"code": "Europe/Kiev",
+		"full_name": "(GMT+02:00) Kyiv",
+		"name": "Kyiv",
+		"timezone": "Europe",
+		"time": "+02:00"
 	},
 	{
-		"code":"Europe/Minsk",
-		"full_name":"(GMT+02:00) Minsk",
-		"name":"Minsk",
-		"timezone":"Europe",
-		"time":"+02:00"
+		"code": "Europe/Minsk",
+		"full_name": "(GMT+02:00) Minsk",
+		"name": "Minsk",
+		"timezone": "Europe",
+		"time": "+02:00"
 	},
 	{
-		"code":"Europe/Riga",
-		"full_name":"(GMT+02:00) Riga",
-		"name":"Riga",
-		"timezone":"Europe",
-		"time":"+02:00"
+		"code": "Europe/Riga",
+		"full_name": "(GMT+02:00) Riga",
+		"name": "Riga",
+		"timezone": "Europe",
+		"time": "+02:00"
 	},
 	{
-		"code":"Europe/Sofia",
-		"full_name":"(GMT+02:00) Sofia",
-		"name":"Sofia",
-		"timezone":"Europe",
-		"time":"+02:00"
+		"code": "Europe/Sofia",
+		"full_name": "(GMT+02:00) Sofia",
+		"name": "Sofia",
+		"timezone": "Europe",
+		"time": "+02:00"
 	},
 	{
-		"code":"Europe/Tallinn",
-		"full_name":"(GMT+02:00) Tallinn",
-		"name":"Tallinn",
-		"timezone":"Europe",
-		"time":"+02:00"
+		"code": "Europe/Tallinn",
+		"full_name": "(GMT+02:00) Tallinn",
+		"name": "Tallinn",
+		"timezone": "Europe",
+		"time": "+02:00"
 	},
 	{
-		"code":"Europe/Vilnius",
-		"full_name":"(GMT+02:00) Vilnius",
-		"name":"Vilnius",
-		"timezone":"Europe",
-		"time":"+02:00"
+		"code": "Europe/Vilnius",
+		"full_name": "(GMT+02:00) Vilnius",
+		"name": "Vilnius",
+		"timezone": "Europe",
+		"time": "+02:00"
 	},
 	{
-		"code":"Asia/Baghdad",
-		"full_name":"(GMT+03:00) Baghdad",
-		"name":"Baghdad",
-		"timezone":"Asia",
-		"time":"+03:00"
+		"code": "Asia/Baghdad",
+		"full_name": "(GMT+03:00) Baghdad",
+		"name": "Baghdad",
+		"timezone": "Asia",
+		"time": "+03:00"
 	},
 	{
-		"code":"Asia/Kuwait",
-		"full_name":"(GMT+03:00) Kuwait",
-		"name":"Kuwait",
-		"timezone":"Asia",
-		"time":"+03:00"
+		"code": "Asia/Kuwait",
+		"full_name": "(GMT+03:00) Kuwait",
+		"name": "Kuwait",
+		"timezone": "Asia",
+		"time": "+03:00"
 	},
 	{
-		"code":"Africa/Nairobi",
-		"full_name":"(GMT+03:00) Nairobi",
-		"name":"Nairobi",
-		"timezone":"Africa",
-		"time":"+03:00"
+		"code": "Africa/Nairobi",
+		"full_name": "(GMT+03:00) Nairobi",
+		"name": "Nairobi",
+		"timezone": "Africa",
+		"time": "+03:00"
 	},
 	{
-		"code":"Asia/Riyadh",
-		"full_name":"(GMT+03:00) Riyadh",
-		"name":"Riyadh",
-		"timezone":"Asia",
-		"time":"+03:00"
+		"code": "Asia/Riyadh",
+		"full_name": "(GMT+03:00) Riyadh",
+		"name": "Riyadh",
+		"timezone": "Asia",
+		"time": "+03:00"
 	},
 	{
-		"code":"Asia/Tehran",
-		"full_name":"(GMT+03:30) Tehran",
-		"name":"Tehran",
-		"timezone":"Asia",
-		"time":"+03:00"
+		"code": "Asia/Tehran",
+		"full_name": "(GMT+03:30) Tehran",
+		"name": "Tehran",
+		"timezone": "Asia",
+		"time": "+03:00"
 	},
 	{
-		"code":"Europe/Moscow",
-		"full_name":"(GMT+04:00) Moscow",
-		"name":"Moscow",
-		"timezone":"Europe",
-		"time":"+04:00"
+		"code": "Europe/Moscow",
+		"full_name": "(GMT+04:00) Moscow",
+		"name": "Moscow",
+		"timezone": "Europe",
+		"time": "+04:00"
 	},
 	{
-		"code":"Asia/Baku",
-		"full_name":"(GMT+04:00) Baku",
-		"name":"Baku",
-		"timezone":"Asia",
-		"time":"+04:00"
+		"code": "Asia/Baku",
+		"full_name": "(GMT+04:00) Baku",
+		"name": "Baku",
+		"timezone": "Asia",
+		"time": "+04:00"
 	},
 	{
-		"code":"Europe/Volgograd",
-		"full_name":"(GMT+04:00) Volgograd",
-		"name":"Volgograd",
-		"timezone":"Europe",
-		"time":"+04:00"
+		"code": "Europe/Volgograd",
+		"full_name": "(GMT+04:00) Volgograd",
+		"name": "Volgograd",
+		"timezone": "Europe",
+		"time": "+04:00"
 	},
 	{
-		"code":"Asia/Muscat",
-		"full_name":"(GMT+04:00) Muscat",
-		"name":"Muscat",
-		"timezone":"Asia",
-		"time":"+04:00"
+		"code": "Asia/Muscat",
+		"full_name": "(GMT+04:00) Muscat",
+		"name": "Muscat",
+		"timezone": "Asia",
+		"time": "+04:00"
 	},
 	{
-		"code":"Asia/Tbilisi",
-		"full_name":"(GMT+04:00) Tbilisi",
-		"name":"Tbilisi",
-		"timezone":"Asia",
-		"time":"+04:00"
+		"code": "Asia/Tbilisi",
+		"full_name": "(GMT+04:00) Tbilisi",
+		"name": "Tbilisi",
+		"timezone": "Asia",
+		"time": "+04:00"
 	},
 	{
-		"code":"Asia/Yerevan",
-		"full_name":"(GMT+04:00) Yerevan",
-		"name":"Yerevan",
-		"timezone":"Asia",
-		"time":"+04:00"
+		"code": "Asia/Yerevan",
+		"full_name": "(GMT+04:00) Yerevan",
+		"name": "Yerevan",
+		"timezone": "Asia",
+		"time": "+04:00"
 	},
 	{
-		"code":"Asia/Kabul",
-		"full_name":"(GMT+04:30) Kabul",
-		"name":"Kabul",
-		"timezone":"Asia",
-		"time":"+04:30"
+		"code": "Asia/Kabul",
+		"full_name": "(GMT+04:30) Kabul",
+		"name": "Kabul",
+		"timezone": "Asia",
+		"time": "+04:30"
 	},
 	{
-		"code":"Asia/Karachi",
-		"full_name":"(GMT+05:00) Karachi",
-		"name":"Karachi",
-		"timezone":"Asia",
-		"time":"+05:00"
+		"code": "Asia/Karachi",
+		"full_name": "(GMT+05:00) Karachi",
+		"name": "Karachi",
+		"timezone": "Asia",
+		"time": "+05:00"
 	},
 	{
-		"code":"Asia/Tashkent",
-		"full_name":"(GMT+05:00) Tashkent",
-		"name":"Tashkent",
-		"timezone":"Asia",
-		"time":"+05:00"
+		"code": "Asia/Tashkent",
+		"full_name": "(GMT+05:00) Tashkent",
+		"name": "Tashkent",
+		"timezone": "Asia",
+		"time": "+05:00"
 	},
 	{
-		"code":"Asia/Kolkata",
-		"full_name":"(GMT+05:30) Kolkata",
-		"name":"Kolkata",
-		"timezone":"Asia",
-		"time":"+05:30"
+		"code": "Asia/Kolkata",
+		"full_name": "(GMT+05:30) Kolkata",
+		"name": "Kolkata",
+		"timezone": "Asia",
+		"time": "+05:30"
 	},
 	{
-		"code":"Asia/Kathmandu",
-		"full_name":"(GMT+05:45) Kathmandu",
-		"name":"Kathmandu",
-		"timezone":"Asia",
-		"time":"+05:45"
+		"code": "Asia/Kathmandu",
+		"full_name": "(GMT+05:45) Kathmandu",
+		"name": "Kathmandu",
+		"timezone": "Asia",
+		"time": "+05:45"
 	},
 	{
-		"code":"Asia/Yekaterinburg",
-		"full_name":"(GMT+06:00) Ekaterinburg",
-		"name":"Ekaterinburg",
-		"timezone":"Asia",
-		"time":"+06:00"
+		"code": "Asia/Yekaterinburg",
+		"full_name": "(GMT+06:00) Ekaterinburg",
+		"name": "Ekaterinburg",
+		"timezone": "Asia",
+		"time": "+06:00"
 	},
 	{
-		"code":"Asia/Almaty",
-		"full_name":"(GMT+06:00) Almaty",
-		"name":"Almaty",
-		"timezone":"Asia",
-		"time":"+06:00"
+		"code": "Asia/Almaty",
+		"full_name": "(GMT+06:00) Almaty",
+		"name": "Almaty",
+		"timezone": "Asia",
+		"time": "+06:00"
 	},
 	{
-		"code":"Asia/Dhaka",
-		"full_name":"(GMT+06:00) Dhaka",
-		"name":"Dhaka",
-		"timezone":"Asia",
-		"time":"+06:00"
+		"code": "Asia/Dhaka",
+		"full_name": "(GMT+06:00) Dhaka",
+		"name": "Dhaka",
+		"timezone": "Asia",
+		"time": "+06:00"
 	},
 	{
-		"code":"Asia/Novosibirsk",
-		"full_name":"(GMT+07:00) Novosibirsk",
-		"name":"Novosibirsk",
-		"timezone":"Asia",
-		"time":"+07:00"
+		"code": "Asia/Novosibirsk",
+		"full_name": "(GMT+07:00) Novosibirsk",
+		"name": "Novosibirsk",
+		"timezone": "Asia",
+		"time": "+07:00"
 	},
 	{
-		"code":"Asia/Bangkok",
-		"full_name":"(GMT+07:00) Bangkok",
-		"name":"Bangkok",
-		"timezone":"Asia",
-		"time":"+07:00"
+		"code": "Asia/Bangkok",
+		"full_name": "(GMT+07:00) Bangkok",
+		"name": "Bangkok",
+		"timezone": "Asia",
+		"time": "+07:00"
 	},
 	{
-		"code":"Asia/Jakarta",
-		"full_name":"(GMT+07:00) Jakarta",
-		"name":"Jakarta",
-		"timezone":"Asia",
-		"time":"+07:00"
+		"code": "Asia/Jakarta",
+		"full_name": "(GMT+07:00) Jakarta",
+		"name": "Jakarta",
+		"timezone": "Asia",
+		"time": "+07:00"
 	},
 	{
-		"code":"Asia/Krasnoyarsk",
-		"full_name":"(GMT+08:00) Krasnoyarsk",
-		"name":"Krasnoyarsk",
-		"timezone":"Asia",
-		"time":"+08:00"
+		"code": "Asia/Krasnoyarsk",
+		"full_name": "(GMT+08:00) Krasnoyarsk",
+		"name": "Krasnoyarsk",
+		"timezone": "Asia",
+		"time": "+08:00"
 	},
 	{
-		"code":"Asia/Chongqing",
-		"full_name":"(GMT+08:00) Chongqing",
-		"name":"Chongqing",
-		"timezone":"Asia",
-		"time":"+08:00"
+		"code": "Asia/Chongqing",
+		"full_name": "(GMT+08:00) Chongqing",
+		"name": "Chongqing",
+		"timezone": "Asia",
+		"time": "+08:00"
 	},
 	{
-		"code":"Asia/Hong_Kong",
-		"full_name":"(GMT+08:00) Hong Kong",
-		"name":"Hong Kong",
-		"timezone":"Asia",
-		"time":"+08:00"
+		"code": "Asia/Hong_Kong",
+		"full_name": "(GMT+08:00) Hong Kong",
+		"name": "Hong Kong",
+		"timezone": "Asia",
+		"time": "+08:00"
 	},
 	{
-		"code":"Asia/Kuala_Lumpur",
-		"full_name":"(GMT+08:00) Kuala Lumpur",
-		"name":"Kuala Lumpur",
-		"timezone":"Asia",
-		"time":"+08:00"
+		"code": "Asia/Kuala_Lumpur",
+		"full_name": "(GMT+08:00) Kuala Lumpur",
+		"name": "Kuala Lumpur",
+		"timezone": "Asia",
+		"time": "+08:00"
 	},
 	{
-		"code":"Australia/Perth",
-		"full_name":"(GMT+08:00) Perth",
-		"name":"Perth",
-		"timezone":"Australia",
-		"time":"+08:00"
+		"code": "Australia/Perth",
+		"full_name": "(GMT+08:00) Perth",
+		"name": "Perth",
+		"timezone": "Australia",
+		"time": "+08:00"
 	},
 	{
-		"code":"Asia/Singapore",
-		"full_name":"(GMT+08:00) Singapore",
-		"name":"Singapore",
-		"timezone":"Asia",
-		"time":"+08:00"
+		"code": "Asia/Singapore",
+		"full_name": "(GMT+08:00) Singapore",
+		"name": "Singapore",
+		"timezone": "Asia",
+		"time": "+08:00"
 	},
 	{
-		"code":"Asia/Taipei",
-		"full_name":"(GMT+08:00) Taipei",
-		"name":"Taipei",
-		"timezone":"Asia",
-		"time":"+08:00"
+		"code": "Asia/Taipei",
+		"full_name": "(GMT+08:00) Taipei",
+		"name": "Taipei",
+		"timezone": "Asia",
+		"time": "+08:00"
 	},
 	{
-		"code":"Asia/Ulaanbaatar",
-		"full_name":"(GMT+08:00) Ulaan Bataar",
-		"name":"Ulaan Bataar",
-		"timezone":"Asia",
-		"time":"+08:00"
+		"code": "Asia/Ulaanbaatar",
+		"full_name": "(GMT+08:00) Ulaan Bataar",
+		"name": "Ulaan Bataar",
+		"timezone": "Asia",
+		"time": "+08:00"
 	},
 	{
-		"code":"Asia/Urumqi",
-		"full_name":"(GMT+08:00) Urumqi",
-		"name":"Urumqi",
-		"timezone":"Asia",
-		"time":"+08:00"
+		"code": "Asia/Urumqi",
+		"full_name": "(GMT+08:00) Urumqi",
+		"name": "Urumqi",
+		"timezone": "Asia",
+		"time": "+08:00"
 	},
 	{
-		"code":"Asia/Irkutsk",
-		"full_name":"(GMT+09:00) Irkutsk",
-		"name":"Irkutsk",
-		"timezone":"Asia",
-		"time":"+09:00"
+		"code": "Asia/Irkutsk",
+		"full_name": "(GMT+09:00) Irkutsk",
+		"name": "Irkutsk",
+		"timezone": "Asia",
+		"time": "+09:00"
 	},
 	{
-		"code":"Asia/Seoul",
-		"full_name":"(GMT+09:00) Seoul",
-		"name":"Seoul",
-		"timezone":"Asia",
-		"time":"+09:00"
+		"code": "Asia/Seoul",
+		"full_name": "(GMT+09:00) Seoul",
+		"name": "Seoul",
+		"timezone": "Asia",
+		"time": "+09:00"
 	},
 	{
-		"code":"Asia/Tokyo",
-		"full_name":"(GMT+09:00) Tokyo",
-		"name":"Tokyo",
-		"timezone":"Asia",
-		"time":"+09:00"
+		"code": "Asia/Tokyo",
+		"full_name": "(GMT+09:00) Tokyo",
+		"name": "Tokyo",
+		"timezone": "Asia",
+		"time": "+09:00"
 	},
 	{
-		"code":"Australia/Adelaide",
-		"full_name":"(GMT+09:30) Adelaide",
-		"name":"Adelaide",
-		"timezone":"Australia",
-		"time":"+09:30"
+		"code": "Australia/Adelaide",
+		"full_name": "(GMT+09:30) Adelaide",
+		"name": "Adelaide",
+		"timezone": "Australia",
+		"time": "+09:30"
 	},
 	{
-		"code":"Australia/Darwin",
-		"full_name":"(GMT+09:30) Darwin",
-		"name":"Darwin",
-		"timezone":"Australia",
-		"time":"+09:30"
+		"code": "Australia/Darwin",
+		"full_name": "(GMT+09:30) Darwin",
+		"name": "Darwin",
+		"timezone": "Australia",
+		"time": "+09:30"
 	},
 	{
-		"code":"Asia/Yakutsk",
-		"full_name":"(GMT+10:00) Yakutsk",
-		"name":"Yakutsk",
-		"timezone":"Asia",
-		"time":"+10:00"
+		"code": "Asia/Yakutsk",
+		"full_name": "(GMT+10:00) Yakutsk",
+		"name": "Yakutsk",
+		"timezone": "Asia",
+		"time": "+10:00"
 	},
 	{
-		"code":"Australia/Brisbane",
-		"full_name":"(GMT+10:00) Brisbane",
-		"name":"Brisbane",
-		"timezone":"Australia",
-		"time":"+10:00"
+		"code": "Australia/Brisbane",
+		"full_name": "(GMT+10:00) Brisbane",
+		"name": "Brisbane",
+		"timezone": "Australia",
+		"time": "+10:00"
 	},
 	{
-		"code":"Australia/Canberra",
-		"full_name":"(GMT+10:00) Canberra",
-		"name":"Canberra",
-		"timezone":"Australia",
-		"time":"+10:00"
+		"code": "Australia/Canberra",
+		"full_name": "(GMT+10:00) Canberra",
+		"name": "Canberra",
+		"timezone": "Australia",
+		"time": "+10:00"
 	},
 	{
-		"code":"Pacific/Guam",
-		"full_name":"(GMT+10:00) Guam",
-		"name":"Guam",
-		"timezone":"Pacific",
-		"time":"+10:00"
+		"code": "Pacific/Guam",
+		"full_name": "(GMT+10:00) Guam",
+		"name": "Guam",
+		"timezone": "Pacific",
+		"time": "+10:00"
 	},
 	{
-		"code":"Australia/Hobart",
-		"full_name":"(GMT+10:00) Hobart",
-		"name":"Hobart",
-		"timezone":"Australia",
-		"time":"+10:00"
+		"code": "Australia/Hobart",
+		"full_name": "(GMT+10:00) Hobart",
+		"name": "Hobart",
+		"timezone": "Australia",
+		"time": "+10:00"
 	},
 	{
-		"code":"Australia/Melbourne",
-		"full_name":"(GMT+10:00) Melbourne",
-		"name":"Melbourne",
-		"timezone":"Australia",
-		"time":"+10:00"
+		"code": "Australia/Melbourne",
+		"full_name": "(GMT+10:00) Melbourne",
+		"name": "Melbourne",
+		"timezone": "Australia",
+		"time": "+10:00"
 	},
 	{
-		"code":"Pacific/Port_Moresby",
-		"full_name":"(GMT+10:00) Port Moresby",
-		"name":"Port Moresby",
-		"timezone":"Pacific",
-		"time":"+10:00"
+		"code": "Pacific/Port_Moresby",
+		"full_name": "(GMT+10:00) Port Moresby",
+		"name": "Port Moresby",
+		"timezone": "Pacific",
+		"time": "+10:00"
 	},
 	{
-		"code":"Australia/Sydney",
-		"full_name":"(GMT+10:00) Sydney",
-		"name":"Sydney",
-		"timezone":"Australia",
-		"time":"+10:00"
+		"code": "Australia/Sydney",
+		"full_name": "(GMT+10:00) Sydney",
+		"name": "Sydney",
+		"timezone": "Australia",
+		"time": "+10:00"
 	},
 	{
-		"code":"Asia/Vladivostok",
-		"full_name":"(GMT+11:00) Vladivostok",
-		"name":"Vladivostok",
-		"timezone":"Asia",
-		"time":"+11:00"
+		"code": "Asia/Vladivostok",
+		"full_name": "(GMT+11:00) Vladivostok",
+		"name": "Vladivostok",
+		"timezone": "Asia",
+		"time": "+11:00"
 	},
 	{
-		"code":"Asia/Magadan",
-		"full_name":"(GMT+12:00) Magadan",
-		"name":"Magadan",
-		"timezone":"Asia",
-		"time":"+12:00"
+		"code": "Asia/Magadan",
+		"full_name": "(GMT+12:00) Magadan",
+		"name": "Magadan",
+		"timezone": "Asia",
+		"time": "+12:00"
 	},
 	{
-		"code":"Pacific/Auckland",
-		"full_name":"(GMT+12:00) Auckland",
-		"name":"Auckland",
-		"timezone":"Pacific",
-		"time":"+12:00"
+		"code": "Pacific/Auckland",
+		"full_name": "(GMT+12:00) Auckland",
+		"name": "Auckland",
+		"timezone": "Pacific",
+		"time": "+12:00"
 	},
 	{
-		"code":"Pacific/Fiji",
-		"full_name":"(GMT+12:00) Fiji",
-		"name":"Fiji",
-		"timezone":"Pacific",
-		"time":"+12:00"
+		"code": "Pacific/Fiji",
+		"full_name": "(GMT+12:00) Fiji",
+		"name": "Fiji",
+		"timezone": "Pacific",
+		"time": "+12:00"
 	}
 ]

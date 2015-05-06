@@ -1,1 +1,9 @@
-{"name":"TwistPHP Repository","key":"twistphp","url":"http:\/\/repo.twistphp.com\/","homepage":"http:\/\/twistphp.com\/","enabled":"1","licence":"","token":""}
+{
+	"name": "TwistPHP Repository",
+	"key": "twistphp",
+	"url": "http:\/\/repo.twistphp.com\/",
+	"homepage": "http:\/\/twistphp.com\/",
+	"enabled": "1",
+	"licence": "",
+	"token": ""
+}

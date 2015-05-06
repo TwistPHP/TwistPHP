@@ -108,17 +108,26 @@
 	"unsemantic": {
 		"desktop": {
 			"default": false,
-			"css": ["unsemantic-grid-base-no-ie7.css","unsemantic-grid-desktop-no-ie7.css"],
+			"css": [
+				"unsemantic-grid-base-no-ie7.css",
+				"unsemantic-grid-desktop-no-ie7.css"
+			],
 			"js": []
 		},
 		"tablet": {
 			"default": false,
-			"css": ["unsemantic-grid-base-no-ie7.css","unsemantic-grid-tablet-no-ie7.css"],
+			"css": [
+				"unsemantic-grid-base-no-ie7.css",
+				"unsemantic-grid-tablet-no-ie7.css"
+			],
 			"js": []
 		},
 		"mobile": {
 			"default": false,
-			"css": ["unsemantic-grid-base-no-ie7.css","unsemantic-grid-mobile-no-ie7.css"],
+			"css": [
+				"unsemantic-grid-base-no-ie7.css",
+				"unsemantic-grid-mobile-no-ie7.css"
+			],
 			"js": []
 		},
 		"desktop-mobile": {
@@ -135,17 +144,26 @@
 	"unsemantic-rtl": {
 		"desktop": {
 			"default": false,
-			"css": ["unsemantic-grid-base-no-ie7-rtl.css","unsemantic-grid-desktop-no-ie7-rtl.css"],
+			"css": [
+				"unsemantic-grid-base-no-ie7-rtl.css",
+				"unsemantic-grid-desktop-no-ie7-rtl.css"
+			],
 			"js": []
 		},
 		"tablet": {
 			"default": false,
-			"css": ["unsemantic-grid-base-no-ie7-rtl.css","unsemantic-grid-tablet-no-ie7-rtl.css"],
+			"css": [
+				"unsemantic-grid-base-no-ie7-rtl.css",
+				"unsemantic-grid-tablet-no-ie7-rtl.css"
+			],
 			"js": []
 		},
 		"mobile": {
 			"default": false,
-			"css": ["unsemantic-grid-base-no-ie7-rtl.css","unsemantic-grid-mobile-no-ie7-rtl.css"],
+			"css": [
+				"unsemantic-grid-base-no-ie7-rtl.css",
+				"unsemantic-grid-mobile-no-ie7-rtl.css"
+			],
 			"js": []
 		},
 		"desktop-mobile": {

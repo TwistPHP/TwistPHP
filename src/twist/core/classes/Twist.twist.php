@@ -120,7 +120,7 @@
 					self::maintenanceMode();
 					self::autoAuthenticate();
 
-					self::recordEvent('Core Loaded');
+					self::recordEvent('Framework ready');
 
 					self::define('TWIST_LAUNCHED',1);
 				}
@@ -196,7 +196,7 @@
 				//If auto authenticate is enabled then authenticate the user at this point
 				if(Twist::framework()->setting('USER_AUTO_AUTHENTICATE')){
 					Twist::User()->authenticate();
-					self::recordEvent('User Authenticated');
+					self::recordEvent('User authenticated');
 				}
 			}
 
