@@ -116,7 +116,7 @@
   #twist-debug > ul {
     margin: 0;
     padding: 0;
-    overflow: hidden;
+    overflow: auto;
     list-style: none;
     white-space: nowrap; }
     #twist-debug > ul li {
