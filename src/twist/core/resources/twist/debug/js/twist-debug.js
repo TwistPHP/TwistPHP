@@ -51,7 +51,7 @@
 					},
 					loadDebugger = function() {
 						var this$ = jQuery.noConflict( true );
-						console.log( $.fn.jquery );
+						//console.log( $.fn.jquery );
 						console.log( this$.fn.jquery );
 						this$( 'body' ).append( '<p>123</p>' );
 
