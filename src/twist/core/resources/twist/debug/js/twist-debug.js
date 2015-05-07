@@ -50,10 +50,30 @@
 						domHead.appendChild( domScript );
 					},
 					loadDebugger = function() {
-						this.$ = jQuery.noConflict( true );
+						var this$ = jQuery.noConflict( true );
 						console.log( $.fn.jquery );
-						console.log( this.$.fn.jquery );
-						this.$( 'body' ).append( '<p>123</p>' );
+						console.log( this$.fn.jquery );
+						this$( 'body' ).append( '<p>123</p>' );
+
+						if( window.devicePixelRatio
+								&& devicePixelRatio >= 2 ) {
+							var jqoTestElement = this$( '<div/>' ).style( 'border', '0.5px solid transparent' );
+							this$( 'body' ).append( jqoTestElement );
+							if( jqoTestElement.height() === 1 ) {
+								this$( 'html' ).addClass( 'hairlines2' );
+								this$( 'body' ).append( '<p>hairlines 2</p>' );
+							}
+
+							var testElem = document.createElement( 'div' );
+							testElem.style.border = '.5px solid transparent';
+							document.body.appendChild( testElem );
+							if( testElem.offsetHeight == 1 ) {
+								document.querySelector( 'html' ).classList.add( 'hairlines' );
+								this$( 'body' ).append( '<p>hairlines</p>' );
+							}
+							document.body.removeChild( testElem );
+						}
+						
 					};
 
 			if( typeof jQuery === 'undefined' ) {
