@@ -23,7 +23,7 @@
 
 namespace Twist\Core\Models\User;
 
-class Session{
+class SessionHandler{
 
 	protected $strSecretKey = 'mySecretKey';
 	protected $intSessionLife = 604800;

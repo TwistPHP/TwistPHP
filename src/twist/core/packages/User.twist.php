@@ -24,7 +24,7 @@
 namespace Twist\Core\Packages;
 use \Twist\Core\Classes\BasePackage;
 use \Twist\Core\Models\User\User as UserObject;
-use \Twist\Core\Models\User\Session;
+use \Twist\Core\Models\User\SessionHandler;
 
 /**
  * User management and control allowing users to register, login and be updated
@@ -58,7 +58,7 @@ class User extends BasePackage{
 		$this->strPasswordHash = $this->framework()->setting('USER_PASSWORD_HASH');
 
 		$this->resTemplate = \Twist::View('pkgUser');
-		$this->objUserSession = new Session();
+		$this->objUserSession = new SessionHandler();
 
 		//@todo setup the template override in the apps folder
 		$this->setCustomTemplateLocation(sprintf('%s/user/',DIR_FRAMEWORK_VIEWS));
