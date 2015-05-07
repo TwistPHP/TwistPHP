@@ -67,6 +67,11 @@ class User extends BasePackage{
 		if($this->framework()->setting('USER_REMEMBER_LENGTH') > 0){
 			$this->objUserSession->setSessionLife( (($this->framework()->setting('USER_REMEMBER_LENGTH') * 60) * 60) );
 		}
+
+		//Check for rouge sessions and kill if required
+		if($this->currentID() && !$this->loggedIn()){
+			$this->processLogout(null);
+		}
 	}
 
 	/**

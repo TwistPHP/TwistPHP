@@ -118,10 +118,8 @@
 					self::showSetup();
 					self::phpSettings();
 					self::maintenanceMode();
-					self::autoAuthenticate();
 
 					self::recordEvent('Framework ready');
-
 					self::define('TWIST_LAUNCHED',1);
 				}
 			}
@@ -180,23 +178,6 @@
 					self::Route()->baseURI(BASE_URI);
 					self::Route()->controller('/%','\Twist\Core\Controllers\Setup');
 					self::Route()->serve();
-				}
-			}
-
-			/**
-			 * Auto authenticate the user when the framework starts, if enabled
-			 */
-			protected static function autoAuthenticate(){
-
-				//Check for rouge sessions and kill if required
-				if(Twist::User()->currentID() && !Twist::User()->loggedIn()){
-					Twist::User()->processLogout(null);
-				}
-
-				//If auto authenticate is enabled then authenticate the user at this point
-				if(Twist::framework()->setting('USER_AUTO_AUTHENTICATE')){
-					Twist::User()->authenticate();
-					self::recordEvent('User authenticated');
 				}
 			}
 
