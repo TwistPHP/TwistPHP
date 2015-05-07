@@ -91,12 +91,14 @@
 			if(\Twist::Database()->checkSettings() && !count($this->arrPackages) || $blRebuild){
 
 				$this->arrPackages = array();
-
 				$arrPackages = \Twist::Database()->getAll(DATABASE_TABLE_PREFIX.'packages');
-				$arrPackages = \Twist::framework()->tools()->arrayReindex($arrPackages,'slug');
 
-				foreach($arrPackages as $strSlug => $arrPackageData){
-					$this->load($strSlug,$arrPackageData);
+				if(count($arrPackages)){
+					$arrPackages = \Twist::framework()->tools()->arrayReindex($arrPackages,'slug');
+
+					foreach($arrPackages as $strSlug => $arrPackageData){
+						$this->load($strSlug,$arrPackageData);
+					}
 				}
 			}
 
