@@ -10,19 +10,18 @@
 	</head>
 	<body>
 		<h1>Hello world</h1>
-
-		<!--<script src="../src/twist/core/resources/jquery/jquery-1.11.2.min.js"></script>-->
-
-		<script src="../src/twist/core/resources/twist/debug/js/twist-debug.js"></script>
-
 		<div id="twist-debug">
 			<img id="twist-debug-icon" src="../src/twist/core/resources/twist/logos/logo-64.png">
 			<ul>
-				<li><i class="fa fa-fw fa-clock-o"></i>1.63s</li><!--
-				--><li><i class="fa fa-fw fa-line-chart"></i>12.64Mb</li><!--
-				--><li><i class="fa fa-fw fa-database"></i>439 queries</li><!--
-				--><li><strong>GET</strong> /shop/favourites</li>
+				<li><a href="#"><i class="fa fa-fw fa-terminal"></i><span id="twist-debug-errors">2</span><span id="twist-debug-warnings">7</span><span id="twist-debug-dumps">3</span></a></li><!--
+				--><li><a href="#"><i class="fa fa-fw fa-clock-o"></i>1.63s</a></li><!--
+				--><li><a href="#"><i class="fa fa-fw fa-line-chart"></i>12.64Mb</a></li><!--
+				--><li><a href="#"><i class="fa fa-fw fa-database"></i>439 queries</a></li><!--
+				--><li><a href="#"><i class="fa fa-fw fa-file-code-o"></i>39 views</a></li><!--
+				<li><a href="#"><span class="fa-stack"><i class="fa fa-bug fa-stack-1x"></i><i class="fa fa-ban fa-stack-2x"></i></span></a></li>
+				--><li><a href="#"><strong>GET</strong> /shop/favourites</a></li>
 			</ul>
 		</div>
+		<script src="../src/twist/core/resources/twist/debug/js/twist-debug.js"></script>
 	</body>
 </html>

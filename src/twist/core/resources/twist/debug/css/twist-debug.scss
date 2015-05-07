@@ -1,23 +1,112 @@
 @charset "UTF-8";
 
+// ===================================================== MIXINS =====================================================
+@mixin keyframes($strName) {
+	@-webkit-keyframes #{$strName} {
+		@content
+	}
+
+	@-moz-keyframes #{$strName} {
+		@content;
+	}
+
+	@-ms-keyframes #{$strName} {
+		@content;
+	}
+
+	@-o-keyframes #{$strName} {
+		@content;
+	}
+
+	@keyframes #{$strName} {
+		@content;
+	}
+}
+
+@mixin animate($name, $time, $delay) {
+	//-webkit-animation: $name $time infinite;
+	-webkit-animation: $name $time 1;
+	-webkit-animation-delay: $delay;
+	-webkit-animation-fill-mode: forwards;
+	//-moz-animation: $name $time infinite;
+	-moz-animation: $name $time 1;
+	-moz-animation-delay: $delay;
+	-moz-animation-fill-mode: forwards;
+	//-ms-animation: $name $time infinite;
+	-ms-animation: $name $time 1;
+	-ms-animation-delay: $delay;
+	-ms-animation-fill-mode: forwards;
+	//-o-animation: $name $time infinite;
+	-o-animation: $name $time 1;
+	-o-animation-delay: $delay;
+	-o-animation-fill-mode: forwards;
+	//animation: $name $time infinite;
+	animation: $name $time 1;
+	animation-delay: $delay;
+	animation-fill-mode: forwards;
+}
+
+/* ===================================================== ANIMATION KEYFRAMES ===================================================== */
+// https://github.com/daneden/animate.css/blob/master/source/attention_seekers/tada.css
+/*@include keyframes(tada) {
+	0% { transform: scale3d(1, 1, 1); }
+	10%, 20% { transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg); }
+	30%, 50%, 70%, 90% { transform: scale3d(1.2, 1.2, 1.2) rotate3d(0, 0, 1, 3deg); }
+	40%, 60%, 80% { transform: scale3d(1.2, 1.2, 1.2) rotate3d(0, 0, 1, -3deg); }
+	100% { transform: scale3d(1, 1, 1); }
+}*/
+
+@include keyframes(bounceInLeft) {
+	0%, 60%, 75%, 90%, 100% { transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000); }
+	0% {
+		opacity: 0;
+		transform: translate3d(-1000px, 0, 0);
+	}
+	60% {
+		opacity: 1;
+		transform: translate3d(12px, 0, 0);
+	}
+	75% { transform: translate3d(-5px, 0, 0); }
+	90% { transform: translate3d(2px, 0, 0); }
+	100% { transform: none; }
+}
+
 /* ===================================================== DEBUG BAR ===================================================== */
 #twist-debug {
 	height: 30px;
-	padding: 0 26px 0 0;
+	padding: 0 47px 0 0;
 
 	position: fixed;
 	right: 0;
 	bottom: 0;
 	left: 0;
 
-	color: #FFF;
+	overflow: visible;
+
 	font-size: 10px;
 	font-family: "Helvetica Neue Light", "Helvetica Neue", HelveticaNeue, Helvetica, "Open Sans", Arial, sans-serif;
 	font-weight: 400;
 	font-style: normal;
 
-	background-color: #000;
-	background-color: rgba(0, 0, 0, 0.75);
+	background-color: #424242;
+
+	&::after {
+		width: 10px;
+
+		position: absolute;
+		top: 0;
+		right: 47px;
+		bottom: 0;
+
+		background: rgba(66, 66, 66, 1);
+		background: -moz-linear-gradient(0deg, rgba(66, 66, 66, 0) 0%, rgba(66, 66, 66, 1) 100%);
+		background: -webkit-linear-gradient(0deg, rgba(66, 66, 66, 0) 0%, rgba(66, 66, 66, 1) 100%);
+		background: -o-linear-gradient(0deg, rgba(66, 66, 66, 0) 0%, rgba(66, 66, 66, 1) 100%);
+		background: -ms-linear-gradient(0deg, rgba(66, 66, 66, 0) 0%, rgba(66, 66, 66, 1) 100%);
+		background: linear-gradient(90deg, rgba(66, 66, 66, 0) 0%, rgba(66, 66, 66, 1) 100%);
+
+		content: "";
+	}
 
 	#twist-debug-icon {
 		width: 32px;
@@ -31,24 +120,75 @@
 		margin: 0;
 		padding: 0;
 
-		overflow: auto;
+		overflow: hidden;
 
 		list-style: none;
 		white-space: nowrap;
 
 		li {
 			margin: 0;
-			padding: 0 10px;
 
 			display: inline-block;
 
 			font-size: 1.25em;
-			line-height: 30px;
 
-			border-right: 1px rgba(255, 255, 255, 0.25) solid;
+			border-right: 1px #757575 solid;
+
+			> a {
+				padding: 0 10px;
+
+				display: block;
+
+				color: #FFF;
+				line-height: 30px;
+				text-decoration: none;
+
+				&:hover {
+					background-color: #616161;
+				}
+			}
 
 			i {
-				margin-right: 10px;
+				margin-right: 5px;
+			}
+
+			#twist-debug-errors,
+			#twist-debug-warnings,
+			#twist-debug-dumps {
+				min-width: 8px;
+				padding: 0 5px;
+
+				display: inline-block;
+
+				color: #FFF;
+				font-weight: 700;
+				text-align: center;
+				line-height: 18px;
+
+				border-radius: 2px;
+
+				transform: translate3d(-3000px, 0, 0);
+			}
+
+			#twist-debug-errors,
+			#twist-debug-warnings {
+				margin-right: 5px;
+			}
+
+			#twist-debug-errors {
+				background-color: #D32F2F;
+				@include animate(bounceInLeft, 1s, 0);
+			}
+
+			#twist-debug-warnings {
+				background-color: #FBC02D;
+				@include animate(bounceInLeft, 1s, 100ms);
+			}
+
+			#twist-debug-dumps {
+				//background-color: #0288D1;
+				background-color: #1976D2;
+				@include animate(bounceInLeft, 1s, 200ms);
 			}
 		}
 	}
