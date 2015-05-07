@@ -1,5 +1,13 @@
 @charset "UTF-8";
 
+// ===================================================== VARIABLES =====================================================
+$height: 30px;
+$logo-width: 32px;
+$fade-width: 10px;
+$background: #424242;
+$background-hover: #616161;
+$border: #757575;
+
 // ===================================================== MIXINS =====================================================
 @mixin keyframes($strName) {
 	@-webkit-keyframes #{$strName} {
@@ -21,6 +29,10 @@
 	@keyframes #{$strName} {
 		@content;
 	}
+}
+
+@function blackorwhite($colour) {
+	@return if(lightness($colour) > 50, #212121, #FFF);
 }
 
 @mixin animate($name, $time, $delay) {
@@ -47,15 +59,7 @@
 }
 
 /* ===================================================== ANIMATION KEYFRAMES ===================================================== */
-// https://github.com/daneden/animate.css/blob/master/source/attention_seekers/tada.css
-/*@include keyframes(tada) {
-	0% { transform: scale3d(1, 1, 1); }
-	10%, 20% { transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg); }
-	30%, 50%, 70%, 90% { transform: scale3d(1.2, 1.2, 1.2) rotate3d(0, 0, 1, 3deg); }
-	40%, 60%, 80% { transform: scale3d(1.2, 1.2, 1.2) rotate3d(0, 0, 1, -3deg); }
-	100% { transform: scale3d(1, 1, 1); }
-}*/
-
+// https://github.com/daneden/animate.css
 @include keyframes(bounceInLeft) {
 	0%, 60%, 75%, 90%, 100% { transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000); }
 	0% {
@@ -73,8 +77,8 @@
 
 /* ===================================================== DEBUG BAR ===================================================== */
 #twist-debug {
-	height: 30px;
-	padding: 0 47px 0 0;
+	height: $height;
+	padding: 0 #{$logo-width + 15} 0 0;
 
 	position: fixed;
 	right: 0;
@@ -88,28 +92,28 @@
 	font-weight: 400;
 	font-style: normal;
 
-	background-color: #424242;
+	background-color: $background;
 
 	&::after {
-		width: 10px;
+		width: $fade-width;
 
 		position: absolute;
 		top: 0;
-		right: 47px;
+		right: #{$logo-width + 15};
 		bottom: 0;
 
-		background: #424242;
-		background: -moz-linear-gradient(0deg, rgba(66, 66, 66, 0) 0%, rgba(66, 66, 66, 1) 100%);
-		background: -webkit-linear-gradient(0deg, rgba(66, 66, 66, 0) 0%, rgba(66, 66, 66, 1) 100%);
-		background: -o-linear-gradient(0deg, rgba(66, 66, 66, 0) 0%, rgba(66, 66, 66, 1) 100%);
-		background: -ms-linear-gradient(0deg, rgba(66, 66, 66, 0) 0%, rgba(66, 66, 66, 1) 100%);
-		background: linear-gradient(90deg, rgba(66, 66, 66, 0) 0%, rgba(66, 66, 66, 1) 100%);
+		background: $background;
+		background: -moz-linear-gradient(0deg, rgba($background, 0) 0%, rgba($background, 1) 100%);
+		background: -webkit-linear-gradient(0deg, rgba($background, 0) 0%, rgba($background, 1) 100%);
+		background: -o-linear-gradient(0deg, rgba($background, 0) 0%, rgba($background, 1) 100%);
+		background: -ms-linear-gradient(0deg, rgba($background, 0) 0%, rgba($background, 1) 100%);
+		background: linear-gradient(90deg, rgba($background, 0) 0%, rgba($background, 1) 100%);
 
 		content: "";
 	}
 
 	#twist-debug-icon {
-		width: 32px;
+		width: $logo-width;
 
 		position: absolute;
 		right: 10px;
@@ -133,19 +137,23 @@
 
 			font-size: 1.25em;
 
-			border-right: 1px #757575 solid;
+			border-right: 1px $border solid;
+
+			&:last-child {
+				margin-right: $fade-width;
+			}
 
 			> a {
 				padding: 0 10px;
 
 				display: block;
 
-				color: #FFF;
-				line-height: 30px;
+				color: blackorwhite($background);
+				line-height: $height;
 				text-decoration: none;
 
 				&:hover {
-					background-color: #616161;
+					background-color: $background-hover;
 				}
 			}
 
@@ -161,7 +169,6 @@
 
 				display: inline-block;
 
-				color: #FFF;
 				font-weight: 700;
 				text-align: center;
 				line-height: 18px;

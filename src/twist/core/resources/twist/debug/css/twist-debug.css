@@ -1,11 +1,4 @@
 /* ===================================================== ANIMATION KEYFRAMES ===================================================== */
-/*@include keyframes(tada) {
-	0% { transform: scale3d(1, 1, 1); }
-	10%, 20% { transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg); }
-	30%, 50%, 70%, 90% { transform: scale3d(1.2, 1.2, 1.2) rotate3d(0, 0, 1, 3deg); }
-	40%, 60%, 80% { transform: scale3d(1.2, 1.2, 1.2) rotate3d(0, 0, 1, -3deg); }
-	100% { transform: scale3d(1, 1, 1); }
-}*/
 @-webkit-keyframes bounceInLeft {
   0%, 60%, 75%, 90%, 100% {
     transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1); }
@@ -125,6 +118,8 @@
       display: inline-block;
       font-size: 1.25em;
       border-right: 1px #757575 solid; }
+      #twist-debug > ul li:last-child {
+        margin-right: 10px; }
       #twist-debug > ul li > a {
         padding: 0 10px;
         display: block;
@@ -141,7 +136,6 @@
         min-width: 8px;
         padding: 0 5px;
         display: inline-block;
-        color: #FFF;
         font-weight: 700;
         text-align: center;
         line-height: 18px;
