@@ -125,9 +125,13 @@
         display: block;
         color: #FFF;
         line-height: 30px;
-        text-decoration: none; }
+        text-decoration: none;
+        -webkit-transition: background ease 400ms;
+        transition: background ease 400ms; }
         #twist-debug > ul li > a:hover {
-          background-color: #616161; }
+          background-color: #616161;
+          -webkit-transition: background ease 100ms;
+          transition: background ease 100ms; }
       #twist-debug > ul li i {
         margin-right: 5px; }
       #twist-debug > ul li #twist-debug-errors,

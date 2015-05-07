@@ -25,8 +25,56 @@
 
 (
 	function( window, document ) {
+
+
+		var log = function() {
+					if( window.console
+							&& window.console.log
+							&& arguments.length > 0 ) {
+						window.console.log( arguments );
+					}
+				},
+				info = function() {
+					if( window.console
+							&& arguments.length > 0 ) {
+						for( var intArguement in arguments ) {
+							if( window.console.info ) {
+								window.console.info( arguments[intArguement] );
+							} else {
+								log( arguments[intArguement] );
+							}
+						}
+					}
+				},
+				error = function() {
+					if( window.console
+							&& arguments.length > 0 ) {
+						for( var intArguement in arguments ) {
+							if( window.console.error ) {
+								window.console.error( arguments[intArguement] );
+							} else {
+								log( arguments[intArguement] );
+							}
+						}
+					}
+				},
+				warn = function() {
+					if( window.console
+							&& arguments.length > 0 ) {
+						for( var intArguement in arguments ) {
+							if( window.console.warn ) {
+								window.console.warn( arguments[intArguement] );
+							} else {
+								log( arguments[intArguement] );
+							}
+						}
+					}
+				};
+
+
+
 		try {
-			var thisPageUsingOtherJSLibrary = false,
+			var blOtherJSLibrary = false,
 					getScript = function( strURL, funSuccess ) {
 						var domScript = document.createElement( 'script' ),
 								domHead = document.getElementsByTagName( 'head' )[0],
@@ -41,7 +89,11 @@
 												|| this.readyState === 'loaded'
 												|| this.readyState === 'complete' ) ) {
 										blDone = true;
-										funSuccess();
+										try {
+											funSuccess();
+										} catch( err ) {
+											error( err );
+										}
 										domScript.onload = domScript.onreadystatechange = null;
 										domHead.removeChild( domScript );
 									}
@@ -50,18 +102,17 @@
 						domHead.appendChild( domScript );
 					},
 					loadDebugger = function() {
-						var this$ = jQuery.noConflict( true );
-						//console.log( $.fn.jquery );
-						console.log( this$.fn.jquery );
-						this$( 'body' ).append( '<p>123</p>' );
+						var $ = jQuery.noConflict( true );
+						$( 'body' ).append( '<p>123</p>' );
+						info( 'jQuery v.' + $.fn.jquery + ' ready' );
 
 						if( window.devicePixelRatio
 								&& devicePixelRatio >= 2 ) {
-							var jqoTestElement = this$( '<div/>' ).style( 'border', '0.5px solid transparent' );
-							this$( 'body' ).append( jqoTestElement );
+							var jqoTestElement = $( '<div/>' ).style( 'border', '0.5px solid transparent' );
+							$( 'body' ).append( jqoTestElement );
 							if( jqoTestElement.height() === 1 ) {
-								this$( 'html' ).addClass( 'hairlines2' );
-								this$( 'body' ).append( '<p>hairlines 2</p>' );
+								$( 'html' ).addClass( 'hairlines2' );
+								$( 'body' ).append( '<p>hairlines 2</p>' );
 							}
 
 							var testElem = document.createElement( 'div' );
@@ -69,42 +120,40 @@
 							document.body.appendChild( testElem );
 							if( testElem.offsetHeight == 1 ) {
 								document.querySelector( 'html' ).classList.add( 'hairlines' );
-								this$( 'body' ).append( '<p>hairlines</p>' );
+								$( 'body' ).append( '<p>hairlines</p>' );
 							}
 							document.body.removeChild( testElem );
 						}
-						
+
+						//#twist-debug
 					};
 
 			if( typeof jQuery === 'undefined' ) {
+				warn( 'jQuery doesn\'t exist' );
 				if( typeof $ === 'function' ) {
-					thisPageUsingOtherJSLibrary = true;
+					blOtherJSLibrary = true;
 				}
 
 				getScript( '../src/twist/core/resources/jquery/jquery-2.1.3.min.js',
 					function() {
 						if( typeof jQuery === 'undefined' ) {
-							console.error( 'Uhhh...' );
+							error( 'This is embarrasing...' );
 						} else {
-							if( !thisPageUsingOtherJSLibrary ) {
+							if( !blOtherJSLibrary ) {
 								loadDebugger();
 							} else {
+								warn( 'Another JS library controls $' );
 								loadDebugger();
 							}
 						}
 					}
 				);
 			} else {
+				info( 'jQuery v.' + $.fn.jquery + ' exists' );
 				loadDebugger();
 			}
 		} catch( err ) {
-			if( window.console ) {
-				if( window.console.error ) {
-					console.error( err );
-				} else if( window.console.log ) {
-					console.log( err );
-				}
-			}
+			error( err );
 		}
 	}
 )( window, document );

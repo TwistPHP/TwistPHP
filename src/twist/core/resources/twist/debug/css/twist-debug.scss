@@ -152,8 +152,14 @@ $border: #757575;
 				line-height: $height;
 				text-decoration: none;
 
+				-webkit-transition: background ease 400ms;
+				transition: background ease 400ms;
+
 				&:hover {
 					background-color: $background-hover;
+
+					-webkit-transition: background ease 100ms;
+					transition: background ease 100ms;
 				}
 			}
 
