@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /* ===================================================== ANIMATION KEYFRAMES ===================================================== */
 @-webkit-keyframes bounceInLeft {
   0%, 60%, 75%, 90%, 100% {
@@ -134,6 +135,8 @@
           transition: background ease 100ms; }
       #twist-debug > ul li i {
         margin-right: 5px; }
+      #twist-debug > ul li .fa-stack-2x {
+        text-shadow: 0 0 3px #424242; }
       #twist-debug > ul li #twist-debug-errors,
       #twist-debug > ul li #twist-debug-warnings,
       #twist-debug > ul li #twist-debug-dumps {

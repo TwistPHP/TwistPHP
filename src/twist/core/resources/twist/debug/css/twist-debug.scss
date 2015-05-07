@@ -167,6 +167,10 @@ $border: #757575;
 				margin-right: 5px;
 			}
 
+			.fa-stack-2x {
+				text-shadow: 0 0 3px $background;
+			}
+
 			#twist-debug-errors,
 			#twist-debug-warnings,
 			#twist-debug-dumps {
@@ -180,6 +184,7 @@ $border: #757575;
 				line-height: 18px;
 
 				border-radius: 2px;
+				//border-radius: 9px 2px 2px 9px;
 
 				transform: translate3d(-3000px, 0, 0);
 			}
