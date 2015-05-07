@@ -108,27 +108,26 @@ class User{
 			foreach($this->arrOriginalUserData as $strKey => $mxdData){
 
 				$arrField = \Twist::Database()->get(sprintf('%suser_data_fields',DATABASE_TABLE_PREFIX),$strKey,'slug');
+				$intUserFieldID = $arrField['id'];
 
 				if(is_null($mxdData)){
 					if(!is_null($arrField)){
 						\Twist::Database()->query("DELETE FROM `%suser_data` WHERE `user_id` = %d AND `field_id` = %d LIMIT 1",
 							DATABASE_TABLE_PREFIX,
 							$this->resDatabaseRecord->get('id'),
-							$mxdData['id']
+							$intUserFieldID
 						);
 					}
 				}else{
-					if(is_null($arrField)){
+					if(!count($arrField)){
 						$resUserDataField = \Twist::Database()->createRecord(sprintf('%suser_data_fields',DATABASE_TABLE_PREFIX));
 						$resUserDataField->set('slug',$strKey);
-						$intFieldId = $resUserDataField->commit();
-					}else{
-						$intFieldId = $mxdData['id'];
+						$intUserFieldID = $resUserDataField->commit();
 					}
 
 					$resUserData = \Twist::Database()->createRecord(sprintf('%suser_data',DATABASE_TABLE_PREFIX));
 					$resUserData->set('user_id',$this->resDatabaseRecord->get('id'));
-					$resUserData->set('field_id',$intFieldId);
+					$resUserData->set('field_id',$intUserFieldID);
 					$resUserData->set('data',$mxdData);
 					$resUserData->commit();
 				}
