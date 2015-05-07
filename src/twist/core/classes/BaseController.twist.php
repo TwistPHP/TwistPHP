@@ -30,10 +30,12 @@
 		protected $arrReplaceURIs = array();
 		protected $resMeta = null;
 		protected $arrRoute = array();
+		protected $arrRouteVars = array();
 
 		final public function _extended($arrRoute,Meta $resMeta = null){
 
 			$this->arrRoute = $arrRoute;
+			$this->arrRouteVars = $arrRoute['vars'];
 			$this->resMeta = $resMeta;
 
 			return true;
@@ -129,15 +131,15 @@
 		 * @param $strKeywords
 		 */
         final protected function _keywords($strKeywords){
-			return (is_null($strKeywords)) ? $_SERVER['TWIST_ROUTE_KEYWORDS'] : $this->_meta()->keywords($strKeywords);
+			$this->_meta()->keywords($strKeywords);
 		}
 
         final protected function _var($strVarKey = null){
-
+	        
 			if(is_null($strVarKey)){
-				return $this->_route('vars');
+				return $this->arrRouteVars;
 			}else{
-				return (array_key_exists($strVarKey,$this->_route('vars'))) ? $_SERVER['TWIST_ROUTE']['vars'][$strVarKey] : null;
+				return (array_key_exists($strVarKey,$this->arrRouteVars)) ? $this->arrRouteVars['vars'][$strVarKey] : null;
 			}
 		}
 
