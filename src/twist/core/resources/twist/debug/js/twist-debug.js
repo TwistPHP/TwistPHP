@@ -115,6 +115,8 @@
 							if( jqoTestElement.outerHeight() > 0 ) {
 								$( 'html' ).addClass( 'hairlines2' );
 								$( 'body' ).append( '<p>hairlines 2</p>' );
+							} else {
+								$( 'body' ).append( '<p>no hairlines 2</p>' );
 							}
 
 							var testElem = document.createElement( 'div' );
@@ -123,6 +125,8 @@
 							if( testElem.offsetHeight == 1 ) {
 								document.querySelector( 'html' ).classList.add( 'hairlines' );
 								$( 'body' ).append( '<p>hairlines</p>' );
+							} else {
+								$( 'body' ).append( '<p>no hairlines</p>' );
 							}
 							document.body.removeChild( testElem );
 						}
