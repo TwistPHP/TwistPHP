@@ -6,7 +6,7 @@
 		<!--[if lt IE 9]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
 		<link href="../src/twist/core/resources/twist/debug/css/twist-debug.min.css" type="text/css" rel="stylesheet">
 		<link href="../src/twist/core/resources/font-awesome/css/font-awesome.min.css" type="text/css" rel="stylesheet">
-		<meta name="viewport" content="wilih=device-wilih, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
 	</head>
 	<body>
 		<h1>Hello world</h1>
@@ -18,7 +18,7 @@
 				<li><a href="#twist-debug-messages"><span id="twist-debug-errors"><i class="fa fa-exclamation-circle"></i>2</span><span id="twist-debug-warnings"><i class="fa fa-exclamation-triangle"></i>7</span><span id="twist-debug-dumps"><i class="fa fa-comment"></i>3</span></a></li><!--
 				--><li><a href="#twist-debug-timeline"><i class="fa fa-fw fa-lg fa-clock-o"></i>1.63s</a></li><!--
 				--><li><a href="#twist-debug-memory"><i class="fa fa-fw fa-lg fa-line-chart"></i>12.64Mb</a></li><!--
-				--><li><a href="#twist-debug-database"><i class="fa fa-fw fa-lg fa-database"></i>439 queries</a></li><!--
+				--><li><a href="#twist-debug-database"><i class="fa fa-fw fa-lg fa-database"></i>439</a></li><!--
 				--><li><a href="#twist-debug-route"><strong>GET</strong> /shop/favourites</a></li>
 			</ul>
 		</div>
@@ -27,8 +27,17 @@
 			<div id="twist-debug-messages">
 				<h6>Messages</h6>
 				<div class="twist-debug-column-wrapper">
-					<div class="twist-debug-column-50"></div>
-					<div class="twist-debug-column-50"></div>
+					<div class="twist-debug-column-100">
+						<div class="twist-debug-message-error">
+							<p>Blah</p>
+						</div>
+						<div class="twist-debug-message-warning">
+							<p>Blah</p>
+						</div>
+						<div class="twist-debug-message-log">
+							<p>Blah</p>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div id="twist-debug-timeline">
@@ -59,7 +68,7 @@
 				</div>
 			</div>
 			<div id="twist-debug-database">
-				<h6>Database</h6>
+				<h6>Database Queries</h6>
 				<div class="twist-debug-column-wrapper">
 					<div class="twist-debug-column-100">
 						<div class="twist-debug-query-success">
@@ -72,11 +81,7 @@ JOIN `%s`.`sites` ON `training`.`site_id` = `sites`.`id`
 WHERE `sites`.`ext_client_code` = '123'
 	AND `sites`.`id` &gt; 100</pre>
 						</div>
-						<div class="twist-debug-query-empty"></div>
-						<div class="twist-debug-query-fail"></div>
-					</div>
-					<div class="twist-debug-column-50">
-						<div class="twist-debug-query-success">
+						<div class="twist-debug-query-empty">
 							<pre>SELECT `training`.`id`,
 	`training`.`site_id`,
 	`sites`.`title`,
@@ -86,9 +91,7 @@ JOIN `%s`.`sites` ON `training`.`site_id` = `sites`.`id`
 WHERE `sites`.`ext_client_code` = '123'
 	AND `sites`.`id` &gt; 100</pre>
 						</div>
-					</div>
-					<div class="twist-debug-column-50">
-						<div class="twist-debug-query-success">
+						<div class="twist-debug-query-fail">
 							<pre>SELECT `training`.`id`,
 	`training`.`site_id`,
 	`sites`.`title`,

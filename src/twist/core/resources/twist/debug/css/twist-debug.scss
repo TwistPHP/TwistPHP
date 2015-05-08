@@ -5,7 +5,7 @@ $bar-height: 30px;
 $bar-block-height: 30px;
 $bar-logo-width: 32px;
 $bar-fade-width: 10px;
-$bar-background: #424242;
+$bar-background: #424242; //#455A64
 $bar-background-hover: #616161;
 $bar-border: #757575;
 $details-background: #EEE;
@@ -80,6 +80,8 @@ $z-index: 1337;
 /* ===================================================== GENERIC ===================================================== */
 #twist-debug,
 #twist-debug-details {
+	font-family: "Helvetica Neue Light", "Helvetica Neue", HelveticaNeue, Helvetica, "Open Sans", Arial, sans-serif;
+
 	* {
 		margin: 0;
 		padding: 0;
@@ -161,9 +163,11 @@ $z-index: 1337;
 		> li {
 			display: inline-block;
 
-			font-size: 1.25em;
+			font-size: 12px;
 
-			&::before {
+			border-right: 1px $bar-border solid;
+
+			/*&::before {
 				width: 1px;
 				height: $bar-height;
 
@@ -179,18 +183,19 @@ $z-index: 1337;
 				background: -ms-linear-gradient(left, $bar-border 0%, $bar-background 100%);
 				background: linear-gradient(to right, $bar-border 0%, $bar-background 100%);
 				filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$bar-border', endColorstr='$bar-background',GradientType=1);
-				/*background: -moz-linear-gradient(left, $bar-border 50%, $bar-background 50%);
-				background: -webkit-gradient(linear, left top, right top, color-stop(50%, $bar-border), color-stop(50%, $bar-background));
-				background: -webkit-linear-gradient(left, $bar-border 50%, $bar-background 50%);
-				background: -o-linear-gradient(left, $bar-border 50%, $bar-background 50%);
-				background: -ms-linear-gradient(left, $bar-border 50%, $bar-background 50%);
-				background: linear-gradient(to right, $bar-border 50%, $bar-background 50%);
-				filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$bar-border', endColorstr='$bar-background', GradientType=1);*/
+				//background: -moz-linear-gradient(left, $bar-border 50%, $bar-background 50%);
+				//background: -webkit-gradient(linear, left top, right top, color-stop(50%, $bar-border), color-stop(50%, $bar-background));
+				//background: -webkit-linear-gradient(left, $bar-border 50%, $bar-background 50%);
+				//background: -o-linear-gradient(left, $bar-border 50%, $bar-background 50%);
+				//background: -ms-linear-gradient(left, $bar-border 50%, $bar-background 50%);
+				//background: linear-gradient(to right, $bar-border 50%, $bar-background 50%);
+				//filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$bar-border', endColorstr='$bar-background', GradientType=1);
 
 				content: "";
-			}
+			}*/
 
 			&:first-child {
+				border-right: none;
 				a {
 					padding-right: (($bar-height - $bar-block-height) / 2);
 					padding-left: (($bar-height - $bar-block-height) / 2);
@@ -307,7 +312,7 @@ $z-index: 1337;
 			right: 0;
 			left: 0;
 
-			background-color: $bar-background;
+			background-color: #FFF;
 
 			content: "";
 		}
@@ -331,14 +336,14 @@ $z-index: 1337;
 		left: 0;
 
 		h6 {
-			height: 20px;
-			margin-right: 45px;
-			padding: 10px 20px;
+			height: 25px;
+			padding: 10px 65px 10px 20px;
 
 			color: #FFF;
-			line-height: 20px;
+			font-size: 20px;
+			line-height: 25px;
 
-			background-color: #455A64;
+			background-color: $bar-background;
 
 			z-index: 2;
 		}
@@ -348,8 +353,8 @@ $z-index: 1337;
 
 	.twist-debug-column-wrapper {
 		position: absolute;
-		top: 40px;
-		right: 45px;
+		top: 45px;
+		right: 0;
 		bottom: 0;
 		left: 0;
 
@@ -380,12 +385,57 @@ $z-index: 1337;
 	}
 }
 
-	#twist-debug-messages {}
+	#twist-debug-messages {
+		[class^="twist-debug-message-"],
+		[class*=" twist-debug-message-"] {
+			margin-left: 4px;
 
-	#twist-debug-timeline {
-		padding-right: 10px;
-		padding-left: 10px;
+			position: relative;
+
+			overflow: visible;
+
+			background-color: #FFF;
+
+			border: 1px #E0E0E0 solid;
+			border-left-width: 0;
+
+			&::before {
+				width: 4px;
+
+				position: absolute;
+				top: -1px;
+				right: 100%;
+				bottom: -1px;
+
+				background-color: $blue;
+
+				content: "";
+			}
+
+			+ [class^="twist-debug-message-"],
+			+ [class*=" twist-debug-message-"] {
+				margin-top: 20px;
+			}
+
+			p {
+				padding: 20px;
+			}
+		}
+
+		.twist-debug-message-warning {
+			&::before {
+				background-color: $yellow;
+			}
+		}
+
+		.twist-debug-message-error {
+			&::before {
+				background-color: $red;
+			}
+		}
 	}
+
+	#twist-debug-timeline {}
 
 		#twist-debug-timeline-chart {
 			padding-top: 50px;
@@ -448,7 +498,6 @@ $z-index: 1337;
 		[class^="twist-debug-query-"],
 		[class*=" twist-debug-query-"] {
 			margin-left: 4px;
-			padding: 20px;
 
 			position: relative;
 
@@ -477,7 +526,16 @@ $z-index: 1337;
 				margin-top: 20px;
 			}
 
-			pre {}
+			pre {
+				width: 100%;
+				padding: 20px;
+
+				-webkit-box-sizing: border-box;
+				-moz-box-sizing: border-box;
+				box-sizing: border-box;
+
+				overflow: auto;
+			}
 		}
 
 		.twist-debug-query-success {
