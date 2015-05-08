@@ -129,6 +129,8 @@
 								$( 'body' ).append( '<p>no hairlines</p>' );
 							}
 							document.body.removeChild( testElem );
+						} else {
+							$( 'body' ).append( '<p>Pixel ratio too small</p>' );
 						}
 
 						$( '#twist-debug-blocks' ).on( 'click', 'a',
