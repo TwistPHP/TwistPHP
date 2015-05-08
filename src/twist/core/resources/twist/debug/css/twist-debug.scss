@@ -2,16 +2,25 @@
 
 // ===================================================== VARIABLES =====================================================
 $bar-height: 30px;
+$bar-block-height: 30px;
 $bar-logo-width: 32px;
 $bar-fade-width: 10px;
 $bar-background: #424242;
 $bar-background-hover: #616161;
 $bar-border: #757575;
 $details-background: #EEE;
+$red: #D32F2F;
+$yellow: #FBC02D;
+$green: #689F38;
+$blue: #1976D2;
 $z-index: 1337;
 
 // ===================================================== MIXINS =====================================================
-@mixin keyframes($strName) {
+@function blackorwhite($colour) {
+	@return if(lightness($colour) > 50, #212121, #FFF);
+}
+
+/*@mixin keyframes($strName) {
 	@-webkit-keyframes #{$strName} {
 		@content
 	}
@@ -33,36 +42,27 @@ $z-index: 1337;
 	}
 }
 
-@function blackorwhite($colour) {
-	@return if(lightness($colour) > 50, #212121, #FFF);
-}
-
 @mixin animate($name, $time, $delay) {
-	//-webkit-animation: $name $time infinite;
 	-webkit-animation: $name $time 1;
 	-webkit-animation-delay: $delay;
 	-webkit-animation-fill-mode: forwards;
-	//-moz-animation: $name $time infinite;
 	-moz-animation: $name $time 1;
 	-moz-animation-delay: $delay;
 	-moz-animation-fill-mode: forwards;
-	//-ms-animation: $name $time infinite;
 	-ms-animation: $name $time 1;
 	-ms-animation-delay: $delay;
 	-ms-animation-fill-mode: forwards;
-	//-o-animation: $name $time infinite;
 	-o-animation: $name $time 1;
 	-o-animation-delay: $delay;
 	-o-animation-fill-mode: forwards;
-	//animation: $name $time infinite;
 	animation: $name $time 1;
 	animation-delay: $delay;
 	animation-fill-mode: forwards;
-}
+}*/
 
 /* ===================================================== ANIMATION KEYFRAMES ===================================================== */
 // https://github.com/daneden/animate.css
-@include keyframes(bounceInLeft) {
+/*@include keyframes(bounceInLeft) {
 	0%, 60%, 75%, 90%, 100% { transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000); }
 	0% {
 		opacity: 0;
@@ -75,7 +75,7 @@ $z-index: 1337;
 	75% { transform: translate3d(-5px, 0, 0); }
 	90% { transform: translate3d(2px, 0, 0); }
 	100% { transform: none; }
-}
+}*/
 
 /* ===================================================== GENERIC ===================================================== */
 #twist-debug,
@@ -104,8 +104,6 @@ $z-index: 1337;
 	font-style: normal;
 
 	background-color: $bar-background;
-
-	border-top: 0.5px $bar-border solid;
 
 	z-index: $z-index + 1;
 
@@ -141,8 +139,8 @@ $z-index: 1337;
 		&:hover {
 			padding-bottom: 3px;
 
-			-webkit-transition: padding ease 100ms;
-			transition: padding ease 100ms;
+			-webkit-transition: padding ease 50ms;
+			transition: padding ease 50ms;
 		}
 
 		img {
@@ -165,13 +163,45 @@ $z-index: 1337;
 
 			font-size: 1.25em;
 
-			border-right: 0.5px $bar-border solid;
+			&::before {
+				width: 1px;
+				height: $bar-height;
+
+				display: block;
+
+				float: right;
+
+				background: $bar-border;
+				background: -moz-linear-gradient(left, $bar-border 0%, $bar-background 100%);
+				background: -webkit-gradient(linear, left top, right top, color-stop(0%, $bar-border), color-stop(100%, $bar-background));
+				background: -webkit-linear-gradient(left, $bar-border 0%, $bar-background 100%);
+				background: -o-linear-gradient(left, $bar-border 0%, $bar-background 100%);
+				background: -ms-linear-gradient(left, $bar-border 0%, $bar-background 100%);
+				background: linear-gradient(to right, $bar-border 0%, $bar-background 100%);
+				filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$bar-border', endColorstr='$bar-background',GradientType=1);
+				/*background: -moz-linear-gradient(left, $bar-border 50%, $bar-background 50%);
+				background: -webkit-gradient(linear, left top, right top, color-stop(50%, $bar-border), color-stop(50%, $bar-background));
+				background: -webkit-linear-gradient(left, $bar-border 50%, $bar-background 50%);
+				background: -o-linear-gradient(left, $bar-border 50%, $bar-background 50%);
+				background: -ms-linear-gradient(left, $bar-border 50%, $bar-background 50%);
+				background: linear-gradient(to right, $bar-border 50%, $bar-background 50%);
+				filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$bar-border', endColorstr='$bar-background', GradientType=1);*/
+
+				content: "";
+			}
+
+			&:first-child {
+				a {
+					padding-right: (($bar-height - $bar-block-height) / 2);
+					padding-left: (($bar-height - $bar-block-height) / 2);
+				}
+			}
 
 			&:last-child {
 				margin-right: $bar-fade-width;
 			}
 
-			> a {
+			a {
 				padding: 0 10px;
 
 				display: block;
@@ -209,39 +239,32 @@ $z-index: 1337;
 			#twist-debug-warnings,
 			#twist-debug-dumps {
 				min-width: 8px;
-				padding: 0 5px;
+				padding: 0 10px;
 
 				display: inline-block;
 
 				font-weight: 700;
 				text-align: center;
-				line-height: 18px;
+				line-height: $bar-block-height;
 
-				border-radius: 2px;
-				//border-radius: 9px 2px 2px 9px;
+				//border-radius: 2px;
 
-				transform: translate3d(-3000px, 0, 0);
-			}
-
-			#twist-debug-errors,
-			#twist-debug-warnings {
-				margin-right: 5px;
+				//transform: translate3d(-3000px, 0, 0);
 			}
 
 			#twist-debug-errors {
-				background-color: #D32F2F;
-				@include animate(bounceInLeft, 1s, 0);
+				background-color: $red;
+				//@include animate(bounceInLeft, 1s, 0);
 			}
 
 			#twist-debug-warnings {
-				background-color: #FBC02D;
-				@include animate(bounceInLeft, 1s, 100ms);
+				background-color: $yellow;
+				//@include animate(bounceInLeft, 1s, 100ms);
 			}
 
 			#twist-debug-dumps {
-				//background-color: #0288D1;
-				background-color: #1976D2;
-				@include animate(bounceInLeft, 1s, 200ms);
+				background-color: $blue;
+				//@include animate(bounceInLeft, 1s, 200ms);
 			}
 
 /* ===================================================== DETAILS WINDOW ===================================================== */
@@ -254,6 +277,11 @@ $z-index: 1337;
 
 	background-color: $details-background;
 
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+
+	-webkit-transition: top ease 800ms;
+	transition: top ease 800ms;
+
 	z-index: $z-index;
 
 	&.show {
@@ -265,10 +293,10 @@ $z-index: 1337;
 		height: 25px;
 
 		position: absolute;
-		top: 20px;
-		right: 20px;
+		top: 10px;
+		right: 10px;
 
-		z-index: $z-index + 1;
+		z-index: 2;
 
 		&::before,
 		&::after {
@@ -297,14 +325,58 @@ $z-index: 1337;
 		display: none;
 
 		position: absolute;
-		top: 20px;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+
+		h6 {
+			height: 20px;
+			margin-right: 45px;
+			padding: 10px 20px;
+
+			color: #FFF;
+			line-height: 20px;
+
+			background-color: #455A64;
+
+			z-index: 2;
+		}
+
+		z-index: 1;
+	}
+
+	.twist-debug-column-wrapper {
+		position: absolute;
+		top: 40px;
 		right: 45px;
-		bottom: 20px;
-		left: 10px;
+		bottom: 0;
+		left: 0;
 
-		h6 {}
+		overflow: auto;
 
-		z-index: $z-index;
+		z-index: 1;
+	}
+
+	[class^="twist-debug-column-"],
+	[class*=" twist-debug-column-"] {
+		padding: 10px;
+
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+
+		float: left;
+	}
+
+	.twist-debug-column-100 {
+		width: 100%;
+
+		clear: both;
+	}
+
+	.twist-debug-column-50 {
+		width: 50%;
 	}
 }
 
@@ -330,21 +402,21 @@ $z-index: 1337;
 				right: 0;
 				left: 200px;
 
-				background-color: #F90;
+				background-color: #F09;
 
 				content: "";
 			}
 
 			ul {
-				margin-top: 20px;
+				margin-top: 10px;
 				padding-left: 200px;
 			}
 
 				li {
-					width: 190px;
+					width: 195px;
 					height: 10px;
 					margin-left: -200px;
-					padding-right: 10px;
+					padding-right: 5px;
 					padding-bottom: 10px;
 
 					display: block;
@@ -355,8 +427,6 @@ $z-index: 1337;
 
 					text-align: right;
 					line-height: 20px;
-
-					//background-color: #F09;
 
 					&::after {
 						height: 1000px;
@@ -374,7 +444,54 @@ $z-index: 1337;
 
 	#twist-debug-memory {}
 
-	#twist-debug-database {}
+	#twist-debug-database {
+		[class^="twist-debug-query-"],
+		[class*=" twist-debug-query-"] {
+			margin-left: 4px;
+			padding: 20px;
+
+			position: relative;
+
+			overflow: visible;
+
+			background-color: #FFF;
+
+			border: 1px #E0E0E0 solid;
+			border-left-width: 0;
+
+			&::before {
+				width: 4px;
+
+				position: absolute;
+				top: -1px;
+				right: 100%;
+				bottom: -1px;
+
+				background-color: $yellow;
+
+				content: "";
+			}
+
+			+ [class^="twist-debug-query-"],
+			+ [class*=" twist-debug-query-"] {
+				margin-top: 20px;
+			}
+
+			pre {}
+		}
+
+		.twist-debug-query-success {
+			&::before {
+				background-color: $green;
+			}
+		}
+
+		.twist-debug-query-fail {
+			&::before {
+				background-color: $red;
+			}
+		}
+	}
 
 	#twist-debug-route {}
 

@@ -26,29 +26,97 @@
 			<a href="#close-twist-debug-details"></a>
 			<div id="twist-debug-messages">
 				<h6>Messages</h6>
+				<div class="twist-debug-column-wrapper">
+					<div class="twist-debug-column-50"></div>
+					<div class="twist-debug-column-50"></div>
+				</div>
 			</div>
 			<div id="twist-debug-timeline">
 				<h6>Timeline</h6>
-				<div id="twist-debug-timeline-chart">
-					<ul>
-						<li style="left: 0;">Loaded Something</li>
-						<li style="left: 25%">Loaded Something</li>
-						<li style="left: 25%">Loaded Something</li>
-						<li style="left: 27%">Loaded Something</li>
-						<li style="left: 50%">Loaded Something</li>
-						<li style="left: 75%">Loaded Something Else</li>
-						<li style="left: 100%">Loaded Something Else</li>
-					</ul>
+				<div class="twist-debug-column-wrapper">
+					<div class="twist-debug-column-100">
+						<div id="twist-debug-timeline-chart">
+							<ul>
+								<li style="left: 0;">Loaded Something</li>
+								<li style="left: 15%">Loaded Something</li>
+								<li style="left: 25%">Loaded Something</li>
+								<li style="left: 27%">Loaded Something</li>
+								<li style="left: 50%">Loaded Something</li>
+								<li style="left: 75%">Loaded Something Else</li>
+								<li style="left: 100%">Loaded Something Else</li>
+							</ul>
+						</div>
+					</div>
+					<div class="twist-debug-column-50"></div>
+					<div class="twist-debug-column-50"></div>
 				</div>
 			</div>
 			<div id="twist-debug-memory">
 				<h6>Memory</h6>
+				<div class="twist-debug-column-wrapper">
+					<div class="twist-debug-column-50"></div>
+					<div class="twist-debug-column-50"></div>
+				</div>
 			</div>
 			<div id="twist-debug-database">
 				<h6>Database</h6>
+				<div class="twist-debug-column-wrapper">
+					<div class="twist-debug-column-100">
+						<div class="twist-debug-query-success">
+							<pre>SELECT `training`.`id`,
+	`training`.`site_id`,
+	`sites`.`title`,
+	`sites`.`url`
+FROM `%s`.`training`
+JOIN `%s`.`sites` ON `training`.`site_id` = `sites`.`id`
+WHERE `sites`.`ext_client_code` = '123'
+	AND `sites`.`id` &gt; 100</pre>
+						</div>
+						<div class="twist-debug-query-empty"></div>
+						<div class="twist-debug-query-fail"></div>
+					</div>
+					<div class="twist-debug-column-50">
+						<div class="twist-debug-query-success">
+							<pre>SELECT `training`.`id`,
+	`training`.`site_id`,
+	`sites`.`title`,
+	`sites`.`url`
+FROM `%s`.`training`
+JOIN `%s`.`sites` ON `training`.`site_id` = `sites`.`id`
+WHERE `sites`.`ext_client_code` = '123'
+	AND `sites`.`id` &gt; 100</pre>
+						</div>
+					</div>
+					<div class="twist-debug-column-50">
+						<div class="twist-debug-query-success">
+							<pre>SELECT `training`.`id`,
+	`training`.`site_id`,
+	`sites`.`title`,
+	`sites`.`url`
+FROM `%s`.`training`
+JOIN `%s`.`sites` ON `training`.`site_id` = `sites`.`id`
+WHERE `sites`.`ext_client_code` = '123'
+	AND `sites`.`id` &gt; 100</pre>
+						</div>
+					</div>
+				</div>
 			</div>
 			<div id="twist-debug-route">
 				<h6>Routes</h6>
+				<div class="twist-debug-column-wrapper">
+					<div class="twist-debug-column-50">
+						<ul>
+							<li>Registered Routes</li>
+							<li>Current Route</li>
+						</ul>
+					</div>
+					<div class="twist-debug-column-50">
+						<ul>
+							<li>$_GET</li>
+							<li>$_POST</li>
+						</ul>
+					</div>
+				</div>
 			</div>
 		</div>
 		<script src="../src/twist/core/resources/twist/debug/js/twist-debug.js"></script>
