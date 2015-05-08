@@ -10,18 +10,34 @@
 	</head>
 	<body>
 		<h1>Hello world</h1>
-		<script src="prototype.js"></script>
-		<!--<script src="../src/twist/core/resources/jquery/jquery-1.11.2.min.js"></script>-->
+		<!--<script src="prototype.js"></script>
+		<script src="../src/twist/core/resources/jquery/jquery-1.11.2.min.js"></script>-->
 		<div id="twist-debug">
 			<img id="twist-debug-icon" src="../src/twist/core/resources/twist/logos/logo-64.png">
-			<ul>
-				<li><a href="#"><span id="twist-debug-errors"><i class="fa fa-exclamation-circle"></i>2</span><span id="twist-debug-warnings"><i class="fa fa-exclamation-triangle"></i>7</span><span id="twist-debug-dumps"><i class="fa fa-comment"></i>3</span></a></li><!--
-				--><li><a href="#"><i class="fa fa-fw fa-lg fa-clock-o"></i>1.63s</a></li><!--
-				--><li><a href="#"><i class="fa fa-fw fa-lg fa-line-chart"></i>12.64Mb</a></li><!--
-				--><li><a href="#"><i class="fa fa-fw fa-lg fa-database"></i>439 queries</a></li><!--
-				<li><a href="#"><span class="fa-stack"><i class="fa fa-bug fa-stack-1x"></i><i class="fa fa-ban fa-stack-2x"></i></span></a></li>
-				--><li><a href="#"><strong>GET</strong> /shop/favourites</a></li>
+			<ul id="twist-debug-blocks">
+				<li><a href="#twist-debug-messages"><span id="twist-debug-errors"><i class="fa fa-exclamation-circle"></i>2</span><span id="twist-debug-warnings"><i class="fa fa-exclamation-triangle"></i>7</span><span id="twist-debug-dumps"><i class="fa fa-comment"></i>3</span></a></li><!--
+				--><li><a href="#twist-debug-timeline"><i class="fa fa-fw fa-lg fa-clock-o"></i>1.63s</a></li><!--
+				--><li><a href="#twist-debug-memory"><i class="fa fa-fw fa-lg fa-line-chart"></i>12.64Mb</a></li><!--
+				--><li><a href="#twist-debug-database"><i class="fa fa-fw fa-lg fa-database"></i>439 queries</a></li><!--
+				--><li><a href="#twist-debug-route"><strong>GET</strong> /shop/favourites</a></li>
 			</ul>
+		</div>
+		<div id="twist-debug-details">
+			<div id="twist-debug-messages">
+				<h6>Messages</h6>
+			</div>
+			<div id="twist-debug-timeline">
+				<h6>Timeline</h6>
+			</div>
+			<div id="twist-debug-memory">
+				<h6>Memory</h6>
+			</div>
+			<div id="twist-debug-database">
+				<h6>Database</h6>
+			</div>
+			<div id="twist-debug-route">
+				<h6>Routes</h6>
+			</div>
 		</div>
 		<script src="../src/twist/core/resources/twist/debug/js/twist-debug.js"></script>
 	</body>

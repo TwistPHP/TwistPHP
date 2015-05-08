@@ -1,12 +1,12 @@
 @charset "UTF-8";
 
 // ===================================================== VARIABLES =====================================================
-$height: 30px;
-$logo-width: 32px;
-$fade-width: 10px;
-$background: #424242;
-$background-hover: #616161;
-$border: #757575;
+$bar-height: 30px;
+$bar-logo-width: 32px;
+$bar-fade-width: 10px;
+$bar-background: #424242;
+$bar-background-hover: #616161;
+$bar-border: #757575;
 
 // ===================================================== MIXINS =====================================================
 @mixin keyframes($strName) {
@@ -77,8 +77,8 @@ $border: #757575;
 
 /* ===================================================== DEBUG BAR ===================================================== */
 #twist-debug {
-	height: $height;
-	padding: 0 #{$logo-width + 15} 0 0;
+	height: $bar-height;
+	padding: 0 #{$bar-logo-width + 15} 0 0;
 
 	position: fixed;
 	right: 0;
@@ -92,35 +92,36 @@ $border: #757575;
 	font-weight: 400;
 	font-style: normal;
 
-	background-color: $background;
+	background-color: $bar-background;
 
 	&::after {
-		width: $fade-width;
+		width: $bar-fade-width;
 
 		position: absolute;
 		top: 0;
-		right: #{$logo-width + 15};
+		right: #{$bar-logo-width + 15};
 		bottom: 0;
 
-		background: $background;
-		background: -moz-linear-gradient(0deg, rgba($background, 0) 0%, rgba($background, 1) 100%);
-		background: -webkit-linear-gradient(0deg, rgba($background, 0) 0%, rgba($background, 1) 100%);
-		background: -o-linear-gradient(0deg, rgba($background, 0) 0%, rgba($background, 1) 100%);
-		background: -ms-linear-gradient(0deg, rgba($background, 0) 0%, rgba($background, 1) 100%);
-		background: linear-gradient(90deg, rgba($background, 0) 0%, rgba($background, 1) 100%);
+		background: $bar-background;
+		background: -moz-linear-gradient(0deg, rgba($bar-background, 0) 0%, rgba($bar-background, 1) 100%);
+		background: -webkit-linear-gradient(0deg, rgba($bar-background, 0) 0%, rgba($bar-background, 1) 100%);
+		background: -o-linear-gradient(0deg, rgba($bar-background, 0) 0%, rgba($bar-background, 1) 100%);
+		background: -ms-linear-gradient(0deg, rgba($bar-background, 0) 0%, rgba($bar-background, 1) 100%);
+		background: linear-gradient(90deg, rgba($bar-background, 0) 0%, rgba($bar-background, 1) 100%);
 
 		content: "";
 	}
+}
 
 	#twist-debug-icon {
-		width: $logo-width;
+		width: $bar-logo-width;
 
 		position: absolute;
 		right: 10px;
 		bottom: 5px;
 	}
 
-	> ul {
+	#twist-debug-blocks {
 		width: 100%;
 		margin: 0;
 		padding: 0;
@@ -130,17 +131,17 @@ $border: #757575;
 		list-style: none;
 		white-space: nowrap;
 
-		li {
+		> li {
 			margin: 0;
 
 			display: inline-block;
 
 			font-size: 1.25em;
 
-			border-right: 1px $border solid;
+			border-right: 1px $bar-border solid;
 
 			&:last-child {
-				margin-right: $fade-width;
+				margin-right: $bar-fade-width;
 			}
 
 			> a {
@@ -148,15 +149,15 @@ $border: #757575;
 
 				display: block;
 
-				color: blackorwhite($background);
-				line-height: $height;
+				color: blackorwhite($bar-background);
+				line-height: $bar-height;
 				text-decoration: none;
 
 				-webkit-transition: background ease 400ms;
 				transition: background ease 400ms;
 
 				&:hover {
-					background-color: $background-hover;
+					background-color: $bar-background-hover;
 
 					-webkit-transition: background ease 100ms;
 					transition: background ease 100ms;
@@ -168,8 +169,10 @@ $border: #757575;
 			}
 
 			.fa-stack-2x {
-				text-shadow: 0 0 3px $background;
+				text-shadow: 0 0 3px $bar-background;
 			}
+		}
+	}
 
 			#twist-debug-errors,
 			#twist-debug-warnings,
@@ -209,6 +212,42 @@ $border: #757575;
 				background-color: #1976D2;
 				@include animate(bounceInLeft, 1s, 200ms);
 			}
+
+#twist-debug-details {
+	padding-bottom: $bar-height;
+	
+	position: fixed;
+	top: 100%;
+	right: 0;
+	bottom: 0;
+	left: 0;
+
+	&.show {
+		top: 0;
+	}
+
+	> div {
+		display: none;
+
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+	}
+}
+
+	#twist-debug-messages {}
+	#twist-debug-timeline {}
+	#twist-debug-memory {}
+	#twist-debug-database {}
+	#twist-debug-route {}
+
+.hairlines,
+.hairlines2 {
+	#twist-debug-blocks {
+		> li {
+			border-right-width: 0.5px;
 		}
 	}
 }

@@ -25,53 +25,55 @@
 
 (
 	function( window, document ) {
-
-
 		var log = function() {
 					if( window.console
 							&& window.console.log
-							&& arguments.length > 0 ) {
-						window.console.log( arguments );
+							&& arguments.length ) {
+						for( var intArguement in arguments ) {
+							window.console.log( arguments[intArguement] );
+						}
 					}
 				},
 				info = function() {
 					if( window.console
-							&& arguments.length > 0 ) {
+							&& arguments.length ) {
 						for( var intArguement in arguments ) {
 							if( window.console.info ) {
 								window.console.info( arguments[intArguement] );
 							} else {
-								log( arguments[intArguement] );
+								log( 'INFO: ', arguments[intArguement] );
 							}
 						}
 					}
 				},
 				error = function() {
 					if( window.console
-							&& arguments.length > 0 ) {
+							&& arguments.length ) {
 						for( var intArguement in arguments ) {
 							if( window.console.error ) {
 								window.console.error( arguments[intArguement] );
 							} else {
-								log( arguments[intArguement] );
+								log( 'ERROR: ', arguments[intArguement] );
 							}
 						}
 					}
 				},
 				warn = function() {
 					if( window.console
-							&& arguments.length > 0 ) {
+							&& arguments.length ) {
 						for( var intArguement in arguments ) {
 							if( window.console.warn ) {
 								window.console.warn( arguments[intArguement] );
 							} else {
-								log( arguments[intArguement] );
+								log( 'WARNING: ', arguments[intArguement] );
 							}
 						}
 					}
 				};
 
+		for( var intLog in ['error', 'warn', 'info'] ) {
 
+		}
 
 		try {
 			var blOtherJSLibrary = false,
@@ -103,14 +105,14 @@
 					},
 					loadDebugger = function() {
 						var $ = jQuery.noConflict( true );
-						$( 'body' ).append( '<p>123</p>' );
+						$( 'body' ).append( '<p>...I am ready</p>' );
 						info( 'jQuery v.' + $.fn.jquery + ' ready' );
 
 						if( window.devicePixelRatio
 								&& devicePixelRatio >= 2 ) {
 							var jqoTestElement = $( '<div/>' ).style( 'border', '0.5px solid transparent' );
 							$( 'body' ).append( jqoTestElement );
-							if( jqoTestElement.height() === 1 ) {
+							if( jqoTestElement.outerHeight() > 0 ) {
 								$( 'html' ).addClass( 'hairlines2' );
 								$( 'body' ).append( '<p>hairlines 2</p>' );
 							}
@@ -125,24 +127,26 @@
 							document.body.removeChild( testElem );
 						}
 
-						//#twist-debug
+						$( '#twist-debug-blocks' ).on( 'click', 'a',
+							function( e ) {
+								e.preventDefault();
+							}
+						);
 					};
 
 			if( typeof jQuery === 'undefined' ) {
-				warn( 'jQuery doesn\'t exist' );
-				if( typeof $ === 'function' ) {
-					blOtherJSLibrary = true;
-				}
+				blOtherJSLibrary = ( typeof $ === 'function' );
 
 				getScript( '../src/twist/core/resources/jquery/jquery-2.1.3.min.js',
 					function() {
 						if( typeof jQuery === 'undefined' ) {
-							error( 'This is embarrasing...' );
+							error( 'This is embarrassing... jQuery couldn\'t be loaded' );
 						} else {
 							if( !blOtherJSLibrary ) {
 								loadDebugger();
 							} else {
 								warn( 'Another JS library controls $' );
+								log( $ );
 								loadDebugger();
 							}
 						}
