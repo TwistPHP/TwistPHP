@@ -422,77 +422,53 @@ class Route extends BasePackage{
 	}
 
 	/**
-	 * Add a element that will be called upon a any request (HTTP METHOD) to the given URI, using this call will not take precedence over a GET,POST,PUT or DELETE route.
-	 * The URI can be made dynamic by adding a '%' symbol at the end.
-	 *
+	 * Pass in a PHP function to be parsed by the route
 	 * @param $strURI
-	 * @param $strElement
+	 * @param $resFunction
 	 * @param bool $mxdBaseView
-	 * @param bool $mxdCache
-	 * @param array $arrData
 	 */
-	public function element($strURI,$strElement,$mxdBaseView = true,$mxdCache = false,$arrData = array()){
-		$this->addRoute($strURI,'element',$strElement,$mxdBaseView,$mxdCache,$arrData);
+	public function any($strURI,$resFunction,$mxdBaseView = true){
+		$this->addRoute($strURI,'function',$resFunction,$mxdBaseView);
 	}
 
 	/**
-	 * Add a element that will only be called upon a GET request (HTTP METHOD) to the given URI
-	 *
-	 * @related element
-	 *
+	 * Pass in a PHP function to be parsed by the route upon a GET request
 	 * @param $strURI
-	 * @param $strElement
+	 * @param $resFunction
 	 * @param bool $mxdBaseView
-	 * @param bool $mxdCache
-	 * @param array $arrData
 	 */
-	public function getElement($strURI,$strElement,$mxdBaseView = true,$mxdCache = false,$arrData = array()){
-		$this->addRoute($strURI,'element',$strElement,$mxdBaseView,$mxdCache,$arrData,'GET');
+	public function get($strURI,$resFunction,$mxdBaseView = true){
+		$this->addRoute($strURI,'function',$resFunction,$mxdBaseView,false,array(),'GET');
 	}
 
 	/**
-	 * Add a element that will only be called upon a POST request (HTTP METHOD) to the given URI
-	 *
-	 * @related element
-	 *
+	 * Pass in a PHP function to be parsed by the route upon a POST request
 	 * @param $strURI
-	 * @param $strElement
+	 * @param $resFunction
 	 * @param bool $mxdBaseView
-	 * @param bool $mxdCache
-	 * @param array $arrData
 	 */
-	public function postElement($strURI,$strElement,$mxdBaseView = true,$mxdCache = false,$arrData = array()){
-		$this->addRoute($strURI,'element',$strElement,$mxdBaseView,$mxdCache,$arrData,'POST');
+	public function post($strURI,$resFunction,$mxdBaseView = true){
+		$this->addRoute($strURI,'function',$resFunction,$mxdBaseView,false,array(),'POST');
 	}
 
 	/**
-	 * Add a element that will only be called upon a PUT request (HTTP METHOD) to the given URI
-	 *
-	 * @related element
-	 *
+	 * Pass in a PHP function to be parsed by the route upon a PUT request
 	 * @param $strURI
-	 * @param $strElement
+	 * @param $resFunction
 	 * @param bool $mxdBaseView
-	 * @param bool $mxdCache
-	 * @param array $arrData
 	 */
-	public function putElement($strURI,$strElement,$mxdBaseView = true,$mxdCache = false,$arrData = array()){
-		$this->addRoute($strURI,'element',$strElement,$mxdBaseView,$mxdCache,$arrData,'PUT');
+	public function put($strURI,$resFunction,$mxdBaseView = true){
+		$this->addRoute($strURI,'function',$resFunction,$mxdBaseView,false,array(),'PUT');
 	}
 
 	/**
-	 * Add a element that will only be called upon a DELETE request (HTTP METHOD) to the given URI
-	 *
-	 * @related element
-	 *
+	 * Pass in a PHP function to be parsed by the route upon a DELETE request
 	 * @param $strURI
-	 * @param $strElement
+	 * @param $resFunction
 	 * @param bool $mxdBaseView
-	 * @param bool $mxdCache
-	 * @param array $arrData
 	 */
-	public function deleteElement($strURI,$strElement,$mxdBaseView = true,$mxdCache = false,$arrData = array()){
-		$this->addRoute($strURI,'element',$strElement,$mxdBaseView,$mxdCache,$arrData,'DELETE');
+	public function delete($strURI,$resFunction,$mxdBaseView = true){
+		$this->addRoute($strURI,'function',$resFunction,$mxdBaseView,false,array(),'DELETE');
 	}
 
 	/**
@@ -1038,10 +1014,14 @@ class Route extends BasePackage{
 
 					switch($arrRoute['type']){
 						case'view':
-							$arrTags['response'] .= $this->resView->build($arrRoute['item'], $arrRoute['data']);
+							if(substr($arrRoute['item'],-3) == 'php'){
+								$arrTags['response'] .= $this->resView->processElement($arrRoute['item'], $arrRoute['data']);
+							}else{
+								$arrTags['response'] .= $this->resView->build($arrRoute['item'], $arrRoute['data']);
+							}
 							break;
-						case'element':
-							$arrTags['response'] .= $this->resView->processElement($arrRoute['item'], $arrRoute['data']);
+						case'function':
+								$arrTags['response'] .= $arrRoute['item']();
 							break;
 						case'controller':
 							if(is_array($arrRoute['item']) && count($arrRoute['item']) >= 1){
