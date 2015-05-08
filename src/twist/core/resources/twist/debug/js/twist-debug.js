@@ -112,7 +112,7 @@
 							var testElem = document.createElement( 'div' );
 							testElem.style.border = '.5px solid transparent';
 							document.body.appendChild( testElem );
-							alert( testElem.offsetHeight );
+							alert( 'Height: ' + testElem.offsetHeight );
 							if( testElem.offsetHeight == 1 ) {
 								document.querySelector( 'html' ).classList.add( 'hairlines' );
 								$( 'body' ).append( '<p>hairlines</p>' );
