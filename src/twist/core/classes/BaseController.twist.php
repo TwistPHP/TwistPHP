@@ -135,7 +135,7 @@
 		}
 
         final protected function _var($strVarKey = null){
-	        
+
 			if(is_null($strVarKey)){
 				return $this->arrRouteVars;
 			}else{

@@ -66,7 +66,7 @@
 
 		public function __construct(){
 			$this->strAutoloadCache = sprintf('%s/../../config/autoload.cache',dirname(__FILE__));
-			$this->arrClassLookup = json_decode(file_get_contents($this->strAutoloadCache),true);
+			$this->arrClassLookup = (file_exists($this->strAutoloadCache)) ? json_decode(file_get_contents($this->strAutoloadCache),true) : array();
 			spl_autoload_register(array($this,'load'));
 		}
 
