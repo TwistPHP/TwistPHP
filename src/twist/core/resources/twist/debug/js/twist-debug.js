@@ -113,7 +113,6 @@
 							var testElem = document.createElement( 'div' );
 							testElem.style.border = '.5px solid transparent';
 							document.body.appendChild( testElem );
-							alert( 'Height: ' + testElem.offsetHeight );
 							if( testElem.offsetHeight == 1 ) {
 								document.querySelector( 'html' ).classList.add( 'hairlines' );
 								$( 'body' ).append( '<p>hairlines</p>' );
@@ -125,10 +124,28 @@
 							$( 'body' ).append( '<p>Pixel ratio too small</p>' );
 						}
 
-						$( '#twist-debug-blocks' ).on( 'click', 'a',
+						var jqoTwistDebugBlocks = $( '#twist-debug-blocks' ),
+								jqoTwistDebugDetails = $( '#twist-debug-details' );
+
+						jqoTwistDebugBlocks.on( 'click', 'a',
 							function( e ) {
 								e.preventDefault();
-								$( '#twist-debug-details' ).addClass( 'show' );
+								var jqoThisBlock = $( this );
+								if( jqoThisBlock.hasClass( 'current' ) ) {
+									jqoTwistDebugDetails.removeClass( 'show' ),
+									jqoThisBlock.removeClass( 'current' );
+								} else {
+									jqoTwistDebugDetails.addClass( 'show' ).children( 'div' ).hide().filter( jqoThisBlock.attr( 'href' ) ).show(),
+									jqoTwistDebugBlocks.find( 'a.current' ).removeClass( 'current' ),
+									jqoThisBlock.addClass( 'current' );
+								}
+							}
+						),
+						jqoTwistDebugDetails.on( 'click', 'a[href="#close-twist-debug-details"]',
+							function( e ) {
+								e.preventDefault();
+								jqoTwistDebugBlocks.find( 'a.current' ).removeClass( 'current' ),
+								jqoTwistDebugDetails.removeClass( 'show' );
 							}
 						);
 					};

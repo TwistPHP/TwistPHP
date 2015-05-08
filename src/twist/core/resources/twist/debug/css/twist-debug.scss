@@ -7,6 +7,7 @@ $bar-fade-width: 10px;
 $bar-background: #424242;
 $bar-background-hover: #616161;
 $bar-border: #757575;
+$details-background: #EEE;
 $z-index: 1337;
 
 // ===================================================== MIXINS =====================================================
@@ -76,6 +77,15 @@ $z-index: 1337;
 	100% { transform: none; }
 }
 
+/* ===================================================== GENERIC ===================================================== */
+#twist-debug,
+#twist-debug-details {
+	* {
+		margin: 0;
+		padding: 0;
+	}
+}
+
 /* ===================================================== DEBUG BAR ===================================================== */
 #twist-debug {
 	height: $bar-height;
@@ -94,6 +104,8 @@ $z-index: 1337;
 	font-style: normal;
 
 	background-color: $bar-background;
+
+	border-top: 0.5px $bar-border solid;
 
 	z-index: $z-index + 1;
 
@@ -117,17 +129,31 @@ $z-index: 1337;
 }
 
 	#twist-debug-icon {
-		width: $bar-logo-width;
+		display: block;
 
 		position: absolute;
 		right: 10px;
 		bottom: 5px;
+
+		-webkit-transition: padding ease 400ms;
+		transition: padding ease 400ms;
+
+		&:hover {
+			padding-bottom: 3px;
+
+			-webkit-transition: padding ease 100ms;
+			transition: padding ease 100ms;
+		}
+
+		img {
+			width: $bar-logo-width;
+
+			display: block;
+		}
 	}
 
 	#twist-debug-blocks {
 		width: 100%;
-		margin: 0;
-		padding: 0;
 
 		overflow: auto;
 
@@ -135,8 +161,6 @@ $z-index: 1337;
 		white-space: nowrap;
 
 		> li {
-			margin: 0;
-
 			display: inline-block;
 
 			font-size: 1.25em;
@@ -164,6 +188,10 @@ $z-index: 1337;
 
 					-webkit-transition: background ease 100ms;
 					transition: background ease 100ms;
+				}
+
+				&.current {
+					background-color: $bar-background-hover;
 				}
 			}
 
@@ -216,16 +244,15 @@ $z-index: 1337;
 				@include animate(bounceInLeft, 1s, 200ms);
 			}
 
+/* ===================================================== DETAILS WINDOW ===================================================== */
 #twist-debug-details {
-	padding-bottom: $bar-height;
-	
 	position: fixed;
 	top: 100%;
 	right: 0;
-	bottom: 0;
+	bottom: $bar-height;
 	left: 0;
 
-	background-color: $bar-background;
+	background-color: $details-background;
 
 	z-index: $z-index;
 
@@ -233,21 +260,122 @@ $z-index: 1337;
 		top: 0;
 	}
 
+	> a {
+		width: 25px;
+		height: 25px;
+
+		position: absolute;
+		top: 20px;
+		right: 20px;
+
+		z-index: $z-index + 1;
+
+		&::before,
+		&::after {
+			height: 1px;
+
+			position: absolute;
+			top: 12px;
+			right: 0;
+			left: 0;
+
+			background-color: $bar-background;
+
+			content: "";
+		}
+
+		&::before {
+			transform: rotate(45deg);
+		}
+
+		&::after {
+			transform: rotate(135deg);
+		}
+	}
+
 	> div {
 		display: none;
 
 		position: absolute;
-		top: 0;
-		right: 0;
-		bottom: 0;
-		left: 0;
+		top: 20px;
+		right: 45px;
+		bottom: 20px;
+		left: 10px;
+
+		h6 {}
+
+		z-index: $z-index;
 	}
 }
 
 	#twist-debug-messages {}
-	#twist-debug-timeline {}
+
+	#twist-debug-timeline {
+		padding-right: 10px;
+		padding-left: 10px;
+	}
+
+		#twist-debug-timeline-chart {
+			padding-top: 50px;
+
+			position: relative;
+
+			overflow: hidden;
+
+			&::before {
+				height: 50px;
+
+				position: absolute;
+				top: 0;
+				right: 0;
+				left: 200px;
+
+				background-color: #F90;
+
+				content: "";
+			}
+
+			ul {
+				margin-top: 20px;
+				padding-left: 200px;
+			}
+
+				li {
+					width: 190px;
+					height: 10px;
+					margin-left: -200px;
+					padding-right: 10px;
+					padding-bottom: 10px;
+
+					display: block;
+
+					position: relative;
+
+					overflow: visible;
+
+					text-align: right;
+					line-height: 20px;
+
+					//background-color: #F09;
+
+					&::after {
+						height: 1000px;
+
+						position: absolute;
+						right: 0;
+						bottom: 10px;
+
+						border-right: 1px #000 solid;
+
+						content: "";
+					}
+				}
+		}
+
 	#twist-debug-memory {}
+
 	#twist-debug-database {}
+
 	#twist-debug-route {}
 
 /*.hairlines,

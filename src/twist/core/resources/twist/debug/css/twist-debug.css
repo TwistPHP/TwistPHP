@@ -74,6 +74,12 @@
     transform: translate3d(2px, 0, 0); }
   100% {
     transform: none; } }
+/* ===================================================== GENERIC ===================================================== */
+#twist-debug *,
+#twist-debug-details * {
+  margin: 0;
+  padding: 0; }
+
 /* ===================================================== DEBUG BAR ===================================================== */
 #twist-debug {
   height: 30px;
@@ -88,6 +94,7 @@
   font-weight: 400;
   font-style: normal;
   background-color: #424242;
+  border-top: 0.5px #757575 solid;
   z-index: 1338; }
   #twist-debug::after {
     width: 10px;
@@ -104,20 +111,26 @@
     content: ""; }
 
 #twist-debug-icon {
-  width: 32px;
+  display: block;
   position: absolute;
   right: 10px;
-  bottom: 5px; }
+  bottom: 5px;
+  -webkit-transition: padding ease 400ms;
+  transition: padding ease 400ms; }
+  #twist-debug-icon:hover {
+    padding-bottom: 3px;
+    -webkit-transition: padding ease 100ms;
+    transition: padding ease 100ms; }
+  #twist-debug-icon img {
+    width: 32px;
+    display: block; }
 
 #twist-debug-blocks {
   width: 100%;
-  margin: 0;
-  padding: 0;
   overflow: auto;
   list-style: none;
   white-space: nowrap; }
   #twist-debug-blocks > li {
-    margin: 0;
     display: inline-block;
     font-size: 1.25em;
     border-right: 0.5px #757575 solid; }
@@ -135,6 +148,8 @@
         background-color: #616161;
         -webkit-transition: background ease 100ms;
         transition: background ease 100ms; }
+      #twist-debug-blocks > li > a.current {
+        background-color: #616161; }
     #twist-debug-blocks > li i {
       margin-right: 5px; }
     #twist-debug-blocks > li .fa-stack-2x {
@@ -210,24 +225,82 @@
   animation-delay: 200ms;
   animation-fill-mode: forwards; }
 
+/* ===================================================== DETAILS WINDOW ===================================================== */
 #twist-debug-details {
-  padding-bottom: 30px;
   position: fixed;
   top: 100%;
   right: 0;
-  bottom: 0;
+  bottom: 30px;
   left: 0;
-  background-color: #424242;
+  background-color: #EEE;
   z-index: 1337; }
   #twist-debug-details.show {
     top: 0; }
+  #twist-debug-details > a {
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1338; }
+    #twist-debug-details > a::before, #twist-debug-details > a::after {
+      height: 1px;
+      position: absolute;
+      top: 12px;
+      right: 0;
+      left: 0;
+      background-color: #424242;
+      content: ""; }
+    #twist-debug-details > a::before {
+      transform: rotate(45deg); }
+    #twist-debug-details > a::after {
+      transform: rotate(135deg); }
   #twist-debug-details > div {
     display: none;
     position: absolute;
+    top: 20px;
+    right: 45px;
+    bottom: 20px;
+    left: 10px;
+    z-index: 1337; }
+
+#twist-debug-timeline {
+  padding-right: 10px;
+  padding-left: 10px; }
+
+#twist-debug-timeline-chart {
+  padding-top: 50px;
+  position: relative;
+  overflow: hidden; }
+  #twist-debug-timeline-chart::before {
+    height: 50px;
+    position: absolute;
     top: 0;
     right: 0;
-    bottom: 0;
-    left: 0; }
+    left: 200px;
+    background-color: #F90;
+    content: ""; }
+  #twist-debug-timeline-chart ul {
+    margin-top: 20px;
+    padding-left: 200px; }
+  #twist-debug-timeline-chart li {
+    width: 190px;
+    height: 10px;
+    margin-left: -200px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    display: block;
+    position: relative;
+    overflow: visible;
+    text-align: right;
+    line-height: 20px; }
+    #twist-debug-timeline-chart li::after {
+      height: 1000px;
+      position: absolute;
+      right: 0;
+      bottom: 10px;
+      border-right: 1px #000 solid;
+      content: ""; }
 
 /*.hairlines,
 .hairlines2 {
