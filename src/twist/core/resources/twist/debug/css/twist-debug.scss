@@ -7,6 +7,7 @@ $bar-fade-width: 10px;
 $bar-background: #424242;
 $bar-background-hover: #616161;
 $bar-border: #757575;
+$z-index: 1337;
 
 // ===================================================== MIXINS =====================================================
 @mixin keyframes($strName) {
@@ -93,6 +94,8 @@ $bar-border: #757575;
 	font-style: normal;
 
 	background-color: $bar-background;
+
+	z-index: $z-index + 1;
 
 	&::after {
 		width: $bar-fade-width;
@@ -221,6 +224,10 @@ $bar-border: #757575;
 	right: 0;
 	bottom: 0;
 	left: 0;
+
+	background-color: $bar-background;
+
+	z-index: $z-index;
 
 	&.show {
 		top: 0;

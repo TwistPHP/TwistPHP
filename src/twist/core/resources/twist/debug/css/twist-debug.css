@@ -87,7 +87,8 @@
   font-family: "Helvetica Neue Light", "Helvetica Neue", HelveticaNeue, Helvetica, "Open Sans", Arial, sans-serif;
   font-weight: 400;
   font-style: normal;
-  background-color: #424242; }
+  background-color: #424242;
+  z-index: 1338; }
   #twist-debug::after {
     width: 10px;
     position: absolute;
@@ -215,7 +216,9 @@
   top: 100%;
   right: 0;
   bottom: 0;
-  left: 0; }
+  left: 0;
+  background-color: #424242;
+  z-index: 1337; }
   #twist-debug-details.show {
     top: 0; }
   #twist-debug-details > div {

@@ -108,12 +108,11 @@
 						$( 'body' ).append( '<p>...I am ready</p>' );
 						info( 'jQuery v.' + $.fn.jquery + ' ready' );
 
-						alert( window.devicePixelRatio ? window.devicePixelRatio : 1 );
-
 						if( window.devicePixelRatio ) {
 							var testElem = document.createElement( 'div' );
 							testElem.style.border = '.5px solid transparent';
 							document.body.appendChild( testElem );
+							alert( testElem.offsetHeight );
 							if( testElem.offsetHeight == 1 ) {
 								document.querySelector( 'html' ).classList.add( 'hairlines' );
 								$( 'body' ).append( '<p>hairlines</p>' );
@@ -128,6 +127,7 @@
 						$( '#twist-debug-blocks' ).on( 'click', 'a',
 							function( e ) {
 								e.preventDefault();
+								$( '#twist-debug-details' ).addClass( 'show' );
 							}
 						);
 					};
