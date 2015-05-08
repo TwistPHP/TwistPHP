@@ -108,17 +108,9 @@
 						$( 'body' ).append( '<p>...I am ready</p>' );
 						info( 'jQuery v.' + $.fn.jquery + ' ready' );
 
-						if( window.devicePixelRatio
-								&& devicePixelRatio >= 2 ) {
-							var jqoTestElement = $( '<div/>' ).style( 'border', '0.5px solid transparent' );
-							$( 'body' ).append( jqoTestElement );
-							if( jqoTestElement.outerHeight() > 0 ) {
-								$( 'html' ).addClass( 'hairlines2' );
-								$( 'body' ).append( '<p>hairlines 2</p>' );
-							} else {
-								$( 'body' ).append( '<p>no hairlines 2</p>' );
-							}
+						alert( window.devicePixelRatio ? window.devicePixelRatio : 1 );
 
+						if( window.devicePixelRatio ) {
 							var testElem = document.createElement( 'div' );
 							testElem.style.border = '.5px solid transparent';
 							document.body.appendChild( testElem );
