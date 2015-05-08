@@ -101,39 +101,7 @@
         final public function _meta(){
 			return $this->resMeta;
 		}
-
-		/**
-		 * @deprecated
-		 * @param $strTitle
-		 */
-        final protected function _title($strTitle){
-			$this->_meta()->title($strTitle);
-		}
-
-		/**
-		 * @deprecated
-		 * @param $strDescription
-		 */
-        final protected function _description($strDescription){
-			$this->_meta()->description($strDescription);
-		}
-
-		/**
-		 * @deprecated
-		 * @param $strAuthor
-		 */
-        final protected function _author($strAuthor){
-			$this->_meta()->author($strAuthor);
-		}
-
-		/**
-		 * @deprecated
-		 * @param $strKeywords
-		 */
-        final protected function _keywords($strKeywords){
-			$this->_meta()->keywords($strKeywords);
-		}
-
+		
         final protected function _var($strVarKey = null){
 
 			if(is_null($strVarKey)){

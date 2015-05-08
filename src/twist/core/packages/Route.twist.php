@@ -1014,11 +1014,7 @@ class Route extends BasePackage{
 
 					switch($arrRoute['type']){
 						case'view':
-							if(substr($arrRoute['item'],-3) == 'php'){
-								$arrTags['response'] .= $this->resView->processElement($arrRoute['item'], $arrRoute['data']);
-							}else{
-								$arrTags['response'] .= $this->resView->build($arrRoute['item'], $arrRoute['data']);
-							}
+							$arrTags['response'] .= $this->resView->build($arrRoute['item'], $arrRoute['data']);
 							break;
 						case'function':
 								$arrTags['response'] .= $arrRoute['item']();
