@@ -33,8 +33,8 @@ class View extends BasePackage{
 	protected $strInstanceKey = '';
 	protected $dirViews = '';
 	protected $dirElements = '';
-	protected $arrElementData = array();
-	protected $arrElementParams = array();
+	protected $arrViewData = array();
+	protected $arrViewParams = array();
 	protected $dirCurrentView = null;
 	protected $strCurrentTag = null;
 	protected $blDebugMode = false;
@@ -85,35 +85,49 @@ class View extends BasePackage{
 		//Backup current view path
 		$strTempCurrentView = $this->dirCurrentView;
 
+		//If their are parameters then pass them through
+		if(strstr($dirView,',')){
+			$arrParts = explode(',',$dirView);
+			$dirView = $arrParts[0];
+
+			//Build the param array from the remaining parts
+			unset($arrParts[0]);
+			$this->arrViewParams = array_values( $arrParts );
+		}
+
 		$dirFullViewPath = $this->parseViewPath($dirView);
 
-		$strCacheKey = ltrim(str_replace(array(DIR_FRAMEWORK_VIEWS,DIR_PACKAGES,DIR_APP),array('core','packages','app'),$dirFullViewPath),'/');
-		$arrViewData = \Twist::Cache('twist/packages/views')->retrieve($strCacheKey);
+		if(substr($dirFullViewPath,-4) == '.php'){
+			$arrViewData['html_raw'] = $this->processElement($dirFullViewPath,$arrViewTags);
+		}else{
+			$strCacheKey = ltrim(str_replace(array(DIR_FRAMEWORK_VIEWS,DIR_PACKAGES,DIR_APP),array('core','packages','app'),$dirFullViewPath),'/');
+			$arrViewData = \Twist::Cache('twist/packages/views')->retrieve($strCacheKey);
 
-	    //Detect if the file has changed, if changed remove cache and rebuild
-	    if(!is_null($arrViewData) && $arrViewData['html_hash'] !== \Twist::File()->hash($dirFullViewPath,'md5')){
-		    \Twist::Cache('twist/packages/views')->remove($strCacheKey);
-		    $arrViewData = null;
-	    }
+			//Detect if the file has changed, if changed remove cache and rebuild
+			if(!is_null($arrViewData) && $arrViewData['html_hash'] !== \Twist::File()->hash($dirFullViewPath,'md5')){
+				\Twist::Cache('twist/packages/views')->remove($strCacheKey);
+				$arrViewData = null;
+			}
 
-	    if(is_null($arrViewData)){
-		    $arrViewData = array();
+			if(is_null($arrViewData)){
+				$arrViewData = array();
 
-		    $arrViewData['html_raw'] = $this->get($dirFullViewPath);
-		    $arrViewData['html_hash'] = \Twist::File()->hash($dirFullViewPath,'md5');
-		    $arrViewData['tags'] = $this->getTags($arrViewData['html_raw'],false);
+				$arrViewData['html_raw'] = $this->get($dirFullViewPath);
+				$arrViewData['html_hash'] = \Twist::File()->hash($dirFullViewPath,'md5');
+				$arrViewData['tags'] = $this->getTags($arrViewData['html_raw'],false);
 
-		    \Twist::Cache('twist/packages/views')->store($strCacheKey,$arrViewData,$this->framework()->setting('VIEW_PRE_PROCESS_CACHE'));
-	    }
+				\Twist::Cache('twist/packages/views')->store($strCacheKey,$arrViewData,$this->framework()->setting('VIEW_PRE_PROCESS_CACHE'));
+			}
 
-	    foreach($arrViewData['tags'] as $strEachTag){
-	        $arrViewData['html_raw'] = $this->processTag($arrViewData['html_raw'],$strEachTag,$arrViewTags);
-	    }
+			foreach($arrViewData['tags'] as $strEachTag){
+				$arrViewData['html_raw'] = $this->processTag($arrViewData['html_raw'],$strEachTag,$arrViewTags);
+			}
 
-	    //Remove all un-used View tags
-	    if($blRemoveUnusedTags){
-	        $arrViewData['html_raw'] = $this->removeUnusedTags($arrViewData['html_raw']);
-	    }
+			//Remove all un-used View tags
+			if($blRemoveUnusedTags){
+				$arrViewData['html_raw'] = $this->removeUnusedTags($arrViewData['html_raw']);
+			}
+		}
 
 	    if($this->blDebugMode){
 	        \Twist::framework()->debug()->log('View','usage',array('instance' => $this->strInstanceKey,'file' => $dirView,'tags' => $arrViewData['tags']));
@@ -166,6 +180,44 @@ class View extends BasePackage{
 		$this->dirCurrentView = $strTempCurrentView;
 
 	    return $strViewDataOut;
+	}
+
+	/**
+	 * For elements to get the element data when required
+	 * @return array
+	 */
+	protected function getData(){
+		return $this->arrViewData;
+	}
+
+	/**
+	 * Get the parameters passed in after the element file. These must be comma separated.
+	 * @return array
+	 */
+	protected function getParameters(){
+		return $this->arrViewParams;
+	}
+
+	/**
+	 * Process element tag, return the data captured from the output of the element.
+	 * Additional parameters are exploded of the end of the Element var, these parameters are comma separated.
+	 * To retrieve the parameters use $this->getParameters(); in your element.
+	 *
+	 * @param $dirElement
+	 * @param $arrData
+	 * @return string
+	 * @throws \Exception
+	 */
+	protected function processElement($dirView,$arrData = null){
+
+		$this->arrViewData = $arrData;
+
+		ob_start();
+		include $dirView;
+		$strOut = ob_get_contents();
+		ob_end_clean();
+
+		return $strOut;
 	}
 
 	/**
@@ -634,20 +686,8 @@ class View extends BasePackage{
 
 			case'view':
 
-				$strView = $strReference;
-
-				if(strstr($strReference,',')){
-					$arrParts = explode(',',$strReference);
-					$strView = $arrParts[0];
-				}
-
-				if(substr($strView,-4) == '.php'){
-					$strOut = $this->processElement($strReference,$arrData);
-					$strRawView = $this->replaceTag($strRawView,$strTag,$strOut,$strFunction);
-				}else{
-					$strTagData = $this->build($strView,$arrData);
-					$strRawView = $this->replaceTag($strRawView,$strTag,$strTagData,$strFunction);
-				}
+				$strTagData = $this->build($strReference,$arrData);
+				$strRawView = $this->replaceTag($strRawView,$strTag,$strTagData,$strFunction);
 
 				break;
 
@@ -829,67 +869,6 @@ class View extends BasePackage{
 		}
 
 		return $arrResponse;
-	}
-
-	/**
-	 * For elements to get the element data when required
-	 * @return array
-	 */
-	protected function getData(){
-	    return $this->arrElementData;
-	}
-
-	/**
-	 * Get the parameters passed in after the element file. These must be comma separated.
-	 * @return array
-	 */
-	protected function getParameters(){
-	    return $this->arrElementParams;
-	}
-
-	/**
-	 * Process element tag, return the data captured from the output of the element.
-	 * Additional parameters are exploded of the end of the Element var, these parameters are comma separated.
-	 * To retrieve the parameters use $this->getParameters(); in your element.
-	 *
-	 * @param $dirElement
-	 * @param $arrData
-	 * @return string
-	 * @throws \Exception
-	 */
-	public function processElement($dirElement,$arrData = null){
-
-	    $strOut = '';
-	    $this->arrElementData = $arrData;
-
-	    //If their are parameters then pass them through
-	    if(strstr($dirElement,',')){
-	        $arrParts = explode(',',$dirElement);
-	        $dirElement = $arrParts[0];
-
-	        //Build the param array from the remaining parts
-	        unset($arrParts[0]);
-	        $this->arrElementParams = array_values( $arrParts );
-	    }
-
-		//Backup current view path
-		$strTempCurrentView = $this->dirCurrentView;
-
-		$dirElement = $this->parseViewPath($dirElement);
-
-        ob_start();
-        include $dirElement;
-        $strOut = ob_get_contents();
-        ob_end_clean();
-
-        if($this->blDebugMode){
-            \Twist::framework()->debug()->log('View','usage',array('instance' => $this->strInstanceKey,'file' => $dirElement,'tags' => array()));
-        }
-
-		//Restore the current view path
-		$this->dirCurrentView = $strTempCurrentView;
-
-		return $strOut;
 	}
 
 	/**
