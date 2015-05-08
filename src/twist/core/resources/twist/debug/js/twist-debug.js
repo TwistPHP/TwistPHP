@@ -108,7 +108,8 @@
 						$( 'body' ).append( '<p>...I am ready</p>' );
 						info( 'jQuery v.' + $.fn.jquery + ' ready' );
 
-						if( window.devicePixelRatio ) {
+						if( window.devicePixelRatio
+								&& window.devicePixelRatio > 1 ) {
 							var testElem = document.createElement( 'div' );
 							testElem.style.border = '.5px solid transparent';
 							document.body.appendChild( testElem );

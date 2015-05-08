@@ -120,7 +120,7 @@
     margin: 0;
     display: inline-block;
     font-size: 1.25em;
-    border-right: 1px #757575 solid; }
+    border-right: 0.5px #757575 solid; }
     #twist-debug-blocks > li:last-child {
       margin-right: 10px; }
     #twist-debug-blocks > li > a {
@@ -229,8 +229,13 @@
     bottom: 0;
     left: 0; }
 
-.hairlines #twist-debug-blocks > li,
-.hairlines2 #twist-debug-blocks > li {
-  border-right-width: 0.5px; }
+/*.hairlines,
+.hairlines2 {
+	#twist-debug-blocks {
+		> li {
+			border-right-width: 0.5px;
+		}
+	}
+}*/
 
 /*# sourceMappingURL=twist-debug.css.map */

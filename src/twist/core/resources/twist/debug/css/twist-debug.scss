@@ -141,7 +141,7 @@ $z-index: 1337;
 
 			font-size: 1.25em;
 
-			border-right: 1px $bar-border solid;
+			border-right: 0.5px $bar-border solid;
 
 			&:last-child {
 				margin-right: $bar-fade-width;
@@ -250,11 +250,11 @@ $z-index: 1337;
 	#twist-debug-database {}
 	#twist-debug-route {}
 
-.hairlines,
+/*.hairlines,
 .hairlines2 {
 	#twist-debug-blocks {
 		> li {
 			border-right-width: 0.5px;
 		}
 	}
-}
+}*/
