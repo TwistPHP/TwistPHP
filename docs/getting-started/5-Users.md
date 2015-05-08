@@ -52,8 +52,8 @@
 	    );
 	    Twist::Route() -> baseTemplate( 'base.tpl' );
 	    Twist::Route() -> template( '/', 'pages/home.tpl', true, false, $arrHomeContent );
-	    Twist::Route() -> element( '/count', 'components/count.php,5', true, false, $arrCountContent );
-	    Twist::Route() -> element( '/fruit', 'components/fruit.php', true, false, $arrFruitContent );
+	    Twist::Route() -> view( '/count', 'components/count.php,5', true, false, $arrCountContent );
+	    Twist::Route() -> view( '/fruit', 'components/fruit.php', true, false, $arrFruitContent );
 	    Twist::Route() -> redirect( '/twitter', 'https://twitter.com/' );
 	    Twist::Route() -> template( '/login', 'pages/login.tpl' );
 	    Twist::Route() -> restrict( '/count/%', '/login' );

@@ -7,7 +7,7 @@ A model is used to interact with and manipulate data.
 	<?php
 
 		// Set the namespace
-		namespace App\Fruits;
+		namespace App\Models;
 
 		// Name your model
 		class Fruits {

@@ -14,7 +14,7 @@ Inspired by the simplicity of CodeIgniters templating parser, we managed to crea
 			<h1>Hello world!</h1>
 			<!-- Some examples of template tags -->
 			<p>The date is {date:jS F Y} and the time is {date:H:i}.</p>
-			<p>Your IP address is: {server:remote_addr}</p>
+			<p>Your IP address is: {server:REMOTE_ADDR}</p>
 		</body>
 	</html>
 	```
