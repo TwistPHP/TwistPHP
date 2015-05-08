@@ -106,6 +106,7 @@
 		 */
 		public function store($mxdUniqueID,$mxdData,$intLifeTime = 3600){
 
+			//@todo register a shutdown function to store the cache files after page complete and served
 			if($this->blCacheEnabled){
 
 				//Generate the expiry time - Fix for php session cache (allow 30 second runtime before re-cache)

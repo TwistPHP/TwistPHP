@@ -125,6 +125,8 @@
 								require_once $strRequireFile;
 								$this->arrClassLookup[$strRequest] = $strRequireFile;
 								$this->arrClassLoaded[$strRequest] = $strRequireFile;
+
+								//@todo register a shutdown function to store this file after page complete and served
 								file_put_contents($this->strAutoloadCache,json_encode($this->arrClassLookup));
 							}else{
 								$blMatchFound = false;
