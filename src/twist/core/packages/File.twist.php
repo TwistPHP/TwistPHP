@@ -572,6 +572,20 @@ class File extends BasePackage{
 		return ($blFormatOutput) ? $this->bytesToSize($intSizeBytes) : $intSizeBytes;
 	}
 
+	public function read($dirFilePath,$intBytesStart = 0,$intBytesEnd = null){
+
+	}
+
+	/**
+	 * @param $dirFilePath
+	 * @param $mxdData
+	 * @param null $strOptions pass in either null, prefix or suffix
+	 * @param bool $blDelayedWrite Store file in memory and write to disk after script has finished
+	 */
+	public function write($dirFilePath,$mxdData,$strOptions = null,$blDelayedWrite = false){
+
+	}
+
 	/**
 	 * Basic alias function of PHP's unlink, removes a file or symlink from the local server
 	 *
