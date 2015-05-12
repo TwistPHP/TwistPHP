@@ -108,22 +108,6 @@
 						$( 'body' ).append( '<p>...I am ready</p>' );
 						info( 'jQuery v.' + $.fn.jquery + ' ready' );
 
-						if( window.devicePixelRatio
-								&& window.devicePixelRatio > 1 ) {
-							var testElem = document.createElement( 'div' );
-							testElem.style.border = '.5px solid transparent';
-							document.body.appendChild( testElem );
-							if( testElem.offsetHeight == 1 ) {
-								document.querySelector( 'html' ).classList.add( 'hairlines' );
-								$( 'body' ).append( '<p>hairlines</p>' );
-							} else {
-								$( 'body' ).append( '<p>no hairlines</p>' );
-							}
-							document.body.removeChild( testElem );
-						} else {
-							$( 'body' ).append( '<p>Pixel ratio too small</p>' );
-						}
-
 						var jqoTwistDebugBlocks = $( '#twist-debug-blocks' ),
 								jqoTwistDebugDetails = $( '#twist-debug-details' );
 
