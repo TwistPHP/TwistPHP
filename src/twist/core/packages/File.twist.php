@@ -32,6 +32,7 @@ class File extends BasePackage{
 
 	protected $resTemplate = null;
 	protected $strAssetDirectory = null;
+	protected $arrDelayedFileStorage = array();
 
 	/**
 	 * Load up an instance of the template class for when it is required
@@ -513,25 +514,25 @@ class File extends BasePackage{
 	 * Get a unique Hash of a directory in MD5 or SHA1. If any single item within the directory or sub-directories changes the unique hash will change as well.
 	 *
 	 * @related hash
-	 * @param $strDirectoryPath Path of the directory
+	 * @param $dirPath Path of the directory
 	 * @param $strHashAlgorithm Set the hash algorithm 'md5' or 'sha1'
 	 * @return bool|string
 	 */
-	public function directoryHash($strDirectoryPath, $strHashAlgorithm='md5'){
+	public function directoryHash($dirPath, $strHashAlgorithm='md5'){
 
 		$arrHashes = array();
 
-		if(is_dir($strDirectoryPath)){
+		if(is_dir($dirPath)){
 
 			$arrHashes = array();
-			$resDir = dir($strDirectoryPath);
+			$resDir = dir($dirPath);
 
 			while(false !== ($strEntry = $resDir->read())){
 				if($strEntry != '.' && $strEntry != '..'){
-					if(is_dir($strDirectoryPath.'/'.$strEntry)){
-						$arrHashes[] = $this->directoryHash($strDirectoryPath.'/'.$strEntry,$strHashAlgorithm);
+					if(is_dir($dirPath.'/'.$strEntry)){
+						$arrHashes[] = $this->directoryHash($dirPath.'/'.$strEntry,$strHashAlgorithm);
 					}else{
-						$arrHashes[] = $this->hash($strDirectoryPath.'/'.$strEntry,$strHashAlgorithm);
+						$arrHashes[] = $this->hash($dirPath.'/'.$strEntry,$strHashAlgorithm);
 					}
 				}
 			}
@@ -545,24 +546,24 @@ class File extends BasePackage{
 	/**
 	 * Get the full size in bytes of any directory by providing its full path. Optional parameter to format the return data in a human readable format.
 	 *
-	 * @param $strDirectoryPath Path of the directory
+	 * @param $dirPath Path of the directory
 	 * @param $blFormatOutput Set 'true' to format output
 	 * @return mixed Returns the size in bytes or a human readable format
 	 */
-	public function directorySize($strDirectoryPath, $blFormatOutput=false){
+	public function directorySize($dirPath, $blFormatOutput=false){
 
 		$intSizeBytes = 0;
 
-		if(is_dir($strDirectoryPath)){
+		if(is_dir($dirPath)){
 
-			$resDir = dir($strDirectoryPath);
+			$resDir = dir($dirPath);
 
 			while(false !== ($strEntry = $resDir->read())){
 				if ($strEntry != '.' && $strEntry != '..'){
-					if (is_dir($strDirectoryPath.'/'.$strEntry)){
-						$intSizeBytes += $this->directorySize($strDirectoryPath.'/'.$strEntry);
+					if (is_dir($dirPath.'/'.$strEntry)){
+						$intSizeBytes += $this->directorySize($dirPath.'/'.$strEntry);
 					}else{
-						$intSizeBytes += filesize($strDirectoryPath.'/'.$strEntry);
+						$intSizeBytes += filesize($dirPath.'/'.$strEntry);
 					}
 				}
 			}
@@ -572,18 +573,99 @@ class File extends BasePackage{
 		return ($blFormatOutput) ? $this->bytesToSize($intSizeBytes) : $intSizeBytes;
 	}
 
-	public function read($dirFilePath,$intBytesStart = 0,$intBytesEnd = null){
+	/**
+	 * Read a file from the server, applies the appropriate file locks when reading from the file
+	 * @param string $dirFilePath Full path to the file to be read
+	 * @param int $intBytesStart
+	 * @param null $intBytesEnd
+	 * @param bool $blCheckDelayedFiles
+	 * @return string
+	 * @throws \Exception
+	 */
+	public function read($dirFilePath,$intBytesStart = 0,$intBytesEnd = null,$blCheckDelayedFiles = true){
 
+		$strOut = '';
+
+		if($blCheckDelayedFiles && array_key_exists($dirFilePath,$this->arrDelayedFileStorage)){
+			if(($intBytesStart == 0 && is_null($intBytesEnd)) || (is_null($intBytesStart) && is_null($intBytesEnd))){
+				return $this->arrDelayedFileStorage[$dirFilePath];
+			}else{
+				return substr($this->arrDelayedFileStorage[$dirFilePath], $intBytesStart, $intBytesEnd);
+			}
+		}else{
+
+			// Get the data from the file
+			try{
+
+				$resFileHandler = fopen($dirFilePath, "r");
+
+				if(flock($resFileHandler, LOCK_SH)){
+
+					if(($intBytesStart == 0 && is_null($intBytesEnd)) || (is_null($intBytesStart) && is_null($intBytesEnd))){
+						$strOut = file_get_contents($dirFilePath);
+					}else{
+
+						if($intBytesStart != 0 && !is_null($intBytesStart)){
+							fseek($resFileHandler, $intBytesStart);
+						}else{
+							$intBytesStart = 0;
+						}
+
+						$strOut = fread($resFileHandler, ($intBytesEnd != 0 && !is_null($intBytesEnd) ? $intBytesEnd - $intBytesStart : filesize($dirFilePath)));
+					}
+				}
+
+				fclose($resFileHandler);
+				return $strOut;
+
+			}catch(\Exception $resException){
+				throw new \Exception('TwistPHP File::read() - '.$resException->getMessage());
+			}
+		}
 	}
 
 	/**
-	 * @param $dirFilePath
-	 * @param $mxdData
+	 * Write a file to disk and apply the appropriate file locks, delayed file writing is also available to store the file upon shutdown of the PHP process (after the user data has been served)
+	 * @param string $dirFilePath Full path to the file to be created/stored
+	 * @param mixed $mxdData Data to be stored in the file
 	 * @param null $strOptions pass in either null, prefix or suffix
 	 * @param bool $blDelayedWrite Store file in memory and write to disk after script has finished
 	 */
 	public function write($dirFilePath,$mxdData,$strOptions = null,$blDelayedWrite = false){
 
+		if($blDelayedWrite){
+			$this->arrDelayedFileStorage[$dirFilePath] = $mxdData;
+		}else{
+			try{
+
+				//Create the required path if not currently existing
+				if(!is_dir(dirname($dirFilePath))){
+					$this->recursiveCreate(dirname($dirFilePath));
+				}
+
+				$resFileHandler = fopen($dirFilePath, "w+");
+
+				if(flock($resFileHandler, LOCK_EX)){
+
+					//Allow for the writing of file data to the beginning/end of a file (default Replaces all data)
+					if($strOptions == 'prefix'){
+						fseek($resFileHandler, 0);
+					}elseif($strOptions == 'suffix'){
+						fseek($resFileHandler, filesize($dirFilePath));
+					}else{
+						ftruncate($resFileHandler, 0);
+					}
+
+					fwrite($resFileHandler, $mxdData);
+					flock($resFileHandler, LOCK_UN);
+				}
+
+				fclose($resFileHandler);
+
+			}catch(\Exception $resException){
+				throw new \Exception('TwistPHP File::write() - '.$resException->getMessage());
+			}
+		}
 	}
 
 	/**

@@ -303,6 +303,14 @@
 		"options":"0,1",
 		"null":0
 	},
+	"CACHE_DELAYED_WRITE":{
+		"title":"Cache Delayed Write",
+		"description":"Delay writing the cache files to disk, the files will be written during the shutdown cycle of the current PHP runtime",
+		"default":"1",
+		"type":"boolean",
+		"options":"0,1",
+		"null":0
+	},
 	"CACHE_GB_PROBABILITY":{
 		"title":"Cache Garbage Collection",
 		"description":"Set the probability of a user collecting garbage between 1-10 when and instance of cache is launched. Default is set to 0, will never collect garbage (Expired items deleted when next used)",
