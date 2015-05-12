@@ -20,62 +20,8 @@ $z-index: 1337;
 	@return if(lightness($colour) > 50, #212121, #FFF);
 }
 
-/*@mixin keyframes($strName) {
-	@-webkit-keyframes #{$strName} {
-		@content
-	}
-
-	@-moz-keyframes #{$strName} {
-		@content;
-	}
-
-	@-ms-keyframes #{$strName} {
-		@content;
-	}
-
-	@-o-keyframes #{$strName} {
-		@content;
-	}
-
-	@keyframes #{$strName} {
-		@content;
-	}
-}
-
-@mixin animate($name, $time, $delay) {
-	-webkit-animation: $name $time 1;
-	-webkit-animation-delay: $delay;
-	-webkit-animation-fill-mode: forwards;
-	-moz-animation: $name $time 1;
-	-moz-animation-delay: $delay;
-	-moz-animation-fill-mode: forwards;
-	-ms-animation: $name $time 1;
-	-ms-animation-delay: $delay;
-	-ms-animation-fill-mode: forwards;
-	-o-animation: $name $time 1;
-	-o-animation-delay: $delay;
-	-o-animation-fill-mode: forwards;
-	animation: $name $time 1;
-	animation-delay: $delay;
-	animation-fill-mode: forwards;
-}*/
-
 /* ===================================================== ANIMATION KEYFRAMES ===================================================== */
 // https://github.com/daneden/animate.css
-/*@include keyframes(bounceInLeft) {
-	0%, 60%, 75%, 90%, 100% { transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000); }
-	0% {
-		opacity: 0;
-		transform: translate3d(-1000px, 0, 0);
-	}
-	60% {
-		opacity: 1;
-		transform: translate3d(12px, 0, 0);
-	}
-	75% { transform: translate3d(-5px, 0, 0); }
-	90% { transform: translate3d(2px, 0, 0); }
-	100% { transform: none; }
-}*/
 
 /* ===================================================== GENERIC ===================================================== */
 #twist-debug,
