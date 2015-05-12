@@ -22,6 +22,7 @@
  */
 
 namespace Twist\Core\Classes;
+use \Twist\Core\Models\User\SessionHandler;
 
 class BaseControllerUser extends BaseController{
 
@@ -55,7 +56,7 @@ class BaseControllerUser extends BaseController{
 				$resUser->commit();
 
 				\Twist::Session()->data('site-login_message','A temporary password has been emailed to you');
-				$this->resUser->goToPage('./', false );
+				\Twist::redirect('./');
 			}
 		}
 	}
@@ -86,7 +87,7 @@ class BaseControllerUser extends BaseController{
 							unset($_POST['current_password']);
 
 							$this->resUser->authenticate(\Twist::Session()->data('user-email'),$strNewPassword,$this->resUser->strLoginUrl,true);
-							$this->resUser->goToPage('./',false);
+							\Twist::redirect('./');
 						}
 					}else{
 
@@ -100,12 +101,12 @@ class BaseControllerUser extends BaseController{
 						\Twist::Session()->data('user-temp_password','0');
 
 						$this->resUser->authenticate(\Twist::Session()->data('user-email'),$strNewPassword,$this->resUser->strLoginUrl,true);
-						$this->resUser->goToPage('./',false);
+						\Twist::redirect('./');
 					}
 
 				}else{
 					\Twist::Session()->data('site-error_message','The passwords you entered do not match');
-					$this->resUser->goToPage('?change',false);
+					\Twist::redirect('?change');
 				}
 			}
 		}
@@ -141,12 +142,14 @@ class BaseControllerUser extends BaseController{
 
 	public function postDeviceManager(){
 
+		$objUserSessionHandler = new SessionHandler();
+
 		if(array_key_exists('save-device',$_GET) && array_key_exists('device-name',$_GET)){
-			$this->resUser->objUserSession->editDevice($this->resUser->currentID(),$_GET['save-device'],$_GET['device-name']);
+			$objUserSessionHandler->editDevice($this->resUser->currentID(),$_GET['save-device'],$_GET['device-name']);
 		}
 
 		if(array_key_exists('forget-device',$_GET)) {
-			$this->resUser->objUserSession->forgetDevice($this->resUser->currentID(), $_GET['forget-device']);
+			$objUserSessionHandler->forgetDevice($this->resUser->currentID(), $_GET['forget-device']);
 		}
 	}
 }
