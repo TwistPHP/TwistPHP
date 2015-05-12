@@ -535,6 +535,33 @@
 		}
 
 		/**
+		 * Test to see if a database table exists already, returns a boolean stats for the table
+		 * @param $strTable
+		 * @param null $strDatabase
+		 * @return bool
+		 */
+		public function tableExists($strTable,$strDatabase = null){
+
+			$blQuery = $this->query("SELECT 'exists' AS `status` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '%s' AND  TABLE_NAME = '%s'",
+				(is_null($strDatabase)) ? $this->strDatabaseName : $strDatabase,
+				$strTable
+			);
+
+			return ($blQuery && $this->getNumberRows());
+		}
+
+		/**
+		 * Test to see if a Twist table exists, automatically adds the table prefix to the request
+		 * @related tableExists
+		 * @param $strTable
+		 * @param null $strDatabase
+		 * @return bool]
+		 */
+		public function twistTableExists($strTable,$strDatabase = null){
+			return $this->tableExists(sprintf('%s%s',DATABASE_TABLE_PREFIX,$strTable),$strDatabase);
+		}
+
+		/**
 		 * Get the structure information of a table by table name
 		 *
 		 * @related table
