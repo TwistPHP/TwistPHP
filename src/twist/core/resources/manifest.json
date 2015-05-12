@@ -1,6 +1,6 @@
 {
 	"arable": {
-		"5.3.4": {
+		"5.4.0": {
 			"default": true,
 			"css": ["arable.min.css"],
 			"js": []
@@ -80,8 +80,18 @@
 	"twist/debug": {
 		"standard": {
 			"default": true,
-			"css": ["css/debug.min.css"],
+			"css": ["css/twist-debug.min.css"],
+			"js": ["js/twist-debug.js"]
+		},
+		"css": {
+			"default": true,
+			"css": ["css/twist-debug.min.css"],
 			"js": []
+		},
+		"js": {
+			"default": true,
+			"css": [],
+			"js": ["js/twist-debug.js"]
 		}
 	},
 	"twist/file-upload": {

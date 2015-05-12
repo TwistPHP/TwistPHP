@@ -1,0 +1,509 @@
+@charset "UTF-8";
+
+// ===================================================== VARIABLES =====================================================
+$bar-height: 30px;
+$bar-block-height: 30px;
+$bar-logo-width: 32px;
+$bar-fade-width: 10px;
+$bar-background: #424242; //#455A64
+$bar-background-hover: #616161;
+$bar-border: #757575;
+$details-background: #EEE;
+$red: #D32F2F;
+$yellow: #FBC02D;
+$green: #689F38;
+$blue: #1976D2;
+$z-index: 1337;
+
+// ===================================================== MIXINS =====================================================
+@function blackorwhite($colour) {
+	@return if(lightness($colour) > 50, #212121, #FFF);
+}
+
+/* ===================================================== ANIMATION KEYFRAMES ===================================================== */
+// https://github.com/daneden/animate.css
+
+/* ===================================================== GENERIC ===================================================== */
+#twist-debug,
+#twist-debug-details {
+	font-family: "Helvetica Neue Light", "Helvetica Neue", HelveticaNeue, Helvetica, "Open Sans", Arial, sans-serif;
+
+	* {
+		margin: 0;
+		padding: 0;
+	}
+}
+
+/* ===================================================== DEBUG BAR ===================================================== */
+#twist-debug {
+	height: $bar-height;
+	padding: 0 #{$bar-logo-width + 15} 0 0;
+
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	left: 0;
+
+	overflow: visible;
+
+	font-size: 10px;
+	font-family: "Helvetica Neue Light", "Helvetica Neue", HelveticaNeue, Helvetica, "Open Sans", Arial, sans-serif;
+	font-weight: 400;
+	font-style: normal;
+
+	background-color: $bar-background;
+
+	z-index: $z-index + 1;
+
+	&::after {
+		width: $bar-fade-width;
+
+		position: absolute;
+		top: 0;
+		right: #{$bar-logo-width + 15};
+		bottom: 0;
+
+		background: $bar-background;
+		background: -moz-linear-gradient(0deg, rgba($bar-background, 0) 0%, rgba($bar-background, 1) 100%);
+		background: -webkit-linear-gradient(0deg, rgba($bar-background, 0) 0%, rgba($bar-background, 1) 100%);
+		background: -o-linear-gradient(0deg, rgba($bar-background, 0) 0%, rgba($bar-background, 1) 100%);
+		background: -ms-linear-gradient(0deg, rgba($bar-background, 0) 0%, rgba($bar-background, 1) 100%);
+		background: linear-gradient(90deg, rgba($bar-background, 0) 0%, rgba($bar-background, 1) 100%);
+
+		content: "";
+	}
+}
+
+	#twist-debug-icon {
+		display: block;
+
+		position: absolute;
+		right: 10px;
+		bottom: 5px;
+
+		-webkit-transition: padding ease 400ms;
+		transition: padding ease 400ms;
+
+		&:hover {
+			padding-bottom: 3px;
+
+			-webkit-transition: padding ease 50ms;
+			transition: padding ease 50ms;
+		}
+
+		img {
+			width: $bar-logo-width;
+
+			display: block;
+		}
+	}
+
+	#twist-debug-blocks {
+		width: 100%;
+
+		overflow: auto;
+
+		list-style: none;
+		white-space: nowrap;
+
+		> li {
+			display: inline-block;
+
+			font-size: 12px;
+
+			border-right: 1px $bar-border solid;
+
+			/*&::before {
+				width: 1px;
+				height: $bar-height;
+
+				display: block;
+
+				float: right;
+
+				background: $bar-border;
+				background: -moz-linear-gradient(left, $bar-border 0%, $bar-background 100%);
+				background: -webkit-gradient(linear, left top, right top, color-stop(0%, $bar-border), color-stop(100%, $bar-background));
+				background: -webkit-linear-gradient(left, $bar-border 0%, $bar-background 100%);
+				background: -o-linear-gradient(left, $bar-border 0%, $bar-background 100%);
+				background: -ms-linear-gradient(left, $bar-border 0%, $bar-background 100%);
+				background: linear-gradient(to right, $bar-border 0%, $bar-background 100%);
+				filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$bar-border', endColorstr='$bar-background',GradientType=1);
+				//background: -moz-linear-gradient(left, $bar-border 50%, $bar-background 50%);
+				//background: -webkit-gradient(linear, left top, right top, color-stop(50%, $bar-border), color-stop(50%, $bar-background));
+				//background: -webkit-linear-gradient(left, $bar-border 50%, $bar-background 50%);
+				//background: -o-linear-gradient(left, $bar-border 50%, $bar-background 50%);
+				//background: -ms-linear-gradient(left, $bar-border 50%, $bar-background 50%);
+				//background: linear-gradient(to right, $bar-border 50%, $bar-background 50%);
+				//filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$bar-border', endColorstr='$bar-background', GradientType=1);
+
+				content: "";
+			}*/
+
+			&:first-child {
+				border-right: none;
+				a {
+					padding-right: (($bar-height - $bar-block-height) / 2);
+					padding-left: (($bar-height - $bar-block-height) / 2);
+				}
+			}
+
+			&:last-child {
+				margin-right: $bar-fade-width;
+			}
+
+			a {
+				padding: 0 10px;
+
+				display: block;
+
+				color: blackorwhite($bar-background);
+				line-height: $bar-height;
+				text-decoration: none;
+
+				-webkit-transition: background ease 400ms;
+				transition: background ease 400ms;
+
+				&:hover {
+					background-color: $bar-background-hover;
+
+					-webkit-transition: background ease 100ms;
+					transition: background ease 100ms;
+				}
+
+				&.current {
+					background-color: $bar-background-hover;
+				}
+			}
+
+			i {
+				margin-right: 5px;
+			}
+
+			.fa-stack-2x {
+				text-shadow: 0 0 3px $bar-background;
+			}
+		}
+	}
+
+			#twist-debug-errors,
+			#twist-debug-warnings,
+			#twist-debug-dumps {
+				min-width: 8px;
+				padding: 0 10px;
+
+				display: inline-block;
+
+				font-weight: 700;
+				text-align: center;
+				line-height: $bar-block-height;
+
+				//border-radius: 2px;
+
+				//transform: translate3d(-3000px, 0, 0);
+			}
+
+			#twist-debug-errors {
+				background-color: $red;
+				//@include animate(bounceInLeft, 1s, 0);
+			}
+
+			#twist-debug-warnings {
+				background-color: $yellow;
+				//@include animate(bounceInLeft, 1s, 100ms);
+			}
+
+			#twist-debug-dumps {
+				background-color: $blue;
+				//@include animate(bounceInLeft, 1s, 200ms);
+			}
+
+/* ===================================================== DETAILS WINDOW ===================================================== */
+#twist-debug-details {
+	position: fixed;
+	top: 100%;
+	right: 0;
+	bottom: $bar-height;
+	left: 0;
+
+	background-color: $details-background;
+
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+
+	-webkit-transition: top ease 800ms;
+	transition: top ease 800ms;
+
+	z-index: $z-index;
+
+	&.show {
+		top: 0;
+	}
+
+	> a {
+		width: 25px;
+		height: 25px;
+
+		position: absolute;
+		top: 10px;
+		right: 10px;
+
+		z-index: 2;
+
+		&::before,
+		&::after {
+			height: 1px;
+
+			position: absolute;
+			top: 12px;
+			right: 0;
+			left: 0;
+
+			background-color: #FFF;
+
+			content: "";
+		}
+
+		&::before {
+			transform: rotate(45deg);
+		}
+
+		&::after {
+			transform: rotate(135deg);
+		}
+	}
+
+	> div {
+		display: none;
+
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+
+		h6 {
+			height: 25px;
+			padding: 10px 65px 10px 20px;
+
+			color: #FFF;
+			font-size: 20px;
+			line-height: 25px;
+
+			background-color: $bar-background;
+
+			z-index: 2;
+		}
+
+		z-index: 1;
+	}
+
+	.twist-debug-column-wrapper {
+		position: absolute;
+		top: 45px;
+		right: 0;
+		bottom: 0;
+		left: 0;
+
+		overflow: auto;
+
+		z-index: 1;
+	}
+
+	[class^="twist-debug-column-"],
+	[class*=" twist-debug-column-"] {
+		padding: 10px;
+
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+
+		float: left;
+	}
+
+	.twist-debug-column-100 {
+		width: 100%;
+
+		clear: both;
+	}
+
+	.twist-debug-column-50 {
+		width: 50%;
+	}
+}
+
+	#twist-debug-messages {
+		[class^="twist-debug-message-"],
+		[class*=" twist-debug-message-"] {
+			margin-left: 4px;
+
+			position: relative;
+
+			overflow: visible;
+
+			background-color: #FFF;
+
+			border: 1px #E0E0E0 solid;
+			border-left-width: 0;
+
+			&::before {
+				width: 4px;
+
+				position: absolute;
+				top: -1px;
+				right: 100%;
+				bottom: -1px;
+
+				background-color: $blue;
+
+				content: "";
+			}
+
+			+ [class^="twist-debug-message-"],
+			+ [class*=" twist-debug-message-"] {
+				margin-top: 20px;
+			}
+
+			p {
+				padding: 20px;
+			}
+		}
+
+		.twist-debug-message-warning {
+			&::before {
+				background-color: $yellow;
+			}
+		}
+
+		.twist-debug-message-error {
+			&::before {
+				background-color: $red;
+			}
+		}
+	}
+
+	#twist-debug-timeline {}
+
+		#twist-debug-timeline-chart {
+			padding-top: 50px;
+
+			position: relative;
+
+			overflow: hidden;
+
+			&::before {
+				height: 50px;
+
+				position: absolute;
+				top: 0;
+				right: 0;
+				left: 200px;
+
+				background-color: #F09;
+
+				content: "";
+			}
+
+			ul {
+				margin-top: 10px;
+				padding-left: 200px;
+			}
+
+				li {
+					width: 195px;
+					height: 10px;
+					margin-left: -200px;
+					padding-right: 5px;
+					padding-bottom: 10px;
+
+					display: block;
+
+					position: relative;
+
+					overflow: visible;
+
+					text-align: right;
+					line-height: 20px;
+
+					&::after {
+						height: 1000px;
+
+						position: absolute;
+						right: 0;
+						bottom: 10px;
+
+						border-right: 1px #000 solid;
+
+						content: "";
+					}
+				}
+		}
+
+	#twist-debug-memory {}
+
+	#twist-debug-database {
+		[class^="twist-debug-query-"],
+		[class*=" twist-debug-query-"] {
+			margin-left: 4px;
+
+			position: relative;
+
+			overflow: visible;
+
+			background-color: #FFF;
+
+			border: 1px #E0E0E0 solid;
+			border-left-width: 0;
+
+			&::before {
+				width: 4px;
+
+				position: absolute;
+				top: -1px;
+				right: 100%;
+				bottom: -1px;
+
+				background-color: $yellow;
+
+				content: "";
+			}
+
+			+ [class^="twist-debug-query-"],
+			+ [class*=" twist-debug-query-"] {
+				margin-top: 20px;
+			}
+
+			pre {
+				width: 100%;
+				padding: 20px;
+
+				-webkit-box-sizing: border-box;
+				-moz-box-sizing: border-box;
+				box-sizing: border-box;
+
+				overflow: auto;
+			}
+		}
+
+		.twist-debug-query-success {
+			&::before {
+				background-color: $green;
+			}
+		}
+
+		.twist-debug-query-fail {
+			&::before {
+				background-color: $red;
+			}
+		}
+	}
+
+	#twist-debug-route {}
+
+/*.hairlines,
+.hairlines2 {
+	#twist-debug-blocks {
+		> li {
+			border-right-width: 0.5px;
+		}
+	}
+}*/
