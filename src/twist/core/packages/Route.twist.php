@@ -966,11 +966,6 @@ class Route extends BasePackage{
 	 */
 	public function serve($blExitOnComplete = true){
 
-		//Enable GZip compression output
-		if(strpos($_SERVER['HTTP_ACCEPT_ENCODING'],'gzip') !== false){
-			ob_start('ob_gzhandler');
-		}
-
 		//Register the resource server if and when required
 		$this->resourceServer();
 		\Twist::recordEvent('Routes Prepared');
@@ -1149,6 +1144,11 @@ class Route extends BasePackage{
 						}else{
 							$strPageOut .= \Twist::framework()->debug()->window($arrRoute);
 						}
+					}
+
+					//Enable GZip compression output
+					if(strpos($_SERVER['HTTP_ACCEPT_ENCODING'],'gzip') !== false){
+						ob_start('ob_gzhandler');
 					}
 
 					//Output the page

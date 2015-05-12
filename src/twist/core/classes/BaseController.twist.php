@@ -107,7 +107,7 @@
 			if(is_null($strVarKey)){
 				return $this->arrRouteVars;
 			}else{
-				return (array_key_exists($strVarKey,$this->arrRouteVars)) ? $this->arrRouteVars['vars'][$strVarKey] : null;
+				return (array_key_exists($strVarKey,$this->arrRouteVars)) ? $this->arrRouteVars[$strVarKey] : null;
 			}
 		}
 
