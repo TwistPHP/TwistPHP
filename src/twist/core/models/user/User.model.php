@@ -402,7 +402,7 @@ class User{
 
 	protected function allowPassword($strPassword){
 
-		$strPasswordFile = sprintf('%score/data/Localisation/common-passwords.json',DIR_FRAMEWORK);
+		$strPasswordFile = sprintf('%score/data/localisation/common-passwords.json',DIR_FRAMEWORK);
 		$arrOut = array(
 			'status' => true,
 			'message' => 'Password is allowed'
