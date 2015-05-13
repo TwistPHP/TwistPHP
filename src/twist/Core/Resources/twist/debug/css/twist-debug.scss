@@ -26,7 +26,11 @@ $z-index: 1337;
 /* ===================================================== GENERIC ===================================================== */
 #twist-debug,
 #twist-debug-details {
+	font-size: 13px;
 	font-family: "Helvetica Neue Light", "Helvetica Neue", HelveticaNeue, Helvetica, "Open Sans", Arial, sans-serif;
+	font-weight: 400;
+	line-height: 1;
+	font-style: normal;
 
 	* {
 		margin: 0;
@@ -45,11 +49,6 @@ $z-index: 1337;
 	left: 0;
 
 	overflow: visible;
-
-	font-size: 10px;
-	font-family: "Helvetica Neue Light", "Helvetica Neue", HelveticaNeue, Helvetica, "Open Sans", Arial, sans-serif;
-	font-weight: 400;
-	font-style: normal;
 
 	background-color: $bar-background;
 
@@ -177,7 +176,12 @@ $z-index: 1337;
 			}
 
 			i {
+				width: 1.3em;
 				margin-right: 5px;
+
+				display: inline-block;
+
+				text-align: left;
 			}
 
 			.fa-stack-2x {
@@ -295,6 +299,20 @@ $z-index: 1337;
 		}
 
 		z-index: 1;
+	}
+
+	th,
+	td {
+		padding: 0.5em 0.75em;
+	}
+
+	dt {
+		margin-top: 0.5em;
+		padding-top: 0.5em;
+
+		&:first-child {
+			margin-top: 0;
+		}
 	}
 
 	.twist-debug-column-wrapper {
