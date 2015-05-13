@@ -394,7 +394,7 @@
 				$objInterface->baseURI($strRegisteredURI);
 
 				//Set the view directory to the one in the package
-				$objInterface->setDirectory(sprintf('%s/%s/views/',DIR_PACKAGES,$arrParts[1]));
+				$objInterface->setDirectory(sprintf('%s/%s/Views/',DIR_PACKAGES,$arrParts[1]));
 
 				if($mxdBaseView === false || is_null($mxdBaseView)){
 					$objInterface->baseViewIgnore();
