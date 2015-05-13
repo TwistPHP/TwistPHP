@@ -1146,8 +1146,8 @@ class Route extends BasePackage{
 						}
 					}
 
-					//Enable GZip compression output
-					if(strpos($_SERVER['HTTP_ACCEPT_ENCODING'],'gzip') !== false){
+					//Enable GZip compression output, only when no other data has been output to the screen
+					if(ob_get_status() == 0 && strpos($_SERVER['HTTP_ACCEPT_ENCODING'],'gzip') !== false){
 						ob_start('ob_gzhandler');
 					}
 
