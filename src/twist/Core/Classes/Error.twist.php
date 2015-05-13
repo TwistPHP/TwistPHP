@@ -33,7 +33,7 @@
 
 			}
 
-	        protected static function apacheRequestHeaders() {
+			public static function apacheRequestHeaders() {
 	            $arh = array();
 	            $rx_http = '/\AHTTP_/';
 	            foreach($_SERVER as $key => $val) {
@@ -53,7 +53,7 @@
 	            return( $arh );
 	        }
 
-	        protected static function serverInformation(){
+			public static function serverInformation(){
 
 	            $arrOut = array();
 

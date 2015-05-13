@@ -22,6 +22,7 @@
 	 */
 
 	namespace Twist\Core\Classes;
+	use Twist\Core\Classes\Error;
 
 	/**
 	 * Debugging the framework and its modules, functionality to access debug data can be found here. Data will only be present if Debugging is enabled in your settings.
@@ -105,9 +106,21 @@
 			}
 
 			$arrTags['route_current'] = print_r($arrCurrentRoute,true);
+			$arrTags['routes'] = '';
+
+			foreach(\Twist::Route()->getAll() as $strType => $arrItems){
+				foreach($arrItems as $arrEachRoute){
+					$arrEachRoute['highlight'] = ($arrEachRoute['registered_uri'] == $arrCurrentRoute['registered_uri']) ? 'highlight' : '';
+					$arrEachRoute['item'] = (is_array($arrEachRoute['item'])) ? implode('->',$arrEachRoute['item']) : $arrEachRoute['item'];
+					$arrTags['routes'] .=  $this->resTemplate->build('components/each-route.tpl',$arrEachRoute);
+				}
+			}
+
 			$arrTags['get'] = print_r($_GET,true);
 			$arrTags['post'] = print_r($_POST,true);
 			$arrTags['cookie'] = print_r($_COOKIE,true);
+			$arrTags['request_headers'] = print_r(Error::apacheRequestHeaders(),true);
+			$arrTags['server'] = print_r(Error::serverInformation(),true);
 
 			/**
 			 * Process the stats timer bar graph

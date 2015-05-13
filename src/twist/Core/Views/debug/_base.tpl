@@ -65,8 +65,21 @@
 		<h6>Routes</h6>
 		<div class="twist-debug-column-wrapper">
 			<div class="twist-debug-column-50">
+				<table>
+					<thead>
+					<tr>
+						<th>URI</th>
+						<td>Method</td>
+						<td>Type</td>
+						<td>Call</td>
+						<td>Restriction</td>
+					</tr>
+					</thead>
+					<tbody>
+					{data:routes}
+					</tbody>
+				</table>
 				<ul>
-					<li>Registered Routes</li>
 					<li>Current Route</li>
 					<li>{data:route_current}</li>
 				</ul>
@@ -79,6 +92,10 @@
 					<li>{data:post}</li>
 					<li>$_COOKIE</li>
 					<li>{data:cookie}</li>
+					<li>Request Headers</li>
+					<li>{data:request_headers}</li>
+					<li>$_SERVER</li>
+					<li>{data:server}</li>
 				</ul>
 			</div>
 		</div>

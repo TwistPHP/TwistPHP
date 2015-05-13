@@ -143,6 +143,20 @@ class Route extends BasePackage{
 	}
 
 	/**
+	 * Get all the registered routes and return as an array
+	 */
+	public function getAll(){
+
+		return array(
+			'ANY' => $this->arrRoutes,
+			'GET' => $this->arrRoutesGET,
+			'PUT' => $this->arrRoutesPUT,
+			'POST' => $this->arrRoutesPOST,
+			'DELETE' => $this->arrRoutesDELETE
+		);
+	}
+
+	/**
 	 * Purge the instance of routes
 	 */
 	public function purge(){
