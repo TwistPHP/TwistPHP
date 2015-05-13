@@ -298,6 +298,8 @@ class View extends BasePackage{
 
 		if(substr($dirView,0,2) == './'){
 			$dirFullViewPath = (is_null($this->dirCurrentView)) ? sprintf('%s/%s',rtrim($this->dirViews,'/'),substr($dirView,2)) : sprintf('%s/%s',dirname($this->dirCurrentView),substr($dirView,2));
+		}elseif(substr($dirView,0,3) == '../'){
+			$dirFullViewPath = sprintf('%s/%s',dirname($this->dirCurrentView),ltrim($dirView,'/'));
 		}else{
 			$dirFullViewPath = (!is_file($dirView) && substr($dirView,0,1) != '/') ? sprintf("%s/%s",rtrim($this->dirViews,'/'),ltrim($dirView,'/')) : $dirView;
 		}
