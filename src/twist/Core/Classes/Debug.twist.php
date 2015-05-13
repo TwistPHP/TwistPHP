@@ -146,11 +146,6 @@
 				$arrTags['server'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $strKey,'value' => $strValue));
 			}
 
-			/**
-			 * Process the stats timer bar graph
-			 * @todo tidy up masivley and made a function in Timer
-			 */
-
 			$intTotalTime = $arrTimer['end']-$arrTimer['start'];
 			$intTotalPercentage = 0;
 
@@ -188,5 +183,4 @@
 
 			return $this->resTemplate->build('_base.tpl',$arrTags);
 		}
-
 	}

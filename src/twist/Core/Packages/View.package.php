@@ -101,7 +101,7 @@ class View extends BasePackage{
 			$arrViewData['html_raw'] = $this->processElement($dirFullViewPath,$arrViewTags);
 		}else{
 			$strCacheKey = ltrim(str_replace(array(DIR_FRAMEWORK_VIEWS,DIR_PACKAGES,DIR_APP),array('core','packages','app'),$dirFullViewPath),'/');
-			$arrViewData = \Twist::Cache('twist/packages/views')->retrieve($strCacheKey);
+			$arrViewData = \Twist::Cache('twist/packages/views')->read($strCacheKey);
 
 			//Detect if the file has changed, if changed remove cache and rebuild
 			if(!is_null($arrViewData) && $arrViewData['html_hash'] !== \Twist::File()->hash($dirFullViewPath,'md5')){
@@ -116,7 +116,7 @@ class View extends BasePackage{
 				$arrViewData['html_hash'] = \Twist::File()->hash($dirFullViewPath,'md5');
 				$arrViewData['tags'] = $this->getTags($arrViewData['html_raw'],false);
 
-				\Twist::Cache('twist/packages/views')->store($strCacheKey,$arrViewData,$this->framework()->setting('VIEW_PRE_PROCESS_CACHE'));
+				\Twist::Cache('twist/packages/views')->write($strCacheKey,$arrViewData,$this->framework()->setting('VIEW_PRE_PROCESS_CACHE'));
 			}
 
 			foreach($arrViewData['tags'] as $strEachTag){
@@ -130,7 +130,7 @@ class View extends BasePackage{
 		}
 
 	    if($this->blDebugMode){
-	        \Twist::framework()->debug()->log('View','usage',array('instance' => $this->strInstanceKey,'file' => $dirView,'tags' => $arrViewData['tags']));
+	        \Twist::framework()->debug()->log('View','usage',array('instance' => $this->strInstanceKey,'file' => $dirView,'tags' => (array_key_exists('tags',$arrViewData)) ? $arrViewData['tags'] : array()));
 	    }
 
 		//Restore the current view path

@@ -105,21 +105,6 @@
 		}
 
 		/**
-		 * @deprecated
-		 * @alias write
-		 */
-		public function store($mxdUniqueID,$mxdData,$intLifeTime = 3600){
-			$this->write($mxdUniqueID,$mxdData,$intLifeTime);
-		}
-
-		/**
-		 * @deprecated
-		 * @alias read
-		 */
-		public function retrieve($mxdUniqueID){
-			return $this->read($mxdUniqueID);
-		}
-		/**
 		 * Store data in the cache, default life time is 1 hour (3600 seconds). Setting the life time to '0' will mean that the cache will be stored as a PHP Runtime Session and will be no longer exists once the current runtime has ended.
 		 * A Unique ID must be passed in so that you can reference the data again later.
 		 *
@@ -162,16 +147,20 @@
 			$strCacheName = sprintf("%s.%s",$mxdUniqueID,$this->strExtension);
 			$dirCacheFile = sprintf("%s/%s",rtrim($this->dirLocation,'/'),ltrim($strCacheName,'/'));
 
-			if($this->blCacheEnabled && file_exists($dirCacheFile)){
+			if($this->blCacheEnabled){
 
-				$arrData = json_decode(\Twist::File()->read($dirCacheFile),true);
+				if(array_key_exists($strCacheName,$this->arrRuntimeSessionCache)){
+					return $this->arrRuntimeSessionCache[$strCacheName]['data'];
+				}elseif(file_exists($dirCacheFile)){
+					$arrData = json_decode(\Twist::File()->read($dirCacheFile),true);
 
-				if(count($arrData) && array_key_exists('expiry',$arrData) && array_key_exists('data',$arrData) && $arrData['expiry'] <= \Twist::DateTime()->time()){
-					return $arrData['data'];
+					if(count($arrData) && array_key_exists('expiry',$arrData) && array_key_exists('data',$arrData) && $arrData['expiry'] <= \Twist::DateTime()->time()){
+						return $arrData['data'];
+					}
+
+					//Only gets here if the cache has expired or is invalid
+					\Twist::File()->remove($dirCacheFile);
 				}
-
-				//Only gets here if the cache has expired or is invalid
-				\Twist::File()->remove($dirCacheFile);
 			}
 
 			return null;

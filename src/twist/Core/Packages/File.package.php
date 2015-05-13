@@ -871,12 +871,12 @@ class File extends BasePackage{
 					'uniqid' => $arrParams['id'],
 					'name' => $arrParams['name'],
 					'uri' => $arrParams['uri'],
-					'include-js' => (is_null(\Twist::Cache()->retrieve('asset-js-include'))) ? 1 : 0,
+					'include-js' => (is_null(\Twist::Cache()->read('asset-js-include'))) ? 1 : 0,
 					'multiple' => ($arrParams['multiple'] == 1 || $arrParams['multiple'] == 'true') ? 1 : 0
 				);
 
 				//Store a temp session for js output
-				\Twist::Cache()->store('asset-js-include',1,0);
+				\Twist::Cache()->write('asset-js-include',1,0);
 
 				$strOut = $this->resTemplate->build('upload.tpl',$arrTags);
 				break;
@@ -888,12 +888,12 @@ class File extends BasePackage{
 					'uniqid' => $arrParams['id'],
 					'name' => $arrParams['name'],
 					'uri' => $arrParams['uri'],
-					'include-js' => (is_null(\Twist::Cache()->retrieve('asset-js-include'))) ? 1 : 0,
+					'include-js' => (is_null(\Twist::Cache()->read('asset-js-include'))) ? 1 : 0,
 	                'multiple' => ($arrParams['multiple'] == 1 || $arrParams['multiple'] == 'true') ? 1 : 0
 				);
 
 				//Store a temp session for js output
-				\Twist::Cache()->store('asset-js-include',1,0);
+				\Twist::Cache()->write('asset-js-include',1,0);
 
 				$strOut = $this->resTemplate->build('upload-html.tpl',$arrTags);
 				break;
@@ -916,11 +916,11 @@ class File extends BasePackage{
 
 				$strOut = '';
 
-				if(is_null(\Twist::Cache()->retrieve('asset-js-include'))){
+				if(is_null(\Twist::Cache()->read('asset-js-include'))){
 					$strOut = $this->resTemplate->build('upload-js.tpl');
 
 					//Store a temp session for js output
-					\Twist::Cache()->store('asset-js-include',1,0);
+					\Twist::Cache()->write('asset-js-include',1,0);
 				}
 
 				break;
