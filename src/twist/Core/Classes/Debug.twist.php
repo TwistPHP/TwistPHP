@@ -105,7 +105,12 @@
 				}
 			}
 
-			$arrTags['route_current'] = print_r($arrCurrentRoute,true);
+			$arrTags['current_route'] = '';
+			foreach($arrCurrentRoute as $strKey => $strValue){
+				$arrTags['current_route'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $strKey,'value' => $strValue));
+			}
+
+
 			$arrTags['routes'] = '';
 
 			foreach(\Twist::Route()->getAll() as $strType => $arrItems){
@@ -116,11 +121,30 @@
 				}
 			}
 
-			$arrTags['get'] = print_r($_GET,true);
-			$arrTags['post'] = print_r($_POST,true);
-			$arrTags['cookie'] = print_r($_COOKIE,true);
-			$arrTags['request_headers'] = print_r(Error::apacheRequestHeaders(),true);
-			$arrTags['server'] = print_r(Error::serverInformation(),true);
+			$arrTags['get'] = '';
+			foreach($_GET as $strKey => $strValue){
+				$arrTags['get'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $strKey,'value' => $strValue));
+			}
+
+			$arrTags['post'] = '';
+			foreach($_POST as $strKey => $strValue){
+				$arrTags['post'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $strKey,'value' => $strValue));
+			}
+
+			$arrTags['cookie'] = '';
+			foreach($_COOKIE as $strKey => $strValue){
+				$arrTags['cookie'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $strKey,'value' => $strValue));
+			}
+
+			$arrTags['request_headers'] = '';
+			foreach(Error::apacheRequestHeaders() as $strKey => $strValue){
+				$arrTags['request_headers'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $strKey,'value' => $strValue));
+			}
+
+			$arrTags['server'] = '';
+			foreach(Error::serverInformation() as $strKey => $strValue){
+				$arrTags['server'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $strKey,'value' => $strValue));
+			}
 
 			/**
 			 * Process the stats timer bar graph

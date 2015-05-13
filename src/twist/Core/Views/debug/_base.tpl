@@ -79,24 +79,25 @@
 					{data:routes}
 					</tbody>
 				</table>
-				<ul>
-					<li>Current Route</li>
-					<li>{data:route_current}</li>
-				</ul>
+
+				<h6>Current Route</h6>
+				<dl>{data:current_route}</dl>
 			</div>
 			<div class="twist-debug-column-50">
-				<ul>
-					<li>$_GET</li>
-					<li>{data:get}</li>
-					<li>$_POST</li>
-					<li>{data:post}</li>
-					<li>$_COOKIE</li>
-					<li>{data:cookie}</li>
-					<li>Request Headers</li>
-					<li>{data:request_headers}</li>
-					<li>$_SERVER</li>
-					<li>{data:server}</li>
-				</ul>
+				<h6>GET Params</h6>
+				<dl>{data:get}</dl>
+
+				<h6>POST Params</h6>
+				<dl>{data:post}</dl>
+
+				<h6>Cookies</h6>
+				<dl>{data:cookie}</dl>
+
+				<h6>Request Headers</h6>
+				<dl>{data:request_headers}</dl>
+
+				<h6>Server Information</h6>
+				<dl>{data:server}</dl>
 			</div>
 		</div>
 	</div>
