@@ -44,6 +44,7 @@ class Route extends BasePackage{
 	protected $arrRestrict = array();
 	protected $arrUnrestricted = array();
 	protected $strBaseView = null;
+	protected $dirBaseViewDir = null;
 	protected $blIgnoreBaseView = false;
 	protected $strBaseURI = null;
 	protected $strPackageURI = null;
@@ -91,7 +92,8 @@ class Route extends BasePackage{
 	public function baseView($dirViewFile = null){
 
 		if(!is_null($dirViewFile)){
-			$this->strBaseView = $dirViewFile;
+			$this->strBaseView = (substr($dirViewFile,0,1) == '/') ? $dirViewFile : sprintf('%s/%s',rtrim($this->resView->getDirectory(),'/'),$dirViewFile);
+			$this->dirBaseViewDir = dirname($this->strBaseView);
 		}
 
 		return $this->strBaseView;
@@ -1132,7 +1134,8 @@ class Route extends BasePackage{
 					if($this->blIgnoreBaseView){
 						$strPageOut = $arrTags['response'];
 					}elseif(!is_null($this->strBaseView) && $arrRoute['base_view'] === true){
-
+						//Set the directory back to the original base as we may be in a package interface using the original site base
+						$this->resView->setDirectory($this->dirBaseViewDir);
 						$strPageOut = $this->resView->build($this->strBaseView, $arrRoute['data']);
 					}elseif(!is_null($arrRoute['base_view']) && !is_bool($arrRoute['base_view'])){
 
