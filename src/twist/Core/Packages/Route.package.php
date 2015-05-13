@@ -1038,7 +1038,7 @@ class Route extends BasePackage{
 								}elseif(count($arrRoute['vars']) && array_key_exists('function',$arrRoute['vars'])){
 									$strControllerFunction = $arrRoute['vars']['function'];
 								}else{
-									$strControllerFunction = (count($arrRoute['parts'])) ? $arrRoute['parts'][0] : '_default';
+									$strControllerFunction = (count($arrRoute['parts'])) ? $arrRoute['parts'][0] : '_index';
 								}
 
 								$objController = new $strControllerClass();
