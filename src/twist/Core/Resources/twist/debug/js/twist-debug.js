@@ -71,10 +71,6 @@
 					}
 				};
 
-		for( var intLog in ['error', 'warn', 'info'] ) {
-
-		}
-
 		try {
 			var blOtherJSLibrary = false,
 					getScript = function( strURL, funSuccess ) {
@@ -103,13 +99,12 @@
 
 						domHead.appendChild( domScript );
 					},
-					loadDebugger = function() {
-						var $ = jQuery.noConflict( true );
-						$( 'body' ).append( '<p>...I am ready</p>' );
-						info( 'jQuery v.' + $.fn.jquery + ' ready' );
-
-						var jqoTwistDebugBlocks = $( '#twist-debug-blocks' ),
+					loadDebugger = function( blNoConfilct ) {
+						var $ = ( blNoConfilct === true ) ? window.jQuery.noConflict( true ) : window.jQuery,
+								jqoTwistDebugBlocks = $( '#twist-debug-blocks' ),
 								jqoTwistDebugDetails = $( '#twist-debug-details' );
+
+						info( 'jQuery v.' + $.fn.jquery + ' ready' );
 
 						jqoTwistDebugBlocks.on( 'click', 'a',
 							function( e ) {
@@ -134,27 +129,26 @@
 						);
 					};
 
-			if( typeof jQuery === 'undefined' ) {
-				blOtherJSLibrary = ( typeof $ === 'function' );
+			if( typeof window.jQuery === 'undefined' ) {
+				blOtherJSLibrary = ( typeof window.$ === 'function' );
 
 				getScript( '../src/twist/core/resources/jquery/jquery-2.1.3.min.js',
 					function() {
-						if( typeof jQuery === 'undefined' ) {
+						if( typeof window.jQuery === 'undefined' ) {
 							error( 'This is embarrassing... jQuery couldn\'t be loaded' );
 						} else {
 							if( !blOtherJSLibrary ) {
-								loadDebugger();
+								loadDebugger( false );
 							} else {
 								warn( 'Another JS library controls $' );
-								log( $ );
-								loadDebugger();
+								loadDebugger( true );
 							}
 						}
 					}
 				);
 			} else {
 				info( 'jQuery v.' + $.fn.jquery + ' exists' );
-				loadDebugger();
+				loadDebugger( false );
 			}
 		} catch( err ) {
 			error( err );
