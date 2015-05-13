@@ -44,7 +44,7 @@
 		 */
 		public function __construct(){
 
-			$jsonLanguage = file_get_contents(sprintf('%score/data/localisation/languages.json',DIR_FRAMEWORK));
+			$jsonLanguage = file_get_contents(sprintf('%sCore/Data/localisation/languages.json',DIR_FRAMEWORK));
 			$arrLanguages = json_decode($jsonLanguage,true);
 
 			//Build the array of languages to include those with variants
@@ -58,13 +58,13 @@
 				}
 			}
 
-			$jsonCountries = file_get_contents(sprintf('%score/data/localisation/countries.json',DIR_FRAMEWORK));
+			$jsonCountries = file_get_contents(sprintf('%sCore/Data/localisation/countries.json',DIR_FRAMEWORK));
 			$this->arrCountries = json_decode($jsonCountries,true);
 
-			$jsonCountries = file_get_contents(sprintf('%score/data/localisation/currencies.json',DIR_FRAMEWORK));
+			$jsonCountries = file_get_contents(sprintf('%sCore/Data/localisation/currencies.json',DIR_FRAMEWORK));
 			$this->arrCurrencies = json_decode($jsonCountries,true);
 
-			$jsonTimezones = file_get_contents(sprintf('%score/data/localisation/timezones.json',DIR_FRAMEWORK));
+			$jsonTimezones = file_get_contents(sprintf('%sCore/Data/localisation/timezones.json',DIR_FRAMEWORK));
 			$arrTimezones = json_decode($jsonTimezones,true);
 
 			foreach($arrTimezones as $arrEachTimezone){

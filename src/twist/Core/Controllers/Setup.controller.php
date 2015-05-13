@@ -345,17 +345,16 @@ class Setup extends BaseController{
 		$resFile = \Twist::File();
 		$resFile->recursiveCreate(sprintf('%s%s',$arrSession['settings']['details']['relative_path'],$arrSession['settings']['details']['packages_path']));
 		$resFile->recursiveCreate(sprintf('%s%s',$arrSession['settings']['details']['relative_path'],$arrSession['settings']['details']['uploads_path']));
-		$resFile->recursiveCreate(sprintf('%sajax',$strApplicationPath));
-		$resFile->recursiveCreate(sprintf('%sassets',$strApplicationPath));
-		$resFile->recursiveCreate(sprintf('%scache',$strApplicationPath));
-		$resFile->recursiveCreate(sprintf('%sconfig',$strApplicationPath));
-		$resFile->recursiveCreate(sprintf('%scontrollers',$strApplicationPath));
-		$resFile->recursiveCreate(sprintf('%smodels',$strApplicationPath));
-		$resFile->recursiveCreate(sprintf('%sresources',$strApplicationPath));
-		$resFile->recursiveCreate(sprintf('%sresources/css',$strApplicationPath));
-		$resFile->recursiveCreate(sprintf('%sresources/images',$strApplicationPath));
-		$resFile->recursiveCreate(sprintf('%sresources/js',$strApplicationPath));
-		$resFile->recursiveCreate(sprintf('%sviews',$strApplicationPath));
+		$resFile->recursiveCreate(sprintf('%sAssets',$strApplicationPath));
+		$resFile->recursiveCreate(sprintf('%sCache',$strApplicationPath));
+		$resFile->recursiveCreate(sprintf('%sConfig',$strApplicationPath));
+		$resFile->recursiveCreate(sprintf('%sControllers',$strApplicationPath));
+		$resFile->recursiveCreate(sprintf('%sModels',$strApplicationPath));
+		$resFile->recursiveCreate(sprintf('%sResources',$strApplicationPath));
+		$resFile->recursiveCreate(sprintf('%sResources/css',$strApplicationPath));
+		$resFile->recursiveCreate(sprintf('%sResources/images',$strApplicationPath));
+		$resFile->recursiveCreate(sprintf('%sResources/js',$strApplicationPath));
+		$resFile->recursiveCreate(sprintf('%sViews',$strApplicationPath));
 
 		//Create the config in the apps/config folder
 		$arrConfigTags = array(
@@ -369,7 +368,7 @@ class Setup extends BaseController{
 			'database_table_prefix' => $arrSession['database']['details']['table_prefix'],
 		);
 
-		file_put_contents(sprintf('%sconfig/config.php',$strApplicationPath),\Twist::View()->build('config.tpl',$arrConfigTags));
+		file_put_contents(sprintf('%sConfig/config.php',$strApplicationPath),\Twist::View()->build('config.tpl',$arrConfigTags));
 
 		$arrAppTags = array(
 			'site_root' => $arrSession['settings']['details']['site_root'],
@@ -379,7 +378,7 @@ class Setup extends BaseController{
 		);
 
 		//Create the apps config in the twist/config folder
-		file_put_contents(sprintf('%sconfig/app.php',DIR_FRAMEWORK),\Twist::View()->build('app.tpl',$arrAppTags));
+		file_put_contents(sprintf('%sConfig/app.php',DIR_FRAMEWORK),\Twist::View()->build('app.tpl',$arrAppTags));
 
 		\Twist::define('DIR_SITE_ROOT',DIR_BASE.$arrSession['settings']['details']['site_root']);
 		\Twist::define('DIR_APP',DIR_BASE.$arrSession['settings']['details']['app_path']);

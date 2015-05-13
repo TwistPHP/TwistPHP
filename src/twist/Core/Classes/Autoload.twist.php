@@ -68,8 +68,6 @@
 
 		public function load($strRequest){
 
-			$blMatchFound = false;
-
 			//Fix for matches that are in 'Twist\Core\Classes' namespace
 			if(!strstr($strRequest,'\\')){
 				$strRequest = sprintf('%s\\%s',__NAMESPACE__,$strRequest);
@@ -82,7 +80,7 @@
 				if(strstr($strRequest,'Twist\\Core\\Classes')){
 					$strFile .= '.twist.php';
 				}elseif(strstr($strRequest,'Twist\\Core\\Packages')){
-					$strFile .= '.twist.php';
+					$strFile .= '.package.php';
 				}elseif(strstr($strRequest,'Twist\\Core\\Models')){
 					$strFile .= '.model.php';
 				}elseif(strstr($strRequest,'Route')){
@@ -97,7 +95,9 @@
 					$strFile .= '.php';
 				}
 
-				$strFile = sprintf('%s/%s',strtolower(dirname($strFile)),basename($strFile));
+				$arrPrats = explode('/',$strFile);
+				$arrPrats[0] = strtolower($arrPrats[0]);
+				$strFile = implode('/',$arrPrats);
 
 				if(substr($strRequest,0,6) == 'Twist\\'){
 					$dirRequire = sprintf('%s/%s',rtrim($this->strBaseDir,'/'),ltrim($strFile));

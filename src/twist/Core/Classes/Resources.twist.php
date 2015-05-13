@@ -146,13 +146,13 @@ final class Resources{
 	protected function loadLibraryManifest(){
 
 		//Get the resource libraries
-		$strJSON = file_get_contents(sprintf('%score/resources/manifest.json',DIR_FRAMEWORK));
+		$strJSON = file_get_contents(sprintf('%sCore/Resources/manifest.json',DIR_FRAMEWORK));
 		$this->arrLibraries = json_decode($strJSON,true);
 
 		//Pre-process the paths and uris into the libraries
 		foreach($this->arrLibraries as $strKey => $arrOptions){
 			foreach($arrOptions as $strOptionKey => $arrOptionParameters){
-				$this->arrLibraries[$strKey][$strOptionKey] = $this->applyPath($arrOptionParameters,sprintf('%score/resources/',DIR_FRAMEWORK));
+				$this->arrLibraries[$strKey][$strOptionKey] = $this->applyPath($arrOptionParameters,sprintf('%sCore/Resources/',DIR_FRAMEWORK));
 			}
 		}
 	}
