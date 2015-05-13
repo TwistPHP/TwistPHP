@@ -495,11 +495,18 @@
 				$strOrder = rtrim($strOrder,',');
 			}
 
+			$blIn = false;
+
+			if(is_array($mxdValue) && count($mxdValue)) {
+				array_walk( $mxdValue, array( $this, 'escapeString' ) );
+				$blIn = true;
+			}
+
 			$strSQL = sprintf("SELECT * FROM `%s`.`%s` WHERE `%s` %s%s%s%s",
 				$this->escapeString($this->strDatabaseName),
 				$this->escapeString($strTable),
 				$this->escapeString($strField),
-				(is_array($mxdValue) && count($mxdValue)) ? sprintf('IN(%s)',implode(',',array_walk($mxdValue, array($this,'escapeString')))) : sprintf(strstr($mxdValue,'%') ? "LIKE '%s'" : "= '%s'", $this->escapeString($mxdValue)),
+				$blIn ? sprintf('IN(%s)',implode(',',$mxdValue)) : sprintf(strstr($mxdValue,'%') ? "LIKE '%s'" : "= '%s'", $this->escapeString($mxdValue)),
 				$strOrder,
 				(!is_null($intLimit)) ? sprintf(' LIMIT %d',$this->escapeString($intLimit)) : '',
 				(!is_null($intLimit) && !is_null($intOffset)) ? sprintf(',%d',$this->escapeString($intOffset)) : ''
