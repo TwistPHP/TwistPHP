@@ -1,136 +1,72 @@
 {resource:twist/debug}
-<script type="text/javascript">
-
-	if(window.jQuery === undefined){
-		var headTag = document.getElementsByTagName("head")[0];
-		var jqTag = document.createElement('script');
-		jqTag.type = 'text/javascript';
-		jqTag.src = '/twist/core/resources/jquery/jquery-2.1.3.min.js';
-		headTag.appendChild(jqTag);
-	}
-
-	function toggleDebug(){
-		$('#twistDebug').toggleClass('minimize');
-	}
-	function twistDebugTab(strTabID,resButton){
-		$('.twistTabs >div').removeClass('hide').addClass('hide');
-		$('#'+strTabID).toggleClass('hide');
-
-		$('.twistDebugHeader li').removeClass('current');
-		$(resButton).addClass('current');
-	}
-</script>
-
-<div id="twistDebug" class="minimize">
-	<div class="twistDebugHeader">
-		<a href="https://twistphp.com/docs" target="_blank"><img src="/twist/core/resources/logos/logo-32.png" width="20" title="TwistPHP" alt="TwistPHP"> Debug Bar</a>
-		<ul>
-			<li onclick="twistDebugTab('twistTabError',this);" class="current">PHP Errors</li><!--
-		--><li onclick="twistDebugTab('twistTabDatabase',this);">Query Log</li><!--
-		--><li onclick="twistDebugTab('twistTabDebug',this);">Debug/Help</li><!--
-		--><li onclick="twistDebugTab('twistTabRoutes',this);">Routes</li><!--
-		--><li onclick="twistDebugTab('twistTabViews',this);">Views</li><!--
-		--><li onclick="twistDebugTab('twistTabStats',this);">Stats</li><!--
-		--><li onclick="twistDebugTab('twistTabCache',this);">Cache</li>
-		</ul>
-		<a class="toggleButton" href="#" onclick="toggleDebug();">X</a>
+<div id="twist-debug">
+	<a href="https://twistphp.com/docs" target="_blank" id="twist-debug-icon" title="TwistPHP documentation"><img src="../src/twist/core/resources/twist/logos/logo-64.png"></a>
+	<ul id="twist-debug-blocks">
+		<li><a href="#twist-debug-messages"><span id="twist-debug-errors"><i class="fa fa-exclamation-circle"></i>2</span><span id="twist-debug-warnings"><i class="fa fa-exclamation-triangle"></i>7</span><span id="twist-debug-dumps"><i class="fa fa-comment"></i>3</span></a></li><!--
+		--><li><a href="#twist-debug-timeline"><i class="fa fa-fw fa-lg fa-clock-o"></i>1.63s</a></li><!--
+		--><li><a href="#twist-debug-memory"><i class="fa fa-fw fa-lg fa-line-chart"></i>12.64Mb</a></li><!--
+		--><li><a href="#twist-debug-database"><i class="fa fa-fw fa-lg fa-database"></i>439</a></li><!--
+		--><li><a href="#twist-debug-route"><strong>GET</strong> /shop/favourites</a></li>
+	</ul>
+</div>
+<div id="twist-debug-details">
+	<a href="#close-twist-debug-details"></a>
+	<div id="twist-debug-messages">
+		<h6>Messages</h6>
+		<div class="twist-debug-column-wrapper">
+			<div class="twist-debug-column-100">
+				{data:errors}
+			</div>
+		</div>
 	</div>
-	<div class="twistTabs">
-
-		<div id="twistTabError">
-			<div class="twistTabTitle"><strong>PHP Errors</strong>All the PHP errors that occurred during this page load</div>
-			{data:errors}
+	<div id="twist-debug-timeline">
+		<h6>Timeline</h6>
+		<div class="twist-debug-column-wrapper">
+			<div class="twist-debug-column-100">
+				<div id="twist-debug-timeline-chart">
+					<ul>
+						{data:timeline}
+					</ul>
+				</div>
+				<p>Execution Time: {data:execution_time}</p>
+			</div>
+			<div class="twist-debug-column-50"></div>
+			<div class="twist-debug-column-50"></div>
 		</div>
-
-		<div id="twistTabDatabase" class="hide">
-			<div class="twistTabTitle"><strong>Database Query Log</strong>All the database queries that where run during this page load</div>
-			{data:database}
+	</div>
+	<div id="twist-debug-memory">
+		<h6>Memory</h6>
+		<div class="twist-debug-column-wrapper">
+			<div class="twist-debug-column-50"></div>
+			<div class="twist-debug-column-50"></div>
 		</div>
-
-		<div id="twistTabDebug" class="hide">
-			<div class="twistTabTitle"><strong>Debug Log</strong>Debug messages that have been output form this page</div>
-			<ul>
-				<li>Messages on this page</li>
-				<li>Messages on other pages</li>
-				<li>Todos in the site code</li>
-				<li>Deprecated functions used</li>
-			</ul>
+	</div>
+	<div id="twist-debug-database">
+		<h6>Database Queries</h6>
+		<div class="twist-debug-column-wrapper">
+			<div class="twist-debug-column-100">
+				{data:database}
+			</div>
 		</div>
-
-		<div id="twistTabRoutes" class="hide">
-			<div class="twistTabTitle"><strong>Routes</strong>All the routes registered in the system</div>
-			<strong>Current Route</strong><br>
-			<pre>
-				{data:route_current}
-			</pre>
-			<strong>Registered Routes</strong><br>
-			<table>
-				<thead>
-				<tr>
-					<th>URI</th>
-					<th>Method</th>
-					<th>Item</th>
-				</tr>
-				</thead>
-				<tbody>
-				<tr>
-					<th>/</th>
-					<td>GET</td>
-					<td>/%</td>
-				</tr>
-				<tr>
-					<th>/test</th>
-					<td>ANY</td>
-					<td>/test/{id}</td>
-				</tr>
-				</tbody>
-			</table>
+	</div>
+	<div id="twist-debug-route">
+		<h6>Routes</h6>
+		<div class="twist-debug-column-wrapper">
+			<div class="twist-debug-column-50">
+				<ul>
+					<li>Registered Routes</li>
+					<li>Current Route</li>
+					<li>{data:route_current}</li>
+				</ul>
+			</div>
+			<div class="twist-debug-column-50">
+				<ul>
+					<li>$_GET</li>
+					<li>{data:get}</li>
+					<li>$_POST</li>
+					<li>{data:post}</li>
+				</ul>
+			</div>
 		</div>
-
-		<div id="twistTabViews" class="hide">
-			<div class="twistTabTitle"><strong>Views</strong>All the templates and elements used in this page load</div>
-			<table>
-				<thead>
-				<tr>
-					<th>Instance</th>
-					<th>File</th>
-					<th>Tags</th>
-				</tr>
-				</thead>
-				<tbody>
-				{data:views}
-				</tbody>
-			</table>
-		</div>
-
-		<div id="twistTabStats" class="hide">
-			<div class="twistTabTitle"><strong>Performance Stats</strong>Page load time stats, memory usage and other useful information</div>
-			{data:stats}
-			<ul>
-				<li>Page Process Time</li>
-				<li>Slow Pages</li>
-				<li>Recent Exceptions</li>
-				<li>Recent Errors (other pages)</li>
-			</ul>
-		</div>
-
-		<div id="twistTabCache" class="hide">
-			<div class="twistTabTitle"><strong>Cache Manager</strong>Manage the server side cache files</div>
-			<table>
-				<thead>
-				<tr>
-					<th>Instance</th>
-					<th>Key</th>
-					<th>Size</th>
-					<th>Expiry</th>
-					<th>Tools</th>
-				</tr>
-				</thead>
-				<tbody>
-				{data:cache}
-				</tbody>
-			</table>
-		</div>
-
 	</div>
 </div>

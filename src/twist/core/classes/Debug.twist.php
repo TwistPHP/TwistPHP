@@ -65,7 +65,7 @@
 				'errors' => '',
 				'database' => '',
 				'views' => '',
-				'stats' => '',
+				'timeline' => '',
 				'cache' => ''
 			);
 
@@ -85,6 +85,8 @@
 			}
 
 			$arrTags['route_current'] = print_r($arrCurrentRoute,true);
+			$arrTags['get'] = print_r($_GET,true);
+			$arrTags['post'] = print_r($_POST,true);
 
 			/**
 			 * Process the stats timer bar graph
@@ -99,32 +101,29 @@
 			$intPreviousTime = 0;
 			$intColourCounter = 0;
 
-			$arrColours = array('#2277aa','#34AA4B','#A2AA36','#AA4250','#6644AA');
-
-			$arrTags['stats'] .= '<div class="timer">';
-
 			foreach($arrTimer['log'] as $strKey => $intTime){
 
-				$arrTags['stats'] .= sprintf('<span style="width:%d%%; background-color: %s;" title="Time taken: %s">%s</span>',
-					($intTime/$intOnePercent)-$intCurrentPercentage,
-					$arrColours[$intColourCounter%count($arrColours)],
-					$intTime-$intPreviousTime,
-					$strKey
+				$arrTimelineTags = array(
+					'percentage' => ($intTime/$intOnePercent)-$intCurrentPercentage,
+					'time' => $intTime-$intPreviousTime,
+					'title' => $strKey
 				);
+
+				$arrTags['timeline'] .= $this->resTemplate->build('components/timeline-entry.tpl',$arrTimelineTags);
 
 				$intCurrentPercentage += ($intTime/$intOnePercent)-$intCurrentPercentage;
 				$intPreviousTime = $intTime;
 				$intColourCounter++;
 			}
 
-			$arrTags['stats'] .= sprintf('<span style="width:%d%%; background-color: %s;" title="Time taken: %s">%s</span>',
-				ceil(100-$intCurrentPercentage),
-				$arrColours[$intColourCounter%count($arrColours)],
-				$intTotalTime-$intPreviousTime,
-				'Page Load'
+			$arrTimelineTags = array(
+				'percentage' => ceil(100-$intCurrentPercentage),
+				'time' => $intTotalTime-$intPreviousTime,
+				'title' => 'Page Load'
 			);
 
-			$arrTags['stats'] .= '</div> Execution Time: '.$intTotalTime;
+			$arrTags['timeline'] .= $this->resTemplate->build('components/timeline-entry.tpl',$arrTimelineTags);
+			$arrTags['execution_time'] = $intTotalTime;
 
 			return $this->resTemplate->build('_base.tpl',$arrTags);
 		}
