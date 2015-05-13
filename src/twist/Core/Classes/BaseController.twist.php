@@ -23,6 +23,7 @@
 
 	namespace Twist\Core\Classes;
 	use Twist\Core\Models\Route\Meta;
+	use Twist\Core\Classes\Error;
 
 	class BaseController{
 
@@ -42,8 +43,7 @@
 		}
 
 		public function _default(){
-			Error::errorPage(404);
-			return false;
+			return $this->_404();
 		}
 
 		public function _index(){
@@ -51,8 +51,7 @@
 		}
 
 		public function _fallback(){
-			Error::errorPage(404);
-			return false;
+			return $this->_404();
 		}
 
         final protected function _aliasURI($strURI,$strFunctionName){
@@ -85,13 +84,25 @@
 			}elseif(array_key_exists(strtolower($strCallFunctionName),$arrControllerFunctions)){
 				return $this->$arrControllerFunctions[strtolower($strCallFunctionName)]();
 			}else{
-				Error::errorPage(404);
-				return false;
+				return $this->_404();
 			}
 		}
 
         final protected function _route($strReturnKey = null){
 			return array_key_exists($strReturnKey, $this->arrRoute) ? $this->arrRoute[$strReturnKey] : $this->arrRoute;
+		}
+
+		final public function _404(){
+			return $this->_error(404);
+		}
+
+		final public function _error($intError){
+			return $this->_response($intError);
+		}
+
+		final public function _response($intError){
+			Error::errorPage($intError);
+			return false;
 		}
 
 		/**
