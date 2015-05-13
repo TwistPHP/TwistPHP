@@ -387,16 +387,14 @@
 
 			$arrParts = explode('\\',$strPackageRoute);
 
-			if($this->isInstalled(strtolower($arrParts[0]))){
-
-				$strRouteClass = sprintf('\Packages\%s',str_replace('\\','\\Route\\',$strPackageRoute));
+			if($this->isInstalled(strtolower($arrParts[1]))){
 
 				//Call the interface
-				$objInterface = new $strRouteClass($arrParts[0]);
+				$objInterface = new $strPackageRoute($arrParts[1]);
 				$objInterface->baseURI($strRegisteredURI);
 
 				//Set the view directory to the one in the package
-				$objInterface->setDirectory(sprintf('%s/%s/views/',DIR_PACKAGES,$arrParts[0]));
+				$objInterface->setDirectory(sprintf('%s/%s/views/',DIR_PACKAGES,$arrParts[1]));
 
 				if($mxdBaseView === false || is_null($mxdBaseView)){
 					$objInterface->baseViewIgnore();

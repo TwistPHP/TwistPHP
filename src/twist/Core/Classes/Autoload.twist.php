@@ -83,13 +83,15 @@
 					$strFile .= '.package.php';
 				}elseif(strstr($strRequest,'Twist\\Core\\Models')){
 					$strFile .= '.model.php';
-				}elseif(strstr($strRequest,'Route')){
-					$strFile .= '.route.php';
-				}elseif(strstr($strRequest,'Controller')){
+				}elseif(strstr($strRequest,'Twist\\Core\\Controllers')){
 					$strFile .= '.controller.php';
-				}elseif(strstr($strRequest,'Model')){
+				}elseif(strstr($strRequest,'\\Routes\\')){
+					$strFile .= '.route.php';
+				}elseif(strstr($strRequest,'\\Controllers\\')){
+					$strFile .= '.controller.php';
+				}elseif(strstr($strRequest,'\\Models\\')){
 					$strFile .= '.model.php';
-				}elseif(strstr($strRequest,'Package')){
+				}elseif(strstr($strRequest,'\\Packages\\')){
 					$strFile .= '.package.php';
 				}else{
 					$strFile .= '.php';
@@ -98,9 +100,15 @@
 				$arrPrats = explode('/',$strFile);
 				$arrPrats[0] = strtolower($arrPrats[0]);
 				$strFile = implode('/',$arrPrats);
+				unset($arrPrats[0]);
+				$strFileWithoutRoot = implode('/',$arrPrats);
 
 				if(substr($strRequest,0,6) == 'Twist\\'){
 					$dirRequire = sprintf('%s/%s',rtrim($this->strBaseDir,'/'),ltrim($strFile));
+				}elseif(substr($strRequest,0,4) == 'App\\'){
+					$dirRequire = sprintf('%s/%s',rtrim(DIR_APP,'/'),ltrim($strFileWithoutRoot));
+				}elseif(substr($strRequest,0,9) == 'Packages\\'){
+					$dirRequire = sprintf('%s/%s',rtrim(DIR_PACKAGES,'/'),ltrim($strFileWithoutRoot));
 				}else{
 					$dirRequire = sprintf('%s/%s',rtrim(DIR_SITE_ROOT,'/'),ltrim($strFile));
 				}

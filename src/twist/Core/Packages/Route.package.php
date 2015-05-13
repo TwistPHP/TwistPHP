@@ -322,7 +322,7 @@ class Route extends BasePackage{
 	}
 
 	/**
-	 * Add a UI (User Interface provided by an installed package) that will be called upon a any request (HTTP METHOD) to the given URI.
+	 * Add a pre-defined package route (interface) (provided by installed packages) that will be called upon a any request (HTTP METHOD) to the given URI.
 	 * The URI can be made dynamic by adding a '%' symbol at the end.
 	 *
 	 * @param $strURI
@@ -331,7 +331,7 @@ class Route extends BasePackage{
 	 * @param bool $mxdCache
 	 * @param array $arrData
 	 */
-	public function ui($strURI,$strPackage,$mxdBaseView = true,$mxdCache = false,$arrData = array()){
+	public function package($strURI,$strPackage,$mxdBaseView = true,$mxdCache = false,$arrData = array()){
 		$this->addRoute($strURI,'package',$strPackage,$mxdBaseView,$mxdCache,$arrData);
 	}
 
@@ -845,10 +845,10 @@ class Route extends BasePackage{
 
 				//Check all the unrestricted pages for exact matches and wildcards
 				if(count($this->arrUnrestricted)){
-					foreach($this->arrUnrestricted as $strUnRestrictURI => $blWildCard){
+					foreach($this->arrUnrestricted as $strUnrestrictURI => $blWildCard){
 
-						$strUnRestrictExpression = sprintf("#^(%s[\/]?)%s#", str_replace('/','\/',rtrim($strUnRestrictURI, '/')), $blWildCard ? '' : '$');
-						if(array_key_exists(rtrim($strCurrentURI,'/'),$strUnRestrictURI) || ($blWildCard && preg_match($strUnRestrictExpression, $strCurrentURI, $arrUnRestrictedMatches))){
+						$strUnrestrictExpression = sprintf("#^(%s[\/]?)%s#", str_replace('/','\/',rtrim($strUnrestrictURI, '/')), $blWildCard ? '' : '$');
+						if(array_key_exists(rtrim($strCurrentURI,'/'),$strUnrestrictURI) || ($blWildCard && preg_match($strUnrestrictExpression, $strCurrentURI, $arrUnrestrictedMatches))){
 
 							$arrMatch = array(
 								'login_required' => false,

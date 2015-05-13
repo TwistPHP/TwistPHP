@@ -125,7 +125,7 @@
 
         protected static function coreResources(){
 
-            $strResourcesURI = sprintf('%score/resources/',FRAMEWORK_URI);
+            $strResourcesURI = sprintf('%sCore/Resources/',FRAMEWORK_URI);
 
             $arrResources = array(
                 'arable' => sprintf('%sarable/arable.min.css',$strResourcesURI),

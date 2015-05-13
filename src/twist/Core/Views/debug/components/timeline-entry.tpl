@@ -1,1 +1,1 @@
-<li style="left: {data:percentage}%;" title="{data:time}">{data:title}</li>
+<li style="left: {data:total_percentage}%;" title="Time Taken: {data:time}s ({data:percentage}%)">{data:title}</li>

@@ -327,7 +327,7 @@ class View extends BasePackage{
 				$intLineNo = $this->locateTag($this->dirCurrentView,$this->strCurrentTag);
 				throw new \Twist\Core\Classes\TwistException(sprintf("View file <em>%s</em> was not found or does not exist in <em>%s</em>",str_replace(DIR_BASE,'/',$dirFullViewPath),str_replace(DIR_BASE,'/',$this->dirCurrentView)),11102,$this->dirCurrentView,$intLineNo);
 			}else{
-				throw new \Twist\Core\Classes\TwistException(sprintf("View file <em>%s</em> was not found or does not exist%s",str_replace(DIR_BASE,'/',$dirFullViewPath)),11102);
+				throw new \Twist\Core\Classes\TwistException(sprintf("View file <em>%s</em> was not found or does not exist",str_replace(DIR_BASE,'/',$dirFullViewPath)),11102);
 			}
 		}
 	}

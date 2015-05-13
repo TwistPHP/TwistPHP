@@ -48,7 +48,7 @@ final class Resources{
 		$blInline = false;
 
 		if($arrParts[0] == 'core-uri'){
-			return sprintf('%score/resources/',FRAMEWORK_URI);
+			return sprintf('%sCore/Resources/',FRAMEWORK_URI);
 		}
 
 		if( count( $arrParts ) > 1 ) {

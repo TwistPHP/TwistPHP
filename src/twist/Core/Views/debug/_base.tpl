@@ -1,12 +1,11 @@
-{resource:twist/debug}
 <div id="twist-debug">
-	<a href="https://twistphp.com/docs" target="_blank" id="twist-debug-icon" title="TwistPHP documentation"><img src="../src/twist/core/resources/twist/logos/logo-64.png"></a>
+	<a href="https://twistphp.com/docs" target="_blank" id="twist-debug-icon" title="TwistPHP documentation"><img src="{resource:core-uri}twist/logos/logo-64.png"></a>
 	<ul id="twist-debug-blocks">
-		<li><a href="#twist-debug-messages"><span id="twist-debug-errors"><i class="fa fa-exclamation-circle"></i>2</span><span id="twist-debug-warnings"><i class="fa fa-exclamation-triangle"></i>7</span><span id="twist-debug-dumps"><i class="fa fa-comment"></i>3</span></a></li><!--
-		--><li><a href="#twist-debug-timeline"><i class="fa fa-fw fa-lg fa-clock-o"></i>1.63s</a></li><!--
-		--><li><a href="#twist-debug-memory"><i class="fa fa-fw fa-lg fa-line-chart"></i>12.64Mb</a></li><!--
-		--><li><a href="#twist-debug-database"><i class="fa fa-fw fa-lg fa-database"></i>439</a></li><!--
-		--><li><a href="#twist-debug-route"><strong>GET</strong> /shop/favourites</a></li>
+		<li><a href="#twist-debug-messages"><span id="twist-debug-errors"><i class="fa fa-exclamation-circle"></i>{data:warning_count}</span><span id="twist-debug-warnings"><i class="fa fa-exclamation-triangle"></i>{data:notice_count}</span><span id="twist-debug-dumps"><i class="fa fa-comment"></i>{data:other_count}</span></a></li><!--
+		--><li><a href="#twist-debug-timeline"><i class="fa fa-fw fa-lg fa-clock-o"></i>{data:execution_time}s</a></li><!--
+		--><li><a href="#twist-debug-memory"><i class="fa fa-fw fa-lg fa-line-chart"></i>{bytestosize[data:memory/peak]}</a></li><!--
+		--><li><a href="#twist-debug-database"><i class="fa fa-fw fa-lg fa-database"></i>{data:database_query_count}</a></li><!--
+		--><li><a href="#twist-debug-route"><strong>GET</strong> {route:uri}</a></li>
 	</ul>
 </div>
 <div id="twist-debug-details">
@@ -37,7 +36,20 @@
 	<div id="twist-debug-memory">
 		<h6>Memory</h6>
 		<div class="twist-debug-column-wrapper">
-			<div class="twist-debug-column-50"></div>
+			<div class="twist-debug-column-100">
+				<div id="twist-debug-memory-chart">
+					<ul>
+						{data:memory_chart}
+					</ul>
+				</div>
+			</div>
+			<div class="twist-debug-column-50">
+				<p>
+					Memory Limit: {data:memory/limit}
+					Peak Memory: {bytestosize[data:memory/peak]}
+					End Memory: {bytestosize[data:memory/end]}
+				</p>
+			</div>
 			<div class="twist-debug-column-50"></div>
 		</div>
 	</div>
@@ -45,7 +57,7 @@
 		<h6>Database Queries</h6>
 		<div class="twist-debug-column-wrapper">
 			<div class="twist-debug-column-100">
-				{data:database}
+				{data:database_queries}
 			</div>
 		</div>
 	</div>
@@ -65,8 +77,11 @@
 					<li>{data:get}</li>
 					<li>$_POST</li>
 					<li>{data:post}</li>
+					<li>$_COOKIE</li>
+					<li>{data:cookie}</li>
 				</ul>
 			</div>
 		</div>
 	</div>
 </div>
+{resource:twist/debug}

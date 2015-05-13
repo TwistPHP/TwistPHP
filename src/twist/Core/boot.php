@@ -60,8 +60,14 @@
 	Twist::define('DIR_FRAMEWORK_INSTALL',sprintf('%sInstall/',DIR_FRAMEWORK));
 	Twist::define('DIR_BASE',realpath(sprintf('%s/../',DIR_FRAMEWORK)).'/');
 
-	if(file_exists(sprintf('%s/../Config/app.php',dirname(__FILE__)))){
-		require_once sprintf('%s/../Config/app.php',dirname(__FILE__));
+	$strAppConfig = sprintf('%s/../Config/app.php',dirname(__FILE__));
+	$blAppConfigExists = file_exists($strAppConfig);
+
+	if($blAppConfigExists){
+		require_once $strAppConfig;
+	}
+
+	if($blAppConfigExists || (defined('DIR_SITE_ROOT') && defined('DIR_APP') && defined('DIR_PACKAGES') && defined('DIR_UPLOADS'))){
 
 		Twist::define('DIR_APP_AJAX',sprintf('%s/Ajax/',rtrim(DIR_APP,'/')));
 		Twist::define('DIR_APP_ASSETS',sprintf('%s/Assets/',rtrim(DIR_APP,'/')));

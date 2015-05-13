@@ -53,6 +53,12 @@
 				'start' => $this->getMicroTime($intStartMicroTime),
 				'end' => 0,
 				'total' => 0,
+				'memory' => array(
+					'start' => memory_get_usage(),
+					'end' => 0,
+					'peak' => 0,
+					'limit' => ini_get('memory_limit'),
+				),
 				'log' => array()
 			);
 		}
@@ -65,6 +71,8 @@
 		public function stop(){
 			$this->arrTimer['end'] = $this->getMicroTime();
 			$this->arrTimer['total'] = ($this->arrTimer['end'] - $this->arrTimer['start']);
+			$this->arrTimer['memory']['end'] = memory_get_usage();
+			$this->arrTimer['memory']['peak'] = memory_get_peak_usage();
 
 			if(strstr($this->arrTimer['total'],'E')){
 				$this->arrTimer['total'] = 0;
@@ -97,7 +105,10 @@
 		 */
 		public function log($strLogKey){
 			$intTotalTime = ($this->getMicroTime() - $this->arrTimer['start']);
-			$this->arrTimer['log'][$strLogKey] = (strstr($intTotalTime,'E')) ? 0 : $intTotalTime;
-			return $this->arrTimer['log'][$strLogKey];
+			$this->arrTimer['log'][$strLogKey] = array(
+				'time' => (strstr($intTotalTime,'E')) ? 0 : $intTotalTime,
+				'memory' => memory_get_usage()
+			);
+			return $this->arrTimer['log'][$strLogKey]['time'];
 		}
 	}

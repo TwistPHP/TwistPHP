@@ -23,45 +23,42 @@
 
 	namespace Twist\Core\Classes;
 
-	if(!class_exists('TwistException')){
+	interface TwistExceptionInterface{
 
-		interface TwistExceptionInterface{
+		/* Protected methods inherited from Exception class */
+		public function getMessage();                 // Exception message
+		public function getCode();                    // User-defined Exception code
+		public function getFile();                    // Source filename
+		public function getLine();                    // Source line
+		public function getTrace();                   // An array of the backtrace()
+		public function getTraceAsString();           // Formated string of trace
 
-			/* Protected methods inherited from Exception class */
-			public function getMessage();                 // Exception message
-			public function getCode();                    // User-defined Exception code
-			public function getFile();                    // Source filename
-			public function getLine();                    // Source line
-			public function getTrace();                   // An array of the backtrace()
-			public function getTraceAsString();           // Formated string of trace
+		/* Overrideable methods inherited from Exception class */
+		public function __toString();                 // formated string for display
+		public function __construct($message = null, $code = 0);
+	}
 
-			/* Overrideable methods inherited from Exception class */
-			public function __toString();                 // formated string for display
-			public function __construct($message = null, $code = 0);
+	class TwistException extends \Exception implements TwistExceptionInterface{
+
+		protected $message = 'Unknown exception';     // Exception message
+		private   $string;                            // Unknown
+		protected $code    = 0;                       // User-defined exception code
+		protected $file;                              // Source filename of exception
+		protected $line;                              // Source line of exception
+		private   $trace;                             // Unknown
+
+		public function __construct($message = null, $code = 0, $file = '', $line = 0){
+			if(!$message){
+				throw new $this('Unknown Exception (No message passed) '. get_class($this));
+			}
+
+			parent::__construct($message, $code);
+
+			$this->file = $file;
+			$this->line = $line;
 		}
 
-		class TwistException extends \Exception implements TwistExceptionInterface{
-
-			protected $message = 'Unknown exception';     // Exception message
-			private   $string;                            // Unknown
-			protected $code    = 0;                       // User-defined exception code
-			protected $file;                              // Source filename of exception
-			protected $line;                              // Source line of exception
-			private   $trace;                             // Unknown
-
-			public function __construct($message = null, $code = 0, $file = '', $line = 0){
-				if(!$message){
-					throw new $this('Unknown '. get_class($this));
-				}
-
-				parent::__construct($message, $code);
-
-				$this->file = $file;
-				$this->line = $line;
-			}
-
-			public function __toString(){
-				return get_class($this) . " '{$this->message}' in {$this->file}({$this->line})\n" . "{$this->getTraceAsString()}";
-			}
+		public function __toString(){
+			return get_class($this) . " '{$this->message}' in {$this->file}({$this->line})\n" . "{$this->getTraceAsString()}";
 		}
 	}

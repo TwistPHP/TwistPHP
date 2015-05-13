@@ -36,7 +36,7 @@
 			public static function package($strPackageName){
 
 				$strObjectRef = sprintf('userPackage_%s',$strPackageName);
-				$strPackage = sprintf('\Package\%s',$strPackageName);
+				$strPackage = sprintf('\Packages\%s\Models\%s',$strPackageName,$strPackageName);
 
 				$resPackage = (!Instance::isObject($strObjectRef)) ? new $strPackage() : Instance::retrieveObject($strObjectRef);
 				Instance::storeObject($strObjectRef,$resPackage);
