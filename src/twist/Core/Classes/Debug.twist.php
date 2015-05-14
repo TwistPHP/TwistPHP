@@ -180,6 +180,7 @@
 			$arrTags['memory_chart'] .= $this->resTemplate->build('components/timeline-entry.tpl',$arrTimelineTags);
 
 			$arrTags['execution_time'] = round($intTotalTime,4);
+			$arrTags['execution_time_formatted'] = ($intTotalTime < 1) ? round($intTotalTime*1000).'ms' : round($intTotalTime,3).'s';
 
 			return $this->resTemplate->build('_base.tpl',$arrTags);
 		}

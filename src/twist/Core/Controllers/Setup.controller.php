@@ -355,6 +355,8 @@ class Setup extends BaseController{
 		$resFile->recursiveCreate(sprintf('%sResources/images',$strApplicationPath));
 		$resFile->recursiveCreate(sprintf('%sResources/js',$strApplicationPath));
 		$resFile->recursiveCreate(sprintf('%sViews',$strApplicationPath));
+		$resFile->recursiveCreate(sprintf('%sTwist',$strApplicationPath));
+		$resFile->recursiveCreate(sprintf('%sPackages',$strApplicationPath));
 
 		//Create the config in the apps/config folder
 		$arrConfigTags = array(
