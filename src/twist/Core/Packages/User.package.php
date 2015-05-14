@@ -46,6 +46,7 @@ class User extends BasePackage{
 	protected $blUserValidatedSession = false;
 	protected $intUserID = 0;
     private $blRequestsProcessed = false;
+    private $blActivityLogged = false;
 
 	public function __construct(){
 
@@ -85,8 +86,12 @@ class User extends BasePackage{
 
 			if(!is_null($this->resCurrentUser)){
 				$this->intUserID = $this->resCurrentUser->id();
-				$this->resCurrentUser->lastActive();
-				$this->resCurrentUser->commit();
+
+				if($this->blActivityLogged == false){
+					$this->resCurrentUser->lastActive();
+					$this->resCurrentUser->commit();
+					$this->blActivityLogged = true;
+				}
 			}
 
 		}else{
@@ -224,9 +229,12 @@ class User extends BasePackage{
 		$objSession->data('user-session_key',$strSessionKey);
 		$objSession->data('user-logged_in',\Twist::DateTime()->time());
 
-		$this->resCurrentUser->lastLogin($_SERVER['REMOTE_ADDR']);
-		$this->resCurrentUser->lastActive();
-		$this->resCurrentUser->commit();
+		if($this->blActivityLogged == false){
+			$this->resCurrentUser->lastLogin($_SERVER['REMOTE_ADDR']);
+			$this->resCurrentUser->lastActive();
+			$this->resCurrentUser->commit();
+			$this->blActivityLogged = true;
+		}
 
 		$this->intUserID = $intUserID;
 
