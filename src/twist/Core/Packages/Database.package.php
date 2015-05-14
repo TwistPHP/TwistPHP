@@ -242,6 +242,26 @@
 			$this->resResult = $this->resLibrary->query($strQuery);
 			$arrResult = \Twist::Timer('database-query')->stop();
 
+			$arrTrace = debug_backtrace();
+			$arrStack = array();
+
+			$intKey = 1;
+			$arrStack[] = array(
+				'file' => $arrTrace[$intKey]['file'],
+				'line' => $arrTrace[$intKey]['line'],
+				'function' => $arrTrace[$intKey]['function']
+			);
+
+			while(strstr($arrTrace[$intKey]['file'],'Database.package.php')){
+
+				$intKey++;
+				$arrStack[] = array(
+					'file' => $arrTrace[$intKey]['file'],
+					'line' => $arrTrace[$intKey]['line'],
+					'function' => $arrTrace[$intKey]['function']
+				);
+			}
+
 			//Log the stats of the query
 			\Twist::framework()->debug()->log('Database','queries',array(
 				'instance' => $this->strConnectionKey,
@@ -249,7 +269,8 @@
 				'time' => $arrResult['total'],
 				'status' => (is_object($this->resResult) || $this->resResult),
 				'result' => $this -> getNumberRows(),
-				'error' => (is_object($this->resResult) || $this->resResult) ? '' : $this->resLibrary->errorString()
+				'error' => (is_object($this->resResult) || $this->resResult) ? '' : $this->resLibrary->errorString(),
+				'trace' => array_reverse($arrStack)
 			));
 
 			return ($this->resResult);
