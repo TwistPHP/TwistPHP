@@ -137,23 +137,23 @@
 			}elseif($intSecondsDifference < 120){
 				return ($blFuture) ? 'In an minute' : 'A minute ago';
 			}elseif($intSecondsDifference < 3600){
-				$strOut = floor($intSecondsDifference / 60).' minutes';
+				$strOut = ceil($intSecondsDifference / 60).' minutes';
 			}elseif($intSecondsDifference < 7200){
 				return ($blFuture) ? 'In an hour' : 'An hour ago';
 			}elseif($intSecondsDifference < 86400){
-				$strOut = floor($intSecondsDifference / 3600).' hours';
+				$strOut = ceil($intSecondsDifference / 3600).' hours';
 			}elseif($intSecondsDifference < 172800){
 				return ($blFuture) ? 'Tomorrow' : 'Yesterday';
 			}elseif($intSecondsDifference < $intMonthSeconds){
-				$strOut = floor($intSecondsDifference / 86400).' days';
+				$strOut = ceil($intSecondsDifference / 86400).' days';
 			}elseif($intSecondsDifference < $intMonthSeconds * 2){
 				return ($blFuture) ? 'In a month' : 'A month ago';
 			}elseif($intSecondsDifference < $this->fltYearDays * 86400){
-				$strOut = floor( $intSecondsDifference / $intMonthSeconds ).' months';
+				$strOut = ceil( $intSecondsDifference / $intMonthSeconds ).' months';
 			}elseif($intSecondsDifference < $this->fltYearDays * 86400 * 2){
 				return ($blFuture) ? 'In a year' : 'A year ago';
 			}else{
-				$strOut = floor($intSecondsDifference / ($this->fltYearDays * 86400)).' years';
+				$strOut = ceil($intSecondsDifference / ($this->fltYearDays * 86400)).' years';
 			}
 
 			return ($blFuture) ? 'In '.$strOut : $strOut.' ago';

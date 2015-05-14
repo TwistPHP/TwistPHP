@@ -135,7 +135,7 @@ class User extends BasePackage{
 	}
 
 	/**
-	 * @alias currentID
+	 * @alias currentLevel
 	 * @return null
 	 */
 	public function loggedInLevel(){
