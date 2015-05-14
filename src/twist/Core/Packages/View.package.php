@@ -310,25 +310,22 @@ class View extends BasePackage{
 			}
 		}
 
-		if(is_file($dirFullViewPath)){
+		$strOverridePath = null;
+
+		if(substr($dirFullViewPath,0,strlen(DIR_FRAMEWORK_VIEWS)) == DIR_FRAMEWORK_VIEWS){
+			//Framework View - check DIR_APP/twist/core/view
+			$strOverridePath = sprintf('%s/twist/Core/Views/%s',rtrim(DIR_APP,'/'),ltrim(substr($dirFullViewPath,strlen(DIR_FRAMEWORK_VIEWS)-1),'/'));
+		}elseif(substr($dirFullViewPath,0,strlen(DIR_PACKAGES)) == DIR_PACKAGES){
+			//Packages View - check DIR_APP/packages (no -1 required for packages)
+			$strOverridePath = sprintf('%s/packages/%s',rtrim(DIR_APP,'/'),ltrim(substr($dirFullViewPath,strlen(DIR_PACKAGES)),'/'));
+		}
+
+		if(is_file($dirFullViewPath) || is_file($strOverridePath)){
 
 			//Set the current view to the original full path before using a replacement
 			$this->dirCurrentView = $dirFullViewPath;
 
-			if(substr($dirFullViewPath,0,strlen(DIR_FRAMEWORK_VIEWS)) == DIR_FRAMEWORK_VIEWS){
-
-				//Framework View - check DIR_APP/twist/core/view
-				$strOverridePath = sprintf('%s/twist/Core/Views/%s',rtrim(DIR_APP,'/'),ltrim(substr($dirFullViewPath,strlen(DIR_FRAMEWORK_VIEWS)-1),'/'));
-				$dirFullViewPath = (is_file($strOverridePath)) ? $strOverridePath : $dirFullViewPath;
-
-			}elseif(substr($dirFullViewPath,0,strlen(DIR_PACKAGES)) == DIR_PACKAGES){
-
-				//Packages View - check DIR_APP/packages
-				$strOverridePath = sprintf('%s/packages/%s',rtrim(DIR_APP,'/'),ltrim(substr($dirFullViewPath,strlen(DIR_PACKAGES)-1),'/'));
-				$dirFullViewPath = (is_file($strOverridePath)) ? $strOverridePath : $dirFullViewPath;
-			}
-
-			return $dirFullViewPath;
+			return (is_file($strOverridePath)) ? $strOverridePath : $dirFullViewPath;
 		}else{
 
 			if(!is_null($this->dirCurrentView)){
