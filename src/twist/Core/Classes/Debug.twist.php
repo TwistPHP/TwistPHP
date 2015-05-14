@@ -107,7 +107,7 @@
 
 			$arrTags['current_route'] = '';
 			foreach($arrCurrentRoute as $strKey => $strValue){
-				$arrTags['current_route'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $strKey,'value' => $strValue));
+				$arrTags['current_route'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $strKey,'value' => htmlentities($strValue)));
 			}
 
 
