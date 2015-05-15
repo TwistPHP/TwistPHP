@@ -995,9 +995,14 @@ class Route extends BasePackage{
 				die();
 			}else{
 
-				$arrRestriction = $this->currentRestriction($arrRoute['uri']);
-
-				\Twist::User()->loginURL($arrRestriction['login_uri']);
+				//Detect if there are any restrctons, if none then skip this step
+				if(count($this->arrRestrict)){
+					$arrRestriction = $this->currentRestriction($arrRoute['uri']);
+					
+					\Twist::User()->loginURL($arrRestriction['login_uri']);
+				}else{
+					$arrRestriction = array('login_required' => false,'allow_access' => true);
+				}
 
 				if($arrRestriction['login_required']){
 					\Twist::User()->setAfterLoginRedirect();
