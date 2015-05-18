@@ -32,6 +32,18 @@
 			"js": ["jquery-2.1.3.min.js"]
 		}
 	},
+	"jquery-ui": {
+		"1.11.4": {
+			"default": true,
+			"css": ["jquery-ui.min.css"],
+			"js": ["jquery-ui.min.js"]
+		},
+		"themed": {
+			"default": false,
+			"css": ["jquery-ui.min.css","jquery-ui.structure.min.css","jquery-ui.theme.min.css"],
+			"js": ["jquery-ui.min.js"]
+		}
+	},
 	"material-design-color-palette": {
 		"1.0.0": {
 			"default": true,
@@ -84,12 +96,12 @@
 			"js": ["js/twist-debug.js"]
 		},
 		"css": {
-			"default": true,
+			"default": false,
 			"css": ["css/twist-debug.min.css"],
 			"js": []
 		},
 		"js": {
-			"default": true,
+			"default": false,
 			"css": [],
 			"js": ["js/twist-debug.js"]
 		}
