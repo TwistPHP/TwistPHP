@@ -35,22 +35,19 @@ try {
 							return strHaystack.toLowerCase().indexOf( strNeedle.toLowerCase() ) !== -1;
 						}
 					},
+				hasOwnProperty = function( objSubject, strProperty ) {
+						return ( oldIE() && Object.prototype.hasOwnProperty.call( objSubject, strProperty ) ) || objSubject.hasOwnProperty( strProperty );
+					},
 				isBlank = function( mxdValue ) {
 						return mxdValue.replace( /[\s\t\r\n]*/g, '' ) == '';
 					},
-				ie = function( mxdVersion ) {
+				oldIE = function() {
 						return navigator.userAgent.indexOf( 'MSIE ' );
-					}
-				isNull = function( mxdValue ) {
-						return typeof( mxdValue ) === 'null' || mxdValue === null;
-					},
-				isSet = function( mxdValue ) {
-						return mxdValue !== null && mxdValue !== undefined && typeof mxdValue !== 'null' && typeof mxdValue !== 'undefined' && mxdValue !== 'undefined';
 					},
 				log = function() {
 						var arrArguements = arguments;
-						if( isSet( window.console )
-								&& isSet( window.console.log )
+						if( window.console
+								&& window.console.log
 								&& arrArguements.length > 0 ) {
 							for( var intArguement in arrArguements ) {
 								window.console.log( arrArguements[intArguement] );
@@ -61,9 +58,7 @@ try {
 						var intLength = 0;
 						if( typeof objIn === 'object' ) {
 							for( var mxdKey in objIn ) {
-								if( ( ie()
-										&& Object.prototype.hasOwnProperty.call( objIn, mxdKey ) )
-										|| objIn.hasOwnProperty( mxdKey ) ) {
+								if( hasOwnProperty( objIn, mxdKey ) ) {
 									intLength++;
 								}
 							}
@@ -71,8 +66,8 @@ try {
 						return intLength;
 					},
 				prettySize = function( intBytes, blUseSpace ) {
-						var arrLimits = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-						var intLimit = 0;
+						var arrLimits = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+								intLimit = 0;
 						while( arrLimits[intLimit]
 								&& intBytes > Math.pow( 1024, intLimit + 1 ) ) {
 							intLimit++;
@@ -82,7 +77,93 @@ try {
 				round = function( intNumber, intDP ) {
 						intDP = ( typeof intDP !== 'number' ) ? 0 : intDP;
 						return intDP === 0 ? parseInt( Math.round( intNumber * Math.pow( 10, intDP ) ) / Math.pow( 10, intDP ) ) : parseFloat( Math.round( intNumber * Math.pow( 10, intDP ) ) / Math.pow( 10, intDP ) );
-					};
+					},
+				serializeJSON = function( jqoForm ) {
+							var objJSON = {},
+									arrFormElements = [];
+
+							jQuery.map( jqoForm.serializeArray(),
+									function( arrElement, intIndex ) {
+										arrFormElements.push( { name: arrElement.name, value: arrElement.value } );
+									}
+							),
+							jqoForm.find( 'input[type="submit"][name][value], input[type="reset"][name][value], input[type="button"][name][value], button[name][value]' ).each(
+									function() {
+										var jqoElement = $( this );
+										arrFormElements.push( { name: jqoElement.attr( 'name' ), value: jqoElement.val() } );
+									}
+							);
+
+							var returnNameObject = function( strFullName, strNameSoFar, strName, mxdValue ) {
+								var objOut = {},
+										arrNameMatches = strName.match( /^(\[([^\[]*)\])((\[[^\[]*\])*)$/i );
+
+								if( arrNameMatches ) {
+									var strThisKey = arrNameMatches[2];
+
+									if( isBlank( strThisKey ) ) {
+										var intKey = 1,
+												blKeyExists = true;
+
+										do {
+											var blKeyFree = true;
+											$.each( arrFormElements,
+													function( intIndex, arrFormElement ) {
+														if( contains( strNameSoFar + '[' + intKey + ']', arrFormElement.name ) ) {
+															intKey++;
+															blKeyFree = false;
+														}
+													}
+											);
+
+											if( blKeyFree ) {
+												var blKeyReplaced = false;
+
+												$.each( arrFormElements,
+														function( intIndex, arrFormElement ) {
+															if( !blKeyReplaced
+																	&& arrFormElement.name === strNameSoFar + '[]'
+																	&& arrFormElement.value === mxdValue ) {
+																arrFormElements[intIndex].name = strNameSoFar + '[' + intKey + ']';
+																blKeyReplaced = true;
+															}
+														}
+												);
+
+												blKeyExists = false;
+											}
+										} while( blKeyExists );
+
+										strThisKey = intKey;
+									}
+
+									if( arrNameMatches[3] ) {
+										objOut[strThisKey] = returnNameObject( strFullName, strNameSoFar + '[' + strThisKey + ']', arrNameMatches[3], mxdValue );
+									} else {
+										objOut[strThisKey] = mxdValue;
+									}
+								}
+
+								return objOut;
+							};
+
+							$.each( arrFormElements,
+									function( intIndex, arrFormElement ) {
+										var arrNameMatches = arrFormElement.name.match( /^([^\[]+)((\[[^\[]*\])+)$/i );
+
+										if( arrNameMatches ) {
+											var objThisName = {};
+											objThisName[arrNameMatches[1]] = returnNameObject( arrFormElement.name, arrNameMatches[1], arrNameMatches[2], arrFormElement.value );
+
+											objJSON = $.extend( true, objJSON, objThisName );
+										} else {
+											objJSON[arrFormElement.name] = arrFormElement.value;
+										}
+									}
+							);
+
+							return objJSON;
+						};
 
 				var TwistAJAX = function( strAJAXPostLocation, b, c, d, e, f ) {
 						var funMasterCallbackSuccess = function() {},
@@ -215,12 +296,12 @@ try {
 									if( typeof b === 'object' ) {
 										if( b instanceof jQuery
 												|| b.jquery ) {
-											objData = thisTwistAJAX.serializeJSON( b );
+											objData = serializeJSON( b );
 										} else {
 											objData = ( objectLength( b ) === 0 ) ? objData : b;
 										}
 									} else {
-										objData = thisTwistAJAX.serializeJSON( $( b ) );
+										objData = serializeJSON( $( b ) );
 									}
 									if( typeof c === 'number' ) {
 										intTimeout = c;
@@ -305,9 +386,9 @@ try {
 										success: function( objResponse, strStatusText, jqXHR ) {
 												var strContentLength = prettySize( jqXHR.getResponseHeader( 'Content-Length' ) );
 												$( '#twist-ajax-loader-size' ).text( 'Downloading ' + strContentLength + '...' );
-												if( !isNull( objResponse )
+												if( objResponse
 														&& typeof objResponse === 'object'
-														&& isSet( objResponse.status )
+														&& hasOwnProperty( objResponse, 'status' )
 														&& objResponse.status === true ) {
 													funCallbackSuccessEnd( objResponse );
 												} else {
@@ -364,7 +445,7 @@ try {
 														}
 													break;
 
-													case 'error':
+													//case 'error':
 													default:
 														funCallbackFailureEnd();
 														$( '#twist-ajax-loader-size' ).text( 'Error' );
@@ -379,93 +460,7 @@ try {
 									}
 								);
 
-								return thisTwistAJAX;
-							},
-						this.serializeJSON = function( jqoForm ) {
-								var objJSON = {},
-								arrFormElements = [];
-
-								jQuery.map( jqoForm.serializeArray(),
-									function( arrElement, intIndex ) {
-										arrFormElements.push( { name: arrElement.name, value: arrElement.value } );
-									}
-								),
-								jqoForm.find( 'input[type="submit"][name][value], input[type="reset"][name][value], input[type="button"][name][value], button[name][value]' ).each(
-									function() {
-										var jqoElement = $( this );
-										arrFormElements.push( { name: jqoElement.attr( 'name' ), value: jqoElement.val() } );
-									}
-								);
-
-								var returnNameObject = function( strFullName, strNameSoFar, strName, mxdValue ) {
-										var objOut = {},
-										arrNameMatches = strName.match( /^(\[([^\[]*)\])((\[[^\[]*\])*)$/i );
-
-										if( arrNameMatches ) {
-											var strThisKey = arrNameMatches[2];
-
-											if( isBlank( strThisKey ) ) {
-												var intKey = 1,
-												blKeyExists = true;
-
-												do {
-													var blKeyFree = true;
-													$.each( arrFormElements,
-														function( intIndex, arrFormElement ) {
-															if( contains( strNameSoFar + '[' + intKey + ']', arrFormElement.name ) ) {
-																intKey++;
-																blKeyFree = false;
-															}
-														}
-													);
-
-													if( blKeyFree ) {
-														var blKeyReplaced = false;
-
-														$.each( arrFormElements,
-															function( intIndex, arrFormElement ) {
-																if( !blKeyReplaced
-																		&& arrFormElement.name === strNameSoFar + '[]'
-																		&& arrFormElement.value === mxdValue ) {
-																	arrFormElements[intIndex].name = strNameSoFar + '[' + intKey + ']';
-																	blKeyReplaced = true;
-																}
-															}
-														);
-
-														blKeyExists = false;
-													}
-												} while( blKeyExists );
-
-												strThisKey = intKey;
-											}
-
-											if( arrNameMatches[3] ) {
-												objOut[strThisKey] = returnNameObject( strFullName, strNameSoFar + '[' + strThisKey + ']', arrNameMatches[3], mxdValue );
-											} else {
-												objOut[strThisKey] = mxdValue;
-											}
-										}
-
-										return objOut;
-									};
-
-								$.each( arrFormElements,
-									function( intIndex, arrFormElement ) {
-										var arrNameMatches = arrFormElement.name.match( /^([^\[]+)((\[[^\[]*\])+)$/i );
-
-										if( arrNameMatches ) {
-											var objThisName = {};
-											objThisName[arrNameMatches[1]] = returnNameObject( arrFormElement.name, arrNameMatches[1], arrNameMatches[2], arrFormElement.value );
-
-											objJSON = $.extend( true, objJSON, objThisName );
-										} else {
-											objJSON[arrFormElement.name] = arrFormElement.value;
-										}
-									}
-								);
-
-								return objJSON;
+								return xhrThis;
 							},
 						this.showLoader = true;
 

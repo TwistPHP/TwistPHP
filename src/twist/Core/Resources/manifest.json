@@ -75,12 +75,12 @@
 	"twist/ajax": {
 		"all": {
 			"default": true,
-			"css": ["css/twist-ajax.css"],
+			"css": ["css/twist-ajax.min.css"],
 			"js": ["js/twist-ajax.min.js"]
 		},
 		"css": {
 			"default": false,
-			"css": ["css/twist-ajax.css"],
+			"css": ["css/twist-ajax.min.css"],
 			"js": []
 		},
 		"js": {
