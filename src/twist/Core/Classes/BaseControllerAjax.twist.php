@@ -29,12 +29,18 @@ class BaseControllerAjax extends BaseController{
 
 	public function __construct(){
 
+		//@todo Should these two options still be set by default
+		$this->_ignoreUserAbort(true);
+		$this->_timeout(60);
+
 		$this->arrAjaxResponse = array(
 			'status' => true,
 			'message' => '',
 			'data' => '',
 			'debug' => array()
 		);
+
+		//@todo Should we still return loggedin and login_redirect? the old Ajax server did
 	}
 
 	/**

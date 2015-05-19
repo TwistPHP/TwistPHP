@@ -54,6 +54,14 @@
 			return $this->_404();
 		}
 
+		public function _timeout($intTimeout = 30){
+			set_time_limit($intTimeout);
+		}
+
+		public function _ignoreUserAbort($blIgnore = true){
+			ignore_user_abort($blIgnore);
+		}
+
         final protected function _aliasURI($strURI,$strFunctionName){
 			$this->arrAliasURIs[$strURI] = $strFunctionName;
 		}
