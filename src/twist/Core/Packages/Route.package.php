@@ -318,23 +318,11 @@ class Route extends BasePackage{
 	 * The URI can be made dynamic by adding a '%' symbol at the end.
 	 *
 	 * @param $strURI
-	 * @param null $strFunctionsFolder
-	 * @param null $strViewsFolder
-	 * @param null $strElementsFolder
+	 * @param null $mxdController
 	 */
-	public function ajax($strURI,$strFunctionsFolder = null,$strViewsFolder = null,$strElementsFolder = null,$blUnrestrict=false){
-
-		$arrCustomFields = array(
-			'functions' => (is_null($strFunctionsFolder)) ? DIR_APP_AJAX : $strFunctionsFolder,
-			'views' => $strViewsFolder,
-			'elements' => $strElementsFolder
-		);
-
-		if($blUnrestrict){
-			$this->unrestrict($strURI);
-		}
-
-		$this->addRoute($strURI,'ajax',null,false,false,$arrCustomFields);
+	public function ajax($strURI,$mxdController){
+		$arrController = (is_array($mxdController)) ? $mxdController : array($mxdController);
+		$this->addRoute($strURI,'ajax',$arrController,false,false,array());
 	}
 
 	/**
@@ -1040,6 +1028,10 @@ class Route extends BasePackage{
 						case'function':
 								$arrTags['response'] .= $arrRoute['item']();
 							break;
+						case'ajax':
+							if(!TWIST_AJAX_REQUEST){
+								\Twist::respond(405);
+							}
 						case'controller':
 							if(is_array($arrRoute['item']) && count($arrRoute['item']) >= 1){
 
@@ -1110,17 +1102,6 @@ class Route extends BasePackage{
 								\Twist::respond(500);
 							}
 							break;
-						case'ajax':
-							//Only allow ajax to make these requests
-							if (TWIST_AJAX_REQUEST){
-								\Twist::AJAX()->server(
-									$arrRoute['data']['functions'],
-									$arrRoute['data']['views']
-								);
-							}else{
-								\Twist::respond(405);
-							}
-							break;
 						case'package':
 							//Should never get here -- See at the top of this function call (more efficient)
 							break;
@@ -1132,49 +1113,59 @@ class Route extends BasePackage{
 							break;
 					}
 
-					//Update the Meta and Route tags to be used in the base template
-					$this->framework()->package()->extend('View', 'meta', $this->resMeta->getTags());
-					$this->framework()->package()->extend('View', 'route', $arrTags);
+					if($arrRoute['type'] == 'ajax'){
+						header( 'Cache-Control: no-cache, must-revalidate' );
+						header( 'Expires: Wed, 24 Sep 1986 14:20:00 GMT' );
+						header( 'Content-type: application/json' );
+						header( sprintf( 'Content-length: %d', mb_strlen( $arrTags['response'] ) ) );
 
-					if($this->blIgnoreBaseView){
-						$strPageOut = $arrTags['response'];
-					}elseif(!is_null($this->strBaseView) && $arrRoute['base_view'] === true){
-						//Set the directory back to the original base as we may be in a package interface using the original site base
-						$this->resView->setDirectory($this->dirBaseViewDir);
-						$strPageOut = $this->resView->build($this->strBaseView, $arrRoute['data']);
-					}elseif(!is_null($arrRoute['base_view']) && !is_bool($arrRoute['base_view'])){
-
-						$strCustomView = sprintf('%s/%s', $this->resView->getDirectory(), $arrRoute['base_view']);
-						if(file_exists($strCustomView)){
-							$strPageOut = $this->resView->build($arrRoute['base_view'], $arrRoute['data']);
-						}else{
-							throw new \Exception(sprintf("The custom base view (%s) for the route %s '%s' does not exist", $arrRoute['base_view'], $arrRoute['type'], $arrRoute['uri']));
-						}
+						echo $arrTags['response'];
 					}else{
-						$strPageOut = $arrTags['response'];
-					}
+						//Update the Meta and Route tags to be used in the base template
+						$this->framework()->package()->extend('View', 'meta', $this->resMeta->getTags());
+						$this->framework()->package()->extend('View', 'route', $arrTags);
 
-					//Cache the page if cache is enabled for this route
-					if($arrRoute['cache'] == true && $arrRoute['cache_life'] > 0) {
-						$this->storePageCache($arrRoute['cache_key'], $strPageOut, $arrRoute['cache_life']);
-					}
+						if($this->blIgnoreBaseView){
+							$strPageOut = $arrTags['response'];
+						}elseif(!is_null($this->strBaseView) && $arrRoute['base_view'] === true){
+							//Set the directory back to the original base as we may be in a package interface using the original site base
+							$this->resView->setDirectory($this->dirBaseViewDir);
+							$strPageOut = $this->resView->build($this->strBaseView, $arrRoute['data']);
+						}elseif(!is_null($arrRoute['base_view']) && !is_bool($arrRoute['base_view'])){
 
-					//Output the Debug window to the screen when in debug mode
-					if($this->blDebugMode){
-						if(strstr($strPageOut,'</body>')){
-							$strPageOut = str_replace('</body>',\Twist::framework()->debug()->window($arrRoute).'</body>',$strPageOut);
+							$strCustomView = sprintf('%s/%s', $this->resView->getDirectory(), $arrRoute['base_view']);
+							if(file_exists($strCustomView)){
+								$strPageOut = $this->resView->build($arrRoute['base_view'], $arrRoute['data']);
+							}else{
+								throw new \Exception(sprintf("The custom base view (%s) for the route %s '%s' does not exist", $arrRoute['base_view'], $arrRoute['type'], $arrRoute['uri']));
+							}
 						}else{
-							$strPageOut .= \Twist::framework()->debug()->window($arrRoute);
+							$strPageOut = $arrTags['response'];
 						}
+
+						//Cache the page if cache is enabled for this route
+						if($arrRoute['cache'] == true && $arrRoute['cache_life'] > 0){
+							$this->storePageCache($arrRoute['cache_key'], $strPageOut, $arrRoute['cache_life']);
+						}
+
+						//Output the Debug window to the screen when in debug mode
+						if($this->blDebugMode){
+							if(strstr($strPageOut, '</body>')){
+								$strPageOut = str_replace('</body>', \Twist::framework()->debug()->window($arrRoute) . '</body>', $strPageOut);
+							}else{
+								$strPageOut .= \Twist::framework()->debug()->window($arrRoute);
+							}
+						}
+
+						//Enable GZip compression output, only when no other data has been output to the screen
+						if(ob_get_status() == 0 && strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false){
+							ob_start('ob_gzhandler');
+						}
+
+						//Output the page
+						echo $strPageOut;
 					}
 
-					//Enable GZip compression output, only when no other data has been output to the screen
-					if(ob_get_status() == 0 && strpos($_SERVER['HTTP_ACCEPT_ENCODING'],'gzip') !== false){
-						ob_start('ob_gzhandler');
-					}
-
-					//Output the page
-					echo $strPageOut;
 					\Twist::recordEvent('Route Served');
 
 					//Exit the script, no further processing will be done
