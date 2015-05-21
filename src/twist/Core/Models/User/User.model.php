@@ -105,31 +105,50 @@ class User{
 		if($mxdOut){
 			$this->arrOriginalData = $this->resDatabaseRecord->values();
 
+			$arrExistingUserDataFieldIDs = array();
+			$arrExistingUserDataFieldValues = array();
+			foreach( \Twist::Database() -> find( sprintf('%suser_data',DATABASE_TABLE_PREFIX), $this->resDatabaseRecord->get('id'), 'user_id' ) as $arrUserDataField ) {
+				$arrExistingUserDataFieldIDs[] = $arrUserDataField['field_id'];
+				$arrExistingUserDataFieldValues[$arrUserDataField['field_id']] = $arrUserDataField['data'];
+			}
+
+			$arrFields = array();
+			foreach( \Twist::Database()->getAll(sprintf('%suser_data_fields',DATABASE_TABLE_PREFIX)) as $arrField ) {
+				$arrFields[$arrField['slug']] = $arrField['id'];
+			}
+
 			foreach($this->arrOriginalUserData as $strKey => $mxdData){
 
-				$arrField = \Twist::Database()->get(sprintf('%suser_data_fields',DATABASE_TABLE_PREFIX),$strKey,'slug');
-				$intUserFieldID = $arrField['id'];
-
 				if(is_null($mxdData)){
-					if(!is_null($arrField)){
+					if(array_key_exists($arrFields[$strKey], $arrExistingUserDataFieldIDs)){
 						\Twist::Database()->query("DELETE FROM `%suser_data` WHERE `user_id` = %d AND `field_id` = %d LIMIT 1",
 							DATABASE_TABLE_PREFIX,
 							$this->resDatabaseRecord->get('id'),
-							$intUserFieldID
+							$arrFields[$strKey]
 						);
 					}
 				}else{
-					if(!count($arrField)){
+
+					if(array_key_exists($strKey, $arrFields)) {
+						$intUserFieldID = $arrFields[$strKey];
+					} else {
 						$resUserDataField = \Twist::Database()->createRecord(sprintf('%suser_data_fields',DATABASE_TABLE_PREFIX));
 						$resUserDataField->set('slug',$strKey);
-						$intUserFieldID = $resUserDataField->commit();
+						$mxdResult = $resUserDataField->commit();
+						$intUserFieldID = $arrFields[$strKey] = $mxdResult;
 					}
-					
-					$resUserData = \Twist::Database()->createRecord(sprintf('%suser_data',DATABASE_TABLE_PREFIX));
-					$resUserData->set('user_id',$this->resDatabaseRecord->get('id'));
-					$resUserData->set('field_id',$intUserFieldID);
-					$resUserData->set('data',$mxdData);
-					$resUserData->commit();
+
+					if(array_key_exists($intUserFieldID, $arrExistingUserDataFieldIDs)){
+						if($mxdData !== $arrExistingUserDataFieldValues[$intUserFieldID]) {
+							\Twist::Database()->query( "UPDATE `%s` SET `data` = '%s' WHERE `user_id` = %d AND `field_id` = %d LIMIT 1", sprintf( '%suser_data', DATABASE_TABLE_PREFIX ), $mxdData, $this->resDatabaseRecord->get( 'id' ), $intUserFieldID );
+						}
+					} else {
+						$resUserData = \Twist::Database()->createRecord(sprintf('%suser_data',DATABASE_TABLE_PREFIX));
+						$resUserData->set('user_id',$this->resDatabaseRecord->get('id'));
+						$resUserData->set('field_id',$intUserFieldID);
+						$resUserData->set('data',$mxdData);
+						$resUserData->commit();
+					}
 				}
 			}
 
