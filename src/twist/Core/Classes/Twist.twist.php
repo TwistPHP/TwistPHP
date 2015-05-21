@@ -268,7 +268,7 @@
 			}
 		}
 
-		public function getEvents($blStopTimer = false){
+		public static function getEvents($blStopTimer = false){
 			return (self::$blRecordEvents) ? (($blStopTimer) ? \Twist::Timer('TwistEventRecorder')->stop() : \Twist::Timer('TwistEventRecorder')->results()) : array();
 		}
 	}

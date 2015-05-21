@@ -853,7 +853,7 @@ class Route extends BasePackage{
 					foreach($this->arrUnrestricted as $strUnrestrictURI => $blWildCard){
 
 						$strUnrestrictExpression = sprintf("#^(%s[\/]?)%s#", str_replace('/','\/',rtrim($strUnrestrictURI, '/')), $blWildCard ? '' : '$');
-						if(array_key_exists(rtrim($strCurrentURI,'/'),$strUnrestrictURI) || ($blWildCard && preg_match($strUnrestrictExpression, $strCurrentURI, $arrUnrestrictedMatches))){
+						if(rtrim($strCurrentURI,'/') == rtrim($strUnrestrictURI,'/')  || ($blWildCard && preg_match($strUnrestrictExpression, $strCurrentURI, $arrUnrestrictedMatches))){
 
 							$arrMatch = array(
 								'login_required' => false,

@@ -271,7 +271,7 @@
 				'num_rows' => $this -> getNumberRows(),
 				'affected_rows' => $this -> getAffectedRows(),
 				'insert_id' => $this -> getInsertID(),
-				'error' => (is_object($this->resResult) || $this->resResult) ? '' : $this->resLibrary->errorString(),
+				'error' => $this->resLibrary->errorString(),
 				'trace' => array_reverse($arrStack)
 			));
 

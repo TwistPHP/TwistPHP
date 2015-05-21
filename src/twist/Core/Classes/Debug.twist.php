@@ -94,13 +94,19 @@
 
 			foreach($this->arrDebugLog['Database']['queries'] as $arrEachItem){
 
-				$arrEachItem['response'] = 'fail';
-
-				if($arrEachItem['status'] && ($arrEachItem['num_rows'] > 0 || $arrEachItem['affected_rows'] > 0 || $arrEachItem['insert_id'] > 0)){
-					$arrEachItem['response'] = 'success';
-				}elseif($arrEachItem['status']){
-					$arrEachItem['response'] = 'empty';
+				if($arrEachItem['affected_rows'] < 0 || $arrEachItem['affected_rows'] == false){
+					$arrEachItem['affected_rows'] = 0;
 				}
+
+				if($arrEachItem['status']){
+					$arrEachItem['response'] = 'success';
+					if($arrEachItem['num_rows'] <= 0 && $arrEachItem['affected_rows'] <= 0){
+						$arrEachItem['response'] = 'empty';
+					}
+				}else{
+					$arrEachItem['response'] = 'fail';
+				}
+
 
 				$arrParts = explode(' ',trim($arrEachItem['query']));
 				$arrEachItem['type'] = $arrParts[0];

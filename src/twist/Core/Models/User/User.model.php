@@ -74,7 +74,7 @@ class User{
     }
 
 	private function getData($strField = null){
-		return (is_null($strField)) ? $this->arrOriginalUserData : $this->arrOriginalUserData[$strField];
+		return (is_null($strField)) ? $this->arrOriginalUserData : (array_key_exists($strField,$this->arrOriginalUserData) ? $this->arrOriginalUserData[$strField] : null);
 	}
 
     private function setData($strField,$mxdValue){
@@ -124,7 +124,7 @@ class User{
 						$resUserDataField->set('slug',$strKey);
 						$intUserFieldID = $resUserDataField->commit();
 					}
-
+					
 					$resUserData = \Twist::Database()->createRecord(sprintf('%suser_data',DATABASE_TABLE_PREFIX));
 					$resUserData->set('user_id',$this->resDatabaseRecord->get('id'));
 					$resUserData->set('field_id',$intUserFieldID);
