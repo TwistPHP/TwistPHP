@@ -93,6 +93,19 @@
 			}
 
 			foreach($this->arrDebugLog['Database']['queries'] as $arrEachItem){
+
+				$arrEachItem['response'] = 'fail';
+
+				if($arrEachItem['status'] && ($arrEachItem['num_rows'] > 0 || $arrEachItem['affected_rows'] > 0 || $arrEachItem['insert_id'] > 0)){
+					$arrEachItem['response'] = 'success';
+				}elseif($arrEachItem['status']){
+					$arrEachItem['response'] = 'empty';
+				}
+
+				$arrParts = explode(' ',trim($arrEachItem['response']));
+				$arrEachItem['type'] = $arrParts[0];
+				unset($arrParts);
+
 				$arrTags['database_queries'] .= $this->resTemplate->build('components/database-query.tpl',$arrEachItem);
 			}
 			$arrTags['database_query_count'] = count($this->arrDebugLog['Database']['queries']);

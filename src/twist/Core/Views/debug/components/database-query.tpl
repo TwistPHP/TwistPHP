@@ -1,6 +1,14 @@
-<div class="twist-debug-query-{data:status==true&&data:result>0?'success':''}{data:status==true&&data:result==0?'empty':''}{data:status==false?'fail':''}">
+<div class="twist-debug-query-{data:response}">
 	<pre>{data:query}</pre>
 	<span>
-		Run Time: {data:time}<br>{data:error==''?'':data:error}<br>Results: {data:result}<br>Called {data:trace/0/function}() on line {data:trace/0/line} of {data:trace/0/file}
+		<ul>
+			<li>Runt Time: {data:time}</li>
+			<li>Query Type: {data:type}</li>
+			<li>Error: {data:error}</li>
+			<li>Results: {data:result}</li>
+			<li>Aff ID: {data:affected_rows}</li>
+			<li>Ins ID: {data:insert_id}</li>
+			<li>Called {data:trace/0/function}() on line {data:trace/0/line} of {data:trace/0/file}</li>
+		</ul>
 	</span>
 </div>
