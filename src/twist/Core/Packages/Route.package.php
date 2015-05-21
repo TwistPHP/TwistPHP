@@ -22,6 +22,7 @@
  */
 
 namespace Twist\Core\Packages;
+use \Twist\Core\Classes\BaseControllerAJAX;
 use \Twist\Core\Classes\BasePackage;
 use \Twist\Core\Models\Route\Meta;
 
@@ -963,6 +964,82 @@ class Route extends BasePackage{
 		}
 	}
 
+	public function processController($arrRoute){
+
+		$strOut = '';
+
+		if(is_array($arrRoute['item']) && count($arrRoute['item']) >= 1){
+
+			if(!strstr($arrRoute['item'][0],'\\')){
+				$strControllerClass = sprintf('\\App\\Controllers\\%s', $arrRoute['item'][0]);
+				$strControllerFile = sprintf('%s/%s.controller.php',$this->strControllerDirectory,$arrRoute['item'][0]);
+
+				if(file_exists($strControllerFile)){
+					require_once sprintf('%s/%s.controller.php',$this->strControllerDirectory,$arrRoute['item'][0]);
+				}
+			}else{
+				$strControllerClass = $arrRoute['item'][0];
+			}
+
+			if(count($arrRoute['item']) > 1){
+				$strControllerFunction = $arrRoute['item'][1];
+			}elseif(count($arrRoute['vars']) && array_key_exists('function',$arrRoute['vars'])){
+				$strControllerFunction = $arrRoute['vars']['function'];
+			}else{
+				$strControllerFunction = (count($arrRoute['parts'])) ? $arrRoute['parts'][0] : '_index';
+			}
+
+			$objController = new $strControllerClass();
+
+			if(in_array("_extended", get_class_methods($objController))){
+
+				//Register the route data and meta model
+				$objController->_extended($arrRoute,$this->resMeta);
+
+				$arrAliases = $objController->_getAliases();
+				$arrReplacements = $objController->_getReplacements();
+
+				$arrControllerFunctions = array();
+				foreach(get_class_methods($objController) as $strFunctionName){
+					if(array_key_exists($strFunctionName, $arrReplacements)){
+						$arrControllerFunctions[strtolower($arrReplacements[$strFunctionName])] = $strFunctionName;
+					}else{
+						$arrControllerFunctions[strtolower($strFunctionName)] = $strFunctionName;
+					}
+				}
+
+				//Merge in all the registered aliases if any exist
+				$arrControllerFunctions = array_merge($arrControllerFunctions, $arrAliases);
+
+				$strRequestMethodFunction = sprintf('%s%s', strtolower($_SERVER['REQUEST_METHOD']), strtolower($strControllerFunction));
+				$strControllerFunction = strtolower($strControllerFunction);
+
+				if(array_key_exists($strRequestMethodFunction, $arrControllerFunctions)){
+
+					$strControllerFunction = $arrControllerFunctions[$strRequestMethodFunction];
+					$strOut = $objController->$strControllerFunction();
+
+				}elseif(array_key_exists($strControllerFunction, $arrControllerFunctions)){
+
+					$strControllerFunction = $arrControllerFunctions[$strControllerFunction];
+					$strOut = $objController->$strControllerFunction();
+				}else{
+					$strControllerFunction = '_fallback';
+					$strOut = $objController->$strControllerFunction();
+				}
+
+				//Return the meta object back to routes
+				$this->resMeta = $objController->_meta();
+			}else{
+				throw new \Exception(sprintf("Controller '%s' must extend BaseController", $strControllerClass));
+			}
+		}else{
+			\Twist::respond(500);
+		}
+
+		return $strOut;
+	}
+
 	/**
 	 * Serve is used to active the routes system after all routes have been set
 	 * @param $blExitOnComplete Exit script once the page has been served
@@ -1023,84 +1100,30 @@ class Route extends BasePackage{
 
 					switch($arrRoute['type']){
 						case'view':
-							$arrTags['response'] .= $this->resView->build($arrRoute['item'], $arrRoute['data']);
+							$arrTags['response'] = $this->resView->build($arrRoute['item'], $arrRoute['data']);
 							break;
 						case'function':
-								$arrTags['response'] .= $arrRoute['item']();
+								$arrTags['response'] = $arrRoute['item']();
 							break;
 						case'ajax':
 							if(!TWIST_AJAX_REQUEST){
 								\Twist::respond(405);
-							}
-						case'controller':
-							if(is_array($arrRoute['item']) && count($arrRoute['item']) >= 1){
-
-								if(!strstr($arrRoute['item'][0],'\\')){
-									$strControllerClass = sprintf('\\App\\Controllers\\%s', $arrRoute['item'][0]);
-									$strControllerFile = sprintf('%s/%s.controller.php',$this->strControllerDirectory,$arrRoute['item'][0]);
-
-									if(file_exists($strControllerFile)){
-										require_once sprintf('%s/%s.controller.php',$this->strControllerDirectory,$arrRoute['item'][0]);
-									}
-								}else{
-									$strControllerClass = $arrRoute['item'][0];
-								}
-
-								if(count($arrRoute['item']) > 1){
-									$strControllerFunction = $arrRoute['item'][1];
-								}elseif(count($arrRoute['vars']) && array_key_exists('function',$arrRoute['vars'])){
-									$strControllerFunction = $arrRoute['vars']['function'];
-								}else{
-									$strControllerFunction = (count($arrRoute['parts'])) ? $arrRoute['parts'][0] : '_index';
-								}
-
-								$objController = new $strControllerClass();
-
-								if(in_array("_extended", get_class_methods($objController))){
-
-									//Register the route data and meta model
-									$objController->_extended($arrRoute,$this->resMeta);
-
-									$arrAliases = $objController->_getAliases();
-									$arrReplacements = $objController->_getReplacements();
-
-									$arrControllerFunctions = array();
-									foreach(get_class_methods($objController) as $strFunctionName){
-										if(array_key_exists($strFunctionName, $arrReplacements)){
-											$arrControllerFunctions[strtolower($arrReplacements[$strFunctionName])] = $strFunctionName;
-										}else{
-											$arrControllerFunctions[strtolower($strFunctionName)] = $strFunctionName;
-										}
-									}
-
-									//Merge in all the registered aliases if any exist
-									$arrControllerFunctions = array_merge($arrControllerFunctions, $arrAliases);
-
-									$strRequestMethodFunction = sprintf('%s%s', strtolower($_SERVER['REQUEST_METHOD']), strtolower($strControllerFunction));
-									$strControllerFunction = strtolower($strControllerFunction);
-
-									if(array_key_exists($strRequestMethodFunction, $arrControllerFunctions)){
-
-										$strControllerFunction = $arrControllerFunctions[$strRequestMethodFunction];
-										$arrTags['response'] .= $objController->$strControllerFunction();
-
-									}elseif(array_key_exists($strControllerFunction, $arrControllerFunctions)){
-
-										$strControllerFunction = $arrControllerFunctions[$strControllerFunction];
-										$arrTags['response'] .= $objController->$strControllerFunction();
-									}else{
-										$strControllerFunction = '_fallback';
-										$arrTags['response'] .= $objController->$strControllerFunction();
-									}
-
-									//Return the meta object back to routes
-									$this->resMeta = $objController->_meta();
-								}else{
-									throw new \Exception(sprintf("Controller '%s' must extend BaseController", $strControllerClass));
-								}
 							}else{
-								\Twist::respond(500);
+								try{
+									$arrTags['response'] = $this->processController($arrRoute);
+								}catch(\Exception $resException){
+									//Response with the relevant error message
+									$resControllerAJAX = new BaseControllerAJAX();
+
+									$resControllerAJAX->_ajaxFail();
+									$resControllerAJAX->_ajaxMessage($resException->getMessage());
+
+									$arrTags['response'] = $resControllerAJAX->_ajaxRespond();
+								}
 							}
+						break;
+						case'controller':
+							$arrTags['response'] = $this->processController($arrRoute);
 							break;
 						case'package':
 							//Should never get here -- See at the top of this function call (more efficient)
