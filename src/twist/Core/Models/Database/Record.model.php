@@ -233,7 +233,7 @@
 			$arrValueClause = array();
 			$objDatabase = \Twist::Database();
 
-			foreach($this->arrRecord as $strField => $strValue){
+			foreach(count($this->arrOriginalRecord) == 0 || $this->arrRecord as $strField => $strValue){
 
 				if($strValue !== $this->arrOriginalRecord[$strField]){
 
