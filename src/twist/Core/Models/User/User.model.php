@@ -124,7 +124,7 @@ class User{
 						$resUserDataField->set('slug',$strKey);
 						$intUserFieldID = $resUserDataField->commit();
 					}
-					
+
 					$resUserData = \Twist::Database()->createRecord(sprintf('%suser_data',DATABASE_TABLE_PREFIX));
 					$resUserData->set('user_id',$this->resDatabaseRecord->get('id'));
 					$resUserData->set('field_id',$intUserFieldID);
