@@ -102,7 +102,7 @@
 					$arrEachItem['response'] = 'empty';
 				}
 
-				$arrParts = explode(' ',trim($arrEachItem['response']));
+				$arrParts = explode(' ',trim($arrEachItem['query']));
 				$arrEachItem['type'] = $arrParts[0];
 				unset($arrParts);
 
