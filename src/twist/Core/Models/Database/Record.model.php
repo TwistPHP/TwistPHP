@@ -63,6 +63,20 @@
 		}
 
 		/**
+		 * Return the auto increment field name if one exists
+		 * @return int|null|string
+		 */
+		protected function detectAutoIncrement(){
+			$strField = null;
+			foreach($this->arrStructure['columns'] as $strField => $arrOptions){
+				if($arrOptions['auto_increment'] == '1'){
+					break;
+				}
+			}
+			return $strField;
+		}
+
+		/**
 		 * Nullify an auto increment field, used when cloning a database record so that you wont get duplicate keys
 		 */
 		protected function nullAutoIncrement(){
@@ -221,19 +235,22 @@
 
 			foreach($this->arrRecord as $strField => $strValue){
 
-				//When storing/updating data allow null if field is auto increment or nullable
-				if(is_null($strValue) && ($this->arrStructure['columns'][$strField]['nullable'] == '1' || $this->arrStructure['columns'][$strField]['auto_increment'] == '1')){
-					$strFieldString = "`%s` = NULL";
-				}else{
-					//Get the correct field string for each value
-					if(strstr($this->arrStructure['columns'][$strField]['data_type'],'int')){
-						$strFieldString = "`%s` = %d";
-					}else{
-						$strFieldString = "`%s` = '%s'";
-					}
-				}
+				if($strValue !== $this->arrOriginalRecord[$strField]){
 
-				$arrValueClause[] = sprintf($strFieldString, $objDatabase->escapeString($strField), $objDatabase->escapeString($strValue));
+					//When storing/updating data allow null if field is auto increment or nullable
+					if(is_null($strValue) && ($this->arrStructure['columns'][$strField]['nullable'] == '1' || $this->arrStructure['columns'][$strField]['auto_increment'] == '1')){
+						$strFieldString = "`%s` = NULL";
+					}else{
+						//Get the correct field string for each value
+						if(strstr($this->arrStructure['columns'][$strField]['data_type'],'int')){
+							$strFieldString = "`%s` = %d";
+						}else{
+							$strFieldString = "`%s` = '%s'";
+						}
+					}
+
+					$arrValueClause[] = sprintf($strFieldString, $objDatabase->escapeString($strField), $objDatabase->escapeString($strValue));
+				}
 			}
 
 			return implode(', ',$arrValueClause);
@@ -248,20 +265,27 @@
 			$arrWhereClause = array();
 			$objDatabase = \Twist::Database();
 
-			foreach($this->arrOriginalRecord as $strField => $strValue){
+			//@todo detect for unique keys also
+			$strAutoIncrementField = $this->detectAutoIncrement();
 
-				if(is_null($strValue) && $this->arrStructure['columns'][$strField]['nullable'] == '1'){
-					$strFieldString = "`%s` IS NULL";
-				}else{
-					//Get the correct field string for each value
-					if(strstr($this->arrStructure['columns'][$strField]['data_type'],'int')){
-						$strFieldString = "`%s` = %d";
+			if(!is_null($strAutoIncrementField)){
+				$arrWhereClause[] = sprintf("`%s` = %d", $objDatabase->escapeString($strAutoIncrementField), $objDatabase->escapeString($this->arrOriginalRecord[$strAutoIncrementField]));
+			}else{
+				foreach($this->arrOriginalRecord as $strField => $strValue){
+
+					if(is_null($strValue) && $this->arrStructure['columns'][$strField]['nullable'] == '1'){
+						$strFieldString = "`%s` IS NULL";
 					}else{
-						$strFieldString = "`%s` = '%s'";
+						//Get the correct field string for each value
+						if(strstr($this->arrStructure['columns'][$strField]['data_type'],'int')){
+							$strFieldString = "`%s` = %d";
+						}else{
+							$strFieldString = "`%s` = '%s'";
+						}
 					}
-				}
 
-				$arrWhereClause[] = sprintf($strFieldString, $objDatabase->escapeString($strField), $objDatabase->escapeString($strValue));
+					$arrWhereClause[] = sprintf($strFieldString, $objDatabase->escapeString($strField), $objDatabase->escapeString($strValue));
+				}
 			}
 
 			return implode(' AND ',$arrWhereClause);
