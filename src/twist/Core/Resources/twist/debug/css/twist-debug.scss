@@ -8,8 +8,10 @@ $bar-fade-width: 10px;
 $bar-background: #424242; //#455A64
 $bar-background-hover: #616161;
 $bar-border: #757575;
-$details-background: #EEE;
+$border: #E0E0E0;
+$background: #EEE;
 $red: #D32F2F;
+$red-light: #D32F2F;
 $yellow: #FBC02D;
 $green: #689F38;
 $blue: #1976D2;
@@ -230,7 +232,7 @@ $z-index: 1337;
 	bottom: $bar-height;
 	left: 0;
 
-	background-color: $details-background;
+	background-color: $background;
 
 	box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 
@@ -347,54 +349,156 @@ $z-index: 1337;
 	.twist-debug-column-50 {
 		width: 50%;
 	}
-}
+
+	.twist-debug-column-33 {
+		width: 33.33333%;
+	}
+
+	.twist-debug-column-25 {
+		width: 25%;
+	}
+
+	.twist-debug-column-clear {
+		padding: 0;
+
+		display: block;
+
+		float: none;
+		clear: both;
+	}
+
+	.twist-debug-box,
+	[class^="twist-debug-box-"],
+	[class*=" twist-debug-box-"] {
+		margin-left: 4px;
+		padding-bottom: 10px;
+
+		position: relative;
+
+		overflow: visible;
+
+		background-color: #FFF;
+
+		border: 1px $border solid;
+		border-left-width: 0;
+
+		&[data-title] {
+			border-top-width: 0;
+
+			&::before {
+				margin-right: -1px;
+				padding: 10px;
+
+				display: block;
+
+				//position: absolute;
+				top: 0;
+				right: 0;
+
+				color: #FFF;
+
+				background-color: $bar-border;
+
+				content: attr(data-title);
+			}
+
+			&::after {
+				top: 0;
+			}
+		}
+
+		&::after {
+			width: 4px;
+
+			position: absolute;
+			top: -1px;
+			right: 100%;
+			bottom: -1px;
+
+			background-color: $bar-border;
+
+			content: "";
+		}
+
+		&:target {
+			div.twist-debug-more-details {
+				margin-top: 20px;
+
+				display: block;
+
+				border-top: 1px $border solid;
+
+				&::before {
+					//content: "Hide";
+				}
+			}
+		}
+
+		> a.twist-debug-more-details {
+			&::before {
+				content: "Details...";
+			}
+		}
+
+		div.twist-debug-more-details {
+			display: none;
+		}
+
+		p,
+		pre {
+			padding: 20px 20px 10px;
+
+			+ p,
+			+ pre {
+				padding-top: 0;
+			}
+		}
+
+		p {}
+
+		pre {
+			width: 100%;
+
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			box-sizing: border-box;
+
+			overflow: auto;
+		}
+	}
+
+	.twist-debug-box-red {
+		&[data-title]::before,
+		&::after {
+			background-color: $red;
+		}
+	}
+
+	.twist-debug-box-yellow {
+		&[data-title]::before,
+		&::after {
+			background-color: $yellow;
+		}
+	}
+
+	.twist-debug-box-blue {
+		&[data-title]::before,
+		&::after {
+			background-color: $blue;
+		}
+	}
+
+	.twist-debug-box-green {
+		&[data-title]::before,
+		&::after {
+			background-color: $green;
+		}
+	}
 
 	#twist-debug-messages {
-		[class^="twist-debug-message-"],
-		[class*=" twist-debug-message-"] {
-			margin-left: 4px;
-
-			position: relative;
-
-			overflow: visible;
-
-			background-color: #FFF;
-
-			border: 1px #E0E0E0 solid;
-			border-left-width: 0;
-
-			&::before {
-				width: 4px;
-
-				position: absolute;
-				top: -1px;
-				right: 100%;
-				bottom: -1px;
-
-				background-color: $blue;
-
-				content: "";
-			}
-
-			+ [class^="twist-debug-message-"],
-			+ [class*=" twist-debug-message-"] {
+		.twist-debug-message {
+			+ .twist-debug-message {
 				margin-top: 20px;
-			}
-
-			p {
-				padding: 20px;
-			}
-		}
-
-		.twist-debug-message-warning {
-			&::before {
-				background-color: $yellow;
-			}
-		}
-
-		.twist-debug-message-error {
-			&::before {
-				background-color: $red;
 			}
 		}
 	}
@@ -459,69 +563,12 @@ $z-index: 1337;
 	#twist-debug-memory {}
 
 	#twist-debug-database {
-		[class^="twist-debug-query-"],
-		[class*=" twist-debug-query-"] {
-			margin-left: 4px;
-
-			position: relative;
-
-			overflow: visible;
-
-			background-color: #FFF;
-
-			border: 1px #E0E0E0 solid;
-			border-left-width: 0;
-
-			&::before {
-				width: 4px;
-
-				position: absolute;
-				top: -1px;
-				right: 100%;
-				bottom: -1px;
-
-				background-color: $yellow;
-
-				content: "";
-			}
-
-			+ [class^="twist-debug-query-"],
-			+ [class*=" twist-debug-query-"] {
+		.twist-debug-query {
+			+ .twist-debug-query {
 				margin-top: 20px;
-			}
-
-			pre {
-				width: 100%;
-				padding: 20px;
-
-				-webkit-box-sizing: border-box;
-				-moz-box-sizing: border-box;
-				box-sizing: border-box;
-
-				overflow: auto;
-			}
-		}
-
-		.twist-debug-query-success {
-			&::before {
-				background-color: $green;
-			}
-		}
-
-		.twist-debug-query-fail {
-			&::before {
-				background-color: $red;
 			}
 		}
 	}
 
 	#twist-debug-route {}
-
-/*.hairlines,
-.hairlines2 {
-	#twist-debug-blocks {
-		> li {
-			border-right-width: 0.5px;
-		}
-	}
-}*/
+}

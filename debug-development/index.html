@@ -10,8 +10,10 @@
 	</head>
 	<body>
 		<h1>Hello world</h1>
-		<!--<script src="prototype.js"></script>
-		<script src="../src/twist/core/resources/jquery/jquery-1.11.2.min.js"></script>-->
+		<!--
+			<script src="prototype.js"></script>
+			<script src="../src/twist/core/resources/jquery/jquery-1.11.2.min.js"></script>
+		-->
 		<div id="twist-debug">
 			<a href="https://twistphp.com/docs" target="_blank" id="twist-debug-icon" title="TwistPHP documentation"><img src="../src/twist/core/resources/twist/logos/logo-64.png"></a>
 			<ul id="twist-debug-blocks">
@@ -28,13 +30,13 @@
 				<h6>Messages</h6>
 				<div class="twist-debug-column-wrapper">
 					<div class="twist-debug-column-100">
-						<div class="twist-debug-message-error">
+						<div class="twist-debug-box-red twist-debug-message">
 							<p>Blah</p>
 						</div>
-						<div class="twist-debug-message-warning">
+						<div class="twist-debug-box-yellow twist-debug-message">
 							<p>Blah</p>
 						</div>
-						<div class="twist-debug-message-log">
+						<div class="twist-debug-box-blue twist-debug-message">
 							<p>Blah</p>
 						</div>
 					</div>
@@ -70,8 +72,39 @@
 			<div id="twist-debug-database">
 				<h6>Database Queries</h6>
 				<div class="twist-debug-column-wrapper">
+					<div class="twist-debug-column-33">
+						<div class="twist-debug-box">
+							<dl>
+								<dt>Insert</dt>
+								<dd>6</dd>
+							</dl>
+						</div>
+					</div>
+					<div class="twist-debug-column-33">
+						<div class="twist-debug-box-yellow">
+						</div>
+					</div>
+					<div class="twist-debug-column-33">
+						<div class="twist-debug-box-red">
+						</div>
+					</div>
+					<div class="twist-debug-column-clear"></div>
 					<div class="twist-debug-column-100">
-						<div class="twist-debug-query-success">
+						<div id="query-123" class="twist-debug-box-green twist-debug-query" data-title="SELECT">
+							<pre>SELECT `training`.`id`,
+	`training`.`site_id`,
+	`sites`.`title`,
+	`sites`.`url`
+FROM `%s`.`training`
+JOIN `%s`.`sites` ON `training`.`site_id` = `sites`.`id`
+WHERE `sites`.`ext_client_code` = '123'
+	AND `sites`.`id` &gt; 100</pre>
+							<a href="#query-123" class="twist-debug-more-details"></a>
+							<div class="twist-debug-more-details">
+								<p>Lorem ipusm</p>
+							</div>
+						</div>
+						<div class="twist-debug-box-yellow twist-debug-query" data-title="INSERT">
 							<pre>SELECT `training`.`id`,
 	`training`.`site_id`,
 	`sites`.`title`,
@@ -81,17 +114,7 @@ JOIN `%s`.`sites` ON `training`.`site_id` = `sites`.`id`
 WHERE `sites`.`ext_client_code` = '123'
 	AND `sites`.`id` &gt; 100</pre>
 						</div>
-						<div class="twist-debug-query-empty">
-							<pre>SELECT `training`.`id`,
-	`training`.`site_id`,
-	`sites`.`title`,
-	`sites`.`url`
-FROM `%s`.`training`
-JOIN `%s`.`sites` ON `training`.`site_id` = `sites`.`id`
-WHERE `sites`.`ext_client_code` = '123'
-	AND `sites`.`id` &gt; 100</pre>
-						</div>
-						<div class="twist-debug-query-fail">
+						<div class="twist-debug-box-red twist-debug-query" data-title="UPDATE">
 							<pre>SELECT `training`.`id`,
 	`training`.`site_id`,
 	`sites`.`title`,
