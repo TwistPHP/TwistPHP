@@ -23,7 +23,7 @@
 
 namespace Twist\Core\Classes;
 
-class BaseControllerAjax extends BaseController{
+class BaseControllerAJAX extends BaseController{
 
 	protected $arrAjaxResponse = array();
 
@@ -47,20 +47,32 @@ class BaseControllerAjax extends BaseController{
 	 * Set the status for the Ajax response, true by default
 	 * @param $blStatus
 	 */
-	public function _status($blStatus){
-		$this->arrAjaxResponse['status'] = (is_bool($blStatus) && $blStatus);
+	public function _ajaxStatus($blStatus){
+		$this->arrAjaxResponse['status'] = ($blStatus !== false);
+	}
+
+	public function _ajaxSucceed(){
+		$this->_ajaxStatus(true);
+	}
+
+	public function _ajaxFail(){
+		$this->_ajaxStatus(false);
 	}
 
 	/**
 	 * Set a message to be returned to the Ajax call, can be used for an error message
 	 * @param $strMessage
 	 */
-	public function _message($strMessage){
+	public function _ajaxMessage($strMessage=''){
 		$this->arrAjaxResponse['message'] = $strMessage;
 	}
 
-	//Encode the response of the Ajax output
-	public function _json($mxdData){
+	/**
+	 * Encode the response of the AJAX output
+	 * @param array $mxdData
+	 * @return string
+	 */
+	public function _ajaxRespond($mxdData=array()){
 		$this->arrAjaxResponse['debug']['route'] = (\Twist::framework()->setting('DEVELOPMENT_MODE')) ? $this->_route() : array();
 		$this->arrAjaxResponse['data'] = $mxdData;
 		return json_encode($this->arrAjaxResponse);
