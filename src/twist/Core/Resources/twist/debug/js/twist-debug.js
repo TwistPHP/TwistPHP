@@ -184,7 +184,7 @@
 			if( typeof window.jQuery === 'undefined' ) {
 				blOtherJSLibrary = ( typeof window.$ === 'function' );
 
-				getScript( '../src/twist/core/resources/jquery/jquery-2.1.3.min.js',
+				getScript( '//code.jquery.com/jquery-2.1.4.min.js',
 					function() {
 						if( typeof window.jQuery === 'undefined' ) {
 							error( 'This is embarrassing... jQuery couldn\'t be loaded' );
