@@ -281,16 +281,16 @@
     #twist-debug-details .twist-debug-box div.twist-debug-more-details,
     #twist-debug-details [class^="twist-debug-box-"] div.twist-debug-more-details,
     #twist-debug-details [class*=" twist-debug-box-"] div.twist-debug-more-details {
-      padding: 0 20px;
-      display: none; }
+      padding: 20px;
+      display: none;
+      background-color: #EEE; }
       #twist-debug-details .twist-debug-box div.twist-debug-more-details > :first-child,
-      #twist-debug-details [class^="twist-debug-box-"] div.twist-debug-more-details > :first-child,
-      #twist-debug-details [class*=" twist-debug-box-"] div.twist-debug-more-details > :first-child {
-        margin-top: 20px; }
       #twist-debug-details .twist-debug-box div.twist-debug-more-details > :last-child,
+      #twist-debug-details [class^="twist-debug-box-"] div.twist-debug-more-details > :first-child,
       #twist-debug-details [class^="twist-debug-box-"] div.twist-debug-more-details > :last-child,
+      #twist-debug-details [class*=" twist-debug-box-"] div.twist-debug-more-details > :first-child,
       #twist-debug-details [class*=" twist-debug-box-"] div.twist-debug-more-details > :last-child {
-        margin-bottom: 20px; }
+        margin-top: 0; }
     #twist-debug-details .twist-debug-box p,
     #twist-debug-details .twist-debug-box pre,
     #twist-debug-details [class^="twist-debug-box-"] p,

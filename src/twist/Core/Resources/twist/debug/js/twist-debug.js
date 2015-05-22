@@ -111,7 +111,8 @@
 							function() {
 								var jqoMoreDetails = $( this ).find( '.twist-debug-more-details' );
 
-								jqoMoreDetails.after( '<a href="#twist-debug-more-details" class="twist-debug-more-details">&hellip;&ctdot;</a>' );
+								//jqoMoreDetails.after( '<a href="#twist-debug-more-details" class="twist-debug-more-details">&hellip;</a>' );
+								jqoMoreDetails.after( '<a href="#twist-debug-more-details" class="twist-debug-more-details">&ctdot;</a>' );
 							}
 						),
 						jqoTwistDebugBlocks.on( 'click', 'a',

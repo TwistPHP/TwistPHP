@@ -446,16 +446,15 @@ $z-index: 1337;
 		}
 
 		div.twist-debug-more-details {
-			padding: 0 20px;
+			padding: 20px;
 
 			display: none;
 
-			> :first-child {
-				margin-top: 20px;
-			}
+			background-color: $background;
 
+			> :first-child,
 			> :last-child {
-				margin-bottom: 20px;
+				margin-top: 0;
 			}
 		}
 
