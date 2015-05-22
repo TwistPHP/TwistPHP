@@ -708,7 +708,6 @@
 		 * @return integer Returns ID of newly inserted row
 		 */
 		public function getInsertID(){
-			$this->connected();
 			return $this->resLibrary->insertId();
 		}
 
@@ -719,7 +718,6 @@
 		 * @return mixed Returns a count of effected rows
 		 */
 		public function getAffectedRows(){
-			$this->connected();
 			return ($this->resResult) ? $this->resLibrary->affectedRows($this->resResult) : 0;
 		}
 
@@ -730,7 +728,6 @@
 		 * @return int Returns a count of query results
 		 */
 		public function getNumberRows(){
-			$this->connected();
 			return ($this->resResult) ? $this->resLibrary->numberRows($this->resResult) : 0;
 		}
 
@@ -740,7 +737,6 @@
 		 * @return array Returns as single dimensional array
 		 */
 		public function getArray($blFullArray = false){
-			$this->connected();
 			$arrOut = array();
 			if($this->resResult && $this->getNumberRows() > 0){
 				if($blFullArray){
@@ -772,7 +768,6 @@
 		 * @return string Sanatized/escaped string
 		 */
 		public function escapeString($strRawString){
-			$this->connected();
 			$strOut = strval($strRawString);
 			$strOut = (get_magic_quotes_gpc()) ? stripslashes($strOut) : $strOut;
 			return (!is_numeric($strOut) && $this->connected()) ? $this->resLibrary->escapeString($strOut) : $strOut;
