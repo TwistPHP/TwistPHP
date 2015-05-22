@@ -100,6 +100,9 @@
 				//Register all the installed packages
 				Twist::framework() -> package() -> getInstalled();
 
+				//Log the framework boot time, this is the point in which the framework code was required
+				Twist::Timer('TwistEventRecorder')->start($_SERVER['TWIST_BOOT']);
+
 				//Register the default PHP package extensions
 				Twist::framework() -> package() -> extend('View','asset',array('module' => 'Asset','function' => 'viewExtension'));
 				Twist::framework() -> package() -> extend('View','file',array('module' => 'File','function' => 'viewExtension'));
@@ -109,9 +112,6 @@
 
 				//Register the framework resources handler into the template system
 				Twist::framework() -> package() -> extend('View','resource',array('instance' => 'twistCoreResources','function' => 'viewExtension'));
-
-				//Log the framework boot time, this is the point in which the framework code was required
-				Twist::Timer('TwistEventRecorder')->start($_SERVER['TWIST_BOOT']);
 
 				self::coreResources();
 				self::showSetup();

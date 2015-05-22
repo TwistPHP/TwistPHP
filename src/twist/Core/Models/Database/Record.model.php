@@ -233,9 +233,9 @@
 			$arrValueClause = array();
 			$objDatabase = \Twist::Database();
 
-			foreach(count($this->arrOriginalRecord) == 0 || $this->arrRecord as $strField => $strValue){
+			foreach($this->arrRecord as $strField => $strValue){
 
-				if($strValue !== $this->arrOriginalRecord[$strField]){
+				if(count($this->arrOriginalRecord) == 0 || $strValue !== $this->arrOriginalRecord[$strField]){
 
 					//When storing/updating data allow null if field is auto increment or nullable
 					if(is_null($strValue) && ($this->arrStructure['columns'][$strField]['nullable'] == '1' || $this->arrStructure['columns'][$strField]['auto_increment'] == '1')){

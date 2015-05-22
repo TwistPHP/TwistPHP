@@ -70,11 +70,15 @@
 		public function start(){
 
 			if($this->blStarted == false){
+
 				session_start();
 				$_COOKIE['PHPSESSID'] = $this->getSessionID();
+
+				if(!array_key_exists('twist-session',$_SESSION)){
+					$_SESSION['twist-session'] = array();
+				}
+
 				$this->blStarted = true;
-				//setcookie('PHPSESSID', $this->getSessionID(), (\Twist::DateTime()->time()+$this->intSessionLife), '/', $_SERVER["HTTP_HOST"], isset($_SERVER["HTTPS"]), true);
-				//setcookie('PHPSESSID', $this->getSessionID(), (\Twist::DateTime()->time()+$this->intSessionLife), '/');
 			}
 		}
 
@@ -95,7 +99,7 @@
 		 * @return mixed Return the data that is contained in the provided key (if any exists otherwise NULL)
 		 */
 		public function data($strKey,$mxdValue = null){
-
+			
 			if(!is_null($mxdValue)){
 				if(strstr($strKey,'/')){
 					$newValue = \Twist::framework() -> tools() -> ghostArray( $strKey, '/', $mxdValue );

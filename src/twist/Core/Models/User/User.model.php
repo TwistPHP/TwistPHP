@@ -30,6 +30,8 @@ class User{
 
 	protected $arrOriginalData = array();
 	protected $arrOriginalUserData = array();
+	protected $arrUserData = array();
+	protected $arrUserDataFields = array();
 
 	protected $arrCustomData = array();
 	protected $resParentClass = null;
@@ -48,6 +50,9 @@ class User{
 		//Get the user data record to allow for this ti be edited
 		$this->blNewAccount = is_null($intUserID);
 
+		//Get the array of user fields
+		$this->arrUserDataFields = \Twist::framework()->tools()->arrayReindex(\Twist::Database()->getAll(sprintf('%suser_data_fields',DATABASE_TABLE_PREFIX)),'slug');
+
 		$blQuery = \Twist::Database()->query("SELECT `ud`.`data`,`udf`.`slug` FROM `%suser_data` AS `ud` JOIN `%suser_data_fields` AS `udf` ON `ud`.`field_id` = `udf`.`id` WHERE `ud`.`user_id` = %d",
 			DATABASE_TABLE_PREFIX,
 			DATABASE_TABLE_PREFIX,
@@ -56,7 +61,7 @@ class User{
 
 		if($blQuery && \Twist::Database()->getNumberRows()){
 			foreach(\Twist::Database()->getFullArray() as $arrEachItem){
-				$this->arrOriginalUserData[$arrEachItem['slug']] = $arrEachItem['data'];
+				$this->arrUserData[$arrEachItem['slug']] = $this->arrOriginalUserData[$arrEachItem['slug']] = $arrEachItem['data'];
 			}
 		}
 	}
@@ -74,15 +79,15 @@ class User{
     }
 
 	private function getData($strField = null){
-		return (is_null($strField)) ? $this->arrOriginalUserData : (array_key_exists($strField,$this->arrOriginalUserData) ? $this->arrOriginalUserData[$strField] : null);
+		return (is_null($strField)) ? $this->arrUserData : (array_key_exists($strField,$this->arrUserData) ? $this->arrUserData[$strField] : null);
 	}
 
     private function setData($strField,$mxdValue){
-		$this->arrOriginalUserData[$strField] = $mxdValue;
+		$this->arrUserData[$strField] = $mxdValue;
 	}
 
 	public function nullData($strField = null){
-		$this->arrOriginalUserData[$strField] = null;
+		$this->arrUserData[$strField] = null;
 	}
 
 	public function deleteData($strField = null){
@@ -103,53 +108,56 @@ class User{
 		$mxdOut = $this->resDatabaseRecord->commit();
 
 		if($mxdOut){
+
 			$this->arrOriginalData = $this->resDatabaseRecord->values();
 
-			$arrExistingUserDataFieldIDs = array();
-			$arrExistingUserDataFieldValues = array();
-			foreach( \Twist::Database() -> find( sprintf('%suser_data',DATABASE_TABLE_PREFIX), $this->resDatabaseRecord->get('id'), 'user_id' ) as $arrUserDataField ) {
-				$arrExistingUserDataFieldIDs[] = $arrUserDataField['field_id'];
-				$arrExistingUserDataFieldValues[$arrUserDataField['field_id']] = $arrUserDataField['data'];
-			}
+			//Only store user data if something has changed
+			if(json_encode($this->arrUserData) !== json_encode($this->arrOriginalUserData)){
+				foreach($this->arrUserData as $strKey => $mxdData){
 
-			$arrFields = array();
-			foreach( \Twist::Database()->getAll(sprintf('%suser_data_fields',DATABASE_TABLE_PREFIX)) as $arrField ) {
-				$arrFields[$arrField['slug']] = $arrField['id'];
-			}
+					if(!array_key_exists($strKey,$this->arrUserDataFields)){
 
-			foreach($this->arrOriginalUserData as $strKey => $mxdData){
+						//The field is a new filed, insert into the database
+						$resUserDataField = \Twist::Database()->createRecord(sprintf('%suser_data_fields',DATABASE_TABLE_PREFIX));
+						$resUserDataField->set('slug',$strKey);
+						$resUserDataField->commit();
+						$this->arrUserDataFields[$strKey] = $resUserDataField->values();
+					}
 
-				if(is_null($mxdData)){
-					if(array_key_exists($arrFields[$strKey], $arrExistingUserDataFieldIDs)){
+					if(is_null($mxdData)){
+
+						//If the item is null it can be removed
 						\Twist::Database()->query("DELETE FROM `%suser_data` WHERE `user_id` = %d AND `field_id` = %d LIMIT 1",
 							DATABASE_TABLE_PREFIX,
 							$this->resDatabaseRecord->get('id'),
-							$arrFields[$strKey]
+							$this->arrUserDataFields[$strKey]['id']
 						);
-					}
-				}else{
 
-					if(array_key_exists($strKey, $arrFields)) {
-						$intUserFieldID = $arrFields[$strKey];
-					} else {
-						$resUserDataField = \Twist::Database()->createRecord(sprintf('%suser_data_fields',DATABASE_TABLE_PREFIX));
-						$resUserDataField->set('slug',$strKey);
-						$mxdResult = $resUserDataField->commit();
-						$intUserFieldID = $arrFields[$strKey] = $mxdResult;
-					}
+						unset($this->arrUserData[$strKey]);
 
-					if(array_key_exists($intUserFieldID, $arrExistingUserDataFieldIDs)){
-						if($mxdData !== $arrExistingUserDataFieldValues[$intUserFieldID]) {
-							\Twist::Database()->query( "UPDATE `%s` SET `data` = '%s' WHERE `user_id` = %d AND `field_id` = %d LIMIT 1", sprintf( '%suser_data', DATABASE_TABLE_PREFIX ), $mxdData, $this->resDatabaseRecord->get( 'id' ), $intUserFieldID );
-						}
-					} else {
+					}elseif(array_key_exists($strKey,$this->arrOriginalUserData) && $mxdData !== $this->arrOriginalUserData[$strKey]){
+
+						//If the key was in the original array and the value is different from the original it can be removed
+						\Twist::Database()->query( "UPDATE `%suser_data` SET `data` = '%s' WHERE `user_id` = %d AND `field_id` = %d LIMIT 1",
+							DATABASE_TABLE_PREFIX,
+							$mxdData,
+							$this->resDatabaseRecord->get( 'id' ),
+							$this->arrUserDataFields[$strKey]['id']
+						);
+
+					}elseif(!array_key_exists($strKey,$this->arrOriginalUserData)){
+
+						//If the key is not in the original array we need to insert the value
 						$resUserData = \Twist::Database()->createRecord(sprintf('%suser_data',DATABASE_TABLE_PREFIX));
 						$resUserData->set('user_id',$this->resDatabaseRecord->get('id'));
-						$resUserData->set('field_id',$intUserFieldID);
+						$resUserData->set('field_id',$this->arrUserDataFields[$strKey]['id']);
 						$resUserData->set('data',$mxdData);
 						$resUserData->commit();
 					}
 				}
+
+				//Reset original data to be the same as user data, ready to continue
+				$this->arrOriginalUserData = $this->arrUserData;
 			}
 
 			if($this->blNewAccount){
