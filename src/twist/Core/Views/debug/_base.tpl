@@ -1,5 +1,6 @@
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 {resource:twist/debug}
+{resource:font-awesome}
 <div id="twist-debug">
 	<a href="https://twistphp.com/docs" target="_blank" id="twist-debug-icon" title="TwistPHP documentation"><img src="{resource:core-uri}twist/logos/logo-64.png"></a>
 	<ul id="twist-debug-blocks">
