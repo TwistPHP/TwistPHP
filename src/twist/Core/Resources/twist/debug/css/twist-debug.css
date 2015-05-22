@@ -11,6 +11,9 @@
   #twist-debug-details * {
     margin: 0;
     padding: 0; }
+  #twist-debug .twist-debug-hidden,
+  #twist-debug-details .twist-debug-hidden {
+    display: none !important; }
 
 /* ===================================================== DEBUG BAR ===================================================== */
 #twist-debug {
