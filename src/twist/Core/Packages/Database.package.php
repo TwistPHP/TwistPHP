@@ -268,10 +268,10 @@
 				'query' => $strQuery,
 				'time' => $arrResult['total'],
 				'status' => (is_object($this->resResult) || $this->resResult),
-				'num_rows' => $this -> getNumberRows(),
+				'error' => $this->resLibrary->errorString(),
 				'affected_rows' => $this -> getAffectedRows(),
 				'insert_id' => $this -> getInsertID(),
-				'error' => $this->resLibrary->errorString(),
+				'num_rows' => $this -> getNumberRows(),
 				'trace' => array_reverse($arrStack)
 			));
 

@@ -29,94 +29,97 @@
 	 */
 	class ProtocolMYSQLI{
 
-		var $resLink = null;
-		var $blActiveTransaction = false;
-		var $blAutoCommit = false;
+		/**
+		 * @var \mysqli
+		 */
+		public $resLink = null;
 
-		function connect($strServer,$strUsername,$strPassword,$strDatabase){
-			$this->resLink = mysqli_connect($strServer,$strUsername,$strPassword,$strDatabase);
+		public $blActiveTransaction = false;
+		public $blAutoCommit = false;
+
+		public function connect($strServer,$strUsername,$strPassword,$strDatabase){
+			$this->resLink = new \mysqli($strServer,$strUsername,$strPassword,$strDatabase);
 		}
 
-		function connected(){
+		public function connected(){
 			return (!is_null($this->resLink) && $this->ping());
 		}
 
-		function close(){
+		public function close(){
 			return $this->resLink->close();
 		}
 
-		function connectionError(){
+		public function connectionError(){
 			return $this->resLink->connect_error;
 		}
 
-		function ping(){
+		public function ping(){
 			return (!is_null($this->resLink) && is_object($this->resLink)) ? $this->resLink->ping() : false;
 		}
 
-		function selectDatabase($strDatabase){
+		public function selectDatabase($strDatabase){
 			return $this->resLink->select_db($strDatabase);
 		}
 
-		function setCharset($strCharset){
+		public function setCharset($strCharset){
 			return $this->resLink->set_charset($strCharset);
 		}
 
-		function escapeString($strRawString){
+		public function escapeString($strRawString){
 			return $this->resLink->real_escape_string($strRawString);
 		}
 
-		function numberRows($resResult){
+		public function numberRows($resResult){
 			return (!is_null($resResult) && is_object($resResult)) ? $resResult->num_rows : 0;
 		}
 
-		function insertId(){
+		public function insertId(){
 			return $this->resLink->insert_id;
 		}
 
-		function affectedRows($resResult){
+		public function affectedRows(\mysqli_result $resResult){
 			return $this->resLink->affected_rows;
 		}
 
-		function query($strQuery){
+		public function query($strQuery){
 			$resOut = $this->resLink->query($strQuery);
 			$this->blActiveTransaction = ($this->blAutoCommit) ? false : true;
 			return $resOut;
 		}
 
-		function fetchArray($resResult){
+		public function fetchArray(\mysqli_result $resResult){
 			return $resResult->fetch_array(MYSQLI_ASSOC);
 		}
 
-		function freeResult($resResult){
-			return $resResult->free();
+		public function freeResult(\mysqli_result $resResult){
+			$resResult->free();
+			return true;
 		}
 
-		function errorString(){
+		public function errorString(){
 			return $this->resLink->error;
 		}
 
-		function errorNumber(){
+		public function errorNumber(){
 			return $this->resLink->errno;
 		}
 
-		function autoCommit($blEnable = true){
+		public function autoCommit($blEnable = true){
 			$this->blAutoCommit = $blEnable;
 			return (!is_null($this->resLink) && is_object($this->resLink)) ? $this->resLink->autocommit($blEnable) : false;
 		}
 
-		function commit(){
+		public function commit(){
 			$this->blActiveTransaction = false;
 			return $this->resLink->commit();
 		}
 
-		function rollback(){
+		public function rollback(){
 			$this->blActiveTransaction = false;
 			return $this->resLink->rollback();
 		}
 
-		function serverInfo(){
+		public function serverInfo(){
 			return mysqli_get_server_info($this->resLink);
 		}
 	}
-
-?>

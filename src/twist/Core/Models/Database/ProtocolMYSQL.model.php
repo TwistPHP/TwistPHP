@@ -29,98 +29,96 @@
 	 */
 	class ProtocolMYSQL{
 
-		var $resLink = null;
-		var $blActiveTransaction = false;
-		var $blAutoCommit = false;
+		public $resLink = null;
+		public $blActiveTransaction = false;
+		public $blAutoCommit = false;
 
-		function validConnectionObject(){
+		public function validConnectionObject(){
 			return (!is_null($this->resLink) && is_object($this->resLink));
 		}
 
-		function connect($strServer,$strUsername,$strPassword,$strDatabase){
+		public function connect($strServer,$strUsername,$strPassword,$strDatabase){
 			$this->resLink = @mysql_connect($strServer,$strUsername,$strPassword);
 			return $this->validConnectionObject();
 		}
 
-		function connected(){
+		public function connected(){
 			return ($this->validConnectionObject() && $this->ping());
 		}
 
-		function close(){
+		public function close(){
 			return false;
 		}
 
-		function connectionError(){
+		public function connectionError(){
 			return $this->errorString();
 		}
 
-		function ping(){
+		public function ping(){
 			return ($this->validConnectionObject()) ? mysql_ping($this->resLink) : false;
 		}
 
-		function selectDatabase($strDatabase){
+		public function selectDatabase($strDatabase){
 			return mysql_select_db($strDatabase,$this->resLink);
 		}
 
-		function setCharset($strCharset){
+		public function setCharset($strCharset){
 			return mysql_set_charset($strCharset,$this->resLink);
 		}
 
-		function escapeString($strRawString){
+		public function escapeString($strRawString){
 			return mysql_real_escape_string($strRawString,$this->resLink);
 		}
 
-		function numberRows($resResult){
+		public function numberRows($resResult){
 			return mysql_num_rows($resResult);
 		}
 
-		function insertId(){
+		public function insertId(){
 			return ($this->validConnectionObject()) ? mysql_insert_id($this->resLink) : 0;
 		}
 
-		function affectedRows($resResult){
+		public function affectedRows($resResult){
 			return ($this->validConnectionObject()) ? mysql_affected_rows($this->resLink) : 0;
 		}
 
-		function query($strQuery){
+		public function query($strQuery){
 			$this->blActiveTransaction = true;
 			return mysql_query($strQuery,$this->resLink);
 		}
 
-		function fetchArray($resResult){
+		public function fetchArray($resResult){
 			return mysql_fetch_array($resResult,MYSQL_ASSOC);
 		}
 
-		function freeResult($resResult){
+		public function freeResult($resResult){
 			return mysql_free_result($resResult);
 		}
 
-		function errorString(){
+		public function errorString(){
 			return ($this->validConnectionObject()) ? mysql_error($this->resLink) : 'MySQL Connection Error: no connection object found, new connection failed.';
 		}
 
-		function errorNumber(){
+		public function errorNumber(){
 			return ($this->validConnectionObject()) ? mysql_errno($this->resLink) : 893;
 		}
 
-		function autoCommit($blEnable = true){
+		public function autoCommit($blEnable = true){
 			$this->blAutoCommit = $blEnable;
 			return false;
 		}
 
-		function commit(){
+		public function commit(){
 			$this->blActiveTransaction = false;
 			return false;
 		}
 
-		function rollback(){
+		public function rollback(){
 			$this->blActiveTransaction = false;
 			return false;
 		}
 
-		function serverInfo(){
+		public function serverInfo(){
 			return mysql_get_server_info($this->resLink);
 		}
 	}
-
-?>
