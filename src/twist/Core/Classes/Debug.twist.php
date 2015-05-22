@@ -166,24 +166,25 @@
 			}
 
 			$intTotalTime = $arrTimer['end']-$arrTimer['start'];
-			$intTotalPercentage = 0;
+			$intTotalPercentage = $intUsedTime = 0;
 
 			foreach($arrTimer['log'] as $strKey => $arrInfo){
 
-				$intPercentage = ($arrInfo['time']/$intTotalTime)*100;
+				$intPercentage = (($arrInfo['time']-$intUsedTime)/$intTotalTime)*100;
 				$intTotalPercentage += $intPercentage;
 
 				$arrTimelineTags = array(
 					'total_percentage' => round($intTotalPercentage,2),
 					'percentage' => round($intPercentage,2),
-					'time' => round($arrInfo['time'],4),
+					'time' => round($arrInfo['time']-$intUsedTime,4),
 					'title' => $strKey
 				);
 
 				$arrTags['timeline'] .= $this->resTemplate->build('components/timeline-entry.tpl',$arrTimelineTags);
 
-				$arrTimelineTags['title'] = $arrInfo['memory'];
+				$arrTimelineTags['title'] = \Twist::File()->bytesToSize($arrInfo['memory']).' - '.$strKey;
 				$arrTags['memory_chart'] .= $this->resTemplate->build('components/timeline-entry.tpl',$arrTimelineTags);
+				$intUsedTime += $arrInfo['time']-$intUsedTime;
 			}
 
 			$arrTimelineTags = array(
@@ -195,7 +196,7 @@
 
 			$arrTags['timeline'] .= $this->resTemplate->build('components/timeline-entry.tpl',$arrTimelineTags);
 
-			$arrTimelineTags['title'] = $arrTimer['memory_end'];
+			$arrTimelineTags['title'] = \Twist::File()->bytesToSize($arrTimer['memory']['end']).' - Page Loaded';
 			$arrTags['memory_chart'] .= $this->resTemplate->build('components/timeline-entry.tpl',$arrTimelineTags);
 
 			$arrTags['execution_time'] = round($intTotalTime,4);

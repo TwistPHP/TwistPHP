@@ -91,7 +91,7 @@
 				//Register the PHP handlers
 				self::errorHandlers();
 
-				self::recordEvent('Registered Error Handlers');
+				self::recordEvent('Handlers prepared');
 
 				/**
 				 * Override the error handlers and exception handlers and turn on AJAX debugging
@@ -109,7 +109,7 @@
 				Twist::framework() -> package() -> extend('View','session',array('module' => 'Session','function' => 'viewExtension'));
 				Twist::framework() -> package() -> extend('View','user',array('module' => 'User','function' => 'viewExtension'));
 
-				self::recordEvent('Packages Prepared');
+				self::recordEvent('Packages prepared');
 
 				//Initalise the resource handler
 				\Twist\Core\Classes\Instance::storeObject('twistCoreResources',new \Twist\Core\Classes\Resources());
@@ -118,7 +118,7 @@
 				Twist::framework() -> package() -> extend('View','resource',array('instance' => 'twistCoreResources','function' => 'viewExtension'));
 				self::coreResources();
 
-				self::recordEvent('Resources Prepared');
+				self::recordEvent('Resources prepared');
 
 				self::showSetup();
 				self::phpSettings();

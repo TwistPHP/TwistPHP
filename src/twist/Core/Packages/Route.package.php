@@ -1098,6 +1098,8 @@ class Route extends BasePackage{
 					$this->framework()->package()->extend('View', 'meta', $this->resMeta->getTags());
 					$this->framework()->package()->extend('View', 'route', $arrTags);
 
+					\Twist::recordEvent('Route found');
+
 					switch($arrRoute['type']){
 						case'view':
 							$arrTags['response'] = $this->resView->build($arrRoute['item'], $arrRoute['data']);
@@ -1136,6 +1138,8 @@ class Route extends BasePackage{
 							break;
 					}
 
+					\Twist::recordEvent('Route processed');
+
 					if($arrRoute['type'] == 'ajax'){
 						header( 'Cache-Control: no-cache, must-revalidate' );
 						header( 'Expires: Wed, 24 Sep 1986 14:20:00 GMT' );
@@ -1166,9 +1170,12 @@ class Route extends BasePackage{
 							$strPageOut = $arrTags['response'];
 						}
 
+						\Twist::recordEvent('Route base processed');
+
 						//Cache the page if cache is enabled for this route
 						if($arrRoute['cache'] == true && $arrRoute['cache_life'] > 0){
 							$this->storePageCache($arrRoute['cache_key'], $strPageOut, $arrRoute['cache_life']);
+							\Twist::recordEvent('Route cache stored');
 						}
 
 						//Output the Debug window to the screen when in debug mode
@@ -1188,8 +1195,6 @@ class Route extends BasePackage{
 						//Output the page
 						echo $strPageOut;
 					}
-
-					\Twist::recordEvent('Route Served');
 
 					//Exit the script, no further processing will be done
 					if($blExitOnComplete){
