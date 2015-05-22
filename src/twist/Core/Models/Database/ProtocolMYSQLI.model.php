@@ -77,7 +77,7 @@
 			return $this->resLink->insert_id;
 		}
 
-		public function affectedRows(\mysqli_result $resResult){
+		public function affectedRows($resResult = null){
 			return $this->resLink->affected_rows;
 		}
 

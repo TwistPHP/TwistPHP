@@ -254,7 +254,7 @@
 						'file' => $strErrorFile,
 						'file_size' => (file_exists($strErrorFile)) ? filesize($strErrorFile) : 0,
 						'code_line' => $intErrorLine,
-						'code' => self::codeOutput($strErrorFile,$intErrorLine,1)
+						'code' => self::codeOutput($strErrorFile,$intErrorLine,3)
 					);
 
 					\Twist::framework()->debug()->log('Error','php',$arrError);
