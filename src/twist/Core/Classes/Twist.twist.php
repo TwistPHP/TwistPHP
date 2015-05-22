@@ -75,6 +75,9 @@
 
 				self::$blRecordEvents = (self::framework() -> setting('DEVELOPMENT_MODE') && self::framework() -> setting('DEVELOPMENT_EVENT_RECORDER'));
 
+				//Log the framework boot time, this is the point in which the framework code was required
+				Twist::Timer('TwistEventRecorder')->start($_SERVER['TWIST_BOOT']);
+
 				require_once sprintf('%sError.twist.php',DIR_FRAMEWORK_CLASSES);
 
 				self::define('E_TWIST_NOTICE',E_USER_NOTICE);
@@ -85,23 +88,19 @@
 				self::define('ERROR_LOG',Twist::framework() -> setting('ERROR_LOG'));
 				self::define('ERROR_SCREEN',Twist::framework() -> setting('ERROR_SCREEN'));
 
+				//Register the PHP handlers
+				self::errorHandlers();
+
+				self::recordEvent('Registered Error Handlers');
+
 				/**
 				 * Override the error handlers and exception handlers and turn on AJAX debugging
 				 * Note: In the future we could use this to enable the log handler instead
 				 */
 				self::define('TWIST_AJAX_REQUEST',array_key_exists('HTTP_X_REQUESTED_WITH',$_SERVER) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest');
 
-				//Register the PHP handlers
-				self::errorHandlers();
-
-				//Initalise the resource handler
-				\Twist\Core\Classes\Instance::storeObject('twistCoreResources',new \Twist\Core\Classes\Resources());
-
 				//Register all the installed packages
 				Twist::framework() -> package() -> getInstalled();
-
-				//Log the framework boot time, this is the point in which the framework code was required
-				Twist::Timer('TwistEventRecorder')->start($_SERVER['TWIST_BOOT']);
 
 				//Register the default PHP package extensions
 				Twist::framework() -> package() -> extend('View','asset',array('module' => 'Asset','function' => 'viewExtension'));
@@ -110,10 +109,17 @@
 				Twist::framework() -> package() -> extend('View','session',array('module' => 'Session','function' => 'viewExtension'));
 				Twist::framework() -> package() -> extend('View','user',array('module' => 'User','function' => 'viewExtension'));
 
+				self::recordEvent('Packages Prepared');
+
+				//Initalise the resource handler
+				\Twist\Core\Classes\Instance::storeObject('twistCoreResources',new \Twist\Core\Classes\Resources());
+
 				//Register the framework resources handler into the template system
 				Twist::framework() -> package() -> extend('View','resource',array('instance' => 'twistCoreResources','function' => 'viewExtension'));
-
 				self::coreResources();
+
+				self::recordEvent('Resources Prepared');
+
 				self::showSetup();
 				self::phpSettings();
 				self::maintenanceMode();
