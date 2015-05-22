@@ -1,7 +1,7 @@
 <div id="twist-debug">
 	<a href="https://twistphp.com/docs" target="_blank" id="twist-debug-icon" title="TwistPHP documentation"><img src="{resource:core-uri}twist/logos/logo-64.png"></a>
 	<ul id="twist-debug-blocks">
-		<li><a href="#twist-debug-messages"><span id="twist-debug-errors"><i class="fa fa-exclamation-circle"></i>{data:warning_count}</span><span id="twist-debug-warnings"><i class="fa fa-exclamation-triangle"></i>{data:notice_count}</span><span id="twist-debug-dumps"><i class="fa fa-comment"></i>{data:other_count}</span></a></li><!--
+		<li><a href="#twist-debug-messages"><span id="twist-debug-errors"{data:warning_count==0?' class="twist-debug-hidden"':''}><i class="fa fa-exclamation-circle"></i>{data:warning_count}</span><span id="twist-debug-warnings"{data:notice_count==0?' class="twist-debug-hidden"':''}><i class="fa fa-exclamation-triangle"></i>{data:notice_count}</span><span id="twist-debug-dumps"{data:other_count==0?' class="twist-debug-hidden"':''}><i class="fa fa-comment"></i>{data:other_count}</span></a></li><!--
 		--><li><a href="#twist-debug-timeline"><i class="fa fa-fw fa-lg fa-clock-o"></i>{data:execution_time_formatted}</a></li><!--
 		--><li><a href="#twist-debug-memory"><i class="fa fa-fw fa-lg fa-line-chart"></i>{bytestosize[data:memory/peak]}</a></li><!--
 		--><li><a href="#twist-debug-database"><i class="fa fa-fw fa-lg fa-database"></i>{data:database_query_count}</a></li><!--

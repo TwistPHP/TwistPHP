@@ -1,4 +1,3 @@
-@charset "UTF-8";
 /* ===================================================== ANIMATION KEYFRAMES ===================================================== */
 /* ===================================================== GENERIC ===================================================== */
 #twist-debug,
@@ -226,7 +225,6 @@
   #twist-debug-details [class^="twist-debug-box-"],
   #twist-debug-details [class*=" twist-debug-box-"] {
     margin-left: 4px;
-    padding-bottom: 10px;
     position: relative;
     overflow: visible;
     background-color: #FFF;
@@ -240,12 +238,13 @@
       #twist-debug-details [class^="twist-debug-box-"][data-title]::before,
       #twist-debug-details [class*=" twist-debug-box-"][data-title]::before {
         margin-right: -1px;
-        padding: 10px;
+        padding: 10px 10px 0;
         display: block;
-        top: 0;
-        right: 0;
-        color: #FFF;
-        background-color: #757575;
+        float: right;
+        color: #BDBDBD;
+        font-size: 14px;
+        text-align: right;
+        font-style: italic;
         content: attr(data-title); }
       #twist-debug-details .twist-debug-box[data-title]::after,
       #twist-debug-details [class^="twist-debug-box-"][data-title]::after,
@@ -261,27 +260,45 @@
       bottom: -1px;
       background-color: #757575;
       content: ""; }
-    #twist-debug-details .twist-debug-box:target div.twist-debug-more-details,
-    #twist-debug-details [class^="twist-debug-box-"]:target div.twist-debug-more-details,
-    #twist-debug-details [class*=" twist-debug-box-"]:target div.twist-debug-more-details {
-      margin-top: 20px;
+    #twist-debug-details .twist-debug-box > a.twist-debug-more-details,
+    #twist-debug-details [class^="twist-debug-box-"] > a.twist-debug-more-details,
+    #twist-debug-details [class*=" twist-debug-box-"] > a.twist-debug-more-details {
       display: block;
-      border-top: 1px #E0E0E0 solid; }
-    #twist-debug-details .twist-debug-box > a.twist-debug-more-details::before,
-    #twist-debug-details [class^="twist-debug-box-"] > a.twist-debug-more-details::before,
-    #twist-debug-details [class*=" twist-debug-box-"] > a.twist-debug-more-details::before {
-      content: "Details..."; }
+      color: #BDBDBD;
+      font-size: 15px;
+      text-decoration: none;
+      text-align: center;
+      line-height: 1;
+      background-color: #EEE;
+      -webkit-transition: line-height ease 400ms;
+      transition: line-height ease 400ms; }
+      #twist-debug-details .twist-debug-box > a.twist-debug-more-details:hover,
+      #twist-debug-details [class^="twist-debug-box-"] > a.twist-debug-more-details:hover,
+      #twist-debug-details [class*=" twist-debug-box-"] > a.twist-debug-more-details:hover {
+        line-height: 2;
+        -webkit-transition: line-height ease 100ms;
+        transition: line-height ease 100ms; }
     #twist-debug-details .twist-debug-box div.twist-debug-more-details,
     #twist-debug-details [class^="twist-debug-box-"] div.twist-debug-more-details,
     #twist-debug-details [class*=" twist-debug-box-"] div.twist-debug-more-details {
+      padding: 0 20px;
       display: none; }
+      #twist-debug-details .twist-debug-box div.twist-debug-more-details > :first-child,
+      #twist-debug-details [class^="twist-debug-box-"] div.twist-debug-more-details > :first-child,
+      #twist-debug-details [class*=" twist-debug-box-"] div.twist-debug-more-details > :first-child {
+        margin-top: 20px; }
+      #twist-debug-details .twist-debug-box div.twist-debug-more-details > :last-child,
+      #twist-debug-details [class^="twist-debug-box-"] div.twist-debug-more-details > :last-child,
+      #twist-debug-details [class*=" twist-debug-box-"] div.twist-debug-more-details > :last-child {
+        margin-bottom: 20px; }
     #twist-debug-details .twist-debug-box p,
     #twist-debug-details .twist-debug-box pre,
     #twist-debug-details [class^="twist-debug-box-"] p,
     #twist-debug-details [class^="twist-debug-box-"] pre,
     #twist-debug-details [class*=" twist-debug-box-"] p,
     #twist-debug-details [class*=" twist-debug-box-"] pre {
-      padding: 20px 20px 10px; }
+      padding: 20px;
+      font-size: 14px; }
       #twist-debug-details .twist-debug-box p + p,
       #twist-debug-details .twist-debug-box p + pre,
       #twist-debug-details .twist-debug-box pre + p,
@@ -302,14 +319,15 @@
       -webkit-box-sizing: border-box;
       -moz-box-sizing: border-box;
       box-sizing: border-box;
-      overflow: auto; }
-  #twist-debug-details .twist-debug-box-red[data-title]::before, #twist-debug-details .twist-debug-box-red::after {
+      overflow: auto;
+      white-space: pre-line; }
+  #twist-debug-details .twist-debug-box-red::after {
     background-color: #D32F2F; }
-  #twist-debug-details .twist-debug-box-yellow[data-title]::before, #twist-debug-details .twist-debug-box-yellow::after {
+  #twist-debug-details .twist-debug-box-yellow::after {
     background-color: #FBC02D; }
-  #twist-debug-details .twist-debug-box-blue[data-title]::before, #twist-debug-details .twist-debug-box-blue::after {
+  #twist-debug-details .twist-debug-box-blue::after {
     background-color: #1976D2; }
-  #twist-debug-details .twist-debug-box-green[data-title]::before, #twist-debug-details .twist-debug-box-green::after {
+  #twist-debug-details .twist-debug-box-green::after {
     background-color: #689F38; }
   #twist-debug-details #twist-debug-messages .twist-debug-message + .twist-debug-message {
     margin-top: 20px; }

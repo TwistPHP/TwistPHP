@@ -100,12 +100,20 @@
 						domHead.appendChild( domScript );
 					},
 					loadDebugger = function( blNoConfilct ) {
+						/* ===================================================== GO, GO, GO! ===================================================== */
 						var $ = ( blNoConfilct === true ) ? window.jQuery.noConflict( true ) : window.jQuery,
 								jqoTwistDebugBlocks = $( '#twist-debug-blocks' ),
 								jqoTwistDebugDetails = $( '#twist-debug-details' );
 
 						info( 'jQuery v.' + $.fn.jquery + ' ready' );
 
+						$( '.twist-debug-box, [class^="twist-debug-box-"], [class*=" twist-debug-box-"]' ).has( '.twist-debug-more-details' ).each(
+							function() {
+								var jqoMoreDetails = $( this ).find( '.twist-debug-more-details' );
+
+								jqoMoreDetails.after( '<a href="#twist-debug-more-details" class="twist-debug-more-details">&hellip;&ctdot;</a>' );
+							}
+						),
 						jqoTwistDebugBlocks.on( 'click', 'a',
 							function( e ) {
 								e.preventDefault();
@@ -125,6 +133,12 @@
 								e.preventDefault();
 								jqoTwistDebugBlocks.find( 'a.current' ).removeClass( 'current' ),
 								jqoTwistDebugDetails.removeClass( 'show' );
+							}
+						).on( 'click', 'a[href="#twist-debug-more-details"]',
+							function( e ) {
+								e.preventDefault();
+
+								$( this ).prev( '.twist-debug-more-details' ).slideToggle();
 							}
 						);
 					};

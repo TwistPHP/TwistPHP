@@ -8,6 +8,7 @@ $bar-fade-width: 10px;
 $bar-background: #424242; //#455A64
 $bar-background-hover: #616161;
 $bar-border: #757575;
+$subtle-text: #BDBDBD;
 $border: #E0E0E0;
 $background: #EEE;
 $red: #D32F2F;
@@ -371,7 +372,6 @@ $z-index: 1337;
 	[class^="twist-debug-box-"],
 	[class*=" twist-debug-box-"] {
 		margin-left: 4px;
-		padding-bottom: 10px;
 
 		position: relative;
 
@@ -387,17 +387,20 @@ $z-index: 1337;
 
 			&::before {
 				margin-right: -1px;
-				padding: 10px;
+				//padding: 10px;
+				padding: 10px 10px 0;
 
 				display: block;
 
-				//position: absolute;
-				top: 0;
-				right: 0;
+				float: right;
 
-				color: #FFF;
+				//color: #FFF;
+				color: $subtle-text;
+				font-size: 14px;
+				text-align: right;
+				font-style: italic;
 
-				background-color: $bar-border;
+				//background-color: $bar-border;
 
 				content: attr(data-title);
 			}
@@ -420,33 +423,47 @@ $z-index: 1337;
 			content: "";
 		}
 
-		&:target {
-			div.twist-debug-more-details {
-				margin-top: 20px;
-
-				display: block;
-
-				border-top: 1px $border solid;
-
-				&::before {
-					//content: "Hide";
-				}
-			}
-		}
-
 		> a.twist-debug-more-details {
-			&::before {
-				content: "Details...";
+			display: block;
+
+			color: $subtle-text;
+			font-size: 15px;
+			text-decoration: none;
+			text-align: center;
+			line-height: 1;
+
+			background-color: $background;
+
+			-webkit-transition: line-height ease 400ms;
+			transition: line-height ease 400ms;
+
+			&:hover {
+				line-height: 2;
+
+				-webkit-transition: line-height ease 100ms;
+				transition: line-height ease 100ms;
 			}
 		}
 
 		div.twist-debug-more-details {
+			padding: 0 20px;
+
 			display: none;
+
+			> :first-child {
+				margin-top: 20px;
+			}
+
+			> :last-child {
+				margin-bottom: 20px;
+			}
 		}
 
 		p,
 		pre {
-			padding: 20px 20px 10px;
+			padding: 20px;
+
+			font-size: 14px;
 
 			+ p,
 			+ pre {
@@ -464,32 +481,34 @@ $z-index: 1337;
 			box-sizing: border-box;
 
 			overflow: auto;
+
+			white-space: pre-line;
 		}
 	}
 
 	.twist-debug-box-red {
-		&[data-title]::before,
+		//&[data-title]::before,
 		&::after {
 			background-color: $red;
 		}
 	}
 
 	.twist-debug-box-yellow {
-		&[data-title]::before,
+		//&[data-title]::before,
 		&::after {
 			background-color: $yellow;
 		}
 	}
 
 	.twist-debug-box-blue {
-		&[data-title]::before,
+		//&[data-title]::before,
 		&::after {
 			background-color: $blue;
 		}
 	}
 
 	.twist-debug-box-green {
-		&[data-title]::before,
+		//&[data-title]::before,
 		&::after {
 			background-color: $green;
 		}
