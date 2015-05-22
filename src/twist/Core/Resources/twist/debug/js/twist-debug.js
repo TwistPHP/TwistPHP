@@ -102,6 +102,7 @@
 					loadDebugger = function( blNoConfilct ) {
 						/* ===================================================== GO, GO, GO! ===================================================== */
 						var $ = ( blNoConfilct === true ) ? window.jQuery.noConflict( true ) : window.jQuery,
+								blMemoryChartLoaded = false,
 								jqoTwistDebugBlocks = $( '#twist-debug-blocks' ),
 								jqoTwistDebugDetails = $( '#twist-debug-details' );
 
@@ -123,9 +124,45 @@
 									jqoTwistDebugDetails.removeClass( 'show' ),
 									jqoThisBlock.removeClass( 'current' );
 								} else {
-									jqoTwistDebugDetails.addClass( 'show' ).children( 'div' ).hide().filter( jqoThisBlock.attr( 'href' ) ).show(),
+									var jqsTarget = jqoThisBlock.attr( 'href' );
+
+									jqoTwistDebugDetails.addClass( 'show' ).children( 'div' ).hide().filter( jqsTarget ).show(),
 									jqoTwistDebugBlocks.find( 'a.current' ).removeClass( 'current' ),
 									jqoThisBlock.addClass( 'current' );
+
+									if( !blMemoryChartLoaded
+											&& jqsTarget === '#twist-debug-memory' ) {
+										/*google.load('visualization', '1.1', {packages: ['line']});
+										var data = new google.visualization.DataTable();
+
+										data.addColumn( 'number', 'Time' );
+										data.addColumn( 'number', 'Memory (MB)' );
+										data.addRows(
+											[
+												[1, 37.8],
+												[2, 30.9],
+												[3, 25.4],
+												[6, 8.8],
+												[7, 7.6],
+												[8, 12.3],
+												[10,12.8],
+												[11, 5.3],
+												[14, 4.2]
+											]
+										);
+
+										var chart = new google.charts.Line( document.getElementById( 'twist-debug-memory-chart' ) );
+
+										chart.draw( data,
+											{
+												chart: { title: 'Memory Usage' },
+												width: 900,
+												height: 500
+											}
+										);*/
+										
+										blMemoryChartLoaded = true;
+									}
 								}
 							}
 						),

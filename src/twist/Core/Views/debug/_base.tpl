@@ -37,20 +37,16 @@
 		<h6>Memory</h6>
 		<div class="twist-debug-column-wrapper">
 			<div class="twist-debug-column-100">
-				<div id="twist-debug-memory-chart">
-					<ul>
-						{data:memory_chart}
-					</ul>
-				</div>
-			</div>
-			<div class="twist-debug-column-50">
+				<div id="twist-debug-memory-chart"></div>
+				<ul>
+					{data:memory_chart}
+				</ul>
 				<p>
 					Memory Limit: {data:memory/limit}
 					Peak Memory: {bytestosize[data:memory/peak]}
 					End Memory: {bytestosize[data:memory/end]}
 				</p>
 			</div>
-			<div class="twist-debug-column-50"></div>
 		</div>
 	</div>
 	<div id="twist-debug-database">
@@ -102,4 +98,5 @@
 		</div>
 	</div>
 </div>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 {resource:twist/debug}
