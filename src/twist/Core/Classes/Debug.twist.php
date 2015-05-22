@@ -94,23 +94,22 @@
 
 			foreach($this->arrDebugLog['Database']['queries'] as $arrEachItem){
 
+				$arrParts = explode(' ',trim($arrEachItem['query']));
+				$arrEachItem['type'] = strtoupper($arrParts[0]);
+				unset($arrParts);
+
 				if($arrEachItem['affected_rows'] < 0 || $arrEachItem['affected_rows'] == false){
 					$arrEachItem['affected_rows'] = 0;
 				}
 
 				if($arrEachItem['status']){
 					$arrEachItem['response'] = 'success';
-					if($arrEachItem['num_rows'] <= 0 && $arrEachItem['affected_rows'] <= 0){
+					if($arrEachItem['type'] != 'INSERT' && ($arrEachItem['num_rows'] <= 0 && $arrEachItem['affected_rows'] <= 0)){
 						$arrEachItem['response'] = 'empty';
 					}
 				}else{
 					$arrEachItem['response'] = 'fail';
 				}
-
-
-				$arrParts = explode(' ',trim($arrEachItem['query']));
-				$arrEachItem['type'] = $arrParts[0];
-				unset($arrParts);
 
 				$arrTags['database_queries'] .= $this->resTemplate->build('components/database-query.tpl',$arrEachItem);
 			}

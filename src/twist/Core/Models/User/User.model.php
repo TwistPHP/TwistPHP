@@ -107,58 +107,57 @@ class User{
 		//Commit and grab the standard user data
 		$mxdOut = $this->resDatabaseRecord->commit();
 
-		if($mxdOut){
+		//Only store user data if something has changed
+		if(json_encode($this->arrUserData) !== json_encode($this->arrOriginalUserData)){
+			foreach($this->arrUserData as $strKey => $mxdData){
 
-			$this->arrOriginalData = $this->resDatabaseRecord->values();
+				if(!array_key_exists($strKey,$this->arrUserDataFields)){
 
-			//Only store user data if something has changed
-			if(json_encode($this->arrUserData) !== json_encode($this->arrOriginalUserData)){
-				foreach($this->arrUserData as $strKey => $mxdData){
-
-					if(!array_key_exists($strKey,$this->arrUserDataFields)){
-
-						//The field is a new filed, insert into the database
-						$resUserDataField = \Twist::Database()->createRecord(sprintf('%suser_data_fields',DATABASE_TABLE_PREFIX));
-						$resUserDataField->set('slug',$strKey);
-						$resUserDataField->commit();
-						$this->arrUserDataFields[$strKey] = $resUserDataField->values();
-					}
-
-					if(is_null($mxdData)){
-
-						//If the item is null it can be removed
-						\Twist::Database()->query("DELETE FROM `%suser_data` WHERE `user_id` = %d AND `field_id` = %d LIMIT 1",
-							DATABASE_TABLE_PREFIX,
-							$this->resDatabaseRecord->get('id'),
-							$this->arrUserDataFields[$strKey]['id']
-						);
-
-						unset($this->arrUserData[$strKey]);
-
-					}elseif(array_key_exists($strKey,$this->arrOriginalUserData) && $mxdData !== $this->arrOriginalUserData[$strKey]){
-
-						//If the key was in the original array and the value is different from the original it can be removed
-						\Twist::Database()->query( "UPDATE `%suser_data` SET `data` = '%s' WHERE `user_id` = %d AND `field_id` = %d LIMIT 1",
-							DATABASE_TABLE_PREFIX,
-							$mxdData,
-							$this->resDatabaseRecord->get( 'id' ),
-							$this->arrUserDataFields[$strKey]['id']
-						);
-
-					}elseif(!array_key_exists($strKey,$this->arrOriginalUserData)){
-
-						//If the key is not in the original array we need to insert the value
-						$resUserData = \Twist::Database()->createRecord(sprintf('%suser_data',DATABASE_TABLE_PREFIX));
-						$resUserData->set('user_id',$this->resDatabaseRecord->get('id'));
-						$resUserData->set('field_id',$this->arrUserDataFields[$strKey]['id']);
-						$resUserData->set('data',$mxdData);
-						$resUserData->commit();
-					}
+					//The field is a new filed, insert into the database
+					$resUserDataField = \Twist::Database()->createRecord(sprintf('%suser_data_fields',DATABASE_TABLE_PREFIX));
+					$resUserDataField->set('slug',$strKey);
+					$resUserDataField->commit();
+					$this->arrUserDataFields[$strKey] = $resUserDataField->values();
 				}
 
-				//Reset original data to be the same as user data, ready to continue
-				$this->arrOriginalUserData = $this->arrUserData;
+				if(is_null($mxdData)){
+
+					//If the item is null it can be removed
+					\Twist::Database()->query("DELETE FROM `%suser_data` WHERE `user_id` = %d AND `field_id` = %d LIMIT 1",
+						DATABASE_TABLE_PREFIX,
+						$this->resDatabaseRecord->get('id'),
+						$this->arrUserDataFields[$strKey]['id']
+					);
+
+					unset($this->arrUserData[$strKey]);
+
+				}elseif(array_key_exists($strKey,$this->arrOriginalUserData) && $mxdData !== $this->arrOriginalUserData[$strKey]){
+
+					//If the key was in the original array and the value is different from the original it can be removed
+					\Twist::Database()->query( "UPDATE `%suser_data` SET `data` = '%s' WHERE `user_id` = %d AND `field_id` = %d LIMIT 1",
+						DATABASE_TABLE_PREFIX,
+						$mxdData,
+						$this->resDatabaseRecord->get( 'id' ),
+						$this->arrUserDataFields[$strKey]['id']
+					);
+
+				}elseif(!array_key_exists($strKey,$this->arrOriginalUserData)){
+
+					//If the key is not in the original array we need to insert the value
+					$resUserData = \Twist::Database()->createRecord(sprintf('%suser_data',DATABASE_TABLE_PREFIX));
+					$resUserData->set('user_id',$this->resDatabaseRecord->get('id'));
+					$resUserData->set('field_id',$this->arrUserDataFields[$strKey]['id']);
+					$resUserData->set('data',$mxdData);
+					$resUserData->commit();
+				}
 			}
+
+			//Reset original data to be the same as user data, ready to continue
+			$this->arrOriginalUserData = $this->arrUserData;
+		}
+
+		if($mxdOut){
+			$this->arrOriginalData = $this->resDatabaseRecord->values();
 
 			if($this->blNewAccount){
 	            $this->resDatabaseRecord->set('joined',\Twist::DateTime()->date('Y-m-d H:i:s'));
