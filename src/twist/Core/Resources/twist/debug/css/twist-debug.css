@@ -10,7 +10,78 @@
   #twist-debug *,
   #twist-debug-details * {
     margin: 0;
-    padding: 0; }
+    padding: 0;
+    color: inherit;
+    text-align: inherit;
+    direction: inherit;
+    text-size-adjust: none;
+    -moz-text-size-adjust: none;
+    -webkit-text-size-adjust: none;
+    -ms-text-size-adjust: none;
+    text-rendering: optimizeLegibility; }
+  #twist-debug h1, #twist-debug h2, #twist-debug h3, #twist-debug h4, #twist-debug h5, #twist-debug h6, #twist-debug p, #twist-debug ul, #twist-debug ol, #twist-debug li, #twist-debug dl, #twist-debug dt, #twist-debug dd, #twist-debug a, #twist-debug span, #twist-debug em, #twist-debug strong, #twist-debug pre,
+  #twist-debug-details h1,
+  #twist-debug-details h2,
+  #twist-debug-details h3,
+  #twist-debug-details h4,
+  #twist-debug-details h5,
+  #twist-debug-details h6,
+  #twist-debug-details p,
+  #twist-debug-details ul,
+  #twist-debug-details ol,
+  #twist-debug-details li,
+  #twist-debug-details dl,
+  #twist-debug-details dt,
+  #twist-debug-details dd,
+  #twist-debug-details a,
+  #twist-debug-details span,
+  #twist-debug-details em,
+  #twist-debug-details strong,
+  #twist-debug-details pre {
+    color: inherit;
+    line-height: inherit; }
+  #twist-debug h1, #twist-debug h2, #twist-debug h3, #twist-debug h4, #twist-debug h5, #twist-debug h6, #twist-debug strong,
+  #twist-debug-details h1,
+  #twist-debug-details h2,
+  #twist-debug-details h3,
+  #twist-debug-details h4,
+  #twist-debug-details h5,
+  #twist-debug-details h6,
+  #twist-debug-details strong {
+    font-weight: 700; }
+  #twist-debug ul,
+  #twist-debug-details ul {
+    list-style: disc outside; }
+  #twist-debug ol,
+  #twist-debug-details ol {
+    list-style: decimal outside; }
+  #twist-debug sub,
+  #twist-debug sup,
+  #twist-debug small,
+  #twist-debug-details sub,
+  #twist-debug-details sup,
+  #twist-debug-details small {
+    font-size: smaller; }
+  #twist-debug ul ul,
+  #twist-debug ol ul,
+  #twist-debug ul ol,
+  #twist-debug ol ol,
+  #twist-debug-details ul ul,
+  #twist-debug-details ol ul,
+  #twist-debug-details ul ol,
+  #twist-debug-details ol ol {
+    font-size: 1em; }
+  #twist-debug img,
+  #twist-debug-details img {
+    display: inline-block; }
+  #twist-debug a img,
+  #twist-debug-details a img {
+    border: none; }
+  #twist-debug input,
+  #twist-debug button,
+  #twist-debug-details input,
+  #twist-debug-details button {
+    -webkit-font-smoothing: antialiased; }
   #twist-debug .twist-debug-hidden,
   #twist-debug-details .twist-debug-hidden {
     display: none !important; }
@@ -111,11 +182,12 @@
         transition: background ease 100ms; }
       #twist-debug-blocks > li a.current {
         background-color: #616161; }
-    #twist-debug-blocks > li i {
-      width: 1.3em;
-      margin-right: 5px;
-      display: inline-block;
-      text-align: left; }
+      #twist-debug-blocks > li a i {
+        width: 1.3em;
+        margin-right: 5px;
+        display: inline-block;
+        color: inherit;
+        text-align: left; }
     #twist-debug-blocks > li .fa-stack-2x {
       text-shadow: 0 0 3px #424242; }
 
@@ -165,12 +237,14 @@
       top: 12px;
       right: 0;
       left: 0;
-      background-color: #FFF;
+      background-color: #E0E0E0;
       content: ""; }
     #twist-debug-details > a::before {
       transform: rotate(45deg); }
     #twist-debug-details > a::after {
       transform: rotate(135deg); }
+    #twist-debug-details > a:hover::before, #twist-debug-details > a:hover::after {
+      background-color: #FFF; }
   #twist-debug-details > div {
     display: none;
     position: absolute;
@@ -230,6 +304,7 @@
     margin-left: 4px;
     position: relative;
     overflow: visible;
+    color: #212121;
     background-color: #FFF;
     border: 1px #E0E0E0 solid;
     border-left-width: 0;
@@ -274,9 +349,8 @@
       text-decoration: none;
       text-align: center;
       line-height: 1;
-      			/*background-color: $background;
-      
-      			-webkit-transition: line-height ease 400ms;
+      border-top: 1px #EEE solid;
+      			/*-webkit-transition: line-height ease 400ms;
       			transition: line-height ease 400ms;
       
       			&:hover {
@@ -285,6 +359,20 @@
       				-webkit-transition: line-height ease 100ms;
       				transition: line-height ease 100ms;
       			}*/ }
+      #twist-debug-details .twist-debug-box > a.twist-debug-more-details:hover,
+      #twist-debug-details [class^="twist-debug-box-"] > a.twist-debug-more-details:hover,
+      #twist-debug-details [class*=" twist-debug-box-"] > a.twist-debug-more-details:hover {
+        color: #212121; }
+    #twist-debug-details .twist-debug-box + .twist-debug-box,
+    #twist-debug-details .twist-debug-box + [class^="twist-debug-box-"],
+    #twist-debug-details .twist-debug-box + [class*=" twist-debug-box-"],
+    #twist-debug-details [class^="twist-debug-box-"] + .twist-debug-box,
+    #twist-debug-details [class^="twist-debug-box-"] + [class^="twist-debug-box-"],
+    #twist-debug-details [class^="twist-debug-box-"] + [class*=" twist-debug-box-"],
+    #twist-debug-details [class*=" twist-debug-box-"] + .twist-debug-box,
+    #twist-debug-details [class*=" twist-debug-box-"] + [class^="twist-debug-box-"],
+    #twist-debug-details [class*=" twist-debug-box-"] + [class*=" twist-debug-box-"] {
+      margin-top: 20px; }
     #twist-debug-details .twist-debug-box div.twist-debug-more-details,
     #twist-debug-details [class^="twist-debug-box-"] div.twist-debug-more-details,
     #twist-debug-details [class*=" twist-debug-box-"] div.twist-debug-more-details {
@@ -303,16 +391,16 @@
         left: 0;
         background-color: #FFF;
         border-radius: 100%;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.35);
+        box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
         content: ""; }
       #twist-debug-details .twist-debug-box div.twist-debug-more-details::before,
       #twist-debug-details [class^="twist-debug-box-"] div.twist-debug-more-details::before,
       #twist-debug-details [class*=" twist-debug-box-"] div.twist-debug-more-details::before {
-        top: -20px; }
+        top: -21px; }
       #twist-debug-details .twist-debug-box div.twist-debug-more-details::after,
       #twist-debug-details [class^="twist-debug-box-"] div.twist-debug-more-details::after,
       #twist-debug-details [class*=" twist-debug-box-"] div.twist-debug-more-details::after {
-        bottom: -20px; }
+        bottom: -23px; }
       #twist-debug-details .twist-debug-box div.twist-debug-more-details > :first-child,
       #twist-debug-details .twist-debug-box div.twist-debug-more-details > :last-child,
       #twist-debug-details [class^="twist-debug-box-"] div.twist-debug-more-details > :first-child,
@@ -349,6 +437,8 @@
       -moz-box-sizing: border-box;
       box-sizing: border-box;
       overflow: auto;
+      font-family: "Courier New", Courier, monospace, mono;
+      line-height: 1.25;
       white-space: pre-line; }
   #twist-debug-details .twist-debug-box-red::after {
     background-color: #D32F2F; }
@@ -358,8 +448,6 @@
     background-color: #1976D2; }
   #twist-debug-details .twist-debug-box-green::after {
     background-color: #689F38; }
-  #twist-debug-details #twist-debug-messages .twist-debug-message + .twist-debug-message {
-    margin-top: 20px; }
   #twist-debug-details #twist-debug-timeline-chart {
     padding-top: 50px;
     position: relative;
@@ -393,7 +481,5 @@
         bottom: 10px;
         border-right: 1px #000 solid;
         content: ""; }
-  #twist-debug-details #twist-debug-database .twist-debug-query + .twist-debug-query {
-    margin-top: 20px; }
 
 /*# sourceMappingURL=twist-debug.css.map */

@@ -5,6 +5,7 @@ $bar-height: 30px;
 $bar-block-height: 30px;
 $bar-logo-width: 32px;
 $bar-fade-width: 10px;
+$text: #212121;
 $bar-background: #424242; //#455A64
 $bar-background-hover: #616161;
 $bar-border: #757575;
@@ -20,7 +21,7 @@ $z-index: 1337;
 
 // ===================================================== MIXINS =====================================================
 @function blackorwhite($colour) {
-	@return if(lightness($colour) > 50, #212121, #FFF);
+	@return if(lightness($colour) > 50, $text, #FFF);
 }
 
 /* ===================================================== ANIMATION KEYFRAMES ===================================================== */
@@ -38,6 +39,58 @@ $z-index: 1337;
 	* {
 		margin: 0;
 		padding: 0;
+
+		color: inherit;
+		text-align: inherit;
+		direction: inherit;
+		text-size-adjust: none;
+		-moz-text-size-adjust: none;
+		-webkit-text-size-adjust: none;
+		-ms-text-size-adjust: none;
+		text-rendering: optimizeLegibility;
+	}
+
+	h1, h2, h3, h4, h5, h6, p, ul, ol, li, dl, dt, dd, a, span, em, strong, pre {
+		color: inherit;
+		line-height: inherit;
+	}
+
+	h1, h2, h3, h4, h5, h6, strong {
+		font-weight: 700;
+	}
+
+	ul {
+		list-style: disc outside;
+	}
+
+	ol {
+		list-style: decimal outside;
+	}
+
+	sub,
+	sup,
+	small {
+		font-size: smaller;
+	}
+
+	ul ul,
+	ol ul,
+	ul ol,
+	ol ol {
+		font-size: 1em;
+	}
+
+	img {
+		display: inline-block;
+	}
+
+	a img {
+		border: none;
+	}
+
+	input,
+	button {
+		-webkit-font-smoothing: antialiased;
 	}
 
 	.twist-debug-hidden {
@@ -180,15 +233,16 @@ $z-index: 1337;
 				&.current {
 					background-color: $bar-background-hover;
 				}
-			}
 
-			i {
-				width: 1.3em;
-				margin-right: 5px;
+				i {
+					width: 1.3em;
+					margin-right: 5px;
 
-				display: inline-block;
+					display: inline-block;
 
-				text-align: left;
+					color: inherit;
+					text-align: left;
+				}
 			}
 
 			.fa-stack-2x {
@@ -269,7 +323,7 @@ $z-index: 1337;
 			right: 0;
 			left: 0;
 
-			background-color: #FFF;
+			background-color: $border;
 
 			content: "";
 		}
@@ -280,6 +334,13 @@ $z-index: 1337;
 
 		&::after {
 			transform: rotate(135deg);
+		}
+
+		&:hover {
+			&::before,
+			&::after {
+				background-color: #FFF;
+			}
 		}
 	}
 
@@ -381,6 +442,8 @@ $z-index: 1337;
 
 		overflow: visible;
 
+		color: $text;
+
 		background-color: #FFF;
 
 		border: 1px $border solid;
@@ -440,9 +503,11 @@ $z-index: 1337;
 			text-align: center;
 			line-height: 1;
 
-			/*background-color: $background;
+			//background-color: $background;
 
-			-webkit-transition: line-height ease 400ms;
+			border-top: 1px $background solid;
+
+			/*-webkit-transition: line-height ease 400ms;
 			transition: line-height ease 400ms;
 
 			&:hover {
@@ -451,6 +516,17 @@ $z-index: 1337;
 				-webkit-transition: line-height ease 100ms;
 				transition: line-height ease 100ms;
 			}*/
+
+			&:hover {
+				color: $text;
+			}
+		}
+
+
+		+ .twist-debug-box,
+		+ [class^="twist-debug-box-"],
+		+ [class*=" twist-debug-box-"] {
+			margin-top: 20px;
 		}
 
 		div.twist-debug-more-details {
@@ -476,17 +552,17 @@ $z-index: 1337;
 
 				border-radius: 100%;
 
-				box-shadow: 0 0 15px rgba(0, 0, 0, 0.35);
+				box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
 
 				content: "";
 			}
 
 			&::before {
-				top: -20px;
+				top: -21px;
 			}
 
 			&::after {
-				bottom: -20px;
+				bottom: -23px;
 			}
 
 			> :first-child,
@@ -517,6 +593,9 @@ $z-index: 1337;
 			box-sizing: border-box;
 
 			overflow: auto;
+
+			font-family: "Courier New", Courier, monospace, mono;
+			line-height: 1.25;
 
 			white-space: pre-line;
 		}
@@ -550,13 +629,7 @@ $z-index: 1337;
 		}
 	}
 
-	#twist-debug-messages {
-		.twist-debug-message {
-			+ .twist-debug-message {
-				margin-top: 20px;
-			}
-		}
-	}
+	#twist-debug-messages {}
 
 	#twist-debug-timeline {}
 
@@ -617,13 +690,7 @@ $z-index: 1337;
 
 	#twist-debug-memory {}
 
-	#twist-debug-database {
-		.twist-debug-query {
-			+ .twist-debug-query {
-				margin-top: 20px;
-			}
-		}
-	}
+	#twist-debug-database {}
 
 	#twist-debug-route {}
 }
