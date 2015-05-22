@@ -1,1 +1,1 @@
-#[Demo](https://rawgit.com/Shadow-Technologies/TwistPHP/debug/debug-development/index.html)
+#[Demo](https://rawgit.com/Shadow-Technologies/TwistPHP/nightly/debug-development/index.html)
