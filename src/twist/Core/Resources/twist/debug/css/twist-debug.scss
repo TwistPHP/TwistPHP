@@ -386,6 +386,8 @@ $z-index: 1337;
 		border: 1px $border solid;
 		border-left-width: 0;
 
+		box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.05);
+
 		&[data-title] {
 			border-top-width: 0;
 
@@ -428,15 +430,17 @@ $z-index: 1337;
 		}
 
 		> a.twist-debug-more-details {
+			height: 20px;
+
 			display: block;
 
 			color: $subtle-text;
-			font-size: 15px;
+			font-size: 20px;
 			text-decoration: none;
 			text-align: center;
 			line-height: 1;
 
-			background-color: $background;
+			/*background-color: $background;
 
 			-webkit-transition: line-height ease 400ms;
 			transition: line-height ease 400ms;
@@ -446,15 +450,44 @@ $z-index: 1337;
 
 				-webkit-transition: line-height ease 100ms;
 				transition: line-height ease 100ms;
-			}
+			}*/
 		}
 
 		div.twist-debug-more-details {
-			padding: 20px;
+			padding: 20px 20px 40px;
 
 			display: none;
 
-			background-color: $background;
+			position: relative;
+
+			overflow: hidden;
+
+			//background-color: $background;
+
+			&::before,
+			&::after {
+				height: 20px;
+
+				position: absolute;
+				right: 0;
+				left: 0;
+
+				background-color: #FFF;
+
+				border-radius: 100%;
+
+				box-shadow: 0 0 15px rgba(0, 0, 0, 0.35);
+
+				content: "";
+			}
+
+			&::before {
+				top: -20px;
+			}
+
+			&::after {
+				bottom: -20px;
+			}
 
 			> :first-child,
 			> :last-child {
