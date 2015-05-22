@@ -67,7 +67,7 @@
 
 			$strKey = array_shift( $arrParts );
 
-			if( array_key_exists( $strKey, $arrData ) ) {
+			if( is_array( $arrData ) && array_key_exists( $strKey, $arrData ) ) {
 
 				if( count( $arrParts ) ) {
 					$mxdOut = $this -> arrayParse( implode( $strSplitChar, $arrParts ), $arrData[$strKey] );
