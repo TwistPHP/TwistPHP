@@ -15,11 +15,11 @@
 	<h3>Application Summary</h3>
 	<dl class="inline">
 		<dt>Cache Size</dt>
-			<dd>32M (300 Files)</dd>
+		<dd>32M (300 Files)</dd>
 		<dt>Routes</dt>
-			<dd>27 Registered</dd>
+		<dd>{data:route-data}</dd>
 		<dt>User Accounts</dt>
-			<dd>3</dd>
+		<dd>{data:user-accounts}</dd>
 	</dl>
 </div>
 <div class="clear"></div>

@@ -66,6 +66,16 @@ class Manager extends BaseController{
 			$arrTags['release-channel'] = \Twist::framework()->setting('RELEASE_CHANNEL');
 			$arrTags['database-debug'] = (\Twist::framework()->setting('DATABASE_DEBUG') == '1') ? 'On' : 'Off';
 
+			$arrRoutes = \Twist::Route()->getAll();
+			$arrTags['route-data'] = sprintf('ANY %d, GET %d, POST %d, PUT %d, DELETE %d',count($arrRoutes['ANY']),count($arrRoutes['GET']),count($arrRoutes['POST']),count($arrRoutes['PUT']),count($arrRoutes['DELETE']));
+
+			$arrTags['user-accounts'] = sprintf('SUPERADMIN %d, ADMIN %d, ADVANCED %d, MEMEBR %d',
+				\Twist::Database()->count(sprintf('%susers',DATABASE_TABLE_PREFIX),\Twist::framework()->setting('USER_LEVEL_SUPERADMIN'),'level'),
+				\Twist::Database()->count(sprintf('%susers',DATABASE_TABLE_PREFIX),\Twist::framework()->setting('USER_LEVEL_ADMIN'),'level'),
+				\Twist::Database()->count(sprintf('%susers',DATABASE_TABLE_PREFIX),\Twist::framework()->setting('USER_LEVEL_ADVANCED'),'level'),
+				\Twist::Database()->count(sprintf('%susers',DATABASE_TABLE_PREFIX),\Twist::framework()->setting('USER_LEVEL_MEMBER'),'level')
+			);
+
 			return $this->_view('pages/dashboard.tpl',$arrTags);
 		}
 
