@@ -29,6 +29,7 @@ namespace Twist\Core\Classes;
 final class Resources{
 
 	var $arrLibraries = array();
+	protected $arrIncluded = array();
 
 	public function __construct(){
 		$this->loadLibraryManifest();
@@ -42,97 +43,103 @@ final class Resources{
 	public function viewExtension($strReference){
 
 		$strOut = '';
-		$arrParts = (strstr($strReference,',')) ? explode(',',$strReference) : array(0 => $strReference,1 => null);
 
-		$strAsyncType = null;
-		$blInline = false;
+		//Only allow each resource to be output once
+		if(!array_key_exists($strReference,$this->arrIncluded)){
 
-		if($arrParts[0] == 'core-uri'){
-			return sprintf('%sCore/Resources/',FRAMEWORK_URI);
-		}
+			$this->arrIncluded[$strReference] = $strReference;
+			$arrParts = (strstr($strReference,',')) ? explode(',',$strReference) : array(0 => $strReference,1 => null);
 
-		if( count( $arrParts ) > 1 ) {
-			if( $arrParts[count( $arrParts ) - 1] === 'inline' ) {
-				$blInline = true;
-				if( $arrParts[count( $arrParts ) - 2] === 'async'
-					|| $arrParts[count( $arrParts ) - 2] === 'defer' ) {
-					$strAsyncType = $arrParts[count( $arrParts ) - 2];
-					if( count( $arrParts ) === 3 ) {
+			$strAsyncType = null;
+			$blInline = false;
+
+			if($arrParts[0] == 'core-uri'){
+				return sprintf('%sCore/Resources/',FRAMEWORK_URI);
+			}
+
+			if( count( $arrParts ) > 1 ) {
+				if( $arrParts[count( $arrParts ) - 1] === 'inline' ) {
+					$blInline = true;
+					if( $arrParts[count( $arrParts ) - 2] === 'async'
+						|| $arrParts[count( $arrParts ) - 2] === 'defer' ) {
+						$strAsyncType = $arrParts[count( $arrParts ) - 2];
+						if( count( $arrParts ) === 3 ) {
+							$arrParts[1] = null;
+						}
+					} else if( count( $arrParts ) === 2 ) {
 						$arrParts[1] = null;
 					}
-				} else if( count( $arrParts ) === 2 ) {
-					$arrParts[1] = null;
-				}
-			} else if( $arrParts[count( $arrParts ) - 1] === 'async'
-				|| $arrParts[count( $arrParts ) - 1] === 'defer' ) {
-				$strAsyncType = $arrParts[count( $arrParts ) - 1];
-				if( count( $arrParts ) === 2 ) {
-					$arrParts[1] = null;
-				}
-			}
-		}
-
-		$arrResource = $this->getFromLibrary($arrParts[0],$arrParts[1]);
-
-		//If the count is bigger than 0 then output the data
-		if(count($arrResource)){
-
-			$strModuleURI = $arrResource['uri'];
-			$strModulePath = $arrResource['path'];
-
-			if(count($arrResource['css'])){
-				foreach($arrResource['css'] as $strEachItem){
-					if( $blInline ) {
-						if(substr($strEachItem,0,2) == '//'){
-							$strOut .= sprintf( '%s ', file_get_contents($strEachItem) );
-						} else {
-							$strOut .= sprintf( '%s ', file_get_contents(sprintf("%s/%s/%s",$strModulePath,$arrParts[0],$strEachItem)) );
-						}
-					} else if( !is_null( $strAsyncType ) ) {
-						if(substr($strEachItem,0,2) == '//'){
-							//$strOut .= sprintf( "(function(d){var g=d.createElement('link'),s=d.getElementsByTagName('script')[0];g.type='text/css';g.rel='stylesheet';g.href='%s';s.parentNode.insertBefore(g,s);}(document));", $strEachItem );
-							$strOut .= sprintf( "(function(d){var g=d.createElement('link');g.type='text/css';g.rel='stylesheet';g.href='%s';d.getElementsByTagName('head')[0].appendChild(g);}(document));", $strEachItem );
-						} else {
-							//$strOut .= sprintf( "(function(d){var g=d.createElement('link'),s=d.getElementsByTagName('script')[0];g.type='text/css';g.rel='stylesheet';g.href='%slibraries/%s/%s';s.parentNode.insertBefore(g,s);}(document));", $strModuleURI,$arrParts[0],$strEachItem );
-							$strOut .= sprintf( "(function(d){var g=d.createElement('link');g.type='text/css';g.rel='stylesheet';g.href='%slibraries/%s/%s';d.getElementsByTagName('head')[0].appendChild(g);}(document));", $strModuleURI,$arrParts[0],$strEachItem );
-						}
-					} else {
-						if(substr($strEachItem,0,2) == '//'){
-							$strOut .= sprintf('<link href="%s" type="text/css" rel="stylesheet">',$strEachItem);
-						}else{
-							$strOut .= sprintf('<link href="%s/%s/%s" type="text/css" rel="stylesheet">',$strModuleURI,$arrParts[0],$strEachItem);
-						}
+				} else if( $arrParts[count( $arrParts ) - 1] === 'async'
+					|| $arrParts[count( $arrParts ) - 1] === 'defer' ) {
+					$strAsyncType = $arrParts[count( $arrParts ) - 1];
+					if( count( $arrParts ) === 2 ) {
+						$arrParts[1] = null;
 					}
-				}
-
-				if( !is_null( $strAsyncType ) ) {
-					$strOut = sprintf( '<script async>%s</script>', $strOut );
-				} else if( $blInline ) {
-					$strOut = sprintf( '<style type="text/css">%s</style>', $strOut );
 				}
 			}
 
-			if(count($arrResource['js'])){
-				foreach($arrResource['js'] as $strEachItem){
-					//$strItemPath = (substr($strEachItem,0,2) == '//') ? $strEachItem : sprintf("%slibraries/%s/%s",$strModulePath,$arrParts[0],$strEachItem);
+			$arrResource = $this->getFromLibrary($arrParts[0],$arrParts[1]);
 
-					if( $blInline ) {
-						if(substr($strEachItem,0,2) == '//'){
-							$strOut .= sprintf( '%s ', file_get_contents($strEachItem) );
+			//If the count is bigger than 0 then output the data
+			if(count($arrResource)){
+
+				$strModuleURI = $arrResource['uri'];
+				$strModulePath = $arrResource['path'];
+
+				if(count($arrResource['css'])){
+					foreach($arrResource['css'] as $strEachItem){
+						if( $blInline ) {
+							if(substr($strEachItem,0,2) == '//'){
+								$strOut .= sprintf( '%s ', file_get_contents($strEachItem) );
+							} else {
+								$strOut .= sprintf( '%s ', file_get_contents(sprintf("%s/%s/%s",$strModulePath,$arrParts[0],$strEachItem)) );
+							}
+						} else if( !is_null( $strAsyncType ) ) {
+							if(substr($strEachItem,0,2) == '//'){
+								//$strOut .= sprintf( "(function(d){var g=d.createElement('link'),s=d.getElementsByTagName('script')[0];g.type='text/css';g.rel='stylesheet';g.href='%s';s.parentNode.insertBefore(g,s);}(document));", $strEachItem );
+								$strOut .= sprintf( "(function(d){var g=d.createElement('link');g.type='text/css';g.rel='stylesheet';g.href='%s';d.getElementsByTagName('head')[0].appendChild(g);}(document));", $strEachItem );
+							} else {
+								//$strOut .= sprintf( "(function(d){var g=d.createElement('link'),s=d.getElementsByTagName('script')[0];g.type='text/css';g.rel='stylesheet';g.href='%slibraries/%s/%s';s.parentNode.insertBefore(g,s);}(document));", $strModuleURI,$arrParts[0],$strEachItem );
+								$strOut .= sprintf( "(function(d){var g=d.createElement('link');g.type='text/css';g.rel='stylesheet';g.href='%slibraries/%s/%s';d.getElementsByTagName('head')[0].appendChild(g);}(document));", $strModuleURI,$arrParts[0],$strEachItem );
+							}
 						} else {
-							$strOut .= sprintf( '%s ', file_get_contents(sprintf("%s/%s/%s",$strModulePath,$arrParts[0],$strEachItem) ) );
+							if(substr($strEachItem,0,2) == '//'){
+								$strOut .= sprintf('<link href="%s" type="text/css" rel="stylesheet">',$strEachItem);
+							}else{
+								$strOut .= sprintf('<link href="%s/%s/%s" type="text/css" rel="stylesheet">',$strModuleURI,$arrParts[0],$strEachItem);
+							}
 						}
-					} else {
-						if(substr($strEachItem,0,2) == '//'){
-							$strOut .= sprintf('<script src="%s"%s></script>',$strEachItem,(is_null( $strAsyncType ) ? '' : sprintf( ' %s', $strAsyncType )));
-						}else{
-							$strOut .= sprintf('<script src="%s/%s/%s"%s></script>',$strModuleURI,$arrParts[0],$strEachItem,(is_null( $strAsyncType ) ? '' : sprintf( ' %s', $strAsyncType )));
-						}
+					}
+
+					if( !is_null( $strAsyncType ) ) {
+						$strOut = sprintf( '<script async>%s</script>', $strOut );
+					} else if( $blInline ) {
+						$strOut = sprintf( '<style type="text/css">%s</style>', $strOut );
 					}
 				}
 
-				if( $blInline ) {
-					$strOut = sprintf( '<script%s>%s</script>',(is_null( $strAsyncType ) ? '' : sprintf( ' %s', $strAsyncType ) ), $strOut );
+				if(count($arrResource['js'])){
+					foreach($arrResource['js'] as $strEachItem){
+						//$strItemPath = (substr($strEachItem,0,2) == '//') ? $strEachItem : sprintf("%slibraries/%s/%s",$strModulePath,$arrParts[0],$strEachItem);
+
+						if( $blInline ) {
+							if(substr($strEachItem,0,2) == '//'){
+								$strOut .= sprintf( '%s ', file_get_contents($strEachItem) );
+							} else {
+								$strOut .= sprintf( '%s ', file_get_contents(sprintf("%s/%s/%s",$strModulePath,$arrParts[0],$strEachItem) ) );
+							}
+						} else {
+							if(substr($strEachItem,0,2) == '//'){
+								$strOut .= sprintf('<script src="%s"%s></script>',$strEachItem,(is_null( $strAsyncType ) ? '' : sprintf( ' %s', $strAsyncType )));
+							}else{
+								$strOut .= sprintf('<script src="%s/%s/%s"%s></script>',$strModuleURI,$arrParts[0],$strEachItem,(is_null( $strAsyncType ) ? '' : sprintf( ' %s', $strAsyncType )));
+							}
+						}
+					}
+
+					if( $blInline ) {
+						$strOut = sprintf( '<script%s>%s</script>',(is_null( $strAsyncType ) ? '' : sprintf( ' %s', $strAsyncType ) ), $strOut );
+					}
 				}
 			}
 		}
