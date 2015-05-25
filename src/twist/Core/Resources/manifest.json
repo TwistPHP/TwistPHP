@@ -49,13 +49,6 @@
 			"js": ["jquery-ui.min.js"]
 		}
 	},
-	"material-design-color-palette": {
-		"1.0.0": {
-			"default": true,
-			"css": ["material-design-color-palette.min.css"],
-			"js": []
-		}
-	},
 	"modernizr": {
 		"2.8.3": {
 			"default": true,
