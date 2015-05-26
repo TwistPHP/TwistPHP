@@ -163,7 +163,7 @@
 		 */
 		public function commit($blInsert = false){
 
-			$mxdOut = false;
+			$mxdOut = true;
 
 			if(json_encode($this->arrOriginalRecord) !== json_encode($this->arrRecord)){
 
@@ -174,7 +174,7 @@
 					//Now that the record has been updated in the database the original data must equal the current data
 					$this->arrOriginalRecord = $this->arrRecord;
 
-					if(substr($strSQL,0,6) == 'INSERT'){
+					if(substr($strSQL,0,6) === 'INSERT'){
 						$mxdOut = $objDatabase->getInsertID();
 
 						//Find an auto increment field and update the ID in the record
@@ -185,13 +185,11 @@
 								break;
 							}
 						}
-					}else{
-						if($objDatabase->getAffectedRows() == 0){
-							$mxdOut = true;
-						}else{
-							$mxdOut = $objDatabase->getAffectedRows();
-						}
+					}else if($objDatabase->getAffectedRows() !== 0){
+						$mxdOut = $objDatabase->getAffectedRows();
 					}
+				} else {
+					$mxdOut = false;
 				}
 			}
 
