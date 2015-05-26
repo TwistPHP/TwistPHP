@@ -218,7 +218,7 @@ class File extends BasePackage{
 		$strOut = null;
 		$arrFiles = scandir(BASE_LOCATION.$strDirectory);
 
-		if(is_null($strVersion) || $strVersion == '' || $strVersion == 'latest'){
+		if(is_null($strVersion) || $strVersion === '' || $strVersion === 'latest'){
 
 			$arrOptions = array();
 
@@ -232,7 +232,7 @@ class File extends BasePackage{
 					$arrVersionNos = explode('.',array_pop($arrParts));
 
 					//Only log files with 4 parts
-					if(count($arrVersionNos) == 4){
+					if(count($arrVersionNos) === 4){
 						$arrOptions[$arrVersionNos[0]][$arrVersionNos[1]][$arrVersionNos[2]] = $strEachFile;
 					}
 				}
@@ -540,7 +540,7 @@ class File extends BasePackage{
 			$resDir->close();
 		}
 
-		return ($strHashAlgorithm == 'md5') ? md5(implode('', $arrHashes)) : sha1(implode('', $arrHashes));
+		return ($strHashAlgorithm === 'md5') ? md5(implode('', $arrHashes)) : sha1(implode('', $arrHashes));
 	}
 
 	/**
@@ -587,7 +587,7 @@ class File extends BasePackage{
 		$strOut = '';
 
 		if($blCheckDelayedFiles && array_key_exists($dirFilePath,$this->arrDelayedFileStorage)){
-			if(($intBytesStart == 0 && is_null($intBytesEnd)) || (is_null($intBytesStart) && is_null($intBytesEnd))){
+			if(($intBytesStart === 0 && is_null($intBytesEnd)) || (is_null($intBytesStart) && is_null($intBytesEnd))){
 				return $this->arrDelayedFileStorage[$dirFilePath];
 			}else{
 				return substr($this->arrDelayedFileStorage[$dirFilePath], $intBytesStart, $intBytesEnd);
@@ -601,7 +601,7 @@ class File extends BasePackage{
 
 				if(flock($resFileHandler, LOCK_SH)){
 
-					if(($intBytesStart == 0 && is_null($intBytesEnd)) || (is_null($intBytesStart) && is_null($intBytesEnd))){
+					if(($intBytesStart === 0 && is_null($intBytesEnd)) || (is_null($intBytesStart) && is_null($intBytesEnd))){
 						$strOut = file_get_contents($dirFilePath);
 					}else{
 
@@ -648,9 +648,9 @@ class File extends BasePackage{
 				if(flock($resFileHandler, LOCK_EX)){
 
 					//Allow for the writing of file data to the beginning/end of a file (default Replaces all data)
-					if($strOptions == 'prefix'){
+					if($strOptions === 'prefix'){
 						fseek($resFileHandler, 0);
-					}elseif($strOptions == 'suffix'){
+					}elseif($strOptions === 'suffix'){
 						fseek($resFileHandler, filesize($dirFilePath));
 					}else{
 						ftruncate($resFileHandler, 0);
@@ -697,7 +697,7 @@ class File extends BasePackage{
 			$arrFiles = scandir($strDirectory);
 
 			foreach ($arrFiles as $strEachFile){
-				($strEachFile != "." && $strEachFile != "..") ? $this->recursiveRemove("$strDirectory/$strEachFile") : null;
+				($strEachFile != "." && $strEachFile != "..") ? $this->recursiveRemove(sprintf('%s/%s',$strDirectory,$strEachFile)) : null;
 			}
 
 			if(file_exists($strDirectory) && is_dir($strDirectory)){
@@ -754,7 +754,7 @@ class File extends BasePackage{
 			foreach($arrFiles as $strEachFile){
 				if($strEachFile != "." && $strEachFile != ".."){
 					//Recursively copy as this is another directory
-					$this->recursiveCopy("$strSourcePath/$strEachFile", "$strDestinationPath/$strEachFile");
+					$this->recursiveCopy("$strSourcePath/$strEachFile", sprintf('%s/%s',$strDestinationPath,$strEachFile));
 				}
 			}
 		}elseif(file_exists($strSourcePath)){
@@ -872,7 +872,7 @@ class File extends BasePackage{
 					'name' => $arrParams['name'],
 					'uri' => $arrParams['uri'],
 					'include-js' => (is_null(\Twist::Cache()->read('asset-js-include'))) ? 1 : 0,
-					'multiple' => ($arrParams['multiple'] == 1 || $arrParams['multiple'] == 'true') ? 1 : 0
+					'multiple' => ($arrParams['multiple'] == 1 || $arrParams['multiple'] === 'true') ? 1 : 0
 				);
 
 				//Store a temp session for js output
@@ -889,7 +889,7 @@ class File extends BasePackage{
 					'name' => $arrParams['name'],
 					'uri' => $arrParams['uri'],
 					'include-js' => (is_null(\Twist::Cache()->read('asset-js-include'))) ? 1 : 0,
-	                'multiple' => ($arrParams['multiple'] == 1 || $arrParams['multiple'] == 'true') ? 1 : 0
+	                'multiple' => ($arrParams['multiple'] == 1 || $arrParams['multiple'] === 'true') ? 1 : 0
 				);
 
 				//Store a temp session for js output
@@ -905,7 +905,7 @@ class File extends BasePackage{
 					'uniqid' => $arrParams['id'],
 					'name' => $arrParams['name'],
 					'uri' => $arrParams['uri'],
-					'function' => ($arrParams['reference'] == 'asset-upload-init') ? 'asset' : 'file'
+					'function' => ($arrParams['reference'] === 'asset-upload-init') ? 'asset' : 'file'
 				);
 
 				$strOut = $this->resTemplate->build('upload-init.tpl',$arrTags);
