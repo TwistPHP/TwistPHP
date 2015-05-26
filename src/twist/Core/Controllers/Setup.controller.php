@@ -73,9 +73,11 @@ class Setup extends BaseController{
 
 		$blVersion = (version_compare(PHP_VERSION, '5.3.0') >= 0);
 		$blPermissions = (is_dir(DIR_FRAMEWORK) && is_writable(DIR_FRAMEWORK) && is_dir(DIR_FRAMEWORK_CONFIG) && is_writable(DIR_FRAMEWORK_CONFIG));
-		$blCurl = (function_exists('curl_init') || class_exists('curl_init'));
-		$blMysql = (function_exists('mysql_connect') || function_exists('mysqli_connect'));
-		$blZip = (function_exists('ZipArchive') || class_exists('ZipArchive'));
+
+		try{ $blCurl = (function_exists('curl_init') || class_exists('curl_init')); }catch(\Exception $resException){ $blCurl = false; }
+		try{ $blMysql = (function_exists('mysql_connect') || function_exists('mysqli_connect')); }catch(\Exception $resException){ $blMysql = false; }
+		try{ $blZip = (function_exists('ZipArchive') || class_exists('ZipArchive')); }catch(\Exception $resException){ $blZip = false; }
+
 		$blCookies = (is_array($_COOKIE) && array_key_exists('twist_setup_test',$_COOKIE));
 
 		$blPassChecks = ($blVersion && $blPermissions);
