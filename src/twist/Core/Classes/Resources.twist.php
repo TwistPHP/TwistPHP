@@ -53,7 +53,7 @@ final class Resources{
 			$strAsyncType = null;
 			$blInline = false;
 
-			if($arrParts[0] == 'core-uri'){
+			if($arrParts[0] === 'core-uri'){
 				return sprintf('%sCore/Resources/',FRAMEWORK_URI);
 			}
 
@@ -89,13 +89,13 @@ final class Resources{
 				if(count($arrResource['css'])){
 					foreach($arrResource['css'] as $strEachItem){
 						if( $blInline ) {
-							if(substr($strEachItem,0,2) == '//'){
+							if(substr($strEachItem,0,2) === '//'){
 								$strOut .= sprintf( '%s ', file_get_contents($strEachItem) );
 							} else {
 								$strOut .= sprintf( '%s ', file_get_contents(sprintf("%s/%s/%s",$strModulePath,$arrParts[0],$strEachItem)) );
 							}
 						} else if( !is_null( $strAsyncType ) ) {
-							if(substr($strEachItem,0,2) == '//'){
+							if(substr($strEachItem,0,2) === '//'){
 								//$strOut .= sprintf( "(function(d){var g=d.createElement('link'),s=d.getElementsByTagName('script')[0];g.type='text/css';g.rel='stylesheet';g.href='%s';s.parentNode.insertBefore(g,s);}(document));", $strEachItem );
 								$strOut .= sprintf( "(function(d){var g=d.createElement('link');g.type='text/css';g.rel='stylesheet';g.href='%s';d.getElementsByTagName('head')[0].appendChild(g);}(document));", $strEachItem );
 							} else {
@@ -103,7 +103,7 @@ final class Resources{
 								$strOut .= sprintf( "(function(d){var g=d.createElement('link');g.type='text/css';g.rel='stylesheet';g.href='%slibraries/%s/%s';d.getElementsByTagName('head')[0].appendChild(g);}(document));", $strModuleURI,$arrParts[0],$strEachItem );
 							}
 						} else {
-							if(substr($strEachItem,0,2) == '//'){
+							if(substr($strEachItem,0,2) === '//'){
 								$strOut .= sprintf('<link href="%s" type="text/css" rel="stylesheet">',$strEachItem);
 							}else{
 								$strOut .= sprintf('<link href="%s/%s/%s" type="text/css" rel="stylesheet">',$strModuleURI,$arrParts[0],$strEachItem);
@@ -123,13 +123,13 @@ final class Resources{
 						//$strItemPath = (substr($strEachItem,0,2) == '//') ? $strEachItem : sprintf("%slibraries/%s/%s",$strModulePath,$arrParts[0],$strEachItem);
 
 						if( $blInline ) {
-							if(substr($strEachItem,0,2) == '//'){
+							if(substr($strEachItem,0,2) === '//'){
 								$strOut .= sprintf( '%s ', file_get_contents($strEachItem) );
 							} else {
 								$strOut .= sprintf( '%s ', file_get_contents(sprintf("%s/%s/%s",$strModulePath,$arrParts[0],$strEachItem) ) );
 							}
 						} else {
-							if(substr($strEachItem,0,2) == '//'){
+							if(substr($strEachItem,0,2) === '//'){
 								$strOut .= sprintf('<script src="%s"%s></script>',$strEachItem,(is_null( $strAsyncType ) ? '' : sprintf( ' %s', $strAsyncType )));
 							}else{
 								$strOut .= sprintf('<script src="%s/%s/%s"%s></script>',$strModuleURI,$arrParts[0],$strEachItem,(is_null( $strAsyncType ) ? '' : sprintf( ' %s', $strAsyncType )));
@@ -197,7 +197,7 @@ final class Resources{
 		$arrParameters['path'] = rtrim($dirResourcePath,'/');
 
 		//Detect if the resource path is outside of the document root, then process the URI accordingly
-		if(rtrim(DIR_BASE,'/') == dirname($dirResourcePath) || strstr(rtrim(DIR_BASE,'/'),dirname($dirResourcePath))){
+		if(rtrim(DIR_BASE,'/') === dirname($dirResourcePath) || strstr(rtrim(DIR_BASE,'/'),dirname($dirResourcePath))){
 			$arrParameters['uri'] = rtrim(BASE_PATH.str_replace(DIR_BASE,'',$dirResourcePath),'/');
 		}else{
 			$arrParameters['uri'] = '/'.rtrim(str_replace(DIR_BASE,'',$dirResourcePath),'/');

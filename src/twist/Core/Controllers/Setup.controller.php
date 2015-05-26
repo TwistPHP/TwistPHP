@@ -104,7 +104,7 @@ class Setup extends BaseController{
 
 		$arrSession = \Twist::Session()->data('twist-setup');
 
-		if($arrSession['checks']['status'] == false){
+		if(!$arrSession['checks']['status']){
 			header('Location: checks');
 		}
 
@@ -126,16 +126,16 @@ class Setup extends BaseController{
 		if(array_key_exists('protocol',$_POST) && array_key_exists('host',$_POST)){
 
 			$arrSession['database']['details'] = array(
-				'type' => (array_key_exists('protocol',$_POST) && $_POST['protocol'] == 'none') ? 'json' : 'database',
+				'type' => (array_key_exists('protocol',$_POST) && $_POST['protocol'] === 'none') ? 'json' : 'database',
 				'protocol' => $_POST['protocol'],
-				'host' => ($_POST['host'] == '') ? 'localhost' : $_POST['host'],
+				'host' => ($_POST['host'] === '') ? 'localhost' : $_POST['host'],
 				'username' => $_POST['username'],
 				'password' => $_POST['password'],
 				'name' => $_POST['database'],
 				'table_prefix' => $_POST['table_prefix'],
 			);
 
-			if($arrSession['database']['details']['type'] == 'database'){
+			if($arrSession['database']['details']['type'] === 'database'){
 
 				//Check to see if the connection settings are valid
 				try{
@@ -156,18 +156,18 @@ class Setup extends BaseController{
 					$arrSession['database']['status'] = false;
 					$arrSession['database']['message'] = $resException->getMessage();
 				}
-			}elseif($arrSession['database']['details']['type'] == 'json'){
+			}elseif($arrSession['database']['details']['type'] === 'json'){
 				$arrSession['database']['status'] = true;
 			}
 
 			\Twist::Session()->data('twist-setup',$arrSession);
 		}
 
-		if($arrSession['database']['status'] == false){
+		if(!$arrSession['database']['status']){
 			header('Location: database');
 		}
 
-		if(rtrim(DIR_BASE,'/') == dirname($_SERVER['SCRIPT_FILENAME'])){
+		if(rtrim(DIR_BASE,'/') === dirname($_SERVER['SCRIPT_FILENAME'])){
 			$strSiteRoot = '/';
 		}elseif(strstr(rtrim(DIR_BASE,'/'),dirname($_SERVER['SCRIPT_FILENAME']))){
 			$strSiteRoot = '/'.ltrim(str_replace(dirname($_SERVER['SCRIPT_FILENAME']),"",rtrim(DIR_BASE,'/')),'/');
@@ -179,9 +179,9 @@ class Setup extends BaseController{
 			'error_message' => '',
 			'relative_path' => rtrim(DIR_BASE,'/').'/',
 			'site_root' => ltrim($strSiteRoot,'/'),
-			'app_path' => ($strSiteRoot == '/') ? '' : ltrim($strSiteRoot,'/').'/app',
-			'packages_path' => ($strSiteRoot == '/') ? '' : ltrim($strSiteRoot,'/').'/packages',
-			'uploads_path' => ($strSiteRoot == '/') ? '' : ltrim($strSiteRoot,'/').'/uploads',
+			'app_path' => ($strSiteRoot === '/') ? '' : ltrim($strSiteRoot,'/').'/app',
+			'packages_path' => ($strSiteRoot === '/') ? '' : ltrim($strSiteRoot,'/').'/packages',
+			'uploads_path' => ($strSiteRoot === '/') ? '' : ltrim($strSiteRoot,'/').'/uploads',
 		);
 
 		if(array_key_exists($arrSession['settings']['details'],'site_root')){
@@ -224,9 +224,9 @@ class Setup extends BaseController{
 				'timezone' => $_POST['timezone'],
 				'relative_path' => $_POST['relative_path'],
 				'site_root' => trim($_POST['site_root'],'/'),
-				'app_path' => ($_POST['app_path'] == '') ? 'app' :  trim($_POST['app_path'],'/'),
-				'packages_path' => ($_POST['packages_path'] == '') ? 'packages' : trim($_POST['packages_path'],'/'),
-				'uploads_path' => ($_POST['uploads_path'] == '') ? 'uploads' : trim($_POST['uploads_path'],'/')
+				'app_path' => ($_POST['app_path'] === '') ? 'app' :  trim($_POST['app_path'],'/'),
+				'packages_path' => ($_POST['packages_path'] === '') ? 'packages' : trim($_POST['packages_path'],'/'),
+				'uploads_path' => ($_POST['uploads_path'] === '') ? 'uploads' : trim($_POST['uploads_path'],'/')
 			);
 
 			if($arrSession['settings']['details']['site_name'] != '' &&
@@ -243,7 +243,7 @@ class Setup extends BaseController{
 			\Twist::Session()->data('twist-setup',$arrSession);
 		}
 
-		if($arrSession['settings']['status'] == false){
+		if(!$arrSession['settings']['status']){
 			header('Location: settings');
 		}
 
@@ -256,7 +256,7 @@ class Setup extends BaseController{
 		}
 
 		//Skip the user creation as no database is required
-		if($arrSession['database']['details']['protocol'] == 'none'){
+		if($arrSession['database']['details']['protocol'] === 'none'){
 
 			$arrSession['user']['details'] = array(
 				'firstname' => '',
@@ -297,7 +297,7 @@ class Setup extends BaseController{
 				$arrSession['user']['details']['email'] != '' &&
 				$arrSession['user']['details']['password'] != ''){
 
-				if($arrSession['user']['details']['password'] == $arrSession['user']['details']['confirm_password']){
+				if($arrSession['user']['details']['password'] === $arrSession['user']['details']['confirm_password']){
 					$arrSession['user']['status'] = true;
 				}else{
 					$arrSession['user']['status'] = false;
@@ -311,11 +311,11 @@ class Setup extends BaseController{
 			\Twist::Session()->data('twist-setup',$arrSession);
 		}
 
-		if($arrSession['user']['status'] == false){
-			header('Location: user');
-		}else{
+		if($arrSession['user']['status']){
 			//@todo Skip the interfaces step for the time being, it will become packages when ready
 			header('Location: finish');
+		}else{
+			header('Location: user');
 		}
 
 		$arrTags = array('interfaces' => '');
@@ -324,8 +324,8 @@ class Setup extends BaseController{
 		foreach($arrInterfaces as $arrEachInterface){
 			if($arrEachInterface['installed'] == '0' && $arrEachInterface['licenced'] == '0'){
 
-				$arrEachInterface['checked'] = ($arrEachInterface['name'] == 'Manager' && $arrEachInterface['repository'] == 'twistphp') ? ' checked' : '';
-				$arrEachInterface['recommended'] = ($arrEachInterface['name'] == 'Manager' && $arrEachInterface['repository'] == 'twistphp') ? ' (Recommended)' : '';
+				$arrEachInterface['checked'] = ($arrEachInterface['name'] === 'Manager' && $arrEachInterface['repository'] === 'twistphp') ? ' checked' : '';
+				$arrEachInterface['recommended'] = ($arrEachInterface['name'] === 'Manager' && $arrEachInterface['repository'] === 'twistphp') ? ' (Recommended)' : '';
 
 				$arrTags['interfaces'] .= \Twist::View()->build('components/interface-each.tpl',$arrEachInterface);
 			}
@@ -390,7 +390,7 @@ class Setup extends BaseController{
 		\Twist::define('DIR_PACKAGES',DIR_BASE.$arrSession['settings']['details']['packages_path']);
 		\Twist::define('DIR_UPLOADS',DIR_BASE.$arrSession['settings']['details']['uploads_path']);
 
-		if($arrSession['database']['details']['type'] == 'database'){
+		if($arrSession['database']['details']['type'] === 'database'){
 
 			\Twist::Database()->connect(
 				$arrSession['database']['details']['host'],
@@ -432,7 +432,7 @@ class Setup extends BaseController{
 		\Twist::framework()->setting('TIMEZONE',$arrSession['settings']['details']['timezone']);
 
 		//Create the level 0 user into the system - this will only occur is a database connection is present
-		if($arrSession['user']['status'] == true && $arrSession['database']['details']['protocol'] != 'none'){
+		if($arrSession['user']['status'] && $arrSession['database']['details']['protocol'] != 'none'){
 
 			$objUser = \Twist::User()->create();
 

@@ -53,7 +53,7 @@
 
 	    protected function load(){
 
-	        if($this->blLoaded == false){
+	        if(!$this->blLoaded){
 
 				$this->arrSettings = $this->arrSettingsInfo = array();
 
@@ -61,7 +61,7 @@
 					$this->loadTempSettings();
 				}else{
 
-					if(DATABASE_PROTOCOL == 'none'){
+					if(DATABASE_PROTOCOL === 'none'){
 
 						$this->blFileConfig = true;
 
@@ -85,11 +85,11 @@
 	                foreach($this->arrSettingsInfo as $arrEachSetting){
 
 	                    //Set the output types of boolean,integer and floats to their correct data types
-	                    if($arrEachSetting['type'] == 'boolean'){
+	                    if($arrEachSetting['type'] === 'boolean'){
 	                        $arrEachSetting['value'] = ($arrEachSetting['value'] == '1' || $arrEachSetting['value'] == 1);
-	                    }elseif($arrEachSetting['type'] == 'float' && preg_match('#^[0-9]+\.[0-9]+$#',$arrEachSetting['value'])){
+	                    }elseif($arrEachSetting['type'] === 'float' && preg_match('#^[0-9]+\.[0-9]+$#',$arrEachSetting['value'])){
 	                        settype( $arrEachSetting['value'] , 'float' );
-	                    }elseif($arrEachSetting['type'] == 'integer' && is_numeric($arrEachSetting['value'])){
+	                    }elseif($arrEachSetting['type'] === 'integer' && is_numeric($arrEachSetting['value'])){
 	                        settype( $arrEachSetting['value'] , 'integer' );
 	                    }
 
@@ -161,7 +161,7 @@
 
 		public function install($strPackage,$strGroup,$strKey,$mxdValue,$strTitle,$strDescription,$strDefault,$strType,$strOptions,$blNull = false){
 
-			if(DATABASE_PROTOCOL == 'none'){
+			if(DATABASE_PROTOCOL === 'none'){
 
 				$strSettingsJSON = sprintf('%s/../../config/settings.json',dirname(__FILE__));
 

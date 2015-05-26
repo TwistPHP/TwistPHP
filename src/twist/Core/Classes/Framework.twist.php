@@ -92,12 +92,12 @@
 				3 => array('level' => 3,'title'=>"WebServer",'description'=>'The script was run from a webserver')
 			);
 
-			if(php_sapi_name() == 'cli'){
+			if(php_sapi_name() === 'cli'){
 				$intRunLevel = (isset($_SERVER['TERM'])) ? 1 : 2;
 			}else{
 				$intRunLevel = 3;
 			}
 
-			return ($blDetails == true) ? $arrInfo[$intRunLevel] : $intRunLevel;
+			return $blDetails ? $arrInfo[$intRunLevel] : $intRunLevel;
 		}
 	}

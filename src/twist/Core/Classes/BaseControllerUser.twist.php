@@ -71,9 +71,9 @@ class BaseControllerUser extends BaseController{
 
 			if($this->resUser->loggedIn()){
 
-				if($_POST['password'] == $_POST['confirm_password']){
+				if($_POST['password'] === $_POST['confirm_password']){
 
-					if(\Twist::Session()->data('user-temp_password') == '0'){
+					if(\Twist::Session()->data('user-temp_password') === '0'){
 
 						if(array_key_exists('current_password',$_POST)){
 

@@ -81,9 +81,9 @@
 
 			foreach($this->arrDebugLog['Error']['php'] as $arrEachItem){
 
-				if($arrEachItem['type'] == 'Warning'){
+				if($arrEachItem['type'] === 'Warning'){
 					$arrTags['warning_count']++;
-				}elseif($arrEachItem['type'] == 'Notice'){
+				}elseif($arrEachItem['type'] === 'Notice'){
 					$arrTags['notice_count']++;
 				}else{
 					$arrTags['other_count']++;
@@ -98,7 +98,7 @@
 				$arrEachItem['type'] = strtoupper($arrParts[0]);
 				unset($arrParts);
 
-				if($arrEachItem['affected_rows'] < 0 || $arrEachItem['affected_rows'] == false){
+				if($arrEachItem['affected_rows'] < 0 || $arrEachItem['affected_rows'] === false){
 					$arrEachItem['affected_rows'] = 0;
 				}
 
@@ -133,7 +133,7 @@
 
 			foreach(\Twist::Route()->getAll() as $strType => $arrItems){
 				foreach($arrItems as $arrEachRoute){
-					$arrEachRoute['highlight'] = ($arrEachRoute['registered_uri'] == $arrCurrentRoute['registered_uri']) ? 'highlight' : '';
+					$arrEachRoute['highlight'] = ($arrEachRoute['registered_uri'] === $arrCurrentRoute['registered_uri']) ? 'highlight' : '';
 					$arrEachRoute['item'] = (is_array($arrEachRoute['item'])) ? implode('->',$arrEachRoute['item']) : $arrEachRoute['item'];
 					$arrTags['routes'] .=  $this->resTemplate->build('components/each-route.tpl',$arrEachRoute);
 				}

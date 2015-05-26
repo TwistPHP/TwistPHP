@@ -58,7 +58,7 @@
 			}
 
 			//Register the Shutdown Handler if an event has been added
-			if(self::$blShutdownRegistered == false){
+			if(!self::$blShutdownRegistered){
 				self::enableHandler();
 			}
 

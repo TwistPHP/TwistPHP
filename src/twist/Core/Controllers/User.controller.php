@@ -59,10 +59,10 @@ class User extends BaseController{
 
 			if(\Twist::framework()->setting('USER_REGISTER_PASSWORD')){
 
-				if($_POST['password'] == $_POST['confirm_password']){
+				if($_POST['password'] === $_POST['confirm_password']){
 					$arrResponse = $resUser->password($_POST['password']);
 
-					if($arrResponse['status'] == false){
+					if(!$arrResponse['status']){
 						\Twist::Session()->data('site-register_error_message',$arrResponse['message']);
 						$blContinue = false;
 					}
@@ -81,7 +81,7 @@ class User extends BaseController{
 				if($intUserID > 0){
 
 					//AUTO_LOGIN
-					if(\Twist::framework()->setting('USER_REGISTER_PASSWORD') && \Twist::framework()->setting('USER_EMAIL_VERIFICATION') == false && \Twist::framework()->setting('USER_AUTO_AUTHENTICATE')){
+					if(\Twist::framework()->setting('USER_REGISTER_PASSWORD') && !\Twist::framework()->setting('USER_EMAIL_VERIFICATION') && \Twist::framework()->setting('USER_AUTO_AUTHENTICATE')){
 
 						//@todo redirect - test or work out best way of doing this
 						//$this->resUser->afterLoginRedirect(); --- set the value that this function uses, authenticate will do the redirect

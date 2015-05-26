@@ -146,7 +146,7 @@
 			$arrFiles = scandir($this->strRepoPath);
 
 			foreach($arrFiles as $strEachFile){
-				if(!in_array($strEachFile,array('.','..')) && substr($strEachFile,-4) == 'json'){
+				if(!in_array($strEachFile,array('.','..')) && substr($strEachFile,-4) === 'json'){
 					$jsonRaw = file_get_contents(sprintf('%s/%s',$this->strRepoPath,$strEachFile));
 					$strRepoKey = str_replace('.json','',$strEachFile);
 
@@ -164,7 +164,7 @@
 				'bugs' => $strBugs,
 				'homepage' => $strHomepage,
 				'repository' => $strRepository,
-				'licenced' => ($blLicenced == true || $blLicenced == 1) ? '1' : '0',
+				'licenced' => $blLicenced ? '1' : '0',
 				'installed' => '0',
 				'current' => array(/*
 					'version' => '1.0.0',
@@ -234,14 +234,14 @@
 
 						if($arrRequestInfo['http_code'] == 200){
 
-							if($strType == 'authenticate' && $this->arrRepositories[$strRepoKey]['token'] != ''){
+							if($strType === 'authenticate' && $this->arrRepositories[$strRepoKey]['token'] != ''){
 								$mxdResponse = $objTwistRC4->decrypt($mxdResponse);
 								$arrOut = (strstr($mxdResponse,'{')) ? json_decode($mxdResponse,true) : array('error' => 'Licence Key Error');
 							}else{
 								$arrOut = (strstr($mxdResponse,'{')) ? json_decode($mxdResponse,true) : array('error' => 'Communication Error');
 							}
 
-							if($strType == 'download' && !is_array($arrOut)){
+							if($strType === 'download' && !is_array($arrOut)){
 								$arrOut = array('file' => $mxdResponse);
 							}
 
@@ -441,8 +441,8 @@
 		protected function _debug($strInformation,$strStatus = null){
 
 			if(!is_null($strStatus)){
-				$strHTMLInformation = ($strInformation == 'OK') ? sprintf("&nbsp;[ <span style=\"color: %s;\">%s</span> ]",$strStatus,$strInformation) : sprintf("&nbsp;[<span style=\"color: %s;\">%s</span>]",$strStatus,$strInformation);
-				$strInformation = ($strInformation == 'OK') ? sprintf(" [ %s ]",$strInformation) : sprintf(" [%s]",$strInformation);
+				$strHTMLInformation = ($strInformation === 'OK') ? sprintf("&nbsp;[ <span style=\"color: %s;\">%s</span> ]",$strStatus,$strInformation) : sprintf("&nbsp;[<span style=\"color: %s;\">%s</span>]",$strStatus,$strInformation);
+				$strInformation = ($strInformation === 'OK') ? sprintf(" [ %s ]",$strInformation) : sprintf(" [%s]",$strInformation);
 			}else{
 
 				$strHTMLInformation = $strInformation;
@@ -458,7 +458,7 @@
 				$strInformation = sprintf("\n%s",$strInformation);
 			}
 
-	        if($this->arrDebugData['html'] == ''){
+	        if($this->arrDebugData['html'] === ''){
 	            $strHTMLInformation = str_replace("<br>","",$strHTMLInformation);
 	            $strInformation = str_replace("\n","",$strInformation);
 	        }
@@ -1059,7 +1059,7 @@
 
 		public function storeSetting($strPackage,$strGroup,$strKey,$mxdValue,$strTitle,$strDescription,$strDefault,$strType,$strOptions,$blNull = false){
 
-			if((count($this->arrDatabaseCustomSettings) && $this->arrDatabaseCustomSettings['protocol'] == 'none') || DATABASE_PROTOCOL == 'none'){
+			if((count($this->arrDatabaseCustomSettings) && $this->arrDatabaseCustomSettings['protocol'] === 'none') || DATABASE_PROTOCOL === 'none'){
 
 				$strSettingsJSON = sprintf('%s/../../config/settings.json',dirname(__FILE__));
 
@@ -1180,7 +1180,7 @@
 
 						$this->_debug(sprintf('Installing %d of %d %s',$intCount,$intTotal,$strType));
 
-						if($strType == 'modules'){
+						if($strType === 'modules'){
 							$arrData = $this->_downloadModule($arrDetails['repo'],$arrDetails['package'],$arrDetails['version']);
 						}else{
 							$arrData = $this->_downloadInterface($arrDetails['repo'],$arrDetails['package'],$arrDetails['version']);
@@ -1189,7 +1189,7 @@
 						$this->_debugProgress((100/$intTotal)*($intCount-0.5));
 						$blOut = $this->_installFiles($arrData);
 
-						if($blOut == false){
+						if(!$blOut){
 							$blOverall = false;
 						}
 
@@ -1251,8 +1251,8 @@
 						if(array_key_exists($strModuleKey,$arrModules)){
 							$arrModules[$strModuleKey]['available'] = $arrData['available'];
 
-							$intAvailableVersion = (substr_count($arrData['available']['version'],'.') == 2) ? $arrData['available']['version'].'.0' : $arrData['available']['version'];
-							$intCurrentVersion = (substr_count($arrModules[$strModuleKey]['current']['version'],'.') == 2) ? $arrModules[$strModuleKey]['current']['version'].'.0' : $arrModules[$strModuleKey]['current']['version'];
+							$intAvailableVersion = (substr_count($arrData['available']['version'],'.') === 2) ? $arrData['available']['version'].'.0' : $arrData['available']['version'];
+							$intCurrentVersion = (substr_count($arrModules[$strModuleKey]['current']['version'],'.') === 2) ? $arrModules[$strModuleKey]['current']['version'].'.0' : $arrModules[$strModuleKey]['current']['version'];
 
 							$arrModules[$strModuleKey]['update'] = (version_compare($intCurrentVersion,$intAvailableVersion,'lt')) ? '1' : '0';
 						}else{
@@ -1281,8 +1281,8 @@
 						if(array_key_exists($strInterfaceKey,$arrInterfaces)){
 							$arrInterfaces[$strInterfaceKey]['available'] = $arrData['available'];
 
-							$intAvailableVersion = (substr_count($arrData['available']['version'],'.') == 2) ? $arrData['available']['version'].'.0' : $arrData['available']['version'];
-							$intCurrentVersion = (substr_count($arrInterfaces[$strInterfaceKey]['current']['version'],'.') == 2) ? $arrInterfaces[$strInterfaceKey]['current']['version'].'.0' : $arrInterfaces[$strInterfaceKey]['current']['version'];
+							$intAvailableVersion = (substr_count($arrData['available']['version'],'.') === 2) ? $arrData['available']['version'].'.0' : $arrData['available']['version'];
+							$intCurrentVersion = (substr_count($arrInterfaces[$strInterfaceKey]['current']['version'],'.') === 2) ? $arrInterfaces[$strInterfaceKey]['current']['version'].'.0' : $arrInterfaces[$strInterfaceKey]['current']['version'];
 
 							$arrInterfaces[$strInterfaceKey]['update'] = (version_compare($intCurrentVersion,$intAvailableVersion,'lt')) ? '1' : '0';
 						}else{
@@ -1306,8 +1306,8 @@
 				$arrAvailable = array_pop($arrAvailable);
 				$arrCore['available'] = $arrAvailable['available'];
 
-				$intAvailableVersion = (substr_count($arrAvailable['available']['version'],'.') == 2) ? $arrAvailable['available']['version'].'.0' : $arrAvailable['available']['version'];
-				$intCurrentVersion = (substr_count($arrCore['current']['version'],'.') == 2) ? $arrCore['current']['version'].'.0' : $arrCore['current']['version'];
+				$intAvailableVersion = (substr_count($arrAvailable['available']['version'],'.') === 2) ? $arrAvailable['available']['version'].'.0' : $arrAvailable['available']['version'];
+				$intCurrentVersion = (substr_count($arrCore['current']['version'],'.') === 2) ? $arrCore['current']['version'].'.0' : $arrCore['current']['version'];
 
 				$arrCore['update'] = (version_compare($intCurrentVersion,$intAvailableVersion,'lt')) ? '1' : '0';
 			}
@@ -1321,7 +1321,7 @@
 			if(file_exists($strRepoPath)){
 				$jsonRaw = file_get_contents($strRepoPath);
 				$arrRepo = json_decode($jsonRaw,true);
-				$arrRepo['enabled'] = ($blStatus == true || $blStatus == '1') ? '1' : '0';
+				$arrRepo['enabled'] = $blStatus ? '1' : '0';
 				file_put_contents($strRepoPath,json_encode($arrRepo));
 
 				//Re-load repository list

@@ -40,7 +40,7 @@ class Upload extends BaseController{
 			$arrOut = json_decode($this->file());
 
 			//We can then pass on the data to a third party function
-			if($arrOut['status'] == true){
+			if($arrOut['status']){
 
 			}
 
@@ -68,7 +68,7 @@ class Upload extends BaseController{
 		$arrOut = json_decode($this->file(),true);
 
 		//Now if the file upload was successful process the asset (if required)
-		if($arrOut['status'] == true && (array_key_exists('HTTP_TWIST_PROCESS',$_SERVER) && $_SERVER['HTTP_TWIST_PROCESS'] == 'asset' || array_key_exists('twist_process',$_GET) && $_GET['twist_process'] == 'asset')){
+		if($arrOut['status'] && (array_key_exists('HTTP_TWIST_PROCESS',$_SERVER) && $_SERVER['HTTP_TWIST_PROCESS'] === 'asset' || array_key_exists('twist_process',$_GET) && $_GET['twist_process'] === 'asset')){
 
 			$intAssetID = \Twist::Asset()->add($arrOut['file']['path'],1);
 			$arrAsset = \Twist::Asset()->get($intAssetID);

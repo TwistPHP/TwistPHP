@@ -49,7 +49,7 @@
 				}
 			}
 
-			return ( $strIndent == '' ) ? sprintf( '<pre>%s</pre>', $strOut ) : $strOut;
+			return ( $strIndent === '' ) ? sprintf( '<pre>%s</pre>', $strOut ) : $strOut;
 		}
 
 		/**
@@ -204,7 +204,7 @@
 							trigger_error( sprintf( 'Cannot reindex the array by "%s": field doesn\'t exist', $strKeyField ), E_USER_WARNING );
 							break;
 						} else {
-							if( $arrEachItem[$strKeyField] == '' ) {
+							if( $arrEachItem[$strKeyField] === '' ) {
 								$arrOut[] = $arrEachItem;
 							} else {
 								$strNewKey = $arrEachItem[$strKeyField];
@@ -258,7 +258,7 @@
 			$arrTree = array();
 
 			foreach( $arrStructure as $arrStructureItem ) {
-				if( $arrStructureItem[$strParentIDField] == '' ) {
+				if( $arrStructureItem[$strParentIDField] === '' ) {
 					$arrTree[0][] = $arrStructureItem;
 				} else {
 					$arrTree[$arrStructureItem[$strParentIDField]][] = $arrStructureItem;
@@ -302,7 +302,7 @@
 			$strQueryString = $strCurrentQueryString = '';
 
 			//Fix when a dot is passed in
-			if( $urlRelativePath == '.' ) {
+			if( $urlRelativePath === '.' ) {
 				$urlRelativePath = './';
 			}
 
@@ -312,8 +312,8 @@
 			}
 
 			//If the redirect id / no further processing required
-			if( $urlRelativePath == '/' ) {
-				return ( $strQueryString == '' ) ? $urlRelativePath : sprintf( '%s?%s', $urlRelativePath, $strQueryString );
+			if( $urlRelativePath === '/' ) {
+				return ( $strQueryString === '' ) ? $urlRelativePath : sprintf( '%s?%s', $urlRelativePath, $strQueryString );
 			}
 
 			//Remove the query string form the users current location (may be required on redirect if enabled)
@@ -324,14 +324,14 @@
 
 			//Append the old query string to the new one if enabled
 			if( $blPreserveQueryString ) {
-				$strQueryString = ( $strQueryString == '' ) ? $strCurrentQueryString : sprintf( '%s&%s', $strCurrentQueryString, $strQueryString );
+				$strQueryString = ( $strQueryString === '' ) ? $strCurrentQueryString : sprintf( '%s&%s', $strCurrentQueryString, $strQueryString );
 			}
 
 			//Start processing the traversal
 			$urlCurrentURI = trim( $urlCurrentURI, '/' );
 			$urlOut = rtrim( $urlRelativePath, '/' );
 
-			if( substr( $urlRelativePath, 0, 2 ) == './' ) {
+			if( substr( $urlRelativePath, 0, 2 ) === './' ) {
 
 				$arrCurrentParts = ( strstr( $urlCurrentURI, '/' ) ) ? explode( '/', $urlCurrentURI ) : array( $urlCurrentURI );
 				array_pop( $arrCurrentParts );
@@ -339,7 +339,7 @@
 
 				$urlOut = sprintf( '/%s/%s', $urlCurrentURI, substr( $urlRelativePath, 2 ) );
 
-			} elseif( substr( $urlRelativePath, 0, 3 ) == '../' ) {
+			} elseif( substr( $urlRelativePath, 0, 3 ) === '../' ) {
 
 				//UP
 				$urlOutTemp = trim( $urlOut, '/' );
@@ -348,7 +348,7 @@
 				$arrRedirectParts = ( strstr( $urlOutTemp, '/' ) ) ? explode( '/', $urlOutTemp ) : array( $urlOutTemp );
 
 				foreach( $arrRedirectParts as $intKey => $strEachPart ) {
-					if( $strEachPart == '..' && count( $arrCurrentParts ) > 0 ) {
+					if( $strEachPart === '..' && count( $arrCurrentParts ) > 0 ) {
 						array_pop( $arrCurrentParts );
 						array_shift( $arrRedirectParts );
 					} else {
@@ -376,12 +376,12 @@
 			} else {
 				$urlOut = rtrim( $urlOut, '/' );
 
-				if( $urlOut == '' ) {
+				if( $urlOut === '' ) {
 					$urlOut = '/';
 				}
 			}
 
-			return ( $strQueryString == '' ) ? $urlOut : sprintf( '%s?%s', $urlOut, $strQueryString );
+			return ( $strQueryString === '' ) ? $urlOut : sprintf( '%s?%s', $urlOut, $strQueryString );
 		}
 
 		/**

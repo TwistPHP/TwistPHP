@@ -109,11 +109,11 @@ class Manager extends BaseController{
 
 			$arrEachItem['input'] = '';
 
-			if($arrEachItem['type'] == 'string'){
+			if($arrEachItem['type'] === 'string'){
 				$arrEachItem['input'] .= sprintf('<input type="text" name="settings[%s]" value="%s">',$arrEachItem['key'],$arrEachItem['value']);
-			}elseif($arrEachItem['type'] == 'boolean'){
+			}elseif($arrEachItem['type'] === 'boolean'){
 				$arrEachItem['input'] .= sprintf('<input type="checkbox" name="settings[%s]" %svalue="1">',$arrEachItem['key'],($arrEachItem['value'] == '1') ? 'checked ' : '');
-			}elseif($arrEachItem['type'] == 'options'){
+			}elseif($arrEachItem['type'] === 'options'){
 
 				$strOptions = '';
 				$arrOptions = explode(',',$arrEachItem['options']);
@@ -132,7 +132,7 @@ class Manager extends BaseController{
 					$arrEachItem['input'] .= sprintf('<select name="settings[%s]">%s</select>',$arrEachItem['key'],$strOptions);
 				}
 
-			}elseif($arrEachItem['type'] == 'integer'){
+			}elseif($arrEachItem['type'] === 'integer'){
 				$arrEachItem['input'] .= sprintf('<input type="text" name="settings[%s]" value="%s">',$arrEachItem['key'],$arrEachItem['value']);
 			}else{
 				//Unknown types
@@ -205,19 +205,19 @@ class Manager extends BaseController{
 
 			$arrEachRepo['interface_count'] = 0;
 			foreach($arrInterfaces as $arrEachInterface){
-				if($arrEachInterface['repository'] == $strRepoKey && count($arrEachInterface['available'])){
+				if($arrEachInterface['repository'] === $strRepoKey && count($arrEachInterface['available'])){
 					$arrEachRepo['interface_count']++;
 				}
 			}
 
 			$arrEachRepo['module_count'] = 0;
 			foreach($arrModules as $arrEachModule){
-				if($arrEachModule['repository'] == $strRepoKey && count($arrEachModule['available'])){
+				if($arrEachModule['repository'] === $strRepoKey && count($arrEachModule['available'])){
 					$arrEachRepo['module_count']++;
 				}
 			}
 
-			if($strRepoKey == 'twistphp'){
+			if($strRepoKey === 'twistphp'){
 				$arrTags['static'] = $this->_view('components/repositories/each-repo-static.tpl', $arrEachRepo );
 			}else{
 				$arrTags['third-party'] .= $this->_view('components/repositories/each-repo.tpl', $arrEachRepo );
@@ -266,14 +266,14 @@ class Manager extends BaseController{
 
 			$arrTags['interfaces'] = 0;
 			foreach($arrInterfaces as $arrEachInterface){
-				if($arrEachInterface['repository'] == $_GET['repo-key'] && count($arrEachInterface['available'])){
+				if($arrEachInterface['repository'] === $_GET['repo-key'] && count($arrEachInterface['available'])){
 					$arrTags['interfaces']++;
 				}
 			}
 
 			$arrTags['modules'] = 0;
 			foreach($arrModules as $arrEachModule){
-				if($arrEachModule['repository'] == $_GET['repo-key'] && count($arrEachModule['available'])){
+				if($arrEachModule['repository'] === $_GET['repo-key'] && count($arrEachModule['available'])){
 					$arrTags['modules']++;
 				}
 			}
@@ -348,11 +348,11 @@ class Manager extends BaseController{
 			}
 		}
 
-		if($arrTags['packages_installed'] == ''){
+		if($arrTags['packages_installed'] === ''){
 			$arrTags['packages_installed'] = '<tr><td colspan="6">No packages installed</td></tr>';
 		}
 
-		if($arrTags['packages_available'] == ''){
+		if($arrTags['packages_available'] === ''){
 			$arrTags['packages_available'] = '<tr><td colspan="4">No packages to install</td></tr>';
 		}
 

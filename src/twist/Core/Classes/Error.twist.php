@@ -110,7 +110,7 @@
 	                $arrTags['type_code'] = 'php-exception';
 	            }
 
-				if(\Twist::framework()->setting('DEVELOPMENT_MODE') == true){
+				if(\Twist::framework()->setting('DEVELOPMENT_MODE')){
 
 	                $arrRequestHeaders = self::apacheRequestHeaders();
 	                $arrServerVars = self::serverInformation();
@@ -130,7 +130,7 @@
 	                    }
 	                }
 
-					if($resException->getCode() == 1200){
+					if($resException->getCode() === 1200){
 						//Dump Data call from core
 						$arrTags['code'] = '';
 						$arrTags['type'] = 'Inspector';
@@ -144,7 +144,7 @@
 							$arrTags['var_dump'] = print_r($mxdData,true);
 						}
 
-						if($mxdData == null){
+						if(is_null($mxdData)){
 							$mxdData = array();
 						}elseif(!is_array($mxdData)){
 							$mxdData = array('n/a' => $mxdData);
@@ -208,7 +208,7 @@
 								$strCode = str_replace(array('<code>','</code>'),'',$strCode);
 								$strCode .= "\n";
 
-								if($intLine == 0){
+								if($intLine === 0){
 									$strOut .= '<em>'.str_pad(($intErrorLine+$intLine)+1,$intMaxChar,' ',STR_PAD_LEFT).' | '.$strCode.'</em>';
 								}else{
 									$strOut .= (array_key_exists($intErrorLine+$intLine,$arrFileCode)) ? str_pad(($intErrorLine+$intLine)+1,$intMaxChar,' ',STR_PAD_LEFT).' | '.$strCode : '';
@@ -267,7 +267,7 @@
 				$arrLastError = error_get_last();
 
 				//Check if the last error was fatal (INSTANT DEATH)
-				if(self::getType($arrLastError['type'],true) == "Fatal Error"){
+				if(self::getType($arrLastError['type'],true) === "Fatal Error"){
 
 					//throw new Exception($arrLastError['message']);
 					//A fatal error has occured, throw and exception instead.
@@ -587,7 +587,7 @@
 				}
 
 				//Output the correct
-				$strHttpProtocol = ("HTTP/1.1" == $_SERVER["SERVER_PROTOCOL"]) ? 'HTTP/1.1' : 'HTTP/1.0';
+				$strHttpProtocol = ("HTTP/1.1" === $_SERVER["SERVER_PROTOCOL"]) ? 'HTTP/1.1' : 'HTTP/1.0';
 
 				header(sprintf('%s %d %s',$strHttpProtocol,$intErrorCode,$strReturn),true,$intErrorCode);
 

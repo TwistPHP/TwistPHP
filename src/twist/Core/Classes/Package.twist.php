@@ -145,7 +145,7 @@
 			$blOut = false;
 
 			foreach($this->getUninstalled() as $strSlug => $arrEachPackage){
-				if($strInstallSlug == $strSlug){
+				if($strInstallSlug === $strSlug){
 					include sprintf('%s/%s/install.php',DIR_PACKAGES,$arrEachPackage['folder']);
 					$blOut = true;
 					break;
@@ -345,7 +345,7 @@
 		public function extend($strPackage,$mxdKey,$mxdData){
 
 			//@deprecate when remove template all traces of templates
-			$strPackage = ($strPackage == 'Template') ? 'View' : $strPackage;
+			$strPackage = ($strPackage === 'Template') ? 'View' : $strPackage;
 
 			if(!array_key_exists($strPackage,$this->arrPackages)){
 				$this->arrPackages[$strPackage] = array('resources' => array(),'routes' => array(),'blocks' => array(),'extensions' => array());
