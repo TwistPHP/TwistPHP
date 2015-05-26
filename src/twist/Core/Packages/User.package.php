@@ -570,7 +570,7 @@ class User extends BasePackage{
 		return $this->viewExtension(($strLoginPage == '') ? 'change_password_form' : sprintf('%s,%s','change_password_form',$strLoginPage));
 	}
 
-	protected function afterLoginRedirect(){
+	public function afterLoginRedirect(){
 
 		$objSession = \Twist::Session();
 
