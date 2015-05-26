@@ -67,13 +67,14 @@
 		 * @return int|null|string
 		 */
 		protected function detectAutoIncrement(){
-			$strField = null;
+			$strOut = null;
 			foreach($this->arrStructure['columns'] as $strField => $arrOptions){
 				if($arrOptions['auto_increment'] == '1'){
+					$strOut = $strField;
 					break;
 				}
 			}
-			return $strField;
+			return $strOut;
 		}
 
 		/**
