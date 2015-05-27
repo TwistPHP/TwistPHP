@@ -22,12 +22,6 @@
 	 */
 
 	/**
-	 * Set the licence details for your copy of Twist Framework v2
-	 */
-	Twist::define('TWIST_ACCOUNT_TOKEN','{data:account_token}');
-	Twist::define('TWIST_LICENCE_KEY','{data:licence_key}');
-
-	/**
 	 * Database Configuration Settings
 	 * DATABASE_NAME			- The name of your primary database
 	 * DATABASE_HOST			- Host IP / Name of the database server
