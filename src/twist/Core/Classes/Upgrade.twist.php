@@ -52,6 +52,7 @@
 		protected $strHexRed = '#C00';
 
 		private $resDatabase = null;
+		protected $arrDatabaseCustomSettings = array();
 
 		public function __construct(){
 
@@ -456,6 +457,14 @@
 
 				$strHTMLInformation = sprintf("<br>&gt; %s",$strHTMLInformation);
 				$strInformation = sprintf("\n%s",$strInformation);
+			}
+
+			if(array_key_exists('html',$this->arrDebugData)){
+				$this->arrDebugData['html'] = '';
+			}
+
+			if(array_key_exists('plain',$this->arrDebugData)){
+				$this->arrDebugData['plain'] = '';
 			}
 
 	        if($this->arrDebugData['html'] === ''){

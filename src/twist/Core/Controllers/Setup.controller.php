@@ -377,7 +377,7 @@ class Setup extends BaseController{
 		\Twist::define('DIR_PUBLIC_ROOT',DIR_BASE.$arrSession['settings']['details']['site_root']);
 
 		\Twist::define('DIR_APP',DIR_BASE.$arrSession['settings']['details']['app_path']);
-		\Twist::define('DIR_APP_CONFIG',DIR_APP.'/config/');
+		\Twist::define('DIR_APP_CONFIG',DIR_APP.'/Config/');
 		\Twist::define('DIR_PACKAGES',DIR_BASE.$arrSession['settings']['details']['packages_path']);
 		\Twist::define('DIR_UPLOADS',DIR_BASE.$arrSession['settings']['details']['uploads_path']);
 

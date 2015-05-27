@@ -618,9 +618,9 @@
 						$strLog = "";
 						foreach(Error::$arrErrorLog as $arrEachItem){
 							if($arrEachItem['type'] != 'TWIST'){
-								$strLog .= sprintf("[%s] %s: [%s] %s\n",date('Y-m-d H:i:s'),$arrEachItem['type'],$arrEachItem['number'],$arrEachItem['message']);
+								$strLog .= sprintf("[%s] %s: [%s] %s - %s [line %s]\n",date('Y-m-d H:i:s'),$arrEachItem['type'],$arrEachItem['number'],$arrEachItem['message'],$arrEachItem['file'],$arrEachItem['code_line']);
 							}else{
-								$strLog .= sprintf("[%s] %s: %s\n",date('Y-m-d H:i:s'),$arrEachItem['type'],$arrEachItem['message']);
+								$strLog .= sprintf("[%s] %s: %s - %s [line %s]\n",date('Y-m-d H:i:s'),$arrEachItem['type'],$arrEachItem['message'],$arrEachItem['file'],$arrEachItem['code_line']);
 							}
 						}
 
