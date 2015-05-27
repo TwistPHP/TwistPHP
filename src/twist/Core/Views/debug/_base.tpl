@@ -7,7 +7,7 @@
 		--><li><a href="#twist-debug-timeline"><i class="fa fa-fw fa-lg fa-clock-o"></i>{data:execution_time_formatted}</a></li><!--
 		--><li><a href="#twist-debug-memory"><i class="fa fa-fw fa-lg fa-line-chart"></i>{bytestosize[data:memory/peak]}</a></li><!--
 		--><li><a href="#twist-debug-database"><i class="fa fa-fw fa-lg fa-database"></i>{data:database_query_count}</a></li><!--
-		--><li><a href="#twist-debug-route"><strong>GET</strong> {route:uri}</a></li>
+		--><li><a href="#twist-debug-route"><strong>{server:REQUEST_METHOD}</strong> {route:uri}</a></li>
 	</ul>
 </div>
 <div id="twist-debug-details">
