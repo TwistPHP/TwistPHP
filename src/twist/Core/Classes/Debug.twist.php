@@ -125,7 +125,7 @@
 
 			$arrTags['current_route'] = '';
 			foreach($arrCurrentRoute as $strKey => $strValue){
-				$arrTags['current_route'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $strKey,'value' => htmlentities($strValue)));
+				$arrTags['current_route'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $strKey,'value' => is_array($strValue) ? sprintf('<pre>%s</pre>',print_r($strValue,true)) : htmlentities($strValue)));
 			}
 
 
@@ -147,6 +147,11 @@
 			$arrTags['post'] = '';
 			foreach($_POST as $strKey => $strValue){
 				$arrTags['post'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $strKey,'value' => $strValue));
+			}
+
+			$arrTags['session'] = '';
+			foreach($_SESSION as $strKey => $strValue){
+				$arrTags['session'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $strKey,'value' => $strValue));
 			}
 
 			$arrTags['cookie'] = '';

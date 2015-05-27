@@ -88,6 +88,9 @@
 				<h6>POST Params</h6>
 				<dl>{data:post}</dl>
 
+				<h6>Session Params</h6>
+				<dl>{data:session}</dl>
+
 				<h6>Cookies</h6>
 				<dl>{data:cookie}</dl>
 
