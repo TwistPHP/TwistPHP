@@ -71,7 +71,7 @@ class Autoload{
 			}elseif(substr($strRequest,0,9) == 'Packages\\'){
 				$dirRequire = sprintf('%s/%s',rtrim(DIR_PACKAGES,'/'),ltrim($strFileWithoutRoot));
 			}else{
-				$dirRequire = sprintf('%s/%s',rtrim(DIR_SITE_ROOT,'/'),ltrim($strFile));
+				$dirRequire = sprintf('%s/%s',rtrim(DIR_PUBLIC_ROOT,'/'),ltrim($strFile));
 			}
 
 			if(file_exists($dirRequire)){

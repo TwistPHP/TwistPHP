@@ -60,14 +60,9 @@
 	Twist::define('DIR_FRAMEWORK_INSTALL',sprintf('%sInstall/',DIR_FRAMEWORK));
 	Twist::define('DIR_BASE',realpath(sprintf('%s/../',DIR_FRAMEWORK)).'/');
 
-	$strAppConfig = sprintf('%s/../Config/app.php',dirname(__FILE__));
-	$blAppConfigExists = file_exists($strAppConfig);
+	if(defined('DIR_PUBLIC_ROOT')){
 
-	if($blAppConfigExists){
-		require_once $strAppConfig;
-	}
-
-	if($blAppConfigExists || (defined('DIR_SITE_ROOT') && defined('DIR_APP') && defined('DIR_PACKAGES') && defined('DIR_UPLOADS'))){
+		Twist::define('DIR_APP',sprintf('%s/app/',rtrim(DIR_PUBLIC_ROOT,'/')));
 
 		Twist::define('DIR_APP_AJAX',sprintf('%s/Ajax/',rtrim(DIR_APP,'/')));
 		Twist::define('DIR_APP_ASSETS',sprintf('%s/Assets/',rtrim(DIR_APP,'/')));
@@ -76,6 +71,9 @@
 		Twist::define('DIR_APP_CONTROLLERS',sprintf('%s/Controllers/',rtrim(DIR_APP,'/')));
 		Twist::define('DIR_APP_MODELS',sprintf('%s/Models/',rtrim(DIR_APP,'/')));
 		Twist::define('DIR_APP_VIEWS',sprintf('%s/Views/',rtrim(DIR_APP,'/')));
+
+		Twist::define('DIR_PACKAGES',sprintf('%s/packages/',rtrim(DIR_PUBLIC_ROOT,'/')));
+		Twist::define('DIR_UPLOADS',sprintf('%s/uploads/',rtrim(DIR_PUBLIC_ROOT,'/')));
 	}
 
 	if(defined('DIR_APP_CONFIG') && file_exists(sprintf('%sconfig.php',DIR_APP_CONFIG))){

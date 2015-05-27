@@ -374,17 +374,8 @@ class Setup extends BaseController{
 
 		file_put_contents(sprintf('%sConfig/config.php',$strApplicationPath),\Twist::View()->build('config.tpl',$arrConfigTags));
 
-		$arrAppTags = array(
-			'site_root' => $arrSession['settings']['details']['site_root'],
-			'app_path' => $arrSession['settings']['details']['app_path'],
-			'packages_path' => $arrSession['settings']['details']['packages_path'],
-			'uploads_path' => $arrSession['settings']['details']['uploads_path'],
-		);
+		\Twist::define('DIR_PUBLIC_ROOT',DIR_BASE.$arrSession['settings']['details']['site_root']);
 
-		//Create the apps config in the twist/config folder
-		file_put_contents(sprintf('%sConfig/app.php',DIR_FRAMEWORK),\Twist::View()->build('app.tpl',$arrAppTags));
-
-		\Twist::define('DIR_SITE_ROOT',DIR_BASE.$arrSession['settings']['details']['site_root']);
 		\Twist::define('DIR_APP',DIR_BASE.$arrSession['settings']['details']['app_path']);
 		\Twist::define('DIR_APP_CONFIG',DIR_APP.'/config/');
 		\Twist::define('DIR_PACKAGES',DIR_BASE.$arrSession['settings']['details']['packages_path']);
@@ -459,14 +450,18 @@ class Setup extends BaseController{
 		/**
 		 * Update the index.php file to be a TwistPHP index file
 		 */
-		$dirIndexFile = sprintf('%s/index.php',DIR_SITE_ROOT);
+		$dirIndexFile = sprintf('%s/index.php',DIR_PUBLIC_ROOT);
 
 		if(file_exists($dirIndexFile)){
-			\Twist::File()->move($dirIndexFile,sprintf('%s/old-index.php',DIR_SITE_ROOT));
+			\Twist::File()->move($dirIndexFile,sprintf('%s/old-index.php',DIR_PUBLIC_ROOT));
 		}
 
 		//Later on we can add in example templates etc if required
 		$arrIndexTags = array(
+			'public_path' => rtrim(DIR_PUBLIC_ROOT,'/'),
+			'app_path' => DIR_APP,
+			'packages_path' => DIR_PACKAGES,
+			'uploads_path' => DIR_UPLOADS,
 			'framework_path' => DIR_FRAMEWORK,
 			'interfaces' => implode("\n\t\t",$arrInterfaces),
 			'routes' => '',
@@ -478,7 +473,7 @@ class Setup extends BaseController{
 		/**
 		 * Update the .htaccess file to be a TwistPHP htaccess file
 		 */
-		$dirHTaccessFile = sprintf('%s/.htaccess',DIR_SITE_ROOT);
+		$dirHTaccessFile = sprintf('%s/.htaccess',DIR_PUBLIC_ROOT);
 		file_put_contents($dirHTaccessFile,\Twist::View()->build(sprintf('%s/default-htaccess.tpl',DIR_FRAMEWORK_VIEWS)));
 
 		return \Twist::View()->build('pages/finish.tpl');
