@@ -449,7 +449,8 @@ $z-index: 1337;
 		border: 1px $border solid;
 		border-left-width: 0;
 
-		box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.05);
+		//box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.05);
+		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 
 		&[data-title] {
 			border-top-width: 0;
