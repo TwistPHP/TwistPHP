@@ -28,6 +28,9 @@ class Resources extends BaseController{
 
 	public function core(){
 
+		//Override and disable debug mode when serving resources
+		\Twist::Route()->debugMode(false);
+
 		$arrRoute = $this->_route();
 		$strResourcePath = sprintf('%s/%s',TWIST_FRAMEWORK,$arrRoute['dynamic']);
 
