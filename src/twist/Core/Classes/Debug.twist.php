@@ -76,7 +76,8 @@ final class Debug{
 			'timeline' => '',
 			'execution_time' => '',
 			'cache' => '',
-			'memory' => $arrTimer['memory']
+			'memory' => $arrTimer['memory'],
+			'memory_chart' => ''
 		);
 
 		if(array_key_exists('Error',$this->arrDebugLog)){
@@ -199,7 +200,7 @@ final class Debug{
 			$arrTags['timeline'] .= $this->resTemplate->build('components/timeline-entry.tpl',$arrTimelineTags);
 
 			$arrTimelineTags['title'] = \Twist::File()->bytesToSize($arrInfo['memory']).' - '.$strKey;
-			$arrTags['memory_chart'] = $this->resTemplate->build('components/timeline-entry.tpl',$arrTimelineTags);
+			$arrTags['memory_chart'] .= $this->resTemplate->build('components/timeline-entry.tpl',$arrTimelineTags);
 			$intUsedTime += $intCurrentTimeUsage;
 		}
 
