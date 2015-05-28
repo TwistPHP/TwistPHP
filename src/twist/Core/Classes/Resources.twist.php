@@ -198,9 +198,9 @@ final class Resources{
 
 		if(strstr(dirname($dirResourcePath),rtrim(TWIST_FRAMEWORK,'/'))){
 			//Resource is in framework (this will work for frameworks in and out of the base)
-			$arrParameters['uri'] = rtrim(TWIST_FRAMEWORK_URI.str_replace(TWIST_FRAMEWORK,'',$dirResourcePath),'/');
+			$arrParameters['uri'] = '/'.trim(TWIST_FRAMEWORK_URI.str_replace(TWIST_FRAMEWORK,'',$dirResourcePath),'/');
 		}else{
-			$arrParameters['uri'] = rtrim(str_replace(TWIST_DOCUMENT_ROOT,'',$dirResourcePath),'/');
+			$arrParameters['uri'] = '/'.trim(str_replace(TWIST_DOCUMENT_ROOT,'',$dirResourcePath),'/');
 		}
 
 		return $arrParameters;
