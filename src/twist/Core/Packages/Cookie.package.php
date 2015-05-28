@@ -76,7 +76,7 @@
 					$intExpiry = strtotime('+99 Years');
 				}elseif (is_numeric($intExpiry)){
 					$intExpiry += time();
-				}else{
+				}elseif(!is_null($intExpiry)){
 					$intExpiry = strtotime($intExpiry);
 				}
 
