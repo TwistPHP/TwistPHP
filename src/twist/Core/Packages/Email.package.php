@@ -460,23 +460,25 @@ class Email extends BasePackage{
 	 */
 	protected function sanitisePlainMessage(){
 
-		if(strstr($this->arrEmailData['body_plain'],'</head>')){
-			$arrParts = explode("</head>",$this->arrEmailData['body_plain']);
-			$strPlainData = $arrParts[1];
-		}else{
-			$strPlainData = $this->arrEmailData['body_plain'];
+		if($this->stripTags($this->arrEmailData['body_plain']) !== $this->arrEmailData['body_plain']){
+
+			if (strstr($this->arrEmailData['body_plain'], '</head>')) {
+				$arrParts = explode("</head>", $this->arrEmailData['body_plain']);
+				$strPlainData = $arrParts[1];
+			} else {
+				$strPlainData = $this->arrEmailData['body_plain'];
+			}
+
+			//Get the unformated HTML
+			$this->arrEmailData['body_plain'] = str_replace(
+				array("\t", "\n", "<br />", "<br/>", "<br>", "</p>", "</h1>", "</h2>", "</h3>", "</h4>", "</h5>"),
+				array("", "", "\n", "\n", "\n", "\n\n", "\n\n", "\n\n", "\n\n", "\n\n", "\n\n"),
+				$strPlainData
+			);
+
+			//Remove style tags and there content and Strip all the html tags from the code
+			$this->arrEmailData['body_plain'] = $this->stripTags($this->arrEmailData['body_plain']);
 		}
-
-		//Get the unformated HTML
-		$this->arrEmailData['body_plain'] = str_replace(
-			array("\t","\n","<br />","<br/>","<br>","</p>","</h1>","</h2>","</h3>","</h4>","</h5>"),
-			array("","","\n","\n","\n","\n\n","\n\n","\n\n","\n\n","\n\n","\n\n"),
-			$strPlainData
-		);
-
-		//Remove style tags and there content and Strip all the html tags from the code
-		$this->arrEmailData['body_plain'] = $this->stripTags($this->arrEmailData['body_plain']);
-
 	}
 
 	/**
