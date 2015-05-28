@@ -51,11 +51,11 @@ class User{
 		$this->blNewAccount = is_null($intUserID);
 
 		//Get the array of user fields
-		$this->arrUserDataFields = \Twist::framework()->tools()->arrayReindex(\Twist::Database()->getAll(sprintf('%suser_data_fields',DATABASE_TABLE_PREFIX)),'slug');
+		$this->arrUserDataFields = \Twist::framework()->tools()->arrayReindex(\Twist::Database()->getAll(sprintf('%suser_data_fields',TWIST_DATABASE_TABLE_PREFIX)),'slug');
 
 		$blQuery = \Twist::Database()->query("SELECT `ud`.`data`,`udf`.`slug` FROM `%suser_data` AS `ud` JOIN `%suser_data_fields` AS `udf` ON `ud`.`field_id` = `udf`.`id` WHERE `ud`.`user_id` = %d",
-			DATABASE_TABLE_PREFIX,
-			DATABASE_TABLE_PREFIX,
+			TWIST_DATABASE_TABLE_PREFIX,
+			TWIST_DATABASE_TABLE_PREFIX,
 			$intUserID
 		);
 
@@ -114,7 +114,7 @@ class User{
 				if(!array_key_exists($strKey,$this->arrUserDataFields)){
 
 					//The field is a new filed, insert into the database
-					$resUserDataField = \Twist::Database()->createRecord(sprintf('%suser_data_fields',DATABASE_TABLE_PREFIX));
+					$resUserDataField = \Twist::Database()->createRecord(sprintf('%suser_data_fields',TWIST_DATABASE_TABLE_PREFIX));
 					$resUserDataField->set('slug',$strKey);
 					$resUserDataField->commit();
 					$this->arrUserDataFields[$strKey] = $resUserDataField->values();
@@ -124,7 +124,7 @@ class User{
 
 					//If the item is null it can be removed
 					\Twist::Database()->query("DELETE FROM `%suser_data` WHERE `user_id` = %d AND `field_id` = %d LIMIT 1",
-						DATABASE_TABLE_PREFIX,
+						TWIST_DATABASE_TABLE_PREFIX,
 						$this->resDatabaseRecord->get('id'),
 						$this->arrUserDataFields[$strKey]['id']
 					);
@@ -135,7 +135,7 @@ class User{
 
 					//If the key was in the original array and the value is different from the original it can be removed
 					\Twist::Database()->query( "UPDATE `%suser_data` SET `data` = '%s' WHERE `user_id` = %d AND `field_id` = %d LIMIT 1",
-						DATABASE_TABLE_PREFIX,
+						TWIST_DATABASE_TABLE_PREFIX,
 						$mxdData,
 						$this->resDatabaseRecord->get( 'id' ),
 						$this->arrUserDataFields[$strKey]['id']
@@ -144,7 +144,7 @@ class User{
 				}elseif(!array_key_exists($strKey,$this->arrOriginalUserData)){
 
 					//If the key is not in the original array we need to insert the value
-					$resUserData = \Twist::Database()->createRecord(sprintf('%suser_data',DATABASE_TABLE_PREFIX));
+					$resUserData = \Twist::Database()->createRecord(sprintf('%suser_data',TWIST_DATABASE_TABLE_PREFIX));
 					$resUserData->set('user_id',$this->resDatabaseRecord->get('id'));
 					$resUserData->set('field_id',$this->arrUserDataFields[$strKey]['id']);
 					$resUserData->set('data',$mxdData);
@@ -428,7 +428,7 @@ class User{
 
 	protected function allowPassword($strPassword){
 
-		$strPasswordFile = sprintf('%sCore/Data/user/common-passwords.json',DIR_FRAMEWORK);
+		$strPasswordFile = sprintf('%sCore/Data/user/common-passwords.json',TWIST_FRAMEWORK);
 		$arrOut = array(
 			'status' => true,
 			'message' => 'Password is allowed'

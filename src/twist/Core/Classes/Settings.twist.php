@@ -39,7 +39,7 @@
 	    public function __construct(){
 
 	        //Check if the framework is setup or not setup
-	        $this->blShowSetup = !(defined('DIR_APP_CONFIG') && file_exists(sprintf("%sconfig.php",DIR_APP_CONFIG)));
+	        $this->blShowSetup = !(defined('TWIST_APP_CONFIG') && file_exists(sprintf("%sconfig.php",TWIST_APP_CONFIG)));
 	        $this->load();
 	    }
 
@@ -61,12 +61,12 @@
 					$this->loadTempSettings();
 				}else{
 
-					if(DATABASE_PROTOCOL === 'none'){
+					if(TWIST_DATABASE_PROTOCOL === 'none'){
 
 						$this->blFileConfig = true;
 
 						//Get the settings from a json settings file
-						$strSettingsFile = defined('DIR_APP_CONFIG') ? sprintf('%ssettings.json',DIR_APP_CONFIG) : null;
+						$strSettingsFile = defined('TWIST_APP_CONFIG') ? sprintf('%ssettings.json',TWIST_APP_CONFIG) : null;
 
 						if(file_exists($strSettingsFile)){
 							$jsonData = file_get_contents($strSettingsFile);
@@ -76,7 +76,7 @@
 						$this->blFileConfig = false;
 						\Twist::Database()->connect();
 
-						$this->arrSettingsInfo = \Twist::Database()->getAll(sprintf('%ssettings',DATABASE_TABLE_PREFIX));
+						$this->arrSettingsInfo = \Twist::Database()->getAll(sprintf('%ssettings',TWIST_DATABASE_TABLE_PREFIX));
 					}
 	            }
 
@@ -104,7 +104,7 @@
 		protected function loadTempSettings(){
 
 			//Process the core settings of the framework
-			$strCoreJSON = sprintf('%ssettings.json',DIR_FRAMEWORK_INSTALL);
+			$strCoreJSON = sprintf('%ssettings.json',TWIST_FRAMEWORK_INSTALL);
 
 			$jsonData = file_get_contents($strCoreJSON);
 			$this->arrSettingsInfo = json_decode($jsonData,true);
@@ -131,7 +131,7 @@
 	                $this->arrSettings[$strKey] = $mxdData;
 
 	                //Export the settings back to the setting file
-	                file_put_contents(sprintf('%ssettings.json',DIR_APP_CONFIG),json_encode($this->arrSettingsInfo));
+	                file_put_contents(sprintf('%ssettings.json',TWIST_APP_CONFIG),json_encode($this->arrSettingsInfo));
 	                $blOut = true;
 	            }
 	        }else{
@@ -143,8 +143,8 @@
 	                                SET `value` = '%s'
 	                                WHERE `key` = '%s'
 	                                LIMIT 1",
-	                DATABASE_NAME,
-	                DATABASE_TABLE_PREFIX,
+	                TWIST_DATABASE_NAME,
+	                TWIST_DATABASE_TABLE_PREFIX,
 	                $objDB->escapeString($mxdData),
 	                $objDB->escapeString(strtoupper($strKey))
 	            );
@@ -161,11 +161,11 @@
 
 		public function install($strPackage,$strGroup,$strKey,$mxdValue,$strTitle,$strDescription,$strDefault,$strType,$strOptions,$blNull = false){
 
-			if(DATABASE_PROTOCOL === 'none'){
+			if(TWIST_DATABASE_PROTOCOL === 'none'){
 
-				$strSettingsJSON = sprintf('%ssettings.json',DIR_APP_CONFIG);
+				$strSettingsJSON = sprintf('%ssettings.json',TWIST_APP_CONFIG);
 
-				if(is_writable(DIR_APP_CONFIG)){
+				if(is_writable(TWIST_APP_CONFIG)){
 					if(!file_exists($strSettingsJSON)){
 						file_put_contents($strSettingsJSON,'{}');
 					}
@@ -230,8 +230,8 @@
 										`options` = '%s',
 										`null` = '%s',
 										`deprecated` = '0'",
-					DATABASE_NAME,
-					DATABASE_TABLE_PREFIX,
+					TWIST_DATABASE_NAME,
+					TWIST_DATABASE_TABLE_PREFIX,
 					$resDatabase->escape($strPackage),
 					$resDatabase->escape(strtolower($strGroup)),
 					$resDatabase->escape(strtoupper($strKey)),

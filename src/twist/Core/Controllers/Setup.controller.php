@@ -59,7 +59,7 @@ class Setup extends BaseController{
 
 	public function licence(){
 
-		$strLicenceText = file_get_contents(sprintf('%s/LICENCE.txt',DIR_FRAMEWORK));
+		$strLicenceText = file_get_contents(sprintf('%s/LICENCE.txt',TWIST_FRAMEWORK));
 		$strLicenceText = str_replace(array("\n\n","\n"),array("<br><br>"," "),$strLicenceText);
 
 		$arrTags = array('licence' => $strLicenceText);
@@ -72,7 +72,7 @@ class Setup extends BaseController{
 		$arrSession = \Twist::Session()->data('twist-setup');
 
 		$blVersion = (version_compare(PHP_VERSION, '5.3.0') >= 0);
-		$blPermissions = (is_dir(DIR_FRAMEWORK) && is_writable(DIR_FRAMEWORK) && is_dir(DIR_FRAMEWORK_CONFIG) && is_writable(DIR_FRAMEWORK_CONFIG));
+		$blPermissions = (is_dir(TWIST_DOCUMENT_ROOT) && is_writable(TWIST_DOCUMENT_ROOT));
 
 		try{ $blCurl = (function_exists('curl_init') || class_exists('curl_init')); }catch(\Exception $resException){ $blCurl = false; }
 		try{ $blMysql = (function_exists('mysql_connect') || function_exists('mysqli_connect')); }catch(\Exception $resException){ $blMysql = false; }
@@ -167,17 +167,17 @@ class Setup extends BaseController{
 			header('Location: database');
 		}
 
-		if(rtrim(DIR_BASE,'/') === dirname($_SERVER['SCRIPT_FILENAME'])){
+		if(rtrim(TWIST_DOCUMENT_ROOT,'/') === dirname($_SERVER['SCRIPT_FILENAME'])){
 			$strSiteRoot = '/';
-		}elseif(strstr(rtrim(DIR_BASE,'/'),dirname($_SERVER['SCRIPT_FILENAME']))){
-			$strSiteRoot = '/'.ltrim(str_replace(dirname($_SERVER['SCRIPT_FILENAME']),"",rtrim(DIR_BASE,'/')),'/');
+		}elseif(strstr(rtrim(TWIST_DOCUMENT_ROOT,'/'),dirname($_SERVER['SCRIPT_FILENAME']))){
+			$strSiteRoot = '/'.ltrim(str_replace(dirname($_SERVER['SCRIPT_FILENAME']),"",rtrim(TWIST_DOCUMENT_ROOT,'/')),'/');
 		}else{
-			$strSiteRoot = '/'.ltrim(str_replace(rtrim(DIR_BASE,'/'),"",dirname($_SERVER['SCRIPT_FILENAME'])),'/');
+			$strSiteRoot = '/'.ltrim(str_replace(rtrim(TWIST_DOCUMENT_ROOT,'/'),"",dirname($_SERVER['SCRIPT_FILENAME'])),'/');
 		}
 
 		$arrTags = array(
 			'error_message' => '',
-			'relative_path' => rtrim(DIR_BASE,'/').'/',
+			'relative_path' => rtrim(TWIST_DOCUMENT_ROOT,'/').'/',
 			'site_root' => ltrim($strSiteRoot,'/'),
 			'app_path' => ($strSiteRoot === '/') ? '' : ltrim($strSiteRoot,'/').'/app',
 			'packages_path' => ($strSiteRoot === '/') ? '' : ltrim($strSiteRoot,'/').'/packages',
@@ -374,12 +374,12 @@ class Setup extends BaseController{
 
 		file_put_contents(sprintf('%sConfig/config.php',$strApplicationPath),\Twist::View()->build('config.tpl',$arrConfigTags));
 
-		\Twist::define('DIR_PUBLIC_ROOT',DIR_BASE.$arrSession['settings']['details']['site_root']);
+		\Twist::define('TWIST_PUBLIC_ROOT',TWIST_DOCUMENT_ROOT.$arrSession['settings']['details']['site_root']);
 
-		\Twist::define('DIR_APP',DIR_BASE.$arrSession['settings']['details']['app_path']);
-		\Twist::define('DIR_APP_CONFIG',DIR_APP.'/Config/');
-		\Twist::define('DIR_PACKAGES',DIR_BASE.$arrSession['settings']['details']['packages_path']);
-		\Twist::define('DIR_UPLOADS',DIR_BASE.$arrSession['settings']['details']['uploads_path']);
+		\Twist::define('TWIST_APP',TWIST_DOCUMENT_ROOT.$arrSession['settings']['details']['app_path']);
+		\Twist::define('TWIST_APP_CONFIG',TWIST_APP.'/Config/');
+		\Twist::define('TWIST_PACKAGES',TWIST_DOCUMENT_ROOT.$arrSession['settings']['details']['packages_path']);
+		\Twist::define('TWIST_UPLOADS',TWIST_DOCUMENT_ROOT.$arrSession['settings']['details']['uploads_path']);
 
 		if($arrSession['database']['details']['type'] === 'database'){
 
@@ -391,9 +391,9 @@ class Setup extends BaseController{
 				$arrSession['database']['details']['protocol']
 			);
 
-			\Twist::define('DATABASE_PROTOCOL',$arrSession['database']['details']['protocol']);
-			\Twist::define('DATABASE_NAME',$arrSession['database']['details']['name']);
-			\Twist::define('DATABASE_TABLE_PREFIX',$arrSession['database']['details']['table_prefix']);
+			\Twist::define('TWIST_DATABASE_PROTOCOL',$arrSession['database']['details']['protocol']);
+			\Twist::define('TWIST_DATABASE_NAME',$arrSession['database']['details']['name']);
+			\Twist::define('TWIST_DATABASE_TABLE_PREFIX',$arrSession['database']['details']['table_prefix']);
 
 			//Disable file config as we are using database
 			\Twist::framework()->settings()->fileConfigOverride(false);
@@ -450,31 +450,31 @@ class Setup extends BaseController{
 		/**
 		 * Update the index.php file to be a TwistPHP index file
 		 */
-		$dirIndexFile = sprintf('%s/index.php',DIR_PUBLIC_ROOT);
+		$dirIndexFile = sprintf('%s/index.php',TWIST_PUBLIC_ROOT);
 
 		if(file_exists($dirIndexFile)){
-			\Twist::File()->move($dirIndexFile,sprintf('%s/old-index.php',DIR_PUBLIC_ROOT));
+			\Twist::File()->move($dirIndexFile,sprintf('%s/old-index.php',TWIST_PUBLIC_ROOT));
 		}
 
 		//Later on we can add in example templates etc if required
 		$arrIndexTags = array(
-			'public_path' => rtrim(DIR_PUBLIC_ROOT,'/'),
-			'app_path' => DIR_APP,
-			'packages_path' => DIR_PACKAGES,
-			'uploads_path' => DIR_UPLOADS,
-			'framework_path' => DIR_FRAMEWORK,
+			'public_path' => rtrim(TWIST_PUBLIC_ROOT,'/'),
+			'app_path' => TWIST_APP,
+			'packages_path' => TWIST_PACKAGES,
+			'uploads_path' => TWIST_UPLOADS,
+			'framework_path' => TWIST_FRAMEWORK,
 			'interfaces' => implode("\n\t\t",$arrInterfaces),
 			'routes' => '',
 			'serve' => 'Twist::Route() -> serve();'
 		);
 
-		file_put_contents($dirIndexFile,\Twist::View()->build(sprintf('%s/default-index.tpl',DIR_FRAMEWORK_VIEWS),$arrIndexTags));
+		file_put_contents($dirIndexFile,\Twist::View()->build(sprintf('%s/default-index.tpl',TWIST_FRAMEWORK_VIEWS),$arrIndexTags));
 
 		/**
 		 * Update the .htaccess file to be a TwistPHP htaccess file
 		 */
-		$dirHTaccessFile = sprintf('%s/.htaccess',DIR_PUBLIC_ROOT);
-		file_put_contents($dirHTaccessFile,\Twist::View()->build(sprintf('%s/default-htaccess.tpl',DIR_FRAMEWORK_VIEWS)));
+		$dirHTaccessFile = sprintf('%s/.htaccess',TWIST_PUBLIC_ROOT);
+		file_put_contents($dirHTaccessFile,\Twist::View()->build(sprintf('%s/default-htaccess.tpl',TWIST_FRAMEWORK_VIEWS)));
 
 		return \Twist::View()->build('pages/finish.tpl');
 	}

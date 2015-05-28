@@ -45,7 +45,7 @@ class Command extends BasePackage{
 			2 => array("pipe", "w")//Output to a Pipe
 		);
 
-		$dirCurrentWorkingDirectory = (is_null($dirCurrentWorkingDirectory) || !is_dir($dirCurrentWorkingDirectory)) ? DIR_BASE : $dirCurrentWorkingDirectory;
+		$dirCurrentWorkingDirectory = (is_null($dirCurrentWorkingDirectory) || !is_dir($dirCurrentWorkingDirectory)) ? TWIST_DOCUMENT_ROOT : $dirCurrentWorkingDirectory;
 		$mxdEnvironmentsVars = null;
 		$strAdditionalInput = '';
 

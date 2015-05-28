@@ -48,9 +48,9 @@
 			$this->getInstalled();
 
 			//Find Packages
-			foreach(scandir(DIR_PACKAGES) as $strFile){
+			foreach(scandir(TWIST_PACKAGES) as $strFile){
 
-				$dirPackage = sprintf('%s/%s',DIR_PACKAGES,$strFile);
+				$dirPackage = sprintf('%s/%s',TWIST_PACKAGES,$strFile);
 
 				if(!in_array($strFile,array('.','..')) && is_dir($dirPackage)){
 
@@ -91,7 +91,7 @@
 			if(\Twist::Database()->checkSettings() && !count($this->arrPackages) || $blRebuild){
 
 				$this->arrPackages = array();
-				$arrPackages = \Twist::Database()->getAll(DATABASE_TABLE_PREFIX.'packages');
+				$arrPackages = \Twist::Database()->getAll(TWIST_DATABASE_TABLE_PREFIX.'packages');
 
 				if(count($arrPackages)){
 					$arrPackages = \Twist::framework()->tools()->arrayReindex($arrPackages,'slug');
@@ -116,7 +116,7 @@
 				$this->arrPackages[$strSlug] = $arrPackageData;
 			}
 
-			$dirPath = sprintf('%s/%s',DIR_PACKAGES,$arrPackageData['folder']);
+			$dirPath = sprintf('%s/%s',TWIST_PACKAGES,$arrPackageData['folder']);
 
 			$rawJson = file_get_contents(sprintf('%s/info.json',$dirPath));
 			$arrDetails = json_decode($rawJson,true);
@@ -146,7 +146,7 @@
 
 			foreach($this->getUninstalled() as $strSlug => $arrEachPackage){
 				if($strInstallSlug === $strSlug){
-					include sprintf('%s/%s/install.php',DIR_PACKAGES,$arrEachPackage['folder']);
+					include sprintf('%s/%s/install.php',TWIST_PACKAGES,$arrEachPackage['folder']);
 					$blOut = true;
 					break;
 				}
@@ -186,7 +186,7 @@
 
 				$arrResources = $arrRoutes = $arrBlocks = $arrExtensions = array();
 
-				$resPackage = \Twist::Database()->createRecord(DATABASE_TABLE_PREFIX.'packages');
+				$resPackage = \Twist::Database()->createRecord(TWIST_DATABASE_TABLE_PREFIX.'packages');
 
 				$resPackage->set('slug',$strSlug);
 				$resPackage->set('name',$arrDetails['name']);
@@ -225,7 +225,7 @@
 
 					//Create a temp file with all the required table pre-fixes
 					$dirImportFile = tempnam(sys_get_temp_dir(), 'twist-import');
-					file_put_contents($dirImportFile, str_replace('/*TABLE_PREFIX*/`', sprintf('`%s', DATABASE_TABLE_PREFIX), file_get_contents($dirInstallSQL)));
+					file_put_contents($dirImportFile, str_replace('/*TWIST_DATABASE_TABLE_PREFIX*/`', sprintf('`%s', TWIST_DATABASE_TABLE_PREFIX), file_get_contents($dirInstallSQL)));
 
 					//Import the SQL form the temp file
 					\Twist::Database()->importSQL($dirImportFile);
@@ -307,7 +307,7 @@
 		 * @return bool
 		 */
 		public function isInstalled($strPackageSlug){
-			return (count(\Twist::Database()->get(DATABASE_TABLE_PREFIX.'packages',$strPackageSlug,'slug'))) ? true : false;
+			return (count(\Twist::Database()->get(TWIST_DATABASE_TABLE_PREFIX.'packages',$strPackageSlug,'slug'))) ? true : false;
 		}
 
 		/**
@@ -394,7 +394,7 @@
 				$objInterface->baseURI($strRegisteredURI);
 
 				//Set the view directory to the one in the package
-				$objInterface->setDirectory(sprintf('%s/%s/Views/',DIR_PACKAGES,$arrParts[1]));
+				$objInterface->setDirectory(sprintf('%s/%s/Views/',TWIST_PACKAGES,$arrParts[1]));
 
 				if($mxdBaseView === false || is_null($mxdBaseView)){
 					$objInterface->baseViewIgnore();

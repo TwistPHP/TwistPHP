@@ -62,7 +62,7 @@ class User extends BasePackage{
 		$this->objUserSession = new SessionHandler();
 
 		//@todo setup the template override in the apps folder
-		$this->setCustomTemplateLocation(sprintf('%s/user/',DIR_FRAMEWORK_VIEWS));
+		$this->setCustomTemplateLocation(sprintf('%s/user/',TWIST_FRAMEWORK_VIEWS));
 
 		//Set the remember me life span in seconds
 		if($this->framework()->setting('USER_REMEMBER_LENGTH') > 0){
@@ -182,8 +182,8 @@ class User extends BasePackage{
 									FROM `%s`.`%susers`
 									WHERE `email` = '%s'
 									LIMIT 1",
-					DATABASE_NAME,
-					DATABASE_TABLE_PREFIX,
+					TWIST_DATABASE_NAME,
+					TWIST_DATABASE_TABLE_PREFIX,
 					$objDB->escapeString($strEmailAddress)
 				);
 
@@ -460,8 +460,8 @@ class User extends BasePackage{
 											`type_id` = %d,
 											`ip` = '%s',
 											`logged` = NOW()",
-			DATABASE_NAME,
-			DATABASE_TABLE_PREFIX,
+			TWIST_DATABASE_NAME,
+			TWIST_DATABASE_TABLE_PREFIX,
 			(is_null($intUserID)) ? 'NULL' : \Twist::Database()->escapeString($intUserID),
 			\Twist::Database()->escapeString($intType),
 			\Twist::Database()->escapeString($strIPAddress)
@@ -645,11 +645,11 @@ class User extends BasePackage{
 	 * @return UserObject
 	 */
 	public function get($intUserID){
-		return new UserObject(\Twist::Database()->getRecord(sprintf('%susers',DATABASE_TABLE_PREFIX),$intUserID),$this);
+		return new UserObject(\Twist::Database()->getRecord(sprintf('%susers',TWIST_DATABASE_TABLE_PREFIX),$intUserID),$this);
 	}
 
 	public function create(){
-		return new UserObject(\Twist::Database()->createRecord(sprintf('%susers',DATABASE_TABLE_PREFIX)),$this);
+		return new UserObject(\Twist::Database()->createRecord(sprintf('%susers',TWIST_DATABASE_TABLE_PREFIX)),$this);
 	}
 
 	/**
@@ -658,7 +658,7 @@ class User extends BasePackage{
 	 * @return array
 	 */
 	public function getData($intUserID){
-		return \Twist::Database()->get(sprintf('%susers',DATABASE_TABLE_PREFIX),$intUserID);
+		return \Twist::Database()->get(sprintf('%susers',TWIST_DATABASE_TABLE_PREFIX),$intUserID);
 	}
 
 	/**
@@ -667,7 +667,7 @@ class User extends BasePackage{
 	 * @return array
 	 */
 	public function getByEmail($strEmail){
-		return \Twist::Database()->get(sprintf('%susers',DATABASE_TABLE_PREFIX),$strEmail,'email');
+		return \Twist::Database()->get(sprintf('%susers',TWIST_DATABASE_TABLE_PREFIX),$strEmail,'email');
 	}
 
 	/**
@@ -676,7 +676,7 @@ class User extends BasePackage{
 	 * @return array
 	 */
 	public function getDetailsByID($intUserID){
-		return \Twist::Database()->get(sprintf('%suser_data',DATABASE_TABLE_PREFIX),$intUserID,'user_id');
+		return \Twist::Database()->get(sprintf('%suser_data',TWIST_DATABASE_TABLE_PREFIX),$intUserID,'user_id');
 	}
 
 	/**
@@ -685,7 +685,7 @@ class User extends BasePackage{
 	 * @return array
 	 */
 	public function getAll($strOrderBy = 'id'){
-		return \Twist::Database()->getAll(sprintf('%susers',DATABASE_TABLE_PREFIX),$strOrderBy);
+		return \Twist::Database()->getAll(sprintf('%susers',TWIST_DATABASE_TABLE_PREFIX),$strOrderBy);
 	}
 
 	/**
@@ -694,7 +694,7 @@ class User extends BasePackage{
 	 * @return array
 	 */
 	public function getAllByLevel($intLevelID){
-		return \Twist::Database()->find(sprintf('%susers',DATABASE_TABLE_PREFIX),$intLevelID,'level');
+		return \Twist::Database()->find(sprintf('%susers',TWIST_DATABASE_TABLE_PREFIX),$intLevelID,'level');
 	}
 
 	/**
@@ -703,7 +703,7 @@ class User extends BasePackage{
 	 * @return array
 	 */
 	public function getLevel($intLevelID){
-		return \Twist::Database()->get(sprintf('%suser_levels',DATABASE_TABLE_PREFIX),$intLevelID,'level');
+		return \Twist::Database()->get(sprintf('%suser_levels',TWIST_DATABASE_TABLE_PREFIX),$intLevelID,'level');
 	}
 
 	/**
@@ -711,7 +711,7 @@ class User extends BasePackage{
 	 * @return int
 	 */
 	public function getLevels(){
-		return \Twist::Database()->getAll(sprintf('%suser_levels',DATABASE_TABLE_PREFIX));
+		return \Twist::Database()->getAll(sprintf('%suser_levels',TWIST_DATABASE_TABLE_PREFIX));
 	}
 
 	public function verifyEmail($strVerificationCode){
@@ -732,8 +732,8 @@ class User extends BasePackage{
 												WHERE `email` = '%s'
 												AND `verification_code` = '%s'
 												LIMIT 1",
-					DATABASE_NAME,
-					DATABASE_TABLE_PREFIX,
+					TWIST_DATABASE_NAME,
+					TWIST_DATABASE_TABLE_PREFIX,
 					\Twist::Database()->escapeString($arrParts[0]),
 					\Twist::Database()->escapeString($arrParts[1])
 				);
@@ -832,7 +832,7 @@ class User extends BasePackage{
 
 		if(!file_exists($strTemplateLocation)){
 			$strTemplateLocation = trim($strTemplateLocation,'/').'/';
-			$strTemplateLocation = sprintf('%s/%s',BASE_LOCATION,$strTemplateLocation);
+			$strTemplateLocation = sprintf('%s/%s',TWIST_DOCUMENT_ROOT,$strTemplateLocation);
 		} else {
 			$strTemplateLocation = rtrim($strTemplateLocation,'/').'/';
 		}

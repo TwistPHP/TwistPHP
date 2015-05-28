@@ -15,7 +15,7 @@
 -- must also be made to the corresponding install.sql
 --
 -- To Add the Twist table prefix you must use the following
--- syntax /*TABLE_PREFIX*/`table_name`
+-- syntax /*TWIST_DATABASE_TABLE_PREFIX*/`table_name`
 --
 -- You can use a single line comment above each query using
 -- the following syntax "-- @comment This is my query comment"
@@ -23,25 +23,25 @@
 -- ------------------------------------------------------
 
 -- @comment Fix the broken icons in the asset package
-UPDATE /*TABLE_PREFIX*/`asset_types` SET `icon` = `image.png` WHERE `icon` = 'photo.png';
+UPDATE /*TWIST_DATABASE_TABLE_PREFIX*/`asset_types` SET `icon` = `image.png` WHERE `icon` = 'photo.png';
 
-RENAME TABLE /*TABLE_PREFIX*/`user_data` TO /*TABLE_PREFIX*/`user_data_deprecated`;
+RENAME TABLE /*TWIST_DATABASE_TABLE_PREFIX*/`user_data` TO /*TWIST_DATABASE_TABLE_PREFIX*/`user_data_deprecated`;
 
-CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`user_data_fields` (
+CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`user_data_fields` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `slug` char(64) COLLATE utf8_unicode_ci NOT NULL,
   KEY `id` (`id`),
   UNIQUE KEY `slug` (`slug`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1;
 
-CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`user_data` (
+CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`user_data` (
   `user_id` int(11) NOT NULL,
   `field_id` int(11) NOT NULL,
   `data` text COLLATE utf8_unicode_ci,
   UNIQUE KEY `user_id` (`user_id`,`field_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`packages` (
+CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`packages` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique ID for this installation',
   `slug` char(64) COLLATE utf8_unicode_ci NOT NULL,
   `name` char(128) COLLATE utf8_unicode_ci NOT NULL,
@@ -58,4 +58,4 @@ CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`packages` (
   UNIQUE KEY `slug` (`slug`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
-ALTER TABLE /*TABLE_PREFIX*/`settings` CHANGE `group` `group` ENUM( 'core', 'package' ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
+ALTER TABLE /*TWIST_DATABASE_TABLE_PREFIX*/`settings` CHANGE `group` `group` ENUM( 'core', 'package' ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL

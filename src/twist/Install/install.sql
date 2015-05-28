@@ -6,17 +6,17 @@
 -- New tables       add a CREATE query
 -- New records      add an INSERT query
 --
--- To Add the Twist table prefix you must use the following syntax /*TABLE_PREFIX*/`table_name`
+-- To Add the Twist table prefix you must use the following syntax /*TWIST_DATABASE_TABLE_PREFIX*/`table_name`
 --
 -- ------------------------------------------------------
 
-ALTER DATABASE /*DATABASE_NAME*/ CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER DATABASE /*TWIST_DATABASE_NAME*/ CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
 --
 -- Table structure for table `settings`
 --
 
-CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`settings` (
+CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`settings` (
   `package` char(64) COLLATE utf8_unicode_ci NOT NULL,
   `group` enum('core','package') COLLATE utf8_unicode_ci NOT NULL,
   `key` char(32) COLLATE utf8_unicode_ci NOT NULL,
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`settings` (
 -- Table structure for table `installed_packages`
 --
 
-CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`packages` (
+CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`packages` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique ID for this installation',
   `slug` char(64) COLLATE utf8_unicode_ci NOT NULL,
   `name` char(128) COLLATE utf8_unicode_ci NOT NULL,
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`packages` (
 -- Table structure for table `users`
 --
 
-CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`users` (
+CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`users` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'User ID',
   `email` char(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Unique email of user',
   `firstname` char(128) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Users first name',
@@ -85,7 +85,7 @@ CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`users` (
 -- Table structure for table `user_data_fields`
 --
 
-CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`user_data_fields` (
+CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`user_data_fields` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `slug` char(64) COLLATE utf8_unicode_ci NOT NULL,
   KEY `id` (`id`),
@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`user_data_fields` (
 -- Table structure for table `user_data`
 --
 
-CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`user_data` (
+CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`user_data` (
   `user_id` int(11) NOT NULL,
   `field_id` int(11) NOT NULL,
   `data` text COLLATE utf8_unicode_ci,
@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`user_data` (
 -- Table structure for table `user_levels`
 --
 
-CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`user_levels` (
+CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`user_levels` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `slug` char(64) COLLATE utf8_unicode_ci NOT NULL,
   `description` text COLLATE utf8_unicode_ci COMMENT 'Description of the level',
@@ -123,7 +123,7 @@ CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`user_levels` (
 -- Dumping data for table `user_levels`
 --
 
-INSERT IGNORE INTO /*TABLE_PREFIX*/`user_levels` (`id`, `slug`, `description`,'level') VALUES
+INSERT IGNORE INTO /*TWIST_DATABASE_TABLE_PREFIX*/`user_levels` (`id`, `slug`, `description`,'level') VALUES
 (1, 'member', 'Standard Member',10),
 (2, 'advanced_member', 'Advanced member',20),
 (3, 'admin', 'Admin',30),
@@ -135,7 +135,7 @@ INSERT IGNORE INTO /*TABLE_PREFIX*/`user_levels` (`id`, `slug`, `description`,'l
 -- Table structure for table `user_levels`
 --
 
-CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`user_groups` (
+CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`user_groups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `slug` char(64) COLLATE utf8_unicode_ci NOT NULL,
   `description` text COLLATE utf8_unicode_ci COMMENT 'Description of user groups',
@@ -149,7 +149,7 @@ CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`user_groups` (
 -- Table structure for table `user_group_members`
 --
 
-CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`user_group_members` (
+CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`user_group_members` (
   `user_id` int(11) NOT NULL,
   `group_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
@@ -161,7 +161,7 @@ CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`user_group_members` (
 -- Table structure for table `user_sessions`
 --
 
-CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`user_sessions` (
+CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`user_sessions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `token` char(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -181,7 +181,7 @@ CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`user_sessions` (
 -- Table structure for table `structure_routes`
 --
 
-CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`structure_routes` (
+CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`structure_routes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uri` char(255) NOT NULL,
   PRIMARY KEY (`id`),
@@ -194,7 +194,7 @@ CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`structure_routes` (
 -- Table structure for table `assets`
 --
 
-CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`assets` (
+CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`assets` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` char(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Name of the asset',
   `description` text COLLATE utf8_unicode_ci NOT NULL,
@@ -217,7 +217,7 @@ CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`assets` (
 -- Table structure for table `asset_groups`
 --
 
-CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`asset_groups` (
+CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`asset_groups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `description` char(255) COLLATE utf8_unicode_ci NOT NULL,
   `slug` char(32) COLLATE utf8_unicode_ci NOT NULL,
@@ -230,7 +230,7 @@ CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`asset_groups` (
 -- Dumping data for table `asset_groups`
 --
 
-INSERT IGNORE INTO /*TABLE_PREFIX*/`asset_groups` (`id`, `description`, `slug`, `order`) VALUES
+INSERT IGNORE INTO /*TWIST_DATABASE_TABLE_PREFIX*/`asset_groups` (`id`, `description`, `slug`, `order`) VALUES
 (1, 'Main Site Assets', 'default', 0);
 
 -- --------------------------------------------------------
@@ -239,7 +239,7 @@ INSERT IGNORE INTO /*TABLE_PREFIX*/`asset_groups` (`id`, `description`, `slug`, 
 -- Table structure for table `asset_support`
 --
 
-CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`asset_support` (
+CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`asset_support` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `asset_id` int(11) NOT NULL,
   `type` char(32) COLLATE utf8_unicode_ci NOT NULL,
@@ -254,7 +254,7 @@ CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`asset_support` (
 -- Table structure for table `asset_types`
 --
 
-CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`asset_types` (
+CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`asset_types` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` char(64) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Name of the asset type',
   `data_description` char(64) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -271,7 +271,7 @@ CREATE TABLE IF NOT EXISTS /*TABLE_PREFIX*/`asset_types` (
 -- Dumping data for table `asset_types`
 --
 
-INSERT INTO /*TABLE_PREFIX*/`asset_types` (`id`, `name`, `data_description`, `data_example`, `slug`, `file_extensions`, `default_file_extension`, `template`, `icon`) VALUES
+INSERT INTO /*TWIST_DATABASE_TABLE_PREFIX*/`asset_types` (`id`, `name`, `data_description`, `data_example`, `slug`, `file_extensions`, `default_file_extension`, `template`, `icon`) VALUES
 (1, 'Image', NULL, NULL, 'image', 'png,jpg,jpeg,gif,tiff', NULL, 'image.tpl', 'image.png'),
 (2, 'Video', NULL, NULL, 'video', 'avi,mpg,mp4,flv,mov,mpeg,rt,webm,ogv,wmv', 'mp4', 'video.tpl', 'movie.png'),
 (3, 'PDF', NULL, NULL, 'pdf', 'pdf', NULL, 'link.tpl', 'pdf.png'),

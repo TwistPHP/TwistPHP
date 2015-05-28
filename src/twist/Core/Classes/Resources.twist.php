@@ -54,7 +54,7 @@ final class Resources{
 			$blInline = false;
 
 			if($arrParts[0] === 'core-uri'){
-				return sprintf('%sCore/Resources/',FRAMEWORK_URI);
+				return sprintf('%sCore/Resources/',TWIST_FRAMEWORK_URI);
 			}
 
 			if( count( $arrParts ) > 1 ) {
@@ -153,13 +153,13 @@ final class Resources{
 	protected function loadLibraryManifest(){
 
 		//Get the resource libraries
-		$strJSON = file_get_contents(sprintf('%sCore/Resources/manifest.json',DIR_FRAMEWORK));
+		$strJSON = file_get_contents(sprintf('%sCore/Resources/manifest.json',TWIST_FRAMEWORK));
 		$this->arrLibraries = json_decode($strJSON,true);
 
 		//Pre-process the paths and uris into the libraries
 		foreach($this->arrLibraries as $strKey => $arrOptions){
 			foreach($arrOptions as $strOptionKey => $arrOptionParameters){
-				$this->arrLibraries[$strKey][$strOptionKey] = $this->applyPath($arrOptionParameters,sprintf('%sCore/Resources/',DIR_FRAMEWORK));
+				$this->arrLibraries[$strKey][$strOptionKey] = $this->applyPath($arrOptionParameters,sprintf('%sCore/Resources/',TWIST_FRAMEWORK));
 			}
 		}
 	}
@@ -197,10 +197,10 @@ final class Resources{
 		$arrParameters['path'] = rtrim($dirResourcePath,'/');
 
 		//Detect if the resource path is outside of the document root, then process the URI accordingly
-		if(rtrim(DIR_BASE,'/') === dirname($dirResourcePath) || strstr(rtrim(DIR_BASE,'/'),dirname($dirResourcePath))){
-			$arrParameters['uri'] = rtrim(BASE_PATH.str_replace(DIR_BASE,'',$dirResourcePath),'/');
+		if(rtrim(TWIST_DOCUMENT_ROOT,'/') === dirname($dirResourcePath) || strstr(rtrim(TWIST_DOCUMENT_ROOT,'/'),dirname($dirResourcePath))){
+			$arrParameters['uri'] = rtrim(TWIST_BASE_PATH.str_replace(TWIST_DOCUMENT_ROOT,'',$dirResourcePath),'/');
 		}else{
-			$arrParameters['uri'] = '/'.rtrim(str_replace(DIR_BASE,'',$dirResourcePath),'/');
+			$arrParameters['uri'] = '/'.trim(str_replace(TWIST_BASE_PATH,'',$dirResourcePath),'/');
 		}
 
 		return $arrParameters;

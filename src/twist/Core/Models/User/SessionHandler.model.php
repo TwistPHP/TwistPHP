@@ -69,8 +69,8 @@ class SessionHandler{
 			$strSQL = sprintf("INSERT INTO `%s`.`%suser_sessions`
 									SET `user_id` = %d,
 										`device` = '%s'",
-				DATABASE_NAME,
-				DATABASE_TABLE_PREFIX,
+				TWIST_DATABASE_NAME,
+				TWIST_DATABASE_TABLE_PREFIX,
 				$objDB->escapeString($intUserID),
 				$objDB->escapeString($strDeviceID)
 			);
@@ -86,8 +86,8 @@ class SessionHandler{
 				$strSQL = sprintf("INSERT INTO `%s`.`%suser_sessions`
 										SET `user_id` = %d,
 											`device` = '%s'",
-					DATABASE_NAME,
-					DATABASE_TABLE_PREFIX,
+					TWIST_DATABASE_NAME,
+					TWIST_DATABASE_TABLE_PREFIX,
 					$objDB->escapeString($intUserID),
 					$objDB->escapeString($strDeviceID)
 				);
@@ -117,8 +117,8 @@ class SessionHandler{
 
 		$strSQL = sprintf("DELETE FROM `%s`.`%suser_sessions`
 								WHERE `device` = '%s'",
-			DATABASE_NAME,
-			DATABASE_TABLE_PREFIX,
+			TWIST_DATABASE_NAME,
+			TWIST_DATABASE_TABLE_PREFIX,
 			$objDB->escapeString($strDeviceID)
 		);
 
@@ -134,8 +134,8 @@ class SessionHandler{
 								FROM `%s`.`%suser_sessions`
 								WHERE `user_id` = %d
 								ORDER BY `last_login` DESC",
-			DATABASE_NAME,
-			DATABASE_TABLE_PREFIX,
+			TWIST_DATABASE_NAME,
+			TWIST_DATABASE_TABLE_PREFIX,
 			$objDB->escapeString($intUserID)
 		);
 
@@ -157,8 +157,8 @@ class SessionHandler{
 									FROM `%s`.`%suser_sessions`
 									WHERE `user_id` = %d
 									AND `device` = '%s'",
-				DATABASE_NAME,
-				DATABASE_TABLE_PREFIX,
+				TWIST_DATABASE_NAME,
+				TWIST_DATABASE_TABLE_PREFIX,
 				$objDB->escapeString($intUserID),
 				$_COOKIE['device']
 			);
@@ -182,8 +182,8 @@ class SessionHandler{
 							SET `device_name` = '%s'
 							WHERE `device` = '%s'
 							AND `user_id` = %d",
-			DATABASE_NAME,
-			DATABASE_TABLE_PREFIX,
+			TWIST_DATABASE_NAME,
+			TWIST_DATABASE_TABLE_PREFIX,
 			$objDB->escapeString($strDeviceName),
 			$objDB->escapeString($mxdDevice),
 			$objDB->escapeString($intUserID)
@@ -203,8 +203,8 @@ class SessionHandler{
 		$strSQL = sprintf("DELETE FROM `%s`.`%suser_sessions`
 								WHERE `device` = '%s'
 								AND `user_id` = %d",
-			DATABASE_NAME,
-			DATABASE_TABLE_PREFIX,
+			TWIST_DATABASE_NAME,
+			TWIST_DATABASE_TABLE_PREFIX,
 			$objDB->escapeString($mxdDevice),
 			$objDB->escapeString($intUserID)
 		);
@@ -275,7 +275,7 @@ class SessionHandler{
 	}
 
 	public function debug($strMessage){
-		//file_put_contents(sprintf('%s/user.log',BASE_LOCATION),$strMessage."\n",FILE_APPEND);
+		//file_put_contents(sprintf('%s/user.log',TWIST_DOCUMENT_ROOT),$strMessage."\n",FILE_APPEND);
 	}
 
 	protected function validateSessionKey($strSessionKey,$blRemember = false,$blUpdateKey = true){
@@ -295,10 +295,10 @@ class SessionHandler{
 								AND `user_sessions`.`token` = '%s'
 								AND md5(concat(`user_sessions`.`user_id`,'%s')) = '%s'
 								AND `users`.`enabled` = '1'",
-			DATABASE_NAME,
-			DATABASE_TABLE_PREFIX,
-			DATABASE_NAME,
-			DATABASE_TABLE_PREFIX,
+			TWIST_DATABASE_NAME,
+			TWIST_DATABASE_TABLE_PREFIX,
+			TWIST_DATABASE_NAME,
+			TWIST_DATABASE_TABLE_PREFIX,
 			$objDB->escapeString($arrMatches[1]),
 			$objDB->escapeString($arrMatches[2]),
 			$objDB->escapeString($this->strSecretKey),
@@ -311,8 +311,8 @@ class SessionHandler{
 									FROM `%s`.`%suser_sessions`
 									WHERE sha1(`device`) = '%s'
 									AND md5(concat(`user_id`,'%s')) = '%s'",
-			DATABASE_NAME,
-			DATABASE_TABLE_PREFIX,
+			TWIST_DATABASE_NAME,
+			TWIST_DATABASE_TABLE_PREFIX,
 			$objDB->escapeString($arrMatches[1]),
 			$objDB->escapeString($this->strSecretKey),
 			$objDB->escapeString($arrMatches[2])
@@ -371,8 +371,8 @@ class SessionHandler{
 									`last_login` = NOW()
 								WHERE sha1(`device`) = '%s'
 								AND md5(concat(`user_id`,'%s')) = '%s'",
-			DATABASE_NAME,
-			DATABASE_TABLE_PREFIX,
+			TWIST_DATABASE_NAME,
+			TWIST_DATABASE_TABLE_PREFIX,
 			$objDB->escapeString($strNewToken),
 			$objDB->escapeString($_SERVER['REMOTE_ADDR']),
 			$objDB->escapeString($strDevice),
@@ -412,8 +412,8 @@ class SessionHandler{
 								SET `token` = ''
 								WHERE md5(`device`) = '%s'
 								AND md5(concat(`user_id`,'%s')) = '%s'",
-			DATABASE_NAME,
-			DATABASE_TABLE_PREFIX,
+			TWIST_DATABASE_NAME,
+			TWIST_DATABASE_TABLE_PREFIX,
 			$objDB->escapeString($strDevice),
 			$objDB->escapeString($this->strSecretKey),
 			$objDB->escapeString($strHash)

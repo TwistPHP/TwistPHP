@@ -39,7 +39,7 @@ class File extends BasePackage{
 	 */
 	public function __construct(){
 		$this->resTemplate = \Twist::View('pkgFile');
-		$this->resTemplate->setDirectory( sprintf('%s/file/',DIR_FRAMEWORK_VIEWS));
+		$this->resTemplate->setDirectory( sprintf('%s/file/',TWIST_FRAMEWORK_VIEWS));
 	}
 
 	/**
@@ -216,7 +216,7 @@ class File extends BasePackage{
 	public function findVersion($strDirectory,$strFilePrefix,$strVersion = null){
 
 		$strOut = null;
-		$arrFiles = scandir(BASE_LOCATION.$strDirectory);
+		$arrFiles = scandir(TWIST_DOCUMENT_ROOT.$strDirectory);
 
 		if(is_null($strVersion) || $strVersion === '' || $strVersion === 'latest'){
 
@@ -397,7 +397,7 @@ class File extends BasePackage{
 		);
 
 		//Create an upload directory for uploaded files
-		$strUploadFolder = DIR_UPLOADS;
+		$strUploadFolder = TWIST_UPLOADS;
 
 		if(!is_dir($strUploadFolder)){
 			mkdir($strUploadFolder);
@@ -470,7 +470,7 @@ class File extends BasePackage{
 		);
 
 		//Create an upload directory for uploaded files
-		$strUploadFolder = DIR_UPLOADS;
+		$strUploadFolder = TWIST_UPLOADS;
 
 		if(!is_dir($strUploadFolder)){
 			mkdir($strUploadFolder);

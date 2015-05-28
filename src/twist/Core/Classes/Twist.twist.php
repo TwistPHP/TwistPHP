@@ -44,31 +44,32 @@
 				self::$blLaunched = true;
 
 				//Get the base location of the site, based on apaches report fo the document root minus a trailing slash
-				self::define('BASE_LOCATION',rtrim($_SERVER['DOCUMENT_ROOT'],'/'));
+				self::define('TWIST_DOCUMENT_ROOT',rtrim($_SERVER['DOCUMENT_ROOT'],'/'));
 
 				$blAboveDocumentRoot = false;
+				$strInstallationFolder = realpath(sprintf('%s/../',TWIST_FRAMEWORK));
 
-				if(rtrim(DIR_BASE,'/') === dirname($_SERVER['SCRIPT_FILENAME'])){
+				if($strInstallationFolder === dirname($_SERVER['SCRIPT_FILENAME'])){
 					$strSiteRoot = '/';
-				}elseif(strstr(rtrim(DIR_BASE,'/'),dirname($_SERVER['SCRIPT_FILENAME']))){
-					$strSiteRoot = '/'.ltrim(str_replace(dirname($_SERVER['SCRIPT_FILENAME']),"",rtrim(DIR_BASE,'/')),'/');
+				}elseif(strstr($strInstallationFolder,dirname($_SERVER['SCRIPT_FILENAME']))){
+					$strSiteRoot = '/'.ltrim(str_replace(dirname($_SERVER['SCRIPT_FILENAME']),"",$strInstallationFolder),'/');
 				}else{
-					$strSiteRoot = '/'.ltrim(str_replace(rtrim(DIR_BASE,'/'),"",dirname($_SERVER['SCRIPT_FILENAME'])),'/');
+					$strSiteRoot = '/'.ltrim(str_replace($strInstallationFolder,"",dirname($_SERVER['SCRIPT_FILENAME'])),'/');
 					$blAboveDocumentRoot = true;
 				}
 
-				$strBaseURI = str_replace('//','','/'.trim(str_replace(BASE_LOCATION,"",dirname($_SERVER['SCRIPT_FILENAME'])),'/').'/');
+				$strBaseURI = str_replace('//','','/'.trim(str_replace(TWIST_DOCUMENT_ROOT,"",dirname($_SERVER['SCRIPT_FILENAME'])),'/').'/');
 
-				if(strstr(DIR_FRAMEWORK,BASE_LOCATION)){
-					$strFrameworkURI = '/'.ltrim(str_replace(BASE_LOCATION,"",DIR_FRAMEWORK),'/');
+				if(strstr(TWIST_FRAMEWORK,TWIST_DOCUMENT_ROOT)){
+					$strFrameworkURI = '/'.ltrim(str_replace(TWIST_DOCUMENT_ROOT,"",TWIST_FRAMEWORK),'/');
 				}else{
 					$strFrameworkURI = sprintf('%stwist/',$strBaseURI);
 				}
 
-				self::define('FRAMEWORK_URI',$strFrameworkURI);
+				self::define('TWIST_FRAMEWORK_URI',$strFrameworkURI);
 				self::define('TWIST_ABOVE_DOCUMENT_ROOT',$blAboveDocumentRoot);
-				self::define('BASE_PATH',$strSiteRoot);
-				self::define('BASE_URI',$strBaseURI);
+				self::define('TWIST_BASE_PATH',$strSiteRoot);
+				self::define('TWIST_BASE_URI',$strBaseURI);
 
 				date_default_timezone_set( Twist::framework() -> setting('TIMEZONE') );
 				$strLocation = rtrim(Twist::framework() -> setting('SITE_BASE'),'/');
@@ -78,15 +79,15 @@
 				//Log the framework boot time, this is the point in which the framework code was required
 				Twist::Timer('TwistEventRecorder')->start($_SERVER['TWIST_BOOT']);
 
-				require_once sprintf('%sError.twist.php',DIR_FRAMEWORK_CLASSES);
+				require_once sprintf('%sError.twist.php',TWIST_FRAMEWORK_CLASSES);
 
 				self::define('E_TWIST_NOTICE',E_USER_NOTICE);
 				self::define('E_TWIST_WARNING',E_USER_WARNING);
 				self::define('E_TWIST_ERROR',E_USER_ERROR);
 				self::define('E_TWIST_DEPRECATED',E_USER_DEPRECATED);
 
-				self::define('ERROR_LOG',Twist::framework() -> setting('ERROR_LOG'));
-				self::define('ERROR_SCREEN',Twist::framework() -> setting('ERROR_SCREEN'));
+				self::define('TWIST_ERROR_LOG',Twist::framework() -> setting('ERROR_LOG'));
+				self::define('TWIST_ERROR_SCREEN',Twist::framework() -> setting('ERROR_SCREEN'));
 
 				//Register the PHP handlers
 				self::errorHandlers();
@@ -131,7 +132,7 @@
 
         protected static function coreResources(){
 
-            $strResourcesURI = sprintf('%sCore/Resources/',FRAMEWORK_URI);
+            $strResourcesURI = sprintf('%sCore/Resources/',TWIST_FRAMEWORK_URI);
 
             $arrResources = array(
                 'arable' => sprintf('%sarable/arable.min.css',$strResourcesURI),
@@ -163,7 +164,7 @@
                 'shadow-js' => sprintf('%sshadow-js/shadow-js.min.js',$strResourcesURI),
                 'unsemantic' => sprintf('%sunsemantic/unsemantic-grid-responsive-tablet-no-ie7.css',$strResourcesURI),
                 'resources_uri' => $strResourcesURI,
-                'uri' => FRAMEWORK_URI
+                'uri' => TWIST_FRAMEWORK_URI
             );
 
             //Integrate the basic core href tag support - legacy support
@@ -178,9 +179,9 @@
 			if(Twist::framework() -> settings() -> showSetup()){
 
 				self::Route()->purge();
-				self::Route()->setDirectory(sprintf('%ssetup/',DIR_FRAMEWORK_VIEWS));
+				self::Route()->setDirectory(sprintf('%ssetup/',TWIST_FRAMEWORK_VIEWS));
 				self::Route()->baseView('_base.tpl');
-				self::Route()->baseURI(BASE_URI);
+				self::Route()->baseURI(TWIST_BASE_URI);
 				self::Route()->controller('/%','\Twist\Core\Controllers\Setup');
 				self::Route()->serve();
 			}

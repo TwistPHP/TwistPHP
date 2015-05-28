@@ -52,7 +52,7 @@
 			if($this->blCacheEnabled){
 
 				$this->strInstanceKey = $strInstanceKey;
-				$this->dirLocation = DIR_APP_CACHE;
+				$this->dirLocation = TWIST_APP_CACHE;
 
 				//Create the default cache folder
 				if(!file_exists($this->dirLocation)){

@@ -69,7 +69,7 @@
 
 			public static function handleException(\Exception $resException,$arrError = array()){
 
-	            $strExceptionTemplate = sprintf("%s/system/exception-user.tpl",DIR_FRAMEWORK_VIEWS);
+	            $strExceptionTemplate = sprintf("%s/system/exception-user.tpl",TWIST_FRAMEWORK_VIEWS);
 
 	            //Clean the screen output ready for an exception
 	            ob_clean();
@@ -151,10 +151,10 @@
 						}
 
 						$arrTags['dump_data'] = self::debugDataOutput($mxdData);
-						$strExceptionTemplate = sprintf("%s/system/dump.tpl",DIR_FRAMEWORK_VIEWS);
+						$strExceptionTemplate = sprintf("%s/system/dump.tpl",TWIST_FRAMEWORK_VIEWS);
 					}else{
 						$arrTags['message'] = $resException->getMessage();
-	                    $strExceptionTemplate = sprintf("%s/system/exception.tpl",DIR_FRAMEWORK_VIEWS);
+	                    $strExceptionTemplate = sprintf("%s/system/exception.tpl",TWIST_FRAMEWORK_VIEWS);
 						$arrTags['dump_data'] = '';
 					}
 
@@ -606,14 +606,14 @@
 					'domain' => \Twist::framework() -> setting('SITE_HOST')
 				);
 
-	            die(\Twist::View('Exception')->build(sprintf("%s/system/error-page.tpl",DIR_FRAMEWORK_VIEWS),$arrTags));
+	            die(\Twist::View('Exception')->build(sprintf("%s/system/error-page.tpl",TWIST_FRAMEWORK_VIEWS),$arrTags));
 			}
 
 			public static function outputLog(){
 
 				if(count(Error::$arrErrorLog)){
 
-					if(ERROR_LOG){
+					if(TWIST_ERROR_LOG){
 
 						$strLog = "";
 						foreach(Error::$arrErrorLog as $arrEachItem){
@@ -624,10 +624,10 @@
 							}
 						}
 
-						file_put_contents(sprintf('%s/twist_error.log',DIR_BASE),$strLog);
+						file_put_contents(sprintf('%s/twist_error.log',TWIST_DOCUMENT_ROOT),$strLog);
 					}
 
-					if(ERROR_SCREEN){
+					if(TWIST_ERROR_SCREEN){
 						echo "<hr/><h1>Twist Error Handler</h1><pre>".print_r(Error::$arrErrorLog,true)."</pre>";
 					}
 				}

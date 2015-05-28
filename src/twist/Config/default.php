@@ -29,16 +29,16 @@
 
 	/**
 	 * Database Configuration Settings
-	 * DATABASE_NAME			- The name of your primary database
-	 * DATABASE_HOST			- Host IP / Name of the database server
-	 * DATABASE_USERNAME		- Username to use whilst connecting to the database
-	 * DATABASE_PASSWORD		- Password to use whilst connecting to the database
-	 * DATABASE_PROTOCOL		- Select the protocol to use (mysql,mysqli) default: mysqli
-	 * DATABASE_TABLE_PREFIX 	- Prefix that will be applied to all tables installed by Twist
+	 * TWIST_DATABASE_NAME			- The name of your primary database
+	 * TWIST_DATABASE_HOST			- Host IP / Name of the database server
+	 * TWIST_DATABASE_USERNAME		- Username to use whilst connecting to the database
+	 * TWIST_DATABASE_PASSWORD		- Password to use whilst connecting to the database
+	 * TWIST_DATABASE_PROTOCOL		- Select the protocol to use (mysql,mysqli) default: mysqli
+	 * TWIST_DATABASE_TABLE_PREFIX 	- Prefix that will be applied to all tables installed by Twist
 	 */
-	Twist::define('DATABASE_NAME','');
-	Twist::define('DATABASE_HOST','localhost');
-	Twist::define('DATABASE_USERNAME','');
-	Twist::define('DATABASE_PASSWORD','');
-	Twist::define('DATABASE_PROTOCOL','mysqli');
-	Twist::define('DATABASE_TABLE_PREFIX','twist_');
+	Twist::define('TWIST_DATABASE_NAME','');
+	Twist::define('TWIST_DATABASE_HOST','localhost');
+	Twist::define('TWIST_DATABASE_USERNAME','');
+	Twist::define('TWIST_DATABASE_PASSWORD','');
+	Twist::define('TWIST_DATABASE_PROTOCOL','mysqli');
+	Twist::define('TWIST_DATABASE_TABLE_PREFIX','twist_');

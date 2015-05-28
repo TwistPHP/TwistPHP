@@ -82,17 +82,30 @@
 				<dl>{data:current_route}</dl>
 			</div>
 			<div class="twist-debug-column-50">
-				<h6>GET Params</h6>
-				<dl>{data:get}</dl>
+				<div{data:get==''?' class="twist-debug-hidden"':''}>
+					<h6>$_GET Params</h6>
+					<dl>{data:get}</dl>
+				</div>
 
-				<h6>POST Params</h6>
-				<dl>{data:post}</dl>
+				<div{data:post==''?' class="twist-debug-hidden"':''}>
+					<h6>$_POST Params</h6>
+					<dl>{data:post}</dl>
+				</div>
 
-				<h6>Session Params</h6>
-				<dl>{data:session}</dl>
+				<div{data:php_session==''?' class="twist-debug-hidden"':''}>
+					<h6>PHP $_SESSION</h6>
+					<dl>{data:php_session}</dl>
+				</div>
 
-				<h6>Cookies</h6>
-				<dl>{data:cookie}</dl>
+				<div{data:twist_session==''?' class="twist-debug-hidden"':''}>
+					<h6>Twist $_SESSION</h6>
+					<dl>{data:twist_session}</dl>
+				</div>
+
+				<div{data:cookie==''?' class="twist-debug-hidden"':''}>
+					<h6>Cookies</h6>
+					<dl>{data:cookie}</dl>
+				</div>
 
 				<h6>Request Headers</h6>
 				<dl>{data:request_headers}</dl>

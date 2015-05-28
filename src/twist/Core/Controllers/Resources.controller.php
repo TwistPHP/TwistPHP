@@ -29,7 +29,7 @@ class Resources extends BaseController{
 	public function core(){
 
 		$arrRoute = $this->_route();
-		$strResourcePath = sprintf('%s/%s',DIR_FRAMEWORK,$arrRoute['dynamic']);
+		$strResourcePath = sprintf('%s/%s',TWIST_FRAMEWORK,$arrRoute['dynamic']);
 
 		if(!file_exists($strResourcePath)){
 			$this->_fallback();

@@ -51,7 +51,7 @@
 
 		public function debugMode(){
 
-			//\Twist::framework()->setting('DATABASE_DEBUG')
+			//\Twist::framework()->setting('TWIST_DATABASE_DEBUG')
 
 			if($this->blDebugMode == false && defined('TWIST_LAUNCHED')){
 				if(\Twist::framework()->setting('DEVELOPMENT_MODE') && \Twist::framework()->setting('DEVELOPMENT_DEBUG_BAR')){
@@ -74,10 +74,10 @@
 		 */
 		public function connect($strHost = null,$strUsername = null,$strPassword = null,$strDatabaseName = null,$strProtocol = null){
 
-			if(defined('DATABASE_PROTOCOL') && DATABASE_PROTOCOL != 'none' || !is_null($strProtocol)){
+			if(defined('TWIST_DATABASE_PROTOCOL') && TWIST_DATABASE_PROTOCOL != 'none' || !is_null($strProtocol)){
 
 				if(is_null($strProtocol)){
-					$strProtocol = DATABASE_PROTOCOL;
+					$strProtocol = TWIST_DATABASE_PROTOCOL;
 				}
 
 				$strLibraryClass = sprintf('\Twist\Core\Models\Database\Protocol%s',strtoupper($strProtocol));
@@ -92,10 +92,10 @@
 					}
 				}else{
 					$this->checkSettings(true);
-					$strHost = DATABASE_HOST;
-					$strUsername = DATABASE_USERNAME;
-					$strPassword = DATABASE_PASSWORD;
-					$strDatabaseName = DATABASE_NAME;
+					$strHost = TWIST_DATABASE_HOST;
+					$strUsername = TWIST_DATABASE_USERNAME;
+					$strPassword = TWIST_DATABASE_PASSWORD;
+					$strDatabaseName = TWIST_DATABASE_NAME;
 				}
 
 				$this->resLibrary = new $strLibraryClass();
@@ -139,13 +139,13 @@
 
 			$blOut = true;
 
-			if(defined('DATABASE_PROTOCOL') && DATABASE_PROTOCOL == 'none'){
+			if(defined('TWIST_DATABASE_PROTOCOL') && TWIST_DATABASE_PROTOCOL == 'none'){
 				$blOut = false;
 				if($blThrowException == true){
 					throw new \Exception('No database connection has been setup for this installation');
 				}
 			}else{
-				if(!defined('DATABASE_HOST') || !defined('DATABASE_USERNAME') || !defined('DATABASE_PASSWORD') || is_null(DATABASE_HOST) || is_null(DATABASE_USERNAME) || is_null(DATABASE_PASSWORD) || is_null(DATABASE_NAME) ||	DATABASE_HOST == '' ||  DATABASE_USERNAME == '' ||  DATABASE_PASSWORD == '' ||  DATABASE_NAME == '' ){
+				if(!defined('TWIST_DATABASE_HOST') || !defined('TWIST_DATABASE_USERNAME') || !defined('TWIST_DATABASE_PASSWORD') || is_null(TWIST_DATABASE_HOST) || is_null(TWIST_DATABASE_USERNAME) || is_null(TWIST_DATABASE_PASSWORD) || is_null(TWIST_DATABASE_NAME) ||	TWIST_DATABASE_HOST == '' ||  TWIST_DATABASE_USERNAME == '' ||  TWIST_DATABASE_PASSWORD == '' ||  TWIST_DATABASE_NAME == '' ){
 					$blOut = false;
 					if($blThrowException == true){
 						throw new \Exception('Missing parameters passed into database connect');
@@ -172,10 +172,10 @@
 
 					//Run the MYSQL import command on command line
 					$strCommand = sprintf('/usr/bin/mysql -h%s -u%s -p%s %s < %s',
-						DATABASE_HOST,
-						DATABASE_USERNAME,
-						DATABASE_PASSWORD,
-						(is_null($strDatabaseName)) ? DATABASE_NAME : trim($strDatabaseName),
+						TWIST_DATABASE_HOST,
+						TWIST_DATABASE_USERNAME,
+						TWIST_DATABASE_PASSWORD,
+						(is_null($strDatabaseName)) ? TWIST_DATABASE_NAME : trim($strDatabaseName),
 						$dirSQLFile
 					);
 
@@ -588,7 +588,7 @@
 		 * @return bool]
 		 */
 		public function twistTableExists($strTable,$strDatabase = null){
-			return $this->tableExists(sprintf('%s%s',DATABASE_TABLE_PREFIX,$strTable),$strDatabase);
+			return $this->tableExists(sprintf('%s%s',TWIST_DATABASE_TABLE_PREFIX,$strTable),$strDatabase);
 		}
 
 		/**

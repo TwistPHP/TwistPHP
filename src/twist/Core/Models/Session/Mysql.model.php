@@ -83,8 +83,8 @@
 								FROM `%s`.`%ssession`
 								WHERE `id` = '%s'
 								LIMIT 1",
-				DATABASE_NAME,
-				DATABASE_TABLE_PREFIX,
+				TWIST_DATABASE_NAME,
+				TWIST_DATABASE_TABLE_PREFIX,
 				$this->objDB->escapeString($intSessionID)
 			);
 
@@ -104,8 +104,8 @@
 			$strSQL = sprintf("INSERT INTO `%s`.`%ssession`
 								(`id`,`data`,`last_modified`) VALUES ('%s','%s',NOW())
 								ON DUPLICATE KEY UPDATE `data` = '%s',`last_modified` = NOW()",
-				DATABASE_NAME,
-				DATABASE_TABLE_PREFIX,
+				TWIST_DATABASE_NAME,
+				TWIST_DATABASE_TABLE_PREFIX,
 				$this->objDB->escapeString($intSessionID),
 				$this->objDB->escapeString($mxdData),
 				$this->objDB->escapeString($mxdData)
@@ -125,8 +125,8 @@
 								FROM `%s`.`%ssession`
 								WHERE `id` = '%s'
 								LIMIT 1",
-				DATABASE_NAME,
-				DATABASE_TABLE_PREFIX,
+				TWIST_DATABASE_NAME,
+				TWIST_DATABASE_TABLE_PREFIX,
 				$this->objDB->escapeString($intSessionID)
 			);
 
@@ -141,8 +141,8 @@
 			$strSQL = sprintf("DELETE
 								FROM `%s`.`%ssession`
 								WHERE `last_modified` < %d",
-				DATABASE_NAME,
-				DATABASE_TABLE_PREFIX,
+				TWIST_DATABASE_NAME,
+				TWIST_DATABASE_TABLE_PREFIX,
 				$this->objDB->escapeString(\Twist::DateTime()->time()-$intMaxLifetime)
 			);
 

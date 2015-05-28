@@ -42,9 +42,9 @@
 		public function __construct(){
 
 			$this->resTemplate = \Twist::View('pkgAsset');
-			$this->resTemplate->setDirectory( sprintf('%s/asset/',DIR_FRAMEWORK_VIEWS));
+			$this->resTemplate->setDirectory( sprintf('%s/asset/',TWIST_FRAMEWORK_VIEWS));
 
-			$this->strAssetDirectory = DIR_APP_ASSETS;
+			$this->strAssetDirectory = TWIST_APP_ASSETS;
 
 			//Create the asset directory if it not exist
 			if(!file_exists($this->strAssetDirectory)){
@@ -52,10 +52,10 @@
 			}
 
 			//Pre-cache the types and groups ready to be used
-			$this->arrTypes = $this->framework()->tools()->arrayReindex(\Twist::Database()->getAll(sprintf('%sasset_types',DATABASE_TABLE_PREFIX)),'id');
+			$this->arrTypes = $this->framework()->tools()->arrayReindex(\Twist::Database()->getAll(sprintf('%sasset_types',TWIST_DATABASE_TABLE_PREFIX)),'id');
 			$this->arrTypeSlugs = $this->framework()->tools()->arrayReindex($this->arrTypes,'slug');
 
-			$this->arrGroups = $this->framework()->tools()->arrayReindex(\Twist::Database()->getAll(sprintf('%sasset_groups',DATABASE_TABLE_PREFIX)),'id');
+			$this->arrGroups = $this->framework()->tools()->arrayReindex(\Twist::Database()->getAll(sprintf('%sasset_groups',TWIST_DATABASE_TABLE_PREFIX)),'id');
 			$this->arrGroupSlugs = $this->framework()->tools()->arrayReindex($this->arrGroups,'slug');
 			$this->arrGroupTree = $this->framework()->tools()->arrayRelationalTree($this->arrGroups,'id','parent');
 		}
@@ -68,7 +68,7 @@
 		 */
 		public function get($intAssetID){
 
-			$arrAsset = \Twist::Database()->get(sprintf('%sassets',DATABASE_TABLE_PREFIX),$intAssetID);
+			$arrAsset = \Twist::Database()->get(sprintf('%sassets',TWIST_DATABASE_TABLE_PREFIX),$intAssetID);
 			$arrAsset = (count($arrAsset)) ? $this->expand($arrAsset) : array();
 
 			return $arrAsset;
@@ -83,7 +83,7 @@
 		public function getAll(){
 
 			$arrOut = array();
-			$arrAssets = \Twist::Database()->getAll(sprintf('%sassets',DATABASE_TABLE_PREFIX));
+			$arrAssets = \Twist::Database()->getAll(sprintf('%sassets',TWIST_DATABASE_TABLE_PREFIX));
 
 			if(count($arrAssets)){
 				foreach($arrAssets as $arrEachAsset){
@@ -104,7 +104,7 @@
 		public function getByGroup($intGroupID){
 
 			$arrOut = array();
-			$arrAssets = \Twist::Database()->find(sprintf('%sassets',DATABASE_TABLE_PREFIX),$intGroupID,'group_id','added');
+			$arrAssets = \Twist::Database()->find(sprintf('%sassets',TWIST_DATABASE_TABLE_PREFIX),$intGroupID,'group_id','added');
 
 			if(count($arrAssets)){
 				foreach($arrAssets as $arrEachAsset){
@@ -125,7 +125,7 @@
 		public function getByType($intTypeID){
 
 			$arrOut = array();
-			$arrAssets = \Twist::Database()->find(sprintf('%sassets',DATABASE_TABLE_PREFIX),$intTypeID,'type_id');
+			$arrAssets = \Twist::Database()->find(sprintf('%sassets',TWIST_DATABASE_TABLE_PREFIX),$intTypeID,'type_id');
 
 			if(count($arrAssets)){
 				foreach($arrAssets as $arrEachAsset){
@@ -155,7 +155,7 @@
 			$arrAsset['group'] = $this->getGroup($arrAsset['group_id']);
 			$arrAsset['support'] = $this->getSupportingContent($arrAsset);
 
-			$arrAsset['icon'] = str_replace(BASE_LOCATION,'',sprintf('%s/images/icons/%s',DIR_FRAMEWORK_RESOURCES,$arrAsset['type']['icon']));
+			$arrAsset['icon'] = str_replace(TWIST_DOCUMENT_ROOT,'',sprintf('%s/images/icons/%s',TWIST_FRAMEWORK_RESOURCES,$arrAsset['type']['icon']));
 
 			return $arrAsset;
 		}
@@ -169,7 +169,7 @@
 		public function getSupportingContent($arrAsset){
 
 			$arrOut = array();
-			$arrSupport = \Twist::Database()->find(sprintf('%sasset_support',DATABASE_TABLE_PREFIX),$arrAsset['id'],'asset_id');
+			$arrSupport = \Twist::Database()->find(sprintf('%sasset_support',TWIST_DATABASE_TABLE_PREFIX),$arrAsset['id'],'asset_id');
 
 			if(count($arrSupport)){
 				foreach($arrSupport as $arrEachItem){
@@ -191,7 +191,7 @@
 		 */
 		public function getDefaultSupportingContent($arrAsset){
 
-			$strIconURI = str_replace(BASE_LOCATION,'',sprintf('%stwist/file-icons/%s',DIR_FRAMEWORK_RESOURCES,$arrAsset['type']['icon']));
+			$strIconURI = str_replace(TWIST_DOCUMENT_ROOT,'',sprintf('%stwist/file-icons/%s',TWIST_FRAMEWORK_RESOURCES,$arrAsset['type']['icon']));
 
 			$arrOut = array(
 				'square-thumb-512' => $strIconURI,
@@ -282,7 +282,7 @@
 		public function addGroup($strDescription,$srtSlug){
 
 			//Create the asset group record in the database
-			$resRecord = \Twist::Database()->createRecord(sprintf('%sasset_groups',DATABASE_TABLE_PREFIX));
+			$resRecord = \Twist::Database()->createRecord(sprintf('%sasset_groups',TWIST_DATABASE_TABLE_PREFIX));
 			$resRecord->set('description',$strDescription);
 			$resRecord->set('slug',$srtSlug);
 			$resRecord->set('created',\Twist::DateTime()->date('Y-m-d H:i:s'));
@@ -301,7 +301,7 @@
 		public function editGroup($intGroupID,$strDescription,$srtSlug){
 
 			//Create the asset group record in the database
-			$resRecord = \Twist::Database()->getRecord(sprintf('%sasset_groups',DATABASE_TABLE_PREFIX),$intGroupID);
+			$resRecord = \Twist::Database()->getRecord(sprintf('%sasset_groups',TWIST_DATABASE_TABLE_PREFIX),$intGroupID);
 			$resRecord->set('description',$strDescription);
 			$resRecord->set('slug',$srtSlug);
 			$resRecord->set('created',\Twist::DateTime()->date('Y-m-d H:i:s'));
@@ -434,21 +434,21 @@
 					$objImage->save(sprintf('%s/%s',$strThumbPath32,$strFileName));
 
 					$arrSupportingAssets = array(
-						'square-thumb-512' => str_replace(BASE_LOCATION,'',sprintf('%s/%s',$strSquareThumbPath512,$strFileName)),
-						'square-thumb-256' => str_replace(BASE_LOCATION,'',sprintf('%s/%s',$strSquareThumbPath256,$strFileName)),
-						'square-thumb-128' => str_replace(BASE_LOCATION,'',sprintf('%s/%s',$strSquareThumbPath128,$strFileName)),
-						'square-thumb-64' => str_replace(BASE_LOCATION,'',sprintf('%s/%s',$strSquareThumbPath64,$strFileName)),
-						'square-thumb-32' => str_replace(BASE_LOCATION,'',sprintf('%s/%s',$strSquareThumbPath32,$strFileName)),
-						'thumb-1024' => str_replace(BASE_LOCATION,'',sprintf('%s/%s',$strThumbPath1024,$strFileName)),
-						'thumb-512' => str_replace(BASE_LOCATION,'',sprintf('%s/%s',$strThumbPath512,$strFileName)),
-						'thumb-256' => str_replace(BASE_LOCATION,'',sprintf('%s/%s',$strThumbPath256,$strFileName)),
-						'thumb-128' => str_replace(BASE_LOCATION,'',sprintf('%s/%s',$strThumbPath128,$strFileName)),
-						'thumb-64' => str_replace(BASE_LOCATION,'',sprintf('%s/%s',$strThumbPath64,$strFileName)),
-						'thumb-32' => str_replace(BASE_LOCATION,'',sprintf('%s/%s',$strThumbPath32,$strFileName))
+						'square-thumb-512' => str_replace(TWIST_DOCUMENT_ROOT,'',sprintf('%s/%s',$strSquareThumbPath512,$strFileName)),
+						'square-thumb-256' => str_replace(TWIST_DOCUMENT_ROOT,'',sprintf('%s/%s',$strSquareThumbPath256,$strFileName)),
+						'square-thumb-128' => str_replace(TWIST_DOCUMENT_ROOT,'',sprintf('%s/%s',$strSquareThumbPath128,$strFileName)),
+						'square-thumb-64' => str_replace(TWIST_DOCUMENT_ROOT,'',sprintf('%s/%s',$strSquareThumbPath64,$strFileName)),
+						'square-thumb-32' => str_replace(TWIST_DOCUMENT_ROOT,'',sprintf('%s/%s',$strSquareThumbPath32,$strFileName)),
+						'thumb-1024' => str_replace(TWIST_DOCUMENT_ROOT,'',sprintf('%s/%s',$strThumbPath1024,$strFileName)),
+						'thumb-512' => str_replace(TWIST_DOCUMENT_ROOT,'',sprintf('%s/%s',$strThumbPath512,$strFileName)),
+						'thumb-256' => str_replace(TWIST_DOCUMENT_ROOT,'',sprintf('%s/%s',$strThumbPath256,$strFileName)),
+						'thumb-128' => str_replace(TWIST_DOCUMENT_ROOT,'',sprintf('%s/%s',$strThumbPath128,$strFileName)),
+						'thumb-64' => str_replace(TWIST_DOCUMENT_ROOT,'',sprintf('%s/%s',$strThumbPath64,$strFileName)),
+						'thumb-32' => str_replace(TWIST_DOCUMENT_ROOT,'',sprintf('%s/%s',$strThumbPath32,$strFileName))
 					);
 				}
 
-				$strAssetPath = str_replace(BASE_LOCATION,'',$strAssetPath);
+				$strAssetPath = str_replace(TWIST_DOCUMENT_ROOT,'',$strAssetPath);
 
 			}elseif(strstr($mxdData,'http://') || strstr($mxdData,'https://') || strstr($mxdData,'ftp://') || strstr($mxdData,'smb://') || strstr($mxdData,'mailto:')){
 				//Youtube video or link
@@ -463,7 +463,7 @@
 			}
 
 			//Create the asset record in the database
-			$resRecord = \Twist::Database()->createRecord(sprintf('%sassets',DATABASE_TABLE_PREFIX));
+			$resRecord = \Twist::Database()->createRecord(sprintf('%sassets',TWIST_DATABASE_TABLE_PREFIX));
 			$resRecord->set('title',$strTitle);
 			$resRecord->set('description',$strDescription);
 			$resRecord->set('type_id',$intTypeID);
@@ -481,7 +481,7 @@
 
 				foreach($arrSupportingAssets as $strType => $strURI){
 					//Create the asset record in the database
-					$resSupportingRecord = \Twist::Database()->createRecord(sprintf('%sasset_support',DATABASE_TABLE_PREFIX));
+					$resSupportingRecord = \Twist::Database()->createRecord(sprintf('%sasset_support',TWIST_DATABASE_TABLE_PREFIX));
 					$resSupportingRecord->set('asset_id',$intOut);
 					$resSupportingRecord->set('type',$strType);
 					$resSupportingRecord->set('data',$strURI);
@@ -548,7 +548,7 @@
 		 */
 		public function edit($intAssetID,$strTitle,$strDescription=''){
 
-			$resRecord = \Twist::Database()->getRecord(sprintf('%sasset',DATABASE_TABLE_PREFIX),$intAssetID);
+			$resRecord = \Twist::Database()->getRecord(sprintf('%sasset',TWIST_DATABASE_TABLE_PREFIX),$intAssetID);
 			$resRecord->set('title',$strTitle);
 			$resRecord->set('description',$strDescription);
 
@@ -564,7 +564,7 @@
 		 */
 		public function active($intAssetID,$blActive=true){
 
-			$resRecord = \Twist::Database()->getRecord(sprintf('%sassets',DATABASE_TABLE_PREFIX),$intAssetID);
+			$resRecord = \Twist::Database()->getRecord(sprintf('%sassets',TWIST_DATABASE_TABLE_PREFIX),$intAssetID);
 			$resRecord->set('enabled',($blActive) ? '1' : '0');
 
 			return $resRecord->commit();
@@ -589,7 +589,7 @@
 				}
 
 				//Delete the asset record
-				$blOut = \Twist::Database()->delete(sprintf('%sassets',DATABASE_TABLE_PREFIX),$intAssetID);
+				$blOut = \Twist::Database()->delete(sprintf('%sassets',TWIST_DATABASE_TABLE_PREFIX),$intAssetID);
 			}
 
 			return $blOut;

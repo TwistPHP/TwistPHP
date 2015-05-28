@@ -103,7 +103,7 @@
 		private function _databaseConnect(){
 
 			$strDefaultApp = sprintf('%s/../../config/app.php',dirname(__FILE__));
-			$strAppConfig = sprintf('%sconfig.php',DIR_APP_CONFIG);
+			$strAppConfig = sprintf('%sconfig.php',TWIST_APP_CONFIG);
 			$strDefaultConfig = sprintf('%s/../../config/default.php',dirname(__FILE__));
 
 			if(file_exists($strDefaultApp)){
@@ -123,10 +123,10 @@
 				$this->resDatabase = mysqli_connect($this->arrDatabaseCustomSettings['host'], $this->arrDatabaseCustomSettings['username'], $this->arrDatabaseCustomSettings['password'], $this->arrDatabaseCustomSettings['name']);
 				mysqli_select_db($this->resDatabase, $this->arrDatabaseCustomSettings['name']);
 
-			}elseif(DATABASE_PROTOCOL != 'none') {
+			}elseif(TWIST_DATABASE_PROTOCOL != 'none') {
 
-				$this->resDatabase = mysqli_connect(DATABASE_HOST, DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_NAME);
-				mysqli_select_db($this->resDatabase, DATABASE_NAME);
+				$this->resDatabase = mysqli_connect(TWIST_DATABASE_HOST, TWIST_DATABASE_USERNAME, TWIST_DATABASE_PASSWORD, TWIST_DATABASE_NAME);
+				mysqli_select_db($this->resDatabase, TWIST_DATABASE_NAME);
 			}
 		}
 
@@ -786,7 +786,7 @@
 
 			$blOut = true;
 
-			$strInstallFile = sprintf('%sinstall.sql',DIR_FRAMEWORK_INSTALL);
+			$strInstallFile = sprintf('%sinstall.sql',TWIST_FRAMEWORK_INSTALL);
 			if(file_exists($strInstallFile)){
 
 				$this->_debug("Installing core database tables");
@@ -799,10 +799,10 @@
 
 				foreach($arrQueries as $strQuery){
 					if(trim($strQuery) != ''){
-						$strPrefix = (count($this->arrDatabaseCustomSettings)) ? $this->arrDatabaseCustomSettings['table_prefix'] : DATABASE_TABLE_PREFIX;
-						$strDatabase = (count($this->arrDatabaseCustomSettings)) ? $this->arrDatabaseCustomSettings['database'] : DATABASE_NAME;
-						$strQuery = str_replace('/*DATABASE_NAME*/',$strDatabase,$strQuery);
-						$strQuery = str_replace('/*TABLE_PREFIX*/`','`'.$strPrefix,$strQuery);
+						$strPrefix = (count($this->arrDatabaseCustomSettings)) ? $this->arrDatabaseCustomSettings['table_prefix'] : TWIST_DATABASE_TABLE_PREFIX;
+						$strDatabase = (count($this->arrDatabaseCustomSettings)) ? $this->arrDatabaseCustomSettings['database'] : TWIST_DATABASE_NAME;
+						$strQuery = str_replace('/*TWIST_DATABASE_NAME*/',$strDatabase,$strQuery);
+						$strQuery = str_replace('/*TWIST_DATABASE_TABLE_PREFIX*/`','`'.$strPrefix,$strQuery);
 
 						if(!$this->_databaseQuery($strQuery)){
 							$blOut = false;
@@ -825,7 +825,7 @@
 		public function updateCoreTables($strPreviousVersion){
 
 			$blOut = true;
-			$strUpdateDir = sprintf('%supdates',DIR_FRAMEWORK_INSTALL);
+			$strUpdateDir = sprintf('%supdates',TWIST_FRAMEWORK_INSTALL);
 
 			if(file_exists($strUpdateDir)){
 
@@ -864,8 +864,8 @@
 
 								foreach($arrQueries as $strQuery){
 									if(trim($strQuery) != ''){
-										$strPrefix = (count($this->arrDatabaseCustomSettings)) ? $this->arrDatabaseCustomSettings['table_prefix'] : DATABASE_TABLE_PREFIX;
-										$strQuery = str_replace('/*TABLE_PREFIX*/`','`'.$strPrefix,$strQuery);
+										$strPrefix = (count($this->arrDatabaseCustomSettings)) ? $this->arrDatabaseCustomSettings['table_prefix'] : TWIST_DATABASE_TABLE_PREFIX;
+										$strQuery = str_replace('/*TWIST_DATABASE_TABLE_PREFIX*/`','`'.$strPrefix,$strQuery);
 
 										if(!$this->_databaseQuery($strQuery)){
 											$blOut = false;
@@ -894,7 +894,7 @@
 		public function updateCoreSettings(){
 
 			//Process the core settings of the framework
-			$strCoreJSON = sprintf('%ssettings.json',DIR_FRAMEWORK_INSTALL);
+			$strCoreJSON = sprintf('%ssettings.json',TWIST_FRAMEWORK_INSTALL);
 			if(file_exists($strCoreJSON)){
 
 				$this->_debug("Updating core settings");
@@ -941,8 +941,8 @@
 
 				foreach($arrQueries as $strQuery){
 					if(trim($strQuery) != ''){
-						$strPrefix = (count($this->arrDatabaseCustomSettings)) ? $this->arrDatabaseCustomSettings['table_prefix'] : DATABASE_TABLE_PREFIX;
-						$strQuery = str_replace('/*TABLE_PREFIX*/`','`'.$strPrefix,$strQuery);
+						$strPrefix = (count($this->arrDatabaseCustomSettings)) ? $this->arrDatabaseCustomSettings['table_prefix'] : TWIST_DATABASE_TABLE_PREFIX;
+						$strQuery = str_replace('/*TWIST_DATABASE_TABLE_PREFIX*/`','`'.$strPrefix,$strQuery);
 
 						if(!$this->_databaseQuery($strQuery)){
 							$blOut = false;
@@ -1004,8 +1004,8 @@
 
 								foreach($arrQueries as $strQuery){
 									if(trim($strQuery) != ''){
-										$strPrefix = (count($this->arrDatabaseCustomSettings)) ? $this->arrDatabaseCustomSettings['table_prefix'] : DATABASE_TABLE_PREFIX;
-										$strQuery = str_replace('/*TABLE_PREFIX*/`','`'.$strPrefix,$strQuery);
+										$strPrefix = (count($this->arrDatabaseCustomSettings)) ? $this->arrDatabaseCustomSettings['table_prefix'] : TWIST_DATABASE_TABLE_PREFIX;
+										$strQuery = str_replace('/*TWIST_DATABASE_TABLE_PREFIX*/`','`'.$strPrefix,$strQuery);
 
 										if(!$this->_databaseQuery($strQuery)){
 											$blOut = false;
@@ -1068,7 +1068,7 @@
 
 		public function storeSetting($strPackage,$strGroup,$strKey,$mxdValue,$strTitle,$strDescription,$strDefault,$strType,$strOptions,$blNull = false){
 
-			if((count($this->arrDatabaseCustomSettings) && $this->arrDatabaseCustomSettings['protocol'] === 'none') || DATABASE_PROTOCOL === 'none'){
+			if((count($this->arrDatabaseCustomSettings) && $this->arrDatabaseCustomSettings['protocol'] === 'none') || TWIST_DATABASE_PROTOCOL === 'none'){
 
 				$strSettingsJSON = sprintf('%s/../../config/settings.json',dirname(__FILE__));
 
@@ -1116,8 +1116,8 @@
 				return true;
 			}else{
 
-				$strDatabaseName = (count($this->arrDatabaseCustomSettings)) ? $this->arrDatabaseCustomSettings['name'] : DATABASE_NAME;
-				$strPrefix = (count($this->arrDatabaseCustomSettings)) ? $this->arrDatabaseCustomSettings['table_prefix'] : DATABASE_TABLE_PREFIX;
+				$strDatabaseName = (count($this->arrDatabaseCustomSettings)) ? $this->arrDatabaseCustomSettings['name'] : TWIST_DATABASE_NAME;
+				$strPrefix = (count($this->arrDatabaseCustomSettings)) ? $this->arrDatabaseCustomSettings['table_prefix'] : TWIST_DATABASE_TABLE_PREFIX;
 
 				$strSQL = sprintf("INSERT INTO `%s`.`%ssettings`
 									SET `package` = '%s',

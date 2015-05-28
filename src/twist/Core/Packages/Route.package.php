@@ -64,7 +64,7 @@ class Route extends BasePackage{
 		$this->resMeta = new Meta();
 		$this->blDebugMode = (\Twist::framework()->setting('DEVELOPMENT_MODE') && \Twist::framework()->setting('DEVELOPMENT_DEBUG_BAR'));
 
-		$strControllerPath = DIR_APP_CONTROLLERS;
+		$strControllerPath = TWIST_APP_CONTROLLERS;
 		if(file_exists($strControllerPath)){
 			$this->setControllerDirectory($strControllerPath);
 		}
@@ -124,8 +124,8 @@ class Route extends BasePackage{
 	public function packageURI($strPackage = null){
 
 		if(!is_null($strPackage)){
-			$strPath = sprintf('%s/%s',DIR_PACKAGES,$strPackage);
-			$this->strPackageURI = '/'.ltrim(rtrim(str_replace(BASE_LOCATION,"",$strPath),'/'),'/');
+			$strPath = sprintf('%s/%s',TWIST_PACKAGES,$strPackage);
+			$this->strPackageURI = '/'.ltrim(rtrim(str_replace(TWIST_DOCUMENT_ROOT,"",$strPath),'/'),'/');
 		}
 
 		return $this->strPackageURI;
@@ -916,7 +916,7 @@ class Route extends BasePackage{
 		if($objDB->checkSettings()){
 
 			$strSQL = sprintf("SELECT * FROM `%s`.`structure_routes` WHERE `uri` = '%s' LIMIT 1",
-				DATABASE_NAME,
+				TWIST_DATABASE_NAME,
 				$objDB->escapeString($strURI)
 			);
 

@@ -27,7 +27,7 @@ use Twist\Core\Classes\BaseController;
 class Manager extends BaseController{
 
 	public function __construct(){
-		\Twist::Route()->setDirectory(sprintf('%smanager/',DIR_FRAMEWORK_VIEWS));
+		\Twist::Route()->setDirectory(sprintf('%smanager/',TWIST_FRAMEWORK_VIEWS));
 		$this->_aliasURI('update-setting','getUpdateSetting');
 	}
 
@@ -65,16 +65,16 @@ class Manager extends BaseController{
 		$arrTags['development-mode'] = (\Twist::framework()->setting('DEVELOPMENT_MODE') == '1') ? 'On' : 'Off';
 		$arrTags['maintenance-mode'] = (\Twist::framework()->setting('MAINTENANCE_MODE') == '1') ? 'On' : 'Off';
 		$arrTags['release-channel'] = \Twist::framework()->setting('RELEASE_CHANNEL');
-		$arrTags['database-debug'] = (\Twist::framework()->setting('DATABASE_DEBUG') == '1') ? 'On' : 'Off';
+		$arrTags['database-debug'] = (\Twist::framework()->setting('TWIST_DATABASE_DEBUG') == '1') ? 'On' : 'Off';
 
 		$arrRoutes = \Twist::Route()->getAll();
 		$arrTags['route-data'] = sprintf('ANY %d, GET %d, POST %d, PUT %d, DELETE %d',count($arrRoutes['ANY']),count($arrRoutes['GET']),count($arrRoutes['POST']),count($arrRoutes['PUT']),count($arrRoutes['DELETE']));
 
 		$arrTags['user-accounts'] = sprintf('SUPERADMIN %d, ADMIN %d, ADVANCED %d, MEMEBR %d',
-			\Twist::Database()->count(sprintf('%susers',DATABASE_TABLE_PREFIX),\Twist::framework()->setting('USER_LEVEL_SUPERADMIN'),'level'),
-			\Twist::Database()->count(sprintf('%susers',DATABASE_TABLE_PREFIX),\Twist::framework()->setting('USER_LEVEL_ADMIN'),'level'),
-			\Twist::Database()->count(sprintf('%susers',DATABASE_TABLE_PREFIX),\Twist::framework()->setting('USER_LEVEL_ADVANCED'),'level'),
-			\Twist::Database()->count(sprintf('%susers',DATABASE_TABLE_PREFIX),\Twist::framework()->setting('USER_LEVEL_MEMBER'),'level')
+			\Twist::Database()->count(sprintf('%susers',TWIST_DATABASE_TABLE_PREFIX),\Twist::framework()->setting('USER_LEVEL_SUPERADMIN'),'level'),
+			\Twist::Database()->count(sprintf('%susers',TWIST_DATABASE_TABLE_PREFIX),\Twist::framework()->setting('USER_LEVEL_ADMIN'),'level'),
+			\Twist::Database()->count(sprintf('%susers',TWIST_DATABASE_TABLE_PREFIX),\Twist::framework()->setting('USER_LEVEL_ADVANCED'),'level'),
+			\Twist::Database()->count(sprintf('%susers',TWIST_DATABASE_TABLE_PREFIX),\Twist::framework()->setting('USER_LEVEL_MEMBER'),'level')
 		);
 
 		return $this->_view('pages/dashboard.tpl',$arrTags);
@@ -83,14 +83,14 @@ class Manager extends BaseController{
 	public function cache(){
 
 		$arrTags = array();
-		$arrFiles = scandir(DIR_APP_CACHE);
+		$arrFiles = scandir(TWIST_APP_CACHE);
 
 		foreach($arrFiles as $strEachCache){
-			if(!in_array($strEachCache,array('.','..')) && is_dir(DIR_APP_CACHE.'/'.$strEachCache)){
+			if(!in_array($strEachCache,array('.','..')) && is_dir(TWIST_APP_CACHE.'/'.$strEachCache)){
 
 				$arrFileTags = array(
 					'file' => $strEachCache,
-					'size' => \Twist::File()->directorySize(DIR_APP_CACHE.'/'.$strEachCache)
+					'size' => \Twist::File()->directorySize(TWIST_APP_CACHE.'/'.$strEachCache)
 				);
 
 				$arrTags['cache'] .= $this->_view('components/cache/each-file.tpl',$arrFileTags);
@@ -179,7 +179,7 @@ class Manager extends BaseController{
 
 	public function getUpdateSetting(){
 
-		$arrAllowedSettings = array('DEVELOPMENT_MODE','MAINTENANCE_MODE','RELEASE_CHANNEL','DATABASE_DEBUG');
+		$arrAllowedSettings = array('DEVELOPMENT_MODE','MAINTENANCE_MODE','RELEASE_CHANNEL','TWIST_DATABASE_DEBUG');
 
 		if(array_key_exists('setting',$_GET) && array_key_exists('setting_value',$_GET) && in_array($_GET['setting'],$arrAllowedSettings)){
 			\Twist::framework() ->setting($_GET['setting'],$_GET['setting_value']);

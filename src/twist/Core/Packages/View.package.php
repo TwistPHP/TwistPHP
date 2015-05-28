@@ -57,7 +57,7 @@ class View extends BasePackage{
 	 * @param $dirCustomViews Path to a custom View directory
 	 */
 	public function setDirectory($dirCustomViews = null){
-	    $this->dirViews = (is_null($dirCustomViews)) ? DIR_APP_VIEWS : $dirCustomViews;
+	    $this->dirViews = (is_null($dirCustomViews)) ? TWIST_APP_VIEWS : $dirCustomViews;
 	    $this->dirElements =  $this->dirViews;
 	}
 
@@ -100,7 +100,7 @@ class View extends BasePackage{
 		if(substr($dirFullViewPath,-4) == '.php'){
 			$arrViewData['html_raw'] = $this->processElement($dirFullViewPath,$arrViewTags);
 		}else{
-			$strCacheKey = ltrim(str_replace(array(DIR_FRAMEWORK_VIEWS,DIR_PACKAGES,DIR_APP),array('core','packages','app'),$dirFullViewPath),'/');
+			$strCacheKey = ltrim(str_replace(array(TWIST_FRAMEWORK_VIEWS,TWIST_PACKAGES,TWIST_APP),array('core','packages','app'),$dirFullViewPath),'/');
 			$arrViewData = \Twist::Cache('twist/packages/views')->read($strCacheKey);
 
 			//Detect if the file has changed, if changed remove cache and rebuild
@@ -312,12 +312,12 @@ class View extends BasePackage{
 
 		$strOverridePath = null;
 
-		if(substr($dirFullViewPath,0,strlen(DIR_FRAMEWORK_VIEWS)) == DIR_FRAMEWORK_VIEWS){
-			//Framework View - check DIR_APP/twist/core/view
-			$strOverridePath = sprintf('%s/Twist/Core/Views/%s',rtrim(DIR_APP,'/'),ltrim(substr($dirFullViewPath,strlen(DIR_FRAMEWORK_VIEWS)-1),'/'));
-		}elseif(substr($dirFullViewPath,0,strlen(DIR_PACKAGES)) == DIR_PACKAGES){
-			//Packages View - check DIR_APP/packages (no -1 required for packages)
-			$strOverridePath = sprintf('%s/Packages/%s',rtrim(DIR_APP,'/'),ltrim(substr($dirFullViewPath,strlen(DIR_PACKAGES)),'/'));
+		if(substr($dirFullViewPath,0,strlen(TWIST_FRAMEWORK_VIEWS)) == TWIST_FRAMEWORK_VIEWS){
+			//Framework View - check TWIST_APP/twist/core/view
+			$strOverridePath = sprintf('%s/Twist/Core/Views/%s',rtrim(TWIST_APP,'/'),ltrim(substr($dirFullViewPath,strlen(TWIST_FRAMEWORK_VIEWS)-1),'/'));
+		}elseif(substr($dirFullViewPath,0,strlen(TWIST_PACKAGES)) == TWIST_PACKAGES){
+			//Packages View - check TWIST_APP/packages (no -1 required for packages)
+			$strOverridePath = sprintf('%s/Packages/%s',rtrim(TWIST_APP,'/'),ltrim(substr($dirFullViewPath,strlen(TWIST_PACKAGES)),'/'));
 		}
 
 		if(is_file($dirFullViewPath) || is_file($strOverridePath)){
@@ -330,11 +330,11 @@ class View extends BasePackage{
 
 			if(!is_null($this->dirCurrentView)){
 				$intLineNo = $this->locateTag($this->dirCurrentView,$this->strCurrentTag);
-				throw new \Twist\Core\Classes\TwistException(sprintf("View file <em>%s</em> was not found or does not exist in <em>%s</em>",str_replace(DIR_BASE,'/',$dirFullViewPath),str_replace(DIR_BASE,'/',$this->dirCurrentView)),11102,$this->dirCurrentView,$intLineNo);
+				throw new \Twist\Core\Classes\TwistException(sprintf("View file <em>%s</em> was not found or does not exist in <em>%s</em>",str_replace(TWIST_DOCUMENT_ROOT,'/',$dirFullViewPath),str_replace(TWIST_DOCUMENT_ROOT,'/',$this->dirCurrentView)),11102,$this->dirCurrentView,$intLineNo);
 			}else{
 				//Will work as long as the error is called from build()
 				$arrBacktrace = debug_backtrace();
-				throw new \Twist\Core\Classes\TwistException(sprintf("View file <em>%s</em> was not found or does not exist",str_replace(DIR_BASE,'/',$dirFullViewPath)),11102,$arrBacktrace[2]['file'],$arrBacktrace[2]['line']);
+				throw new \Twist\Core\Classes\TwistException(sprintf("View file <em>%s</em> was not found or does not exist",str_replace(TWIST_DOCUMENT_ROOT,'/',$dirFullViewPath)),11102,$arrBacktrace[2]['file'],$arrBacktrace[2]['line']);
 			}
 		}
 	}

@@ -67,11 +67,11 @@ class Autoload{
 			if(substr($strRequest,0,6) == 'Twist\\'){
 				$dirRequire = sprintf('%s/%s',rtrim(self::$strBaseDir,'/'),ltrim($strFile));
 			}elseif(substr($strRequest,0,4) == 'App\\'){
-				$dirRequire = sprintf('%s/%s',rtrim(DIR_APP,'/'),ltrim($strFileWithoutRoot));
+				$dirRequire = sprintf('%s/%s',rtrim(TWIST_APP,'/'),ltrim($strFileWithoutRoot));
 			}elseif(substr($strRequest,0,9) == 'Packages\\'){
-				$dirRequire = sprintf('%s/%s',rtrim(DIR_PACKAGES,'/'),ltrim($strFileWithoutRoot));
+				$dirRequire = sprintf('%s/%s',rtrim(TWIST_PACKAGES,'/'),ltrim($strFileWithoutRoot));
 			}else{
-				$dirRequire = sprintf('%s/%s',rtrim(DIR_PUBLIC_ROOT,'/'),ltrim($strFile));
+				$dirRequire = sprintf('%s/%s',rtrim(TWIST_PUBLIC_ROOT,'/'),ltrim($strFile));
 			}
 
 			if(file_exists($dirRequire)){

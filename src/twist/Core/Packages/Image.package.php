@@ -83,7 +83,7 @@
 			$strURL = sprintf('%s://%s%s?width=%s&height=%d&bg=%s&line=%s',
 				\Twist::framework()->setting('HTTP_PROTOCOL'),
 				\Twist::framework()->setting('HTTP_HOST'),
-				FRAMEWORK_URI,
+				TWIST_FRAMEWORK_URI,
 				$intWidth,
 				$intHeight,
 				str_replace('#','',$strBackgroundColour),

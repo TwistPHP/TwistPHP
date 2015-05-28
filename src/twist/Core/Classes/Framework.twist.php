@@ -81,7 +81,7 @@
 		}
 
 		public function getURI(){
-			return str_replace(BASE_LOCATION,'',DIR_FRAMEWORK);
+			return str_replace(TWIST_DOCUMENT_ROOT,'',TWIST_FRAMEWORK);
 		}
 
 		public function runLevel($blDetails = false){

@@ -62,7 +62,7 @@
 			$arrTimer = \Twist::getEvents(true);
 
 			$this->resTemplate = \Twist::View('TwistDebugBar');
-			$this->resTemplate->setDirectory( sprintf('%sdebug/',DIR_FRAMEWORK_VIEWS));
+			$this->resTemplate->setDirectory( sprintf('%sdebug/',TWIST_FRAMEWORK_VIEWS));
 
 			$arrTags = array(
 				'errors' => '',
@@ -149,9 +149,16 @@
 				$arrTags['post'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $strKey,'value' => $strValue));
 			}
 
-			$arrTags['session'] = '';
+			$arrTags['twist_session'] = '';
+			$arrTags['php_session'] = '';
 			foreach($_SESSION as $strKey => $strValue){
-				$arrTags['session'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $strKey,'value' => $strValue));
+				if($strKey == 'twist-session'){
+					foreach($strValue as $mxdKey => $mxdValue){
+						$arrTags['twist_session'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $mxdKey,'value' => $mxdValue));
+					}
+				}else{
+					$arrTags['php_session'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $strKey,'value' => $strValue));
+				}
 			}
 
 			$arrTags['cookie'] = '';
