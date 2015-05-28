@@ -104,9 +104,9 @@ final class Resources{
 							}
 						} else {
 							if(substr($strEachItem,0,2) === '//'){
-								$strOut .= sprintf('<link href="%s" type="text/css" rel="stylesheet" property="stylesheet" itemprop>',$strEachItem);
+								$strOut .= sprintf('<link href="%s" type="text/css" rel="stylesheet" property="stylesheet">',$strEachItem);
 							}else{
-								$strOut .= sprintf('<link href="%s/%s/%s" type="text/css" rel="stylesheet" property="stylesheet" itemprop>',$strModuleURI,$arrParts[0],$strEachItem);
+								$strOut .= sprintf('<link href="%s/%s/%s" type="text/css" rel="stylesheet" property="stylesheet">',$strModuleURI,$arrParts[0],$strEachItem);
 							}
 						}
 					}
