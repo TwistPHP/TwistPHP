@@ -54,7 +54,7 @@ final class Resources{
 			$blInline = false;
 
 			if($arrParts[0] === 'core-uri'){
-				return sprintf('%sCore/Resources/',TWIST_FRAMEWORK_URI);
+				return sprintf('/%sCore/Resources/',ltrim(TWIST_FRAMEWORK_URI,'/'));
 			}
 
 			if( count( $arrParts ) > 1 ) {

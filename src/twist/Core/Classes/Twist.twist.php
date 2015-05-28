@@ -127,7 +127,7 @@
 
         protected static function coreResources(){
 
-            $strResourcesURI = sprintf('%sCore/Resources/',TWIST_FRAMEWORK_URI);
+            $strResourcesURI = sprintf('/%sCore/Resources/',ltrim(TWIST_FRAMEWORK_URI,'/'));
 
             $arrResources = array(
                 'arable' => sprintf('%sarable/arable.min.css',$strResourcesURI),
@@ -159,7 +159,7 @@
                 'shadow-js' => sprintf('%sshadow-js/shadow-js.min.js',$strResourcesURI),
                 'unsemantic' => sprintf('%sunsemantic/unsemantic-grid-responsive-tablet-no-ie7.css',$strResourcesURI),
                 'resources_uri' => $strResourcesURI,
-                'uri' => TWIST_FRAMEWORK_URI
+                'uri' => ltrim(TWIST_FRAMEWORK_URI,'/')
             );
 
             //Integrate the basic core href tag support - legacy support
