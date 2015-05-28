@@ -196,11 +196,11 @@ final class Resources{
 
 		$arrParameters['path'] = rtrim($dirResourcePath,'/');
 
-		//Detect if the resource path is outside of the document root, then process the URI accordingly
-		if(rtrim(TWIST_DOCUMENT_ROOT,'/') === dirname($dirResourcePath) || strstr(rtrim(TWIST_DOCUMENT_ROOT,'/'),dirname($dirResourcePath))){
-			$arrParameters['uri'] = rtrim(TWIST_BASE_PATH.str_replace(TWIST_DOCUMENT_ROOT,'',$dirResourcePath),'/');
+		if(strstr(dirname($dirResourcePath),rtrim(TWIST_FRAMEWORK,'/'))){
+			//Resource is in framework (this will work for frameworks in and out of the base)
+			$arrParameters['uri'] = rtrim(TWIST_FRAMEWORK_URI.str_replace(TWIST_FRAMEWORK,'',$dirResourcePath),'/');
 		}else{
-			$arrParameters['uri'] = '/'.trim(str_replace(TWIST_BASE_PATH,'',$dirResourcePath),'/');
+			$arrParameters['uri'] = rtrim(str_replace(TWIST_DOCUMENT_ROOT,'',$dirResourcePath),'/');
 		}
 
 		return $arrParameters;

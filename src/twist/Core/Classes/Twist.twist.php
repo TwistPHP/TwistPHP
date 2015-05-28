@@ -49,12 +49,7 @@
 				$blAboveDocumentRoot = false;
 				$strInstallationFolder = realpath(sprintf('%s/../',TWIST_FRAMEWORK));
 
-				if($strInstallationFolder === dirname($_SERVER['SCRIPT_FILENAME'])){
-					$strSiteRoot = '/';
-				}elseif(strstr($strInstallationFolder,dirname($_SERVER['SCRIPT_FILENAME']))){
-					$strSiteRoot = '/'.ltrim(str_replace(dirname($_SERVER['SCRIPT_FILENAME']),"",$strInstallationFolder),'/');
-				}else{
-					$strSiteRoot = '/'.ltrim(str_replace($strInstallationFolder,"",dirname($_SERVER['SCRIPT_FILENAME'])),'/');
+				if(!($strInstallationFolder === TWIST_DOCUMENT_ROOT || strstr($strInstallationFolder,TWIST_DOCUMENT_ROOT))){
 					$blAboveDocumentRoot = true;
 				}
 
@@ -68,7 +63,7 @@
 
 				self::define('TWIST_FRAMEWORK_URI',$strFrameworkURI);
 				self::define('TWIST_ABOVE_DOCUMENT_ROOT',$blAboveDocumentRoot);
-				self::define('TWIST_BASE_PATH',$strSiteRoot);
+				self::define('TWIST_BASE_PATH',dirname($_SERVER['SCRIPT_FILENAME']));
 				self::define('TWIST_BASE_URI',$strBaseURI);
 
 				date_default_timezone_set( Twist::framework() -> setting('TIMEZONE') );

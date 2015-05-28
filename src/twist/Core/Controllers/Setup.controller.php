@@ -376,10 +376,10 @@ class Setup extends BaseController{
 
 		\Twist::define('TWIST_PUBLIC_ROOT',TWIST_DOCUMENT_ROOT.$arrSession['settings']['details']['site_root']);
 
-		\Twist::define('TWIST_APP',TWIST_DOCUMENT_ROOT.$arrSession['settings']['details']['app_path']);
+		\Twist::define('TWIST_APP',TWIST_DOCUMENT_ROOT.'/'.$arrSession['settings']['details']['app_path']);
 		\Twist::define('TWIST_APP_CONFIG',TWIST_APP.'/Config/');
-		\Twist::define('TWIST_PACKAGES',TWIST_DOCUMENT_ROOT.$arrSession['settings']['details']['packages_path']);
-		\Twist::define('TWIST_UPLOADS',TWIST_DOCUMENT_ROOT.$arrSession['settings']['details']['uploads_path']);
+		\Twist::define('TWIST_PACKAGES',TWIST_DOCUMENT_ROOT.'/'.$arrSession['settings']['details']['packages_path']);
+		\Twist::define('TWIST_UPLOADS',TWIST_DOCUMENT_ROOT.'/'.$arrSession['settings']['details']['uploads_path']);
 
 		if($arrSession['database']['details']['type'] === 'database'){
 
