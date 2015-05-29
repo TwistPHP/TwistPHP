@@ -95,6 +95,14 @@
 		"options":"",
 		"null":0
 	},
+	"DEFAULT_COUNTRY":{
+		"title":"Default Country",
+		"description":"Set to the default country ISO code of your site",
+		"default":"GB",
+		"type":"country_iso",
+		"options":"",
+		"null":0
+	},
 	"DEFAULT_LANGUAGE":{
 		"title":"Default Language",
 		"description":"Set to the default language ISO code of your site",

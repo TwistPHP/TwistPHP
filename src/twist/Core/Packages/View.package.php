@@ -523,7 +523,15 @@ class View extends BasePackage{
 
 	            if($arrResults[5][($blOut)?0:1] != ''){
 	                $arrTagParts = explode(':',$arrResults[5][($blOut)?0:1]);
+
+		            //Would crc32() be faster?
+		            $strHash = md5($strRawView);
 	                $strRawView = $this->runTags($strRawView,$strTag,$arrTagParts[0],$arrTagParts[1],$arrData);
+
+		            if($strHash === md5($strRawView)){
+			            //Remove un-used tag as the statement has been matched
+			            $strRawView = $this->replaceTag($strRawView,$strTag,'');
+		            }
 	            }else{
 	                $intConditionResult = ($blOut)?0:1;
 

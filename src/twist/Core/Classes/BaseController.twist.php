@@ -27,6 +27,7 @@
 
 	class BaseController{
 
+		protected $arrMessages = array();
 		protected $arrAliasURIs = array();
 		protected $arrReplaceURIs = array();
 		protected $resMeta = null;
@@ -38,6 +39,9 @@
 			$this->arrRoute = $arrRoute;
 			$this->arrRouteVars = $arrRoute['vars'];
 			$this->resMeta = $resMeta;
+
+			//Preset the array of messages
+			\Twist::framework()->package()->extend('View', 'messages', array( 'all' => '','error' => '','warning' => '','notice' => '','success' => '' ));
 
 			return true;
 		}
@@ -111,6 +115,47 @@
 		final public function _response($intError){
 			Error::errorPage($intError);
 			return false;
+		}public function _errorMessage($strMessage){
+		$this->_message($strMessage,'error');
+	}
+
+		public function _warningMessage($strMessage){
+			$this->_message($strMessage,'warning');
+		}
+
+		public function _noticeMessage($strMessage){
+			$this->_message($strMessage,'notice');
+		}
+
+		public function _successMessage($strMessage){
+			$this->_message($strMessage,'success');
+		}
+
+		private function _message($strMessage,$strType){
+
+			$this->arrMessages[] = array(
+				'type' => $strType,
+				'html' => $this->_view(sprintf('%s/messages/%s.tpl',TWIST_FRAMEWORK_VIEWS,$strType),array('type' => $strType,'message' => $strMessage))
+			);
+
+			$arrOut = array( 'all' => '','error' => '','warning' => '','notice' => '','success' => '' );
+
+			foreach($this->arrMessages as $arrEachMessage){
+
+				if($arrEachMessage['type'] == 'error'){
+					$arrOut['error'] .= $arrEachMessage['html'];
+				}elseif($arrEachMessage['type'] == 'warning'){
+					$arrOut['warning'] .= $arrEachMessage['html'];
+				}elseif($arrEachMessage['type'] == 'notice'){
+					$arrOut['notice'] .= $arrEachMessage['html'];
+				}elseif($arrEachMessage['type'] == 'success'){
+					$arrOut['success'] .= $arrEachMessage['html'];
+				}
+
+				$arrOut['all'] .= $arrEachMessage['html'];
+			}
+
+			\Twist::framework()->package()->extend('View', 'messages', $arrOut);
 		}
 
 		/**
