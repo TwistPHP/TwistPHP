@@ -120,10 +120,12 @@ final class Debug{
 			$arrTags['database_query_count'] = count($this->arrDebugLog['Database']['queries']);
 		}
 
-		foreach($this->arrDebugLog['View']['usage'] as $arrEachItem){
+		if(array_key_exists('View',$this->arrDebugLog)){
+			foreach($this->arrDebugLog['View']['usage'] as $arrEachItem){
 
-			if($arrEachItem['instance'] != 'TwistDebugBar'){
-				$arrTags['views'] .= sprintf("<tr><td>%s</td><td>%s</td><td>%s</td></tr>",$arrEachItem['instance'],$arrEachItem['file'],implode("<br>",$arrEachItem['tags']));
+				if($arrEachItem['instance'] != 'TwistDebugBar'){
+					$arrTags['views'] .= sprintf("<tr><td>%s</td><td>%s</td><td>%s</td></tr>",$arrEachItem['instance'],$arrEachItem['file'],implode("<br>",$arrEachItem['tags']));
+				}
 			}
 		}
 
