@@ -8,10 +8,12 @@
 		<meta name="robots" content="noindex, nofollow">
 
 		<!--================================ THIRD-PARTY RESOURCES ================================-->
-		<link href="{core:unsemantic}" type="text/css" rel="stylesheet">
+		<!--<link href="{core:unsemantic}" type="text/css" rel="stylesheet">-->
+		{resource:unsemantic,inline}
 
 		<!--================================ SHADOW RESOURCES ================================-->
-		<link href="{core:arable}" type="text/css" rel="stylesheet">
+		<!--<link href="{core:arable}" type="text/css" rel="stylesheet">-->
+		{resource:arable,inline}
 
 		<!--================================ CSS ================================-->
 		<style type="text/css">
