@@ -900,7 +900,7 @@ class View extends BasePackage{
 	            'json_encode','json_decode',
 	            'strip_tags',
 	            'addslashes','stripslashes',
-	            'count','round','ceil','floor',
+	            'count','round','ceil','floor','decimalise',
 	            'strlen','strtolower','strtoupper',
 	            'ucfirst','ucwords',
 	            'prettytime','bytestosize',
@@ -924,6 +924,8 @@ class View extends BasePackage{
 
 	                $strData = date($strDateFormat,strtotime($strData));
 
+	            }elseif($strFunction == 'decimalise'){
+		            $strData = number_format($strData,2,'.','');
 	            }elseif(function_exists($strFunction)){
 	                $strData = call_user_func($strFunction,$strData);
 	            }elseif($strFunction == 'escape'){

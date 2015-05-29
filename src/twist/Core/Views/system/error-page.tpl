@@ -8,7 +8,6 @@
 		<meta name="robots" content="noindex, nofollow">
 
 		<!--================================ SHADOW RESOURCES ================================-->
-		<!--<link href="{core:arable}" type="text/css" rel="stylesheet">-->
 		{resource:arable,inline}
 
 		<!--================================ CSS ================================-->
