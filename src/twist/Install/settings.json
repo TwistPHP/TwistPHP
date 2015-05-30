@@ -458,7 +458,7 @@
 	"USER_LEVEL_SUPERADMIN":{
 		"title":"User Level (Super Admin)",
 		"description":"Level (integer) of a super admin user used to restrict access through routes",
-		"default":0,
+		"default":40,
 		"type":"integer",
 		"options":"",
 		"null":0

@@ -123,7 +123,7 @@ CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`user_levels` (
 -- Dumping data for table `user_levels`
 --
 
-INSERT IGNORE INTO /*TWIST_DATABASE_TABLE_PREFIX*/`user_levels` (`id`, `slug`, `description`,'level') VALUES
+INSERT IGNORE INTO /*TWIST_DATABASE_TABLE_PREFIX*/`user_levels` (`id`, `slug`, `description`,`level`) VALUES
 (1, 'member', 'Standard Member',10),
 (2, 'advanced_member', 'Advanced member',20),
 (3, 'admin', 'Admin',30),
