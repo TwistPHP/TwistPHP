@@ -28,14 +28,6 @@
 	 */
 	final class Register{
 
-		public function autoloadPath($strMatch,$dirPath,$strExtension = '.php'){
-			Autoload::registerPath($strMatch,$dirPath,$strExtension);
-		}
-
-		public function autoloadClass($strMatch,$strClass,$strFunction){
-			Autoload::registerClass($strMatch,$strClass,$strFunction);
-		}
-
 		public function handler($strType,$strClass,$strFunction){
 
 			switch($strType){

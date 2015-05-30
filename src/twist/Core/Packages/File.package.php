@@ -40,6 +40,21 @@ class File extends BasePackage{
 	public function __construct(){
 		$this->resTemplate = \Twist::View('pkgFile');
 		$this->resTemplate->setDirectory( sprintf('%s/file/',TWIST_FRAMEWORK_VIEWS));
+
+		//Register the delayed write shutdown function
+		\Twist::framework()->register()->shutdownEvent('delayed-file-write','Twist::File','writeDelayedFiles');
+	}
+
+	public function writeDelayedFiles(){
+
+		if(count($this->arrDelayedFileStorage)){
+
+			//Write each file to disk one by one
+			foreach($this->arrDelayedFileStorage as $dirFilePath => $mxdData){
+				$this->write($dirFilePath,$mxdData);
+				unset($this->arrDelayedFileStorage[$dirFilePath]);
+			}
+		}
 	}
 
 	/**
