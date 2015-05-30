@@ -4,7 +4,7 @@
 	<p class="notice" style="display: {data:register_message!=null?'block':'none'};">{data:register_message}</p>
 	<div style="display: {data:register_message!=null?'none':'block'};">
 		<label>Email</label>
-		<input type="email" name="email" value="{post:email==''?'':post:email}" placeholder="Email" maxlength="255" tabindex="101" required>
+		<input type="email" name="email" value="{post:email==''?'':post:email}" placeholder="Email" maxlength="255" tabindex="101" required autofocus>
 		<label>First Name</label>
 		<input type="text" name="firstname" value="{post:firstname}" maxlength="128" placeholder="First Name" tabindex="102" required>
 		<label>Last Name</label>

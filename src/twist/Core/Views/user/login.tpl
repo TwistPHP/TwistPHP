@@ -3,7 +3,7 @@
 	<p class="error" style="display: {data:login_error_message!=null?'block':'none'};">{data:login_error_message}</p>
 	<p class="notice" style="display: {data:login_message!=null?'block':'none'};">{data:login_message}</p>
 	<label>Email</label>
-	<input type="email" name="email" value="" placeholder="Email" maxlength="255" tabindex="1" required>
+	<input type="email" name="email" value="" placeholder="Email" maxlength="255" tabindex="1" required autofocus>
 	<label>Password</label>
 	<input type="password" name="password" value="" maxlength="255" placeholder="Password" tabindex="2" required>
 	<p><a href="?forgotten">Forgotten your password?</a></p>
