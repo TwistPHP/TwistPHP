@@ -52,7 +52,7 @@
 		public function loadFile($strLocalFilePath){
 
 			//Get the contents of the file and turn into an array
-			$this->strRawXML = file_get_contents($strLocalFilePath);
+			$this->strRawXML = (function_exists('curl_init')) ? \Twist::Curl()->get($strLocalFilePath) : file_get_contents($strLocalFilePath);
 			$this->processXML();
 
 			//Expand the raw array and get teh results
