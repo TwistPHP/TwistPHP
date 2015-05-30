@@ -68,7 +68,12 @@ class Manager extends BaseController{
 		$arrTags['database-debug'] = (\Twist::framework()->setting('TWIST_DATABASE_DEBUG') == '1') ? 'On' : 'Off';
 
 		$arrRoutes = \Twist::Route()->getAll();
-		$arrTags['route-data'] = sprintf('ANY %d, GET %d, POST %d, PUT %d, DELETE %d',count($arrRoutes['ANY']),count($arrRoutes['GET']),count($arrRoutes['POST']),count($arrRoutes['PUT']),count($arrRoutes['DELETE']));
+		$arrTags['route-data'] = sprintf('<strong>%d</strong> ANY<br><strong>%d</strong> GET<br><strong>%d</strong> POST<br><strong>%d</strong> PUT<br><strong>%d</strong> DELETE',
+			count($arrRoutes['ANY']),
+			count($arrRoutes['GET']),
+			count($arrRoutes['POST']),
+			count($arrRoutes['PUT']),
+			count($arrRoutes['DELETE']));
 
 		$arrTags['user-accounts'] = sprintf('<strong>%d</strong> Superadmin,<br><strong>%d</strong> Admin,<br><strong>%d</strong> Advanced,<br><strong>%d</strong> Member',
 			\Twist::Database()->count(sprintf('%susers',TWIST_DATABASE_TABLE_PREFIX),\Twist::framework()->setting('USER_LEVEL_SUPERADMIN'),'level'),
