@@ -123,6 +123,7 @@
 
 			//Add the details from the info JSON file
 			$this->arrPackages[$strSlug]['details'] = $arrDetails;
+			$this->arrPackages[$strSlug]['path'] = $dirPath;
 
 			//Add the URI to the package here
 			$this->arrPackages[$strSlug]['uri'] = '';
@@ -374,6 +375,7 @@
 		 */
 		public function information($strPackage){
 			$arrParts = explode('\\',$strPackage);
+			//$strPackage = strtolower(array_pop($arrParts));
 			$strPackage = array_pop($arrParts);
 			return (array_key_exists($strPackage,$this->arrPackages)) ? $this->arrPackages[$strPackage] : array();
 		}

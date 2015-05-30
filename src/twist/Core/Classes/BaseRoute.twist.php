@@ -40,7 +40,7 @@
 				$this->baseView(\Twist::Route()->baseView());
 				\Twist::Route()->purge();
 
-				$arrPackageParams = \Twist::framework()->package()->information($strPackageKey);
+				$arrPackageParams = \Twist::framework()->package()->information(strtolower($strPackageKey));
 
 				$this->packageURI($strPackageKey);
 				$this->setDirectory(sprintf('%s/views/', rtrim($arrPackageParams['path'], '/')));
