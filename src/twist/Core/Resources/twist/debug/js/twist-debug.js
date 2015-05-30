@@ -184,7 +184,7 @@
 			if( typeof window.jQuery === 'undefined' ) {
 				blOtherJSLibrary = ( typeof window.$ === 'function' );
 
-				getScript( '//code.jquery.com/jquery-2.1.4.min.js',
+				getScript( 'http' + ( location.protocol === 'https:' ? 's' : '' ) + '://code.jquery.com/jquery-2.1.4.min.js',
 					function() {
 						if( typeof window.jQuery === 'undefined' ) {
 							error( 'This is embarrassing... jQuery couldn\'t be loaded' );
