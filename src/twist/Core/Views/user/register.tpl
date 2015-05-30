@@ -6,9 +6,9 @@
         <label>Email</label>
         <input type="email" name="email" value="{post:email==''?'':post:email}" placeholder="Email" size="255" tabindex="101" required>
         <label>First Name</label>
-        <input type="text" name="firstname" value="{post:firstname}" size="128" placeholder="First Name" tabindex="102" required>
+        <input type="text" name="firstname" value="{post:firstname}" maxlength="128" placeholder="First Name" tabindex="102" required>
         <label>Last Name</label>
-        <input type="text" name="lastname" value="{post:lastname}" size="128" placeholder="Last Name" tabindex="103" required>
+        <input type="text" name="lastname" value="{post:lastname}" maxlength="128" placeholder="Last Name" tabindex="103" required>
         <input type="hidden" name="register" value="1">
         <button type="submit" tabindex="104">Register</button>
         <div class="clear"></div>
