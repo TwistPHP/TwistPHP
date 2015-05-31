@@ -58,11 +58,11 @@ class User extends BasePackage{
 		$this->strEncryptionType = $this->framework()->setting('USER_PASSWORD_ENCRYPTION');
 		$this->strPasswordHash = $this->framework()->setting('USER_PASSWORD_HASH');
 
-		$this->resTemplate = \Twist::View('pkgUser');
+		$this->resTemplate = \Twist::View();
 		$this->objUserSession = new SessionHandler();
 
 		//@todo setup the template override in the apps folder
-		$this->setCustomTemplateLocation(sprintf('%s/user/',TWIST_FRAMEWORK_VIEWS));
+		$this->setCustomTemplateLocation(sprintf('%suser/',TWIST_FRAMEWORK_VIEWS));
 
 		//Set the remember me life span in seconds
 		if($this->framework()->setting('USER_REMEMBER_LENGTH') > 0){
@@ -838,7 +838,6 @@ class User extends BasePackage{
 		}
 
 		$this->strTemplateLocation = $strTemplateLocation;
-		$this->resTemplate->setDirectory($strTemplateLocation);
 	}
 
 	public function viewExtension($strReference){
@@ -871,7 +870,7 @@ class User extends BasePackage{
 			$strReference = 'devices_form';
 		}
 
-		$strDefaultLogin = 'login.tpl';
+		$strDefaultLogin = $this->strTemplateLocation.'login.tpl';
 
 		switch($strReference){
 
@@ -897,11 +896,11 @@ class User extends BasePackage{
 				break;
 
 			case'account_verification':
-				$strData = $this->resTemplate->build( 'account-verification.tpl', array( 'login_page' => $strLoginPage ) );
+				$strData = $this->resTemplate->build( $this->strTemplateLocation.'account-verification.tpl', array( 'login_page' => $strLoginPage ) );
 				break;
 
 			case'forgotten_password_form':
-				$strData = $this->resTemplate->build( 'forgotten-password.tpl', array( 'login_page' => $strLoginPage ) );
+				$strData = $this->resTemplate->build( $this->strTemplateLocation.'forgotten-password.tpl', array( 'login_page' => $strLoginPage ) );
 				break;
 
 			case'change_password_form':
@@ -913,9 +912,9 @@ class User extends BasePackage{
 				\Twist::Session()->data('site-error_message',null);
 
 				if(\Twist::Session()->data('user-temp_password') == '0'){
-					$strData = $this->resTemplate->build( 'change-password.tpl', $arrTags );
+					$strData = $this->resTemplate->build( $this->strTemplateLocation.'change-password.tpl', $arrTags );
 				}else{
-					$strData = $this->resTemplate->build( 'change-password-initial.tpl', $arrTags );
+					$strData = $this->resTemplate->build( $this->strTemplateLocation.'change-password-initial.tpl', $arrTags );
 				}
 
 				break;
@@ -932,7 +931,7 @@ class User extends BasePackage{
                 \Twist::Session()->remove('site-register_message');
                 \Twist::Session()->remove('site-register_error_message');
 
-				$strData = $this->resTemplate->build((\Twist::framework()->setting('USER_REGISTER_PASSWORD')) ? 'register-password.tpl' : 'register.tpl', $arrTags, true );
+				$strData = $this->resTemplate->build((\Twist::framework()->setting('USER_REGISTER_PASSWORD')) ? $this->strTemplateLocation.'register-password.tpl' : $this->strTemplateLocation.'register.tpl', $arrTags, true );
 				break;
 
 			case'devices_form':
@@ -954,13 +953,13 @@ class User extends BasePackage{
 					$arrEachDevice['current'] = ($arrCurrentDevices['id'] == $arrEachDevice['id']) ? true : false;
 
 					if(array_key_exists('edit-device',$_GET) && $arrEachDevice['device'] == $_GET['edit-device']){
-						$strDeviceList .= $this->resTemplate->build('device-each-edit.tpl',$arrEachDevice);
+						$strDeviceList .= $this->resTemplate->build($this->strTemplateLocation.'device-each-edit.tpl',$arrEachDevice);
 					}else{
-						$strDeviceList .= $this->resTemplate->build('device-each.tpl',$arrEachDevice);
+						$strDeviceList .= $this->resTemplate->build($this->strTemplateLocation.'device-each.tpl',$arrEachDevice);
 					}
 				}
 
-				$strData = $this->resTemplate->build( 'devices.tpl', array( 'login_page' => $strLoginPage, 'device_list' => $strDeviceList ),true );
+				$strData = $this->resTemplate->build( $this->strTemplateLocation.'devices.tpl', array( 'login_page' => $strLoginPage, 'device_list' => $strDeviceList ),true );
 				break;
 
 			case'id':

@@ -313,8 +313,16 @@ class View extends BasePackage{
 		$strOverridePath = null;
 
 		if(substr($dirFullViewPath,0,strlen(TWIST_FRAMEWORK_VIEWS)) == TWIST_FRAMEWORK_VIEWS){
-			//Framework View - check TWIST_APP/twist/core/view
-			$strOverridePath = sprintf('%s/Twist/Core/Views/%s',rtrim(TWIST_APP,'/'),ltrim(substr($dirFullViewPath,strlen(TWIST_FRAMEWORK_VIEWS)-1),'/'));
+
+			//If the current system is a package
+			if(substr($this->dirViews,0,strlen(TWIST_PACKAGES)) == TWIST_PACKAGES){
+				//Framework View - check {PACKAGE_VIEWS}/twist/core/view
+				$strOverridePath = sprintf('%s/Twist/Core/Views/%s',rtrim($this->dirViews,'/'),ltrim(substr($dirFullViewPath,strlen(TWIST_FRAMEWORK_VIEWS)-1),'/'));
+			}else{
+				//Framework View - check TWIST_APP/twist/core/view
+				$strOverridePath = sprintf('%s/Twist/Core/Views/%s',rtrim(TWIST_APP,'/'),ltrim(substr($dirFullViewPath,strlen(TWIST_FRAMEWORK_VIEWS)-1),'/'));
+			}
+
 		}elseif(substr($dirFullViewPath,0,strlen(TWIST_PACKAGES)) == TWIST_PACKAGES){
 			//Packages View - check TWIST_APP/packages (no -1 required for packages)
 			$strOverridePath = sprintf('%s/Packages/%s',rtrim(TWIST_APP,'/'),ltrim(substr($dirFullViewPath,strlen(TWIST_PACKAGES)),'/'));
