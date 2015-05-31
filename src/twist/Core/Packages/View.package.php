@@ -314,6 +314,8 @@ class View extends BasePackage{
 
 		if(substr($dirFullViewPath,0,strlen(TWIST_FRAMEWORK_VIEWS)) == TWIST_FRAMEWORK_VIEWS){
 
+			//Maybe detect if the usr has created an over-ride for the package override first?
+
 			//If the current system is a package
 			if(substr($this->dirViews,0,strlen(TWIST_PACKAGES)) == TWIST_PACKAGES){
 				//Framework View - check {PACKAGE_VIEWS}/twist/core/view
