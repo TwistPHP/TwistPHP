@@ -676,6 +676,7 @@ class File extends BasePackage{
 				}
 
 				fclose($resFileHandler);
+				chmod($dirFilePath, 0755);
 
 			}catch(\Exception $resException){
 				throw new \Exception('TwistPHP File::write() - '.$resException->getMessage());

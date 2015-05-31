@@ -138,7 +138,7 @@
 		/**
 		 * Retrieve the data form the cache at any point by passing in the Unique ID. Expired cache date will be purged and passed back as NULL in the result.
 		 *
-		 * @param $mxdUniqueID Unique ID used to reference the cache
+		 * @param $mxdUniqueID string Unique ID used to reference the cache
 		 * @return mixed Returns cache data or array of cache properties
 		 */
 		public function read($mxdUniqueID){
@@ -154,7 +154,7 @@
 				}elseif(file_exists($dirCacheFile)){
 					$arrData = json_decode(\Twist::File()->read($dirCacheFile),true);
 
-					if(count($arrData) && array_key_exists('expiry',$arrData) && array_key_exists('data',$arrData) && $arrData['expiry'] <= \Twist::DateTime()->time()){
+					if(count($arrData) && array_key_exists('expiry',$arrData) && array_key_exists('data',$arrData) && $arrData['expiry'] >= \Twist::DateTime()->time()){
 						return $arrData['data'];
 					}
 
