@@ -589,6 +589,16 @@ class File extends BasePackage{
 	}
 
 	/**
+	 * Check to see if a file exists, this also checks delayed files by default
+	 * @param $dirFilePath
+	 * @param bool $blCheckDelayedFiles
+	 * @return bool
+	 */
+	public function exists($dirFilePath,$blCheckDelayedFiles = true){
+		return (file_exists($dirFilePath) || $blCheckDelayedFiles && array_key_exists($dirFilePath,$this->arrDelayedFileStorage));
+	}
+
+	/**
 	 * Read a file from the server, applies the appropriate file locks when reading from the file
 	 * @param string $dirFilePath Full path to the file to be read
 	 * @param int $intBytesStart
@@ -689,16 +699,22 @@ class File extends BasePackage{
 	 *
 	 * @reference http://php.net/manual/en/function.unlink.php
 	 * @param $strFilePath Path of the file to be removed
+	 * @param $blIncludeDelayedFiles
 	 * @return bool Return the status of the removal
 	 */
-	public function remove($strFilePath){
-		return (file_exists($strFilePath) || is_link($strFilePath)) ? unlink($strFilePath) : false;
+	public function remove($dirFilePath,$blIncludeDelayedFiles = true){
+
+		if($blIncludeDelayedFiles && array_key_exists($dirFilePath,$this->arrDelayedFileStorage)){
+			unset($this->arrDelayedFileStorage[$dirFilePath]);
+		}
+
+		return (file_exists($dirFilePath) || is_link($dirFilePath)) ? unlink($dirFilePath) : false;
 	}
 
 	/**
 	 * @alias remove
 	 */
-	public function delete($strFilePath){ return $this->remove($strFilePath); }
+	public function delete($strFilePath,$blIncludeDelayedFiles = true){ return $this->remove($strFilePath,$blIncludeDelayedFiles); }
 
 	/**
 	 * Recursively remove a directory and all its files and sub directories on the local server

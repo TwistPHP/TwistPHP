@@ -151,7 +151,7 @@
 
 				if(array_key_exists($strCacheName,$this->arrRuntimeSessionCache)){
 					return $this->arrRuntimeSessionCache[$strCacheName]['data'];
-				}elseif(file_exists($dirCacheFile)){
+				}elseif(\Twist::File()->exists($dirCacheFile)){
 					$arrData = json_decode(\Twist::File()->read($dirCacheFile),true);
 
 					if(count($arrData) && array_key_exists('expiry',$arrData) && array_key_exists('data',$arrData) && $arrData['expiry'] >= \Twist::DateTime()->time()){
@@ -207,7 +207,7 @@
 			$strCacheName = sprintf("%s.%s",$mxdUniqueID,$this->strExtension);
 			$dirCacheFile = sprintf("%s/%s",rtrim($this->dirLocation,'/'),ltrim($strCacheName,'/'));
 
-			if($this->blCacheEnabled && file_exists($dirCacheFile)){
+			if($this->blCacheEnabled && \Twist::File()->exists($dirCacheFile)){
 
 				$arrData = json_decode(\Twist::File()->read($dirCacheFile),true);
 
