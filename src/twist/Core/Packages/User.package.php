@@ -977,7 +977,7 @@ class User extends BasePackage{
 				break;
 
 			case'level_description':
-				$arrLevelData = $this->getLevel($this->currentLevel());
+				$arrLevelData = $this->getLevel($this->loggedInData('level'));
 				$strData = $arrLevelData['description'];
 				break;
 
