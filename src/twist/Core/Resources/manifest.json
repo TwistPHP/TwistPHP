@@ -1,13 +1,13 @@
 {
 	"arable": {
-		"5.4.4": {
+		"5.4.5": {
 			"default": true,
 			"css": ["arable.min.css"],
 			"js": []
 		}
 	},
 	"arable-reset": {
-		"5.2": {
+		"5.3": {
 			"default": true,
 			"css": ["arable-reset.min.css"],
 			"js": []
