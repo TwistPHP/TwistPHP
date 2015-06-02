@@ -615,37 +615,31 @@
 		 * @param $strReference Template tag passed in from a template
 		 * @return string Formatted HTML/Markup to be output by the template package
 		 */
-		public function viewExtension($strReference){
+		public function viewExtension($strReference,$arrParameters = array()){
 
 			$strOut = '';
 			$arrAsset = $arrParams = array();
 
-			if(strstr($strReference,',')){
-				$arrParams = explode(',',$strReference);
-				if($arrParams[0] != 'upload'){
-					$arrAsset = $this->get($arrParams[1]);
-				}
-			}else{
-				$arrParams[] = $strReference;
-				$arrAsset = $this->get($arrParams[1]);
+			if(array_key_exists('asset-id',$arrParameters)){
+				$arrAsset = $this->get($arrParameters['asset-id']);
 			}
 
-			switch($arrParams[0]){
+			switch($strReference){
 
 				case'upload':
-					$strOut = \Twist::File()->viewExtension(sprintf('asset-%s',$strReference));
+					$strOut = \Twist::File()->viewExtension(sprintf('asset-%s',$strReference),$arrParameters);
 					break;
 
 				case'upload-html':
-					$strOut = \Twist::File()->viewExtension(sprintf('asset-%s',$strReference));
+					$strOut = \Twist::File()->viewExtension(sprintf('asset-%s',$strReference),$arrParameters);
 					break;
 
 				case'upload-init':
-					$strOut = \Twist::File()->viewExtension(sprintf('asset-%s',$strReference));
+					$strOut = \Twist::File()->viewExtension(sprintf('asset-%s',$strReference),$arrParameters);
 					break;
 
 				case'upload-js':
-					$strOut = \Twist::File()->viewExtension(sprintf('asset-%s',$strReference));
+					$strOut = \Twist::File()->viewExtension(sprintf('asset-%s',$strReference),$arrParameters);
 					break;
 
 				case'uri':
