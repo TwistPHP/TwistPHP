@@ -49,6 +49,7 @@
 					return intDP === 0 ? parseInt( Math.round( intNumber * Math.pow( 10, intDP ) ) / Math.pow( 10, intDP ) ) : parseFloat( Math.round( intNumber * Math.pow( 10, intDP ) ) / Math.pow( 10, intDP ) );
 				},
 				uploader = function( strInputID, strUri, objSettings ) {
+
 					var uploadSupported = ( typeof new XMLHttpRequest().responseType === 'string' && 'withCredentials' in new XMLHttpRequest() );
 
 					if( uploadSupported ) {
@@ -64,6 +65,8 @@
 					if( uploadSupported ) {
 						try {
 							var thisUploader = this;
+
+							strInputID = 'twistupload-' + strInputID;
 
 							thisUploader.accept = [],
 									thisUploader.created = ( new Date() ).getTime(),
