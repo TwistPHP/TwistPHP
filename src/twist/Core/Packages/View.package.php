@@ -348,7 +348,7 @@ class View extends BasePackage{
 			}
 		}
 	}
-	
+
 	/**
 	 * Get the raw View data form the View file
 	 *
@@ -684,12 +684,29 @@ class View extends BasePackage{
 	public function runTags($strRawView,$strTag,$strType,$strReference,$arrData = array(),$blReturnArray = false){
 
 		$strFunction = null;
+		$arrParameters = array();
 		$this->strCurrentTag = $strTag;
 
 		if(preg_match("#(.*)\[(.*)\:(.*)\]#",$strTag,$srtMatchResults)){
 			$strFunction = $srtMatchResults[1];
 			$strType = $srtMatchResults[2];
 			$strReference = $srtMatchResults[3];
+		}
+
+		//Explode parameters they must be set as key=value pairs comma separated. To pass a unassociated array in the values split by  pipe symbol '|'
+		if(strstr($strReference,',')){
+
+			$arrReferenceParams = explode(',', $strReference);
+			$strReference = $arrReferenceParams[0];
+
+			unset($arrReferenceParams[0]);
+			foreach($arrReferenceParams as $mxdItem){
+				if(strstr($mxdItem,'=')){
+					//Update the parameters with custom values
+					list($strKey,$mxdValue) = explode('=',$mxdItem);
+					$arrParameters[$strKey] = (strstr($mxdValue,'|')) ? explode('|',$mxdValue) : $mxdValue;
+				}
+			}
 		}
 
 		switch($strType){
@@ -814,7 +831,7 @@ class View extends BasePackage{
 						$strClassName = $arrExtensions[$strType]['module'];
 						$strFunctionName = $arrExtensions[$strType]['function'];
 
-						$strReplacementData = \Twist::$strClassName() -> $strFunctionName($strReference);
+						$strReplacementData = \Twist::$strClassName() -> $strFunctionName($strReference,$arrParameters);
 
 					}elseif(array_key_exists('class',$arrExtensions[$strType])){
 
@@ -822,17 +839,18 @@ class View extends BasePackage{
 						$strFunctionName = $arrExtensions[$strType]['function'];
 
 						$objClass = new $strClassName();
-						$strReplacementData = $objClass -> $strFunctionName($strReference);
+						$strReplacementData = $objClass -> $strFunctionName($strReference,$arrParameters);
 
 					}elseif(array_key_exists('instance',$arrExtensions[$strType])){
 
 						$resClass = \Twist\Core\Classes\Instance::retrieveObject($arrExtensions[$strType]['instance']);
 						$strFunctionName = $arrExtensions[$strType]['function'];
 
-						$strReplacementData = $resClass -> $strFunctionName($strReference);
+						$strReplacementData = $resClass -> $strFunctionName($strReference,$arrParameters);
 
 					}elseif(array_key_exists('function',$arrExtensions[$strType])){
 
+						//@note Does not accept the params array at the moment, may deprecate this option
 						$strFunctionName = $arrExtensions[$strType]['function'];
 						$strReplacementData = call_user_func($strFunctionName,$strReference);
 					}else{
