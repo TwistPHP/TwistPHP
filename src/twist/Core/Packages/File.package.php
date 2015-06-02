@@ -30,7 +30,6 @@ use \Twist\Core\Classes\BasePackage;
  */
 class File extends BasePackage{
 
-	protected $resTemplate = null;
 	protected $strAssetDirectory = null;
 	protected $arrDelayedFileStorage = array();
 	protected $arrContentTypes = array();
@@ -39,9 +38,6 @@ class File extends BasePackage{
 	 * Load up an instance of the template class for when it is required
 	 */
 	public function __construct(){
-		$this->resTemplate = \Twist::View('pkgFile');
-		$this->resTemplate->setDirectory( sprintf('%s/file/',TWIST_FRAMEWORK_VIEWS));
-
 		$jsonContentTypes = file_get_contents(sprintf('%sCore/Data/file/content-types.json',TWIST_FRAMEWORK));
 		$this->arrContentTypes = json_decode($jsonContentTypes,true);
 
@@ -897,7 +893,7 @@ class File extends BasePackage{
 				//Store a temp session for js output
 				\Twist::Cache()->write('asset-js-include',1,0);
 
-				$strOut = $this->resTemplate->build('upload.tpl',$arrTags);
+				$strOut = \Twist::View()->build(sprintf('%s/file/upload.tpl',TWIST_FRAMEWORK_VIEWS),$arrTags);
 				break;
 
 			case 'upload-html':
@@ -915,7 +911,7 @@ class File extends BasePackage{
 				//Store a temp session for js output
 				\Twist::Cache()->write('asset-js-include',1,0);
 
-				$strOut = $this->resTemplate->build('upload-html.tpl',$arrTags);
+				$strOut = \Twist::View()->build(sprintf('%s/file/upload-html.tpl',TWIST_FRAMEWORK_VIEWS),$arrTags);
 				break;
 
 			case 'upload-init':
@@ -928,7 +924,7 @@ class File extends BasePackage{
 					'function' => ($strReference === 'asset-upload-init') ? 'asset' : 'file'
 				);
 
-				$strOut = $this->resTemplate->build('upload-init.tpl',$arrTags);
+				$strOut = \Twist::View()->build(sprintf('%s/file/upload-init.tpl',TWIST_FRAMEWORK_VIEWS),$arrTags);
 				break;
 
 			case 'upload-js':
@@ -937,7 +933,7 @@ class File extends BasePackage{
 				$strOut = '';
 
 				if(is_null(\Twist::Cache()->read('asset-js-include'))){
-					$strOut = $this->resTemplate->build('upload-js.tpl');
+					$strOut = \Twist::View()->build(sprintf('%s/file/upload-js.tpl',TWIST_FRAMEWORK_VIEWS));
 
 					//Store a temp session for js output
 					\Twist::Cache()->write('asset-js-include',1,0);
@@ -948,5 +944,4 @@ class File extends BasePackage{
 
 		return $strOut;
 	}
-
 }
