@@ -871,7 +871,10 @@ class File extends BasePackage{
 
 			$arrTypes = array();
 			foreach($arrParameters['accept'] as $strFileExtension){
-				$arrTypes[] = $this->mimeType($strFileExtension);
+				$strMimeType = $this->mimeType($strFileExtension);
+
+				//Use as key to avoid duplication
+				$arrTypes[$strMimeType] = $strMimeType;
 			}
 
 			$strAccept = sprintf(' accept="%s"',implode(',',$arrTypes));

@@ -35,8 +35,7 @@ class Validate extends BasePackage{
 	/**
 	 * Get a validator object, form here you can define all your validator checks and then test your data against the checks
 	 *
-	 * @return_object Validator core/packages/models/Validator/Validator.model.php
-	 * @return object Returns an object of the Validator tool
+	 * @return Validator Returns an object of the Validator tool
 	 */
 	public function createTest(){
 		return new Validator();
