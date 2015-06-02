@@ -38,7 +38,7 @@ class Resources extends BaseController{
 			$this->_fallback();
 		}
 
-		header('Content-Type: '.\Twist::File()->contentType($strResourcePath));
+		header('Content-Type: '.\Twist::File()->mimeType($strResourcePath));
 
 		return file_get_contents($strResourcePath);
 	}

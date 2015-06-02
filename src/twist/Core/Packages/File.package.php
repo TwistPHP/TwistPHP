@@ -33,6 +33,7 @@ class File extends BasePackage{
 	protected $resTemplate = null;
 	protected $strAssetDirectory = null;
 	protected $arrDelayedFileStorage = array();
+	protected $arrContentTypes = array();
 
 	/**
 	 * Load up an instance of the template class for when it is required
@@ -40,6 +41,9 @@ class File extends BasePackage{
 	public function __construct(){
 		$this->resTemplate = \Twist::View('pkgFile');
 		$this->resTemplate->setDirectory( sprintf('%s/file/',TWIST_FRAMEWORK_VIEWS));
+
+		$jsonContentTypes = file_get_contents(sprintf('%sCore/Data/file/content-types.json',TWIST_FRAMEWORK));
+		$this->arrContentTypes = json_decode($jsonContentTypes,true);
 
 		//Register the delayed write shutdown function
 		\Twist::framework()->register()->shutdownEvent('delayed-file-write','Twist::File','writeDelayedFiles');
@@ -159,65 +163,56 @@ class File extends BasePackage{
 	}
 
 	/**
-	 * Get the content type of a file by its file extension.
+	 * Get the mime type of a file by its file extension.
 	 *
 	 * @param $dirFile Full path to file including file name
 	 * @return string Returns the content type
 	 */
-	public function contentType($dirFile){
+	public function mimeType($dirFile){
 
-		$strFileExtension = $this->extension($dirFile);
+		$strOut = '';
+		$strFileExtension = strtolower((!strstr($dirFile,'.')) ? $dirFile : $this->extension($dirFile));
 
-		$arrMimeTypes = array(
-			'txt' => 'text/plain',
-			'htm' => 'text/html',
-			'html' => 'text/html',
-			'php' => 'text/html',
-			'css' => 'text/css',
-			'js' => 'application/javascript',
-			'json' => 'application/json',
-			'xml' => 'application/xml',
-			'swf' => 'application/x-shockwave-flash',
-			'flv' => 'video/x-flv',
-			// images
-			'png' => 'image/png',
-			'jpe' => 'image/jpeg',
-			'jpeg' => 'image/jpeg',
-			'jpg' => 'image/jpeg',
-			'gif' => 'image/gif',
-			'bmp' => 'image/bmp',
-			'ico' => 'image/vnd.microsoft.icon',
-			'tiff' => 'image/tiff',
-			'tif' => 'image/tiff',
-			'svg' => 'image/svg+xml',
-			'svgz' => 'image/svg+xml',
-			// archives
-			'zip' => 'application/zip',
-			'rar' => 'application/x-rar-compressed',
-			'exe' => 'application/x-msdownload',
-			'msi' => 'application/x-msdownload',
-			'cab' => 'application/vnd.ms-cab-compressed',
-			// audio/video
-			'mp3' => 'audio/mpeg',
-			'qt' => 'video/quicktime',
-			'mov' => 'video/quicktime',
-			// adobe
-			'pdf' => 'application/pdf',
-			'psd' => 'image/vnd.adobe.photoshop',
-			'ai' => 'application/postscript',
-			'eps' => 'application/postscript',
-			'ps' => 'application/postscript',
-			// ms office
-			'doc' => 'application/msword',
-			'rtf' => 'application/rtf',
-			'xls' => 'application/vnd.ms-excel',
-			'ppt' => 'application/vnd.ms-powerpoint',
-			// open office
-			'odt' => 'application/vnd.oasis.opendocument.text',
-			'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
-		);
+		foreach($this->arrContentTypes as $strType => $mxdData){
+			if(array_key_exists($strFileExtension,$mxdData['extensions'])){
+				$strOut = $mxdData['extensions'][$strFileExtension]['mine'];
+				break;
+			}
+		}
 
-		return (array_key_exists($strFileExtension,$arrMimeTypes)) ? $arrMimeTypes[$strFileExtension] : 'application/octet-stream';
+		return ($strOut == '') ? 'application/octet-stream' : $strOut;
+	}
+
+	/**
+	 * Get file details by path or extension
+	 * @param $dirFile
+	 * @return array
+	 */
+	public function mimeTypeInfo($dirFile){
+
+		$arrOut = array();
+		$strFileExtension = strtolower((!strstr($dirFile,'.')) ? $dirFile : $this->extension($dirFile));
+
+		foreach($this->arrContentTypes as $strType => $mxdData){
+			if(array_key_exists($strFileExtension,$mxdData['extensions'])){
+
+				$arrOut = $mxdData['extensions'][$strFileExtension];
+				$arrOut['icon'] = $mxdData['icon'];
+				$arrOut['name'] = $mxdData['name'];
+				break;
+			}
+		}
+
+		return $arrOut;
+	}
+
+	/**
+	 * Get all mime type information or mime type for a selected type i.e document, spreadsheet, archive
+	 * @param null $strType
+	 * @return array|mixed
+	 */
+	public function mimeTypes($strType = null){
+		return (!is_null($strType)) ? $this->arrContentTypes[$strType] : $this->arrContentTypes;
 	}
 
 	/**
@@ -828,16 +823,17 @@ class File extends BasePackage{
 	 * upload-init
 	 * upload-js
 	 *
-	 * Parameter Order:
+	 * There is no required order for the parameters
 	 * {file:upload}
-	 * {file:upload,name}
-	 * {file:upload,name,multiple}
-	 * {file:upload,name,multiple,id}
+	 * {file:upload,name=myname}
+	 * {file:upload,name=myname,multiple=1}
+	 * {file:upload,name=myname,multiple=1,id=myid}
 	 *
 	 * Parameter Contents:
 	 * name = string
 	 * multiple = 0|1
 	 * id = unique string
+	 * types = pipe separated string of file extensions
 	 *
 	 * Parameter Defaults:
 	 * name = file
@@ -847,64 +843,52 @@ class File extends BasePackage{
 	 * @param $strReference
 	 * @return string
 	 */
-	public function viewExtension($strReference){
+	public function viewExtension($strReference,$arrParameters = array()){
 
-		$strOut = '';
-		$arrParams = array(
-			'reference' => $strReference,
-			'uri' => '/upload',
+		$strOut = $strAccept = '';
+
+		$arrDefaultParams = array(
+			'uri' => (substr($strReference,0,5) == 'asset') ? '/upload/asset' : '/upload/file',
 			'name' => 'file',
 			'id' => uniqid(),
-			'multiple' => 0
+			'multiple' => 0,
+			'accept' => ''
 		);
 
-		if(strstr($strReference,',')){
+		$arrParameters = \Twist::framework()->tools()->arrayMergeRecursive($arrDefaultParams,$arrParameters);
 
-			$arrTempParams = explode(',',$strReference);
-			$arrParams['reference'] = $arrTempParams[0];
-
-			switch($arrParams['reference']){
-
-				case 'upload':
-				case 'upload-html':
-				case 'upload-init':
-				case 'upload-js':
-					$arrParams['uri'] = '/upload/file';
-					break;
-
-				case 'asset-upload':
-				case 'asset-upload-html':
-				case 'asset-upload-init':
-				case 'asset-upload-js':
-					$arrParams['uri'] = '/upload/asset';
-					break;
-			}
-
-			if(count($arrTempParams) > 1) {
-	            $arrParams['uri'] = $arrTempParams[1];
-	            if(count($arrTempParams) > 2) {
-	                $arrParams['name'] = $arrTempParams[2];
-	                if(count($arrTempParams) > 3) {
-	                    $arrParams['id'] = $arrTempParams[3];
-	                    if(count($arrTempParams) > 4) {
-		                    $arrParams['multiple'] = $arrTempParams[4];
-	                    }
-	                }
-	            }
-	        }
+		//Now update the URI if only relative is passed in
+		if(substr($arrDefaultParams['uri'],0,1) == '/'){
+			$arrDefaultParams['uri'] = sprintf('/upload/%s',$arrDefaultParams['uri']);
 		}
 
-		switch($arrParams['reference']){
+		//Get the mime types of the
+		if(count($arrParameters['accept']) || $arrParameters['accept'] != ''){
+
+			if(!is_array($arrParameters['accept'])){
+				$arrParameters['accept'] = array($arrParameters['accept']);
+			}
+
+			$arrTypes = array();
+			foreach($arrParameters['accept'] as $strFileExtension){
+				$arrTypes[] = $this->mimeType($strFileExtension);
+			}
+
+			$strAccept = sprintf(' accept="%s"',implode(',',$arrTypes));
+		}
+
+		switch($strReference){
 
 			case 'upload':
 			case 'asset-upload':
 
 				$arrTags = array(
-					'uniqid' => $arrParams['id'],
-					'name' => $arrParams['name'],
-					'uri' => $arrParams['uri'],
+					'uniqid' => $arrParameters['id'],
+					'name' => $arrParameters['name'],
+					'uri' => $arrParameters['uri'],
 					'include-js' => (is_null(\Twist::Cache()->read('asset-js-include'))) ? 1 : 0,
-					'multiple' => ($arrParams['multiple'] == 1 || $arrParams['multiple'] === 'true') ? 1 : 0
+					'multiple' => ($arrParameters['multiple'] == 1 || $arrParameters['multiple'] === 'true') ? 1 : 0,
+					'accept' => $strAccept
 				);
 
 				//Store a temp session for js output
@@ -917,11 +901,12 @@ class File extends BasePackage{
 			case 'asset-upload-html':
 
 				$arrTags = array(
-					'uniqid' => $arrParams['id'],
-					'name' => $arrParams['name'],
-					'uri' => $arrParams['uri'],
+					'uniqid' => $arrParameters['id'],
+					'name' => $arrParameters['name'],
+					'uri' => $arrParameters['uri'],
 					'include-js' => (is_null(\Twist::Cache()->read('asset-js-include'))) ? 1 : 0,
-	                'multiple' => ($arrParams['multiple'] == 1 || $arrParams['multiple'] === 'true') ? 1 : 0
+					'multiple' => ($arrParameters['multiple'] == 1 || $arrParameters['multiple'] === 'true') ? 1 : 0,
+					'accept' => $strAccept
 				);
 
 				//Store a temp session for js output
@@ -934,10 +919,10 @@ class File extends BasePackage{
 			case 'asset-upload-init':
 
 				$arrTags = array(
-					'uniqid' => $arrParams['id'],
-					'name' => $arrParams['name'],
-					'uri' => $arrParams['uri'],
-					'function' => ($arrParams['reference'] === 'asset-upload-init') ? 'asset' : 'file'
+					'uniqid' => $arrParameters['id'],
+					'name' => $arrParameters['name'],
+					'uri' => $arrParameters['uri'],
+					'function' => ($strReference === 'asset-upload-init') ? 'asset' : 'file'
 				);
 
 				$strOut = $this->resTemplate->build('upload-init.tpl',$arrTags);
