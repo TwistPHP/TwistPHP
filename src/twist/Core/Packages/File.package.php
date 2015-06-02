@@ -471,8 +471,7 @@ class File extends BasePackage{
 				'name' => '',
 				'size' => 0,
 				'path' => '',
-			),
-			'preview' => ''
+			)
 		);
 
 		//Create an upload directory for uploaded files

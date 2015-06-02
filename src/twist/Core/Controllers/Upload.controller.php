@@ -60,6 +60,11 @@ class Upload extends BaseController{
 			$arrOut = \Twist::File()->uploadPUT();
 		}
 
+		$arrOut['uri'] = str_replace(TWIST_DOCUMENT_ROOT,'',$arrOut['file']['path']);
+
+		//Value to be posted in a form for this file type
+		$arrOut['form_value'] = $arrOut['uri'];
+
 		return json_encode($arrOut);
 	}
 
@@ -68,7 +73,7 @@ class Upload extends BaseController{
 		$arrOut = json_decode($this->file(),true);
 
 		//Now if the file upload was successful process the asset (if required)
-		if($arrOut['status'] && (array_key_exists('HTTP_TWIST_PROCESS',$_SERVER) && $_SERVER['HTTP_TWIST_PROCESS'] === 'asset' || array_key_exists('twist_process',$_GET) && $_GET['twist_process'] === 'asset')){
+		if($arrOut['status']){
 
 			$intAssetID = \Twist::Asset()->add($arrOut['file']['path'],1);
 			$arrAsset = \Twist::Asset()->get($intAssetID);
@@ -78,6 +83,9 @@ class Upload extends BaseController{
 			$arrOut['support'] = $arrAsset['support'];
 			$arrOut['type'] = $arrAsset['type']['slug'];
 			$arrOut['asset_id'] = $intAssetID;
+
+			//Value to be posted in a form for this file type
+			$arrOut['form_value'] = $intAssetID;
 		}
 
 		return json_encode($arrOut);
