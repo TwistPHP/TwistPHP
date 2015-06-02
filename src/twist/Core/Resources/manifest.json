@@ -108,7 +108,7 @@
 		"standard": {
 			"default": true,
 			"css": [],
-			"js": ["js/file-upload.min.js"]
+			"js": ["js/file-upload.js"]
 		}
 	},
 	"twist/manager": {

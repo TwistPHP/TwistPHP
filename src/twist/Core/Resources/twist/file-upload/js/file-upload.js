@@ -52,6 +52,7 @@
 				try {
 					var thisUploader = this;
 
+					thisUploader.accept = [],
 					thisUploader.created = ( new Date() ).getTime(),
 					thisUploader.cancelUpload = function( e ) {
 							e.preventDefault();
@@ -128,164 +129,179 @@
 
 							if( thisUploader.queue.length ) {
 								var resFile = thisUploader.queue[0],
-								strFileName = resFile.name,
-								intFileSize = parseInt( resFile.size ),
-								resFileReader = new FileReader( { blob: true } );
+										strFileName = resFile.name,
+										strFileType = resFile.type,
+										intFileSize = parseInt( resFile.size ),
+										resFileReader = new FileReader( { blob: true } ),
+										blAcceptedType = !thisUploader.accept.length;
 
-								thisUploader.showProgress();
-
-								if( thisUploader.domCount ) {
-									thisUploader.domCount.innerText = thisUploader.queueUploadedCount + 1;
+								if( !blAcceptedType ) {
+									for( var intType in thisUploader.accept ) {
+										if( strFileType.match( new RegExp( '^' + thisUploader.accept[intType] + '$' ) ) ) {
+											blAcceptedType = true;
+											break;
+										}
+									}
 								}
 
-								if( thisUploader.queueCount === 1 ) {
-									if( thisUploader.domProgress ) {
-										thisUploader.domProgress.removeAttribute( 'value' );
+								if( blAcceptedType ) {
+									thisUploader.showProgress();
+
+									if( thisUploader.domCount ) {
+										thisUploader.domCount.innerText = thisUploader.queueUploadedCount + 1;
 									}
 
-									if( thisUploader.domCountWrapper ) {
-										thisUploader.domCountWrapper.style.display = 'none';
-									}
-								} else if( thisUploader.domCountWrapper ) {
-									thisUploader.domCountWrapper.style.display = thisUploader.domCountWrapperDisplay;
-								}
+									if( thisUploader.queueCount === 1 ) {
+										if( thisUploader.domProgress ) {
+											thisUploader.domProgress.removeAttribute( 'value' );
+										}
 
-								resFileReader.addEventListener( 'load',
-									function( e ) {
-										thisUploader.request.onreadystatechange = function() {
-												switch( thisUploader.request.status ) {
-													case 200:
-														if( thisUploader.request.readyState == 4 ) {
-															log( 'Uploaded ' + strFileName + ' (' + prettySize( intFileSize ) + ')' );
+										if( thisUploader.domCountWrapper ) {
+											thisUploader.domCountWrapper.style.display = 'none';
+										}
+									} else if( thisUploader.domCountWrapper ) {
+										thisUploader.domCountWrapper.style.display = thisUploader.domCountWrapperDisplay;
+									}
+
+									resFileReader.addEventListener( 'load',
+										function( e ) {
+											thisUploader.request.onreadystatechange = function() {
+													switch( thisUploader.request.status ) {
+														case 200:
+															if( thisUploader.request.readyState == 4 ) {
+																log( 'Uploaded ' + strFileName + ' (' + prettySize( intFileSize ) + ')' );
+
+																thisUploader.queue.shift();
+																thisUploader.queueUploadedCount++;
+																thisUploader.queueUploadedSize += intFileSize;
+
+																if( thisUploader.queue.length ) {
+																	thisUploader.settings.oncompletefile( resFile, JSON.parse( thisUploader.request.responseText ) );
+
+																	thisUploader.upload();
+																} else {
+																	thisUploader.hideProgress();
+
+																	if( thisUploader.settings.clearoncomplete ) {
+																		thisUploader.domInput.value = '';
+
+																		if( thisUploader.domInput.value ) {
+																			thisUploader.domInput.type = 'text';
+																			thisUploader.domInput.type = 'file';
+																		}
+																	}
+
+																	log( 'Finsihed uploading ' + thisUploader.queueUploadedCount + ' files (' + prettySize( thisUploader.queueUploadedSize ) + ')', 'info' );
+																	thisUploader.queueCount = 0;
+																	thisUploader.queueSize = 0;
+																	thisUploader.queueUploadedCount = 0;
+																	thisUploader.queueUploadedSize = 0;
+
+																	thisUploader.settings.oncompletefile( resFile, JSON.parse( thisUploader.request.responseText ) );
+																	thisUploader.settings.oncompletequeue();
+																}
+															}
+															break;
+
+														case 403:
+															log( 'Permission denied', 'error' );
 
 															thisUploader.queue.shift();
-															thisUploader.queueUploadedCount++;
-															thisUploader.queueUploadedSize += intFileSize;
+															thisUploader.queueCount--;
+															thisUploader.queueSize--;
+
+															thisUploader.settings.onerror( resFile );
 
 															if( thisUploader.queue.length ) {
-																thisUploader.settings.oncompletefile( resFile, JSON.parse( thisUploader.request.responseText ) );
-
 																thisUploader.upload();
 															} else {
 																thisUploader.hideProgress();
+															}
+															break;
 
-																if( thisUploader.settings.clearoncomplete ) {
-																	thisUploader.domInput.value = '';
+														case 404:
+															log( 'Invalid function call', 'error' );
 
-																	if( thisUploader.domInput.value ) {
-																		thisUploader.domInput.type = 'text';
-																		thisUploader.domInput.type = 'file';
-																	}
-																}
+															thisUploader.queue.shift();
+															thisUploader.queueCount--;
+															thisUploader.queueSize--;
 
-																log( 'Finsihed uploading ' + thisUploader.queueUploadedCount + ' files (' + prettySize( thisUploader.queueUploadedSize ) + ')', 'info' );
-																thisUploader.queueCount = 0;
-																thisUploader.queueSize = 0;
-																thisUploader.queueUploadedCount = 0;
-																thisUploader.queueUploadedSize = 0;
+															thisUploader.settings.onerror( resFile );
 
-																thisUploader.settings.oncompletefile( resFile, JSON.parse( thisUploader.request.responseText ) );
-																thisUploader.settings.oncompletequeue();
+															if( thisUploader.queue.length ) {
+																thisUploader.upload();
+															} else {
+																thisUploader.hideProgress();
+															}
+															break;
+													}
+												},
+											thisUploader.request.onprogress = function( e ) {
+													if( e.lengthComputable ) {
+														if( thisUploader.domProgress ) {
+															var intPercentage = Math.round( ( e.loaded / e.total ) * 100 );
+															thisUploader.domProgress.value = intPercentage;
+
+															if( thisUploader.settings.verbose ) {
+																log( prettySize( e.loaded ) + '/' + prettySize( e.total ) + ' (' + intPercentage + '%)' );
 															}
 														}
-														break;
 
-													case 403:
-														log( 'Permission denied', 'error' );
-
-														thisUploader.queue.shift();
-														thisUploader.queueCount--;
-														thisUploader.queueSize--;
-
-														thisUploader.settings.onerror( resFile );
-
-														if( thisUploader.queue.length ) {
-															thisUploader.upload();
-														} else {
-															thisUploader.hideProgress();
-														}
-														break;
-
-													case 404:
-														log( 'Invalid function call', 'error' );
-
-														thisUploader.queue.shift();
-														thisUploader.queueCount--;
-														thisUploader.queueSize--;
-
-														thisUploader.settings.onerror( resFile );
-
-														if( thisUploader.queue.length ) {
-															thisUploader.upload();
-														} else {
-															thisUploader.hideProgress();
-														}
-														break;
-												}
-											},
-										thisUploader.request.onprogress = function( e ) {
-												if( e.lengthComputable ) {
-													if( thisUploader.domProgress ) {
-														var intPercentage = Math.round( ( e.loaded / e.total ) * 100 );
-														thisUploader.domProgress.value = intPercentage;
-
-														if( thisUploader.settings.verbose ) {
-															log( prettySize( e.loaded ) + '/' + prettySize( e.total ) + ' (' + intPercentage + '%)' );
-														}
+														thisUploader.settings.onprogress( resFile, e.loaded, e.total );
 													}
+												},
+											thisUploader.request.upload.onprogress = thisUploader.request.onprogress,
+											thisUploader.request.addEventListener( 'load',
+												function() {}, false
+											),
+											thisUploader.request.addEventListener( 'error',
+												function() {
+													if( thisUploader.queue.length ) {
+														thisUploader.hideProgress();
 
-													thisUploader.settings.onprogress( resFile, e.loaded, e.total );
-												}
-											},
-										thisUploader.request.upload.onprogress = thisUploader.request.onprogress,
-										thisUploader.request.addEventListener( 'load',
-											function() {}, false
-										),
-										thisUploader.request.addEventListener( 'error',
-											function() {
-												if( thisUploader.queue.length ) {
-													thisUploader.hideProgress();
+														thisUploader.queue = [];
+														thisUploader.queueCount = 0;
+														thisUploader.queueSize = 0;
+														thisUploader.queueUploadedCount = 0;
+														thisUploader.queueUploadedSize = 0;
 
-													thisUploader.queue = [];
-													thisUploader.queueCount = 0;
-													thisUploader.queueSize = 0;
-													thisUploader.queueUploadedCount = 0;
-													thisUploader.queueUploadedSize = 0;
+														thisUploader.settings.onerror( resFile );
 
-													thisUploader.settings.onerror( resFile );
+														log( 'An error occurred', 'error' );
+													}
+												}, false
+											),
+											thisUploader.request.addEventListener( 'abort',
+												function() {
+													if( thisUploader.queue.length ) {
+														thisUploader.hideProgress();
 
-													log( 'An error occurred', 'error' );
-												}
-											}, false
-										),
-										thisUploader.request.addEventListener( 'abort',
-											function() {
-												if( thisUploader.queue.length ) {
-													thisUploader.hideProgress();
+														thisUploader.queue = [];
+														thisUploader.queueCount = 0;
+														thisUploader.queueSize = 0;
+														thisUploader.queueUploadedCount = 0;
+														thisUploader.queueUploadedSize = 0;
 
-													thisUploader.queue = [];
-													thisUploader.queueCount = 0;
-													thisUploader.queueSize = 0;
-													thisUploader.queueUploadedCount = 0;
-													thisUploader.queueUploadedSize = 0;
+														thisUploader.settings.onabort( resFile );
 
-													thisUploader.settings.onabort( resFile );
+														log( 'Upload aborted', 'warning' );
+													}
+												}, false
+											),
+											thisUploader.request.open( 'PUT', thisUploader.uri, true ),
+											thisUploader.request.setRequestHeader( 'Accept', '"text/plain; charset=iso-8859-1", "Content-Type": "text/plain; charset=iso-8859-1"' ),
+											thisUploader.request.setRequestHeader( 'Twist-File', strFileName ),
+											thisUploader.request.setRequestHeader( 'Twist-Length', intFileSize ),
+											thisUploader.request.setRequestHeader( 'Twist-UID', thisUploader.uid ),
+											thisUploader.request.send( resFileReader.result );
+										}, false
+									);
 
-													log( 'Upload aborted', 'warning' );
-												}
-											}, false
-										),
-										thisUploader.request.open( 'PUT', thisUploader.uri, true ),
-										thisUploader.request.setRequestHeader( 'Accept', '"text/plain; charset=iso-8859-1", "Content-Type": "text/plain; charset=iso-8859-1"' ),
-										thisUploader.request.setRequestHeader( 'Twist-File', strFileName ),
-										thisUploader.request.setRequestHeader( 'Twist-Length', intFileSize ),
-										thisUploader.request.setRequestHeader( 'Twist-UID', thisUploader.uid ),
-										//thisUploader.request.setRequestHeader( 'Twist-Process', thisUploader.process ),
-										thisUploader.request.send( resFileReader.result );
-									}, false
-								);
-
-								resFileReader.readAsArrayBuffer( resFile );
+									resFileReader.readAsArrayBuffer( resFile );
+								} else {
+									log( strFileType + ' not permitted', 'error' );
+									alert( 'This file type is not permitted' );
+								}
 							}
 						},
 					thisUploader.uri = '/' + strUri.replace( /^\//, '' ).replace( /\/$/, '' );
@@ -311,6 +327,11 @@
 						thisUploader.hideProgress();
 					} else {
 						throw 'No element exists with the id="' + strInputID + '"';
+					}
+
+					var strAccept = thisUploader.domInput.getAttribute( 'accept' );
+					if( strAccept ) {
+						thisUploader.accept = strAccept.replace( '/', '\\/' ).replace( '*', '.*' ).split( ',' );
 					}
 
 					return thisUploader;
