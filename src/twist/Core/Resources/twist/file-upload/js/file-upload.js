@@ -33,6 +33,19 @@
 						}
 					}
 				},
+				hasClass = function( domElement, strClass ) {
+						return domElement.className.indexOf( strClass ) !== -1;
+					},
+				addClass = function( domElement, strClass ) {
+						if( !hasClass( domElement, strClass ) ) {
+							domElement.className += ' ' + strClass;
+						}
+					},
+				removeClass = function( domElement, strClass ) {
+						if( hasClass( domElement, strClass ) ) {
+							domElement.className = domElement.className.replace( new RegExp( '^' + strClass + '$', 'g' ), '' ).replace( new RegExp( '^' + strClass + ' ', 'g' ), '' ).replace( new RegExp( ' ' + strClass + '$', 'g' ), '' ).replace( new RegExp( ' ' + strClass + ' ', 'g' ), ' ' );
+						}
+					},
 				prettySize = function( intBytes ) {
 					var arrLimits = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
 							intLimit = 0;
@@ -65,8 +78,6 @@
 					if( uploadSupported ) {
 						try {
 							var thisUploader = this;
-
-							strInputID = 'twistupload-' + strInputID;
 
 							thisUploader.accept = [],
 									thisUploader.created = ( new Date() ).getTime(),
@@ -133,6 +144,7 @@
 										clearoncomplete: true,
 										counter: true,
 										debug: false,
+										dragdrop: null,
 										onabort: function() {},
 										onclear: function() {},
 										oncompletefile: function() {},
@@ -151,7 +163,7 @@
 										thisUploader.domInput.style.display = 'none';
 
 										if( thisUploader.domProgressWrapper ) {
-											thisUploader.domProgressWrapper.style.display = this.domInputDisplay;
+											thisUploader.domProgressWrapper.style.display = thisUploader.domInputDisplay;
 										}
 
 										if( thisUploader.domCancelUpload ) {
@@ -159,10 +171,14 @@
 										}
 									},
 									thisUploader.uid = strInputID,
-									thisUploader.upload = function( e ) {
+									thisUploader.upload = function( e, arrFiles ) {
 										if( e ) {
-											var domCaller = e.target || e.srcElement,
-													resFiles = domCaller.files;
+											if( !arrFiles ) {
+												var domCaller = e.target || e.srcElement,
+														resFiles = domCaller.files;
+											} else {
+												resFiles = arrFiles;
+											}
 
 											thisUploader.queue.push.apply( thisUploader.queue, resFiles );
 											thisUploader.queueCount += resFiles.length;
@@ -247,7 +263,7 @@
 																			if( thisUploader.queue.length ) {
 																				thisUploader.uploaded.push( jsonResponse.form_value );
 
-																				thisUploader.settings.oncompletefile( resFile, jsonResponse );
+																				thisUploader.settings.oncompletefile( jsonResponse, resFile );
 
 																				thisUploader.upload();
 																			} else {
@@ -268,7 +284,7 @@
 
 																				thisUploader.uploaded.push( jsonResponse.form_value );
 
-																				thisUploader.settings.oncompletefile( resFile, jsonResponse );
+																				thisUploader.settings.oncompletefile( jsonResponse, resFile );
 
 																				thisUploader.domPseudo.value = thisUploader.uploaded.join( ',' );
 
@@ -413,11 +429,42 @@
 							thisUploader.domCancelUpload.style.display = 'none';
 							thisUploader.domClearUpload.style.display = 'none';
 
+							if( thisUploader.settings.dragdrop !== null ) {
+								var domDrop = document.getElementById( thisUploader.settings.dragdrop );
+
+								if( domDrop ) {
+									domDrop.ondrop = function( e ) {
+											e.preventDefault();
+											thisUploader.upload( e, e.target.files || e.dataTransfer.files );
+
+											removeClass( domDrop, 'hover' ),
+											removeClass( domDrop, 'droppable' );
+										},
+									domDrop.ondragstart = function() {
+											addClass( domDrop, 'droppable' );
+											return false;
+										},
+									domDrop.ondragover = function() {
+											addClass( domDrop, 'hover' );
+											return false;
+										},
+									domDrop.ondragleave = function() {
+											removeClass( domDrop, 'hover' );
+											return false;
+										},
+									domDrop.ondragend = function() {
+											removeClass( domDrop, 'hover' ),
+											removeClass( domDrop, 'droppable' );
+											return false;
+										};
+								}
+							}
+
 							if( thisUploader.domInput ) {
-								thisUploader.domInput.addEventListener( 'change', this.upload );
+								thisUploader.domInput.addEventListener( 'change', thisUploader.upload );
 								thisUploader.hideProgress();
 							} else {
-								throw 'No element exists with the id="' + strInputID + '"';
+								throw 'No element exists with id="' + strInputID + '"';
 							}
 
 							var strAccept = thisUploader.domInput.getAttribute( 'accept' );
