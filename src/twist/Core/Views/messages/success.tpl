@@ -1,1 +1,1 @@
-<p class="callout {data:type}">{data:message}</p>
+<p class="{data:type}">{data:message}</p>
