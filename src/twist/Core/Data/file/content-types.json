@@ -657,10 +657,6 @@
 	},
 	"other": {
 		"extensions": {
-			"": {
-				"name": "Pretty Good Privacy",
-				"mine": "application\/pgp-encrypted"
-			},
 			"aab": {
 				"name": "Adobe (Macropedia) Authorware - Binary File",
 				"mine": "application\/x-authorware-bin"

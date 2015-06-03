@@ -858,13 +858,14 @@ class File extends BasePackage{
 		}
 
 		//Get the mime types of the
-		if(count($arrParameters['accept']) || $arrParameters['accept'] != ''){
+		if((is_array($arrParameters['accept']) && count($arrParameters['accept'])) || $arrParameters['accept'] != ''){
 
 			if(!is_array($arrParameters['accept'])){
 				$arrParameters['accept'] = array($arrParameters['accept']);
 			}
 
 			$arrTypes = array();
+
 			foreach($arrParameters['accept'] as $strFileExtension){
 				$strMimeType = $this->mimeType($strFileExtension);
 
