@@ -7,7 +7,8 @@
 	<label>Password</label>
 	<input type="password" name="password" placeholder="Password" tabindex="2">
 	<p><a href="?forgotten">Forgotten your password?</a></p>
-	<label>Keep me logged in</label><input type="checkbox" name="remember" value="1" tabindex="3">
+	<label>Keep me logged in</label>
+	<input type="checkbox" name="remember" value="1" tabindex="3">
 	<button type="submit" tabindex="4">Log In</button>
 	<div class="clear"></div>
 </form>
