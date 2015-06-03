@@ -150,8 +150,7 @@
 										oncompletefile: function() {},
 										oncompletequeue: function() {},
 										onerror: function() {},
-										onprogress: function() {},
-										verbose: false
+										onprogress: function() {}
 									},
 									thisUploader.showClear = function() {
 										if( thisUploader.domClearUpload ) {
@@ -332,9 +331,7 @@
 																		var intPercentage = Math.round( ( e.loaded / e.total ) * 100 );
 																		thisUploader.domProgress.value = intPercentage;
 
-																		if( thisUploader.settings.verbose ) {
-																			log( prettySize( e.loaded ) + '/' + prettySize( e.total ) + ' (' + intPercentage + '%)' );
-																		}
+																		log( prettySize( e.loaded ) + '/' + prettySize( e.total ) + ' (' + intPercentage + '%)' );
 																	}
 
 																	thisUploader.settings.onprogress( resFile, e.loaded, e.total );
