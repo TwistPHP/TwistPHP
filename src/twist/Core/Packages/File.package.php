@@ -162,21 +162,26 @@ class File extends BasePackage{
 	 * Get the mime type of a file by its file extension.
 	 *
 	 * @param $dirFile Full path to file including file name
+	 * @param $blReturnDefaultOnly If multiple types available return as array
 	 * @return string Returns the content type
 	 */
-	public function mimeType($dirFile){
+	public function mimeType($dirFile,$blReturnDefaultOnly = true){
 
-		$strOut = '';
+		$mxdOut = null;
 		$strFileExtension = strtolower((!strstr($dirFile,'.')) ? $dirFile : $this->extension($dirFile));
 
 		foreach($this->arrContentTypes as $strType => $mxdData){
 			if(array_key_exists($strFileExtension,$mxdData['extensions'])){
-				$strOut = $mxdData['extensions'][$strFileExtension]['mine'];
+				$mxdOut = array($mxdData['extensions'][$strFileExtension]['mine']);
 				break;
 			}
 		}
 
-		return ($strOut == '') ? 'application/octet-stream' : $strOut;
+		if(!is_null($mxdOut) && strstr($mxdOut[0],',')){
+			$mxdOut = explode(',',$mxdOut[0]);
+		}
+
+		return (is_null($mxdOut)) ? 'application/octet-stream' : ($blReturnDefaultOnly) ? $mxdOut[0] : $mxdOut;
 	}
 
 	/**
@@ -867,7 +872,7 @@ class File extends BasePackage{
 			$arrTypes = array();
 
 			foreach($arrParameters['accept'] as $strFileExtension){
-				$strMimeType = $this->mimeType($strFileExtension);
+				$strMimeType = implode(',',$this->mimeType($strFileExtension,false));
 
 				//Use as key to avoid duplication
 				$arrTypes[$strMimeType] = $strMimeType;

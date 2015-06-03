@@ -2445,7 +2445,7 @@
 		"extensions": {
 			"csv": {
 				"name": "Comma-Seperated Values",
-				"mine": "text\/csv"
+				"mine": "text\/csv,text\/comma-separated-values,text\/x-csv"
 			},
 			"ods": {
 				"name": "OpenDocument Spreadsheet",
