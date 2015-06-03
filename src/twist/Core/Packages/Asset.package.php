@@ -148,6 +148,8 @@
 			$arrNameData = explode('-',$strFileName);
 			unset($arrNameData[0]);
 
+			$arrAsset['path'] = sprintf('%s%s',TWIST_APP_ASSETS,$arrAsset['data']);
+			$arrAsset['uri'] = str_replace(TWIST_DOCUMENT_ROOT,'',$arrAsset['path']);
 			$arrAsset['filename'] = $strFileName;
 			$arrAsset['original_filename'] = implode('-',$arrNameData);
 
@@ -448,7 +450,7 @@
 					);
 				}
 
-				$strAssetPath = str_replace(TWIST_DOCUMENT_ROOT,'',$strAssetPath);
+				$strAssetPath = ltrim(str_replace(TWIST_APP_ASSETS,'',$strAssetPath),'/');
 
 			}elseif(strstr($mxdData,'http://') || strstr($mxdData,'https://') || strstr($mxdData,'ftp://') || strstr($mxdData,'smb://') || strstr($mxdData,'mailto:')){
 				//Youtube video or link
