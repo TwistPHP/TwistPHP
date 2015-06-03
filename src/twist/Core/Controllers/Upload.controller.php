@@ -60,7 +60,15 @@ class Upload extends BaseController{
 			$arrOut = \Twist::File()->uploadPUT();
 		}
 
+		//Get info about the file type
+		$arrInfo = \Twist::File()->mimeTypeInfo($arrOut['file']['path']);
+
 		$arrOut['uri'] = str_replace(TWIST_DOCUMENT_ROOT,'',$arrOut['file']['path']);
+		$arrOut['uri_preview'] = $arrInfo['icon'];
+		$arrOut['uri_icon'] = $arrOut['icon'];
+
+		//Output the file type
+		$arrOut['file_type'] = $arrInfo['name'];
 
 		//Value to be posted in a form for this file type
 		$arrOut['form_value'] = $arrOut['uri'];
@@ -78,14 +86,23 @@ class Upload extends BaseController{
 			$intAssetID = \Twist::Asset()->add($arrOut['file']['path'],1);
 			$arrAsset = \Twist::Asset()->get($intAssetID);
 
+			//Get info about the file type
+			$arrInfo = \Twist::File()->mimeTypeInfo($arrOut['file']['path']);
+
 			//Add 2 additional parameters to the output
 			$arrOut['uri'] = $arrAsset['data'];
-			$arrOut['support'] = $arrAsset['support'];
-			$arrOut['type'] = $arrAsset['type']['slug'];
-			$arrOut['asset_id'] = $intAssetID;
+			$arrOut['uri_preview'] = $arrInfo['icon'];
+			$arrOut['uri_icon'] = $arrOut['icon'];
+
+			//Output the file type
+			$arrOut['file_type'] = $arrInfo['name'];
 
 			//Value to be posted in a form for this file type
 			$arrOut['form_value'] = $intAssetID;
+
+			//Additional data that only Assets returns
+			$arrOut['support'] = $arrAsset['support'];
+			$arrOut['asset_id'] = $intAssetID;
 		}
 
 		return json_encode($arrOut);
