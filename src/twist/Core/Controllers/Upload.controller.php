@@ -65,7 +65,7 @@ class Upload extends BaseController{
 
 		$arrOut['uri'] = str_replace(TWIST_DOCUMENT_ROOT,'',$arrOut['file']['path']);
 		$arrOut['uri_preview'] = $arrInfo['icon'];
-		$arrOut['uri_icon'] = $arrOut['icon'];
+		$arrOut['uri_icon'] = $arrInfo['icon'];
 
 		//Output the file type
 		$arrOut['file_type'] = $arrInfo['name'];
@@ -92,7 +92,7 @@ class Upload extends BaseController{
 			//Add 2 additional parameters to the output
 			$arrOut['uri'] = $arrAsset['data'];
 			$arrOut['uri_preview'] = $arrInfo['icon'];
-			$arrOut['uri_icon'] = $arrOut['icon'];
+			$arrOut['uri_icon'] = $arrInfo['icon'];
 
 			//Output the file type
 			$arrOut['file_type'] = $arrInfo['name'];

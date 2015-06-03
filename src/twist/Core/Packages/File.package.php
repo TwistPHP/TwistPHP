@@ -193,7 +193,7 @@ class File extends BasePackage{
 			if(array_key_exists($strFileExtension,$mxdData['extensions'])){
 
 				$arrOut = $mxdData['extensions'][$strFileExtension];
-				$arrOut['icon'] = $mxdData['icon'];
+				$arrOut['icon'] = sprintf('/%sCore/Resources/%s',ltrim(TWIST_FRAMEWORK_URI,'/'),$mxdData['icon']);
 				$arrOut['name'] = $mxdData['name'];
 				break;
 			}
