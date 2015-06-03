@@ -2827,7 +2827,7 @@
 			},
 			"sql": {
 				"name": "Structured Query Langauge",
-				"mine": "text\/plain"
+				"mine": "text\/x-sql,text\/sql"
 			},
 			"xhtml": {
 				"name": "XHTML - The Extensible HyperText Markup Language",

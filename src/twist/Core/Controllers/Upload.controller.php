@@ -52,10 +52,10 @@ class Upload extends BaseController{
 		}
 	}
 
-	public function file(){
+	public function file($strFileKey = null,$intIndex = null){
 
 		if(is_array($_FILES) && count($_FILES)){
-			$arrOut = \Twist::File()->upload('');
+			$arrOut = \Twist::File()->upload($strFileKey,null,$intIndex);
 		}else{
 			$arrOut = \Twist::File()->uploadPUT();
 		}
@@ -76,9 +76,9 @@ class Upload extends BaseController{
 		return json_encode($arrOut);
 	}
 
-	public function asset(){
+	public function asset($strFileKey = null,$intIndex = null){
 
-		$arrOut = json_decode($this->file(),true);
+		$arrOut = json_decode($this->file($strFileKey,$intIndex),true);
 
 		//Now if the file upload was successful process the asset (if required)
 		if($arrOut['status']){
@@ -90,7 +90,7 @@ class Upload extends BaseController{
 			$arrInfo = \Twist::File()->mimeTypeInfo($arrOut['file']['path']);
 
 			//Add 2 additional parameters to the output
-			$arrOut['uri'] = $arrAsset['data'];
+			$arrOut['uri'] = $arrAsset['uri'];
 			$arrOut['uri_preview'] = $arrInfo['icon'];
 			$arrOut['uri_icon'] = $arrInfo['icon'];
 

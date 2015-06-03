@@ -104,6 +104,25 @@
 			return array_key_exists($strReturnKey, $this->arrRoute) ? $this->arrRoute[$strReturnKey] : $this->arrRoute;
 		}
 
+		public function _upload($strFileKey,$strType = 'file'){
+
+			$arrOut = array();
+
+			if(count($_FILES) && array_key_exists($strFileKey,$_FILES)){
+				$resUpload = new \Twist\Core\Controllers\Upload();
+
+				if(count($_FILES[$strFileKey]['name'])){
+					foreach($_FILES[$strFileKey]['name'] as $intKey => $mxdValue){
+						$arrOut[] = json_decode($resUpload->$strType($strFileKey,$intKey),true);
+					}
+				}else{
+					$arrOut = json_decode($resUpload->$strType($strFileKey),true);
+				}
+			}
+
+			return $arrOut;
+		}
+
 		final public function _404(){
 			return $this->_error(404);
 		}
