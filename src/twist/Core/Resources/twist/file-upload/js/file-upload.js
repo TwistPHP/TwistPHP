@@ -171,228 +171,246 @@
 									},
 									thisUploader.uid = strInputID,
 									thisUploader.upload = function( e, arrFiles ) {
-										if( e ) {
-											if( !arrFiles ) {
-												var domCaller = e.target || e.srcElement,
-														resFiles = domCaller.files;
-											} else {
-												resFiles = arrFiles;
-											}
-
-											thisUploader.queue.push.apply( thisUploader.queue, resFiles );
-											thisUploader.queueCount += resFiles.length;
-
-											for( var intFile = 0, intFiles = resFiles.length; intFile < intFiles; intFile++ ) {
-												thisUploader.queueSize += parseInt( resFiles[intFile].size );
-											}
-
-											if( thisUploader.domCountTotal ) {
-												thisUploader.domCountTotal.innerText = thisUploader.queueCount;
-											}
-
-											log( 'Added ' + resFiles.length + ' files to the queue', 'info' );
-										}
-
-										if( thisUploader.domCancelUploadDisplay === null ) {
-											thisUploader.domCancelUploadDisplay = thisUploader.domCancelUpload.style.display || 'inline-block';
-										}
-
-										if( thisUploader.domCancelUploadDisplay === null ) {
-											thisUploader.domClearUploadDisplay = thisUploader.domClearUpload.style.display || 'inline-block';
-										}
-
-										if( thisUploader.domCancelUploadDisplay === null ) {
-											thisUploader.domCountWrapperDisplay = thisUploader.domCountWrapper.style.display || 'inline-block';
-										}
-
-										if( thisUploader.domCancelUploadDisplay === null ) {
-											thisUploader.domInputDisplay = thisUploader.domInput.style.display || 'inline-block';
-										}
-
-										if( thisUploader.queue.length ) {
-											var resFile = thisUploader.queue[0],
-													strFileName = resFile.name,
-													strFileType = resFile.type,
-													intFileSize = parseInt( resFile.size ),
-													resFileReader = new FileReader( {blob: true} ),
-													blAcceptedType = !thisUploader.accept.length;
-
-											if( !blAcceptedType ) {
-												for( var intType in thisUploader.accept ) {
-													if( strFileType.match( new RegExp( '^' + thisUploader.accept[intType] + '$' ) ) ) {
-														blAcceptedType = true;
-														break;
-													}
-												}
-											}
-
-											if( blAcceptedType ) {
-												thisUploader.showProgress();
-
-												if( thisUploader.domCount ) {
-													thisUploader.domCount.innerText = thisUploader.queueUploadedCount + 1;
+										try {
+											if( e ) {
+												if( !arrFiles ) {
+													var domCaller = e.target || e.srcElement,
+															resFiles = domCaller.files;
+												} else {
+													resFiles = arrFiles;
 												}
 
-												if( thisUploader.queueCount === 1 ) {
-													if( thisUploader.domProgress ) {
-														thisUploader.domProgress.removeAttribute( 'value' );
-													}
+												thisUploader.queue.push.apply( thisUploader.queue, resFiles );
+												thisUploader.queueCount += resFiles.length;
 
-													if( thisUploader.domCountWrapper ) {
-														thisUploader.domCountWrapper.style.display = 'none';
-													}
-												} else if( thisUploader.domCountWrapper ) {
-													thisUploader.domCountWrapper.style.display = thisUploader.domCountWrapperDisplay;
+												for( var intFile = 0, intFiles = resFiles.length; intFile < intFiles; intFile++ ) {
+													thisUploader.queueSize += parseInt( resFiles[intFile].size );
 												}
 
-												resFileReader.addEventListener( 'load',
-														function( e ) {
-															thisUploader.request.onreadystatechange = function() {
-																switch( thisUploader.request.status ) {
-																	case 200:
-																		if( thisUploader.request.readyState == 4 ) {
-																			log( 'Uploaded ' + strFileName + ' (' + prettySize( intFileSize ) + ')' );
+												if( thisUploader.domCountTotal ) {
+													thisUploader.domCountTotal.innerText = thisUploader.queueCount;
+												}
 
-																			thisUploader.queue.shift();
-																			thisUploader.queueUploadedCount++;
-																			thisUploader.queueUploadedSize += intFileSize;
+												log( 'Added ' + resFiles.length + ' files to the queue', 'info' );
 
-																			var jsonResponse = JSON.parse( thisUploader.request.responseText );
+												if( thisUploader.domCancelUploadDisplay === null ) {
+													thisUploader.domCancelUploadDisplay = thisUploader.domCancelUpload.style.display || 'inline-block';
+												}
 
+												if( thisUploader.domClearUploadDisplay === null ) {
+													thisUploader.domClearUploadDisplay = thisUploader.domClearUpload.style.display || 'inline-block';
+												}
+
+												if( thisUploader.domCountWrapperDisplay === null ) {
+													thisUploader.domCountWrapperDisplay = thisUploader.domCountWrapper.style.display || 'inline-block';
+												}
+
+												if( thisUploader.domInputDisplay === null ) {
+													thisUploader.domInputDisplay = thisUploader.domInput.style.display || 'inline-block';
+												}
+
+												if( thisUploader.queue.length ) {
+													var resFile = thisUploader.queue[0],
+															strFileName = resFile.name,
+															strFileType = resFile.type,
+															intFileSize = parseInt( resFile.size ),
+															resFileReader = new FileReader( {blob: true} ),
+															blAcceptedType = !thisUploader.accept.length;
+
+													log( resFile.type );
+
+													if( !blAcceptedType ) {
+														for( var intType in thisUploader.accept ) {
+															if( new RegExp( '^' + thisUploader.accept[intType] + '$', 'gi' ).test( strFileType ) ) {
+																blAcceptedType = true;
+																break;
+															}
+														}
+													}
+
+													if( blAcceptedType ) {
+														thisUploader.showProgress();
+
+														if( thisUploader.domCount ) {
+															thisUploader.domCount.innerText = thisUploader.queueUploadedCount + 1;
+														}
+
+														if( thisUploader.queueCount === 1 ) {
+															if( thisUploader.domProgress ) {
+																thisUploader.domProgress.removeAttribute( 'value' );
+															}
+
+															if( thisUploader.domCountWrapper ) {
+																thisUploader.domCountWrapper.style.display = 'none';
+															}
+														} else if( thisUploader.domCountWrapper ) {
+															thisUploader.domCountWrapper.style.display = thisUploader.domCountWrapperDisplay;
+														}
+
+														resFileReader.addEventListener( 'load',
+																function( e ) {
+																	thisUploader.request.onreadystatechange = function() {
+																		switch( thisUploader.request.status ) {
+																			case 200:
+																				if( thisUploader.request.readyState == 4 ) {
+																					log( 'Uploaded ' + strFileName + ' (' + prettySize( intFileSize ) + ')' );
+
+																					thisUploader.queue.shift();
+																					thisUploader.queueUploadedCount++;
+																					thisUploader.queueUploadedSize += intFileSize;
+
+																					var jsonResponse = JSON.parse( thisUploader.request.responseText );
+
+																					if( thisUploader.queue.length ) {
+																						thisUploader.uploaded.push( jsonResponse.form_value );
+
+																						thisUploader.settings.oncompletefile( jsonResponse, resFile );
+
+																						thisUploader.upload();
+																					} else {
+																						thisUploader.hideProgress();
+
+																						log( 'Finsihed uploading ' + thisUploader.queueUploadedCount + ' files (' + prettySize( thisUploader.queueUploadedSize ) + ')', 'info' );
+																						thisUploader.queueCount = 0;
+																						thisUploader.queueSize = 0;
+																						thisUploader.queueUploadedCount = 0;
+																						thisUploader.queueUploadedSize = 0;
+
+																						if( thisUploader.settings.clearoncomplete ) {
+																							thisUploader.clearInput();
+																							thisUploader.hideClear();
+																						} else {
+																							thisUploader.showClear();
+																						}
+
+																						thisUploader.uploaded.push( jsonResponse.form_value );
+
+																						thisUploader.settings.oncompletefile( jsonResponse, resFile );
+
+																						thisUploader.domPseudo.value = thisUploader.uploaded.join( ',' );
+
+																						thisUploader.settings.oncompletequeue();
+																					}
+																				}
+																				break;
+
+																			case 403:
+																				log( 'Permission denied', 'error' );
+
+																				thisUploader.queue.shift();
+																				thisUploader.queueCount--;
+																				thisUploader.queueSize--;
+
+																				thisUploader.settings.onerror( resFile );
+
+																				if( thisUploader.queue.length ) {
+																					thisUploader.upload();
+																				} else {
+																					thisUploader.hideProgress();
+																				}
+																				break;
+
+																			case 404:
+																				log( 'Invalid function call', 'error' );
+
+																				thisUploader.queue.shift();
+																				thisUploader.queueCount--;
+																				thisUploader.queueSize--;
+
+																				thisUploader.settings.onerror( resFile );
+
+																				if( thisUploader.queue.length ) {
+																					thisUploader.upload();
+																				} else {
+																					thisUploader.hideProgress();
+																				}
+																				break;
+																		}
+																	},
+																	thisUploader.request.onprogress = function( e ) {
+																		if( e.lengthComputable ) {
+																			if( thisUploader.domProgress ) {
+																				var intPercentage = Math.round( ( e.loaded / e.total ) * 100 );
+																				thisUploader.domProgress.value = intPercentage;
+
+																				log( prettySize( e.loaded ) + '/' + prettySize( e.total ) + ' (' + intPercentage + '%)' );
+																			}
+
+																			thisUploader.settings.onprogress( resFile, e.loaded, e.total );
+																		}
+																	},
+																	thisUploader.request.upload.onprogress = thisUploader.request.onprogress,
+																	thisUploader.request.addEventListener( 'load',
+																		function() {}, false
+																	),
+																	thisUploader.request.addEventListener( 'error',
+																		function() {
 																			if( thisUploader.queue.length ) {
-																				thisUploader.uploaded.push( jsonResponse.form_value );
-
-																				thisUploader.settings.oncompletefile( jsonResponse, resFile );
-
-																				thisUploader.upload();
-																			} else {
 																				thisUploader.hideProgress();
 
-																				log( 'Finsihed uploading ' + thisUploader.queueUploadedCount + ' files (' + prettySize( thisUploader.queueUploadedSize ) + ')', 'info' );
+																				thisUploader.queue = [];
 																				thisUploader.queueCount = 0;
 																				thisUploader.queueSize = 0;
 																				thisUploader.queueUploadedCount = 0;
 																				thisUploader.queueUploadedSize = 0;
 
-																				if( thisUploader.settings.clearoncomplete ) {
-																					thisUploader.clearInput();
-																					thisUploader.hideClear();
-																				} else {
-																					thisUploader.showClear();
-																				}
+																				thisUploader.settings.onerror( resFile );
 
-																				thisUploader.uploaded.push( jsonResponse.form_value );
-
-																				thisUploader.settings.oncompletefile( jsonResponse, resFile );
-
-																				thisUploader.domPseudo.value = thisUploader.uploaded.join( ',' );
-
-																				thisUploader.settings.oncompletequeue();
+																				log( 'An error occurred', 'error' );
 																			}
-																		}
-																		break;
+																		}, false
+																	),
+																	thisUploader.request.addEventListener( 'abort',
+																		function() {
+																			if( thisUploader.queue.length ) {
+																				thisUploader.hideProgress();
 
-																	case 403:
-																		log( 'Permission denied', 'error' );
+																				thisUploader.queue = [];
+																				thisUploader.queueCount = 0;
+																				thisUploader.queueSize = 0;
+																				thisUploader.queueUploadedCount = 0;
+																				thisUploader.queueUploadedSize = 0;
 
-																		thisUploader.queue.shift();
-																		thisUploader.queueCount--;
-																		thisUploader.queueSize--;
+																				thisUploader.settings.onabort( resFile );
 
-																		thisUploader.settings.onerror( resFile );
-
-																		if( thisUploader.queue.length ) {
-																			thisUploader.upload();
-																		} else {
-																			thisUploader.hideProgress();
-																		}
-																		break;
-
-																	case 404:
-																		log( 'Invalid function call', 'error' );
-
-																		thisUploader.queue.shift();
-																		thisUploader.queueCount--;
-																		thisUploader.queueSize--;
-
-																		thisUploader.settings.onerror( resFile );
-
-																		if( thisUploader.queue.length ) {
-																			thisUploader.upload();
-																		} else {
-																			thisUploader.hideProgress();
-																		}
-																		break;
-																}
-															},
-															thisUploader.request.onprogress = function( e ) {
-																if( e.lengthComputable ) {
-																	if( thisUploader.domProgress ) {
-																		var intPercentage = Math.round( ( e.loaded / e.total ) * 100 );
-																		thisUploader.domProgress.value = intPercentage;
-
-																		log( prettySize( e.loaded ) + '/' + prettySize( e.total ) + ' (' + intPercentage + '%)' );
-																	}
-
-																	thisUploader.settings.onprogress( resFile, e.loaded, e.total );
-																}
-															},
-															thisUploader.request.upload.onprogress = thisUploader.request.onprogress,
-															thisUploader.request.addEventListener( 'load',
-																function() {}, false
-															),
-															thisUploader.request.addEventListener( 'error',
-																function() {
-																	if( thisUploader.queue.length ) {
-																		thisUploader.hideProgress();
-
-																		thisUploader.queue = [];
-																		thisUploader.queueCount = 0;
-																		thisUploader.queueSize = 0;
-																		thisUploader.queueUploadedCount = 0;
-																		thisUploader.queueUploadedSize = 0;
-
-																		thisUploader.settings.onerror( resFile );
-
-																		log( 'An error occurred', 'error' );
-																	}
+																				log( 'Upload aborted', 'warning' );
+																			}
+																		}, false
+																	),
+																	thisUploader.request.open( 'PUT', thisUploader.uri, true ),
+																	thisUploader.request.setRequestHeader( 'Accept', '"text/plain; charset=iso-8859-1", "Content-Type": "text/plain; charset=iso-8859-1"' ),
+																	thisUploader.request.setRequestHeader( 'Twist-File', strFileName ),
+																	thisUploader.request.setRequestHeader( 'Twist-Length', intFileSize ),
+																	thisUploader.request.setRequestHeader( 'Twist-UID', thisUploader.uid ),
+																	thisUploader.request.send( resFileReader.result );
 																}, false
-															),
-															thisUploader.request.addEventListener( 'abort',
-																function() {
-																	if( thisUploader.queue.length ) {
-																		thisUploader.hideProgress();
+														);
 
-																		thisUploader.queue = [];
-																		thisUploader.queueCount = 0;
-																		thisUploader.queueSize = 0;
-																		thisUploader.queueUploadedCount = 0;
-																		thisUploader.queueUploadedSize = 0;
+														resFileReader.readAsArrayBuffer( resFile );
+													} else {
+														thisUploader.queue.shift();
+														thisUploader.domInput.value = '';
 
-																		thisUploader.settings.onabort( resFile );
+														log( strFileType + ' not permitted', 'warn' );
+														alert( 'This file type is not permitted' );
 
-																		log( 'Upload aborted', 'warning' );
-																	}
-																}, false
-															),
-															thisUploader.request.open( 'PUT', thisUploader.uri, true ),
-															thisUploader.request.setRequestHeader( 'Accept', '"text/plain; charset=iso-8859-1", "Content-Type": "text/plain; charset=iso-8859-1"' ),
-															thisUploader.request.setRequestHeader( 'Twist-File', strFileName ),
-															thisUploader.request.setRequestHeader( 'Twist-Length', intFileSize ),
-															thisUploader.request.setRequestHeader( 'Twist-UID', thisUploader.uid ),
-															thisUploader.request.send( resFileReader.result );
-														}, false
-												);
-
-												resFileReader.readAsArrayBuffer( resFile );
-											} else {
-												log( strFileType + ' not permitted', 'error' );
-												alert( 'This file type is not permitted' );
-
-												thisUploader.domInput.value = '';
-
-												thisUploader.clearInput();
+														thisUploader.clearInput();
+													}
+												}
 											}
+										} catch( err ) {
+											thisUploader.hideProgress();
+
+											thisUploader.queue = [];
+											thisUploader.queueCount = 0;
+											thisUploader.queueSize = 0;
+											thisUploader.queueUploadedCount = 0;
+											thisUploader.queueUploadedSize = 0;
+
+											thisUploader.settings.onerror( resFile );
+											thisUploader.settings.onabort( resFile );
+
+											log( err, 'error' );
 										}
 									},
 									thisUploader.uploaded = [];
@@ -469,7 +487,7 @@
 								thisUploader.accept = strAccept.replace( '/', '\\/' ).replace( '*', '.*' ).split( ',' );
 							}
 
-							thisUploader.domPseudo.name = thisUploader.domInput.name;
+							thisUploader.domPseudo.name = thisUploader.domInput.name.replace( '[]', '' );
 							thisUploader.domInput.removeAttribute( 'name' );
 
 							return thisUploader;
