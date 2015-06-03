@@ -154,7 +154,7 @@
 
 			$this->arrMessages[] = array(
 				'type' => $strType,
-				'html' => $this->_view(sprintf('%s/messages/%s.tpl',TWIST_FRAMEWORK_VIEWS,$strType),array('type' => $strType,'message' => $strMessage))
+				'html' => $this->_view(sprintf('%smessages/%s.tpl',TWIST_FRAMEWORK_VIEWS,$strType),array('type' => $strType,'message' => $strMessage))
 			);
 
 			$arrOut = array( 'all' => '','error' => '','warning' => '','notice' => '','success' => '' );

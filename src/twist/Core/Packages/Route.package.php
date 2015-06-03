@@ -1008,8 +1008,10 @@ class Route extends BasePackage{
 					}
 				}
 
-				//Merge in all the registered aliases if any exist
-				$arrControllerFunctions = array_merge($arrControllerFunctions, $arrAliases);
+				//Update the request if an alias has been registered
+				if(array_key_exists($strControllerFunction,$arrAliases)){
+					$strControllerFunction = $arrAliases[$strControllerFunction];
+				}
 
 				$strRequestMethodFunction = (substr($strControllerFunction,0,1) == '_') ? sprintf('_%s%s', strtolower($_SERVER['REQUEST_METHOD']), ltrim(strtolower($strControllerFunction),'_')) : sprintf('%s%s', strtolower($_SERVER['REQUEST_METHOD']), strtolower($strControllerFunction));
 				$strControllerFunction = strtolower($strControllerFunction);

@@ -1,0 +1,1 @@
+<p class="callout {data:type}">{data:message}</p>
