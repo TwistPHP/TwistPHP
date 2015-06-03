@@ -9,5 +9,5 @@
 		<a href="#" id="twistupload-{data:uniqid}-cancel" class="twistupload-cancel">Cancel</a>
 	</div>
 	<div id="twistupload-{data:uniqid}-list"></div>
-	{template:./upload-js.tpl}
+	{view:./upload-js.tpl}
 </div>

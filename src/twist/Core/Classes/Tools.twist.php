@@ -169,7 +169,7 @@
 
 			foreach( $arrSecondary as $strKey => $mxdValue ) {
 
-				if( array_key_exists( $strKey, $arrPrimary ) ) {
+				if( is_array($arrPrimary) && array_key_exists( $strKey, $arrPrimary ) ) {
 
 					if( is_array( $mxdValue ) ) {
 

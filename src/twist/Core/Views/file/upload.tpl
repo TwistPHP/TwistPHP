@@ -1,2 +1,2 @@
-{template:./upload-html.tpl}
-{template:./upload-init.tpl}
+{view:./upload-html.tpl}
+{view:./upload-init.tpl}
