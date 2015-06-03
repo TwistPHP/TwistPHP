@@ -38,6 +38,7 @@
 		var $root = null;
 		var $ignored_names = null;
 
+		protected $blTempFile = false;
 		protected $strHandler = 'native';
 		protected $resHandler = null;
 		protected $dirZipFile = null;
@@ -65,8 +66,15 @@
 		 * Create a new empty archive ready to have files and directories added
 		 * @param $dirZipArchive Full path for the new Zip archive, the Archive will be created here
 		 */
-		public function create($dirZipArchive){
-			$this->dirZipFile = $dirZipArchive;
+		public function create($dirZipArchive = null){
+
+			if(is_null($dirZipArchive)){
+				$this->dirZipFile = sprintf('%s/twist-temp-archive-%s.zip',sys_get_temp_dir(),time());
+				$this->blTempFile = true;
+			}else{
+				$this->dirZipFile = $dirZipArchive;
+			}
+
 			$this->resHandler->create($this->dirZipFile);
 		}
 
@@ -161,16 +169,31 @@
 
 		/**
 		 * Finish and save the archive
+		 * If a temp file a new save file must be passed in otherwise the temp file will be deleted
 		 */
-		public function save(){
+		public function save($dirSaveFile = null){
+
 			$this->resHandler->close();
+
+			if($this->blTempFile){
+				if(!is_null($dirSaveFile)){
+					\Twist::File()->move($this->dirZipFile,$dirSaveFile);
+				}else{
+					unlink($this->dirZipFile);
+				}
+			}
 		}
 
 		/**
 		 * Serve the newly created archive to the browser, this will allow the user to download the Archive to there computer
+		 * Temp files are deleted upon serve
 		 */
-		public function serve(){
-			\Twist::File()->serve($this->dirZipFile);
+		public function serve($strFileName = null){
+
+			//Save and close
+			$this->resHandler->close();
+
+			\Twist::File()->serve($this->dirZipFile,$strFileName,null,null,null,$this->blTempFile);
 		}
 
 		/**

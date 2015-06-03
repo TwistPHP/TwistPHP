@@ -1052,6 +1052,8 @@ class Route extends BasePackage{
 		\Twist::recordEvent('Routes Prepared');
 
 		$arrRoute = $this->current();
+		$arrRoute['request_method'] = strtoupper($_SERVER['REQUEST_METHOD']);
+
 		if (count($arrRoute)) {
 
 			//First of all check for a package interface and do that

@@ -231,6 +231,14 @@
 		"options":"",
 		"null":0
 	},
+	"ARCHIVE_HANDLER":{
+		"title":"Archive Handling Library",
+		"description":"Set the library that will handle the creation for archive libraries",
+		"default":"native",
+		"type":"options",
+		"options":"native,pclzip",
+		"null":0
+	},
 	"EMAIL_MULTIPART_ENCODING":{
 		"title":"Default Encoding",
 		"description":"Set the default encoding type to use when sending emails",
