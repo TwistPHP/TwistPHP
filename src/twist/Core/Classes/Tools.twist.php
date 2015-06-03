@@ -337,7 +337,7 @@
 				array_pop( $arrCurrentParts );
 				$urlCurrentURI = implode( '/', $arrCurrentParts );
 
-				$urlOut = sprintf( '/%s/%s', $urlCurrentURI, substr( $urlRelativePath, 2 ) );
+				$urlOut = ($urlCurrentURI == '') ? sprintf( '/%s', substr( $urlRelativePath, 2 ) ) : sprintf( '/%s/%s', $urlCurrentURI, substr( $urlRelativePath, 2 ) );
 
 			} elseif( substr( $urlRelativePath, 0, 3 ) === '../' ) {
 
@@ -367,7 +367,7 @@
 
 				//CHILD
 				$urlOutTemp = trim( $urlOut, '/' );
-				$urlOut = sprintf( '/%s/%s', $urlCurrentURI, $urlOutTemp );
+				$urlOut = ($urlCurrentURI == '') ? sprintf( '/%s', $urlOutTemp ) : sprintf( '/%s/%s', $urlCurrentURI, $urlOutTemp );
 			}
 
 			//Otherwise do a full redirect
