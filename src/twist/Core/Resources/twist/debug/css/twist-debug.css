@@ -221,7 +221,8 @@
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   -webkit-transition: top ease 800ms;
   transition: top ease 800ms;
-  z-index: 1337; }
+  z-index: 1337;
+  /* ===================================================== TEMP ===================================================== */ }
   #twist-debug-details.show {
     top: 0; }
   #twist-debug-details > a {
@@ -481,5 +482,59 @@
         bottom: 10px;
         border-right: 1px #000 solid;
         content: ""; }
+  #twist-debug-details pre,
+  #twist-debug-details code {
+    margin-bottom: 1em;
+    display: block;
+    font-family: "Courier New", Courier, monospace, mono;
+    line-height: 1.25;
+    font-weight: 400;
+    white-space: pre-wrap; }
+  #twist-debug-details pre {
+    font-size: 1.33em; }
+  #twist-debug-details code {
+    font-size: 1em; }
+  #twist-debug-details code,
+  #twist-debug-details pre.code {
+    position: relative;
+    overflow: auto;
+    color: #212121;
+    white-space: pre;
+    border: 1px #E0E0E0 solid; }
+  #twist-debug-details pre.code {
+    padding: 1em;
+    background-color: #FFF;
+    border: 1px #E0E0E0 solid;
+    border-left-width: 0;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1); }
+    #twist-debug-details pre.code em {
+      font-style: normal;
+      background-color: #FFF59D;
+      box-shadow: 0 0 0 1px #FFF59D; }
+    #twist-debug-details pre.code[title] {
+      padding-top: 3em; }
+      #twist-debug-details pre.code[title]::before {
+        padding: 0.25em 0.75em;
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        font-weight: 700;
+        line-height: 1.5;
+        white-space: nowrap;
+        content: attr(title); }
+    #twist-debug-details pre.code[lang]::after {
+      height: 1.5em;
+      padding: 0 0.5em;
+      position: absolute;
+      top: 0.25em;
+      right: 0.25em;
+      line-height: 1.5;
+      text-transform: uppercase;
+      content: attr(lang); }
+    #twist-debug-details pre.code[lang][title]::after {
+      padding: 0;
+      right: 0.75em;
+      background-color: transparent; }
 
 /*# sourceMappingURL=twist-debug.css.map */
