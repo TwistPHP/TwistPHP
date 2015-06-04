@@ -80,6 +80,7 @@
 							var thisUploader = this;
 
 							thisUploader.accept = [],
+							thisUploader.acceptRaw = [],
 									thisUploader.created = ( new Date() ).getTime(),
 									thisUploader.cancelUpload = function( e ) {
 										e.preventDefault();
@@ -105,7 +106,6 @@
 									thisUploader.domCancelUpload = document.getElementById( strInputID + '-cancel' ),
 									thisUploader.domCancelUploadDisplay = null,
 									thisUploader.domClearUpload = document.getElementById( strInputID + '-clear' ),
-									thisUploader.domClearUploadDisplay = null,
 									thisUploader.domCount = document.getElementById( strInputID + '-count' ),
 									thisUploader.domCountWrapper = document.getElementById( strInputID + '-count-wrapper' ),
 									thisUploader.domCountWrapperDisplay = null,
@@ -154,7 +154,7 @@
 									},
 									thisUploader.showClear = function() {
 										if( thisUploader.domClearUpload ) {
-											thisUploader.domClearUpload.style.display = thisUploader.domClearUploadDisplay;
+											thisUploader.domClearUpload.style.display = this.domInputDisplay;
 											thisUploader.domClearUpload.addEventListener( 'click', thisUploader.clearInput );
 										}
 									},
@@ -195,10 +195,6 @@
 
 												if( thisUploader.domCancelUploadDisplay === null ) {
 													thisUploader.domCancelUploadDisplay = thisUploader.domCancelUpload.style.display || 'inline-block';
-												}
-
-												if( thisUploader.domClearUploadDisplay === null ) {
-													thisUploader.domClearUploadDisplay = thisUploader.domClearUpload.style.display || 'inline-block';
 												}
 
 												if( thisUploader.domCountWrapperDisplay === null ) {
@@ -262,7 +258,11 @@
 																					var jsonResponse = JSON.parse( thisUploader.request.responseText );
 
 																					if( thisUploader.queue.length ) {
-																						thisUploader.uploaded.push( jsonResponse.form_value );
+																						if( thisUploader.multiple ) {
+																							thisUploader.uploaded.push( jsonResponse.form_value );
+																						} else {
+																							thisUploader.uploaded = [jsonResponse.form_value];
+																						}
 
 																						thisUploader.settings.oncompletefile( jsonResponse, resFile );
 
@@ -283,7 +283,11 @@
 																							thisUploader.showClear();
 																						}
 
-																						thisUploader.uploaded.push( jsonResponse.form_value );
+																						if( thisUploader.multiple ) {
+																							thisUploader.uploaded.push( jsonResponse.form_value );
+																						} else {
+																							thisUploader.uploaded = [jsonResponse.form_value];
+																						}
 
 																						thisUploader.settings.oncompletefile( jsonResponse, resFile );
 
@@ -391,7 +395,7 @@
 														thisUploader.queue.shift();
 														thisUploader.domInput.value = '';
 
-														log( strFileType + ' not permitted', 'warn' );
+														log( strFileType + ' not in list of allowed types: ' + thisUploader.acceptRaw.join( ', ' ), 'warn' );
 														alert( 'This file type is not permitted' );
 
 														thisUploader.clearInput();
@@ -484,7 +488,14 @@
 
 							var strAccept = thisUploader.domInput.getAttribute( 'accept' );
 							if( strAccept ) {
-								thisUploader.accept = strAccept.replace( '/', '\\/' ).replace( '*', '.*' ).split( ',' );
+								var arrAcceptValues = strAccept.replace( / /g, '' ).split( ',' );
+
+								if( arrAcceptValues.length ) {
+									for( var intAccept in arrAcceptValues ) {
+										thisUploader.accept.push( arrAcceptValues[intAccept].replace( /\//g, '\\/' ).replace( /\*/g, '.*' ).replace( /^\.([^\*])/g, '*.$1' ) );
+										thisUploader.acceptRaw.push( arrAcceptValues[intAccept] );
+									}
+								}
 							}
 
 							thisUploader.domPseudo.name = thisUploader.domInput.name.replace( '[]', '' );
