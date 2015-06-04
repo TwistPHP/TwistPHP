@@ -830,7 +830,13 @@ class View extends BasePackage{
 
 					$strReplacementData = '';
 
-					if(array_key_exists('module',$arrExtensions[$strType])){
+					if(array_key_exists('core',$arrExtensions[$strType])){
+
+						$strClassName = $arrExtensions[$strType]['core'];
+
+						$strReplacementData = \Twist::$strClassName($strReference,$arrParameters);
+
+					}elseif(array_key_exists('module',$arrExtensions[$strType])){
 
 						$strClassName = $arrExtensions[$strType]['module'];
 						$strFunctionName = $arrExtensions[$strType]['function'];
