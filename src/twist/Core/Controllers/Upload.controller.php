@@ -26,7 +26,14 @@ use Twist\Core\Classes\BaseController;
 
 class Upload extends BaseController{
 
+	public function _construct(){
+		//TODO: Not being called?
+		\Twist::Route()->debugMode(false);
+	}
+
 	public function _default(){
+
+		\Twist::Route()->debugMode(false);
 
 		$arrRoute = $this->_route();
 
@@ -54,6 +61,8 @@ class Upload extends BaseController{
 
 	public function file($strFileKey = null,$intIndex = null){
 
+		\Twist::Route()->debugMode(false);
+
 		if(is_array($_FILES) && count($_FILES)){
 			$arrOut = \Twist::File()->upload($strFileKey,null,$intIndex);
 		}else{
@@ -77,6 +86,8 @@ class Upload extends BaseController{
 	}
 
 	public function asset($strFileKey = null,$intIndex = null){
+
+		\Twist::Route()->debugMode(false);
 
 		$arrOut = json_decode($this->file($strFileKey,$intIndex),true);
 
