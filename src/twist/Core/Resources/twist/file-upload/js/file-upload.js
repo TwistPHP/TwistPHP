@@ -79,8 +79,9 @@
 						try {
 							var thisUploader = this;
 
-							thisUploader.accept = [],
-							thisUploader.acceptRaw = [],
+							thisUploader.acceptExtentions = [],
+									thisUploader.acceptRaw = [],
+									thisUploader.acceptTypes = [],
 									thisUploader.created = ( new Date() ).getTime(),
 									thisUploader.cancelUpload = function( e ) {
 										e.preventDefault();
@@ -209,15 +210,26 @@
 													var resFile = thisUploader.queue[0],
 															strFileName = resFile.name,
 															strFileType = resFile.type,
+															strFileExtention = strFileName.substr( strFileName.lastIndexOf( '.' ) + 1 ),
 															intFileSize = parseInt( resFile.size ),
-															resFileReader = new FileReader( {blob: true} ),
-															blAcceptedType = !thisUploader.accept.length;
+															resFileReader = new FileReader( { blob: true } ),
+															blAcceptedType = !thisUploader.acceptTypes.length && !thisUploader.acceptExtentions.length;
 
-													log( resFile.type );
+													log( strFileType );
+													log( strFileExtention );
 
 													if( !blAcceptedType ) {
-														for( var intType in thisUploader.accept ) {
-															if( new RegExp( '^' + thisUploader.accept[intType] + '$', 'gi' ).test( strFileType ) ) {
+														for( var intType in thisUploader.acceptTypes ) {
+															if( new RegExp( '^' + thisUploader.acceptTypes[intType] + '$', 'gi' ).test( strFileType ) ) {
+																blAcceptedType = true;
+																break;
+															}
+														}
+													}
+
+													if( !blAcceptedType ) {
+														for( var intExtention in thisUploader.acceptExtentions ) {
+															if( strFileExtention === thisUploader.acceptExtentions[intExtention] ) {
 																blAcceptedType = true;
 																break;
 															}
@@ -395,7 +407,16 @@
 														thisUploader.queue.shift();
 														thisUploader.domInput.value = '';
 
-														log( strFileType + ' not in list of allowed types: ' + thisUploader.acceptRaw.join( ', ' ), 'warn' );
+														log( strFileName + ' (' + strFileType + ') is not in the list of allowed types', 'warn' );
+
+														if( thisUploader.acceptRaw.length ) {
+															log( 'Allowed MIME types: ' + thisUploader.acceptRaw.join( ', ' ) );
+														}
+
+														if( thisUploader.acceptExtentions.length ) {
+															log( 'Allowed file extenstions: ' + thisUploader.acceptExtentions.join( ', ' ) );
+														}
+
 														alert( 'This file type is not permitted' );
 
 														thisUploader.clearInput();
@@ -492,7 +513,12 @@
 
 								if( arrAcceptValues.length ) {
 									for( var intAccept in arrAcceptValues ) {
-										thisUploader.accept.push( arrAcceptValues[intAccept].replace( /\//g, '\\/' ).replace( /\*/g, '.*' ).replace( /^\.([^\*])/g, '*.$1' ) );
+										if( arrAcceptValues[intAccept].substr( 0, 1 ) === '.' ) {
+											thisUploader.acceptExtentions.push( arrAcceptValues[intAccept].substr( 1 ) );
+										} else {
+											thisUploader.acceptTypes.push( arrAcceptValues[intAccept].replace( /\//g, '\\/' ).replace( /\*/g, '.*' ) );
+										}
+
 										thisUploader.acceptRaw.push( arrAcceptValues[intAccept] );
 									}
 								}
