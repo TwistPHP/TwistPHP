@@ -704,7 +704,11 @@ class View extends BasePackage{
 				if(strstr($mxdItem,'=')){
 					//Update the parameters with custom values
 					list($strKey,$mxdValue) = explode('=',$mxdItem);
+					$mxdValue = $this->detectType($mxdValue);
 					$arrParameters[$strKey] = (strstr($mxdValue,'|')) ? explode('|',$mxdValue) : $mxdValue;
+				}else{
+					$mxdItem = $this->detectType($mxdItem);
+					$arrParameters[] = (strstr($mxdItem,'|')) ? explode('|',$mxdItem) : $mxdItem;
 				}
 			}
 		}

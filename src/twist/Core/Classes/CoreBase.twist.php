@@ -28,6 +28,109 @@
 		class CoreBase{
 
 			/**
+			 * Process each message as they are added and store them for the current PHP session only
+			 * @param $strMessage
+			 * @param $strKey
+			 * @param $strType
+			 */
+			protected static function messageProcess($strMessage,$strKey,$strType){
+
+				$arrMessages = \Twist::Cache()->read('twistUserMessages');
+				$arrMessages = (is_null($arrMessages)) ? array() : $arrMessages;
+
+				$strMessageKey = sprintf('%s-%s',$strKey,$strType);
+
+				if(array_key_exists($strMessageKey,$arrMessages)){
+					$arrMessages[$strMessageKey]['messages'][] = $strMessage;
+				}else{
+
+					$arrMessages[$strMessageKey] = array(
+						'type' => $strType,
+						'key' => $strKey,
+						'messages' => array($strMessage)
+					);
+				}
+
+				\Twist::Cache()->write('twistUserMessages',$arrMessages,0);
+			}
+
+			/**
+			 * Process the user messages to be output into the view
+			 *
+			 * Tag: Tag can be any one of the below but not multiple.
+			 * {messages:all|error|notice|warning|success}
+			 *
+			 * Tag Parameters:
+			 * combine - default is true (on)
+			 * key - pass in the required messages by key can be pipe (|) separated
+			 * style - determine th output styling, currently can be plain, rich or HTML
+			 *
+			 * Example Tag:
+			 * {messages:error,combine=true,key=andi|dan,style=html}
+			 *
+			 * @param $strReference
+			 * @param array $arrParameters
+			 * @return string
+			 */
+			public static function messageHandler($strReference,$arrParameters = array()){
+
+				$strOut = '';
+				$arrCombine = array();
+				$arrMessages = \Twist::Cache()->read('twistUserMessages');
+
+				//Combine is enabled by default it not passed in (combines all messages by type)
+				$blCombine = (!array_key_exists('combine',$arrParameters) || $arrParameters['combine']);
+
+				$strStyle = array_key_exists('style',$arrParameters) ? $arrParameters['style'] : null;
+				$mxdFilterByKey = array_key_exists('key',$arrParameters) ? $arrParameters['key'] : null;
+
+				if(is_array($arrMessages)){
+					foreach($arrMessages as $strUniqueKey => $arrData){
+
+						if($strReference == 'all' || $strReference == $arrData['type']){
+
+							if(is_null($mxdFilterByKey) || (is_array($mxdFilterByKey) && in_array($arrData['key'],$mxdFilterByKey)) || $mxdFilterByKey == $arrData['key']){
+
+								switch($strStyle){
+
+									case'plain':
+										$strOut .= implode("\n",$arrData['messages']);
+										break;
+
+									case'rich':
+										$strOut .= implode("<br>",$arrData['messages']);
+										break;
+
+									case'html':
+									default:
+
+										if($blCombine){
+											if(!array_key_exists($arrData['type'],$arrCombine)){
+												$arrCombine[$arrData['type']] = implode("<br>",$arrData['messages']);
+											}else{
+												$arrCombine[$arrData['type']] .= '<br>'.implode("<br>",$arrData['messages']);
+											}
+										}else{
+											$strOut .= self::View()->build(sprintf('%smessages/%s.tpl',TWIST_FRAMEWORK_VIEWS,$arrData['type']),array('key' => $arrData['key'],'type' => $arrData['type'],'message' => implode("<br>",$arrData['messages'])));
+										}
+										break;
+								}
+							}
+						}
+					}
+
+					//If we are looking at a combined output, we need to run a final process on the combined array
+					if($strOut === '' && count($arrCombine)){
+						foreach($arrCombine as $strType => $strMessage){
+							$strOut .= self::View()->build(sprintf('%smessages/%s.tpl',TWIST_FRAMEWORK_VIEWS,$strType),array('key' => '','type' => $strType,'message' => $strMessage));
+						}
+					}
+				}
+
+				return $strOut;
+			}
+
+			/**
 			 * Call 3rd parky packages in the framework located in your packages folder
 			 * Alternatively packages can be called '$resMyPackage = new Package\MyPackage();'
 			 * @param $strPackageName

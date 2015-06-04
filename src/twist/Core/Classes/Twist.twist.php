@@ -112,6 +112,10 @@
 
 				//Register the framework resources handler into the template system
 				Twist::framework() -> package() -> extend('View','resource',array('instance' => 'twistCoreResources','function' => 'viewExtension'));
+
+				//Register the framework message handler into the template system
+				\Twist::framework() -> package() -> extend('View','messages',array('core' => 'messageHandler'));
+
 				self::coreResources();
 
 				self::recordEvent('Resources prepared');
@@ -227,6 +231,42 @@
 			if(Twist::framework()->setting('ERROR_LOG')){
 				Twist::framework() -> register() -> shutdownEvent('errorLog','Twist\Core\Classes\Error','outputLog');
 			}
+		}
+
+		/**
+		 * Log an error message that can be output using the {messages:} template tag
+		 * @param $strMessage
+		 * @param null $strKey
+		 */
+		public static function errorMessage($strMessage,$strKey = null){
+			self::messageProcess($strMessage,$strKey,'error');
+		}
+
+		/**
+		 * Log an warning message that can be output using the {messages:} template tag
+		 * @param $strMessage
+		 * @param null $strKey
+		 */
+		public static function warningMessage($strMessage,$strKey = null){
+			self::messageProcess($strMessage,$strKey,'warning');
+		}
+
+		/**
+		 * Log an notice message that can be output using the {messages:} template tag
+		 * @param $strMessage
+		 * @param null $strKey
+		 */
+		public static function noticeMessage($strMessage,$strKey = null){
+			self::messageProcess($strMessage,$strKey,'notice');
+		}
+
+		/**
+		 * Log an success message that can be output using the {messages:} template tag
+		 * @param $strMessage
+		 * @param null $strKey
+		 */
+		public static function successMessage($strMessage,$strKey = null){
+			self::messageProcess($strMessage,$strKey,'success');
 		}
 
 		/**
