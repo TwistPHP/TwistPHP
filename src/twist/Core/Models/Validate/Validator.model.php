@@ -153,6 +153,11 @@ class Validator{
 	 *
 	 * Note: When checking a multi-dimensional array the key can contain '/' for eg. 'user/name' for the array $arrData['user']['name']
 	 *
+	 * Return Keys per field
+	 * status - If the field passed the test
+	 * type - Contains the type of problem encountered pass|blank|invalid|missing
+	 * message - The message contains a basic human readable description of the problem
+	 *
 	 * @param $arrData
 	 * @return array
 	 */
@@ -184,7 +189,7 @@ class Validator{
 				}
 
 				if(trim($mxdTestValue) == '' && array_key_exists('blank',$arrEachCheck) && $arrEachCheck['blank'] == 0){
-					$this->testResult($strKey,false,sprintf("%s cannot be blank",$strKey));
+					$this->testResult($strKey,false,sprintf("%s cannot be blank",$this->keyToText($strKey)),'blank');
 				}elseif(array_key_exists('type',$arrEachCheck) && in_array($arrEachCheck['type'],$this->arrTypes)){
 
 					//Call the test function and get the result
@@ -212,35 +217,40 @@ class Validator{
 							//Todo the callback update
 						}
 
-						$this->testResult($strKey,true,sprintf("%s has passed all checks",$strKey));
+						$this->testResult($strKey,true,sprintf("%s has passed all checks",$this->keyToText($strKey)));
 					}else{
-						$this->testResult($strKey,false,sprintf("%s contains incorrectly formatted data",$strKey));
+						$this->testResult($strKey,false,sprintf("%s contains incorrectly formatted data",$this->keyToText($strKey)),'invalid');
 					}
 
 				}elseif(array_key_exists('type',$arrEachCheck) && !in_array($arrEachCheck['type'],$this->arrTypes)){
-					$this->testResult($strKey,false,sprintf("invalid check type '%s' for field",$arrEachCheck['type']));
+					throw new \Exception(sprintf("%s (%s) has an invalid validation type '%s' specified.",$this->keyToText($strKey),$strKey,$arrEachCheck['type']));
 				}else{
-					$this->testResult($strKey,true,sprintf("%s has been passed in",$strKey));
+					$this->testResult($strKey,true,sprintf("%s has been passed in",$this->keyToText($strKey)));
 				}
 
 			}elseif(array_key_exists('required',$arrEachCheck) && $arrEachCheck['required'] == 0){
-				$this->testResult($strKey,true,sprintf("%s has not been passed in but is not required",$strKey));
+				$this->testResult($strKey,true,sprintf("%s has not been passed in but is not required",$this->keyToText($strKey)));
 			}else{
-				$this->testResult($strKey,false,sprintf("%s has not been passed in",$strKey));
+				$this->testResult($strKey,false,sprintf("%s has not been passed in",$this->keyToText($strKey)),'missing');
 			}
 		}
 
 		return $this->arrTestResults;
 	}
 
+	protected function keyToText($strKey){
+		return ucwords(str_replace('_',' ',$strKey));
+	}
+
 	public function success(){
 		return (count($this->arrTestResults)) ? $this->arrTestResults['status'] : false;
 	}
 
-	private function testResult($strKey,$blStatus,$strMessage){
+	private function testResult($strKey,$blStatus,$strMessage,$strErrorType = 'pass'){
 
 		$this->arrTestResults['results'][$strKey] = array(
 			'status' => $blStatus,
+			'type' => $strErrorType,
 			'message' => $strMessage
 		);
 
