@@ -872,7 +872,12 @@ class File extends BasePackage{
 			$arrTypes = array();
 
 			foreach($arrParameters['accept'] as $strFileExtension){
-				$strMimeType = implode(',',$this->mimeType($strFileExtension,false));
+
+				if(substr($strFileExtension,0,1) === '.' || strstr('/',$strFileExtension)){
+					$strMimeType = $strFileExtension;
+				}else{
+					$strMimeType = implode(',',$this->mimeType($strFileExtension,false));
+				}
 
 				//Use as key to avoid duplication
 				$arrTypes[$strMimeType] = $strMimeType;
