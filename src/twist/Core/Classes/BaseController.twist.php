@@ -111,7 +111,7 @@
 			if(count($_FILES) && array_key_exists($strFileKey,$_FILES)){
 				$resUpload = new \Twist\Core\Controllers\Upload();
 
-				if(count($_FILES[$strFileKey]['name'])){
+				if(is_array($_FILES[$strFileKey]['name'])){
 					foreach($_FILES[$strFileKey]['name'] as $intKey => $mxdValue){
 						$arrOut[] = json_decode($resUpload->$strType($strFileKey,$intKey),true);
 					}
