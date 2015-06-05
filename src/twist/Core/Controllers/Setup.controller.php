@@ -224,9 +224,9 @@ class Setup extends BaseController{
 				'timezone' => $_POST['timezone'],
 				'relative_path' => $_POST['relative_path'],
 				'site_root' => trim($_POST['site_root'],'/'),
-				'app_path' => ($_POST['app_path'] === '') ? 'app' :  trim($_POST['app_path'],'/'),
-				'packages_path' => ($_POST['packages_path'] === '') ? 'packages' : trim($_POST['packages_path'],'/'),
-				'uploads_path' => ($_POST['uploads_path'] === '') ? 'uploads' : trim($_POST['uploads_path'],'/')
+				'app_path' => ($_POST['app_path'] == '') ? 'app' :  trim($_POST['app_path'],'/'),
+				'packages_path' => ($_POST['packages_path'] == '') ? 'packages' : trim($_POST['packages_path'],'/'),
+				'uploads_path' => ($_POST['uploads_path'] == '') ? 'uploads' : trim($_POST['uploads_path'],'/')
 			);
 
 			if($arrSession['settings']['details']['site_name'] != '' &&
