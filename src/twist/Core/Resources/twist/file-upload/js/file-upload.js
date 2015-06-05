@@ -539,7 +539,7 @@
 					}
 				};
 
-		window.twistUploader = function( strInputID, strUri, objSettings ) {
+		window.TwistUploader = function( strInputID, strUri, objSettings ) {
 			return new uploader( strInputID, strUri, objSettings );
 		};
 	}

@@ -1,3 +1,3 @@
 <script>
-	twistUploader( 'twistupload-{data:uniqid}', '{data:uri}' );
+	TwistUploader( 'twistupload-{data:uniqid}', '{data:uri}' );
 </script>
