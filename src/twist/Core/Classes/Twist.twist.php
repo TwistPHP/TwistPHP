@@ -287,8 +287,8 @@
 		 * Respond with a HTTP status page, pass in the status code that you require
 		 * @param $intResponseCode Code of the required response i.e. 404
 		 */
-		public static function respond($intResponseCode){
-			\Twist\Core\Classes\Error::errorPage($intResponseCode);
+		public static function respond($intResponseCode,$strCustomDescription = null){
+			\Twist\Core\Classes\Error::errorPage($intResponseCode,$strCustomDescription);
 		}
 
 		/**

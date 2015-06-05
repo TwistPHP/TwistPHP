@@ -281,7 +281,7 @@
 				self::errorPage(404);
 			}
 
-			public static function errorPage($intErrorCode){
+			public static function errorPage($intErrorCode,$strCustomDescription = null){
 
 				$strReturn = 'Unknown';
 				$strDescription = '';
@@ -601,7 +601,7 @@
 				$arrTags = array(
 					'code' => $intErrorCode,
 					'title' => $strReturn,
-					'description' => $strDescription,
+					'description' => (is_null($strCustomDescription)) ? $strDescription : $strCustomDescription,
 					'name' => \Twist::framework() -> setting('SITE_NAME'),
 					'domain' => \Twist::framework() -> setting('SITE_HOST')
 				);

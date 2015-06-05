@@ -128,8 +128,8 @@
 			return $this->_response($intError);
 		}
 
-		final public function _response($intError){
-			Error::errorPage($intError);
+		final public function _response($intError,$strCustomDescription = null){
+			Error::errorPage($intError,$strCustomDescription);
 			return false;
 		}
 

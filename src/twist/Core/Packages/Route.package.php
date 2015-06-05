@@ -1113,7 +1113,7 @@ class Route extends BasePackage{
 							break;
 						case'ajax':
 							if(!TWIST_AJAX_REQUEST){
-								\Twist::respond(405);
+								\Twist::respond(403,'Unsupported HTTP protocol used to request this URI');
 							}else{
 								try{
 									$arrTags['response'] = $this->processController($arrRoute);
