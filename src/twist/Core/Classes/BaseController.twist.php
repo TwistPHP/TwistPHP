@@ -40,9 +40,6 @@
 			$this->arrRouteVars = $arrRoute['vars'];
 			$this->resMeta = $resMeta;
 
-			//Preset the array of messages
-			\Twist::framework()->package()->extend('View', 'messages', array( 'all' => '','error' => '','warning' => '','notice' => '','success' => '' ));
-
 			return true;
 		}
 
