@@ -873,14 +873,13 @@ class File extends BasePackage{
 
 			foreach($arrParameters['accept'] as $strFileExtension){
 
+				//Use as key to avoid duplication
 				if(substr($strFileExtension,0,1) === '.' || strstr('/',$strFileExtension)){
-					$strMimeType = $strFileExtension;
+					$arrTypes[$strFileExtension] = $strFileExtension;
 				}else{
 					$strMimeType = implode(',',$this->mimeType($strFileExtension,false));
+					$arrTypes[$strMimeType] = $strMimeType;
 				}
-
-				//Use as key to avoid duplication
-				$arrTypes[$strMimeType] = $strMimeType;
 			}
 
 			$strAccept = sprintf(' accept="%s"',implode(',',$arrTypes));
