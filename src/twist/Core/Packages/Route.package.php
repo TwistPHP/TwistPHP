@@ -300,6 +300,17 @@ class Route extends BasePackage{
 	}
 
 	/**
+	 * Serve a file form a particular route, you can change the name of the file upon download and restrict the download bandwidth (very helpfull if you have limited bandwidth)
+	 * @param $strURI
+	 * @param $dirFilePath Full path to the file that will be served
+	 * @param null $strServeName Name of the file to be served
+	 * @param null $intLimitDownloadSpeed Download speed for the end user in KB
+	 */
+	public function file($strURI,$dirFilePath,$strServeName = null,$intLimitDownloadSpeed = null){
+		$this->addRoute($strURI,'file',array('file' => $dirFilePath, 'name' => $strServeName, 'speed' => $intLimitDownloadSpeed),false,false,array());
+	}
+
+	/**
 	 * Add a controller that will be called upon a any request (HTTP METHOD) to the given URI.
 	 * The URI can be made dynamic by adding a '%' symbol at the end.
 	 *
@@ -1107,6 +1118,9 @@ class Route extends BasePackage{
 					switch($arrRoute['type']){
 						case'view':
 							$arrTags['response'] = $this->resView->build($arrRoute['item'], $arrRoute['data']);
+							break;
+						case'file':
+							\Twist::File()->serve($arrRoute['item']['file'],$arrRoute['item']['name'],null,null,$arrRoute['item']['speed'],false);
 							break;
 						case'function':
 								$arrTags['response'] = $arrRoute['item']();
