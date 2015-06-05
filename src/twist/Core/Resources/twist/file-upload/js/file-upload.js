@@ -23,8 +23,9 @@
 (
 	function( window, document ) {
 		var debug = false,
-				log = function( mxdData, strType ) {
-					if( debug
+				log = function( mxdData, strType, blOverride ) {
+					if( ( debug
+								|| blOverride === true )
 							&& window.console ) {
 						if( window.console[strType] ) {
 							window.console[strType]( mxdData );
@@ -171,6 +172,7 @@
 											thisUploader.domCancelUpload.addEventListener( 'click', thisUploader.cancelUpload );
 										}
 									},
+									thisUploader.supported = false,
 									thisUploader.uid = strInputID,
 									thisUploader.upload = function( e, arrFiles ) {
 										try {
@@ -530,6 +532,10 @@
 						} catch( err ) {
 							log( err, 'error' );
 						}
+					} else {
+						log( 'Your browser does not support AJAX uploading', 'warn', true );
+
+						return null;
 					}
 				};
 
