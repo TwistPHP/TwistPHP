@@ -151,7 +151,8 @@
 										oncompletefile: function() {},
 										oncompletequeue: function() {},
 										onerror: function() {},
-										onprogress: function() {}
+										onprogress: function() {},
+										onstart: function() {}
 									},
 									thisUploader.showClear = function() {
 										if( thisUploader.domClearUpload ) {
@@ -237,6 +238,7 @@
 													}
 
 													if( blAcceptedType ) {
+														thisUploader.settings.onstart( resFile );
 														thisUploader.showProgress();
 
 														if( thisUploader.domCount ) {
