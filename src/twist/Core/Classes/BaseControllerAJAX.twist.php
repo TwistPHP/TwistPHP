@@ -70,9 +70,9 @@ class BaseControllerAJAX extends BaseController{
 		$arrResponse['message'] = $this->strAjaxResponseMessage;
 		$arrResponse['data'] = $mxdData;
 		if( $blDebug === true && \Twist::framework()->setting('DEVELOPMENT_MODE') ) {
-			$this->arrAjaxResponse['debug'] = array();
-			$this->arrAjaxResponse['debug']['route'] = $this->_route();
+			$arrResponse['debug'] = array();
+			$arrResponse['debug']['route'] = $this->_route();
 		}
-		return json_encode($arrResponse).'123';
+		return json_encode($arrResponse);
 	}
 }
