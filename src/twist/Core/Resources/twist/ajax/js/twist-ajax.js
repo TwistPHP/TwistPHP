@@ -176,6 +176,8 @@ try {
 						if( typeof strAJAXPostLocation !== 'string'
 								|| strAJAXPostLocation == '' ) {
 							throw new Error( 'Need to specify a valid AJAX post location' );
+						} else {
+							strAJAXPostLocation = strAJAXPostLocation.replace( /\/$/, '' );
 						}
 
 						if( typeof b === 'function' ) {
@@ -244,39 +246,17 @@ try {
 							}
 						);
 
-						var thisTwistAJAX = this;
-
-						this.count = 0,
-						this.defaultArray = objDefaultData,
-						this.disableLoader = function() {
-								thisTwistAJAX.showLoader = false;
-								return thisTwistAJAX;
-							},
-						this.enableLoader = function() {
-								thisTwistAJAX.showLoader = true;
-								return thisTwistAJAX;
-							},
-						this.loaderSize = function( strSize ) {
-								if( $( '#twist-ajax-loader' ).length ) {
-									$( '#twist-ajax-loader' ).attr( 'class', '' ).addClass( strSize );
-								}
-
-								strLoaderSize = strSize;
-
-								return thisTwistAJAX;
-							},
-						this.onfail = function( strMessage, strBugReportLink ) {
-								var strErrorMessage = ( typeof strMessage === 'string' && strMessage !== '' ) ? strMessage : 'An unexpected AJAX response was given';
-								log( strErrorMessage );
-
-								return thisTwistAJAX;
-							},
-						this.send = function( strFunction, b, c, d, e ) {
+						var thisTwistAJAX = this,
+								send = function( strFunction, strMethod, b, c, d, e ) {
 								thisTwistAJAX.count++;
+								strMethod = ( typeof strMethod === 'string' ) ? strMethod : 'POST';
+
 								$( '#twist-ajax-loader-size' ).text( 'Loading...' );
+
 								if( thisTwistAJAX.count > 1 ) {
 									$( '#twist-ajax-loader-count' ).text( thisTwistAJAX.count );
 								}
+
 								if( thisTwistAJAX.showLoader ) {
 									$( '#twist-ajax-loader' ).stop().show().fadeTo( 0, 1 );
 								}
@@ -349,23 +329,19 @@ try {
 										}
 									};
 
-								var objPostData = {
-										'function': strFunction,
-										data: objData
-									};
-
 								$.each( thisTwistAJAX.defaultArray,
 									function( strIndex, mxdValue ) {
-										objPostData[strIndex] = mxdValue;
+										objData[strIndex] = mxdValue;
 									}
 								);
 
 								var strUID = ( new Date() ).getTime(),
+								strFinalURL = strAJAXPostLocation + '/' + strFunction.replace( /^\//, '' ),
 								xhrThis = $.ajax(
 									{
-										type: 'POST',
-										url: strAJAXPostLocation,
-										data: objPostData,
+										type: strMethod.toUpperCase(),
+										url: strFinalURL,
+										data: objData,
 										dataType: 'json',
 										timeout: intTimeout,
 										global: true,
@@ -410,13 +386,12 @@ try {
 													break;
 
 													case 'parsererror':
-														var rexJSON = /{"status":(true|false),"message":"[^"]*","title":"[^"]*","data":({.*}|\[\])(,"[^"]+":(true|false|("[^"]*")|({.*}|\[\])))*,"sticky":(true|false),"importance":\d+,"loggedin":(true|false),"login_redirect":(true|false),"output":"[^"]*"}/,
+														var rexJSON = /{"status":(true|false),"message":"[^"]*","data":({.*}|\[\])(,"[^"]+":(true|false|("[^"]*")|({.*}|\[\])))*(,"debug":({.*}|\[\])(,"[^"]+":(true|false|("[^"]*")|({.*}|\[\])))*)?}/,
 														strContentLength = prettySize( jqXHR.getResponseHeader( 'Content-Length' ) ),
-														strSeperator = '==============================================================================================',
-														strPostData = ( typeof JSON !== 'undefined' ) ? '\nPost              ' + JSON.stringify( objPostData ) : '';
-														log( strSeperator + '\nDate              ' + jqXHR.getResponseHeader( 'Date' ) + '\nLocation          ' + strAJAXPostLocation + '\nFunction          ' + strFunction + '\nTimeout           ' + ( intTimeout / 1000 ) + 's\nResponse length   ' + strContentLength + strPostData + '\n' + strSeperator + '\n' + jqXHR.responseText.replace( rexJSON, '' ) );
+														strSeperator = '===============================================';
+														log( strSeperator + '\nPARSER ERROR RECOVERY\n' + strSeperator + '\nDate:             ' + jqXHR.getResponseHeader( 'Date' ) + '\nLocation:         ' + strFinalURL + '\nTimeout:          ' + ( intTimeout / 1000 ) + 's\nResponse length:  ' + strContentLength + ( ( typeof JSON !== 'undefined' ) ? '\nPost data:        ' + JSON.stringify( objData ) : '{}' ) + '\n' + strSeperator );
 
-														if( jqXHR.responseText.match( rexJSON ) ) {
+														if( rexJSON.test( jqXHR.responseText ) ) {
 															var strResponse = jqXHR.responseText.match( rexJSON )[0];
 															if( $.parseJSON( strResponse ) !== null ) {
 																var objResponse = $.parseJSON( strResponse );
@@ -461,8 +436,49 @@ try {
 								);
 
 								return xhrThis;
-							},
-						this.showLoader = true;
+							};
+
+						this.count = 0,
+								this.defaultArray = objDefaultData,
+								this.delete = function( strFunction, b, c, d, e ) {
+										send( strFunction, 'DELETE', b, c, d, e );
+									},
+								this.disableLoader = function() {
+									thisTwistAJAX.showLoader = false;
+									return thisTwistAJAX;
+								},
+								this.enableLoader = function() {
+									thisTwistAJAX.showLoader = true;
+									return thisTwistAJAX;
+								},
+								this.get = function( strFunction, b, c, d, e ) {
+										send( strFunction, 'GET', b, c, d, e );
+									},
+								this.loaderSize = function( strSize ) {
+									if( $( '#twist-ajax-loader' ).length ) {
+										$( '#twist-ajax-loader' ).attr( 'class', '' ).addClass( strSize );
+									}
+
+									strLoaderSize = strSize;
+
+									return thisTwistAJAX;
+								},
+								this.onfail = function( strMessage ) {
+									var strErrorMessage = ( typeof strMessage === 'string' && strMessage !== '' ) ? strMessage : 'An unexpected AJAX response was given';
+									log( strErrorMessage );
+
+									return thisTwistAJAX;
+								},
+								this.patch = function( strFunction, b, c, d, e ) {
+										send( strFunction, 'PATCH', b, c, d, e );
+									},
+								this.post = function( strFunction, b, c, d, e ) {
+										send( strFunction, 'POST', b, c, d, e );
+									},
+								this.put = function( strFunction, b, c, d, e ) {
+										send( strFunction, 'PUT', b, c, d, e );
+									},
+								this.showLoader = true;
 
 						$( document ).ready(
 							function() {
@@ -470,7 +486,7 @@ try {
 							}
 						);
 
-						window.TwistAJAXSessions.push( this );
+						//window.TwistAJAXSessions.push( this );
 
 						return true;
 					};
@@ -479,9 +495,9 @@ try {
 						return new TwistAJAX( a, b, c, d );
 					};
 
-				if( !window.TwistAJAXSessions ) {
+				/*if( !window.TwistAJAXSessions ) {
 					window.TwistAJAXSessions = [];
-				}
+				}*/
 			}
 		)( window, document, jQuery );
 	} else {

@@ -25,22 +25,14 @@ namespace Twist\Core\Classes;
 
 class BaseControllerAJAX extends BaseController{
 
-	protected $arrAjaxResponse = array();
+	protected $blAjaxResponse = true;
+	protected $strAjaxResponseMessage = '';
 
 	public function __construct(){
 
 		//@todo Should these two options still be set by default
 		$this->_ignoreUserAbort(true);
 		$this->_timeout(60);
-
-		$this->arrAjaxResponse = array(
-			'status' => true,
-			'message' => '',
-			'data' => '',
-			'debug' => array()
-		);
-
-		//@todo Should we still return loggedin and login_redirect? the old Ajax server did
 	}
 
 	/**
@@ -48,7 +40,7 @@ class BaseControllerAJAX extends BaseController{
 	 * @param $blStatus
 	 */
 	public function _ajaxStatus($blStatus){
-		$this->arrAjaxResponse['status'] = ($blStatus !== false);
+		$this->blAjaxResponse = ($blStatus !== false);
 	}
 
 	public function _ajaxSucceed(){
@@ -64,7 +56,7 @@ class BaseControllerAJAX extends BaseController{
 	 * @param $strMessage
 	 */
 	public function _ajaxMessage($strMessage=''){
-		$this->arrAjaxResponse['message'] = $strMessage;
+		$this->strAjaxResponseMessage = $strMessage;
 	}
 
 	/**
@@ -72,9 +64,15 @@ class BaseControllerAJAX extends BaseController{
 	 * @param array $mxdData
 	 * @return string
 	 */
-	public function _ajaxRespond($mxdData=array()){
-		$this->arrAjaxResponse['debug']['route'] = (\Twist::framework()->setting('DEVELOPMENT_MODE')) ? $this->_route() : array();
-		$this->arrAjaxResponse['data'] = $mxdData;
-		return json_encode($this->arrAjaxResponse);
+	public function _ajaxRespond($mxdData=array(), $blDebug = false){
+		$arrResponse = array();
+		$arrResponse['status'] = $this->blAjaxResponse;
+		$arrResponse['message'] = $this->strAjaxResponseMessage;
+		$arrResponse['data'] = $mxdData;
+		if( $blDebug === true && \Twist::framework()->setting('DEVELOPMENT_MODE') ) {
+			$this->arrAjaxResponse['debug'] = array();
+			$this->arrAjaxResponse['debug']['route'] = $this->_route();
+		}
+		return json_encode($arrResponse).'123';
 	}
 }
