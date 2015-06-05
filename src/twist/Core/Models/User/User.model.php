@@ -71,18 +71,18 @@ class User{
 	}
 
 	public function data($strField = null,$mxdValue = null){
-        if(is_null($mxdValue)){
-            return $this -> getData($strField);
-        } else {
-            return $this -> setData($strField,$mxdValue);
-        }
-    }
+		if(is_null($mxdValue)){
+			return $this -> getData($strField);
+		} else {
+			return $this -> setData($strField,$mxdValue);
+		}
+	}
 
 	private function getData($strField = null){
 		return (is_null($strField)) ? $this->arrUserData : (array_key_exists($strField,$this->arrUserData) ? $this->arrUserData[$strField] : null);
 	}
 
-    private function setData($strField,$mxdValue){
+	private function setData($strField,$mxdValue){
 		$this->arrUserData[$strField] = $mxdValue;
 	}
 
@@ -160,8 +160,8 @@ class User{
 			$this->arrOriginalData = $this->resDatabaseRecord->values();
 
 			if($this->blNewAccount){
-	            $this->resDatabaseRecord->set('joined',\Twist::DateTime()->date('Y-m-d H:i:s'));
-	            $this->resDatabaseRecord->commit();
+				$this->resDatabaseRecord->set('joined',\Twist::DateTime()->date('Y-m-d H:i:s'));
+				$this->resDatabaseRecord->commit();
 				$this->sendWelcomeEmail();
 				$this->blNewAccount = false;
 			}else{
@@ -319,7 +319,7 @@ class User{
 
 		$strTemplate = (is_null($this->strTempPassword)) ? 'change-password-email.tpl' : 'forgotten-password-email.tpl';
 
-		$strData = $this->resParentClass->resTemplate->build($strTemplate, $arrTags);
+		$strData = \Twist::View()->build(sprintf('%suser/%s',TWIST_FRAMEWORK_VIEWS,$strTemplate),$arrTags);
 
 		//Reset the temp password holder
 		$this->strTempPassword = null;
@@ -373,7 +373,7 @@ class User{
 			);
 		}
 
-		$strHTML = $this->resParentClass->resTemplate->build('welcome-email.tpl',$arrTags);
+		$strHTML = \Twist::View()->build(sprintf('%suser/welcome-email.tpl',TWIST_FRAMEWORK_VIEWS),$arrTags);
 
 		//Reset the temp password holder
 		$this->strTempPassword = null;
@@ -416,7 +416,7 @@ class User{
 			$arrTags['site_name'] = $strSiteName;
 			$arrTags['verification_link'] = $strVerificationLink;
 
-			$strHTML = $this->resParentClass->resTemplate->build('account-verification-email.tpl',$arrTags);
+			$strHTML = \Twist::View()->build(sprintf('%suser/account-verification-email.tpl',TWIST_FRAMEWORK_VIEWS),$arrTags);
 
 			$resEmail->setBodyHTML($strHTML);
 			$resEmail->send();
