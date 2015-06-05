@@ -26,7 +26,7 @@ use Twist\Core\Classes\BaseController;
 
 class Setup extends BaseController{
 
-	public function _default(){
+	public function _index(){
 		return $this->welcome();
 	}
 
@@ -393,6 +393,9 @@ class Setup extends BaseController{
 
 			\Twist::define('TWIST_DATABASE_PROTOCOL',$arrSession['database']['details']['protocol']);
 			\Twist::define('TWIST_DATABASE_NAME',$arrSession['database']['details']['name']);
+			\Twist::define('TWIST_DATABASE_HOST',$arrSession['database']['details']['host']);
+			\Twist::define('TWIST_DATABASE_USERNAME',$arrSession['database']['details']['username']);
+			\Twist::define('TWIST_DATABASE_PASSWORD',$arrSession['database']['details']['password']);
 			\Twist::define('TWIST_DATABASE_TABLE_PREFIX',$arrSession['database']['details']['table_prefix']);
 
 			//Disable file config as we are using database
