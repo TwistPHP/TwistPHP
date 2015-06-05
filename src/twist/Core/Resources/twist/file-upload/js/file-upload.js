@@ -216,9 +216,6 @@
 															resFileReader = new FileReader( { blob: true } ),
 															blAcceptedType = !thisUploader.acceptTypes.length && !thisUploader.acceptExtentions.length;
 
-													log( strFileType );
-													log( strFileExtention );
-
 													if( !blAcceptedType ) {
 														for( var intType in thisUploader.acceptTypes ) {
 															if( new RegExp( '^' + thisUploader.acceptTypes[intType] + '$', 'gi' ).test( strFileType ) ) {
