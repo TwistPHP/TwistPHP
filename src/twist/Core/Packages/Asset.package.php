@@ -80,10 +80,10 @@
 		 * @related get
 		 * @return array Returns a multi-dimensional array of all the assets in the system
 		 */
-		public function getAll(){
+		public function getAll($strOrderBy='added',$strOrderDirection='DESC'){
 
 			$arrOut = array();
-			$arrAssets = \Twist::Database()->getAll(sprintf('%sassets',TWIST_DATABASE_TABLE_PREFIX));
+			$arrAssets = \Twist::Database()->getAll(sprintf('%sassets',TWIST_DATABASE_TABLE_PREFIX),$strOrderBy,$strOrderDirection);
 
 			if(count($arrAssets)){
 				foreach($arrAssets as $arrEachAsset){
@@ -101,10 +101,10 @@
 		 * @param $intGroupID ID of the required asset group
 		 * @return array Returns a multi-dimensional array of the groups assets
 		 */
-		public function getByGroup($intGroupID){
+		public function getByGroup($intGroupID,$strOrderBy='added',$strOrderDirection='DESC'){
 
 			$arrOut = array();
-			$arrAssets = \Twist::Database()->find(sprintf('%sassets',TWIST_DATABASE_TABLE_PREFIX),$intGroupID,'group_id','added');
+			$arrAssets = \Twist::Database()->find(sprintf('%sassets',TWIST_DATABASE_TABLE_PREFIX),$intGroupID,'group_id',$strOrderBy,$strOrderDirection);
 
 			if(count($arrAssets)){
 				foreach($arrAssets as $arrEachAsset){
@@ -122,10 +122,10 @@
 		 * @param $intTypeID ID of the required asset type
 		 * @return array Returns a multi-dimensional array of assets
 		 */
-		public function getByType($intTypeID){
+		public function getByType($intTypeID,$strOrderBy='added',$strOrderDirection='DESC'){
 
 			$arrOut = array();
-			$arrAssets = \Twist::Database()->find(sprintf('%sassets',TWIST_DATABASE_TABLE_PREFIX),$intTypeID,'type_id');
+			$arrAssets = \Twist::Database()->find(sprintf('%sassets',TWIST_DATABASE_TABLE_PREFIX),$intTypeID,'type_id',$strOrderBy,$strOrderDirection);
 
 			if(count($arrAssets)){
 				foreach($arrAssets as $arrEachAsset){
