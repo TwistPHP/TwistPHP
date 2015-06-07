@@ -274,6 +274,21 @@
 			}
 		}
 
+		public function uninstaller($strInstallSlug){
+
+			$blOut = false;
+
+			foreach($this->getInstalled() as $strSlug => $arrEachPackage){
+				if($strInstallSlug === $strSlug){
+					include sprintf('%s/%s/uninstall.php',TWIST_PACKAGES,$arrEachPackage['folder']);
+					$blOut = true;
+					break;
+				}
+			}
+
+			return $blOut;
+		}
+
 		/**
 		 * Uninstall the package from the framework
 		 */
@@ -298,7 +313,8 @@
 					'routes' => (is_dir(sprintf('%s/routes',$dirPackage)) && count(scandir(sprintf('%s/routes',$dirPackage))) > 2) ? '1' : '0'
 				);
 
-				//Write the code to un-install the package
+				$resPackage = \Twist::Database()->getRecord(TWIST_DATABASE_TABLE_PREFIX.'packages',$arrUninstall['slug'],'slug');
+				$resPackage->delete();
 			}
 		}
 

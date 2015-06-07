@@ -374,6 +374,16 @@ class Manager extends BaseController{
 		\Twist::redirect('./packages');
 	}
 
+	public function uninstall(){
+
+		//Run the package installer
+		if(array_key_exists('package',$_GET)){
+			\Twist::framework()->package()->uninstaller($_GET['package']);
+		}
+
+		\Twist::redirect('./packages');
+	}
+
 	public function processUpdate(){
 
 		$arrActions = array();
