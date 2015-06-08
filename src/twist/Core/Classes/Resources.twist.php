@@ -43,11 +43,12 @@ final class Resources{
 	public function viewExtension($strReference,$arrParameters = array()){
 
 		$strOut = '';
+		$strIncludeKey = $strReference.(count($arrParameters) ? ','.implode(',',$arrParameters) : '');
 
 		//Only allow each resource to be output once
-		if(!array_key_exists($strReference,$this->arrIncluded)){
+		if(!array_key_exists($strIncludeKey,$this->arrIncluded)){
 
-			$this->arrIncluded[$strReference] = $strReference;
+			$this->arrIncluded[$strIncludeKey] = $strReference;
 
 			if(!count($arrParameters)){
 				$arrParameters[0] = null;

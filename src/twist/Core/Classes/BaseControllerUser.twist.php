@@ -38,8 +38,12 @@ class BaseControllerUser extends BaseController{
 		$this -> _aliasURI( 'device-manager', 'deviceManager' );
 	}
 
+	public function login(){
+		return $this->resUser->viewExtension('login_form');
+	}
+
 	public function forgottenPassword(){
-		return $this->resUser->templateExtension('forgotten_password_form');
+		return $this->resUser->viewExtension('forgotten_password_form');
 	}
 
 	public function postForgottenPassword(){
@@ -62,7 +66,7 @@ class BaseControllerUser extends BaseController{
 	}
 
 	public function changePassword(){
-		return $this->resUser->templateExtension('change_password_form');
+		return $this->resUser->viewExtension('change_password_form');
 	}
 
 	public function postChangePassword(){
@@ -113,7 +117,7 @@ class BaseControllerUser extends BaseController{
 	}
 
 	public function verifyAccount(){
-		return $this->resUser->templateExtension('account_verification');
+		return $this->resUser->viewExtension('account_verification');
 	}
 
 	public function postVerifyAccount(){
@@ -137,7 +141,7 @@ class BaseControllerUser extends BaseController{
 	}
 
 	public function deviceManager(){
-		return $this->resUser->templateExtension('devices_form');
+		return $this->resUser->viewExtension('devices_form');
 	}
 
 	public function postDeviceManager(){
