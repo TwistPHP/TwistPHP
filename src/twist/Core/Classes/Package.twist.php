@@ -304,18 +304,15 @@
 				$rawJson = file_get_contents(sprintf('%s/info.json',$dirPackage));
 				$arrDetails = json_decode($rawJson,true);
 
-				$arrUninstall = array(
-					'slug' => strtolower(basename($dirPackage)),
-					'path' => $dirPackage,
-					'name' => $arrDetails['name'],
-					'version' => $arrDetails['version'],
-					'resources' => (is_file(sprintf('%s/resources.json',$dirPackage)) && count(scandir(sprintf('%s/resources',$dirPackage))) > 2) ? '1' : '0',
-					'routes' => (is_dir(sprintf('%s/routes',$dirPackage)) && count(scandir(sprintf('%s/routes',$dirPackage))) > 2) ? '1' : '0'
-				);
+				$strSlug = strtolower(basename($dirPackage));
 
-				$resPackage = \Twist::Database()->getRecord(TWIST_DATABASE_TABLE_PREFIX.'packages',$arrUninstall['slug'],'slug');
+				$resPackage = \Twist::Database()->getRecord(TWIST_DATABASE_TABLE_PREFIX.'packages',$strSlug,'slug');
 				$resPackage->delete();
+
+				return true;
 			}
+
+			return false;
 		}
 
 		/**
