@@ -944,7 +944,7 @@ class View extends BasePackage{
 	            'base64_encode','base64_decode',
 	            'htmlentities','htmlspecialchars',
 	            'json_encode','json_decode',
-	            'strip_tags',
+	            'strip_tags','nl2br',
 	            'addslashes','stripslashes',
 	            'count','round','ceil','floor','decimalise',
 	            'strlen','strtolower','strtoupper',
