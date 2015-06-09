@@ -411,8 +411,8 @@
 
 													log( strFileName + ' (' + strFileType + ') is not in the list of allowed types', 'warn' );
 
-													if( thisUploader.acceptRaw.length ) {
-														log( 'Allowed MIME types: ' + thisUploader.acceptRaw.join( ', ' ) );
+													if( thisUploader.acceptTypes.length ) {
+														log( 'Allowed MIME types: ' + thisUploader.acceptTypes.join( ', ' ) );
 													}
 
 													if( thisUploader.acceptExtentions.length ) {
