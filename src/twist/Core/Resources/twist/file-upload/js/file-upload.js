@@ -122,7 +122,9 @@
 								}
 							},
 							thisUploader.hideProgress = function() {
-								thisUploader.domInput.style.display = thisUploader.domInputDisplay;
+								if( thisUploader.domInput ) {
+									thisUploader.domInput.style.display = thisUploader.domInputDisplay;
+								}
 
 								if( thisUploader.domProgressWrapper ) {
 									thisUploader.domProgressWrapper.style.display = 'none';
@@ -132,7 +134,7 @@
 									thisUploader.domCancelUpload.removeEventListener( 'click', thisUploader.cancelUpload );
 								}
 							},
-							thisUploader.multiple = thisUploader.domInput.hasAttribute( 'multiple' ),
+							thisUploader.multiple = ( thisUploader.domInput && thisUploader.domInput.hasAttribute( 'multiple' ) ),
 							thisUploader.queue = [],
 							thisUploader.queueCount = 0,
 							thisUploader.queueSize = 0,
@@ -448,7 +450,8 @@
 						thisUploader.settings.clearoncomplete = true;
 					}
 
-					if( thisUploader.domPseudo.value
+					if( thisUploader.domPseudo
+							&& thisUploader.domPseudo.value
 							&& thisUploader.domPseudo.value !== '' ) {
 						thisUploader.uploaded = thisUploader.domPseudo.value.split( ',' ) || [];
 					}
@@ -465,8 +468,9 @@
 						thisUploader.domCancelUpload.style.display = 'none';
 					}
 
-					thisUploader.domCancelUpload.style.display = 'none';
-					thisUploader.domClearUpload.style.display = 'none';
+					if( thisUploader.domClearUpload ) {
+						thisUploader.domClearUpload.style.display = 'none';
+					}
 
 					thisUploader.hideProgress();
 
@@ -501,7 +505,7 @@
 						}
 					}
 
-					var strAccept = thisUploader.domInput.getAttribute( 'accept' );
+					var strAccept = thisUploader.domInput ? thisUploader.domInput.getAttribute( 'accept' ) : '';
 					if( strAccept ) {
 						var arrAcceptValues = strAccept.replace( / /g, '' ).split( ',' );
 
@@ -518,8 +522,11 @@
 						}
 					}
 
-					thisUploader.domPseudo.name = thisUploader.domInput.name.replace( '[]', '' );
-					thisUploader.domInput.removeAttribute( 'name' );
+					if( thisUploader.domPseudo
+							&& thisUploader.domInput ) {
+						thisUploader.domPseudo.name = thisUploader.domInput.name.replace( '[]', '' );
+						thisUploader.domInput.removeAttribute( 'name' );
+					}
 
 					if( uploadSupported ) {
 						try {
