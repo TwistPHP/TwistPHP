@@ -258,7 +258,7 @@
 			$arrTree = array();
 
 			foreach( $arrStructure as $arrStructureItem ) {
-				if( !array_key_exists($strParentIDField,$arrStructureItem) || $arrStructureItem[$strParentIDField] === '' ) {
+				if( !array_key_exists($strParentIDField,$arrStructureItem) || $arrStructureItem[$strParentIDField] === '' || is_null($arrStructureItem[$strParentIDField]) ) {
 					$arrTree[0][] = $arrStructureItem;
 				} else {
 					$arrTree[$arrStructureItem[$strParentIDField]][] = $arrStructureItem;
