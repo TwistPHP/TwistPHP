@@ -1070,9 +1070,9 @@
 
 			if((count($this->arrDatabaseCustomSettings) && $this->arrDatabaseCustomSettings['protocol'] === 'none') || TWIST_DATABASE_PROTOCOL === 'none'){
 
-				$strSettingsJSON = sprintf('%s/../../config/settings.json',dirname(__FILE__));
+				$strSettingsJSON = sprintf('%ssettings.json',TWIST_APP_CONFIG);
 
-				if(is_writable(sprintf('%s/../../config/',dirname(__FILE__)))){
+				if(is_writable(TWIST_APP_CONFIG)){
 					if(!file_exists($strSettingsJSON)){
 						file_put_contents($strSettingsJSON,'{}');
 					}
