@@ -732,6 +732,8 @@ class View extends BasePackage{
 
 			case'view':
 
+				$arrData = is_array($arrData) ? array_merge($arrData,$arrParameters) : $arrParameters;
+
 				$strTagData = $this->build($strReference,$arrData);
 				$strRawView = $this->replaceTag($strRawView,$strTag,$strTagData,$strFunction);
 
