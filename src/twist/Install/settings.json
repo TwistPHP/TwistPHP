@@ -239,6 +239,22 @@
 		"options":"native,pclzip",
 		"null":0
 	},
+	"ASSET_THUMBNAIL_SIZES":{
+		"title":"Asset Default Thumbnail Sizes",
+		"description":"Comma separated pixel size, thumbnails of each size specified wil be created upon upload of an Asset. Can be left blank if no thumbnails are required",
+		"default":"32,64,128,256",
+		"type":"string",
+		"options":"",
+		"null":0
+	},
+	"ASSET_THUMBNAIL_SQUARE_SIZES":{
+		"title":"Asset Default Thumbnail Square Sizes",
+		"description":"Comma separated pixel size, square thumbnails of each size specified wil be created upon upload of an Asset. Can be left blank if no thumbnails are required",
+		"default":"32,64,128,256",
+		"type":"string",
+		"options":"",
+		"null":0
+	},
 	"EMAIL_MULTIPART_ENCODING":{
 		"title":"Default Encoding",
 		"description":"Set the default encoding type to use when sending emails",

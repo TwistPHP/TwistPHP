@@ -368,86 +368,41 @@
 				if(count($arrType) && $arrType['slug'] == 'image'){
 					list($intWidth, $intHeight, $type, $attr) = getimagesize($strAssetPath);
 
-					//Generate the mandatory thumbnail
-					$strSquareThumbPath512 = sprintf('%s/square-thumb-512',$strAssetGroupDir);
-					$strSquareThumbPath256 = sprintf('%s/square-thumb-256',$strAssetGroupDir);
-					$strSquareThumbPath128 = sprintf('%s/square-thumb-128',$strAssetGroupDir);
-					$strSquareThumbPath64 = sprintf('%s/square-thumb-64',$strAssetGroupDir);
-					$strSquareThumbPath32 = sprintf('%s/square-thumb-32',$strAssetGroupDir);
+					//Create standard thumbnails if any are set to be created
+					$strSizeList = \Twist::framework()->setting('ASSET_THUMBNAIL_SIZES');
+					if($strSizeList !== ''){
+						$objImage = \Twist::Image()->load($strAssetPath);
+						$arrSizes = (strstr($strSizeList,',')) ? explode(',',$strSizeList) : array($strSizeList);
 
-					//Create the asset group directory if it not exist
-					if(!file_exists($strSquareThumbPath512)){ mkdir($strSquareThumbPath512); }
-					if(!file_exists($strSquareThumbPath256)){ mkdir($strSquareThumbPath256); }
-					if(!file_exists($strSquareThumbPath128)){ mkdir($strSquareThumbPath128); }
-					if(!file_exists($strSquareThumbPath64)){ mkdir($strSquareThumbPath64); }
-					if(!file_exists($strSquareThumbPath32)){ mkdir($strSquareThumbPath32); }
+						foreach($arrSizes as $intEachSize){
+							$intEachSize = trim($intEachSize);
+							$dirThumbPath = sprintf('%s/thumb-%d',$strAssetGroupDir,$intEachSize);
+							\Twist::File()->recursiveCreate($dirThumbPath);
 
-					$objImage = \Twist::Image()->load($strAssetPath);
+							$objImage->resizeMaxDimension($intEachSize);
+							$objImage->save(sprintf('%s/%s',$dirThumbPath,$strFileName));
 
-					$objImage->resizeCover(512);
-					$objImage->save(sprintf('%s/%s',$strSquareThumbPath512,$strFileName));
+							$arrSupportingAssets[sprintf('thumb-%d',$intEachSize)] = str_replace(TWIST_DOCUMENT_ROOT,'',sprintf('%s/%s',$dirThumbPath,$strFileName));
+						}
+					}
 
-					$objImage->resizeCover(256);
-					$objImage->save(sprintf('%s/%s',$strSquareThumbPath256,$strFileName));
+					//Create square thumbnails if any are set to be created
+					$strSizeList = \Twist::framework()->setting('ASSET_THUMBNAIL_SQUARE_SIZES');
+					if($strSizeList !== ''){
+						$objImage = \Twist::Image()->load($strAssetPath);
+						$arrSizes = (strstr($strSizeList,',')) ? explode(',',$strSizeList) : array($strSizeList);
 
-					$objImage->resizeCover(128);
-					$objImage->save(sprintf('%s/%s',$strSquareThumbPath128,$strFileName));
+						foreach($arrSizes as $intEachSize){
+							$intEachSize = trim($intEachSize);
+							$dirThumbPath = sprintf('%s/square-thumb-%d',$strAssetGroupDir,$intEachSize);
+							\Twist::File()->recursiveCreate($dirThumbPath);
 
-					$objImage->resizeCover(64);
-					$objImage->save(sprintf('%s/%s',$strSquareThumbPath64,$strFileName));
+							$objImage->resizeCover($intEachSize);
+							$objImage->save(sprintf('%s/%s',$dirThumbPath,$strFileName));
 
-					$objImage->resizeCover(32);
-					$objImage->save(sprintf('%s/%s',$strSquareThumbPath32,$strFileName));
-
-					//Generate the mandatory thumbnail
-					$strThumbPath1024 = sprintf('%s/thumb-1024',$strAssetGroupDir);
-					$strThumbPath512 = sprintf('%s/thumb-512',$strAssetGroupDir);
-					$strThumbPath256 = sprintf('%s/thumb-256',$strAssetGroupDir);
-					$strThumbPath128 = sprintf('%s/thumb-128',$strAssetGroupDir);
-					$strThumbPath64 = sprintf('%s/thumb-64',$strAssetGroupDir);
-					$strThumbPath32 = sprintf('%s/thumb-32',$strAssetGroupDir);
-
-					//Create the asset group directory if it not exist
-					if(!file_exists($strThumbPath1024)){ mkdir($strThumbPath1024); }
-					if(!file_exists($strThumbPath512)){ mkdir($strThumbPath512); }
-					if(!file_exists($strThumbPath256)){ mkdir($strThumbPath256); }
-					if(!file_exists($strThumbPath128)){ mkdir($strThumbPath128); }
-					if(!file_exists($strThumbPath64)){ mkdir($strThumbPath64); }
-					if(!file_exists($strThumbPath32)){ mkdir($strThumbPath32); }
-
-					$objImage = \Twist::Image()->load($strAssetPath);
-
-					$objImage->resizeMaxDimension(1024);
-					$objImage->save(sprintf('%s/%s',$strThumbPath1024,$strFileName));
-
-					$objImage->resizeMaxDimension(512);
-					$objImage->save(sprintf('%s/%s',$strThumbPath512,$strFileName));
-
-					$objImage->resizeMaxDimension(256);
-					$objImage->save(sprintf('%s/%s',$strThumbPath256,$strFileName));
-
-					$objImage->resizeMaxDimension(128);
-					$objImage->save(sprintf('%s/%s',$strThumbPath128,$strFileName));
-
-					$objImage->resizeMaxDimension(64);
-					$objImage->save(sprintf('%s/%s',$strThumbPath64,$strFileName));
-
-					$objImage->resizeMaxDimension(32);
-					$objImage->save(sprintf('%s/%s',$strThumbPath32,$strFileName));
-
-					$arrSupportingAssets = array(
-						'square-thumb-512' => str_replace(TWIST_DOCUMENT_ROOT,'',sprintf('%s/%s',$strSquareThumbPath512,$strFileName)),
-						'square-thumb-256' => str_replace(TWIST_DOCUMENT_ROOT,'',sprintf('%s/%s',$strSquareThumbPath256,$strFileName)),
-						'square-thumb-128' => str_replace(TWIST_DOCUMENT_ROOT,'',sprintf('%s/%s',$strSquareThumbPath128,$strFileName)),
-						'square-thumb-64' => str_replace(TWIST_DOCUMENT_ROOT,'',sprintf('%s/%s',$strSquareThumbPath64,$strFileName)),
-						'square-thumb-32' => str_replace(TWIST_DOCUMENT_ROOT,'',sprintf('%s/%s',$strSquareThumbPath32,$strFileName)),
-						'thumb-1024' => str_replace(TWIST_DOCUMENT_ROOT,'',sprintf('%s/%s',$strThumbPath1024,$strFileName)),
-						'thumb-512' => str_replace(TWIST_DOCUMENT_ROOT,'',sprintf('%s/%s',$strThumbPath512,$strFileName)),
-						'thumb-256' => str_replace(TWIST_DOCUMENT_ROOT,'',sprintf('%s/%s',$strThumbPath256,$strFileName)),
-						'thumb-128' => str_replace(TWIST_DOCUMENT_ROOT,'',sprintf('%s/%s',$strThumbPath128,$strFileName)),
-						'thumb-64' => str_replace(TWIST_DOCUMENT_ROOT,'',sprintf('%s/%s',$strThumbPath64,$strFileName)),
-						'thumb-32' => str_replace(TWIST_DOCUMENT_ROOT,'',sprintf('%s/%s',$strThumbPath32,$strFileName))
-					);
+							$arrSupportingAssets[sprintf('square-thumb-%d',$intEachSize)] = str_replace(TWIST_DOCUMENT_ROOT,'',sprintf('%s/%s',$dirThumbPath,$strFileName));
+						}
+					}
 				}
 
 				$strAssetPath = ltrim(str_replace(TWIST_APP_ASSETS,'',$strAssetPath),'/');
