@@ -785,12 +785,9 @@ class View extends BasePackage{
 
 			case'cookie':
 
-				$arrResult = $this->processArrayItem(strtoupper($strReference),$_COOKIE,$blReturnArray);
-
-				if($arrResult['status'] == true){
-					//Protect against XSS attacks
-					$arrResult['return'] = htmlspecialchars($arrResult['return']);
-					$strRawView = $this->replaceTag($strRawView,$strTag,$arrResult['return'],$strFunction,$arrResult['return_raw']);
+				if(array_key_exists($strReference,$_COOKIE)){
+					$strOut = $_COOKIE[$strReference];
+					$strRawView = $this->replaceTag($strRawView,$strTag,$strOut,$strFunction);
 				}
 				break;
 
