@@ -27,6 +27,7 @@ use \Twist\Core\Models\User\SessionHandler;
 class BaseControllerUser extends BaseController{
 
 	protected $resUser = null;
+	protected $strEntryPageURI = null;
 
 	public function __construct(){
 
@@ -38,8 +39,49 @@ class BaseControllerUser extends BaseController{
 		$this -> _aliasURI( 'device-manager', 'deviceManager' );
 	}
 
+	public function _entryPage($strEntryPageURI = null){
+		$this->strEntryPageURI = $strEntryPageURI;
+	}
+
 	public function login(){
+
+		if(array_key_exists('logout',$_GET)){
+			$this->logout();
+		}
+
 		return $this->resUser->viewExtension('login_form');
+	}
+
+	public function authenticate(){
+
+		$arrResult = $this->resUser->authenticate($_POST['email'],$_POST['password']);
+
+		if($arrResult['loggedin']){
+
+			//User is logged in, now have 2 options
+			if(\Twist::framework()->setting('USER_PASSWORD_CHANGE') && $arrResult['status'] == 'temp-pass'){
+				\Twist::redirect('change-password');
+			}else{
+				\Twist::redirect(is_null($this->strEntryPageURI) ? './' : $this->strEntryPageURI);
+			}
+
+		}elseif(\Twist::framework()->setting('USER_EMAIL_VERIFICATION') && $arrResult['status'] == 'unverified'){
+
+			\Twist::redirect('verify-account');
+		}elseif($arrResult['status'] == 'disabled'){
+
+			$this->_errorMessage('Your account has been disabled');
+			\Twist::redirect('login');
+		}else{
+
+			$this->_errorMessage('Invalid login credentials, please try again');
+			\Twist::redirect('login');
+		}
+	}
+
+	public function logout(){
+		$this->resUser->processLogout(null);
+		\Twist::redirect('login');
 	}
 
 	public function forgottenPassword(){
