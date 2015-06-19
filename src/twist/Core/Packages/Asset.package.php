@@ -371,14 +371,16 @@
 					//Create standard thumbnails if any are set to be created
 					$strSizeList = \Twist::framework()->setting('ASSET_THUMBNAIL_SIZES');
 					if($strSizeList !== ''){
-						$objImage = \Twist::Image()->load($strAssetPath);
 						$arrSizes = (strstr($strSizeList,',')) ? explode(',',$strSizeList) : array($strSizeList);
+
+						rsort($arrSizes);
 
 						foreach($arrSizes as $intEachSize){
 							$intEachSize = trim($intEachSize);
 							$dirThumbPath = sprintf('%s/thumb-%d',$strAssetGroupDir,$intEachSize);
 							\Twist::File()->recursiveCreate($dirThumbPath);
 
+							$objImage = \Twist::Image()->load($strAssetPath);
 							$objImage->resizeMaxDimension($intEachSize);
 							$objImage->save(sprintf('%s/%s',$dirThumbPath,$strFileName));
 
@@ -389,14 +391,16 @@
 					//Create square thumbnails if any are set to be created
 					$strSizeList = \Twist::framework()->setting('ASSET_THUMBNAIL_SQUARE_SIZES');
 					if($strSizeList !== ''){
-						$objImage = \Twist::Image()->load($strAssetPath);
 						$arrSizes = (strstr($strSizeList,',')) ? explode(',',$strSizeList) : array($strSizeList);
+
+						rsort($arrSizes);
 
 						foreach($arrSizes as $intEachSize){
 							$intEachSize = trim($intEachSize);
 							$dirThumbPath = sprintf('%s/square-thumb-%d',$strAssetGroupDir,$intEachSize);
 							\Twist::File()->recursiveCreate($dirThumbPath);
 
+							$objImage = \Twist::Image()->load($strAssetPath);
 							$objImage->resizeCover($intEachSize);
 							$objImage->save(sprintf('%s/%s',$dirThumbPath,$strFileName));
 
