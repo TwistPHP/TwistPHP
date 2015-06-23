@@ -337,6 +337,38 @@
 		}
 
 		/**
+		 * Get an array of objects of database records with the ability to update and delete
+		 *
+		 * @param $strTable
+		 * @param array $arrFieldValues
+		 * @return null|array Returns an array of objects of the database table
+		 */
+		public function getRecords($strTable,$arrFieldValues = array()){
+
+			$arrRecords = array();
+
+			if(count($arrFieldValues)){
+				//Get the structure of the table
+				$arrStructure = $this->getStructure($strTable,$this->strDatabaseName);
+
+				foreach($arrFieldValues as $strField => $mxdValue) {
+
+					$arrRecords = $this->find($strTable,$mxdValue,$strField);
+
+					if(count($arrRecords)){
+						foreach($arrRecords as $arrRecord) {
+							$arrRecords[] = new \Twist\Core\Models\Database\Record($this->strDatabaseName,$strTable,$arrStructure,$arrRecord);
+						}
+					}
+				}
+			} else {
+				throw new \Exception('No fields and values specified');
+			}
+
+			return $arrRecords;
+		}
+
+		/**
 		 * Get a clone of a database record as an object to be stored as a new record (auto-increment fields will be nulled)
 	     * The where clause is generated from the second parameter, must be an array
 		 * For example to get the user with the 'id' of 1 pass in array('id' => 1)
@@ -541,6 +573,107 @@
 				}
 			}else{
 				throw new \Exception('Find query failed to run');
+			}
+
+			return $arrRecord;
+		}
+
+		/**
+		 * Search a table for records with more than one field and value using AND to find matching rows
+		 * $arrFieldValues should be an array of key/value pairs e.g. array( 'visible' => '1', 'status' => array( 1, 2 ) ) makes [`visible` = 1 AND `status` IN (1,2)]
+		 *
+		 * @param        $strTable
+		 * @param array  $arrFieldValues
+		 * @param null   $strOrderBy
+		 * @param string $strDirection
+		 * @param null   $intLimit
+		 * @param null   $intOffset
+		 * @return array
+		 * @throws \Exception
+		 */
+		public function search($strTable,$arrFieldValues = array(),$strOrderBy = null,$strDirection = 'ASC',$intLimit = null,$intOffset = null){
+			return $this->performSearch('AND',$strTable,$arrFieldValues,$strOrderBy,$strDirection,$intLimit,$intOffset);
+		}
+
+		/**
+		 * Search a table for records with more than one field and value using OR to find matching rows
+		 * $arrFieldValues should be an array of key/value pairs e.g. array( 'visible' => '1', 'status' => array( 1, 2 ) ) makes [`visible` = 1 AND `status` IN (1,2)]
+		 *
+		 * @param        $strTable
+		 * @param array  $arrFieldValues
+		 * @param null   $strOrderBy
+		 * @param string $strDirection
+		 * @param null   $intLimit
+		 * @param null   $intOffset
+		 * @return array
+		 * @throws \Exception
+		 */
+		public function searchOr($strTable,$arrFieldValues = array(),$strOrderBy = null,$strDirection = 'ASC',$intLimit = null,$intOffset = null){
+			return $this->performSearch('OR',$strTable,$arrFieldValues,$strOrderBy,$strDirection,$intLimit,$intOffset);
+		}
+
+		/**
+		 * Perform a search on a table for records with more than one field and value
+		 *
+		 * @param        $strTable
+		 * @param array  $arrFieldValues
+		 * @param null   $strOrderBy
+		 * @param string $strDirection
+		 * @param null   $intLimit
+		 * @param null   $intOffset
+		 * @return array
+		 * @throws \Exception
+		 */
+		private function performSearch($strAndOr,$strTable,$arrFieldValues = array(),$strOrderBy = null,$strDirection = 'ASC',$intLimit = null,$intOffset = null){
+
+			$arrRecord = array();
+
+			$strOrder = '';
+			if(!is_null($strOrderBy)){
+				$arrOrder = (strstr($strOrderBy,',')) ? explode(',',$strOrderBy) : array($strOrderBy);
+				$strOrder = ' ORDER BY';
+				foreach($arrOrder as $strEachOrder){
+					$strOrder .= sprintf(' `%s` %s,',$this->escapeString($strEachOrder),$this->escapeString($strDirection));
+				}
+				$strOrder = rtrim($strOrder,',');
+			}
+
+			if( count( $arrFieldValues ) ) {
+				$arrWhere = array();
+
+				foreach( $arrFieldValues as $strField => $mxdValue ) {
+
+					$blIn = false;
+
+					if(is_array($mxdValue) && count($mxdValue)) {
+						array_walk( $mxdValue, array( $this, 'escapeString' ) );
+						$blIn = true;
+					}
+
+					$arrWhere[] = sprintf("`%s` %s",
+						$strField,
+						$blIn ? sprintf('IN(%s)',implode(',',$mxdValue)) : sprintf(strstr($mxdValue,'%') ? "LIKE '%s'" : "= '%s'", $this->escapeString($mxdValue))
+					);
+				}
+
+				$strSQL = sprintf("SELECT * FROM `%s`.`%s` WHERE %s%s%s%s",
+					$this->escapeString($this->strDatabaseName),
+					$this->escapeString($strTable),
+					implode(sprintf(' %s ',$strAndOr),$arrWhere),
+					$strOrder,
+					(!is_null($intLimit)) ? sprintf(' LIMIT %d',$this->escapeString($intLimit)) : '',
+					(!is_null($intLimit) && !is_null($intOffset)) ? sprintf(',%d',$this->escapeString($intOffset)) : ''
+				);
+
+				if($this->query($strSQL)){
+					if($this->getNumberRows()){
+						$arrRecord = $this->getFullArray();
+					}
+				}else{
+					throw new \Exception('Find query failed to run');
+				}
+			} else {
+				throw new \Exception('No fields and values specified');
 			}
 
 			return $arrRecord;
