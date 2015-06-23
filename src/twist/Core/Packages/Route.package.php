@@ -1109,6 +1109,7 @@ class Route extends BasePackage{
 
 					$arrTags['base_uri'] = $this->strBaseURI;
 					$arrTags['package_uri'] = $this->strPackageURI;
+					$arrTags['request_uri'] = sprintf('%s%s',$this->strBaseURI, $arrRoute['uri']);
 
 					$this->framework()->package()->extend('View', 'meta', $this->resMeta->getTags());
 					$this->framework()->package()->extend('View', 'route', $arrTags);
