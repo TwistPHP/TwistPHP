@@ -133,7 +133,7 @@
 		 * @note You can pass multidimensional keys separated by '/'
 		 * @param $strKey The key for the item to be removed, passing null removes all
 		 */
-		public function remove($strKey = null){
+		public function delete($strKey = null){
 
 			if(!is_null($strKey) && strstr($strKey,'/')){
 				$_SESSION['twist-session'] = \Twist::framework()->tools()->arrayParseUnset($strKey,$_SESSION['twist-session'],'/');
@@ -142,6 +142,13 @@
 			}elseif(is_null($strKey)){
 				$_SESSION['twist-session'] = array();
 			}
+		}
+
+		/**
+		 * @alias delete
+		 */
+		public function remove($strKey = null){
+			$this->delete($strKey);
 		}
 
 		public function viewExtension($strReference){
