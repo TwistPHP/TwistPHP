@@ -261,12 +261,11 @@ try {
 									$( '#twist-ajax-loader' ).stop().show().fadeTo( 0, 1 );
 								}
 
-								var objData = {
-										foo: 'bar'
-									},
-								intTimeout = intMasterTimeout,
-								funCallbackSuccess = function() {},
-								funCallbackFailure = function() {};
+								//var objData = { foo: 'bar' },
+								var objData = {},
+										intTimeout = intMasterTimeout,
+										funCallbackSuccess = function() {},
+										funCallbackFailure = function() {};
 
 								if( typeof b === 'object'
 										|| ( typeof b === 'string'
