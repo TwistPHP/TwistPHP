@@ -244,7 +244,8 @@ class User extends BasePackage{
 				$objSession->data('user-temp_password','1');
 				$objSession->remove('site-login_redirect');
 
-				$this->goToPage( '?change', false );
+				//$this->goToPage( '?change', false );
+				$this->goToPage( sprintf('%s%s?change',\Twist::Route()->current('registered_uri'),$this->strLoginUrl), false );
 			}
 
 		}elseif($arrUserData['temp_password'] == '1'){
@@ -282,7 +283,8 @@ class User extends BasePackage{
 				//If the user is not verified and password is correct show verification message
 				$objSession->data('user-email',$arrUserData['email']);
 
-				$this->goToPage( '?verification', false );
+				//$this->goToPage( '?verification', false );
+				$this->goToPage( sprintf('%s%s?verification',\Twist::Route()->current('registered_uri'),$this->strLoginUrl), false );
 			}
 		}else{
 			$objSession->remove();
@@ -310,7 +312,8 @@ class User extends BasePackage{
                     $resUser->commit();
 
                     \Twist::Session()->data('site-login_message','A temporary password has been emailed to you');
-                    $this->goToPage('./', false );
+                    //$this->goToPage('./', false );
+	                $this->goToPage( \Twist::Route()->current('registered_uri'), false );
                 }
             }
 
@@ -391,7 +394,8 @@ class User extends BasePackage{
                                 unset($_POST['current_password']);
 
                                 $this->authenticate(\Twist::Session()->data('user-email'),$strNewPassword,$this->strLoginUrl,true);
-                                $this->goToPage('./',false);
+                                //$this->goToPage('./',false);
+	                            $this->goToPage( \Twist::Route()->current('registered_uri'), false );
                             }
                         }else{
 
@@ -405,12 +409,14 @@ class User extends BasePackage{
                             \Twist::Session()->data('user-temp_password','0');
 
                             $this->authenticate(\Twist::Session()->data('user-email'),$strNewPassword,$this->strLoginUrl,true);
-                            $this->goToPage('./',false);
+                            //$this->goToPage('./',false);
+	                        $this->goToPage( \Twist::Route()->current('registered_uri'), false );
                         }
 
                     }else{
                         \Twist::Session()->data('site-error_message','The passwords you entered do not match');
-                        $this->goToPage('?change',false);
+                        //$this->goToPage('?change',false);
+	                    $this->goToPage( sprintf('%s%s?change',\Twist::Route()->current('registered_uri'),$this->strLoginUrl), false );
                     }
                 }
             }
@@ -500,7 +506,8 @@ class User extends BasePackage{
 		$this->resCurrentUser = null;
 
 		if(!is_null($strPage)){
-			$this->goToPage($strPage);
+			//$this->goToPage($strPage);
+			$this->goToPage( sprintf('%s%s?change',\Twist::Route()->current('registered_uri'),$strPage), false );
 		}
 	}
 
@@ -590,10 +597,12 @@ class User extends BasePackage{
 					&& !in_array(substr($strUrl, -4), array('.css','.jpg','.png','.gif','.ico'))){
 				$this->goToPage($strUrl);
 			} else {
-				$this->goToPage( sprintf('%s?change',$this->strLoginUrl), false );
+				//$this->goToPage( sprintf('%s?change',$this->strLoginUrl), false );
+				$this->goToPage( sprintf('%s%s?change',\Twist::Route()->current('registered_uri'),$this->strLoginUrl), false );
 			}
 		}elseif($objSession->data('user-temp_password') == '1' && !strstr($_SERVER['REQUEST_URI'],'?change')){
-			$this->goToPage( '?change', false );
+			//$this->goToPage( '?change', false );
+			$this->goToPage( sprintf('%s%s?change',\Twist::Route()->current('registered_uri'),$this->strLoginUrl), false );
 		}
 	}
 
@@ -783,7 +792,8 @@ class User extends BasePackage{
 
 		if(!$blPasswordChanged){
 			//Send the user back to the change password page
-			$this->goToPage( sprintf('%s?change',$this->strLoginUrl), false );
+			//$this->goToPage( sprintf('%s?change',$this->strLoginUrl), false );
+			$this->goToPage( sprintf('%s%s?change',\Twist::Route()->current('registered_uri'),$this->strLoginUrl), false );
 		}
 
 		return $blPasswordChanged;
@@ -822,7 +832,8 @@ class User extends BasePackage{
 
 		if(!$blPasswordChanged && $blRedirectOnFail){
 			//Send the user back to the change password page
-			$this->goToPage( sprintf('%s?change',$this->strLoginUrl), false );
+			//$this->goToPage( sprintf('%s?change',$this->strLoginUrl), false );
+			$this->goToPage( sprintf('%s%s?change',\Twist::Route()->current('registered_uri'),$this->strLoginUrl), false );
 		}
 
 		return $blPasswordChanged;
