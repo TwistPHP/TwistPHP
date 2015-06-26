@@ -167,11 +167,13 @@ try {
 
 				var TwistAJAX = function( strAJAXPostLocation, b, c, d, e, f ) {
 						var funMasterCallbackSuccess = function() {},
-						funMasterCallbackFailure = function() {},
-						objDefaultData = {},
-						intMasterTimeout = 10000,
-						strLoaderSize = 'medium',
-						objRequests = {};
+								funMasterCallbackFailure = function() {},
+								objDefaultData = {},
+								intMasterTimeout = 10000,
+								strLoaderSize = 'medium',
+								objRequests = {},
+								blCache = false,
+								blShowLoader = true;
 
 						if( typeof strAJAXPostLocation !== 'string'
 								|| strAJAXPostLocation == '' ) {
@@ -257,7 +259,7 @@ try {
 									$( '#twist-ajax-loader-count' ).text( thisTwistAJAX.count );
 								}
 
-								if( thisTwistAJAX.showLoader ) {
+								if( blShowLoader ) {
 									$( '#twist-ajax-loader' ).stop().show().fadeTo( 0, 1 );
 								}
 
@@ -344,7 +346,7 @@ try {
 										dataType: 'json',
 										timeout: intTimeout,
 										global: true,
-										cache: false,
+										cache: blCache,
 										complete: function( jqXHR, strStatusText ) {
 												thisTwistAJAX.count--;
 
@@ -441,17 +443,27 @@ try {
 								this.defaultArray = objDefaultData,
 								this.delete = function( strFunction, b, c, d, e ) {
 										send( strFunction, 'DELETE', b, c, d, e );
+										return thisTwistAJAX;
+									},
+								this.disableCache = function() {
+										blCache = false;
+										return thisTwistAJAX;
 									},
 								this.disableLoader = function() {
-									thisTwistAJAX.showLoader = false;
-									return thisTwistAJAX;
-								},
+										blShowLoader = false;
+										return thisTwistAJAX;
+									},
+								this.enableCache = function() {
+										blCache = false;
+										return thisTwistAJAX;
+									},
 								this.enableLoader = function() {
-									thisTwistAJAX.showLoader = true;
-									return thisTwistAJAX;
-								},
+										blShowLoader = true;
+										return thisTwistAJAX;
+									},
 								this.get = function( strFunction, b, c, d, e ) {
 										send( strFunction, 'GET', b, c, d, e );
+										return thisTwistAJAX;
 									},
 								this.loaderSize = function( strSize ) {
 									if( $( '#twist-ajax-loader' ).length ) {
@@ -470,14 +482,16 @@ try {
 								},
 								this.patch = function( strFunction, b, c, d, e ) {
 										send( strFunction, 'PATCH', b, c, d, e );
+										return thisTwistAJAX;
 									},
 								this.post = function( strFunction, b, c, d, e ) {
 										send( strFunction, 'POST', b, c, d, e );
+										return thisTwistAJAX;
 									},
 								this.put = function( strFunction, b, c, d, e ) {
 										send( strFunction, 'PUT', b, c, d, e );
-									},
-								this.showLoader = true;
+										return thisTwistAJAX;
+									};
 
 						$( document ).ready(
 							function() {
