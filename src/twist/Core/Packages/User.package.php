@@ -392,6 +392,7 @@ class User extends BasePackage{
                                 //Remove the two posted password vars
                                 unset($_POST['password']);
                                 unset($_POST['current_password']);
+	                            \Twist::Session()->remove('site-error_message');
 
                                 $this->authenticate(\Twist::Session()->data('user-email'),$strNewPassword,$this->strLoginUrl,true);
                                 //$this->goToPage('./',false);
@@ -407,6 +408,7 @@ class User extends BasePackage{
                             //Remove the posted password and reset the session var
                             unset($_POST['password']);
                             \Twist::Session()->data('user-temp_password','0');
+	                        \Twist::Session()->remove('site-error_message');
 
                             $this->authenticate(\Twist::Session()->data('user-email'),$strNewPassword,$this->strLoginUrl,true);
                             //$this->goToPage('./',false);
