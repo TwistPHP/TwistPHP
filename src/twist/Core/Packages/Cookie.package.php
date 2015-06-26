@@ -62,7 +62,7 @@
 		 * @param string $domain
 		 * @return bool
 		 */
-		public function set($strName, $mxdValue, $intExpiry = null, $strPath = '/', $strDomain = false){
+		public function set($strName, $mxdValue, $intExpiry = 0, $strPath = '/', $strDomain = false){
 
 			$blOut = false;
 
@@ -72,12 +72,14 @@
 					$strDomain = $_SERVER['HTTP_HOST'];
 				}
 
-				if($intExpiry === -1){
-					$intExpiry = strtotime('+99 Years');
-				}elseif (is_numeric($intExpiry)){
-					$intExpiry += time();
-				}elseif(!is_null($intExpiry)){
-					$intExpiry = strtotime($intExpiry);
+				if($intExpiry !== 0){
+					if($intExpiry === -1){
+						$intExpiry = strtotime('+99 Years');
+					}elseif (is_numeric($intExpiry)){
+						$intExpiry += time();
+					}elseif(!is_null($intExpiry)){
+						$intExpiry = strtotime($intExpiry);
+					}
 				}
 
 				$blOut = @setcookie($strName, $mxdValue, $intExpiry, $strPath, $strDomain);
