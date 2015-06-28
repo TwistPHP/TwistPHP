@@ -1,5 +1,10 @@
 #TwistPHP Documentation
 
+Hooray!
+You've chosen to use the TwistPHP framework. We can promise you won't be disappointed.
+
+If you already have a good understanding of PHP then this should be a breeze...
+
 ##Getting Started
 
 1. [Installing](getting-started/1-Installing.md)
@@ -17,7 +22,10 @@
 
 ##Examples
 
+Examples guides to get you up and running with all the main features of TwistPHP.
+
 ###Controllers
+* [Create](examples/Controllers/Create.md)
 
 ###Database
 
@@ -27,7 +35,13 @@
 
 ###Packages
 
+* [Create](examples/Packages/Create.md)
+* [Install](examples/Packages/Install.md)
+* [Update](examples/Packages/Update.md)
+
 ###Routes
+
+* [Rules](examples/Routes/Rules.md)
 
 ##Coding Conventions
 
