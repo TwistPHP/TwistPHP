@@ -23,7 +23,7 @@
 
 	namespace Twist\Core\Models\Session;
 
-	class File{
+	class Files{
 
 		protected $savePath;
 		protected $sessionName;

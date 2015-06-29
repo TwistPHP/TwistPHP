@@ -23,7 +23,7 @@
 
 	namespace Twist\Core\Packages;
 	use \Twist\Core\Classes\BasePackage;
-	use \Twist\Core\Models\Session\File;
+	use \Twist\Core\Models\Session\Files;
 	use \Twist\Core\Models\Session\Memcache;
 	use \Twist\Core\Models\Session\Mysql;
 
@@ -44,7 +44,7 @@
 			switch($this->strHandler){
 
 				case'file';
-					$this->resHandler = new File();
+					$this->resHandler = new Files();
 					break;
 
 				case'memcache';
