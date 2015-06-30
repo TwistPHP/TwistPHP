@@ -1151,7 +1151,7 @@ class Route extends BasePackage{
                                     $strMimeType = ($arrRoute['item']['force-download']) ? null : \Twist::File()->mimeType($strFilePath);
                                     \Twist::File()->serve($strFilePath, basename($strFilePath), $strMimeType, null, $arrRoute['item']['speed'], false);
                                 }else{
-                                    \Twist::respond(403,'Unsupported file extension, PHP files are disabled');
+                                    \Twist::respond(403,'Unsupported file extension, PHP files are disallowed through this method');
                                 }
                             }else{
                                 \Twist::respond(404);
