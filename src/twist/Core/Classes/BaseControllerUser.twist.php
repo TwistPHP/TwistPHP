@@ -62,7 +62,7 @@ class BaseControllerUser extends BaseController{
 			if(\Twist::framework()->setting('USER_PASSWORD_CHANGE') && $arrResult['status'] == 'temp-pass'){
 				\Twist::redirect('change-password');
 			}else{
-				\Twist::redirect(is_null($this->strEntryPageURI) ? './' : $this->strEntryPageURI);
+				\Twist::redirect(is_null($this->strEntryPageURI) ? './' : './'.$this->strEntryPageURI);
 			}
 
 		}elseif(\Twist::framework()->setting('USER_EMAIL_VERIFICATION') && $arrResult['status'] == 'unverified'){
@@ -71,17 +71,17 @@ class BaseControllerUser extends BaseController{
 		}elseif($arrResult['status'] == 'disabled'){
 
 			$this->_errorMessage('Your account has been disabled');
-			\Twist::redirect('login');
+			\Twist::redirect('./login');
 		}else{
 
 			$this->_errorMessage('Invalid login credentials, please try again');
-			\Twist::redirect('login');
+			\Twist::redirect('./login');
 		}
 	}
 
 	public function logout(){
 		$this->resUser->processLogout(null);
-		\Twist::redirect('login');
+		\Twist::redirect('./login');
 	}
 
 	public function forgottenPassword(){
@@ -126,7 +126,7 @@ class BaseControllerUser extends BaseController{
 							$strNewPassword = $_POST['password'];
 
 							//Change the users password and re-log them in (Only for none-temp password users)
-							$this->resUser->changePassword(\Twist::Session()->data('user-id'),$strNewPassword,$_POST['current_password'],true);
+							$this->resUser->changePassword(\Twist::Session()->data('user-id'),$strNewPassword,$_POST['current_password'],false);
 
 							//Remove the two posted password vars
 							unset($_POST['password']);
@@ -152,7 +152,7 @@ class BaseControllerUser extends BaseController{
 
 				}else{
 					\Twist::Session()->data('site-error_message','The passwords you entered do not match');
-					\Twist::redirect('?change');
+					\Twist::redirect('./change-password');
 				}
 			}
 		}
