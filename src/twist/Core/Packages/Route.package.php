@@ -300,7 +300,8 @@ class Route extends BasePackage{
 	}
 
 	/**
-	 * Serve a file form a particular route, you can change the name of the file upon download and restrict the download bandwidth (very helpfull if you have limited bandwidth)
+	 * Serve a file form a particular route, you can change the name of the file upon download and restrict the download bandwidth (very helpful if you have limited bandwidth)
+     *
 	 * @param $strURI
 	 * @param $dirFilePath Full path to the file that will be served
 	 * @param null $strServeName Name of the file to be served
@@ -309,6 +310,19 @@ class Route extends BasePackage{
 	public function file($strURI,$dirFilePath,$strServeName = null,$intLimitDownloadSpeed = null){
 		$this->addRoute($strURI,'file',array('file' => $dirFilePath, 'name' => $strServeName, 'speed' => $intLimitDownloadSpeed),false,false,array());
 	}
+
+    /**
+     * Serve all contents of a folder on a virtual route, the folder begin served dose not need to be publicly accessible,
+     * also restriction can be applied to the virtual route if user login is required to access.
+     *
+     * @param $strURI
+     * @param $dirFolderPath Full path to the folder to be served
+     * @param bool $blForceDownload Force the file to be downloaded to be browser
+     * @param null $intLimitDownloadSpeed Download speed for the end user in KB
+     */
+    public function folder($strURI,$dirFolderPath,$blForceDownload = false,$intLimitDownloadSpeed = null){
+        $this->addRoute($strURI,'folder',array('folder' => $dirFolderPath,'force-download' => $blForceDownload,'speed' => $intLimitDownloadSpeed),false,false,array());
+    }
 
 	/**
 	 * Add a controller that will be called upon a any request (HTTP METHOD) to the given URI.
@@ -1125,8 +1139,18 @@ class Route extends BasePackage{
 						case'file':
 							\Twist::File()->serve($arrRoute['item']['file'],$arrRoute['item']['name'],null,null,$arrRoute['item']['speed'],false);
 							break;
+						case'folder':
+                            $strFilePath = sprintf('%s/%s',$arrRoute['item']['folder'],$arrRoute['dynamic']);
+
+                            if(file_exists($strFilePath)){
+                                $strMimeType = ($arrRoute['item']['force-download']) ? null : \Twist::File()->mimeType($strFilePath);
+                                \Twist::File()->serve($strFilePath,basename($strFilePath),$strMimeType,null,$arrRoute['item']['speed'],false);
+                            }else{
+                                \Twist::respond(404);
+                            }
+							break;
 						case'function':
-								$arrTags['response'] = $arrRoute['item']();
+							$arrTags['response'] = $arrRoute['item']();
 							break;
 						case'ajax':
 							if(!TWIST_AJAX_REQUEST){

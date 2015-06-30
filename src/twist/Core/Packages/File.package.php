@@ -306,10 +306,15 @@ class File extends BasePackage{
 					$strFileBase = $this->sanitizeName($strFileBase);
 				}
 
-				//Set the inital headers
-				header("Content-Transfer-Encoding: binary");
-				header('Content-Description: File Transfer');
-				header('Content-Disposition: attachment; filename='.$strFileBase);
+                if(is_null($strMimeType)){
+                    //Only set these headers if we are forcing a download
+                    header("Content-Transfer-Encoding: binary");
+                    header('Content-Description: File Transfer');
+                    header('Content-Disposition: attachment; filename='.$strFileBase);
+                }else{
+                    header('Content-Disposition: inline; filename='.$strFileBase);
+                }
+
 				header("Content-Length: ".filesize($strFile));
 
 				//Fix for IE6, IE7 and IE8 browsers when using HTTPS that do not have the following HotFix: http://support.microsoft.com/kb/323308/en-us
