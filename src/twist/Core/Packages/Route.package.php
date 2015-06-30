@@ -1140,14 +1140,23 @@ class Route extends BasePackage{
 							\Twist::File()->serve($arrRoute['item']['file'],$arrRoute['item']['name'],null,null,$arrRoute['item']['speed'],false);
 							break;
 						case'folder':
+
                             $strFilePath = sprintf('%s/%s',$arrRoute['item']['folder'],$arrRoute['dynamic']);
 
                             if(file_exists($strFilePath)){
-                                $strMimeType = ($arrRoute['item']['force-download']) ? null : \Twist::File()->mimeType($strFilePath);
-                                \Twist::File()->serve($strFilePath,basename($strFilePath),$strMimeType,null,$arrRoute['item']['speed'],false);
+
+                                //For security do not allow PHP files to be served.
+                                if(!substr($arrRoute['dynamic'],'-3') == 'php') {
+
+                                    $strMimeType = ($arrRoute['item']['force-download']) ? null : \Twist::File()->mimeType($strFilePath);
+                                    \Twist::File()->serve($strFilePath, basename($strFilePath), $strMimeType, null, $arrRoute['item']['speed'], false);
+                                }else{
+                                    \Twist::respond(403,'Unsupported file extension, PHP files are disabled');
+                                }
                             }else{
                                 \Twist::respond(404);
                             }
+
 							break;
 						case'function':
 							$arrTags['response'] = $arrRoute['item']();
