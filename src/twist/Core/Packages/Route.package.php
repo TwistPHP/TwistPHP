@@ -1146,7 +1146,7 @@ class Route extends BasePackage{
                             if(file_exists($strFilePath)){
 
                                 //For security do not allow PHP files to be served.
-                                if(!substr($arrRoute['dynamic'],'-3') == 'php') {
+                                if(substr($arrRoute['dynamic'],'-3') !== 'php') {
 
                                     $strMimeType = ($arrRoute['item']['force-download']) ? null : \Twist::File()->mimeType($strFilePath);
                                     \Twist::File()->serve($strFilePath, basename($strFilePath), $strMimeType, null, $arrRoute['item']['speed'], false);
