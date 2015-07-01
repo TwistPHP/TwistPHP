@@ -1,4 +1,4 @@
-<form class="block" action="{route:login_uri==undefiend?data:login_page:route:login_uri}" method="post">
+<form class="block" action="{uri:./register}" method="post">
 	<h6 class="no-top-padding">Register</h6>
 	<p class="error" style="display: {data:register_error_message!=null?'block':'none'};">{data:register_error_message}</p>
 	<p class="notice" style="display: {data:register_message!=null?'block':'none'};">{data:register_message}</p>

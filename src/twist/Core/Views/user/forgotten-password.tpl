@@ -1,4 +1,4 @@
-<form class="block" action="{route:login_uri==undefiend?data:login_page:route:login_uri}" method="post" autocomplete="off">
+<form class="block" action="{uri:./forgotten-password}" method="post" autocomplete="off">
 	<h6 class="no-top-padding">Password Reset</h6>
 	<p>Enter your registered email address and a new password will be sent to you.</p>
 	<label class="shadowEmail">Email</label>

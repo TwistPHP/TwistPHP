@@ -1,4 +1,4 @@
-<form class="block" action="{route:login_uri==undefiend?data:login_page:route:login_uri}" method="post" autocomplete="off">
+<form class="block" action="{uri:./change-password}" method="post" autocomplete="off">
 	<h6 class="no-top-padding">Change Your Password</h6>
 	<p class="error" style="display: {data:error_message!=null?'block':'none'};">{data:error_message}</p>
 	<label class="shadowCurrentPassword">Your Current Password</label>
