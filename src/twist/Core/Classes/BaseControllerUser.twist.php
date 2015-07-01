@@ -198,4 +198,69 @@ class BaseControllerUser extends BaseController{
 			$objUserSessionHandler->forgetDevice($this->resUser->currentID(), $_GET['forget-device']);
 		}
 	}
+
+    public function register(){
+        return $this->resUser->viewExtension('registration_form');
+    }
+
+    public function postRegister(){
+
+        //Process the register user request
+        if(array_key_exists('register',$_POST) && $_POST['register'] != ''){
+
+            $resUser = $this->resUser->create();
+            $resUser->email($_POST['email']);
+            $resUser->firstname($_POST['firstname']);
+            $resUser->surname($_POST['lastname']);
+            $resUser->level(10);
+
+            $blContinue = true;
+
+            if(\Twist::framework()->setting('USER_REGISTER_PASSWORD')){
+
+                if($_POST['password'] === $_POST['confirm_password']){
+                    $arrResponse = $resUser->password($_POST['password']);
+
+                    if(!$arrResponse['status']){
+                        \Twist::Session()->data('site-register_error_message',$arrResponse['message']);
+                        $blContinue = false;
+                    }
+                }else{
+                    \Twist::Session()->data('site-register_error_message','Your password and confirm password do not match');
+                    $blContinue = false;
+                }
+            }else{
+                $resUser->resetPassword();
+            }
+
+            //If the password configuration has passed all checks then continue
+            if($blContinue){
+                $intUserID = $resUser->commit();
+
+                if($intUserID > 0){
+
+                    //AUTO_LOGIN
+                    if(\Twist::framework()->setting('USER_REGISTER_PASSWORD') && !\Twist::framework()->setting('USER_EMAIL_VERIFICATION') && \Twist::framework()->setting('USER_AUTO_AUTHENTICATE')){
+
+                        //@todo redirect - test or work out best way of doing this
+                        //$this->resUser->afterLoginRedirect(); --- set the value that this function uses, authenticate will do the redirect
+
+                        //Authenticate the user (log them in)
+                        $this->resUser->authenticate($_POST['email'],$_POST['password']);
+
+                        //@todo redirect - test or work out best way of doing this
+                        $this->resUser->afterLoginRedirect();
+                    }else{
+                        \Twist::Session()->data('site-register_message','Thank you for your registration, your password has been emailed to you');
+                        unset( $_POST['email'] );
+                        unset( $_POST['firstname'] );
+                        unset( $_POST['lastname'] );
+                        unset( $_POST['register'] );
+                    }
+                }else{
+                    \Twist::Session()->data('site-register_error_message','Failed to register user');
+                }
+            }
+        }
+    }
 }

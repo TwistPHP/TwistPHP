@@ -22,9 +22,9 @@
  */
 
 namespace Twist\Core\Controllers;
-use Twist\Core\Classes\BaseController;
+use Twist\Core\Classes\BaseControllerUser;
 
-class Manager extends BaseController{
+class Manager extends BaseControllerUser{
 
 	public function __construct(){
 		\Twist::Route()->setDirectory(sprintf('%smanager/',TWIST_FRAMEWORK_VIEWS));
@@ -33,11 +33,6 @@ class Manager extends BaseController{
 
 	public function _default(){
 		return $this->dashboard();
-	}
-
-	public function login(){
-		\Twist::Route()->baseViewIgnore();
-		return $this->_view('_login.tpl');
 	}
 
 	public function update(){
