@@ -77,6 +77,7 @@ class Setup extends BaseController{
 		try{ $blCurl = (function_exists('curl_init') || class_exists('curl_init')); }catch(\Exception $resException){ $blCurl = false; }
 		try{ $blMysql = (function_exists('mysql_connect') || function_exists('mysqli_connect')); }catch(\Exception $resException){ $blMysql = false; }
 		try{ $blZip = (function_exists('ZipArchive') || class_exists('ZipArchive')); }catch(\Exception $resException){ $blZip = false; }
+		try{ $blMultiByte = function_exists('mb_strlen'); }catch(\Exception $resException){ $blMultiByte = false; }
 
 		$blCookies = (is_array($_COOKIE) && array_key_exists('twist_setup_test',$_COOKIE));
 
@@ -88,6 +89,7 @@ class Setup extends BaseController{
 			'php_curl' => ($blCurl) ? 'success' : 'warning',
 			'php_mysql' => ($blMysql) ? 'success' : 'warning',
 			'php_zip' => ($blZip) ? 'success' : 'warning',
+			'php_multibyte' => ($blMultiByte) ? 'success' : 'warning',
 			'php_cookies' => ($blCookies) ? 'success' : 'warning',
 			'continue_status' => ($blPassChecks) ? '' : ' hidden'
 		);
