@@ -106,7 +106,7 @@
 		 * @param $strLineDelimiter  Expected delimiter for each line used in the CSV
 		 * @param $intFieldDelimiter Expected delimiter for each field used in the CSV
 		 * @param $strEnclosure      Expected enclosure to be used in creation of CSV data
-		 * @param $strEscape         String used to escape the CSV data
+		 * @param $strEscape         String used to escape the CSV data (Only used if mbstring is enabled in PHP)
 		 *
 		 * @return array Returns Multi-dimensional array of the CSV data
 		 */
@@ -114,8 +114,13 @@
 
 			$arrOut = $arrHeaders = array();
 
-			foreach( str_getcsv( mb_convert_encoding( file_get_contents( $strLocalFile ), $strEncoding ), $strLineDelimiter ) as $intRow => $strRow ) {
-				$arrRow = str_getcsv( mb_convert_encoding( $strRow, $strEncoding ), $intFieldDelimiter, $strEnclosure, $strEscape );
+			$strConvertedString = function_exists('mb_convert_encoding') ? mb_convert_encoding( file_get_contents( $strLocalFile ), $strEncoding ) : file_get_contents( $strLocalFile );
+
+			foreach( str_getcsv( $strConvertedString, $strLineDelimiter ) as $intRow => $strRow ) {
+
+				$strRow = function_exists('mb_convert_encoding') ? mb_convert_encoding( $strRow, $strEncoding ) : $strRow;
+				$arrRow = str_getcsv( $strRow, $intFieldDelimiter, $strEnclosure, $strEscape );
+
 				if( $blUseFirstRowAsKeys ) {
 					if( $intRow === 0 ) {
 						$arrHeaders = $arrRow;

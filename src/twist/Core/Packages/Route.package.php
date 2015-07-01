@@ -1198,7 +1198,7 @@ class Route extends BasePackage{
 						header( 'Cache-Control: no-cache, must-revalidate' );
 						header( 'Expires: Wed, 24 Sep 1986 14:20:00 GMT' );
 						header( 'Content-type: application/json' );
-						header( sprintf( 'Content-length: %d', mb_strlen( $arrTags['response'] ) ) );
+						header( sprintf( 'Content-length: %d', function_exists('mb_strlen') ? mb_strlen( $arrTags['response'] ) : strlen( $arrTags['response'] ) ) );
 
 						echo $arrTags['response'];
 					}else{

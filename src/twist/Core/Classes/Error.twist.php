@@ -178,7 +178,7 @@
 	                header( 'Cache-Control: no-cache, must-revalidate' );
 	                header( 'Expires: Wed, 24 Sep 1986 14:20:00 GMT' );
 	                header( 'Content-type: application/json' );
-	                header( sprintf('Content-length: %d', mb_strlen(json_encode($arrTags))) );
+	                header( sprintf('Content-length: %d', function_exists('mb_strlen') ? mb_strlen(json_encode($arrTags)) : strlen(json_encode($arrTags))) );
 
 	                die(json_encode($arrTags));
 	            }else{

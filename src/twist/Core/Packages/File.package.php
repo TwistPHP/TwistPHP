@@ -119,8 +119,8 @@ class File extends BasePackage{
 		$strFilename = preg_replace('/\s/','-',$strFilename);
 		$strFilename = preg_replace('/\-{2,}/','-',$strFilename);
 
-		// Only allow one dash separator at a time (and make string lowercase)
-		return mb_strtolower(preg_replace('/--+/u', '-', $strFilename), 'UTF-8');
+		// Only allow one dash separator at a time (and make string lowercase) - only user mb_ if mbstring is enabled in PHP
+		return function_exists('mb_strtolower') ? mb_strtolower(preg_replace('/--+/u', '-', $strFilename), 'UTF-8') : strtolower(preg_replace('/--+/u', '-', $strFilename));
 	}
 
 
