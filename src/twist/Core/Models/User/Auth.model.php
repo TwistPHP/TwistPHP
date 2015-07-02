@@ -49,7 +49,7 @@ class Auth{
         self::validate($strEmail,$strPassword);
 
         if(self::$arrCurrentSession['status']){
-            
+
             //Create the session key or session cookie
             if($blRememberMeCookie){
                 //self::$arrCurrentSession['session_key'] = self::$objUserSession->createCookie(self::$arrCurrentSession['user_id']);
