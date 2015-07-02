@@ -22,182 +22,188 @@
  */
 
 namespace Twist\Core\Classes;
-use \Twist\Core\Models\User\SessionHandler;
+use \Twist\Core\Models\User\Auth;
 
 class BaseControllerUser extends BaseController{
 
-	protected $resUser = null;
-	protected $strEntryPageURI = null;
+    protected $resUser = null;
+    protected $strEntryPageURI = null;
 
-	public function __construct(){
+    public function __construct(){
 
-		$this->resUser = \Twist::User();
+        $this->resUser = \Twist::User();
 
-		$this -> _aliasURI( 'change-password', 'changePassword' );
-		$this -> _aliasURI( 'forgotten-password', 'forgottenPassword' );
-		$this -> _aliasURI( 'verify-account', 'verifyAccount' );
-		$this -> _aliasURI( 'device-manager', 'deviceManager' );
-	}
+        $this -> _aliasURI( 'change-password', 'changePassword' );
+        $this -> _aliasURI( 'forgotten-password', 'forgottenPassword' );
+        $this -> _aliasURI( 'verify-account', 'verifyAccount' );
+        $this -> _aliasURI( 'device-manager', 'deviceManager' );
+    }
 
-	public function _entryPage($strEntryPageURI = null){
-		$this->strEntryPageURI = $strEntryPageURI;
-	}
+    public function _entryPage($strEntryPageURI = null){
+        $this->strEntryPageURI = $strEntryPageURI;
+    }
 
-	public function login(){
+    public function login(){
 
-		if(array_key_exists('logout',$_GET)){
-			$this->logout();
-		}
+        if(array_key_exists('logout',$_GET)){
+            $this->logout();
+        }
 
-		return $this->resUser->viewExtension('login_form');
-	}
+        return $this->resUser->viewExtension('login_form');
+    }
 
-	public function authenticate(){
+    public function authenticate(){
 
-		$arrResult = $this->resUser->authenticate($_POST['email'],$_POST['password']);
+        $arrResult = Auth::login($_POST['email'],$_POST['password'],(array_key_exists('remember',$_POST) && $_POST['remember'] == '1'));
 
-		if($arrResult['loggedin']){
+        if($arrResult['issue'] != ''){
 
-			//User is logged in, now have 2 options
-			if(\Twist::framework()->setting('USER_PASSWORD_CHANGE') && $arrResult['status'] == 'temp-pass'){
-				\Twist::redirect('change-password');
-			}else{
-				\Twist::redirect(is_null($this->strEntryPageURI) ? './' : './'.$this->strEntryPageURI);
-			}
+            \Twist::Session()->data('site-login_error_message',$arrResult['message']);
 
-		}elseif(\Twist::framework()->setting('USER_EMAIL_VERIFICATION') && $arrResult['status'] == 'unverified'){
+            //A login issue has occurred, redirect to the relevant page
+            switch($arrResult['issue']){
 
-			\Twist::redirect('verify-account');
-		}elseif($arrResult['status'] == 'disabled'){
+                case 'temporary':
+                    \Twist::redirect('./change-password');
+                    break;
 
-			$this->_errorMessage('Your account has been disabled');
-			\Twist::redirect('./login');
-		}else{
+                case 'verify':
+                    \Twist::redirect('./verify-account');
+                    break;
 
-			$this->_errorMessage('Invalid login credentials, please try again');
-			\Twist::redirect('./login');
-		}
-	}
+                case 'disabled':
+                case 'password':
+                case 'email':
+                    \Twist::redirect('./login');
+                    break;
+            }
 
-	public function logout(){
-		$this->resUser->processLogout(null);
-		\Twist::redirect('./login');
-	}
+        }elseif($arrResult['status']){
+            //Login complete
+            \Twist::redirect(is_null($this->strEntryPageURI) ? './' : './'.$this->strEntryPageURI);
+        }else{
+            //You are not logged in
+            \Twist::redirect('./login');
+        }
+    }
 
-	public function forgottenPassword(){
-		return $this->resUser->viewExtension('forgotten_password_form');
-	}
+    public function logout(){
+        Auth::logout();
+        \Twist::redirect('./login');
+    }
 
-	public function postForgottenPassword(){
+    public function forgottenPassword(){
+        return $this->resUser->viewExtension('forgotten_password_form');
+    }
 
-		//Process the forgotten password request
-		if(array_key_exists('forgotten_email',$_POST) && $_POST['forgotten_email'] != ''){
-			$arrUserData = $this->resUser->getByEmail($_POST['forgotten_email']);
+    public function postForgottenPassword(){
 
-			//Now if the email exists send out the reset password email.
-			if(is_array($arrUserData) && count($arrUserData) > 0){
+        //Process the forgotten password request
+        if(array_key_exists('forgotten_email',$_POST) && $_POST['forgotten_email'] != ''){
+            $arrUserData = $this->resUser->getByEmail($_POST['forgotten_email']);
 
-				$resUser = $this->resUser->get($arrUserData['id']);
-				$resUser->resetPassword(true);
-				$resUser->commit();
+            //Now if the email exists send out the reset password email.
+            if(is_array($arrUserData) && count($arrUserData) > 0){
 
-				\Twist::Session()->data('site-login_message','A temporary password has been emailed to you');
-				\Twist::redirect('./');
-			}
-		}
-	}
+                $resUser = $this->resUser->get($arrUserData['id']);
+                $resUser->resetPassword(true);
+                $resUser->commit();
 
-	public function changePassword(){
-		return $this->resUser->viewExtension('change_password_form');
-	}
+                \Twist::Session()->data('site-login_message','A temporary password has been emailed to you');
+                \Twist::redirect('./');
+            }
+        }
+    }
 
-	public function postChangePassword(){
+    public function changePassword(){
+        return $this->resUser->viewExtension('change_password_form');
+    }
 
-		if(array_key_exists('password',$_POST) && array_key_exists('confirm_password',$_POST)){
+    public function postChangePassword(){
 
-			if($this->resUser->loggedIn()){
+        if(array_key_exists('password',$_POST) && array_key_exists('confirm_password',$_POST)){
 
-				if($_POST['password'] === $_POST['confirm_password']){
+            if($this->resUser->loggedIn()){
 
-					if(\Twist::Session()->data('user-temp_password') === '0'){
+                if($_POST['password'] === $_POST['confirm_password']){
 
-						if(array_key_exists('current_password',$_POST)){
+                    if(\Twist::Session()->data('user-temp_password') === '0'){
 
-							$strNewPassword = $_POST['password'];
+                        if(array_key_exists('current_password',$_POST)){
 
-							//Change the users password and re-log them in (Only for none-temp password users)
-							$this->resUser->changePassword(\Twist::Session()->data('user-id'),$strNewPassword,$_POST['current_password'],false);
+                            $strNewPassword = $_POST['password'];
 
-							//Remove the two posted password vars
-							unset($_POST['password']);
-							unset($_POST['current_password']);
+                            //Change the users password and re-log them in (Only for none-temp password users)
+                            $this->resUser->changePassword(\Twist::Session()->data('user-id'),$strNewPassword,$_POST['current_password'],false);
 
-							$this->resUser->authenticate(\Twist::Session()->data('user-email'),$strNewPassword,$this->resUser->strLoginUrl,true);
-							\Twist::redirect('./');
-						}
-					}else{
+                            //Remove the two posted password vars
+                            unset($_POST['password']);
+                            unset($_POST['current_password']);
 
-						$strNewPassword = $_POST['password'];
+                            Auth::login(\Twist::Session()->data('user-email'),$strNewPassword);
+                            \Twist::redirect('./');
+                        }
+                    }else{
 
-						//Change the users password and re-log them in
-						$this->resUser->updatePassword(\Twist::Session()->data('user-id'),$strNewPassword);
+                        $strNewPassword = $_POST['password'];
 
-						//Remove the posted password and reset the session var
-						unset($_POST['password']);
-						\Twist::Session()->data('user-temp_password','0');
+                        //Change the users password and re-log them in
+                        $this->resUser->updatePassword(\Twist::Session()->data('user-id'),$strNewPassword);
 
-						$this->resUser->authenticate(\Twist::Session()->data('user-email'),$strNewPassword,$this->resUser->strLoginUrl,true);
-						\Twist::redirect('./');
-					}
+                        //Remove the posted password and reset the session var
+                        unset($_POST['password']);
+                        \Twist::Session()->data('user-temp_password','0');
 
-				}else{
-					\Twist::Session()->data('site-error_message','The passwords you entered do not match');
-					\Twist::redirect('./change-password');
-				}
-			}
-		}
-	}
+                        Auth::login(\Twist::Session()->data('user-email'),$strNewPassword);
+                        \Twist::redirect('./');
+                    }
 
-	public function verifyAccount(){
-		return $this->resUser->viewExtension('account_verification');
-	}
+                }else{
+                    \Twist::Session()->data('site-error_message','The passwords you entered do not match');
+                    \Twist::redirect('./change-password');
+                }
+            }
+        }
+    }
 
-	public function postVerifyAccount(){
+    public function verifyAccount(){
+        return $this->resUser->viewExtension('account_verification');
+    }
 
-		//Resend a new verification code
-		if(array_key_exists('verification_email',$_POST) && $_POST['verification_email'] != ''){
-			$arrUserData = $this->resUser->getByEmail($_POST['verification_email']);
+    public function postVerifyAccount(){
 
-			//Now if the email exists send out the reset password email.
-			if(is_array($arrUserData) && count($arrUserData) > 0){
+        //Resend a new verification code
+        if(array_key_exists('verification_email',$_POST) && $_POST['verification_email'] != ''){
+            $arrUserData = $this->resUser->getByEmail($_POST['verification_email']);
 
-				$resUser = $this->resUser->get($arrUserData['id']);
-				$resUser->requireVerification();
-				$resUser->commit();
-			}
-		}
+            //Now if the email exists send out the reset password email.
+            if(is_array($arrUserData) && count($arrUserData) > 0){
 
-		if(array_key_exists('verify',$_GET) && array_key_exists('verify',$_GET) && $_GET['verify'] != ''){
-			$this->resUser->verifyEmail($_GET['verify']);
-		}
-	}
+                $resUser = $this->resUser->get($arrUserData['id']);
+                $resUser->requireVerification();
+                $resUser->commit();
+            }
+        }
 
-	public function deviceManager(){
-		return $this->resUser->viewExtension('devices_form');
-	}
+        if(array_key_exists('verify',$_GET) && array_key_exists('verify',$_GET) && $_GET['verify'] != ''){
+            $this->resUser->verifyEmail($_GET['verify']);
+        }
+    }
 
-	public function postDeviceManager(){
+    public function deviceManager(){
+        return $this->resUser->viewExtension('devices_form');
+    }
 
-		$objUserSessionHandler = new SessionHandler();
+    public function postDeviceManager(){
 
-		if(array_key_exists('save-device',$_GET) && array_key_exists('device-name',$_GET)){
-			$objUserSessionHandler->editDevice($this->resUser->currentID(),$_GET['save-device'],$_GET['device-name']);
-		}
+        if(array_key_exists('save-device',$_GET) && array_key_exists('device-name',$_GET)){
+            Auth::SessionHandler()->editDevice($this->resUser->currentID(),$_GET['save-device'],$_GET['device-name']);
+        }
 
-		if(array_key_exists('forget-device',$_GET)) {
-			$objUserSessionHandler->forgetDevice($this->resUser->currentID(), $_GET['forget-device']);
-		}
-	}
+        if(array_key_exists('forget-device',$_GET)) {
+            Auth::SessionHandler()->forgetDevice($this->resUser->currentID(), $_GET['forget-device']);
+        }
+    }
 
     public function register(){
         return $this->resUser->viewExtension('registration_form');

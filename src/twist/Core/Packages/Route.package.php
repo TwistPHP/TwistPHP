@@ -818,9 +818,6 @@ class Route extends BasePackage{
 
 		if(\Twist::Database()->checkSettings()){
 
-			\Twist::User()->logout();
-			\Twist::User()->authenticate();
-
 			$blLoggedIn = \Twist::User()->loggedIn();
 			$intCurrentUserLevel = \Twist::User()->currentLevel();
 
@@ -1092,8 +1089,6 @@ class Route extends BasePackage{
 				//Detect if there are any restrctons, if none then skip this step
 				if(count($this->arrRestrict)){
 					$arrRestriction = $this->currentRestriction($arrRoute['uri']);
-					
-					\Twist::User()->loginURL($arrRestriction['login_uri']);
 				}else{
 					$arrRestriction = array('login_required' => false,'allow_access' => true);
 				}

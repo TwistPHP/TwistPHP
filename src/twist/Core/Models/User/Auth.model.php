@@ -25,17 +25,61 @@ namespace Twist\Core\Models\User;
 
 class Auth{
 
-    protected static $arrCurrentSession = array();
+    protected static $blValidated = false;
+    protected static $objSessionHandler = null;
+    protected static $arrCurrentSession = array(
+        'status' => false,
+        'issue' => '',
+        'message' => '',
+        'diagnosis' => '',
+        'session_key' => null,
+        'user_id' => null,
+        'user_data' => array()
+    );
 
-    public function __construct(){
+    public static function current(){
 
-        self::$arrCurrentSession = array(
-            'status' => false,
-            'message' => '',
-            'diagnosis' => '',
-            'session_key' => null,
-            'user_id' => null
-        );
+        if(self::$arrCurrentSession['status'] === false && self::$blValidated === false){
+
+            //Get the PHP session object
+            $objSession = \Twist::Session();
+
+            $intUserID = 0;
+            $strSessionKey = $objSession->data('user-session_key');
+
+            //Validate the session if available else validate the cookie if remembered
+            if(!is_null($strSessionKey)){
+                $intUserID = self::SessionHandler()->validateCode($strSessionKey);
+            }elseif(self::SessionHandler()->remembered()){
+                $intUserID = self::SessionHandler()->validateCookie();
+            }
+
+            //Rebuild the users auth array if is a valid user
+            if($intUserID > 0){
+
+                self::$arrCurrentSession['status'] = true;
+                self::$arrCurrentSession['session_key'] = $strSessionKey;
+                self::$arrCurrentSession['user_id'] = $intUserID;
+                self::$arrCurrentSession['user_data'] = array(
+                    'id' => $objSession->data('user-id'),
+                    'enabled' => $objSession->data('user-id'),
+                    'verified' => $objSession->data('user-id'),
+                    'level' => $objSession->data('user-level'),
+                    'temp_password' => $objSession->data('user-temp_password'),
+                    'firstname' => $objSession->data('user-firstname'),
+                    'surname' => $objSession->data('user-surname'),
+                    'email' => $objSession->data('user-email')
+                );
+
+                //Set shutdown function to log activity and IP address upon script shutdown
+                \Twist::framework()->register()->shutdownEvent('auth-user-lastactive','Twist\Core\Models\User\Auth','logLastActive');
+            }
+
+            //Tell the script not to try an recheck current session
+            self::$blValidated = true;
+        }
+
+        return self::$arrCurrentSession;
     }
 
     /**
@@ -52,12 +96,30 @@ class Auth{
 
             //Create the session key or session cookie
             if($blRememberMeCookie){
-                //self::$arrCurrentSession['session_key'] = self::$objUserSession->createCookie(self::$arrCurrentSession['user_id']);
+                self::$arrCurrentSession['session_key'] = self::SessionHandler()->createCookie(self::$arrCurrentSession['user_id']);
             }else{
-                //self::$arrCurrentSession['session_key'] = self::$objUserSession->createCode(self::$arrCurrentSession['user_id']);
+                self::$arrCurrentSession['session_key'] = self::SessionHandler()->createCode(self::$arrCurrentSession['user_id']);
             }
 
-            self::processUserLoginSession(self::$arrCurrentSession['user_id'],self::$arrCurrentSession['session_key']);
+            //Get the PHP session object
+            $objSession = \Twist::Session();
+
+            $objSession->data('user-id',self::$arrCurrentSession['user_id']);
+            $objSession->data('user-level',self::$arrCurrentSession['user_data']['level']);
+            $objSession->data('user-email',self::$arrCurrentSession['user_data']['email']);
+            $objSession->data('user-enabled',self::$arrCurrentSession['user_data']['enabled']);
+            $objSession->data('user-verified',self::$arrCurrentSession['user_data']['verified']);
+            $objSession->data('user-temp_password',self::$arrCurrentSession['user_data']['temp_password']);
+            $objSession->data('user-session_key',self::$arrCurrentSession['session_key']);
+            $objSession->data('user-logged_in',\Twist::DateTime()->time());
+
+            //Set the users name into the php session
+            $objSession->data('user-name',sprintf('%s %s',self::$arrCurrentSession['user_data']['firstname'],self::$arrCurrentSession['user_data']['surname']));
+            $objSession->data('user-firstname',self::$arrCurrentSession['user_data']['firstname']);
+            $objSession->data('user-surname',self::$arrCurrentSession['user_data']['surname']);
+
+            //Set shutdown function to log activity and IP address upon script shutdown
+            \Twist::framework()->register()->shutdownEvent('auth-user-lastactive','Twist\Core\Models\User\Auth','logLastActive');
         }
 
         return self::$arrCurrentSession;
@@ -76,7 +138,7 @@ class Auth{
 
             $objDB = \Twist::Database();
 
-            $strSQL = sprintf("SELECT `id`,`password`,`enabled`,`verified`
+            $strSQL = sprintf("SELECT `id`,`password`,`enabled`,`verified`,`level`,`temp_password`,`firstname`,`surname`
 									FROM `%s`.`%susers`
 									WHERE `email` = '%s'
 									LIMIT 1",
@@ -90,17 +152,41 @@ class Auth{
 
                 if($arrUserData['password'] == sha1($strPassword)){
                     if($arrUserData['enabled'] == '1'){
-                        self::$arrCurrentSession['status'] = true;
-                        self::$arrCurrentSession['user_id'] = $arrUserData['id'];
+                        if(\Twist::framework()->setting('USER_EMAIL_VERIFICATION') == false || (\Twist::framework()->setting('USER_EMAIL_VERIFICATION') && $arrUserData['verified'] == '1')){
+
+                            //We don't want to store the users hashed password in the auth array
+                            unset($arrUserData['password']);
+
+                            //But we do want to save the email address (don't return it in the SQL as it is more secure not to return both email and password in at together)
+                            $arrUserData['email'] = $strEmail;
+
+                            self::$arrCurrentSession['status'] = true;
+                            self::$arrCurrentSession['user_id'] = $arrUserData['id'];
+                            self::$arrCurrentSession['user_data'] = $arrUserData;
+
+                            if(\Twist::framework()->setting('USER_PASSWORD_CHANGE') == true && $arrUserData['temp_password'] == '1'){
+                                //The user is on a temporary password and a change is required by the system
+                                self::$arrCurrentSession['issue'] = 'temporary';
+                                self::$arrCurrentSession['message'] = 'You are using a temporary password, please change your password';
+                                self::$arrCurrentSession['diagnosis'] = 'The account is running on a temporary password and needs to be reset';
+                            }
+                        }else{
+                            self::$arrCurrentSession['issue'] = 'verify';
+                            self::$arrCurrentSession['message'] = 'You have not verified your email address';
+                            self::$arrCurrentSession['diagnosis'] = 'The account has not been verified';
+                        }
                     }else{
+                        self::$arrCurrentSession['issue'] = 'disabled';
                         self::$arrCurrentSession['message'] = 'Your account has been disabled';
                         self::$arrCurrentSession['diagnosis'] = 'The account has been set to disabled';
                     }
                 }else{
+                    self::$arrCurrentSession['issue'] = 'password';
                     self::$arrCurrentSession['message'] = 'Invalid login credentials, please try again';
                     self::$arrCurrentSession['diagnosis'] = 'Password does not match that of the requested account';
                 }
             }else{
+                self::$arrCurrentSession['issue'] = 'email';
                 self::$arrCurrentSession['message'] = 'Invalid login credentials, please try again';
                 self::$arrCurrentSession['diagnosis'] = 'Email address not registered to a user';
             }
@@ -115,91 +201,53 @@ class Auth{
      */
     public static function logout(){
 
+        self::SessionHandler()->forget();
+        \Twist::Session()->remove();
 
-        return self::$arrCurrentSession;
+        self::$arrCurrentSession = array(
+            'status' => false,
+            'issue' => '',
+            'message' => '',
+            'diagnosis' => '',
+            'session_key' => null,
+            'user_id' => null,
+            'user_data' => array()
+        );
+
+        return true;
     }
 
+    /**
+     * Log the last time the user was active, by default this is called as a PHP shutdown function for users that are logged in
+     */
+    public static function logLastActive(){
 
+        if(!is_null(self::$arrCurrentSession['user_id'])){
 
-    /*** BELOW FUNCTIONS TO BE RE-WRITTEN FOR THE NEW AUTH MODEL ***/
-
-
-
-    protected static function processUserLoginSession($intUserID,$strSessionKey){
-
-        $arrUserData = self::processUserSession($intUserID);
-
-        $objSession = \Twist::Session();
-
-        $objSession->data('user-session_key',$strSessionKey);
-        $objSession->data('user-logged_in',\Twist::DateTime()->time());
-
-        if(self::$blActivityLogged == false){
-            self::$resCurrentUser->lastLogin($_SERVER['REMOTE_ADDR']);
-            self::$resCurrentUser->lastActive();
-            self::$resCurrentUser->commit();
-            self::$blActivityLogged = true;
+            $resUser = \Twist::User()->get(self::$arrCurrentSession['user_id']);
+            $resUser->lastLogin($_SERVER['REMOTE_ADDR']);
+            $resUser->lastActive();
+            $resUser->commit();
         }
+    }
 
-        self::$intUserID = $intUserID;
+    /**
+     * Get an instance of the user session handler
+     * @return \Twist\Core\Models\User\SessionHandler
+     */
+    public static function SessionHandler(){
 
-        if(\Twist::framework()->setting('USER_PASSWORD_CHANGE') == true){
+        if(is_null(self::$objSessionHandler)){
+            self::$objSessionHandler = new SessionHandler();
 
-            if($arrUserData['temp_password'] == '1'){
-                $objSession->data('user-temp_password','1');
-                $objSession->remove('site-login_redirect');
+            $intSessionLife = \Twist::framework()->setting('USER_REMEMBER_LENGTH');
 
-                //self::$goToPage( '?change', false );
-                self::goToPage( sprintf('%s%s?change',\Twist::Route()->current('registered_uri'),self::$strLoginUrl), false );
+            //Set the remember me life span in seconds
+            if($intSessionLife > 0){
+                self::$objSessionHandler->setSessionLife(($intSessionLife * 60) * 60);
             }
-
-        }elseif($arrUserData['temp_password'] == '1'){
-            self::$resCurrentUser->tempPassword(0);
         }
 
-        //Destroy the var
-        unset($objSession);
-
-        self::afterLoginRedirect();
+        return self::$objSessionHandler;
     }
-
-    protected static function processUserSession($intUserID){
-
-        $objSession = \Twist::Session();
-        $arrUserData = self::$getData($intUserID);
-
-        //Check that the account is enabled
-        if($arrUserData['enabled'] == '1'){
-
-            //Check that the account is verified if required
-            if(self::$framework()->setting('USER_EMAIL_VERIFICATION') == false || (self::$framework()->setting('USER_EMAIL_VERIFICATION') && $arrUserData['verified'] == '1')){
-
-                $objSession->data('user-id',$arrUserData['id']);
-                $objSession->data('user-level',$arrUserData['level']);
-                $objSession->data('user-email',$arrUserData['email']);;
-                $objSession->data('user-name',sprintf('%s %s',$arrUserData['firstname'],$arrUserData['surname']));
-                $objSession->data('user-firstname',$arrUserData['firstname']);
-                $objSession->data('user-surname',$arrUserData['surname']);
-                $objSession->data('user-temp_password',$arrUserData['temp_password']);
-
-                self::$loadCurrentUser();
-
-            }else{
-                //If the user is not verified and password is correct show verification message
-                $objSession->data('user-email',$arrUserData['email']);
-
-                //self::$goToPage( '?verification', false );
-                self::$goToPage( sprintf('%s%s?verification',\Twist::Route()->current('registered_uri'),self::$strLoginUrl), false );
-            }
-        }else{
-            $objSession->remove();
-            $objSession->data('site-login_error_message','Your account has been disabled');
-        }
-
-        //Destroy the var
-        unset($objSession);
-
-        return $arrUserData;
-    }
-
 }
