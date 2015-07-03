@@ -47,6 +47,7 @@ class Route extends BasePackage{
 	protected $strBaseView = null;
 	protected $dirBaseViewDir = null;
 	protected $blIgnoreBaseView = false;
+	protected $blForceBaseView = false;
 	protected $strBaseURI = null;
 	protected $strPackageURI = null;
 	protected $strPageTitle = '';
@@ -136,6 +137,14 @@ class Route extends BasePackage{
 	 */
 	public function baseViewIgnore(){
 		$this->blIgnoreBaseView = true;
+	}
+
+	/**
+	 * Force the base view set in routes to over-ride any route specific base view
+     * This function is called by baseController's _baseView() to ensure a custom base view is used nomatter what
+	 */
+	public function baseViewForce(){
+		$this->blForceBaseView = true;
 	}
 
 	/**
@@ -1203,7 +1212,7 @@ class Route extends BasePackage{
 
 						if($this->blIgnoreBaseView){
 							$strPageOut = $arrTags['response'];
-						}elseif(!is_null($this->strBaseView) && $arrRoute['base_view'] === true){
+						}elseif(!is_null($this->strBaseView) && ($this->blForceBaseView || $arrRoute['base_view'] === true)){
 							//Set the directory back to the original base as we may be in a package interface using the original site base
 							$this->resView->setDirectory($this->dirBaseViewDir);
 							$strPageOut = $this->resView->build($this->strBaseView, $arrRoute['data']);

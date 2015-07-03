@@ -78,6 +78,11 @@
          * @return null|string
          */
 		public function _baseView($mxdBaseView = null){
+
+            if(!is_null($mxdBaseView)){
+                $this->resRoute->baseViewForce();
+            }
+
 			return $this->resRoute->baseView($mxdBaseView);
 		}
 
