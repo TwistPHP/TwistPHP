@@ -532,8 +532,8 @@
 						try {
 							if( thisUploader.domInput ) {
 								thisUploader.domInput.addEventListener( 'change', thisUploader.upload );
-							} else {
-								throw 'No element exists with id="' + strInputID + '"';
+							//} else {
+								//throw 'No element exists with id="' + strInputID + '"';
 							}
 
 							return thisUploader;
