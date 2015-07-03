@@ -225,13 +225,13 @@ class Validator{
 				}elseif(array_key_exists('type',$arrEachCheck) && !in_array($arrEachCheck['type'],$this->arrTypes)){
 					throw new \Exception(sprintf("%s (%s) has an invalid validation type '%s' specified.",$this->keyToText($strKey),$strKey,$arrEachCheck['type']));
 				}else{
-					$this->testResult($strKey,true,sprintf("%s has been passed in",$this->keyToText($strKey)));
+					$this->testResult($strKey,true,sprintf("%s has been selected",$this->keyToText($strKey)));
 				}
 
 			}elseif(array_key_exists('required',$arrEachCheck) && $arrEachCheck['required'] == 0){
-				$this->testResult($strKey,true,sprintf("%s has not been passed in but is not required",$this->keyToText($strKey)));
+				$this->testResult($strKey,true,sprintf("%s has not been selected but is not required",$this->keyToText($strKey)));
 			}else{
-				$this->testResult($strKey,false,sprintf("%s has not been passed in",$this->keyToText($strKey)),'missing');
+				$this->testResult($strKey,false,sprintf("%s has not been selected",$this->keyToText($strKey)),'missing');
 			}
 		}
 

@@ -500,25 +500,33 @@ class Email extends BasePackage{
 	}
 
 	/**
-	 * Convert the header encoding
+	 * Convert the header encoding, if no multibyte support on PHP installation ignore the encoding and output a warning
 	 * @param $strData
 	 * @return string
 	 */
 	protected function convertEncodingHeader($strData){
 
-		$strData = mb_encode_mimeheader(mb_convert_encoding($strData,$this->strCharEncoding,"AUTO"));
+        if(function_exists('mb_encode_mimeheader')){
+            $strData = mb_encode_mimeheader(mb_convert_encoding($strData,$this->strCharEncoding,"AUTO"));
+        }else{
+            trigger_error('TwistPHP, skipping Email->convertEncodingHeader as multi-byte (mbstring) support not enabled in PHP installation',E_USER_WARNING);
+        }
 
 		return $strData;
 	}
 
 	/**
-	 * Convert the body encoding
+	 * Convert the body encoding, if no multibyte support on PHP installation ignore the encoding and output a warning
 	 * @param $strData
 	 * @return string
 	 */
 	protected function convertEncodingBody($strData){
 
-		$strData = mb_convert_encoding($strData,$this->strCharEncoding,"AUTO");
+        if(function_exists('mb_encode_mimeheader')){
+            $strData = mb_convert_encoding($strData,$this->strCharEncoding,"AUTO");
+        }else{
+            trigger_error('TwistPHP, skipping Email->convertEncodingBody as multi-byte (mbstring) support not enabled in PHP installation',E_USER_WARNING);
+        }
 
 		return $strData;
 	}

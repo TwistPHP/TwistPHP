@@ -154,10 +154,13 @@
 			$arrAsset['original_filename'] = implode('-',$arrNameData);
 
 			$arrAsset['type'] = $this->getType($arrAsset['type_id']);
+
+            //Replace standard type icon with the new method of detection
+            $arrMimeType = \Twist::File()->mimeTypeInfo($arrAsset['data']);
+            $arrAsset['icon'] = $arrAsset['type']['icon'] = $arrMimeType['icon'];
+
 			$arrAsset['group'] = $this->getGroup($arrAsset['group_id']);
 			$arrAsset['support'] = $this->getSupportingContent($arrAsset);
-
-			$arrAsset['icon'] = str_replace(TWIST_DOCUMENT_ROOT,'',sprintf('%s/images/icons/%s',TWIST_FRAMEWORK_RESOURCES,$arrAsset['type']['icon']));
 
 			return $arrAsset;
 		}
@@ -193,19 +196,17 @@
 		 */
 		public function getDefaultSupportingContent($arrAsset){
 
-			$strIconURI = str_replace(TWIST_DOCUMENT_ROOT,'',sprintf('%stwist/file-icons/%s',TWIST_FRAMEWORK_RESOURCES,$arrAsset['type']['icon']));
-
 			$arrOut = array(
-				'square-thumb-512' => $strIconURI,
-				'square-thumb-256' => $strIconURI,
-				'square-thumb-128' => $strIconURI,
-				'square-thumb-64' => $strIconURI,
-				'square-thumb-32' => $strIconURI,
-				'thumb-512' => $strIconURI,
-				'thumb-256' => $strIconURI,
-				'thumb-128' => $strIconURI,
-				'thumb-64' => $strIconURI,
-				'thumb-32' => $strIconURI
+				'square-thumb-512' => $arrAsset['type']['icon'],
+				'square-thumb-256' => $arrAsset['type']['icon'],
+				'square-thumb-128' => $arrAsset['type']['icon'],
+				'square-thumb-64' => $arrAsset['type']['icon'],
+				'square-thumb-32' => $arrAsset['type']['icon'],
+				'thumb-512' => $arrAsset['type']['icon'],
+				'thumb-256' => $arrAsset['type']['icon'],
+				'thumb-128' => $arrAsset['type']['icon'],
+				'thumb-64' => $arrAsset['type']['icon'],
+				'thumb-32' => $arrAsset['type']['icon']
 			);
 
 			return $arrOut;
