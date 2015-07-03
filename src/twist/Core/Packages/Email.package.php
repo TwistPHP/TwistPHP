@@ -25,6 +25,7 @@ namespace Twist\Core\Packages;
 use \Twist\Core\Classes\BasePackage;
 use \Twist\Core\Models\Email\Native;
 use \Twist\Core\Models\Email\SMTP;
+use \Twist\Core\Models\String\Html2Text;
 
 /**
  * Generate and send full multi-lingual multi-part HTML emails with the ability to add attachments. Fully customisable with Char encoding, message encoding,
@@ -433,51 +434,27 @@ class Email extends BasePackage{
 	}
 
 	/**
-	 * Generate a plain version of the HTML message
+	 * Generate a plain version of the HTML message using Html2Text
 	 */
 	protected function generatePlainMessage(){
 
-		if(strstr($this->arrEmailData['body_html'],'</head>')){
-			$arrParts = explode("</head>",$this->arrEmailData['body_html']);
-			$strHtmlData = $arrParts[1];
-		}else{
-			$strHtmlData = $this->arrEmailData['body_html'];
-		}
+        //Convert the HTML into formatted text, using a new model Html2Text, can expand on this later
+        $resHtml2Text = new Html2Text($this->arrEmailData['body_html']);
 
-		//Get the unformated HTML
-		$this->arrEmailData['body_plain'] = str_replace(
-			array("\t","\n","<br />","<br/>","<br>","</p>","</h1>","</h2>","</h3>","</h4>","</h5>"),
-			array("","","\n","\n","\n","\n\n","\n\n","\n\n","\n\n","\n\n","\n\n"),
-			$strHtmlData
-		);
-
-		//Remove style tags and there content and Strip all the html tags from the code
-		$this->arrEmailData['body_plain'] = $this->stripTags($this->arrEmailData['body_plain']);
+        $this->arrEmailData['body_plain'] = $resHtml2Text->getText();
 	}
 
 	/**
-	 * Sanitise teh plain message to ensure no HTML is present
+	 * Sanitise the plain message to ensure no HTML is present, use Html2Text to do this
 	 */
 	protected function sanitisePlainMessage(){
 
 		if($this->stripTags($this->arrEmailData['body_plain']) !== $this->arrEmailData['body_plain']){
 
-			if (strstr($this->arrEmailData['body_plain'], '</head>')) {
-				$arrParts = explode("</head>", $this->arrEmailData['body_plain']);
-				$strPlainData = $arrParts[1];
-			} else {
-				$strPlainData = $this->arrEmailData['body_plain'];
-			}
+            //Convert the HTML into formatted text, using a new model Html2Text, can expand on this later
+            $resHtml2Text = new Html2Text($this->arrEmailData['body_plain']);
 
-			//Get the unformated HTML
-			$this->arrEmailData['body_plain'] = str_replace(
-				array("\t", "\n", "<br />", "<br/>", "<br>", "</p>", "</h1>", "</h2>", "</h3>", "</h4>", "</h5>"),
-				array("", "", "\n", "\n", "\n", "\n\n", "\n\n", "\n\n", "\n\n", "\n\n", "\n\n"),
-				$strPlainData
-			);
-
-			//Remove style tags and there content and Strip all the html tags from the code
-			$this->arrEmailData['body_plain'] = $this->stripTags($this->arrEmailData['body_plain']);
+            $this->arrEmailData['body_plain'] = $resHtml2Text->getText();
 		}
 	}
 
