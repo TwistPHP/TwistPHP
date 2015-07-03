@@ -1016,7 +1016,7 @@ class Route extends BasePackage{
 			if(in_array("_extended", get_class_methods($objController))){
 
 				//Register the route data and meta model
-				$objController->_extended($arrRoute,$this->resMeta);
+				$objController->_extended($arrRoute,$this->resMeta,$this);
 
 				$arrAliases = $objController->_getAliases();
 				$arrReplacements = $objController->_getReplacements();

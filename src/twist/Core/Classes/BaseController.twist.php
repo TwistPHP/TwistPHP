@@ -30,15 +30,33 @@
 		protected $arrMessages = array();
 		protected $arrAliasURIs = array();
 		protected $arrReplaceURIs = array();
-		protected $resMeta = null;
 		protected $arrRoute = array();
 		protected $arrRouteVars = array();
 
-		final public function _extended($arrRoute,Meta $resMeta = null){
+        /**
+         * @var \Twist\Core\Models\Route\Meta
+         */
+		protected $resMeta = null;
+
+        /**
+         * @var \Twist\Core\Packages\Route
+         */
+		protected $resRoute = null;
+
+        /**
+         * @param $arrRoute
+         * @param \Twist\Core\Models\Route\Meta $resMeta
+         * @param \Twist\Core\Packages\Route $resRoute
+         * @return bool
+         */
+		final public function _extended($arrRoute,$resMeta,$resRoute){
 
 			$this->arrRoute = $arrRoute;
 			$this->arrRouteVars = $arrRoute['vars'];
 			$this->resMeta = $resMeta;
+
+            //Can be used to modify the baseView etc
+            $this->resRoute = $resRoute;
 
 			return true;
 		}
@@ -55,10 +73,33 @@
 			return $this->_404();
 		}
 
+        /**
+         * Over-ride the base view for the current page
+         * @return null|string
+         */
+		public function _baseView($mxdBaseView = null){
+			return $this->resRoute->baseView($mxdBaseView);
+		}
+
+        /**
+         * Ignore the base view for the current page
+         */
+		public function _baseViewIgnore(){
+			$this->resRoute->baseViewIgnore();
+		}
+
+        /**
+         * Set the timeout for the current page (Some pages may have allot to do so this can be done per page)
+         * @param int $intTimeout
+         */
 		public function _timeout($intTimeout = 30){
 			set_time_limit($intTimeout);
 		}
 
+        /**
+         * Ignore user abourt
+         * @param bool $blIgnore
+         */
 		public function _ignoreUserAbort($blIgnore = true){
 			ignore_user_abort($blIgnore);
 		}
