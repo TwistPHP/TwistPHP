@@ -32,6 +32,56 @@
 			}
 
 			return false;
+		};
+
+		if( window.console ) {
+			var objOriginalConsole = window.console;
+
+			window.console.log = function( mxdData ) {
+				//LOG ERROR TO TWIST
+
+				if( funOriginalError ) {
+					return objOriginalConsole.log( mxdData );
+				}
+
+				return false;
+			},
+			window.console.error = function( mxdData ) {
+				//LOG ERROR TO TWIST
+
+				if( funOriginalError ) {
+					return objOriginalConsole.error( mxdData );
+				}
+
+				return false;
+			},
+			window.console.warn = function( mxdData ) {
+				//LOG ERROR TO TWIST
+
+				if( funOriginalError ) {
+					return objOriginalConsole.warn( mxdData );
+				}
+
+				return false;
+			},
+			window.console.debug = function( mxdData ) {
+				//LOG ERROR TO TWIST
+
+				if( funOriginalError ) {
+					return objOriginalConsole.debug( mxdData );
+				}
+
+				return false;
+			},
+			window.console.info = function( mxdData ) {
+				//LOG ERROR TO TWIST
+
+				if( funOriginalError ) {
+					return objOriginalConsole.info( mxdData );
+				}
+
+				return false;
+			}
 		}
 	}
-)();
+)( window );
