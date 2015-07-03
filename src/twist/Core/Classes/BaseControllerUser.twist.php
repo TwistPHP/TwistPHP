@@ -191,18 +191,41 @@ class BaseControllerUser extends BaseController{
     }
 
     public function deviceManager(){
-        return $this->resUser->viewExtension('devices_form');
+
+        $arrUserData = Auth::current();
+
+        $arrCurrentDevices = Auth::SessionHandler()->getCurrentDevice($arrUserData['user_id']);
+        $arrDevices = Auth::SessionHandler()->getDeviceList($arrUserData['user_id']);
+
+        $strDeviceList = '';
+        foreach($arrDevices as $arrEachDevice){
+
+            $arrEachDevice['current'] = ($arrCurrentDevices['id'] == $arrEachDevice['id']) ? true : false;
+
+            if(array_key_exists('edit-device',$_GET) && $arrEachDevice['device'] == $_GET['edit-device']){
+                $strDeviceList .= $this->_view(sprintf('%suser/device-each-edit.tpl',TWIST_FRAMEWORK_VIEWS), $arrEachDevice);
+            }else{
+                $strDeviceList .= $this->_view(sprintf('%suser/device-each.tpl',TWIST_FRAMEWORK_VIEWS), $arrEachDevice);
+            }
+        }
+
+        return $this->_view(sprintf('%suser/devices.tpl',TWIST_FRAMEWORK_VIEWS), array('device_list' => $strDeviceList));
+        //return $this->resUser->viewExtension('devices_form');
     }
 
     public function postDeviceManager(){
 
-        if(array_key_exists('save-device',$_GET) && array_key_exists('device-name',$_GET)){
-            Auth::SessionHandler()->editDevice($this->resUser->currentID(),$_GET['save-device'],$_GET['device-name']);
+        $arrUserData = Auth::current();
+
+        if(array_key_exists('save-device',$_POST) && array_key_exists('device-name',$_POST)){
+            Auth::SessionHandler()->editDevice($arrUserData['user_id'],$_POST['save-device'],$_POST['device-name']);
         }
 
         if(array_key_exists('forget-device',$_GET)) {
-            Auth::SessionHandler()->forgetDevice($this->resUser->currentID(), $_GET['forget-device']);
+            Auth::SessionHandler()->forgetDevice($arrUserData['user_id'], $_POST['forget-device']);
         }
+
+        \Twist::redirect('./device-maanger');
     }
 
     public function register(){
