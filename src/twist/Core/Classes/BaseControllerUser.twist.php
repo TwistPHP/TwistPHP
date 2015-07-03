@@ -225,7 +225,7 @@ class BaseControllerUser extends BaseController{
             Auth::SessionHandler()->forgetDevice($arrUserData['user_id'], $_POST['forget-device']);
         }
 
-        \Twist::redirect('./device-maanger');
+        \Twist::redirect('./device-manger');
     }
 
     public function register(){
