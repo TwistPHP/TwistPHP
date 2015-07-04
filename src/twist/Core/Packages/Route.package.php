@@ -1057,8 +1057,17 @@ class Route extends BasePackage{
 					$strControllerFunction = $arrControllerFunctions[$strControllerFunction];
 					$strOut = $objController->$strControllerFunction();
 				}else{
+
+					//Check for method fallback before calling the standard fallback
+					$strRequestMethodFunction = sprintf('_%sfallback', strtolower($_SERVER['REQUEST_METHOD']));
 					$strControllerFunction = '_fallback';
-					$strOut = $objController->$strControllerFunction();
+
+					if(array_key_exists($strRequestMethodFunction, $arrControllerFunctions)){
+						$strControllerFunction = $arrControllerFunctions[$strRequestMethodFunction];
+						$strOut = $objController->$strControllerFunction();
+					}else{
+						$strOut = $objController->$strControllerFunction();
+					}
 				}
 
 				//Return the meta object back to routes
