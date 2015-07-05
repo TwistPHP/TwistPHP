@@ -1145,65 +1145,9 @@ class Route extends BasePackage{
 
 					\Twist::recordEvent('Route found');
 
-					switch($arrRoute['type']){
-						case'view':
-							$arrTags['response'] = $this->resView->build($arrRoute['item'], $arrRoute['data']);
-							break;
-						case'file':
-							\Twist::File()->serve($arrRoute['item']['file'],$arrRoute['item']['name'],null,null,$arrRoute['item']['speed'],false);
-							break;
-						case'folder':
-
-                            $strFilePath = sprintf('%s/%s',$arrRoute['item']['folder'],$arrRoute['dynamic']);
-
-                            if(file_exists($strFilePath)){
-
-                                //For security do not allow PHP files to be served.
-                                if(substr($arrRoute['dynamic'],'-3') !== 'php') {
-
-                                    $strMimeType = ($arrRoute['item']['force-download']) ? null : \Twist::File()->mimeType($strFilePath);
-                                    \Twist::File()->serve($strFilePath, basename($strFilePath), $strMimeType, null, $arrRoute['item']['speed'], false);
-                                }else{
-                                    \Twist::respond(403,'Unsupported file extension, PHP files are disallowed through this method');
-                                }
-                            }else{
-                                \Twist::respond(404);
-                            }
-
-							break;
-						case'function':
-							$arrTags['response'] = $arrRoute['item']();
-							break;
-						case'ajax':
-							if(!TWIST_AJAX_REQUEST){
-								\Twist::respond(403,'Unsupported HTTP protocol used to request this URI');
-							}else{
-								try{
-									$arrTags['response'] = $this->processController($arrRoute);
-								}catch(\Exception $resException){
-									//Response with the relevant error message
-									$resControllerAJAX = new BaseControllerAJAX();
-
-									$resControllerAJAX->_ajaxFail();
-									$resControllerAJAX->_ajaxMessage($resException->getMessage());
-
-									$arrTags['response'] = $resControllerAJAX->_ajaxRespond();
-								}
-							}
-						break;
-						case'controller':
-							$arrTags['response'] = $this->processController($arrRoute);
-							break;
-						case'package':
-							//Should never get here -- See at the top of this function call (more efficient)
-							break;
-						case'redirect-permanent':
-							\Twist::redirect($arrRoute['item'], true);
-							break;
-						case'redirect':
-							\Twist::redirect($arrRoute['item']);
-							break;
-					}
+					//Run through all the serve types, this has been made into a separate function
+					//So that it can be extended by other systems
+					$arrTags = $this->serveTypes($arrRoute,$arrTags);
 
 					\Twist::recordEvent('Route processed');
 
@@ -1273,5 +1217,70 @@ class Route extends BasePackage{
 		} elseif ($this->bl404) {
 			\Twist::respond(404);
 		}
+	}
+
+	protected function serveTypes($arrRoute,$arrTags){
+
+		switch($arrRoute['type']){
+			case'view':
+				$arrTags['response'] = $this->resView->build($arrRoute['item'], $arrRoute['data']);
+				break;
+			case'file':
+				\Twist::File()->serve($arrRoute['item']['file'],$arrRoute['item']['name'],null,null,$arrRoute['item']['speed'],false);
+				break;
+			case'folder':
+
+				$strFilePath = sprintf('%s/%s',$arrRoute['item']['folder'],$arrRoute['dynamic']);
+
+				if(file_exists($strFilePath)){
+
+					//For security do not allow PHP files to be served.
+					if(substr($arrRoute['dynamic'],'-3') !== 'php') {
+
+						$strMimeType = ($arrRoute['item']['force-download']) ? null : \Twist::File()->mimeType($strFilePath);
+						\Twist::File()->serve($strFilePath, basename($strFilePath), $strMimeType, null, $arrRoute['item']['speed'], false);
+					}else{
+						\Twist::respond(403,'Unsupported file extension, PHP files are disallowed through this method');
+					}
+				}else{
+					\Twist::respond(404);
+				}
+
+				break;
+			case'function':
+				$arrTags['response'] = $arrRoute['item']();
+				break;
+			case'ajax':
+				if(!TWIST_AJAX_REQUEST){
+					\Twist::respond(403,'Unsupported HTTP protocol used to request this URI');
+				}else{
+					try{
+						$arrTags['response'] = $this->processController($arrRoute);
+					}catch(\Exception $resException){
+						//Response with the relevant error message
+						$resControllerAJAX = new BaseControllerAJAX();
+
+						$resControllerAJAX->_ajaxFail();
+						$resControllerAJAX->_ajaxMessage($resException->getMessage());
+
+						$arrTags['response'] = $resControllerAJAX->_ajaxRespond();
+					}
+				}
+				break;
+			case'controller':
+				$arrTags['response'] = $this->processController($arrRoute);
+				break;
+			case'package':
+				//Should never get here -- See at the top of this function call (more efficient)
+				break;
+			case'redirect-permanent':
+				\Twist::redirect($arrRoute['item'], true);
+				break;
+			case'redirect':
+				\Twist::redirect($arrRoute['item']);
+				break;
+		}
+
+		return $arrTags;
 	}
 }
