@@ -280,7 +280,7 @@
 			$strOut = '';
 
 			foreach($this->arrTags as $arrEachTag) {
-				$strOut .= $this->createTag($arrEachTag);
+				$strOut .= $this->createTag($arrEachTag)."\n";
 			}
 
 			return $strOut;
@@ -300,7 +300,7 @@
 					if($arrData['name'] == 'charset'){
 						$strOut = sprintf('<meta charset="%s">', $arrData['value']);
 					}else{
-						$strOut .= sprintf('<meta name="%s" content="%s">', $arrData['name'], $arrData['value']);
+						$strOut = sprintf('<meta name="%s" content="%s">', $arrData['name'], $arrData['value']);
 					}
 
 					break;
