@@ -25,6 +25,7 @@
 
 	/**
 	 * Route Meta Tag manager and template extension
+	 * @reference http://ogp.me/
 	 * @package TwistPHP\Packages
 	 */
 	class Meta{
@@ -104,12 +105,118 @@
 			$this->add('og','title',$strContent);
 		}
 
-		public function ogType($strContent){
-			$this->add('og','type',$strContent);
+		public function ogSiteName($strContent){
+			$this->add('og','site_name',$strContent);
 		}
 
-		public function ogImage($strURL,$intWidth=null,$intHeight=null,$strType=null){
+		public function ogType($strContent){
+
+			$arrTypes = array(
+				'music.song','music.album','music.playlist','music.radio_station',
+				'video.movie','video.episode','video.tv_show','video.other',
+				'article','book','profile','website'
+			);
+
+			if(in_array($strContent,$arrTypes)){
+				$this->add('og','type',$strContent);
+			}else{
+				throw new \Exception('Invalid OG type passed in, please use on of '.implode(', ',$arrTypes));
+			}
+		}
+
+		public function ogTypeArticle($mxdPublishedDate = null,$mxdModifiedDate = null,$mxdExpirationDate = null,$arrAuthor = array(),$strSection = null,$mxdTags = null){
+
+			$this->ogType('article');
+
+			if(!is_null($mxdPublishedDate)){
+				$this->add('og','article:published_time',date('Y-m-d\TH:i:s\Z',strtotime($mxdPublishedDate)));
+			}
+
+			if(!is_null($mxdModifiedDate)){
+				$this->add('og','article:modified_time',date('Y-m-d\TH:i:s\Z',strtotime($mxdModifiedDate)));
+			}
+
+			if(!is_null($mxdExpirationDate)){
+				$this->add('og','article:expiration_time',date('Y-m-d\TH:i:s\Z',strtotime($mxdExpirationDate)));
+			}
+
+			if(is_array($arrAuthor)){
+				foreach($arrAuthor as $strKey => $strValue){
+					if(in_array($strKey,array('first_name','last_name','username','gender'))){
+						$this->add('og',sprintf('article:author:%s',$strKey),$strValue);
+					}
+				}
+			}
+
+			if(!is_null($strSection)){
+				$this->add('og','article:section',$strSection);
+			}
+
+			if(!is_null($mxdTags)){
+				foreach(((!is_array($mxdTags)) ? array($mxdTags) : $mxdTags) as $strEachTag){
+					$this->add('og','article:tag',$strEachTag);
+				}
+			}
+		}
+
+		public function ogTypeBook($arrAuthor = array(),$strISBN = null,$mxdReleaseDate = null,$mxdTags = null){
+
+			$this->ogType('book');
+
+			if(is_array($arrAuthor)){
+				foreach($arrAuthor as $strKey => $strValue){
+					if(in_array($strKey,array('first_name','last_name','username','gender'))){
+						$this->add('og',sprintf('book:author:%s',$strKey),$strValue);
+					}
+				}
+			}
+
+			if(!is_null($strISBN)){
+				$this->add('og','book:isbn',$strISBN);
+			}
+
+			if(!is_null($mxdReleaseDate)){
+				$this->add('og','book:release_date',date('Y-m-d\TH:i:s\Z',strtotime($mxdReleaseDate)));
+			}
+
+			if(!is_null($mxdTags)){
+				foreach(((!is_array($mxdTags)) ? array($mxdTags) : $mxdTags) as $strEachTag){
+					$this->add('og','book:tag',$strEachTag);
+				}
+			}
+		}
+
+		public function ogTypeProfile($strFirstName = null,$strLastName = null,$strUsername = null,$strGender = null){
+
+			$this->ogType('profile');
+
+			if(!is_null($strFirstName)){
+				$this->add('og','profile:first_name',$strFirstName);
+			}
+
+			if(!is_null($strLastName)){
+				$this->add('og','profile:last_name',$strLastName);
+			}
+
+			if(!is_null($strUsername)){
+				$this->add('og','profile:username',$strUsername);
+			}
+
+			if(in_array($strGender,array('male','female'))){
+				$this->add('og','profile:gender',$strGender);
+			}
+		}
+
+		public function ogTypeWebsite(){
+			$this->ogType('website');
+		}
+
+		public function ogImage($strURL,$intWidth=null,$intHeight=null,$strType=null,$strSecureURL = null){
 			$this->add('og','image',$strURL);
+
+			if(!is_null($strSecureURL)){
+				$this->add('og','image:secure_url',$strSecureURL);
+			}
 
 			if(!is_null($intWidth)){
 				$this->add('og','image:width',$intWidth);
@@ -121,6 +228,38 @@
 
 			if(!is_null($strType)){
 				$this->add('og','image:type',$strType);
+			}
+		}
+
+		public function ogVideo($strURL,$intWidth=null,$intHeight=null,$strType=null,$strSecureURL = null){
+			$this->add('og','video',$strURL);
+
+			if(!is_null($strSecureURL)){
+				$this->add('og','video:secure_url',$strSecureURL);
+			}
+
+			if(!is_null($intWidth)){
+				$this->add('og','video:width',$intWidth);
+			}
+
+			if(!is_null($intHeight)){
+				$this->add('og','video:height',$intHeight);
+			}
+
+			if(!is_null($strType)){
+				$this->add('og','video:type',$strType);
+			}
+		}
+
+		public function ogAudio($strURL,$strType=null,$strSecureURL = null){
+			$this->add('og','audio',$strURL);
+
+			if(!is_null($strSecureURL)){
+				$this->add('og','audio:secure_url',$strSecureURL);
+			}
+
+			if(!is_null($strType)){
+				$this->add('og','audio:type',$strType);
 			}
 		}
 
