@@ -37,16 +37,23 @@ class BaseControllerAJAX extends BaseController{
 
 	/**
 	 * Set the status for the Ajax response, true by default
+	 *
 	 * @param $blStatus
 	 */
 	public function _ajaxStatus($blStatus){
 		$this->blAjaxResponse = ($blStatus !== false);
 	}
 
+	/**
+	 * Call to mark the AJAX request as successfully complete, calls the _ajaxStatus function and passes in true.
+	 */
 	public function _ajaxSucceed(){
 		$this->_ajaxStatus(true);
 	}
 
+	/**
+	 * Call to mark the AJAX request as failed, calls the _ajaxStatus function and passes in false.
+	 */
 	public function _ajaxFail(){
 		$this->_ajaxStatus(false);
 	}

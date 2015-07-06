@@ -39,10 +39,18 @@ class BaseControllerUser extends BaseController{
         $this -> _aliasURI( 'device-manager', 'deviceManager' );
     }
 
+	/**
+	 * Set the entry page for the restricted area
+	 * @param null $strEntryPageURI
+	 */
     public function _entryPage($strEntryPageURI = null){
         $this->strEntryPageURI = $strEntryPageURI;
     }
 
+	/**
+	 * Login page, the response for this page would be the login form with a forgotten password link and remember me button.
+	 * @return string
+	 */
     public function login(){
 
         if(array_key_exists('logout',$_GET)){
@@ -52,6 +60,10 @@ class BaseControllerUser extends BaseController{
         return $this->resUser->viewExtension('login_form');
     }
 
+	/**
+	 * Authentication script, upon login the post request will be sent to this script. If the login is successful the user will be redirected to the entry page or './'.
+	 * if hte login request has failed the user will be forwarded on to the relevan page i.e Change Password, Verify Account or the login page with an error message.
+	 */
     public function authenticate(){
 
         $arrResult = Auth::login($_POST['email'],$_POST['password'],(array_key_exists('remember',$_POST) && $_POST['remember'] == '1'));
@@ -87,15 +99,28 @@ class BaseControllerUser extends BaseController{
         }
     }
 
+	/**
+	 * Logout route will log the user out and then redirect them on to the login page
+	 */
     public function logout(){
         Auth::logout();
         \Twist::redirect('./login');
     }
 
+	/**
+	 * Forgotten password page, form here you can enter your email address and you will then be emailed a temporary password.
+	 * Once submitted the user will be directed on to the postForgottenPassword function in the controller.
+	 *
+	 * @return string
+	 */
     public function forgottenPassword(){
         return $this->resUser->viewExtension('forgotten_password_form');
     }
 
+	/**
+	 * The forgotten password request is processed by this function, if the details are correct the user is emailed a temporary password and then redirected to the login page.
+	 * If the request has failed the user will be shown the forgotten password form again.
+	 */
     public function postForgottenPassword(){
 
         //Process the forgotten password request
@@ -113,12 +138,24 @@ class BaseControllerUser extends BaseController{
                 \Twist::redirect('./');
             }
         }
+
+	    \Twist::redirect('./forgotten-password');
     }
 
+	/**
+	 * The change password form can display two types of form, the one that contains a box to enter your current password and your new password or a form that only required your new password to be entered.
+	 * The form that does not required you to enter your current password as well will only be displayed when you have a temporary password that needs to be personalised.
+	 *
+	 * @return string
+	 */
     public function changePassword(){
         return $this->resUser->viewExtension('change_password_form');
     }
 
+	/**
+	 * The change password request is processed by this function, if the details are all correct the user will be redirected to the entry page or './'.
+	 * If there is a problem with the data entered the user will see the change password page again.
+	 */
     public function postChangePassword(){
 
         if(array_key_exists('password',$_POST) && array_key_exists('confirm_password',$_POST)){
@@ -164,6 +201,8 @@ class BaseControllerUser extends BaseController{
                 }
             }
         }
+
+	    \Twist::redirect('./change-password');
     }
 
     public function verifyAccount(){
