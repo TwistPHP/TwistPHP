@@ -105,6 +105,10 @@
 			$this->add('og','title',$strContent);
 		}
 
+		public function ogDescription($strContent){
+			$this->add('og','description',$strContent);
+		}
+
 		public function ogSiteName($strContent){
 			$this->add('og','site_name',$strContent);
 		}
