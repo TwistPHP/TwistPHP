@@ -26,7 +26,7 @@
 
 	/**
 	 * Asset management package that allows the addition and grouping of assets. Assets can be images, videos, files, links and other data that can be uploaded to a website/service.
-	 * @package TwistPHP\Packages
+	 * @package Twist\Core\Packages
 	 */
 	class Asset extends BasePackage{
 
@@ -99,6 +99,8 @@
 		 *
 		 * @related get
 		 * @param $intGroupID ID of the required asset group
+		 * @param string $strOrderBy field to order the results by
+		 * @param string $strOrderDirection directional order of the results
 		 * @return array Returns a multi-dimensional array of the groups assets
 		 */
 		public function getByGroup($intGroupID,$strOrderBy='added',$strOrderDirection='DESC'){
@@ -120,6 +122,8 @@
 		 *
 		 * @related get
 		 * @param $intTypeID ID of the required asset type
+		 * @param string $strOrderBy field to order the results by
+		 * @param string $strOrderDirection directional order of the results
 		 * @return array Returns a multi-dimensional array of assets
 		 */
 		public function getByType($intTypeID,$strOrderBy='added',$strOrderDirection='DESC'){

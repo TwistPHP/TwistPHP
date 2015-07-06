@@ -32,7 +32,8 @@
 	class Image extends BasePackage{
 
 		/**
-		 * Checked that the PHP GD library is installed and loads in the image object library
+		 * Checked that the PHP GD library is installed and loads in the image object library.
+		 *
 		 * @throws \Exception
 		 */
 		public function __construct(){
@@ -47,8 +48,7 @@
 		 * Once all changes have been made you can then export the image as a file or serve to the screen.
 		 *
 		 * @param $mxdImage
-		 * @return_object ImageObject core/packages/models/Image/Object.model.php
-		 * @return object Returns an object of the loaded Image
+		 * @return \Twist\Core\Models\Image\Image Returns an object of the loaded Image
 		 */
 		public function load($mxdImage){
 			return new ImageObject($mxdImage);
@@ -61,8 +61,7 @@
 		 * @param $intWidth
 		 * @param $intHeight
 		 * @param $strFillColour
-		 * @return_object ImageObject core/packages/models/Image/Object.model.php
-		 * @return object Returns an object of the new Image
+		 * @return \Twist\Core\Models\Image\Image Returns an object of the new Image
 		 */
 		public function create($intWidth,$intHeight,$strFillColour){
 			return new ImageObject(null,$intWidth,$intHeight,$strFillColour);

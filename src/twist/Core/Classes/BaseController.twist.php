@@ -25,6 +25,10 @@
 	use Twist\Core\Models\Route\Meta;
 	use Twist\Core\Classes\Error;
 
+	/**
+	 * Base Controller should be used as an extension to every controller class that is made with the exception of those controllers that use BaseControllerAJAX and BaseControllerUser.
+	 * @package Twist\Core\Classes
+	 */
 	class BaseController{
 
 		protected $arrMessages = array();
@@ -44,6 +48,8 @@
 		protected $resRoute = null;
 
         /**
+         * A function that is called by Routes both to ensure that the controller has been extended and so that we can pass in resources and information required by the controller.
+         *
          * @param $arrRoute
          * @param \Twist\Core\Models\Route\Meta $resMeta
          * @param \Twist\Core\Packages\Route $resRoute
@@ -61,20 +67,38 @@
 			return true;
 		}
 
+		/**
+		 * Default response from any controller, this function can be replaced in a controller to do what is required.
+		 * The default response is a 404 page.
+		 *
+		 * @return bool
+		 */
 		public function _default(){
 			return $this->_404();
 		}
 
+		/**
+		 * The main response of the controller, treat this function as though it where an index.php file.
+		 * As default the responses returned is that of _default.
+		 *
+		 * @return bool
+		 */
 		public function _index(){
 			return $this->_default();
 		}
 
+		/**
+		 * This is that function that will be called in the even that Routes was unable to find a exact controller response.
+		 *
+		 * @return bool
+		 */
 		public function _fallback(){
 			return $this->_404();
 		}
 
         /**
-         * Over-ride the base view for the current page
+         * Over-ride the base view for the current page only.
+         *
          * @return null|string
          */
 		public function _baseView($mxdBaseView = null){
@@ -87,14 +111,15 @@
 		}
 
         /**
-         * Ignore the base view for the current page
+         * Ignore the base view for the current page only.
          */
 		public function _baseViewIgnore(){
 			$this->resRoute->baseViewIgnore();
 		}
 
         /**
-         * Set the timeout for the current page (Some pages may have allot to do so this can be done per page)
+         * Set the timeout for the current page (Some pages may have allot to do so this can be done per page).
+         *
          * @param int $intTimeout
          */
 		public function _timeout($intTimeout = 30){
@@ -102,29 +127,60 @@
 		}
 
         /**
-         * Ignore user abourt
+         * Ignore user abort, when in use the scrip will carry on processing until complete even if the user closes the browser window or stops the request from loading.
+         *
          * @param bool $blIgnore
          */
 		public function _ignoreUserAbort($blIgnore = true){
 			ignore_user_abort($blIgnore);
 		}
 
-        final protected function _aliasURI($strURI,$strFunctionName){
+		/**
+		 * Register an alias URI for a response function for instance if you had thankYou() as the function name you could register 'thank-you' as an alias URI.
+		 * All aliases must be registered from within a __construct function in your controller. Adding an alias means that the original thankYou() will still be callable by routes.
+		 *
+		 * @param $strURI
+		 * @param $strFunctionName
+		 */
+        protected function _aliasURI($strURI,$strFunctionName){
 			$this->arrAliasURIs[$strURI] = $strFunctionName;
 		}
 
-        final public function _getAliases(){
+		/**
+		 * Get an array of all the aliases registered for this controller.
+		 *
+		 * @return array
+		 */
+        public function _getAliases(){
 			return $this->arrAliasURIs;
 		}
 
-        final protected function _replaceURI($strURI,$strFunctionName){
+		/**
+		 * Register an replace URI for a response function for instance if you had thankYou() as the function name you could register 'thank-you' as an replace URI.
+		 * All replaces must be registered from within a __construct function in your controller. Adding a replace means that the original thankYou() will no-longer be callable by routes.
+		 *
+		 * @param $strURI
+		 * @param $strFunctionName
+		 */
+        protected function _replaceURI($strURI,$strFunctionName){
 			$this->arrReplaceURIs[$strFunctionName] = $strURI;
 		}
 
-        final public function _getReplacements(){
+		/**
+		 * Get an array of all the replacements registered for this controller.
+		 *
+		 * @return array
+		 */
+        public function _getReplacements(){
 			return $this->arrReplaceURIs;
 		}
 
+		/**
+		 * Function to call any controller response with the correct method prefix if any has been setup. If the response function is not found a 404 page will be output.
+		 *
+		 * @param $strCallFunctionName Name of the function to be called
+		 * @return bool
+		 */
         final protected function _callFunction($strCallFunctionName){
 
 			$arrControllerFunctions = array();
@@ -143,10 +199,23 @@
 			}
 		}
 
+		/**
+		 * Returns either a single item (if key passed in) from the route array otherwise returns the whole array.
+		 *
+		 * @param null|string $strReturnKey
+		 * @return array
+		 */
         final protected function _route($strReturnKey = null){
 			return array_key_exists($strReturnKey, $this->arrRoute) ? $this->arrRoute[$strReturnKey] : $this->arrRoute;
 		}
 
+		/**
+		 * Process files that have been uplaoded and return an array of uploaded data, this is to help when a browser does not support teh pure AJAX uploader.
+		 *
+		 * @param $strFileKey
+		 * @param string $strType
+		 * @return array|mixed
+		 */
 		public function _upload($strFileKey,$strType = 'file'){
 
 			$arrOut = array();
@@ -166,44 +235,93 @@
 			return $arrOut;
 		}
 
+		/**
+		 * Halts all scripts and outputs a 404 page to the screen.
+		 *
+		 * @return bool
+		 */
 		final public function _404(){
 			return $this->_error(404);
 		}
 
+		/**
+		 * Halts all scripts and outputs the desired error page by response code (for example 404 or 403) to the screen.
+		 *
+		 * @param int $intError HTTP Response code of the error page to be output
+		 * @return bool
+		 */
 		final public function _error($intError){
 			return $this->_response($intError);
 		}
 
+		/**
+		 * Halts all scripts and outputs the desired error page by response code (for example 404 or 403) to the screen.
+		 *
+		 * @param $intError HTTP Response code of the error page to be output
+		 * @param null $strCustomDescription Custom description to be included in the response page
+		 * @return bool
+		 */
 		final public function _response($intError,$strCustomDescription = null){
 			Error::errorPage($intError,$strCustomDescription);
 			return false;
 		}
 
+		/**
+		 * Add an error message, the messages can be output using the {messages:error} template tag, you can also output all messages using {messages:all}.
+		 *
+		 * @param $strMessage
+		 * @param null $strKey
+		 */
 		public function _errorMessage($strMessage,$strKey = null){
 			\Twist::errorMessage($strMessage,$strKey);
 		}
 
+		/**
+		 * Add an warning message, the messages can be output using the {messages:warning} template tag, you can also output all messages using {messages:all}.
+		 *
+		 * @param $strMessage
+		 * @param null $strKey
+		 */
 		public function _warningMessage($strMessage,$strKey = null){
 			\Twist::warningMessage($strMessage,$strKey);
 		}
 
+		/**
+		 * Add an notice message, the messages can be output using the {messages:notice} template tag, you can also output all messages using {messages:all}.
+		 *
+		 * @param $strMessage
+		 * @param null $strKey
+		 */
 		public function _noticeMessage($strMessage,$strKey = null){
 			\Twist::noticeMessage($strMessage,$strKey);
 		}
 
+		/**
+		 * Add an success message, the messages can be output using the {messages:success} template tag, you can also output all messages using {messages:all}.
+		 *
+		 * @param $strMessage
+		 * @param null $strKey
+		 */
 		public function _successMessage($strMessage,$strKey = null){
 			\Twist::successMessage($strMessage,$strKey);
 		}
 
 		/**
-		 * Meta object that
-		 * @return Meta
+		 * Returns the Meta object so that page titles, keywords and other meta items can all be updated before being output to the base template.
+		 *
+		 * @return \Twist\Core\Models\Route\Meta
 		 */
         final public function _meta(){
 			return $this->resMeta;
 		}
 
-        final protected function _var($strVarKey = null){
+		/**
+		 * Get a Route URI var from the route vars, passing in null will return the whole array of route vars.
+		 *
+		 * @param null $strVarKey
+		 * @return array|null
+		 */
+        protected function _var($strVarKey = null){
 
 			if(is_null($strVarKey)){
 				return $this->arrRouteVars;
@@ -212,11 +330,21 @@
 			}
 		}
 
-        final protected function _view($dirView,$arrViewTags = null,$blRemoveUnusedTags = false){
+		/**
+		 * Process a view template file and return the output.
+		 * @param $dirView
+		 * @param null $arrViewTags
+		 * @param bool $blRemoveUnusedTags
+		 * @return string
+		 */
+        protected function _view($dirView,$arrViewTags = null,$blRemoveUnusedTags = false){
 			return \Twist::View()->build($dirView,$arrViewTags,$blRemoveUnusedTags);
 		}
 
-        final protected function _render($dirView,$arrViewTags = null,$blRemoveUnusedTags = false){
+		/**
+		 * @alias _view
+		 */
+        protected function _render($dirView,$arrViewTags = null,$blRemoveUnusedTags = false){
 			return $this->_view($dirView,$arrViewTags,$blRemoveUnusedTags);
 		}
 	}

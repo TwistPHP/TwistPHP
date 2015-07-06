@@ -47,10 +47,9 @@
 
 		/**
 		 * Connect to the remote FTP server
-		 *
 		 * @param $strHost
-		 * @param $intPort
-		 * @param $intConnectionTimeout
+		 * @param int $intPort
+		 * @param null|int $intConnectionTimeout
 		 */
 		public function connect($strHost,$intPort = 21,$intConnectionTimeout = null){
 
@@ -69,7 +68,6 @@
 
 		/**
 		 * Login to the open FTP connection
-		 *
 		 * @param $strUsername
 		 * @param $strPassword
 		 * @return bool
@@ -80,8 +78,7 @@
 
 		/**
 		 * Enable/Disable passive mode globally for this connection
-		 *
-		 * @param $blEnable
+		 * @param bool $blEnable
 		 */
 		public function passiveMode($blEnable = true){
 			$this->resLibrary->pasv($blEnable);
@@ -89,7 +86,6 @@
 
 		/**
 		 * Get the system name for the FTP connection
-		 *
 		 * @return bool
 		 */
 		public function systemName(){
@@ -98,7 +94,6 @@
 
 		/**
 		 * Get an array of supported features for the current FTP server connection
-		 *
 		 * @return array|bool
 		 */
 		public function featureList(){
@@ -107,7 +102,6 @@
 
 		/**
 		 * Detect if the connected FTP server supports this feature
-		 *
 		 * @param $strFeature Name of feature to check
 		 * @return bool
 		 */
@@ -118,7 +112,6 @@
 
 		/**
 		 * Get path of the current working directory on the remote FTP server
-		 *
 		 * @return string Returns the directory path
 		 */
 		public function getCurrentDirectory(){

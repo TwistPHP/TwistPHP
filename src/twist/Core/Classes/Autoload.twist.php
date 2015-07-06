@@ -28,11 +28,20 @@ class Autoload{
 	public static $strBaseDir = null;
 	public static $arrClassLoaded = array();
 
+	/**
+	 * Initialise the autoloader and register the class as an autoloader
+	 * @param $strBaseDir Base directory of the framework
+	 */
 	public static function init($strBaseDir){
 		self::$strBaseDir = $strBaseDir;
 		spl_autoload_register(__NAMESPACE__ .'\Autoload::load');
 	}
 
+	/**
+	 * Handler for each individual request, the path for the required file will be worked out here
+	 * @param $strRequest The full class and namespace of the file to be loaded
+	 * @throws \Exception
+	 */
 	public static function load($strRequest){
 
 		//Fix for matches that are in 'Twist\Core\Classes' namespace

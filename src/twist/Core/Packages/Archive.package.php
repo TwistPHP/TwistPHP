@@ -29,7 +29,7 @@
 	/**
 	 * Create ZIP archives of compressed files, easily zip up whole directories and single files. Default handler is PHP's native ZipArchive, the option to use the thrid party class PclZip can be selected in the framework settings.
 	 *
-	 * @package TwistPHP\Packages
+	 * @package Twist\Core\Packages
 	 * @reference http://www.phpconcept.net/pclzip/ PclZip Package included as fallback option
 	 */
 	class Archive extends BasePackage{
