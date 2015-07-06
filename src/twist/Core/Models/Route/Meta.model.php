@@ -276,26 +276,34 @@
 			$strOut = '';
 
 			foreach($this->arrTags as $arrEachTag) {
+				$strOut .= $this->createTag($arrEachTag);
+			}
 
-				switch ($arrEachTag['type']) {
-					case'title':
-						$strOut .= sprintf("<title>%s</title>", $arrEachTag['value']);
-						break;
+			return $strOut;
+		}
 
-					case'meta':
+		protected function createTag($arrData){
 
-						if ($arrEachTag['name'] == 'charset') {
-							$strOut .= sprintf('<meta charset="%s">', $arrEachTag['value']);
-						} else {
-							$strOut .= sprintf('<meta name="%s" content="%s">', $arrEachTag['name'], $arrEachTag['value']);
-						}
+			$strOut = '';
 
-						break;
+			switch($arrData['type']){
+				case'title':
+					$strOut = sprintf("<title>%s</title>", $arrData['value']);
+					break;
 
-					case'og':
-						$strOut .= sprintf('<meta property="og:%s" content="%s">', $arrEachTag['name'], $arrEachTag['value']);
-						break;
-				}
+				case'meta':
+
+					if($arrData['name'] == 'charset'){
+						$strOut = sprintf('<meta charset="%s">', $arrData['value']);
+					}else{
+						$strOut .= sprintf('<meta name="%s" content="%s">', $arrData['name'], $arrData['value']);
+					}
+
+					break;
+
+				case'og':
+					$strOut = sprintf('<meta property="og:%s" content="%s">', $arrData['name'], $arrData['value']);
+					break;
 			}
 
 			return $strOut;
