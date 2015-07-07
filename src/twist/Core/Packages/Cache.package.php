@@ -196,6 +196,42 @@
 		}
 
 		/**
+		 * Get the created time for the cache file
+		 * @param $mxdUniqueID
+		 * @return int|null
+		 */
+		public function created($mxdUniqueID){
+
+			//Build the cache files location
+			$strCacheName = sprintf("%s.%s",$mxdUniqueID,$this->strExtension);
+			$dirCacheFile = sprintf("%s/%s",rtrim($this->dirLocation,'/'),ltrim($strCacheName,'/'));
+
+			if($this->blCacheEnabled && \Twist::File()->exists($dirCacheFile)){
+				return filectime($dirCacheFile);
+			}
+
+			return null;
+		}
+
+		/**
+		 * Get the last modified time of the cache file
+		 * @param $mxdUniqueID
+		 * @return int|null
+		 */
+		public function modified($mxdUniqueID){
+
+			//Build the cache files location
+			$strCacheName = sprintf("%s.%s",$mxdUniqueID,$this->strExtension);
+			$dirCacheFile = sprintf("%s/%s",rtrim($this->dirLocation,'/'),ltrim($strCacheName,'/'));
+
+			if($this->blCacheEnabled && \Twist::File()->exists($dirCacheFile)){
+				return filemtime($dirCacheFile);
+			}
+
+			return null;
+		}
+
+		/**
 		 * Get the expiry timestamp of a cache file by its unique ID
 		 * @param $mxdUniqueID
 		 * @return null
