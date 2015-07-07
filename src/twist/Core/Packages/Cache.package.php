@@ -117,10 +117,12 @@
 			if($this->blCacheEnabled){
 
 				//Generate the expiry time - Fix for php session cache (allow 30 second runtime before re-cache)
-				$intExpiryTime = ($intLifeTime == 0) ? (\Twist::DateTime()->time() + 30) : (\Twist::DateTime()->time() + $intLifeTime);
+				$intCreated = \Twist::DateTime()->time();
+				$intExpiryTime = ($intLifeTime == 0) ? ($intCreated + 30) : ($intCreated + $intLifeTime);
 				$strCacheName = sprintf("%s.%s", $mxdUniqueID, $this->strExtension);
 
 				$arrData = array(
+					'created' => $intCreated,
 					'expiry' => $intExpiryTime,
 					'data' => $mxdData
 				);
@@ -207,7 +209,12 @@
 			$dirCacheFile = sprintf("%s/%s",rtrim($this->dirLocation,'/'),ltrim($strCacheName,'/'));
 
 			if($this->blCacheEnabled && \Twist::File()->exists($dirCacheFile)){
-				return filectime($dirCacheFile);
+
+				$arrData = json_decode(\Twist::File()->read($dirCacheFile),true);
+
+				if(count($arrData) && array_key_exists('created',$arrData) && array_key_exists('data',$arrData)){
+					return $arrData['created'];
+				}
 			}
 
 			return null;
