@@ -274,6 +274,19 @@
 			}
 		}
 
+		public function removeSettings(){
+
+			$arrBacktrace = debug_backtrace();
+			if(count($arrBacktrace)) {
+
+				$dirInstallFile = $arrBacktrace[0]['file'];
+				$dirPackage = dirname($dirInstallFile);
+				$strSlug = strtolower(basename($dirPackage));
+
+				\Twist::framework()->settings()->uninstall($strSlug,'package');
+			}
+		}
+
 		public function uninstaller($strInstallSlug){
 
 			$blOut = false;

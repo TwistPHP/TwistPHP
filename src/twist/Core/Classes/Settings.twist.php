@@ -159,6 +159,28 @@
 	        return $blOut;
 	    }
 
+		public function uninstall($strPackage,$strGroup,$strKey = null){
+
+			//@todo also remove from JSON file if that is what is being used
+
+			if(is_null($strKey)){
+				\Twist::Database()->query("DELETE * FROM `%s`.`%ssettings` WHERE `package` = '%s' AND `group` = '%s'",
+					TWIST_DATABASE_NAME,
+					TWIST_DATABASE_TABLE_PREFIX,
+					$strPackage,
+					$strGroup
+				);
+			}else{
+				\Twist::Database()->query("DELETE * FROM `%s`.`%ssettings` WHERE `package` = '%s' AND `group` = '%s' AND `key` = '%s'",
+					TWIST_DATABASE_NAME,
+					TWIST_DATABASE_TABLE_PREFIX,
+					$strPackage,
+					$strGroup,
+					$strKey
+				);
+			}
+		}
+
 		public function install($strPackage,$strGroup,$strKey,$mxdValue,$strTitle,$strDescription,$strDefault,$strType,$strOptions,$blNull = false){
 
 			if(TWIST_DATABASE_PROTOCOL === 'none'){
