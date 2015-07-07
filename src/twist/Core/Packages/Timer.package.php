@@ -107,7 +107,7 @@
 		public function log($strLogKey){
 			$this->intKey++;
 			$intTotalTime = ($this->getMicroTime() - $this->arrTimer['start']);
-			$this->arrTimer['log'][(array_key_exists($strLogKey,$this->arrTimer['log'])) ? $strLogKey.$this->intKey : $strLogKey] = array(
+			$this->arrTimer['log'][$strLogKey.$this->intKey] = array(
 				'time' => (strstr($intTotalTime,'E')) ? 0 : $intTotalTime,
 				'memory' => memory_get_usage()
 			);
