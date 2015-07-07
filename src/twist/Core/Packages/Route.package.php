@@ -630,23 +630,23 @@ class Route extends BasePackage{
 
 		//Get the page cache if exists
 		$arrCacheData = \Twist::Cache('twist/packages/route')->read($strPageCacheKey,true);
-		$intModifiedTime = \Twist::Cache('twist/packages/route')->modified($strPageCacheKey);
+		$intCreatedTime = \Twist::Cache('twist/packages/route')->created($strPageCacheKey);
 		$intExpiryTime = \Twist::Cache('twist/packages/route')->expiry($strPageCacheKey);
 
 		if(!is_null($arrCacheData)){
 
-			$mxdModifiedTime = gmdate('D, d M Y H:i:s ', $intModifiedTime) . 'GMT';
+			$mxdModifiedTime = gmdate('D, d M Y H:i:s ', $intCreatedTime) . 'GMT';
 			$strETag = sha1($strPageCacheKey . $mxdModifiedTime);
 
 			$blModifiedSince = isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) ? $_SERVER['HTTP_IF_MODIFIED_SINCE'] : false;
 			$blNoneMatch = isset($_SERVER['HTTP_IF_NONE_MATCH']) ? $_SERVER['HTTP_IF_NONE_MATCH'] : false;
 
-			if((($blNoneMatch && $blNoneMatch == $strETag) || (!$blNoneMatch)) && ($blModifiedSince && $blModifiedSince == $mxdModifiedTime)){
+			if((($blNoneMatch && $blNoneMatch == $strETag) || (!$blNoneMatch)) && ($blModifiedSince !== false && $blModifiedSince == $mxdModifiedTime)){
 				header('HTTP/1.1 304 Not Modified');
 				die();
 			}elseif(!$blModifiedSince && !$blNoneMatch){
 
-				header("Cache-Control: max-age=".($intExpiryTime-$intModifiedTime));
+				header("Cache-Control: max-age=".($intExpiryTime-$intCreatedTime));
 				header("Last-Modified: $mxdModifiedTime");
 				header("ETag: \"{$strETag}\"");
 
