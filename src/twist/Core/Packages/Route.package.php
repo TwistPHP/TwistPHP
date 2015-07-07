@@ -629,11 +629,11 @@ class Route extends BasePackage{
 	protected function loadPageCache($strPageCacheKey){
 
 		//Get the page cache if exists
-		$arrCacheData = \Twist::Cache('twist/packages/route')->read($strPageCacheKey,true);
+		$strCacheData = \Twist::Cache('twist/packages/route')->read($strPageCacheKey,true);
 		$intCreatedTime = \Twist::Cache('twist/packages/route')->created($strPageCacheKey);
 		$intExpiryTime = \Twist::Cache('twist/packages/route')->expiry($strPageCacheKey);
 
-		if(!is_null($arrCacheData)){
+		if(!is_null($strCacheData)){
 
 			$mxdModifiedTime = gmdate('D, d M Y H:i:s ', $intCreatedTime) . 'GMT';
 			$strETag = sha1($strPageCacheKey . $mxdModifiedTime);
@@ -649,9 +649,10 @@ class Route extends BasePackage{
 				header("Cache-Control: max-age=".($intExpiryTime-$intCreatedTime));
 				header("Last-Modified: $mxdModifiedTime");
 				header("ETag: \"{$strETag}\"");
+				header("Twist-Cache: Served");
 
 				//Output the cached page here
-				echo $arrCacheData;
+				echo $strCacheData;
 				die();
 			}
 		}
@@ -665,14 +666,15 @@ class Route extends BasePackage{
 	 */
 	protected function storePageCache($strPageCacheKey,$strPageData,$intCacheTime = 3600){
 
-		$mxdModifiedTime = gmdate('D, d M Y H:i:s ', \Twist::DateTime()->time()) . 'GMT';
+		\Twist::Cache('twist/packages/route')->write($strPageCacheKey,$strPageData,$intCacheTime);
+		$intCreatedTime = \Twist::Cache('twist/packages/route')->created($strPageCacheKey);
+
+		$mxdModifiedTime = gmdate('D, d M Y H:i:s ', $intCreatedTime) . 'GMT';
 		$strEtag = sha1($strPageCacheKey . $mxdModifiedTime);
 
 		header("Cache-Control: max-age=".$intCacheTime);
 		header("Last-Modified: $mxdModifiedTime");
 		header("ETag: \"{$strEtag}\"");
-
-		\Twist::Cache('twist/packages/route')->write($strPageCacheKey,$strPageData,$intCacheTime);
 	}
 
 	/**
