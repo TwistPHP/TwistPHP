@@ -516,8 +516,6 @@
 				}else{
 					$intOut = 0;
 				}
-			}else{
-				throw new \Exception('Count query failed to run');
 			}
 
 			return $intOut;
@@ -571,8 +569,6 @@
 				if($this->getNumberRows()){
 					$arrRecord = $this->getFullArray();
 				}
-			}else{
-				throw new \Exception('Find query failed to run');
 			}
 
 			return $arrRecord;
@@ -669,8 +665,6 @@
 					if($this->getNumberRows()){
 						$arrRecord = $this->getFullArray();
 					}
-				}else{
-					throw new \Exception('Find query failed to run');
 				}
 			} else {
 				throw new \Exception('No fields and values specified');
