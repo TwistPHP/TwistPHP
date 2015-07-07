@@ -31,6 +31,7 @@
 
 		protected $strInstanceKey = '';
 		protected $arrTimer = array();
+		protected $intKey = 0;
 
 		public function __construct($strInstanceKey){
 			$this->strInstanceKey = $strInstanceKey;
@@ -104,8 +105,9 @@
 		 * @return int
 		 */
 		public function log($strLogKey){
+			$this->intKey++;
 			$intTotalTime = ($this->getMicroTime() - $this->arrTimer['start']);
-			$this->arrTimer['log'][$strLogKey] = array(
+			$this->arrTimer['log'][(array_key_exists($strLogKey,$this->arrTimer['log'])) ? $strLogKey.$this->intKey : $strLogKey] = array(
 				'time' => (strstr($intTotalTime,'E')) ? 0 : $intTotalTime,
 				'memory' => memory_get_usage()
 			);
