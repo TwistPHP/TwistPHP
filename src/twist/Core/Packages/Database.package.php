@@ -900,6 +900,18 @@
 			return (!is_numeric($strOut) && $this->connected()) ? $this->resLibrary->escapeString($strOut) : $strOut;
 		}
 
+		public function mbSupport() {
+			$blMultibyteSupport = false;
+
+			if($this->query("SELECT VERSION() as mysql_version")
+					&& $this->getNumberRows()) {
+				$arrSQLData = \Twist::Database()->getArray();
+				$blMultibyteSupport = version_compare($arrSQLData['mysql_version'], '5.5.3', '>=');
+			}
+
+			return $blMultibyteSupport;
+		}
+
 		/**
 		 * Check to see if a connection is present to a database server
 		 *

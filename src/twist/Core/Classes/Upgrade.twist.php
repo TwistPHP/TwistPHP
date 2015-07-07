@@ -803,6 +803,9 @@
 						$strDatabase = (count($this->arrDatabaseCustomSettings)) ? $this->arrDatabaseCustomSettings['database'] : TWIST_DATABASE_NAME;
 						$strQuery = str_replace('/*TWIST_DATABASE_NAME*/',$strDatabase,$strQuery);
 						$strQuery = str_replace('/*TWIST_DATABASE_TABLE_PREFIX*/`','`'.$strPrefix,$strQuery);
+						if(!\Twist::Database()->mbSupport()){
+							$strQuery = str_replace('utf8mb4','utf8',$strQuery);
+						}
 
 						if(!$this->_databaseQuery($strQuery)){
 							$blOut = false;
@@ -866,6 +869,9 @@
 									if(trim($strQuery) != ''){
 										$strPrefix = (count($this->arrDatabaseCustomSettings)) ? $this->arrDatabaseCustomSettings['table_prefix'] : TWIST_DATABASE_TABLE_PREFIX;
 										$strQuery = str_replace('/*TWIST_DATABASE_TABLE_PREFIX*/`','`'.$strPrefix,$strQuery);
+										if(!\Twist::Database()->mbSupport()){
+											$strQuery = str_replace('utf8mb4','utf8',$strQuery);
+										}
 
 										if(!$this->_databaseQuery($strQuery)){
 											$blOut = false;

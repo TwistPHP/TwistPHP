@@ -32,14 +32,14 @@ CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`user_data_fields` (
   `slug` char(64) COLLATE utf8_unicode_ci NOT NULL,
   KEY `id` (`id`),
   UNIQUE KEY `slug` (`slug`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`user_data` (
   `user_id` int(11) NOT NULL,
   `field_id` int(11) NOT NULL,
   `data` text COLLATE utf8_unicode_ci,
   UNIQUE KEY `user_id` (`user_id`,`field_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`packages` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique ID for this installation',
@@ -56,6 +56,6 @@ CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`packages` (
   `updated` datetime DEFAULT NULL COMMENT 'Date the package was updated',
   PRIMARY KEY (`id`),
   UNIQUE KEY `slug` (`slug`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1 ;
 
 ALTER TABLE /*TWIST_DATABASE_TABLE_PREFIX*/`settings` CHANGE `group` `group` ENUM( 'core', 'package' ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
