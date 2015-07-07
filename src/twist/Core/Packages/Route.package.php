@@ -649,7 +649,11 @@ class Route extends BasePackage{
 				header("Cache-Control: max-age=".($intExpiryTime-$intCreatedTime));
 				header("Last-Modified: $mxdModifiedTime");
 				header("ETag: \"{$strETag}\"");
-				header("Twist-Cache: Served");
+
+				//Enable GZip compression output, only when no other data has been output to the screen
+				if(ob_get_status()['buffer_used'] == 0 && strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false){
+					ob_start('ob_gzhandler');
+				}
 
 				//Output the cached page here
 				echo $strCacheData;
@@ -1203,7 +1207,7 @@ class Route extends BasePackage{
 						}
 
 						//Enable GZip compression output, only when no other data has been output to the screen
-						if(ob_get_status() == 0 && strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false){
+						if(ob_get_status()['buffer_used'] == 0 && strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false){
 							ob_start('ob_gzhandler');
 						}
 
