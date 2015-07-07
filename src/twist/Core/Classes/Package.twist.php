@@ -247,7 +247,7 @@
 				$strSlug = strtolower(basename($dirPackage));
 
 				//Install the SQL tables when required
-				$dirSettingsJSON = sprintf('%s/%s', $dirPackage, $dirSettingsJSON);
+				$dirSettingsJSON = (!file_exists($dirSettingsJSON)) ? sprintf('%s/%s', $dirPackage, $dirSettingsJSON) : $dirSettingsJSON;
 
 				if(file_exists($dirSettingsJSON)){
 
