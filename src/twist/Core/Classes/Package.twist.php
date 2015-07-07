@@ -220,7 +220,7 @@
 				$dirPackage = dirname($dirInstallFile);
 
 				//Install the SQL tables when required
-				$dirInstallSQL = sprintf('%s/%s', $dirPackage, $dirInstallSQL);
+				$dirInstallSQL = (!file_exists($dirInstallSQL)) ? sprintf('%s/%s', $dirPackage, $dirInstallSQL) : $dirInstallSQL;
 
 				if(file_exists($dirInstallSQL)){
 
