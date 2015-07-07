@@ -196,12 +196,12 @@ final class Debug{
 				'total_percentage' => round($intTotalPercentage,2),
 				'percentage' => round($intPercentage,2),
 				'time' => ($intCurrentTimeUsage < 1) ? round($intCurrentTimeUsage*1000).'ms' : round($intCurrentTimeUsage,3).'s',
-				'title' => $strKey
+				'title' => $arrInfo['title']
 			);
 
 			$arrTags['timeline'] .= $this->resTemplate->build('components/timeline-entry.tpl',$arrTimelineTags);
 
-			$arrTimelineTags['title'] = \Twist::File()->bytesToSize($arrInfo['memory']).' - '.$strKey;
+			$arrTimelineTags['title'] = \Twist::File()->bytesToSize($arrInfo['memory']).' - '.$arrInfo['title'];
 			$arrTags['memory_chart'] .= $this->resTemplate->build('components/timeline-entry.tpl',$arrTimelineTags);
 			$intUsedTime += $intCurrentTimeUsage;
 		}

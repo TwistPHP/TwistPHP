@@ -31,7 +31,6 @@
 
 		protected $strInstanceKey = '';
 		protected $arrTimer = array();
-		protected $intKey = 0;
 
 		public function __construct($strInstanceKey){
 			$this->strInstanceKey = $strInstanceKey;
@@ -101,16 +100,16 @@
 
 		/**
 		 * Get the timers' current length but do not stop the timer
-		 * @param $strReference
+		 * @param $strLogTitle
 		 * @return int
 		 */
-		public function log($strLogKey){
-			$this->intKey++;
+		public function log($strLogTitle){
 			$intTotalTime = ($this->getMicroTime() - $this->arrTimer['start']);
-			$this->arrTimer['log'][$strLogKey.$this->intKey] = array(
+			$this->arrTimer['log'][] = array(
+				'title' => $strLogTitle,
 				'time' => (strstr($intTotalTime,'E')) ? 0 : $intTotalTime,
 				'memory' => memory_get_usage()
 			);
-			return $this->arrTimer['log'][$strLogKey]['time'];
+			return $this->arrTimer['log'][count($this->arrTimer['log'])-1]['time'];
 		}
 	}
