@@ -641,10 +641,10 @@ class Route extends BasePackage{
 			$blModifiedSince = isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) ? $_SERVER['HTTP_IF_MODIFIED_SINCE'] : false;
 			$blNoneMatch = isset($_SERVER['HTTP_IF_NONE_MATCH']) ? $_SERVER['HTTP_IF_NONE_MATCH'] : false;
 
-			if((($blNoneMatch && $blNoneMatch == $strETag) || (!$blNoneMatch)) && ($blModifiedSince !== false && $blModifiedSince == $mxdModifiedTime)){
+			if($blNoneMatch === $strETag || $blModifiedSince === $mxdModifiedTime){
 				header('HTTP/1.1 304 Not Modified');
 				die();
-			}elseif(!$blModifiedSince && !$blNoneMatch){
+			}elseif($blModifiedSince === false && $blNoneMatch === false){
 
 				header("Cache-Control: max-age=".($intExpiryTime-$intCreatedTime));
 				header("Last-Modified: $mxdModifiedTime");
