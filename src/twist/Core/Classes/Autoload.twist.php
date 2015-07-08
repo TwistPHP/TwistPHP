@@ -74,11 +74,25 @@ class Autoload{
 			$strFileWithoutRoot = implode('/',$arrPrats);
 
 			if(substr($strRequest,0,6) == 'Twist\\'){
-				$dirRequire = sprintf('%s/%s',rtrim(self::$strBaseDir,'/'),ltrim($strFile));
+
+				//First check if there is an over-ride
+				$dirRequire = sprintf('%s/Twist/%s',rtrim(TWIST_APP,'/'),ltrim($strFileWithoutRoot));
+
+				if(!file_exists($dirRequire)){
+					$dirRequire = sprintf('%s/%s',rtrim(self::$strBaseDir,'/'),ltrim($strFile));
+				}
+
 			}elseif(substr($strRequest,0,4) == 'App\\'){
 				$dirRequire = sprintf('%s/%s',rtrim(TWIST_APP,'/'),ltrim($strFileWithoutRoot));
 			}elseif(substr($strRequest,0,9) == 'Packages\\'){
-				$dirRequire = sprintf('%s/%s',rtrim(TWIST_PACKAGES,'/'),ltrim($strFileWithoutRoot));
+
+				//First check if there is an over-ride
+				$dirRequire = sprintf('%s/Packages/%s',rtrim(TWIST_APP,'/'),ltrim($strFileWithoutRoot));
+
+				if(!file_exists($dirRequire)){
+					$dirRequire = sprintf('%s/%s',rtrim(TWIST_PACKAGES,'/'),ltrim($strFileWithoutRoot));
+				}
+
 			}else{
 				$dirRequire = sprintf('%s/%s',rtrim(TWIST_PUBLIC_ROOT,'/'),ltrim($strFile));
 			}
