@@ -24,11 +24,19 @@
 	function( window ) {
 		var funOriginalError = window.onerror;
 
-		window.onerror = function( strErrorMessage, strURL, intLineNumber ) {
+		window.onerror = function( strErrorMessage, strURL, intLineNumber, intColumn, objError ) {
 			//LOG ERROR TO TWIST
 
 			if( funOriginalError ) {
-				return funOriginalError( strErrorMessage, strURL, intLineNumber );
+				if( intColumn ) {
+					if( objError ) {
+						return funOriginalError( strErrorMessage, strURL, intLineNumber, intColumn, objError );
+					} else {
+						return funOriginalError( strErrorMessage, strURL, intLineNumber, intColumn );
+					}
+				} else {
+					return funOriginalError( strErrorMessage, strURL, intLineNumber );
+				}
 			}
 
 			return false;
