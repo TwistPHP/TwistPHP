@@ -291,8 +291,7 @@
 		 * Create a new database record (row) an empty object will be returned from this function, you can then populate the record and commit your changes
 		 *
 		 * @param $strTable
-		 * @return_object DatabaseRecord core/packages/models/Database/Record.model.php
-		 * @return null|object Returns and object of the database table
+		 * @return null|\Twist\Core\Models\Database\Record Returns and object of the database table
 		 */
 		public function createRecord($strTable){
 
@@ -315,8 +314,7 @@
 		 * @param $strTable
 		 * @param $mxdValue
 		 * @param string $strField
-		 * @return_object DatabaseRecord core/packages/models/Database/Record.model.php
-		 * @return null|object Returns and object of the database table
+		 * @return null|\Twist\Core\Models\Database\Record Returns and object of the database table
 		 */
 		public function getRecord($strTable,$mxdValue,$strField = 'id'){
 
@@ -376,8 +374,7 @@
 		 * @param $strTable
 		 * @param $mxdValue
 		 * @param string $strField
-		 * @return_object DatabaseRecord core/packages/models/Database/Record.model.php
-		 * @return null|object Returns and object of the database table
+		 * @return null|\Twist\Core\Models\Database\Record Returns and object of the database table
 		 */
 		public function cloneRecord($strTable,$mxdValue,$strField = 'id'){
 
@@ -678,8 +675,7 @@
 		 *
 		 * @param $strTable Name of that table to lookup
 		 * @param $strDatabase Name of the tables database if not the current database
-		 * @return_object DatabaseTable core/packages/models/Database/Table.model.php
-		 * @return object Returns and object of the database table
+		 * @return null|\Twist\Core\Models\Database\Record Returns and object of the database table
 		 */
 		public function table($strTable,$strDatabase = null){
 

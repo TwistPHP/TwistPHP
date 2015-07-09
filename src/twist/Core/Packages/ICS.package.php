@@ -35,8 +35,7 @@
 		/**
 		 * Create a new instance of the ICSCalendar object, allowing the creation of an calendar ICS file
 		 *
-		 * @return_object ICSCalendar core/packages/models/ICS/Calendar.model.php
-		 * @return object Returns the ICS Calendar Object
+		 * @return \Twist\Core\Models\ICS\Calendar Returns the ICS Calendar Object
 		 */
 		public function createCalendar(){
 			return new Calendar();
@@ -45,8 +44,7 @@
 		/**
 		 * Create a new instance of the ICSEvent object, allowing the creation of an event ICS file
 		 *
-		 * @return_object ICSEvent core/packages/models/ICS/Event.model.php
-		 * @return object Returns the ICS Event Object
+		 * @return \Twist\Core\Models\ICS\Event Returns the ICS Event Object
 		 */
 		public function createEvent(){
 			return new Event();

@@ -44,37 +44,47 @@
 	use \Twist\Core\Classes\Autoload;
 	Autoload::init(realpath(sprintf('%s/../../',dirname(__FILE__))));
 
-	require_once sprintf('%s/Classes/Twist.twist.php',dirname(__FILE__));
+	//Temp function to allow the easy definition of core defines in preparation for Twist to be included
+	function TwistDefine($strKey,$mxdValue){
+		if(!defined($strKey)){
+			define($strKey,$mxdValue);
+		}
+	}
 
 	$arrShadowCoreInfo = json_decode(file_get_contents(sprintf('%s/../info.json',dirname(__FILE__))),true);
 	Twist::define('TWIST_VERSION',$arrShadowCoreInfo['version']);
 
 	//Get the base location of the site, based on this config file (should be in the doc_root)
-	Twist::define('TWIST_FRAMEWORK',realpath(sprintf('%s/../',dirname(__FILE__))).'/');
-	Twist::define('TWIST_FRAMEWORK_CONFIG',sprintf('%sConfig/',TWIST_FRAMEWORK));
-	Twist::define('TWIST_FRAMEWORK_CLASSES',sprintf('%sCore/Classes/',TWIST_FRAMEWORK));
-	Twist::define('TWIST_FRAMEWORK_MODELS',sprintf('%sCore/Models/',TWIST_FRAMEWORK));
-	Twist::define('TWIST_FRAMEWORK_PACKAGES',sprintf('%sCore/Packages/',TWIST_FRAMEWORK));
-	Twist::define('TWIST_FRAMEWORK_VIEWS',sprintf('%sCore/Views/',TWIST_FRAMEWORK));
-	Twist::define('TWIST_FRAMEWORK_RESOURCES',sprintf('%sCore/Resources/',TWIST_FRAMEWORK));
-	Twist::define('TWIST_FRAMEWORK_INSTALL',sprintf('%sInstall/',TWIST_FRAMEWORK));
+	TwistDefine('TWIST_FRAMEWORK',realpath(sprintf('%s/../',dirname(__FILE__))).'/');
+	TwistDefine('TWIST_FRAMEWORK_CONFIG',sprintf('%sConfig/',TWIST_FRAMEWORK));
+	TwistDefine('TWIST_FRAMEWORK_CLASSES',sprintf('%sCore/Classes/',TWIST_FRAMEWORK));
+	TwistDefine('TWIST_FRAMEWORK_MODELS',sprintf('%sCore/Models/',TWIST_FRAMEWORK));
+	TwistDefine('TWIST_FRAMEWORK_PACKAGES',sprintf('%sCore/Packages/',TWIST_FRAMEWORK));
+	TwistDefine('TWIST_FRAMEWORK_VIEWS',sprintf('%sCore/Views/',TWIST_FRAMEWORK));
+	TwistDefine('TWIST_FRAMEWORK_RESOURCES',sprintf('%sCore/Resources/',TWIST_FRAMEWORK));
+	TwistDefine('TWIST_FRAMEWORK_INSTALL',sprintf('%sInstall/',TWIST_FRAMEWORK));
 
-	if(!defined('TWIST_PUBLIC_ROOT')){
-		Twist::define('TWIST_PUBLIC_ROOT',$_SERVER['DOCUMENT_ROOT']);
-	}
+	//TWIST_PUBLIC_ROOT - Can be defined in your index file
+	TwistDefine('TWIST_PUBLIC_ROOT',$_SERVER['DOCUMENT_ROOT']);
 
-	Twist::define('TWIST_APP',sprintf('%s/app/',rtrim(TWIST_PUBLIC_ROOT,'/')));
-	Twist::define('TWIST_APP_AJAX',sprintf('%s/Ajax/',rtrim(TWIST_APP,'/')));
-	Twist::define('TWIST_APP_ASSETS',sprintf('%s/Assets/',rtrim(TWIST_APP,'/')));
-	Twist::define('TWIST_APP_CACHE',sprintf('%s/Cache/',rtrim(TWIST_APP,'/')));
-	Twist::define('TWIST_APP_CONFIG',sprintf('%s/Config/',rtrim(TWIST_APP,'/')));
-	Twist::define('TWIST_APP_CONTROLLERS',sprintf('%s/Controllers/',rtrim(TWIST_APP,'/')));
-	Twist::define('TWIST_APP_MODELS',sprintf('%s/Models/',rtrim(TWIST_APP,'/')));
-	Twist::define('TWIST_APP_VIEWS',sprintf('%s/Views/',rtrim(TWIST_APP,'/')));
+	//TWIST_APP - Can be defined in your index file
+	TwistDefine('TWIST_APP',sprintf('%s/app/',rtrim(TWIST_PUBLIC_ROOT,'/')));
+	TwistDefine('TWIST_APP_AJAX',sprintf('%s/Ajax/',rtrim(TWIST_APP,'/')));
+	TwistDefine('TWIST_APP_ASSETS',sprintf('%s/Assets/',rtrim(TWIST_APP,'/')));
+	TwistDefine('TWIST_APP_CACHE',sprintf('%s/Cache/',rtrim(TWIST_APP,'/')));
+	TwistDefine('TWIST_APP_CONFIG',sprintf('%s/Config/',rtrim(TWIST_APP,'/')));
+	TwistDefine('TWIST_APP_CONTROLLERS',sprintf('%s/Controllers/',rtrim(TWIST_APP,'/')));
+	TwistDefine('TWIST_APP_MODELS',sprintf('%s/Models/',rtrim(TWIST_APP,'/')));
+	TwistDefine('TWIST_APP_VIEWS',sprintf('%s/Views/',rtrim(TWIST_APP,'/')));
 
-	Twist::define('TWIST_PACKAGES',sprintf('%s/packages/',rtrim(TWIST_PUBLIC_ROOT,'/')));
+	//TWIST_PACKAGES - Can be defined in your index file
+	TwistDefine('TWIST_PACKAGES',sprintf('%s/packages/',rtrim(TWIST_PUBLIC_ROOT,'/')));
 
-	Twist::define('TWIST_UPLOADS',sprintf('%s/uploads/',rtrim(TWIST_PUBLIC_ROOT,'/')));
+	//TWIST_UPLOADS - Can be defined in your index file
+	TwistDefine('TWIST_UPLOADS',sprintf('%s/uploads/',rtrim(TWIST_PUBLIC_ROOT,'/')));
+
+	/** From this point onwards you now have to use Twist::define() rather than TwistDefine */
+	require_once sprintf('%s/Classes/Twist.twist.php',dirname(__FILE__));
 
 	if(defined('TWIST_APP_CONFIG') && file_exists(sprintf('%sconfig.php',TWIST_APP_CONFIG))){
 		require_once sprintf('%sconfig.php',TWIST_APP_CONFIG);
@@ -84,5 +94,3 @@
 	if(file_exists(sprintf('%s/../Config/default.php',dirname(__FILE__)))){
 		require_once sprintf('%s/../Config/default.php',dirname(__FILE__));
 	}
-
-
