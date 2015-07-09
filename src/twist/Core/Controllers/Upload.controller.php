@@ -27,41 +27,12 @@ use Twist\Core\Classes\BaseController;
 class Upload extends BaseController{
 
 	public function _construct(){
-		//TODO: Not being called?
-		\Twist::Route()->debugMode(false);
+		$this->resRoute->debugMode(false);
 	}
-
-	public function _default(){
-
-		\Twist::Route()->debugMode(false);
-
-		$arrRoute = $this->_route();
-
-		//@todo finish this part of the upload script
-		$arrFunctions = array('test','test2');
-
-		//First of all check that the third party function exists
-		if(in_array($arrRoute['dynamic'][0],$arrFunctions)){
-
-			//Accept the uploaded file to the server
-			$arrOut = json_decode($this->file());
-
-			//We can then pass on the data to a third party function
-			if($arrOut['status']){
-
-			}
-
-			//We then return the output
-			return json_encode($arrOut);
-		}else{
-			//Invalid function call, return fallback (404 page by default)
-			return $this->_fallback();
-		}
-	}
-
+	
 	public function file($strFileKey = null,$intIndex = null){
 
-		\Twist::Route()->debugMode(false);
+		$this->resRoute->debugMode(false);
 
 		if(is_array($_FILES) && count($_FILES)){
 			$arrOut = \Twist::File()->upload($strFileKey,null,$intIndex);
@@ -87,7 +58,7 @@ class Upload extends BaseController{
 
 	public function asset($strFileKey = null,$intIndex = null){
 
-		\Twist::Route()->debugMode(false);
+		$this->resRoute->debugMode(false);
 
 		$arrOut = json_decode($this->file($strFileKey,$intIndex),true);
 
