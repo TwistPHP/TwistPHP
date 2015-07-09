@@ -59,21 +59,22 @@
 	Twist::define('TWIST_FRAMEWORK_RESOURCES',sprintf('%sCore/Resources/',TWIST_FRAMEWORK));
 	Twist::define('TWIST_FRAMEWORK_INSTALL',sprintf('%sInstall/',TWIST_FRAMEWORK));
 
-	if(defined('TWIST_PUBLIC_ROOT')){
-
-		Twist::define('TWIST_APP',sprintf('%s/app/',rtrim(TWIST_PUBLIC_ROOT,'/')));
-
-		Twist::define('TWIST_APP_AJAX',sprintf('%s/Ajax/',rtrim(TWIST_APP,'/')));
-		Twist::define('TWIST_APP_ASSETS',sprintf('%s/Assets/',rtrim(TWIST_APP,'/')));
-		Twist::define('TWIST_APP_CACHE',sprintf('%s/Cache/',rtrim(TWIST_APP,'/')));
-		Twist::define('TWIST_APP_CONFIG',sprintf('%s/Config/',rtrim(TWIST_APP,'/')));
-		Twist::define('TWIST_APP_CONTROLLERS',sprintf('%s/Controllers/',rtrim(TWIST_APP,'/')));
-		Twist::define('TWIST_APP_MODELS',sprintf('%s/Models/',rtrim(TWIST_APP,'/')));
-		Twist::define('TWIST_APP_VIEWS',sprintf('%s/Views/',rtrim(TWIST_APP,'/')));
-
-		Twist::define('TWIST_PACKAGES',sprintf('%s/packages/',rtrim(TWIST_PUBLIC_ROOT,'/')));
-		Twist::define('TWIST_UPLOADS',sprintf('%s/uploads/',rtrim(TWIST_PUBLIC_ROOT,'/')));
+	if(!defined('TWIST_PUBLIC_ROOT')){
+		Twist::define('TWIST_PUBLIC_ROOT',$_SERVER['DOCUMENT_ROOT']);
 	}
+
+	Twist::define('TWIST_APP',sprintf('%s/app/',rtrim(TWIST_PUBLIC_ROOT,'/')));
+	Twist::define('TWIST_APP_AJAX',sprintf('%s/Ajax/',rtrim(TWIST_APP,'/')));
+	Twist::define('TWIST_APP_ASSETS',sprintf('%s/Assets/',rtrim(TWIST_APP,'/')));
+	Twist::define('TWIST_APP_CACHE',sprintf('%s/Cache/',rtrim(TWIST_APP,'/')));
+	Twist::define('TWIST_APP_CONFIG',sprintf('%s/Config/',rtrim(TWIST_APP,'/')));
+	Twist::define('TWIST_APP_CONTROLLERS',sprintf('%s/Controllers/',rtrim(TWIST_APP,'/')));
+	Twist::define('TWIST_APP_MODELS',sprintf('%s/Models/',rtrim(TWIST_APP,'/')));
+	Twist::define('TWIST_APP_VIEWS',sprintf('%s/Views/',rtrim(TWIST_APP,'/')));
+
+	Twist::define('TWIST_PACKAGES',sprintf('%s/packages/',rtrim(TWIST_PUBLIC_ROOT,'/')));
+
+	Twist::define('TWIST_UPLOADS',sprintf('%s/uploads/',rtrim(TWIST_PUBLIC_ROOT,'/')));
 
 	if(defined('TWIST_APP_CONFIG') && file_exists(sprintf('%sconfig.php',TWIST_APP_CONFIG))){
 		require_once sprintf('%sconfig.php',TWIST_APP_CONFIG);
