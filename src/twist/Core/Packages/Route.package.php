@@ -900,30 +900,19 @@ class Route extends BasePackage{
 			if($blRestrict){
 
 				$strFullLoginURI = str_replace('//','/',sprintf('%s/%s',$this->strBaseURI,ltrim($arrMatch['login_uri'],'/')));
-				$blFoundUnrestrictedPage = false;
 
 				//Check all the unrestricted pages for exact matches and wildcards
-				if(count($this->arrUnrestricted)){
-					foreach($this->arrUnrestricted as $strUnrestrictURI => $blWildCard){
+				if($this->findURI($this->arrUnrestricted,$strCurrentURI)){
 
-						$strUnrestrictExpression = sprintf("#^(%s[\/]?)%s#", str_replace('/','\/',rtrim($strUnrestrictURI, '/')), $blWildCard ? '' : '$');
-						if(rtrim($strCurrentURI,'/') == rtrim($strUnrestrictURI,'/')  || ($blWildCard && preg_match($strUnrestrictExpression, $strCurrentURI, $arrUnrestrictedMatches))){
+					$arrMatch = array(
+						'login_required' => false,
+						'allow_access' => true,
+						'login_uri' => $strFullLoginURI,
+						'status' => 'Ignored, unrestricted page'
+					);
 
-							$arrMatch = array(
-								'login_required' => false,
-								'allow_access' => true,
-								'login_uri' => $strFullLoginURI,
-								'status' => 'Ignored, unrestricted page'
-							);
-
-							$blFoundUnrestrictedPage = true;
-							break;
-						}
-					}
-				}
-
-				//If no unrestricted matches are found then continue
-				if($blFoundUnrestrictedPage == false){
+				}else{
+					//If no unrestricted matches are found then continue
 					if($blLoggedIn){
 						if($arrMatch['level'] > 0 && $intCurrentUserLevel >= $arrMatch['level'] || $intCurrentUserLevel == 0){
 							$arrMatch['login_required'] = false;
