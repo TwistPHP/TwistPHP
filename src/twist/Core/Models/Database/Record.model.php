@@ -267,7 +267,7 @@
 			$arrWhereClause = array();
 			$objDatabase = \Twist::Database();
 
-			//@todo detect for unique keys also
+			//It would be possible to detect for unique keys here to minimize where clause id no autoincrement is set.
 			$strAutoIncrementField = $this->detectAutoIncrement();
 
 			if(!is_null($strAutoIncrementField)){

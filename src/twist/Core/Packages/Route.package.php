@@ -28,7 +28,7 @@ use \Twist\Core\Models\Route\Meta;
 
 /**
  * Simply setup a website with multiple pages in minutes. Create restricted areas with login pages and dynamic sections with wild carded URI's.
- * Just a couple lines of code and you will be up and running.
+ * Just a couple lines of code and you will be up and running.Maintenance
  */
 class Route extends BasePackage{
 
@@ -48,6 +48,7 @@ class Route extends BasePackage{
 	protected $dirBaseViewDir = null;
 	protected $blIgnoreBaseView = false;
 	protected $blForceBaseView = false;
+	protected $arrBypassMaintenanceMode = array();
 	protected $strBaseURI = null;
 	protected $strPackageURI = null;
 	protected $strPageTitle = '';
@@ -152,6 +153,20 @@ class Route extends BasePackage{
 	 */
 	public function debugMode($blEnabled = true){
 		$this->blDebugMode = $blEnabled;
+	}
+
+	/**
+	 * Allow the route to bypass maintenance mode when maintenance mode is enabled
+	 * @param $strURI URI of the route to allow
+	 */
+	public function bypassMaintenanceMode($strURI){
+
+		$blWildCard = (strstr($strURI,'%'));
+		$strURI = rtrim(str_replace('%','',$strURI),'/').'/';
+
+		if(!array_key_exists($strURI,$this->arrBypassMaintenanceMode)){
+			$this->arrBypassMaintenanceMode[$strURI] = $blWildCard;
+		}
 	}
 
 	/**
@@ -983,6 +998,9 @@ class Route extends BasePackage{
 		\Twist::define('MANAGER_ROUTE_URI',$strURI);
 		$this->controller($strURI,'Twist\Core\Controllers\Manager','_base.tpl');
 		$this->restrictSuperAdmin($strURI,rtrim(str_replace('%','',$strURI),'/').'/login');
+
+		//Allow the manager to still be accessible even in maintenance mode
+		$this->bypassMaintenanceMode($strURI);
 	}
 
 	/*
@@ -1091,6 +1109,31 @@ class Route extends BasePackage{
 	}
 
 	/**
+	 * Check to see if a URI is present in an array od URIs, the key must be the URI and the value can either be 1 (denotes wildcard check enabled) or 0 (no wildcard check)
+	 * @param $arrURIs
+	 * @param $strCurrentURI
+	 * @return bool
+	 */
+	protected function findURI($arrURIs,$strCurrentURI){
+
+		$blMatchFound = false;
+
+		//Check all the URIs for an exact matches, wildcard checks will be done if value set to 1s
+		if(count($arrURIs)){
+			foreach($arrURIs as $strEachURI => $blWildCard){
+
+				$strUriExpression = sprintf("#^(%s[\/]?)%s#", str_replace('/','\/',rtrim($strEachURI, '/')), $blWildCard ? '' : '$');
+				if(rtrim($strCurrentURI,'/') == rtrim($strEachURI,'/')  || ($blWildCard && preg_match($strUriExpression, $strCurrentURI, $arrMatches))){
+					$blMatchFound = true;
+					break;
+				}
+			}
+		}
+
+		return $blMatchFound;
+	}
+
+	/**
 	 * Serve is used to active the routes system after all routes have been set
 	 * @param $blExitOnComplete Exit script once the page has been served
 	 * @throws \Exception
@@ -1111,6 +1154,13 @@ class Route extends BasePackage{
 				\Twist::framework()->package()->route($arrRoute['item'], $arrRoute['registered_uri'], $arrRoute['base_view']);
 				die();
 			}else{
+
+				if(\Twist::framework()->setting('MAINTENANCE_MODE')){
+					//Check to see if the current route is allowed to bypass
+					if($this->findURI($this->arrBypassMaintenanceMode,$arrRoute['uri']) === false){
+						\Twist::respond(503,'The site is currently undergoing maintenance, please check back shortly!');
+					}
+				}
 
 				//Detect if there are any restrctons, if none then skip this step
 				if(count($this->arrRestrict)){

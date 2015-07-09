@@ -122,7 +122,6 @@
 
 				self::showSetup();
 				self::phpSettings();
-				self::maintenanceMode();
 
 				self::recordEvent('Framework ready');
 				self::define('TWIST_LAUNCHED',1);
@@ -197,17 +196,6 @@
 
 			if(!is_null(Twist::framework()->setting('PHP_MAX_EXECUTION'))){
 				ini_set('max_executions_time',Twist::framework()->setting('PHP_MAX_EXECUTION'));
-			}
-		}
-
-		/**
-		 * Decide if the maintenance page should be output, this can be used when undergoing updates/development
-		 * @todo add in a level 0 override for users to browse site in maintenance mode
-		 */
-		protected static function maintenanceMode(){
-
-			if(Twist::framework()->setting('MAINTENANCE_MODE')){
-				\Twist\Core\Classes\Error::errorPage(503);
 			}
 		}
 

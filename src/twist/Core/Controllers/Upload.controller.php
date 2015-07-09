@@ -29,7 +29,7 @@ class Upload extends BaseController{
 	public function _construct(){
 		$this->resRoute->debugMode(false);
 	}
-	
+
 	public function file($strFileKey = null,$intIndex = null){
 
 		$this->resRoute->debugMode(false);
