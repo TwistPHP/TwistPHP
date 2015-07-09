@@ -29,9 +29,6 @@ class BaseControllerAJAX extends BaseController{
 	protected $strAjaxResponseMessage = '';
 
 	public function __construct(){
-
-		//@todo Should these two options still be set by default
-		$this->_ignoreUserAbort(true);
 		$this->_timeout(60);
 	}
 

@@ -218,13 +218,15 @@ final class Resources{
 				//Get the resource libraries
 				$strJSON = file_get_contents($dirManifest);
 				$arrExtendedLibraries = json_decode($strJSON,true);
+				$blResourceOverride = \Twist::framework()->setting('RESOURCE_VERSION_OVERRIDE');
 
 				foreach($arrExtendedLibraries as $strKey => $arrOptions){
 					if(array_key_exists($strKey,$this->arrLibraries)){
 
 						foreach($arrOptions as $strSubKey => $arrParameters){
 							if(array_key_exists($strSubKey,$this->arrLibraries[$strKey])){
-								//@todo Decide if to keep original or overwrite - currently keeps original
+								//If over-ride enabled allow the extending library to over-ride the current file when the version numbers match
+								$this->arrLibraries[$strKey][$strSubKey] = ($blResourceOverride) ? $this->applyPath($arrParameters,$dirResourcePath) : $this->arrLibraries[$strKey][$strSubKey];
 							}else{
 								$this->arrLibraries[$strKey][$strSubKey] = $this->applyPath($arrParameters,$dirResourcePath);
 							}

@@ -459,7 +459,7 @@ class View extends BasePackage{
 	                $strParenthesisOpen = (!$strParenthesisOpen && $strValue == '(') ? true : $strParenthesisOpen;
 
 	                //Get the two values to be compared
-	                //@todo Re-write the functionality to the below 4 connected functions
+	                //This functionality could be made much more efficient in a future release
 	                $arrValue1Parts = (strstr($arrConditions[2][$intKey],':')) ? explode(':',$arrConditions[2][$intKey]) : null;
 	                $arrValue2Parts = (strstr($arrConditions[4][$intKey],':')) ? explode(':',$arrConditions[4][$intKey]) : null;
 

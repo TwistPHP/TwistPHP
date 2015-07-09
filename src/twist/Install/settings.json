@@ -367,6 +367,14 @@
 		"options":"1,0",
 		"null":0
 	},
+	"RESOURCE_VERSION_OVERRIDE":{
+		"title":"Resource Version Override",
+		"description":"Allow calls to Resource->extendLibrary to override existing (matching) version of a file, for example jQuery v2.1.1 from the core would be over-ridden by the new jQuery v2.1.1 where as jQuery v2.1.2 would be added as a new resource.",
+		"default":1,
+		"type":"boolean",
+		"options":"1,0",
+		"null":0
+	},
 	"RANDOM_STRING_LENGTH":{
 		"title":"Random String Length",
 		"description":"Set the default length for the output of the Tools()->randomString() function call",

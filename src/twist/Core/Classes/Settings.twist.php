@@ -120,6 +120,10 @@
 	        return (array_key_exists($strKey,$this->arrSettings)) ? $this->arrSettings[$strKey] : null;
 	    }
 
+	    public function getInfo($strKey){
+	        return (array_key_exists($strKey,$this->arrSettingsInfo)) ? $this->arrSettingsInfo[$strKey] : null;
+	    }
+
 	    public function set($strKey,$mxdData){
 
 	        $blOut = false;
@@ -161,23 +165,46 @@
 
 		public function uninstall($strPackage,$strGroup,$strKey = null){
 
-			//@todo also remove from JSON file if that is what is being used
+			if($this->blFileConfig){
 
-			if(is_null($strKey)){
-				\Twist::Database()->query("DELETE * FROM `%s`.`%ssettings` WHERE `package` = '%s' AND `group` = '%s'",
-					TWIST_DATABASE_NAME,
-					TWIST_DATABASE_TABLE_PREFIX,
-					$strPackage,
-					$strGroup
-				);
+				if(!is_null($strKey)){
+					if(array_key_exists($strKey,$this->arrSettings)){
+						unset($this->arrSettingsInfo[$strKey]);
+						unset($this->arrSettings[$strKey]);
+
+						//Export the settings back to the setting file
+						file_put_contents(sprintf('%ssettings.json', TWIST_APP_CONFIG), json_encode($this->arrSettingsInfo));
+					}
+				}else{
+					foreach($this->arrSettingsInfo as $strKey => $arrInfo){
+
+						if($arrInfo['package'] == $strPackage && $arrInfo['group'] == $strGroup){
+							unset($this->arrSettingsInfo[$strKey]);
+							unset($this->arrSettings[$strKey]);
+						}
+					}
+
+					//Export the settings back to the setting file
+					file_put_contents(sprintf('%ssettings.json', TWIST_APP_CONFIG), json_encode($this->arrSettingsInfo));
+				}
+
 			}else{
-				\Twist::Database()->query("DELETE * FROM `%s`.`%ssettings` WHERE `package` = '%s' AND `group` = '%s' AND `key` = '%s'",
-					TWIST_DATABASE_NAME,
-					TWIST_DATABASE_TABLE_PREFIX,
-					$strPackage,
-					$strGroup,
-					$strKey
-				);
+				if(is_null($strKey)){
+					\Twist::Database()->query("DELETE * FROM `%s`.`%ssettings` WHERE `package` = '%s' AND `group` = '%s'",
+						TWIST_DATABASE_NAME,
+						TWIST_DATABASE_TABLE_PREFIX,
+						$strPackage,
+						$strGroup
+					);
+				}else{
+					\Twist::Database()->query("DELETE * FROM `%s`.`%ssettings` WHERE `package` = '%s' AND `group` = '%s' AND `key` = '%s'",
+						TWIST_DATABASE_NAME,
+						TWIST_DATABASE_TABLE_PREFIX,
+						$strPackage,
+						$strGroup,
+						$strKey
+					);
+				}
 			}
 		}
 

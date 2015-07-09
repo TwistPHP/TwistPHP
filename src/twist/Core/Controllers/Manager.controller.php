@@ -159,6 +159,8 @@ class Manager extends BaseControllerUser{
 
 	public function postSettings(){
 
+		$arrSettingsInfo = \Twist::framework()->settings()->arrSettingsInfo;
+
 		if(array_key_exists('settings',$_POST) && count($_POST['settings']) && count($_POST['original'])){
 			foreach($_POST['original'] as $strKey => $strValue){
 				if(array_key_exists($strKey,$_POST['settings'])){
@@ -166,8 +168,9 @@ class Manager extends BaseControllerUser{
 					\Twist::framework() ->setting($strKey,$_POST['settings'][$strKey]);
 				}else{
 					//Store '0' as we can consider this an unchecked checkbox
-					//@todo add validation of the data type here
-					\Twist::framework() ->setting($strKey,0);
+					if($arrSettingsInfo[$strKey]['type'] === 'boolean'){
+						\Twist::framework() ->setting($strKey,0);
+					}
 				}
 			}
 			$arrTags['message'] = '<p class="success">You new module settings were saved successfully</p>';
