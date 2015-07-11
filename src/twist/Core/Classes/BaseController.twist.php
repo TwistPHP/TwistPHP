@@ -64,7 +64,19 @@
             //Can be used to modify the baseView etc
             $this->resRoute = $resRoute;
 
+			$this->_baseCalls();
+
 			return true;
+		}
+
+		/**
+		 * This function is called by _extended, replace this function
+		 * putting calls such as alias and replaces.
+		 * This function is needed only if creating a new expendable baseController
+		 * such as baseControllerUser and baseControllerAJAX.
+		 */
+		protected function _baseCalls(){
+			//Leave empty - this is to be extended only!
 		}
 
 		/**

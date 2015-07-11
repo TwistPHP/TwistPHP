@@ -26,10 +26,14 @@ use \Twist\Core\Models\User\Auth;
 
 class BaseControllerUser extends BaseController{
 
+	/**
+	 * @var \Twist\Core\Packages\User
+	 */
     protected $resUser = null;
+	
     protected $strEntryPageURI = null;
 
-    public function __construct(){
+    public function _baseCalls(){
 
         $this->resUser = \Twist::User();
 

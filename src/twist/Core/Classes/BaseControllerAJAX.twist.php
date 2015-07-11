@@ -28,7 +28,7 @@ class BaseControllerAJAX extends BaseController{
 	protected $blAjaxResponse = true;
 	protected $strAjaxResponseMessage = '';
 
-	public function __construct(){
+	public function _baseCalls(){
 		$this->_timeout(60);
 	}
 
