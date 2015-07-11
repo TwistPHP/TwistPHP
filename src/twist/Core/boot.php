@@ -46,6 +46,13 @@
 			define($strKey,$mxdValue);
 		}
 	}
+	
+	//TWIST_APP - Can be defined in your index file
+	TwistDefine('TWIST_APP',sprintf('%s/app/',rtrim(TWIST_PUBLIC_ROOT,'/')));
+
+	require_once sprintf('%s/Classes/Autoload.twist.php',dirname(__FILE__));
+	use \Twist\Core\Classes\Autoload;
+	Autoload::init(realpath(sprintf('%s/../../',dirname(__FILE__))));
 
 	$arrShadowCoreInfo = json_decode(file_get_contents(sprintf('%s/../info.json',dirname(__FILE__))),true);
 	Twist::define('TWIST_VERSION',$arrShadowCoreInfo['version']);
@@ -62,9 +69,7 @@
 
 	//TWIST_PUBLIC_ROOT - Can be defined in your index file
 	TwistDefine('TWIST_PUBLIC_ROOT',$_SERVER['DOCUMENT_ROOT']);
-	
-	//TWIST_APP - Can be defined in your index file
-	TwistDefine('TWIST_APP',sprintf('%s/app/',rtrim(TWIST_PUBLIC_ROOT,'/')));
+
 	TwistDefine('TWIST_APP_AJAX',sprintf('%s/Ajax/',rtrim(TWIST_APP,'/')));
 	TwistDefine('TWIST_APP_ASSETS',sprintf('%s/Assets/',rtrim(TWIST_APP,'/')));
 	TwistDefine('TWIST_APP_CACHE',sprintf('%s/Cache/',rtrim(TWIST_APP,'/')));
@@ -78,10 +83,6 @@
 
 	//TWIST_UPLOADS - Can be defined in your index file
 	TwistDefine('TWIST_UPLOADS',sprintf('%s/uploads/',rtrim(TWIST_PUBLIC_ROOT,'/')));
-
-	require_once sprintf('%s/Classes/Autoload.twist.php',dirname(__FILE__));
-	use \Twist\Core\Classes\Autoload;
-	Autoload::init(realpath(sprintf('%s/../../',dirname(__FILE__))));
 
 	/** From this point onwards you now have to use Twist::define() rather than TwistDefine */
 	require_once sprintf('%s/Classes/Twist.twist.php',dirname(__FILE__));
