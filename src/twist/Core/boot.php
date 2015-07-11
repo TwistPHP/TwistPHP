@@ -46,9 +46,12 @@
 			define($strKey,$mxdValue);
 		}
 	}
-	
+
 	//TWIST_APP - Can be defined in your index file
 	TwistDefine('TWIST_APP',sprintf('%s/app/',rtrim(TWIST_PUBLIC_ROOT,'/')));
+
+	//TWIST_PUBLIC_ROOT - Can be defined in your index file
+	TwistDefine('TWIST_PUBLIC_ROOT',$_SERVER['DOCUMENT_ROOT']);
 
 	require_once sprintf('%s/Classes/Autoload.twist.php',dirname(__FILE__));
 	use \Twist\Core\Classes\Autoload;
@@ -66,9 +69,6 @@
 	TwistDefine('TWIST_FRAMEWORK_VIEWS',sprintf('%sCore/Views/',TWIST_FRAMEWORK));
 	TwistDefine('TWIST_FRAMEWORK_RESOURCES',sprintf('%sCore/Resources/',TWIST_FRAMEWORK));
 	TwistDefine('TWIST_FRAMEWORK_INSTALL',sprintf('%sInstall/',TWIST_FRAMEWORK));
-
-	//TWIST_PUBLIC_ROOT - Can be defined in your index file
-	TwistDefine('TWIST_PUBLIC_ROOT',$_SERVER['DOCUMENT_ROOT']);
 
 	TwistDefine('TWIST_APP_AJAX',sprintf('%s/Ajax/',rtrim(TWIST_APP,'/')));
 	TwistDefine('TWIST_APP_ASSETS',sprintf('%s/Assets/',rtrim(TWIST_APP,'/')));
