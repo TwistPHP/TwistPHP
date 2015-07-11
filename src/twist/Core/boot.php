@@ -47,11 +47,11 @@
 		}
 	}
 
-	//TWIST_APP - Can be defined in your index file
-	TwistDefine('TWIST_APP',sprintf('%s/app/',rtrim(TWIST_PUBLIC_ROOT,'/')));
-
 	//TWIST_PUBLIC_ROOT - Can be defined in your index file
 	TwistDefine('TWIST_PUBLIC_ROOT',$_SERVER['DOCUMENT_ROOT']);
+
+	//TWIST_APP - Can be defined in your index file
+	TwistDefine('TWIST_APP',sprintf('%s/app/',rtrim(TWIST_PUBLIC_ROOT,'/')));
 
 	require_once sprintf('%s/Classes/Autoload.twist.php',dirname(__FILE__));
 	use \Twist\Core\Classes\Autoload;
