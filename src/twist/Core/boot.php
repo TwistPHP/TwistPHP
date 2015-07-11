@@ -40,10 +40,6 @@
 	date_default_timezone_set('Europe/London');
 	$_SERVER['TWIST_BOOT'] = microtime();
 
-	require_once sprintf('%s/Classes/Autoload.twist.php',dirname(__FILE__));
-	use \Twist\Core\Classes\Autoload;
-	Autoload::init(realpath(sprintf('%s/../../',dirname(__FILE__))));
-
 	//Temp function to allow the easy definition of core defines in preparation for Twist to be included
 	function TwistDefine($strKey,$mxdValue){
 		if(!defined($strKey)){
@@ -66,7 +62,7 @@
 
 	//TWIST_PUBLIC_ROOT - Can be defined in your index file
 	TwistDefine('TWIST_PUBLIC_ROOT',$_SERVER['DOCUMENT_ROOT']);
-
+	
 	//TWIST_APP - Can be defined in your index file
 	TwistDefine('TWIST_APP',sprintf('%s/app/',rtrim(TWIST_PUBLIC_ROOT,'/')));
 	TwistDefine('TWIST_APP_AJAX',sprintf('%s/Ajax/',rtrim(TWIST_APP,'/')));
@@ -82,6 +78,10 @@
 
 	//TWIST_UPLOADS - Can be defined in your index file
 	TwistDefine('TWIST_UPLOADS',sprintf('%s/uploads/',rtrim(TWIST_PUBLIC_ROOT,'/')));
+
+	require_once sprintf('%s/Classes/Autoload.twist.php',dirname(__FILE__));
+	use \Twist\Core\Classes\Autoload;
+	Autoload::init(realpath(sprintf('%s/../../',dirname(__FILE__))));
 
 	/** From this point onwards you now have to use Twist::define() rather than TwistDefine */
 	require_once sprintf('%s/Classes/Twist.twist.php',dirname(__FILE__));
