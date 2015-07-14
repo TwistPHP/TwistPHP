@@ -23,44 +23,70 @@
 
 	namespace Twist\Core\Classes;
 
-	if(!class_exists('BasePackage')){
-		class BasePackage{
+	class BasePackage{
 
-			protected function __calledClass(){
-				return (function_exists('get_called_class')) ? get_called_class() : get_class($this);
-			}
+		/**
+		 * Return the name of the package class
+		 * @return string
+		 */
+		protected function __calledClass(){
+			return (function_exists('get_called_class')) ? get_called_class() : get_class($this);
+		}
 
-			protected function __info(){
-				return $this->framework() -> package() -> information($this->__calledClass());
-			}
+		/**
+		 * Return information about the current package as an array
+		 * @return array
+		 */
+		protected function __info(){
+			return $this->framework() -> package() -> information($this->__calledClass());
+		}
 
-			protected function __version(){
-				$arrData = $this->framework() -> package() -> information($this->__calledClass());
-				return $arrData['version'];
-			}
+		/**
+		 * Return the version number of the current package
+		 * @return mixed
+		 */
+		protected function __version(){
+			$arrData = $this->framework() -> package() -> information($this->__calledClass());
+			return $arrData['version'];
+		}
 
-			protected function __uri(){
-				$arrData = $this->framework() -> package() -> information($this->__calledClass());
-				return $arrData['uri'];
-			}
+		/**
+		 * Return the URI of the current package
+		 * @return mixed
+		 */
+		protected function __uri(){
+			$arrData = $this->framework() -> package() -> information($this->__calledClass());
+			return $arrData['uri'];
+		}
 
-			protected function __path(){
-				$arrData = $this->framework() -> package() -> information($this->__calledClass());
-				return $arrData['path'];
-			}
+		/**
+		 * Return the path to the current package
+		 * @return mixed
+		 */
+		protected function __path(){
+			$arrData = $this->framework() -> package() -> information($this->__calledClass());
+			return $arrData['path'];
+		}
 
-			protected function __extensions(){
-				$arrData = $this->framework() -> package() -> information($this->__calledClass());
-				return $arrData['extensions'];
-			}
+		/**
+		 * Return the registered extensions for the current package
+		 * @return mixed
+		 */
+		protected function __extensions(){
+			$arrData = $this->framework() -> package() -> information($this->__calledClass());
+			return $arrData['extensions'];
+		}
 
-			protected function framework(){
+		/**
+		 * Short link to the framework class itself
+		 * @deprecated
+		 * @return Framework
+		 */
+		protected function framework(){
 
-				//Only required allow IDE auto-complete of code, otherwise only return Instance::retrieveObject('CoreFramework') would be fine
-				$resTwistModule = (!Instance::isObject('CoreFramework')) ? new Framework() : Instance::retrieveObject('CoreFramework');
-				Instance::storeObject('CoreFramework',$resTwistModule);
-				return $resTwistModule;
-			}
-
+			//Only required allow IDE auto-complete of code, otherwise only return Instance::retrieveObject('CoreFramework') would be fine
+			$resTwistModule = (!Instance::isObject('CoreFramework')) ? new Framework() : Instance::retrieveObject('CoreFramework');
+			Instance::storeObject('CoreFramework',$resTwistModule);
+			return $resTwistModule;
 		}
 	}

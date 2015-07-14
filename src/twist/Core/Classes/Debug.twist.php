@@ -37,7 +37,7 @@ final class Debug{
 	}
 
 	/**
-	 * Log some debug data
+	 * Log some debug data into the debug array, the debug data is shown on the debug window.
 	 * @param $strSystem
 	 * @param $strType
 	 * @param $mxdData
@@ -55,6 +55,11 @@ final class Debug{
 		$this->arrDebugLog[$strSystem][$strType][] = $mxdData;
 	}
 
+	/**
+	 * Process the debug window to be output into the page.
+	 * @param $arrCurrentRoute
+	 * @return string
+	 */
 	public function window($arrCurrentRoute){
 
 		//print_r($this->arrDebugLog);

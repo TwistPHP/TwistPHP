@@ -209,10 +209,18 @@ class BaseControllerUser extends BaseController{
 	    \Twist::redirect('./change-password');
     }
 
+	/**
+	 * Account verification page allows the user to verify their account, when an account is registered (depending on the what settings have been enabled) as use might be require to verify there email address by entering the code received in the welcome email.
+	 * This will then confirm that the user has received the email and that the email address is valid.
+	 * @return string
+	 */
     public function verifyAccount(){
         return $this->resUser->viewExtension('account_verification');
     }
 
+	/**
+	 * Process the email verification code that has been submitted for validation, upon successful process that user will be redirected to the login page.
+	 */
     public function postVerifyAccount(){
 
         //Resend a new verification code
@@ -231,8 +239,16 @@ class BaseControllerUser extends BaseController{
         if(array_key_exists('verify',$_GET) && array_key_exists('verify',$_GET) && $_GET['verify'] != ''){
             $this->resUser->verifyEmail($_GET['verify']);
         }
+
+	    \Twist::redirect('./login');
     }
 
+	/**
+	 * Manage all the connected devices registered under a users account, once the user is logged in they can view this page and see all the devices that have been used to connect to the account.
+	 * The user has the ability to forget a device (removes the device and associated session) effectively and remotely login the user out of the site on the requested device. Also the ability to
+	 * rename the device so that at a glance you know which device is which.
+	 * @return string
+	 */
     public function deviceManager(){
 
         $arrUserData = Auth::current();
@@ -256,6 +272,9 @@ class BaseControllerUser extends BaseController{
         //return $this->resUser->viewExtension('devices_form');
     }
 
+	/**
+	 * Processes the requested to forget a users connected device and or rename a users connected device.
+	 */
     public function postDeviceManager(){
 
         $arrUserData = Auth::current();
@@ -271,10 +290,17 @@ class BaseControllerUser extends BaseController{
         \Twist::redirect('./device-manager');
     }
 
+	/**
+	 * Registration form to allow a user to register for an account within the system. The registration form can be disabled within the frameworks settings for closed/invite only systems.
+	 * @return string
+	 */
     public function register(){
         return $this->resUser->viewExtension('registration_form');
     }
 
+	/**
+	 * Process the users registration request and then redirect onto the relevant page.
+	 */
     public function postRegister(){
 
         //Process the register user request

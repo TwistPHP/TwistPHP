@@ -24,35 +24,46 @@
 	namespace Twist\Core\Classes;
 	use Twist\Core\Packages\Route;
 
-	if(!class_exists('BaseRoute')){
-		class BaseRoute extends Route{
+	class BaseRoute extends Route{
 
-			protected $strInterfaceKey = null;
-			protected $strBaseURI = null;
-			protected $strBaseTemplate = null;
-			protected $resRoute = null;
+		protected $strInterfaceKey = null;
+		protected $strBaseURI = null;
+		protected $strBaseTemplate = null;
+		protected $resRoute = null;
 
-			public function __construct($strPackageKey){
+		/**
+		 * Called when the routes package launches a routes file. A routes file is usually a pre-defined set of route found withing an installable package.
+		 * @param $strPackageKey
+		 */
+		public function __construct($strPackageKey){
 
-				parent::__construct($strPackageKey);
+			parent::__construct($strPackageKey);
 
-				//Get the current base template before it is purged
-				$this->baseView(\Twist::Route()->baseView());
-				\Twist::Route()->purge();
+			//Get the current base template before it is purged
+			$this->baseView(\Twist::Route()->baseView());
+			\Twist::Route()->purge();
 
-				$arrPackageParams = \Twist::framework()->package()->information(strtolower($strPackageKey));
+			$arrPackageParams = \Twist::framework()->package()->information(strtolower($strPackageKey));
 
-				$this->packageURI($strPackageKey);
-				$this->setDirectory(sprintf('%s/views/', rtrim($arrPackageParams['path'], '/')));
-				$this->setControllerDirectory(sprintf('%s/controllers/', rtrim($arrPackageParams['path'], '/')));
-			}
+			$this->packageURI($strPackageKey);
+			$this->setDirectory(sprintf('%s/views/', rtrim($arrPackageParams['path'], '/')));
+			$this->setControllerDirectory(sprintf('%s/controllers/', rtrim($arrPackageParams['path'], '/')));
+		}
 
-			protected function packageRequired($strModule){
-				\Twist::framework()->package()->exists($strModule, true);
-			}
+		/**
+		 * Function to detect if a package exists or has been installed
+		 * @param $strModule
+		 * @throws \Exception
+		 */
+		protected function packageRequired($strModule){
+			\Twist::framework()->package()->exists($strModule, true);
+		}
 
-			public function load(){
-				throw new \Exception('A load function must be added to your interface class, the class must extend TwistInterface');
-			}
+		/**
+		 * Fall back function to determine if the extending class has got a load function. This function must be over-ridden for the route file to work correctly.
+		 * @throws \Exception
+		 */
+		public function load(){
+			throw new \Exception('A load function must be added to your interface class, the class must extend TwistInterface');
 		}
 	}
