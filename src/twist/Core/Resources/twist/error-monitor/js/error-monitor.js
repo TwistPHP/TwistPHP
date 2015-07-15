@@ -22,26 +22,6 @@
 
 (
 	function( window ) {
-		var funOriginalError = window.onerror;
-
-		window.onerror = function( strErrorMessage, strURL, intLineNumber, intColumn, objError ) {
-			//LOG ERROR TO TWIST
-
-			if( funOriginalError ) {
-				if( intColumn ) {
-					if( objError ) {
-						return funOriginalError( strErrorMessage, strURL, intLineNumber, intColumn, objError );
-					} else {
-						return funOriginalError( strErrorMessage, strURL, intLineNumber, intColumn );
-					}
-				} else {
-					return funOriginalError( strErrorMessage, strURL, intLineNumber );
-				}
-			}
-
-			return false;
-		};
-
 		if( window.console ) {
 			var objOriginalConsole = window.console;
 
@@ -91,5 +71,53 @@
 				return false;
 			}
 		}
+
+		var funOriginalError = window.onerror,
+				log = function() {
+					var arrArguements = arguments;
+					if( this.isSet( window.console )
+							&& this.isSet( window.console.log )
+							&& arrArguements.length > 0 ) {
+						for( var intArguement in arrArguements ) {
+							window.console.log( arrArguements[intArguement] );
+						}
+					}
+				},
+				error = function() {
+					if( arguments.length > 0
+							&& window.console ) {
+						if( window.console.error ) {
+							for( var intArguement in arguments ) {
+								window.console.error( arguments[intArguement] );
+							}
+						} else {
+							for( var intArguement in arguments ) {
+								log( arguments[intArguement] );
+							}
+						}
+					}
+				};
+
+		window.onerror = function( strErrorMessage, strURL, intLineNumber, intColumn, objError ) {
+			//LOG ERROR TO TWIST
+
+			if( funOriginalError ) {
+				if( !strErrorMessage.indexOf( 'Script error.' ) ) {
+					if( intColumn ) {
+						if( objError ) {
+							return funOriginalError( strErrorMessage, strURL, intLineNumber, intColumn, objError );
+						} else {
+							return funOriginalError( strErrorMessage, strURL, intLineNumber, intColumn );
+						}
+					} else {
+						return funOriginalError( strErrorMessage, strURL, intLineNumber );
+					}
+				} else {
+					error( 'For security reasons, your browser does not report exceptions from scripts that are of a different origin' );
+				}
+			}
+
+			return false;
+		};
 	}
 )( window );
