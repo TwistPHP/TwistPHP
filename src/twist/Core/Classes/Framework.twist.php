@@ -37,21 +37,39 @@
 			return false;
 		}
 
+		/**
+		 * Returns and object of the debug tool, this can be used to process the debug window.
+		 * @return null|\Twist\Core\Classes\Debug
+		 */
 		public function debug(){
 			$this->objDebug = (is_null($this->objDebug)) ? new Debug() : $this->objDebug;
 			return $this->objDebug;
 		}
 
+		/**
+		 * An object with usfull functions to install, uninstall and work with Twist and third party packages.
+		 * @return null|\Twist\Core\Classes\Package
+		 */
 		public function package(){
 			$this->objPackage = (is_null($this->objPackage)) ? new Package() : $this->objPackage;
 			return $this->objPackage;
 		}
 
+		/**
+		 * An object to register and manager functions such as Shutdown handlers and Error Handlers.
+		 * @return null|\Twist\Core\Classes\Register
+		 */
 		public function register(){
 			$this->objRegister = (is_null($this->objRegister)) ? new Register() : $this->objRegister;
 			return $this->objRegister;
 		}
 
+		/**
+		 * Get or set a single setting by its key, pass in a value (2nd parameter to set/store the value against the key).
+		 * @param $strKey
+		 * @param null $strValue
+		 * @return bool|null
+		 */
 		public function setting($strKey,$strValue = null){
 
 			$this->objSettings = (is_null($this->objSettings)) ? new Settings() : $this->objSettings;
@@ -65,25 +83,47 @@
 			return $mxdOut;
 		}
 
+		/**
+		 * Returns the settings object where settings can be added/edited/reset and installed.
+		 * @return null|\Twist\Core\Classes\Settings
+		 */
 		public function settings(){
 			$this->objSettings = (is_null($this->objSettings)) ? new Settings() : $this->objSettings;
 			return $this->objSettings;
 		}
 
+		/**
+		 * Return an object of useful tools that don't really fit anywhere else in the framework at this point.
+		 * @return null|\Twist\Core\Classes\Tools
+		 */
 		public function tools(){
 			$this->objTools = (is_null($this->objTools)) ? new Tools() : $this->objTools;
 			return $this->objTools;
 		}
 
+		/**
+		 * The old framework upgrade object, this will be removed soon (need to extract some functions first)
+		 * @deprecated
+		 * @return null|\Twist\Core\Classes\Upgrade
+		 */
 		public function upgrade(){
 			$this->objUpgrade = (is_null($this->objUpgrade)) ? new Upgrade() : $this->objUpgrade;
 			return $this->objUpgrade;
 		}
 
+		/**
+		 * Return the URI to the framework folder
+		 * @return mixed
+		 */
 		public function getURI(){
 			return str_replace(TWIST_DOCUMENT_ROOT,'',TWIST_FRAMEWORK);
 		}
 
+		/**
+		 * Determin if the script is being run on Shell, CronTab or by a Webserver
+		 * @param bool $blDetails
+		 * @return int
+		 */
 		public function runLevel($blDetails = false){
 
 			$arrInfo = array(
