@@ -103,4 +103,3 @@ public function postContact(){
 ```
 
 Navigate to the new contact page of your website in your browser '/contact' and submit the complete form, all being well you should see the output for the new post function rather than the form.
-
