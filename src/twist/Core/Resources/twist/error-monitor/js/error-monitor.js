@@ -105,6 +105,7 @@
 				if( !strErrorMessage.indexOf( 'Script error.' ) ) {
 					if( intColumn ) {
 						if( objError ) {
+							console.log("This is a stack trace! Wow! --> %s", objError.stack);
 							return funOriginalError( strErrorMessage, strURL, intLineNumber, intColumn, objError );
 						} else {
 							return funOriginalError( strErrorMessage, strURL, intLineNumber, intColumn );
@@ -117,7 +118,7 @@
 				}
 			}
 
-			return false;
+			return true;
 		};
 	}
 )( window );

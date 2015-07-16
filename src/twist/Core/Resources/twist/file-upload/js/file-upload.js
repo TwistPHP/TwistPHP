@@ -214,7 +214,7 @@
 										var resFile = thisUploader.queue[0],
 												strFileName = resFile.name,
 												strFileType = resFile.type,
-												strFileExtention = strFileName.substr( strFileName.lastIndexOf( '.' ) + 1 ),
+												strFileExtention = strFileName.substr( strFileName.lastIndexOf( '.' ) + 1 ).toLowerCase(),
 												intFileSize = parseInt( resFile.size ),
 												resFileReader = new FileReader( { blob: true } ),
 												blAcceptedType = !thisUploader.acceptTypes.length && !thisUploader.acceptExtentions.length;
@@ -512,7 +512,7 @@
 						if( arrAcceptValues.length ) {
 							for( var intAccept in arrAcceptValues ) {
 								if( arrAcceptValues[intAccept].substr( 0, 1 ) === '.' ) {
-									thisUploader.acceptExtentions.push( arrAcceptValues[intAccept].substr( 1 ) );
+									thisUploader.acceptExtentions.push( arrAcceptValues[intAccept].substr( 1 ).toLowerCase() );
 								} else {
 									thisUploader.acceptTypes.push( arrAcceptValues[intAccept].replace( /\//g, '\\/' ).replace( /\*/g, '.*' ) );
 								}
