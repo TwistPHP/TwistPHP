@@ -28,11 +28,20 @@
 		public static $blShutdownRegistered = false;
 		public static $arrCallbackEvents = array(); // array to store user callbacks
 
+		/**
+		 * Used for TwistPHP to register the master shutdown handler that will then run through and process each of the registered shutdown events.
+		 * @related Twist\Core\Classes\Register
+		 */
 		public static function enableHandler(){
 			register_shutdown_function(array('Twist\Core\Classes\Shutdown', 'callEvents'));
 			self::$blShutdownRegistered = true;
 		}
 
+		/**
+		 * Register a shutdown event, this function should be used exclusively by the \Twist::framework()->register() object.
+		 * @related Twist\Core\Classes\Register
+		 * @return bool
+		 */
 		public static function registerEvent(){
 
 			$arrCallback = func_get_args();
@@ -67,6 +76,9 @@
 			return true;
 		}
 
+		/**
+		 * Called upon PHP shutdown by the PHP shutdown handler to run all of the registered shutdown events one by one.
+		 */
 		public static function callEvents(){
 
 			foreach(self::$arrCallbackEvents as $arrArguments){
@@ -80,10 +92,17 @@
 			}
 		}
 
+		/**
+		 * Remove a registered even from the event list
+		 * @param $strEventKey
+		 */
 		public static function cancelEvent($strEventKey){
 			unset(self::$arrCallbackEvents[$strEventKey]);
 		}
 
+		/**
+		 * Cancel/Remove all events registered by the shutdown handler
+		 */
 		public static function cancelEvents(){
 			self::$arrCallbackEvents = array();
 		}

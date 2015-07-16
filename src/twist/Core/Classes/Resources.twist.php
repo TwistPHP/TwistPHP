@@ -26,7 +26,7 @@ namespace Twist\Core\Classes;
 /**
  * Core resource handler for the framework, can be extended by installing the Official Resource module
  */
-final class Resources{
+class Resources{
 
 	var $arrLibraries = array();
 	protected $arrIncluded = array();
@@ -196,6 +196,12 @@ final class Resources{
 		return $arrOut;
 	}
 
+	/**
+	 * Apply the correct URI to a resource based on its resource directory path.
+	 * @param $arrParameters
+	 * @param $dirResourcePath
+	 * @return mixed
+	 */
 	protected function applyPath($arrParameters,$dirResourcePath){
 
 		$arrParameters['path'] = rtrim($dirResourcePath,'/');
@@ -210,6 +216,13 @@ final class Resources{
 		return $arrParameters;
 	}
 
+	/**
+	 * Extend the resource library with a whole new set of resources. This function can be called if you want to put some custom rescources into the system that the site or package can use.
+	 * The resources will then become accessible via the {resource:} view tag.
+	 * @param $dirManifest
+	 * @param $dirResourcePath
+	 * @throws \Exception
+	 */
 	public function extendLibrary($dirManifest,$dirResourcePath){
 
 		if(file_exists($dirManifest)){

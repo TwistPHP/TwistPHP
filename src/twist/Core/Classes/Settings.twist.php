@@ -43,14 +43,26 @@
 	        $this->load();
 	    }
 
+		/**
+		 * Return a boolean status, if true the framework has not been setup.
+		 * @return bool
+		 */
 		public function showSetup(){
 			return $this->blShowSetup;
 		}
 
+		/**
+		 * Set to true will ensure that the framework runs using a file configuration rather than the Database settings table.
+		 * @param bool $blFileConfig
+		 */
 		public function fileConfigOverride($blFileConfig = true){
 			$this->blFileConfig = $blFileConfig;
 		}
 
+		/**
+		 * Load all the framework settings into the system, these could either be stored in a Database or a file depending on how TwistPHP has been configured.
+		 * @throws \Exception
+		 */
 	    protected function load(){
 
 	        if(!$this->blLoaded){
@@ -101,6 +113,9 @@
 	        }
 	    }
 
+		/**
+		 * Before the framework has been setup it will be running on its default settings that are defined in the frameworks install folder.
+		 */
 		protected function loadTempSettings(){
 
 			//Process the core settings of the framework
@@ -116,14 +131,30 @@
 			}
 		}
 
+		/**
+		 * Get the setting value that is associated with the provided key, is the key does not exists NULL will be returned.
+		 * @param $strKey
+		 * @return null|mixed
+		 */
 	    public function get($strKey){
 	        return (array_key_exists($strKey,$this->arrSettings)) ? $this->arrSettings[$strKey] : null;
 	    }
 
+		/**
+		 * Get all information that is associated with the provided key, is the key does not exists NULL will be returned.
+		 * @param $strKey
+		 * @return null
+		 */
 	    public function getInfo($strKey){
 	        return (array_key_exists($strKey,$this->arrSettingsInfo)) ? $this->arrSettingsInfo[$strKey] : null;
 	    }
 
+		/**
+		 * Set a value against a particular setting Key, the value will be stored in the Database or File depending on how TwistPHP has been configured.
+		 * @param $strKey
+		 * @param $mxdData
+		 * @return bool
+		 */
 	    public function set($strKey,$mxdData){
 
 	        $blOut = false;
@@ -163,6 +194,12 @@
 	        return $blOut;
 	    }
 
+		/**
+		 * Remove/Uninstall a particular setting or group of settings form the Database or File depending on how TwistPHP has been configured.
+		 * @param $strPackage
+		 * @param $strGroup
+		 * @param null $strKey
+		 */
 		public function uninstall($strPackage,$strGroup,$strKey = null){
 
 			if($this->blFileConfig){
@@ -208,6 +245,21 @@
 			}
 		}
 
+		/**
+		 * Install/Add a new setting into the Database or File depending on how TwistPHP has been configured.
+		 * @param $strPackage
+		 * @param $strGroup
+		 * @param $strKey
+		 * @param $mxdValue
+		 * @param $strTitle
+		 * @param $strDescription
+		 * @param $strDefault
+		 * @param $strType
+		 * @param $strOptions
+		 * @param bool $blNull
+		 * @return bool|null
+		 * @throws \Exception
+		 */
 		public function install($strPackage,$strGroup,$strKey,$mxdValue,$strTitle,$strDescription,$strDefault,$strType,$strOptions,$blNull = false){
 
 			if(TWIST_DATABASE_PROTOCOL === 'none'){

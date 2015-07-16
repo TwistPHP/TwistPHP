@@ -26,10 +26,14 @@
 	/**
 	 * Handle all package/package related enquiries, for instance if you want to know if a package is installed or what version it is.
 	 */
-	final class Package{
+	class Package{
 
 		protected $arrPackages = array();
 
+		/**
+		 * Get an array of all packages in the system, both installed and not installed (but in the packages folder)
+		 * @return array
+		 */
 		public function getAll(){
 
 			$arrOut = array_merge($this->getUninstalled(),$this->getInstalled());
@@ -141,6 +145,11 @@
 			$this->arrPackages[$strSlug]['extensions'] = ($arrPackageData['extensions'] != '') ?  json_decode($arrPackageData['extensions'],true) : array();
 		}
 
+		/**
+		 * Find the uninstalled package by its slug and run the install.php file within the package folder.
+		 * @param $strInstallSlug
+		 * @return bool
+		 */
 		public function installer($strInstallSlug){
 
 			$blOut = false;
@@ -157,7 +166,8 @@
 		}
 
 		/**
-		 * Install the package into the framework
+		 * Install the package into the framework, this function is called by the packages install.php file located in the package folder.
+		 * It handles the registration of the package withing the framework.
 		 */
 		public function install(){
 
@@ -172,18 +182,6 @@
 				$arrDetails = json_decode($rawJson,true);
 
 				$strSlug = strtolower(basename($dirPackage));
-
-				if(is_file(sprintf('%s/resources.json',$dirPackage)) && count(scandir(sprintf('%s/resources',$dirPackage))) > 2){
-
-				}
-
-				if(is_dir(sprintf('%s/routes',$dirPackage)) && count(scandir(sprintf('%s/routes',$dirPackage))) > 2){
-
-				}
-
-				if(is_dir(sprintf('%s/blocks',$dirPackage)) && count(scandir(sprintf('%s/blocks',$dirPackage))) > 2){
-
-				}
 
 				$arrResources = $arrRoutes = $arrBlocks = $arrExtensions = array();
 
@@ -211,6 +209,10 @@
 			return false;
 		}
 
+		/**
+		 * Install any DB and tables required by the package, this function is called by the packages install.php file located in the package folder.
+		 * @param $dirInstallSQL
+		 */
 		public function importSQL($dirInstallSQL){
 
 			$arrBacktrace = debug_backtrace();
@@ -237,6 +239,11 @@
 			}
 		}
 
+		/**
+		 * Install any framework settings that are required by the package, this function is called by the packages install.php file located in the package folder.
+		 * @param $dirSettingsJSON
+		 * @throws \Exception
+		 */
 		public function importSettings($dirSettingsJSON){
 
 			$arrBacktrace = debug_backtrace();
@@ -274,6 +281,9 @@
 			}
 		}
 
+		/**
+		 * Remove all the settings for a particular package, this is usually called by the uninstall.php file located in the package folder
+		 */
 		public function removeSettings(){
 
 			$arrBacktrace = debug_backtrace();
@@ -287,12 +297,17 @@
 			}
 		}
 
-		public function uninstaller($strInstallSlug){
+		/**
+		 * Find the installed package by its slug and run the uninstall.php file within the package folder.
+		 * @param $strInstallSlug
+		 * @return bool
+		 */
+		public function uninstaller($strUnInstallSlug){
 
 			$blOut = false;
 
 			foreach($this->getInstalled() as $strSlug => $arrEachPackage){
-				if($strInstallSlug === $strSlug){
+				if($strUnInstallSlug === $strSlug){
 					include sprintf('%s/%s/uninstall.php',TWIST_PACKAGES,$arrEachPackage['folder']);
 					$blOut = true;
 					break;
@@ -303,7 +318,7 @@
 		}
 
 		/**
-		 * Uninstall the package from the framework
+		 * Uninstall the package from the framework, this happens by removing the package record form the twist_packages DB table.
 		 */
 		public function uninstall(){
 
@@ -390,10 +405,6 @@
 			return (array_key_exists($strPackage,$this->arrPackages)) ? $this->arrPackages[$strPackage]['extensions'] : array();
 		}
 
-
-
-
-
 		/**
 		 * Get all the current information for any installed package
 		 * @param $strPackage
@@ -437,6 +448,11 @@
 			}
 		}
 
+		/**
+		 * Register a package route into a routes array
+		 * @param $strPackage
+		 * @param $strRouteName
+		 */
 		public function registerRoute($strPackage,$strRouteName){
 
 			if(!array_key_exists($strPackage,$this->arrPackages)){

@@ -28,22 +28,45 @@
 
 			protected static $arrFrameworkObjects = array();
 
-			public static function isObject($strObjectIdentifier){
-				return (array_key_exists($strObjectIdentifier,self::$arrFrameworkObjects));
+			/**
+			 * Detect if and object Key has been stored.
+			 * @param string $strObjectKey Unique identification key
+			 * @return bool
+			 */
+			public static function isObject($strObjectKey){
+				return (array_key_exists($strObjectKey,self::$arrFrameworkObjects));
 			}
 
-			public static function storeObject($strObjectIdentifier,$objResource){
-				self::$arrFrameworkObjects[$strObjectIdentifier] = $objResource;
+			/**
+			 * Store and object/resource against an object key. An object key is a unique string that will enable you to retrieve the object later.
+			 * @param string $strObjectKey Unique identification key
+			 * @param object|resource $objResource
+			 */
+			public static function storeObject($strObjectKey,$objResource){
+				self::$arrFrameworkObjects[$strObjectKey] = $objResource;
 			}
 
-			public static function retrieveObject($strObjectIdentifier){
-				return self::$arrFrameworkObjects[$strObjectIdentifier];
+			/**
+			 * Returns an object/resource using its object key.
+			 * @param string $strObjectKey Unique identification key
+			 * @return null|object|resource
+			 */
+			public static function retrieveObject($strObjectKey){
+				return self::$arrFrameworkObjects[$strObjectKey];
 			}
 
-			public static function removeObject($strObjectIdentifier){
-				self::$arrFrameworkObjects[$strObjectIdentifier] = null;
+			/**
+			 * Removes the object from the instance holder and destroys the object.
+			 * @param $strObjectKey
+			 */
+			public static function removeObject($strObjectKey){
+				unset(self::$arrFrameworkObjects[$strObjectKey]);
 			}
 
+			/**
+			 * Returns an array of all the stored object keys.
+			 * @return array
+			 */
 			public static function listObjects(){
 				return array_keys(self::$arrFrameworkObjects);
 			}

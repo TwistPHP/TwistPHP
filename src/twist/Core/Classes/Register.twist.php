@@ -26,9 +26,16 @@
 	/**
 	 * Register Shutdown and Event handlers, also handlers can be canceled if required
 	 */
-	final class Register{
+	class Register{
 
-		public function handler($strType,$strClass,$strFunction){
+		/**
+		 * Register a handler for shutdown events, errors and exceptions. All default handlers are registered with this method by TwistPHP.
+		 * @param $strType
+		 * @param $strClass
+		 * @param $strFunction
+		 * @param null $strEventKey
+		 */
+		public function handler($strType,$strClass,$strFunction,$strEventKey = null){
 
 			switch($strType){
 
@@ -37,16 +44,25 @@
 					break;
 
 				case'fatal':
-					$this->shutdownEvent('TwistFatalError',$strClass,$strFunction);
+					Shutdown::registerEvent(array('TwistFatalError',$strClass,$strFunction));
 					break;
 
 				case'exception':
 					set_exception_handler(array($strClass, $strFunction));
 					break;
+
+				case'shutdown':
+					Shutdown::registerEvent(array($strEventKey,$strClass,$strFunction));
+					break;
 			}
 		}
 
-		public function cancelHandler($strType){
+		/**
+		 * Cancel a registered handler, these handlers can be for shutdown events, errors and exceptions.
+		 * @param $strType
+		 * @param null $strEventKey
+		 */
+		public function cancelHandler($strType,$strEventKey = null){
 
 			switch($strType){
 
@@ -55,20 +71,36 @@
 					break;
 
 				case'fatal':
-					$this->cancelShutdownEvent('TwistFatalError');
+					Shutdown::cancelEvent('TwistFatalError');
 					break;
 
 				case'exception':
 					restore_exception_handler();
 					break;
+
+				case'shutdown':
+					Shutdown::cancelEvent($strEventKey);
+					break;
 			}
 		}
 
+		/**
+		 * Alias function with the first parameter preset to 'shutdown'.
+		 * @alias handler
+		 * @param $strEventKey
+		 * @param $strClass
+		 * @param $strFunction
+		 */
 		public function shutdownEvent($strEventKey,$strClass,$strFunction){
-			Shutdown::registerEvent(array($strEventKey,$strClass,$strFunction));
+			$this->handler('shutdown',$strClass,$strFunction,$strEventKey);
 		}
 
+		/**
+		 * Alias function with the first parameter preset to 'shutdown'.
+		 * @alias cancelHandler
+		 * @param $strEventKey
+		 */
 		public function cancelShutdownEvent($strEventKey){
-			Shutdown::cancelEvent($strEventKey);
+			$this->cancelHandler('shutdown',$strEventKey);
 		}
 	}

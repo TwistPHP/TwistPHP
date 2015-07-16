@@ -159,7 +159,7 @@
 		}
 
 		/**
-		 * Fully merge two multidimensional arrays
+		 * Fully merge two multidimensional arrays and return the new merged array.
 		 *
 		 * @param $arrPrimary   Primary array
 		 * @param $arrSecondary Secondary array
@@ -187,6 +187,22 @@
 		}
 
 		/**
+		 * Re-index an array of data, provide the key field to be used to re-index the array. The key must exists with a value within the array.
+		 *
+		 * Example of original data:
+		 * array(
+		 *     0 => array('id' => 1, 'name' => 'Home', 'slug' => 'home'),
+		 *     1 => array('id' => 2, 'name' => 'About', 'slug' => 'about'),
+		 *     2 => array('id' => 3, 'name' => 'Contact', 'slug' => 'contact'),
+		 * )
+		 *
+		 * Example of data after being re-indexed by the key 'slug':
+		 * array(
+		 *     'home' => array('id' => 1, 'name' => 'Home', 'slug' => 'home'),
+		 *     'about' => array('id' => 2, 'name' => 'About', 'slug' => 'about'),
+		 *     'contact' => array('id' => 3, 'name' => 'Contact', 'slug' => 'contact'),
+		 * )
+		 *
 		 * @param      $arrData
 		 * @param      $strKeyField
 		 * @param bool $blGroup
@@ -268,6 +284,13 @@
 			return $this -> buildRelationalTree( $arrTree, $arrTree[0], $strIDField, $strChildrenKey );
 		}
 
+		/**
+		 * @param $arrList
+		 * @param $arrParents
+		 * @param $strIDField
+		 * @param $strChildrenKey
+		 * @return array
+		 */
 		private function buildRelationalTree( &$arrList, $arrParents, $strIDField, $strChildrenKey ) {
 
 			$arrTempTree = array();
@@ -282,6 +305,11 @@
 			return $arrTempTree;
 		}
 
+		/**
+		 * Var dump some data and return the output as a string of text (and not to the screen). Accepts all the same parameters as the regular PHP vardump function.
+		 * @reference http://php.net/manual/en/function.var-dump.php
+		 * @return string
+		 */
 		public function varDump() {
 			ob_start();
 			call_user_func_array( 'var_dump', func_get_args() );

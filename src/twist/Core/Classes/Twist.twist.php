@@ -32,12 +32,20 @@
 			throw new Exception("Twist Framework can only be called statically, please refer to documentation for more details");
 		}
 
+		/**
+		 * Define PHP Defines but automatically checks to see if has already been defined, if so the new define is ignored but no error is thrown.
+		 * @param $strKey
+		 * @param $mxdValue
+		 */
 		public static function define($strKey,$mxdValue){
 			if(!defined($strKey)){
 				define($strKey,$mxdValue);
 			}
 		}
 
+		/**
+		 * Main function called by the boot.php file, this function will boot the framework setting all the variables and initialising required functionality to ensure that TwistPHP runs as expected.
+		 */
 		public static function launch(){
 
 			if(self::$blLaunched === false){
@@ -128,6 +136,10 @@
 			}
 		}
 
+		/**
+		 * Add the ability to serve some basic core resources, this functionality will soon be deprecated in favour of using the resources package.
+		 * @deprecated
+		 */
         protected static function coreResources(){
 
             $strResourcesURI = sprintf('/%sCore/Resources/',ltrim(TWIST_FRAMEWORK_URI,'/'));
@@ -170,7 +182,7 @@
         }
 
 		/**
-		 * Show the setup process if required
+		 * Show the setup wizard, if the wizard is required to be output all existing routes will be cleared and the wizard will be served.
 		 */
 		protected static function showSetup(){
 
@@ -289,7 +301,8 @@
 		}
 
 		/**
-		 * Record events on for the current page load can be logged and a timeline produced, helps with debugging
+		 * Record events on for the current page load can be logged and a time-line produced, helps with debugging.
+		 * The TwistPHP event recorder only records and outputs events if DEVELOPMENT_MODE and DEVELOPMENT_EVENT_RECORDER settings are set to true|1.
 		 * @param $strEventName
 		 */
 		public static function recordEvent($strEventName){
@@ -298,6 +311,12 @@
 			}
 		}
 
+		/**
+		 * Get an array of all the recorded events from withing the TwistPHP even recorder, this will provide times and memory usage data on allow of key processing done by TwistPHP.
+		 *  The TwistPHP event recorder only records and outputs events if DEVELOPMENT_MODE and DEVELOPMENT_EVENT_RECORDER settings are set to true|1.
+		 * @param bool $blStopTimer
+		 * @return array|mixed
+		 */
 		public static function getEvents($blStopTimer = false){
 			return (self::$blRecordEvents) ? (($blStopTimer) ? \Twist::Timer('TwistEventRecorder')->stop() : \Twist::Timer('TwistEventRecorder')->results()) : array();
 		}
