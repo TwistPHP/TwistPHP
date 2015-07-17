@@ -30,6 +30,12 @@ class Upload extends BaseController{
 		$this->resRoute->debugMode(false);
 	}
 
+	/**
+	 * Upload a file to the site and place in the uploads directory
+	 * @param null $strFileKey
+	 * @param null $intIndex
+	 * @return string
+	 */
 	public function file($strFileKey = null,$intIndex = null){
 
 		$this->resRoute->debugMode(false);
@@ -56,6 +62,12 @@ class Upload extends BaseController{
 		return json_encode($arrOut);
 	}
 
+	/**
+	 * Upload an asset to the system and create relevant thumbnails of images.
+	 * @param null $strFileKey
+	 * @param null $intIndex
+	 * @return string
+	 */
 	public function asset($strFileKey = null,$intIndex = null){
 
 		$this->resRoute->debugMode(false);

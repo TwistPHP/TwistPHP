@@ -31,10 +31,18 @@ class Manager extends BaseControllerUser{
 		$this->_aliasURI('update-setting','getUpdateSetting');
 	}
 
+	/**
+	 * @alias dashboard
+	 * @return string
+	 */
 	public function _index(){
 		return $this->dashboard();
 	}
 
+	/**
+	 * Manager dashboard page, here you have access to some of the core framework settings and information
+	 * @return string
+	 */
 	public function dashboard(){
 
 		$arrTags['development-mode'] = (\Twist::framework()->setting('DEVELOPMENT_MODE') == '1') ? 'On' : 'Off';
@@ -60,6 +68,10 @@ class Manager extends BaseControllerUser{
 		return $this->_view('pages/dashboard.tpl',$arrTags);
 	}
 
+	/**
+	 * Overview of the TwistPHP cache system with the ability to clear out cache data so that it must be re-generated.
+	 * @return string
+	 */
 	public function cache(){
 
 		$arrTags = array();
@@ -80,6 +92,10 @@ class Manager extends BaseControllerUser{
 		return $this->_view('pages/cache.tpl',$arrTags);
 	}
 
+	/**
+	 * An overview of all the settings in the TwistPHP Settings table, from here all settings can be updated as necessary.
+	 * @return string
+	 */
 	public function settings(){
 
 		$arrSettings = \Twist::framework() -> settings() -> arrSettingsInfo;
@@ -137,6 +153,9 @@ class Manager extends BaseControllerUser{
 		return $this->_view('pages/settings.tpl',$arrTags);
 	}
 
+	/**
+	 * Store all the setting changes POST'ed  form the settings page.
+	 */
 	public function postSettings(){
 
 		$arrSettingsInfo = \Twist::framework()->settings()->arrSettingsInfo;
@@ -160,6 +179,9 @@ class Manager extends BaseControllerUser{
 		\Twist::redirect('./settings');
 	}
 
+	/**
+	 * Allow a select few settings to be updated using GET parameters, these are settings that are displayed as buttons throughout the manager.
+	 */
 	public function getUpdateSetting(){
 
 		$arrAllowedSettings = array('DEVELOPMENT_MODE','MAINTENANCE_MODE','DEVELOPMENT_DEBUG_BAR','CACHE_ENABLED');
@@ -171,6 +193,10 @@ class Manager extends BaseControllerUser{
 		\Twist::redirect('./dashboard');
 	}
 
+	/**
+	 * Display all the installed and un-installed packages that are currently in your packages folder. The page does not currently have an APP store feature.
+	 * @return string
+	 */
 	public function packages(){
 
 		$arrTags = array();
@@ -202,6 +228,9 @@ class Manager extends BaseControllerUser{
 		return $this->_view('pages/packages.tpl',$arrTags);
 	}
 
+	/**
+	 * Install a package into the system, pass the package slug in the GET param 'package'.
+	 */
 	public function install(){
 
 		//Run the package installer
@@ -212,6 +241,9 @@ class Manager extends BaseControllerUser{
 		\Twist::redirect('./packages');
 	}
 
+	/**
+	 * Uninstall a package from the system, pass the package slug in the GET param 'package'.
+	 */
 	public function uninstall(){
 
 		//Run the package installer
