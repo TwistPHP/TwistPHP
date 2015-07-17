@@ -196,7 +196,7 @@
 		"description":"Set the memory limit for all your PHP scripts that use the framework",
 		"default":"128M",
 		"type":"options",
-		"options":"32M,62M,128M,256M,512M,1G,2G,3G,4G",
+		"options":"32M,64M,128M,256M,512M,1G,2G,3G,4G",
 		"null":0
 	},
 	"PHP_MAX_EXECUTION":{
