@@ -1006,7 +1006,7 @@ class Route extends BasePackage{
 	protected function resourceServer(){
 
 		if(TWIST_ABOVE_DOCUMENT_ROOT){
-			$this->controller('/twist/%','Twist\Core\Controllers\Resources',false);
+			$this->folder('/twist/Core/Resources%',sprintf('%s/Core/Resources',TWIST_FRAMEWORK));
 		}
 	}
 

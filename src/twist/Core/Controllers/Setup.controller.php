@@ -24,12 +24,24 @@
 namespace Twist\Core\Controllers;
 use Twist\Core\Classes\BaseController;
 
+/**
+ * Setup controller that provides the TwistPHP setup wizard.
+ * @package Twist\Core\Controllers
+ */
 class Setup extends BaseController{
 
+	/**
+	 * @alias welcome
+	 * @return string
+	 */
 	public function _index(){
 		return $this->welcome();
 	}
 
+	/**
+	 * Welcome page, this is the start page for the setup process
+	 * @return string
+	 */
 	public function welcome(){
 
 		setcookie('twist_setup_test','1');
@@ -57,6 +69,10 @@ class Setup extends BaseController{
 		return \Twist::View()->build('pages/welcome.tpl');
 	}
 
+	/**
+	 * Licence Agreement page, the user must agree to the licence to use the software
+	 * @return string
+	 */
 	public function licence(){
 
 		$strLicenceText = file_get_contents(sprintf('%s/LICENCE.txt',TWIST_FRAMEWORK));
@@ -67,6 +83,11 @@ class Setup extends BaseController{
 		return \Twist::View()->build('pages/licence.tpl',$arrTags);
 	}
 
+	/**
+	 * Check that all the prerequisite have been met by the users server/hosting configuration.
+	 * The framework requires PHP5.3+ and the files/folders need to be writable by the PHP user.
+	 * @return string
+	 */
 	public function checks(){
 
 		$arrSession = \Twist::Session()->data('twist-setup');
@@ -102,6 +123,10 @@ class Setup extends BaseController{
 		return \Twist::View()->build('pages/checks.tpl',$arrChecks);
 	}
 
+	/**
+	 * Setup a database connection or choose not to use one.
+	 * @return string
+	 */
 	public function database(){
 
 		$arrSession = \Twist::Session()->data('twist-setup');
@@ -121,6 +146,10 @@ class Setup extends BaseController{
 		return \Twist::View()->build('pages/database.tpl',$arrTags);
 	}
 
+	/**
+	 * Set all your initial settings so that you can be up and running faster.
+	 * @return string
+	 */
 	public function settings(){
 
 		$arrSession = \Twist::Session()->data('twist-setup');
@@ -211,6 +240,10 @@ class Setup extends BaseController{
 		return \Twist::View()->build('pages/settings.tpl',$arrTags);
 	}
 
+	/**
+	 * Setup an initial (super admin, level 0) user account, this is only used at the moment if you have a DB setup, otherwise this step is skipped.
+	 * @return string
+	 */
 	public function user(){
 
 		$arrSession = \Twist::Session()->data('twist-setup');
@@ -276,6 +309,10 @@ class Setup extends BaseController{
 		return \Twist::View()->build('pages/user.tpl',$arrTags);
 	}
 
+	/**
+	 * @deprecated
+	 * @return string
+	 */
 	public function interfaces(){
 
 		$arrSession = \Twist::Session()->data('twist-setup');
@@ -336,6 +373,11 @@ class Setup extends BaseController{
 		return \Twist::View()->build('pages/interfaces.tpl',$arrTags);
 	}
 
+	/**
+	 * Final step, all the settings and tables are created, the user is then shown a finish page.
+	 * @return string
+	 * @throws \Exception
+	 */
 	public function finish(){
 
 		//Remove the cookie test cookie

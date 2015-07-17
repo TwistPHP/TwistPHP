@@ -51,8 +51,6 @@
 
 		public function debugMode(){
 
-			//\Twist::framework()->setting('TWIST_DATABASE_DEBUG')
-
 			if($this->blDebugMode == false && defined('TWIST_LAUNCHED')){
 				if(\Twist::framework()->setting('DEVELOPMENT_MODE') && \Twist::framework()->setting('DEVELOPMENT_DEBUG_BAR')){
 					$this->blDebugMode = true;

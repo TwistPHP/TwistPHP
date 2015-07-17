@@ -31,36 +31,16 @@ class Manager extends BaseControllerUser{
 		$this->_aliasURI('update-setting','getUpdateSetting');
 	}
 
-	public function _default(){
+	public function _index(){
 		return $this->dashboard();
-	}
-
-	public function update(){
-		\Twist::Route()->baseViewIgnore();
-		return $this->_view('_update.tpl');
-	}
-
-	public function progress(){
-		\Twist::Route()->baseViewIgnore();
-		header('Content-Type: application/json');
-		$strJsonFile = sprintf('%s/../progress.json',dirname(__FILE__));
-		return (file_exists($strJsonFile)) ? file_get_contents($strJsonFile) : json_encode(array());
 	}
 
 	public function dashboard(){
 
-		//Set the release channel
-		\Twist::framework()->upgrade()->channel(\Twist::framework()->setting('RELEASE_CHANNEL'));
-
-		$arrCore = \Twist::framework()->upgrade()->getCore();
-
-		$arrTags = array();
-		$arrTags['update-information'] = ($arrCore['update'] == '1') ? $this->_view('components/dashboard/update.tpl',$arrCore) : $this->_view('components/dashboard/no-update.tpl',$arrCore);
-
 		$arrTags['development-mode'] = (\Twist::framework()->setting('DEVELOPMENT_MODE') == '1') ? 'On' : 'Off';
 		$arrTags['maintenance-mode'] = (\Twist::framework()->setting('MAINTENANCE_MODE') == '1') ? 'On' : 'Off';
-		$arrTags['release-channel'] = \Twist::framework()->setting('RELEASE_CHANNEL');
-		$arrTags['database-debug'] = (\Twist::framework()->setting('TWIST_DATABASE_DEBUG') == '1') ? 'On' : 'Off';
+		$arrTags['debug-bar'] = (\Twist::framework()->setting('DEVELOPMENT_DEBUG_BAR') == '1') ? 'On' : 'Off';
+		$arrTags['data-caching'] = (\Twist::framework()->setting('CACHE_ENABLED') == '1') ? 'On' : 'Off';
 
 		$arrRoutes = \Twist::Route()->getAll();
 		$arrTags['route-data'] = sprintf('<strong>%d</strong> ANY<br><strong>%d</strong> GET<br><strong>%d</strong> POST<br><strong>%d</strong> PUT<br><strong>%d</strong> DELETE',
@@ -182,7 +162,7 @@ class Manager extends BaseControllerUser{
 
 	public function getUpdateSetting(){
 
-		$arrAllowedSettings = array('DEVELOPMENT_MODE','MAINTENANCE_MODE','RELEASE_CHANNEL','TWIST_DATABASE_DEBUG');
+		$arrAllowedSettings = array('DEVELOPMENT_MODE','MAINTENANCE_MODE','DEVELOPMENT_DEBUG_BAR','CACHE_ENABLED');
 
 		if(array_key_exists('setting',$_GET) && array_key_exists('setting_value',$_GET) && in_array($_GET['setting'],$arrAllowedSettings)){
 			\Twist::framework() ->setting($_GET['setting'],$_GET['setting_value']);
@@ -191,149 +171,9 @@ class Manager extends BaseControllerUser{
 		\Twist::redirect('./dashboard');
 	}
 
-	public function repositories(){
-
-		$arrTags = array();
-
-		//Set the release channel
-		\Twist::framework()->upgrade()->channel(\Twist::framework()->setting('RELEASE_CHANNEL'));
-
-		$arrRepositories = \Twist::framework()->upgrade()->getRepositories();
-		$arrInterfaces = \Twist::framework()->upgrade()->getInterfaces();
-		$arrModules = \Twist::framework()->upgrade()->getModules();
-
-		$arrTags['static'] = '';
-		$arrTags['third-party'] = '';
-		foreach($arrRepositories as $strRepoKey => $arrEachRepo){
-
-			$arrEachRepo['interface_count'] = 0;
-			foreach($arrInterfaces as $arrEachInterface){
-				if($arrEachInterface['repository'] === $strRepoKey && count($arrEachInterface['available'])){
-					$arrEachRepo['interface_count']++;
-				}
-			}
-
-			$arrEachRepo['module_count'] = 0;
-			foreach($arrModules as $arrEachModule){
-				if($arrEachModule['repository'] === $strRepoKey && count($arrEachModule['available'])){
-					$arrEachRepo['module_count']++;
-				}
-			}
-
-			if($strRepoKey === 'twistphp'){
-				$arrTags['static'] = $this->_view('components/repositories/each-repo-static.tpl', $arrEachRepo );
-			}else{
-				$arrTags['third-party'] .= $this->_view('components/repositories/each-repo.tpl', $arrEachRepo );
-			}
-
-		}
-
-		return $this->_view('pages/repositories.tpl',$arrTags);
-	}
-
-	public function postRepositories(){
-
-		if(array_key_exists('repository_url',$_POST) && $_POST['repository_url'] != ''){
-			$arrRepositories = \Twist::framework()->upgrade()->installRepository($_POST['repository_url']);
-		}
-
-		header(sprintf('Location: %s/repositories',$_SERVER['TWIST_ROUTE']['base_uri']));
-	}
-
-	public function deleteRepository(){
-
-		if(array_key_exists('repo-key',$_GET)){
-			\Twist::framework()->upgrade()->deleteRepository($_GET['repo-key']);
-		}
-
-		header(sprintf('Location: %s/repositories',$_SERVER['TWIST_ROUTE']['base_uri']));
-	}
-
-	public function repository(){
-
-		$arrTags = array();
-
-		if(array_key_exists('repo-key',$_GET) && array_key_exists('repo-enable',$_GET)){
-			\Twist::framework()->upgrade()->enableRepository($_GET['repo-key'],$_GET['repo-enable']);
-		}
-
-		\Twist::framework()->upgrade()->channel(\Twist::framework()->setting('RELEASE_CHANNEL'));
-		$arrRepositories = \Twist::framework()->upgrade()->getRepositories();
-
-		if(array_key_exists('repo-key',$_GET) && array_key_exists($_GET['repo-key'],$arrRepositories)){
-
-			$arrInterfaces = \Twist::framework()->upgrade()->getInterfaces();
-			$arrModules = \Twist::framework()->upgrade()->getModules();
-
-			$arrTags = $arrRepositories[$_GET['repo-key']];
-
-			$arrTags['interfaces'] = 0;
-			foreach($arrInterfaces as $arrEachInterface){
-				if($arrEachInterface['repository'] === $_GET['repo-key'] && count($arrEachInterface['available'])){
-					$arrTags['interfaces']++;
-				}
-			}
-
-			$arrTags['modules'] = 0;
-			foreach($arrModules as $arrEachModule){
-				if($arrEachModule['repository'] === $_GET['repo-key'] && count($arrEachModule['available'])){
-					$arrTags['modules']++;
-				}
-			}
-		}
-
-		return $this->_view('pages/repository_manage.tpl',$arrTags);
-	}
-
-	public function postRepository(){
-
-		if(array_key_exists('repository_url',$_POST) && $_POST['repository_url'] != ''){
-			$arrRepositories = \Twist::framework()->upgrade()->installRepository($_POST['repository_url']);
-		}
-
-		header(sprintf('Location: %s/repositories',$_SERVER['TWIST_ROUTE']['base_uri']));
-	}
-
-	public function getPackageInformation(){
-
-		$arrPackages = array();
-
-		if(array_key_exists('repo',$_GET) && array_key_exists('package',$_GET) && array_key_exists('package-type',$_GET)){
-
-			$strRepo = $_GET['repo'];
-			$strPackage = $_GET['package'];
-			$strType = $_GET['package-type'];
-
-			switch($strType){
-				case'interfaces':
-					$arrPackages = \Twist::framework()->upgrade()->getInterfaces();
-					break;
-				case'modules':
-					$arrPackages = \Twist::framework()->upgrade()->getModules();
-					break;
-			}
-
-			$strPackageKey = strtolower(sprintf('%s-%s',$strRepo,$strPackage));
-
-			if(count($arrPackages) && array_key_exists($strPackageKey,$arrPackages)){
-				$arrTags = $arrPackages[$strPackageKey];
-				$arrTags['repo'] = $strRepo;
-				$arrTags['type'] = ucfirst($strType);
-
-				return $this->_view('pages/package_information.tpl',$arrTags);
-			}
-		}
-
-		header(sprintf('Location: %s',$_SERVER['TWIST_ROUTE']['base_uri']));
-	}
-
 	public function packages(){
 
 		$arrTags = array();
-
-		//Set the release channel
-		\Twist::framework()->upgrade()->channel(\Twist::framework()->setting('RELEASE_CHANNEL'));
-
 		$arrModules = \Twist::framework()->package()->getAll();
 
 		$arrTags['packages_installed'] = '';
@@ -380,42 +220,5 @@ class Manager extends BaseControllerUser{
 		}
 
 		\Twist::redirect('./packages');
-	}
-
-	public function processUpdate(){
-
-		$arrActions = array();
-
-		if(count($_POST)){
-			foreach($_POST as $strKey => $arrPosts){
-				if($arrPosts['install'] == '1'){
-					$arrPosts['channel'] = strtolower(\Twist::framework()->setting('RELEASE_CHANNEL'));
-					$arrActions[] = $arrPosts;
-				}
-			}
-		}elseif(array_key_exists('action',$_GET) && array_key_exists('repo',$_GET) && array_key_exists('package',$_GET) && array_key_exists('package-type',$_GET) && array_key_exists('package-version',$_GET)){
-
-			$arrActions = array(
-				0 => array(
-					'channel' => strtolower(\Twist::framework()->setting('RELEASE_CHANNEL')),
-					'action' => $_GET['action'],
-					'repo' => $_GET['repo'],
-					'package' => $_GET['package'],
-					'package-type' => $_GET['package-type'],
-					'package-version' => $_GET['package-version']
-				)
-			);
-		}
-
-
-		$strJsonFile = sprintf('%s/../update-actions.json',dirname(__FILE__));
-		if(count($arrActions)){
-			file_put_contents($strJsonFile,json_encode($arrActions));
-		}else{
-			unlink($strJsonFile);
-		}
-
-		//Send the user to the update page
-		header(sprintf('Location: %s/update',$_SERVER['TWIST_ROUTE']['base_uri']));
 	}
 }

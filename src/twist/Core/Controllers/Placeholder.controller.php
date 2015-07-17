@@ -24,9 +24,23 @@
 namespace Twist\Core\Controllers;
 use Twist\Core\Classes\BaseController;
 
+/**
+ * Placeholder image generator and serves as an image in the browser.
+ * @package Twist\Core\Controllers
+ */
 class Placeholder extends BaseController{
 
-	public function _default(){
+	/**
+	 * Output a placeholder image, this route uses the following GET parameters if set:
+	 * width - Width of the image e.g 400 (do not suffix with px)
+	 * height - Height of the image e.g 400 (do not suffix with px)
+	 * bg - Background color as a Hex code
+	 * line - Line color as a Hex code
+	 *
+	 * To register this functionality look at Twist::Route()->placeholder()
+	 * @related \Twist\Core\Packages\Route
+	 */
+	public function _index(){
 
 		//ob_start( 'ob_gzhandler' );
 		//header( 'Content-type: image/png; charset: UTF-8' );
