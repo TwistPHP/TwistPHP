@@ -666,7 +666,8 @@ class Route extends BasePackage{
 				header("ETag: \"{$strETag}\"");
 
 				//Enable GZip compression output, only when no other data has been output to the screen
-				if(ob_get_status()['buffer_used'] == 0 && strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false){
+				$arrOBStatus = ob_get_status();
+				if($arrOBStatus['buffer_used'] == 0 && strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false){
 					ob_start('ob_gzhandler');
 				}
 
@@ -1246,7 +1247,8 @@ class Route extends BasePackage{
 						}
 
 						//Enable GZip compression output, only when no other data has been output to the screen
-						if(ob_get_status()['buffer_used'] == 0 && strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false){
+						$arrOBStatus = ob_get_status();
+						if($arrOBStatus['buffer_used'] == 0 && strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false){
 							ob_start('ob_gzhandler');
 						}
 
