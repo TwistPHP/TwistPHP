@@ -298,7 +298,7 @@ class User{
 		$arrTags = array();
 		$strSiteName = \Twist::framework()->setting('SITE_NAME');
 		$strSiteHost = \Twist::framework()->setting('SITE_HOST');
-		$strLoginURL = $this->resParentClass->loginURL();
+		$strLoginURL = $this->resParentClass->strLoginUrl;
 
 		$strEmailSubject = (is_null($this->strTempPassword)) ? sprintf('%s: Password Updated',$strSiteName) : sprintf('%s: Password Reset',$strSiteName);
 
@@ -330,7 +330,7 @@ class User{
 
 	protected function sendWelcomeEmail(){
 
-		$strLoginURL = $this->resParentClass->loginURL();
+		$strLoginURL = $this->resParentClass->strLoginUrl;
 
 		$strTempPass = (is_null($this->strTempPassword)) ? '[specified on registration]' : $this->strTempPassword;
 
@@ -389,7 +389,7 @@ class User{
 		//Send out the email verification
 		if(\Twist::framework()->setting('USER_EMAIL_VERIFICATION')){
 
-			$strLoginURL = $this->resParentClass->loginURL();
+			$strLoginURL = $this->resParentClass->strLoginUrl;
 			$strSiteName = \Twist::framework()->setting('SITE_NAME');
 			$strSiteHost = \Twist::framework()->setting('SITE_HOST');
 
