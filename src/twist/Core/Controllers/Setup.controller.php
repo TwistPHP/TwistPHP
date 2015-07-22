@@ -420,12 +420,12 @@ class Setup extends BaseController{
 
 		file_put_contents(sprintf('%sConfig/config.php',$strApplicationPath),\Twist::View()->build('config.tpl',$arrConfigTags));
 
-		\Twist::define('TWIST_PUBLIC_ROOT',TWIST_DOCUMENT_ROOT.$arrSession['settings']['details']['site_root']);
+		\Twist::define('_TWIST_PUBLIC_ROOT',TWIST_DOCUMENT_ROOT.'/'.$arrSession['settings']['details']['site_root']);
 
-		\Twist::define('TWIST_APP',TWIST_DOCUMENT_ROOT.'/'.$arrSession['settings']['details']['app_path']);
-		\Twist::define('TWIST_APP_CONFIG',TWIST_APP.'/Config/');
-		\Twist::define('TWIST_PACKAGES',TWIST_DOCUMENT_ROOT.'/'.$arrSession['settings']['details']['packages_path']);
-		\Twist::define('TWIST_UPLOADS',TWIST_DOCUMENT_ROOT.'/'.$arrSession['settings']['details']['uploads_path']);
+		\Twist::define('_TWIST_APP',TWIST_DOCUMENT_ROOT.'/'.$arrSession['settings']['details']['app_path']);
+		\Twist::define('_TWIST_APP_CONFIG',_TWIST_APP.'/Config/');
+		\Twist::define('_TWIST_PACKAGES',TWIST_DOCUMENT_ROOT.'/'.$arrSession['settings']['details']['packages_path']);
+		\Twist::define('_TWIST_UPLOADS',TWIST_DOCUMENT_ROOT.'/'.$arrSession['settings']['details']['uploads_path']);
 
 		if($arrSession['database']['details']['type'] === 'database'){
 
@@ -499,18 +499,18 @@ class Setup extends BaseController{
 		/**
 		 * Update the index.php file to be a TwistPHP index file
 		 */
-		$dirIndexFile = sprintf('%s/index.php',TWIST_PUBLIC_ROOT);
+		$dirIndexFile = sprintf('%s/index.php',_TWIST_PUBLIC_ROOT);
 
 		if(file_exists($dirIndexFile)){
-			\Twist::File()->move($dirIndexFile,sprintf('%s/old-index.php',TWIST_PUBLIC_ROOT));
+			\Twist::File()->move($dirIndexFile,sprintf('%s/old-index.php',_TWIST_PUBLIC_ROOT));
 		}
 
 		//Later on we can add in example templates etc if required
 		$arrIndexTags = array(
-			'public_path' => rtrim(TWIST_PUBLIC_ROOT,'/'),
-			'app_path' => TWIST_APP,
-			'packages_path' => TWIST_PACKAGES,
-			'uploads_path' => TWIST_UPLOADS,
+			'public_path' => rtrim(_TWIST_PUBLIC_ROOT,'/'),
+			'app_path' => _TWIST_APP,
+			'packages_path' => _TWIST_PACKAGES,
+			'uploads_path' => _TWIST_UPLOADS,
 			'framework_path' => TWIST_FRAMEWORK,
 			'interfaces' => implode("\n\t\t",$arrInterfaces),
 			'routes' => '',
@@ -522,7 +522,7 @@ class Setup extends BaseController{
 		/**
 		 * Update the .htaccess file to be a TwistPHP htaccess file
 		 */
-		$dirHTaccessFile = sprintf('%s/.htaccess',TWIST_PUBLIC_ROOT);
+		$dirHTaccessFile = sprintf('%s/.htaccess',_TWIST_PUBLIC_ROOT);
 		file_put_contents($dirHTaccessFile,\Twist::View()->build(sprintf('%s/default-htaccess.tpl',TWIST_FRAMEWORK_VIEWS)));
 
 		return \Twist::View()->build('pages/finish.tpl');
