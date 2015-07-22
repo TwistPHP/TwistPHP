@@ -100,9 +100,9 @@ class Autoload{
 			if(file_exists($dirRequire)){
 				require_once $dirRequire;
 				self::$arrClassLoaded[$strRequest] = $dirRequire;
-			}else{
+			}/**else{
 				throw new \Exception(sprintf("TwistPHP AutoLoader: Unable to load the requested class '%s', please check to see if the file exists",$strRequest));
-			}
+			}*/
 		}
 	}
 }
