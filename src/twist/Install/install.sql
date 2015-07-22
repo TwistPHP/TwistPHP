@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`packages` (
 
 CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`users` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'User ID',
-  `email` char(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Unique email of user',
+  `email` char(250) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Unique email of user',
   `firstname` char(128) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Users first name',
   `surname` char(128) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'The last (given) name of the user',
   `password` char(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Hash of the users password using SHA512 algorithm',
@@ -152,7 +152,7 @@ CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`user_groups` (
 CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`user_group_members` (
   `user_id` int(11) NOT NULL,
   `group_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  UNIQUE KEY `user_group` (`user_id`,`group_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Link a user to a group';
 
 -- --------------------------------------------------------
@@ -164,8 +164,8 @@ CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`user_group_members` (
 CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`user_sessions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
-  `token` char(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `device` char(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` char(230) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `device` char(230) COLLATE utf8mb4_unicode_ci NOT NULL,
   `device_name` char(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `remote_addr` char(16) COLLATE utf8mb4_unicode_ci NOT NULL,
   `os` char(32) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -174,19 +174,6 @@ CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`user_sessions` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_device` (`user_id`,`device`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `structure_routes`
---
-
-CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`structure_routes` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `uri` char(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uri` (`uri`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
