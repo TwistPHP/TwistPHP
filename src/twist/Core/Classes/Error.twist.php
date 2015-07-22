@@ -671,7 +671,7 @@
 						}
 					}
 
-					file_put_contents(sprintf('%s/twist_error.log',TWIST_DOCUMENT_ROOT),$strLog);
+					file_put_contents(sprintf('%s/Logs/php-errors.log',TWIST_APP),$strLog);
 				}
 
 				if(TWIST_ERROR_SCREEN){

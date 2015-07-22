@@ -395,6 +395,7 @@ class Setup extends BaseController{
 		$resFile->recursiveCreate(sprintf('%sCache',$strApplicationPath));
 		$resFile->recursiveCreate(sprintf('%sConfig',$strApplicationPath));
 		$resFile->recursiveCreate(sprintf('%sControllers',$strApplicationPath));
+		$resFile->recursiveCreate(sprintf('%sLogs',$strApplicationPath));
 		$resFile->recursiveCreate(sprintf('%sModels',$strApplicationPath));
 		$resFile->recursiveCreate(sprintf('%sResources',$strApplicationPath));
 		$resFile->recursiveCreate(sprintf('%sResources/css',$strApplicationPath));
