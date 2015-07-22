@@ -671,7 +671,14 @@
 						}
 					}
 
-					file_put_contents(sprintf('%s/Logs/php-errors.log',TWIST_APP),$strLog);
+					if(defined('TWIST_APP')){
+
+						if(!is_dir(sprintf('%s/Logs',TWIST_APP))){
+							mkdir(sprintf('%s/Logs',TWIST_APP),0777,true);
+						}
+
+						file_put_contents(sprintf('%s/Logs/php-errors.log',TWIST_APP),$strLog);
+					}
 				}
 
 				if(TWIST_ERROR_SCREEN){
