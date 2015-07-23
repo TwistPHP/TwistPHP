@@ -139,7 +139,7 @@ class BaseControllerUser extends BaseController{
                 $resUser->commit();
 
                 \Twist::Session()->data('site-login_message','A temporary password has been emailed to you');
-                \Twist::redirect('./');
+                \Twist::redirect('./login');
             }
         }
 
