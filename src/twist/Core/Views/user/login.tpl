@@ -6,7 +6,7 @@
 	<input type="email" name="email" value="{post:email!==undefined?post:email:''}" placeholder="Email" maxlength="255" tabindex="1" autofocus>
 	<label>Password</label>
 	<input type="password" name="password" placeholder="Password" tabindex="2">
-	<p><a href="?forgotten">Forgotten your password?</a></p>
+	<p><a href="{uri:./forgotten-password}">Forgotten your password?</a></p>
 	<label>Keep me logged in</label>
 	<input type="checkbox" name="remember" value="1" tabindex="3">
 	<button type="submit" tabindex="4">Log In</button>

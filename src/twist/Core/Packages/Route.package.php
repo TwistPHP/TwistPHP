@@ -988,6 +988,8 @@ class Route extends BasePackage{
 		\Twist::define('MANAGER_ROUTE_URI',$strURI);
 		$this->controller($strURI,'Twist\Core\Controllers\Manager','_base.tpl');
 		$this->restrictSuperAdmin($strURI,rtrim(str_replace('%','',$strURI),'/').'/login');
+		$this->unrestrict( rtrim(str_replace('%','',$strURI),'/').'/authenticate' );
+		$this->unrestrict( rtrim(str_replace('%','',$strURI),'/').'/forgotten-password' );
 
 		//Allow the manager to still be accessible even in maintenance mode
 		$this->bypassMaintenanceMode($strURI);
