@@ -21,9 +21,11 @@
 	 *
 	 */
 
-	namespace Twist\Core\Classes;
+	namespace Twist\Core\Packages;
 
-	class BasePackage{
+	use Twist\Core\Classes\Instance;
+
+	class Base{
 
 		/**
 		 * Return the name of the package class
@@ -38,7 +40,7 @@
 		 * @return array
 		 */
 		protected function __info(){
-			return $this->framework() -> package() -> information($this->__calledClass());
+			return \Twist::framework() -> package() -> information($this->__calledClass());
 		}
 
 		/**
@@ -46,7 +48,7 @@
 		 * @return mixed
 		 */
 		protected function __version(){
-			$arrData = $this->framework() -> package() -> information($this->__calledClass());
+			$arrData = \Twist::framework() -> package() -> information($this->__calledClass());
 			return $arrData['version'];
 		}
 
@@ -55,7 +57,7 @@
 		 * @return mixed
 		 */
 		protected function __uri(){
-			$arrData = $this->framework() -> package() -> information($this->__calledClass());
+			$arrData = \Twist::framework() -> package() -> information($this->__calledClass());
 			return $arrData['uri'];
 		}
 
@@ -64,7 +66,7 @@
 		 * @return mixed
 		 */
 		protected function __path(){
-			$arrData = $this->framework() -> package() -> information($this->__calledClass());
+			$arrData = \Twist::framework() -> package() -> information($this->__calledClass());
 			return $arrData['path'];
 		}
 
@@ -73,7 +75,7 @@
 		 * @return mixed
 		 */
 		protected function __extensions(){
-			$arrData = $this->framework() -> package() -> information($this->__calledClass());
+			$arrData = \Twist::framework() -> package() -> information($this->__calledClass());
 			return $arrData['extensions'];
 		}
 

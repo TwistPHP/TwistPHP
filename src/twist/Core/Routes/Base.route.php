@@ -21,10 +21,10 @@
 	 *
 	 */
 
-	namespace Twist\Core\Classes;
+	namespace Twist\Core\Routes;
 	use Twist\Core\Packages\Route;
 
-	class BaseRoute extends Route{
+	class Base extends Route{
 
 		protected $strInterfaceKey = null;
 		protected $strBaseURI = null;

@@ -22,13 +22,12 @@
 	 */
 
 	namespace Twist\Core\Packages;
-	use \Twist\Core\Classes\BasePackage;
 
 	/**
 	 * Easy session management allowing the use of a user and site array of data. All stored using the PHP session.
 	 * Also extends the template package to allow the use of session vars in templates.
 	 */
-	class Cookie extends BasePackage{
+	class Cookie extends Base{
 
 		/**
 		 * Returns true if there is a cookie with this name.

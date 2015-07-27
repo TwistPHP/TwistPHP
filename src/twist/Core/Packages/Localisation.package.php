@@ -22,7 +22,6 @@
 	 */
 
 	namespace Twist\Core\Packages;
-	use \Twist\Core\Classes\BasePackage;
 
 	/**
 	 * Localisation of websites is becoming a necessity, the ability to list counties, currencies, timezones, languages and there relationship is essential.
@@ -31,7 +30,7 @@
 	 * Get the name of a language by its ISO language code.
 	 * Get the official currency by its ISO currency code.
 	 */
-	class Localisation extends BasePackage{
+	class Localisation extends Base{
 
 		protected $arrLanguages = array();
 		protected $arrLanguagesLocalised = array();

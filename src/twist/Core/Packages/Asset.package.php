@@ -22,13 +22,12 @@
 	 */
 
 	namespace Twist\Core\Packages;
-	use \Twist\Core\Classes\BasePackage;
 
 	/**
 	 * Asset management package that allows the addition and grouping of assets. Assets can be images, videos, files, links and other data that can be uploaded to a website/service.
 	 * @package Twist\Core\Packages
 	 */
-	class Asset extends BasePackage{
+	class Asset extends Base{
 
 		protected $resTemplate = null;
 		protected $strAssetDirectory = null;

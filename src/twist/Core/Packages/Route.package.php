@@ -22,15 +22,14 @@
  */
 
 namespace Twist\Core\Packages;
-use \Twist\Core\Classes\BaseControllerAJAX;
-use \Twist\Core\Classes\BasePackage;
+use \Twist\Core\Controllers\BaseAJAX;
 use \Twist\Core\Models\Route\Meta;
 
 /**
  * Simply setup a website with multiple pages in minutes. Create restricted areas with login pages and dynamic sections with wild carded URI's.
  * Just a couple lines of code and you will be up and running.Maintenance
  */
-class Route extends BasePackage{
+class Route extends Base{
 
 	protected $bl404 = true;
 
@@ -986,13 +985,7 @@ class Route extends BasePackage{
 	 */
 	public function manager($strURI = '/manager/%'){
 		\Twist::define('MANAGER_ROUTE_URI',$strURI);
-		$this->controller($strURI,'Twist\Core\Controllers\Manager','_base.tpl');
-		$this->restrictSuperAdmin($strURI,rtrim(str_replace('%','',$strURI),'/').'/login');
-		$this->unrestrict( rtrim(str_replace('%','',$strURI),'/').'/authenticate' );
-		$this->unrestrict( rtrim(str_replace('%','',$strURI),'/').'/forgotten-password' );
-
-		//Allow the manager to still be accessible even in maintenance mode
-		$this->bypassMaintenanceMode($strURI);
+		$this->package($strURI,'Twist\Core\Routes\Manager');
 	}
 
 	/*
@@ -1309,7 +1302,7 @@ class Route extends BasePackage{
 						$arrTags['response'] = $this->processController($arrRoute);
 					}catch(\Exception $resException){
 						//Response with the relevant error message
-						$resControllerAJAX = new BaseControllerAJAX();
+						$resControllerAJAX = new BaseAJAX();
 
 						$resControllerAJAX->_ajaxFail();
 						$resControllerAJAX->_ajaxMessage($resException->getMessage());

@@ -22,13 +22,13 @@
 	 */
 
 	namespace Twist\Core\Packages;
-	use \Twist\Core\Classes\BasePackage;
+
 	use \Twist\Core\Models\Form\Builder;
 
 	/**
 	 * Simply Form Builder Package
 	 */
-	class Form extends BasePackage{
+	class Form extends Base{
 
 		public function create(){
 			return new Builder();

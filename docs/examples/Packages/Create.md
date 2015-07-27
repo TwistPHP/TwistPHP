@@ -254,10 +254,10 @@ Create the admin controller that will allow the user to edit the settings for th
 ```php
 <?php
 
-	namespace Packages\Twitter\Controller;
-	use Twist\Core\Classes\BaseController;
+	namespace Packages\Twitter\Controllers;
+	use Twist\Core\Controllers\Base;
 
-	class Admin extends BaseController{
+	class Admin extends Base{
 
 		public function _default(){
 			return $this->view('settings.tpl');

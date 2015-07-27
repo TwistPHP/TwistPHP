@@ -22,7 +22,7 @@
  */
 
 namespace Twist\Core\Packages;
-use \Twist\Core\Classes\BasePackage;
+
 use \Twist\Core\Models\Validate\Validator;
 
 /**
@@ -30,7 +30,7 @@ use \Twist\Core\Models\Validate\Validator;
  * Also includes a testing suite that allows testing of an array of data providing detailed results, very useful for HTML form validation.
  * @package TwistPHP\Packages
  */
-class Validate extends BasePackage{
+class Validate extends Base{
 
 	/**
 	 * Get a validator object, form here you can define all your validator checks and then test your data against the checks

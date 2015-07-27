@@ -22,7 +22,7 @@
  */
 
 namespace Twist\Core\Packages;
-use \Twist\Core\Classes\BasePackage;
+
 use \Twist\Core\Models\User\User as UserObject;
 use \Twist\Core\Models\User\Auth;
 use \Twist\Core\Models\User\SessionHandler;
@@ -31,7 +31,7 @@ use \Twist\Core\Models\User\SessionHandler;
  * User management and control allowing users to register, login and be updated
  * Functionality to edit, reset passwords, send welcome emails with session management for multi and single devices
  */
-class User extends BasePackage{
+class User extends Base{
 
     public $strLoginUrl = null;
     public $strViewLocation;

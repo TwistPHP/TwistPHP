@@ -22,12 +22,11 @@
  */
 
 namespace Twist\Core\Packages;
-use \Twist\Core\Classes\BasePackage;
 
 /**
  * Execute bash command line commands on the server and get back nicely formatted result array.
  */
-class Command extends BasePackage{
+class Command extends Base{
 
 	/**
 	 * Pass in the bash command to be executed on the server, the result will be formatted as an array with overall status, return code and error messages in an error array.

@@ -22,13 +22,13 @@
  */
 
 namespace Twist\Core\Packages;
-use \Twist\Core\Classes\BasePackage;
+
 use \Twist\Core\Classes\Instance;
 
 /**
  * Bring HTML to life with conditional tags, allowing interaction with PHP without using PHP code. Include functionality of additional views in just a fue chars
  */
-class View extends BasePackage{
+class View extends Base{
 
 	protected $strInstanceKey = '';
 	protected $dirViews = '';

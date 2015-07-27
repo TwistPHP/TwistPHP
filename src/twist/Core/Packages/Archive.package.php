@@ -22,7 +22,7 @@
 	 */
 
 	namespace Twist\Core\Packages;
-	use \Twist\Core\Classes\BasePackage;
+
 	use \Twist\Core\Models\Archive\PclZip;
 	use \Twist\Core\Models\Archive\Native;
 
@@ -32,7 +32,7 @@
 	 * @package Twist\Core\Packages
 	 * @reference http://www.phpconcept.net/pclzip/ PclZip Package included as fallback option
 	 */
-	class Archive extends BasePackage{
+	class Archive extends Base{
 
 		var $resZip = null;
 		var $root = null;

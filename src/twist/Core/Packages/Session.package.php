@@ -22,7 +22,7 @@
 	 */
 
 	namespace Twist\Core\Packages;
-	use \Twist\Core\Classes\BasePackage;
+
 	use \Twist\Core\Models\Session\Files;
 	use \Twist\Core\Models\Session\Memcache;
 	use \Twist\Core\Models\Session\Mysql;
@@ -31,7 +31,7 @@
 	 * Easy session management allowing the use of a user and site array of data. All stored using the PHP session.
 	 * Also extends the template package to allow the use of session vars in templates.
 	 */
-	class Session extends BasePackage{
+	class Session extends Base{
 
 		protected $intSessionLife = 86400;
 		protected $blStarted = false;

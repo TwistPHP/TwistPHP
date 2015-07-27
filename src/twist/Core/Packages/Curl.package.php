@@ -22,12 +22,11 @@
 	 */
 
 	namespace Twist\Core\Packages;
-	use \Twist\Core\Classes\BasePackage;
 
 	/**
 	 * Simply make GET, POST, PUT and DELETE CURL requests, set custom headers, decode JSON responses. Transferring data via many different protocols including HTTP, HTTPS, FTP, FTPS, TELNET, LDAP and many more.
 	 */
-	class Curl extends BasePackage{
+	class Curl extends Base{
 
 		protected $blResponseJSON = false;
 		protected $blDisableUrlEncoding = false;
