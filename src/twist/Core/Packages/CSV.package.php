@@ -102,23 +102,40 @@
 		/**
 		 * Pass in the local file path to a CSV file, the CSV file will be parsed and turned into an array. By default the Delimiter, Enclosure and Escape are already set.
 		 *
-		 * @param $strLocalFile      Full path to the local CSV file that will be imported
-		 * @param $strLineDelimiter  Expected delimiter for each line used in the CSV
-		 * @param $intFieldDelimiter Expected delimiter for each field used in the CSV
-		 * @param $strEnclosure      Expected enclosure to be used in creation of CSV data
-		 * @param $strEscape         String used to escape the CSV data (Only used if mbstring is enabled in PHP)
+		 * @param $strLocalFile         Full path to the local CSV file that will be imported
+		 * @param $strLineDelimiter     Expected delimiter for each line used in the CSV
+		 * @param $intFieldDelimiter    Expected delimiter for each field used in the CSV
+		 * @param $strEnclosure         Expected enclosure to be used in creation of CSV data
+		 * @param $strEscape            String used to escape the CSV data (Only used if mbstring is enabled in PHP)
+		 * @param $blUseFirstRowAsKeys  If TRUE, the first row of data is returned as the indexes for the array data
+		 * @param $strEncoding          Output encoding (defaults to UTF-8)
+		 * @param $strLocale            Expected inout locale (default of en_GB.UTF-8 ensures multibyte strings are safe)
 		 *
 		 * @return array Returns Multi-dimensional array of the CSV data
 		 */
-		public function import( $strLocalFile, $strLineDelimiter = "\n", $intFieldDelimiter = ',', $strEnclosure = '"', $strEscape = '\\', $blUseFirstRowAsKeys = false, $strEncoding = 'UTF-8' ) {
+		public function import( $strLocalFile, $strLineDelimiter = "\n", $intFieldDelimiter = ',', $strEnclosure = '"', $strEscape = '\\', $blUseFirstRowAsKeys = false, $strEncoding = 'UTF-8', $strLocale = 'en_GB.UTF-8' ) {
 
 			$arrOut = $arrHeaders = array();
 
-			$strConvertedString = function_exists('mb_convert_encoding') ? mb_convert_encoding( file_get_contents( $strLocalFile ), $strEncoding ) : file_get_contents( $strLocalFile );
+			$strOriginalLocale = locale_get_default();
+			setlocale(LC_ALL, $strLocale);
 
-			foreach( str_getcsv( $strConvertedString, $strLineDelimiter ) as $intRow => $strRow ) {
+			$strImportedString = file_get_contents($strLocalFile);
 
-				$strRow = function_exists('mb_convert_encoding') ? mb_convert_encoding( $strRow, $strEncoding ) : $strRow;
+			if( function_exists('mb_strlen')
+					&& function_exists('mb_convert_encoding')
+					&& mb_strlen($strImportedString) !== strlen($strImportedString) ) {
+				$strImportedString = mb_convert_encoding($strImportedString, $strEncoding, mb_detect_encoding($strImportedString));
+			}
+
+			foreach( str_getcsv( $strImportedString, $strLineDelimiter ) as $intRow => $strRow ) {
+
+				if( function_exists('mb_strlen')
+						&& function_exists('mb_convert_encoding')
+						&& mb_strlen($strRow) !== strlen($strRow) ) {
+					$strRow = mb_convert_encoding($strRow, $strEncoding, mb_detect_encoding($strRow));
+				}
+
 				$arrRow = str_getcsv( $strRow, $intFieldDelimiter, $strEnclosure, $strEscape );
 
 				if( $blUseFirstRowAsKeys ) {
@@ -135,6 +152,8 @@
 					$arrOut[] = $arrRow;
 				}
 			}
+
+			setlocale(LC_ALL, $strOriginalLocale);
 
 			return $arrOut;
 		}
