@@ -85,7 +85,7 @@
 	TwistDefine('TWIST_UPLOADS',sprintf('%s/uploads/',rtrim(TWIST_PUBLIC_ROOT,'/')));
 
 	/** From this point onwards you now have to use Twist::define() rather than TwistDefine */
-	require_once sprintf('%s/Classes/Twist.twist.php',dirname(__FILE__));
+	require_once sprintf('%sTwist.php',TWIST_FRAMEWORK);
 
 	if(defined('TWIST_APP_CONFIG') && file_exists(sprintf('%sconfig.php',TWIST_APP_CONFIG))){
 		require_once sprintf('%sconfig.php',TWIST_APP_CONFIG);
