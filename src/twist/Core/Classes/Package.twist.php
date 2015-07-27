@@ -426,14 +426,14 @@
 
 			$arrParts = explode('\\',$strPackageRoute);
 
-			if($this->isInstalled(strtolower($arrParts[1]))){
+			if($arrParts[0] == 'Twist' || $this->isInstalled(strtolower($arrParts[1]))){
 
 				//Call the interface
 				$objInterface = new $strPackageRoute($arrParts[1]);
 				$objInterface->baseURI($strRegisteredURI);
 
 				//Set the view directory to the one in the package
-				$objInterface->setDirectory(sprintf('%s/%s/Views/',TWIST_PACKAGES,$arrParts[1]));
+				$objInterface->setDirectory( ($arrParts[0] == 'Twist') ? TWIST_FRAMEWORK_VIEWS : sprintf('%s/%s/Views/',TWIST_PACKAGES,$arrParts[1]));
 
 				if($mxdBaseView === false || is_null($mxdBaseView)){
 					$objInterface->baseViewIgnore();
