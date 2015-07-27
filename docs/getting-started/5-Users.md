@@ -7,16 +7,23 @@
 	```
 
 	* public_html
-		* templates
-			* common
-				* head.tpl
-			* components
-				* count.php
-				* fruit.php
-			* pages
-				* home.tpl
-				* **login.tpl**
-			* base.tpl
+	    * app
+            * Assets
+            * Cache
+            * Config
+            * Controllers
+				* Site.controller.php
+            * Logs
+            * Models
+            * Packages
+            * Resources
+            * Twist
+            * Views
+                * pages
+					* about.tpl
+                    * home.tpl
+                    * **login.tpl**
+                * base.tpl
 		* twist
 			* ...
 		* .htaccess

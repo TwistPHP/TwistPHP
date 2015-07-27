@@ -2,7 +2,7 @@
 
 A model is used to interact with and manipulate data.
 
-1. Our model in this example is used to get and set details about fruits. Create a file called *Fruits.model.php* in the */app/models* folder:
+1. Our model in this example is used to get and set details about fruits. Create a file called *Fruits.model.php* in the */app/Models* folder:
 	```php
 	<?php
 
@@ -14,24 +14,24 @@ A model is used to interact with and manipulate data.
 
 			// Create a table and some records for this example
 			private function init() {
-				$resFruitTable = Twist::Database() -> table( 'fruits' );
+				$resFruitTable = \Twist::Database() -> table( 'fruits' );
 				$resFruitTable -> addField( 'id', 'int', 11 );
 				$resFruitTable -> addField( 'name', 'char', '64' );
 				$resFruitTable -> addField( 'colour', 'char', '16' );
 				$resFruitTable -> setAutoIncrement( 'id' );
 				$resFruitTable -> create();
 				
-				$resFruit = Twist::Database() -> createRecord( 'fruits' );
+				$resFruit = \Twist::Database() -> createRecord( 'fruits' );
 				$resFruit -> set( 'name', 'Apple' );
 				$resFruit -> set( 'colour', 'green' );
 				$resFruit -> commit();
 		
-				$resFruit = Twist::Database() -> createRecord( 'fruits' );
+				$resFruit = \Twist::Database() -> createRecord( 'fruits' );
 				$resFruit -> set( 'name', 'Banana' );
 				$resFruit -> set( 'colour', 'yellow' );
 				$resFruit -> commit();
 		
-				$resFruit = Twist::Database() -> createRecord( 'fruits' );
+				$resFruit = \Twist::Database() -> createRecord( 'fruits' );
 				$resFruit -> set( 'name', 'Cherry' );
 				$resFruit -> set( 'colour', 'red' );
 				$resFruit -> commit();

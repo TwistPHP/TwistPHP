@@ -2,7 +2,7 @@
 
 Inspired by the simplicity of CodeIgniters templating parser, we managed to create a unique and powerful templating engine of our own.
 
-1. Create a file called *base.tpl* in your */app/views* folder and paste in the following:
+1. Create a file called *base.tpl* in your */app/Views* folder and paste in the following:
 	```html
 	<!DOCTYPE html>
 	<html xmlns="http://www.w3.org/1999/xhtml">
@@ -23,14 +23,16 @@ Inspired by the simplicity of CodeIgniters templating parser, we managed to crea
 
 	* public_html
 		* app
-			* ajax
-			* assets
-			* cache
-			* config
-			* controllers
-			* models
-			* resources
-			* views
+			* Assets
+			* Cache
+			* Config
+			* Controllers
+			* Logs
+			* Models
+			* Packages
+			* Resources
+			* Twist
+			* Views
 				* **base.tpl**
 		* twist
 			* ...
@@ -90,7 +92,7 @@ Inspired by the simplicity of CodeIgniters templating parser, we managed to crea
 
 The real power behind the template engine after pre-defined variables and content lies in including other files within your view to minimise HTML duplication.
 
-1. Copy the following HTML into a new *home.tpl* file in your */app/views* folder:
+1. Copy the following HTML into a new *home.tpl* file in your */app/Views* folder:
 	```html
 	<h1>Welcome to my site</h1>
 	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
@@ -99,14 +101,16 @@ The real power behind the template engine after pre-defined variables and conten
 	```
 	* public_html
 		* app
-			* ajax
-			* assets
-			* cache
-			* config
-			* controllers
-			* models
-			* resources
-			* views
+			* Assets
+            * Cache
+            * Config
+            * Controllers
+            * Logs
+            * Models
+            * Packages
+            * Resources
+            * Twist
+            * Views
 				* base.tpl
 				* **pages**
 					* **home.tpl**

@@ -2,13 +2,13 @@
 
 Routing requests through a controller allows you to create responses to URIs. By setting up various responses, you can create various pages for your site.
 
-1. Create a new page view, *about.tpl* in a your */app/views/pages* folder:
+1. Create a new page view, *about.tpl* in a your */app/Views/pages* folder:
 	```html
 	<h1>All about me...</h1>
 	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
 	```
 
-2. Create a new controller file in *app/controllers* called *Site.controller.php* that contains:
+2. Create a new controller file in *app/Controllers* called *Site.controller.php* that contains:
 	```php
 	<?php
 
@@ -16,12 +16,12 @@ Routing requests through a controller allows you to create responses to URIs. By
 		namespace App\Controllers;
 
 		// Use the BaseController namespace from TwistPHP
-		use Twist\Core\Classes\BaseController;
+		use Twist\Core\Controllers\Base;
 		// The Error class allows you to return various HTTP responses to the user
-		use Twist\Core\Classes\Error;
+		use Twist\Classes\Error;
 
 		// The controller must extend the BaseController from TwistPHP
-		class Site extends BaseController {
+		class Site extends Base {
 
 			// The _index (or _default) function returns when the request URI is simply /
 			public function _index() {
@@ -55,15 +55,17 @@ Routing requests through a controller allows you to create responses to URIs. By
 
 	* public_html
 		* app
-			* ajax
-			* assets
-			* cache
-			* config
-			* controllers
+		    * Assets
+            * Cache
+            * Config
+            * Controllers
 				* **Site.controller.php**
-			* models
-			* resources
-			* views
+            * Logs
+            * Models
+            * Packages
+            * Resources
+            * Twist
+            * Views
 				* base.tpl
 				* **pages**
 					* **home.tpl**
