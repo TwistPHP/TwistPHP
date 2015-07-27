@@ -74,8 +74,8 @@
 				self::define('TWIST_BASE_PATH',dirname($_SERVER['SCRIPT_FILENAME']));
 				self::define('TWIST_BASE_URI',$strBaseURI);
 
-				date_default_timezone_set( Twist::framework() -> setting('TIMEZONE') );
-				$strLocation = rtrim(Twist::framework() -> setting('SITE_BASE'),'/');
+				date_default_timezone_set( !is_null( Twist::framework() -> setting('TIMEZONE') ) ? Twist::framework() -> setting('TIMEZONE') : 'Europe/London' );
+				$strLocation = !is_null( Twist::framework() -> setting('SITE_BASE') ) ? rtrim(Twist::framework() -> setting('SITE_BASE'),'/') : '/';
 
 				self::$blRecordEvents = (self::framework() -> setting('DEVELOPMENT_MODE') && self::framework() -> setting('DEVELOPMENT_EVENT_RECORDER'));
 
