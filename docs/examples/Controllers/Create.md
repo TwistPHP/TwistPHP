@@ -4,13 +4,13 @@ TwistPHP uses controllers to help
 
 ## Create you controller file
 
-Create a controller file in your app/controllers directory called 'Test.controller.php'. Your controller will be need to be in the namespace 'Twist/Controllers' and must extent the twist base controller 'BaseController'.
+Create a controller file in your app/Controllers directory called 'Test.controller.php'. Your controller will be need to be in the namespace 'App\Controllers' and must extent the twist base controller 'Base'.
 
 ```php
-namespace Twist\Controllers;
-use Twist\Core\Classes\BaseController;
+namespace App\Controllers;
+use Twist\Core\Controllers\Base;
 
-class Test extends BaseController{
+class Test extends Base{
 
 	public function __construct(){
 
@@ -20,11 +20,11 @@ class Test extends BaseController{
 
 ### Adding a default response
 
-You can now add a default response so that if the controller is called you will get back some data. There are two main functions '_fallback' and '_default', both of which will always return a 404 page unless you override their default actions by creating the functions in your controller.
-Add the following '_default' function into your controller.
+You can now add a default/index response so that if the controller is called you will get back some data. There are two main functions '_fallback' and '_index', both of which will always return a 404 page unless you override their default actions by creating the functions in your controller.
+Add the following '_index' function into your controller.
 
 ```php
-public function _default(){
+public function _index(){
 	return 'Hello World!';
 }
 ```
@@ -50,7 +50,7 @@ public function contact(){
 }
 ```
 
-We will also need to create the view that will be output from the contact function. Create the view file in your app/views directory called 'contact.tpl' and paste in the below HTML.
+We will also need to create the view that will be output from the contact function. Create the view file in your app/Views directory called 'contact.tpl' and paste in the below HTML.
 
 ```html
 <h1>Contact</h1>
@@ -70,13 +70,12 @@ Navigate to the new contact page of your website in your browser '/contact', all
 ### Capturing the POST data
 
 To capture the POST data in the controller, create a new function called 'postContact' the function will only be called when you are on the '/contact' page with POST data.
-Processing the POST data can be done using a model, which can be created in the app/model directory.
+Processing the POST data can be done using a model, which can be created in the app/Models directory.
 
 ```php
-namespace Twist\Models;
-use Twist\Core\Classes\BaseModel;
+namespace App\Models;
 
-class Contact extends BaseModel{
+class Contact{
 
 	public function send($strName,$strEmailAddress,$strMessage){
 		
@@ -95,7 +94,7 @@ Add the below 'postContact' function into your controller.
 ```php
 public function postContact(){
 
-	$resContact = $this->_model('Contact');
+    $resContact = new \App\Models\Contact();
 	$resContact->send($_POST['name'],$_POST['email'],$_POST['message']);
 	
 	return '<h1>Thank you for message!</h1>';
