@@ -58,7 +58,7 @@
 	Autoload::init(realpath(sprintf('%s/../../',dirname(__FILE__))));
 
 	$arrShadowCoreInfo = json_decode(file_get_contents(sprintf('%s/../info.json',dirname(__FILE__))),true);
-	TwistDefine::define('TWIST_VERSION',$arrShadowCoreInfo['version']);
+	TwistDefine('TWIST_VERSION',$arrShadowCoreInfo['version']);
 
 	//Get the base location of the site, based on this config file (should be in the doc_root)
 	TwistDefine('TWIST_FRAMEWORK',realpath(sprintf('%s/../',dirname(__FILE__))).'/');

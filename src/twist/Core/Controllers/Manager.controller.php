@@ -22,9 +22,8 @@
  */
 
 namespace Twist\Core\Controllers;
-use Twist\Core\Classes\BaseControllerUser;
 
-class Manager extends BaseControllerUser{
+class Manager extends BaseUser{
 
 	public function __construct(){
 		\Twist::Route()->setDirectory(sprintf('%smanager/',TWIST_FRAMEWORK_VIEWS));

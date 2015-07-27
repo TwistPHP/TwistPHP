@@ -22,9 +22,8 @@
  */
 
 namespace Twist\Core\Controllers;
-use Twist\Core\Classes\BaseController;
 
-class Upload extends BaseController{
+class Upload extends Base{
 
 	public function _construct(){
 		$this->resRoute->debugMode(false);

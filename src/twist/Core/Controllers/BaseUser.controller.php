@@ -21,10 +21,10 @@
  *
  */
 
-namespace Twist\Core\Classes;
+namespace Twist\Core\Controllers;
 use \Twist\Core\Models\User\Auth;
 
-class BaseControllerUser extends BaseController{
+class BaseUser extends Base{
 
 	/**
 	 * @var \Twist\Core\Packages\User

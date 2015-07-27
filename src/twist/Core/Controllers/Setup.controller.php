@@ -22,13 +22,12 @@
  */
 
 namespace Twist\Core\Controllers;
-use Twist\Core\Classes\BaseController;
 
 /**
  * Setup controller that provides the TwistPHP setup wizard.
  * @package Twist\Core\Controllers
  */
-class Setup extends BaseController{
+class Setup extends Base{
 
 	/**
 	 * @alias welcome

@@ -21,9 +21,9 @@
  *
  */
 
-namespace Twist\Core\Classes;
+namespace Twist\Core\Controllers;
 
-class BaseControllerAJAX extends BaseController{
+class BaseAJAX extends Base{
 
 	protected $blAjaxResponse = true;
 	protected $strAjaxResponseMessage = '';

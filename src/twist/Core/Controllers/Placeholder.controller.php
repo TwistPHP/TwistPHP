@@ -22,13 +22,12 @@
  */
 
 namespace Twist\Core\Controllers;
-use Twist\Core\Classes\BaseController;
 
 /**
  * Placeholder image generator and serves as an image in the browser.
  * @package Twist\Core\Controllers
  */
-class Placeholder extends BaseController{
+class Placeholder extends Base{
 
 	/**
 	 * Output a placeholder image, this route uses the following GET parameters if set:
