@@ -425,7 +425,7 @@ class File extends Base{
 
 				if($arrFileData['error'] == 0){
 
-					$intMegabytes = str_replace('M','',$this->framework()->setting('FILE_MAX_UPLOAD_SIZE'));
+					$intMegabytes = str_replace('M','',\Twist::framework()->setting('FILE_MAX_UPLOAD_SIZE'));
 					$intMaxSizeInBytes = (($intMegabytes*1024)*1024);
 
 					if($arrFileData['size'] <= $intMaxSizeInBytes){
@@ -445,7 +445,7 @@ class File extends Base{
 						$arrOut['file']['path'] = sprintf('%s/%s',$strUploadFolder,$strFile);
 						$arrOut['status'] = true;
 					}else{
-						$arrOut['error'] = sprintf("Uploaded file size to large, max file size of %s",$this->framework()->setting('FILE_MAX_UPLOAD_SIZE'));
+						$arrOut['error'] = sprintf("Uploaded file size to large, max file size of %s",\Twist::framework()->setting('FILE_MAX_UPLOAD_SIZE'));
 					}
 				}else{
 					$arrOut['error'] = $_FILES[$strFileKey]["error"];

@@ -541,7 +541,7 @@ class Route extends Base{
 			$strURI = str_replace('%','',$strURI);
 		}
 
-		$strTrailingSlash = ($this->framework()->setting('SITE_TAILING_SLASH')) ? '/' : '';
+		$strTrailingSlash = (\Twist::framework()->setting('SITE_TAILING_SLASH')) ? '/' : '';
 		$strURI = rtrim($strURI,'/').$strTrailingSlash;
 
 		$regxMatchURI = null;
@@ -627,8 +627,8 @@ class Route extends Base{
 
 				$arrEachRoute['registered_uri'] = sprintf("%s%s",$this->baseURI(),str_replace('//','/',$strURI));
 				$arrEachRoute['base_uri'] = $this->baseURI();
-				$arrEachRoute['base_url'] = sprintf("%s://%s%s",$this->framework()->setting('SITE_PROTOCOL'),$this->framework()->setting('SITE_HOST'),$this->baseURI());
-				$arrEachRoute['url'] = sprintf("%s://%s%s%s",$this->framework()->setting('SITE_PROTOCOL'),$this->framework()->setting('SITE_HOST'),$this->baseURI(),str_replace('//','/',$strURI));
+				$arrEachRoute['base_url'] = sprintf("%s://%s%s",\Twist::framework()->setting('SITE_PROTOCOL'),\Twist::framework()->setting('SITE_HOST'),$this->baseURI());
+				$arrEachRoute['url'] = sprintf("%s://%s%s%s",\Twist::framework()->setting('SITE_PROTOCOL'),\Twist::framework()->setting('SITE_HOST'),$this->baseURI(),str_replace('//','/',$strURI));
 				$arrEachRoute['cache_key'] = str_replace('/','+',trim(sprintf("%s%s",$this->baseURI(),str_replace('//','/',$strURI)),'/'));
 
 				$arrRoutesDataRef[$strURI] = $arrEachRoute;
@@ -743,10 +743,10 @@ class Route extends Base{
 			$strPageCacheKey = str_replace('/','+',trim($arrPartsURI[0],'/'));
 			$arrPartsURI[0] = (!in_array($this->strBaseURI,array(null,'/'))) ? str_replace($this->strBaseURI,'',$arrPartsURI[0]) : $arrPartsURI[0];
 
-			$strTrailingSlash = ($this->framework()->setting('SITE_TAILING_SLASH')) ? '/' : '';
+			$strTrailingSlash = (\Twist::framework()->setting('SITE_TAILING_SLASH')) ? '/' : '';
 
 			//Get the current URI to be used, added a URI key as teh regx version has 2 different variations a real URI and a param uri (the key)
-			$strCurrentURI = $strCurrentURIKey = rtrim( str_replace(rtrim($this->framework()->setting('SITE_BASE'),'/'),'',$arrPartsURI[0]), '/').$strTrailingSlash;
+			$strCurrentURI = $strCurrentURIKey = rtrim( str_replace(rtrim(\Twist::framework()->setting('SITE_BASE'),'/'),'',$arrPartsURI[0]), '/').$strTrailingSlash;
 
 			$strRouteDynamic = '';
 			$arrRouteParts = array();
@@ -820,7 +820,7 @@ class Route extends Base{
 
 				$arrOut['cache_key'] = $strPageCacheKey;
 
-				$arrOut['title'] = $this->framework() -> setting('SITE_NAME');
+				$arrOut['title'] = \Twist::framework()->setting('SITE_NAME');
 				$arrOut['uri'] = sprintf('%s/%s',rtrim($strCurrentURI,'/'),ltrim($strRouteDynamic,'/'));
 				$arrOut['vars'] = $arrUriParameters;
 				$arrOut['dynamic'] = $strRouteDynamic;
@@ -1183,8 +1183,8 @@ class Route extends Base{
 
 					$arrTags['query_string'] = http_build_query( $_GET );
 
-					$this->framework()->package()->extend('View', 'meta', $this->resMeta->getTags());
-					$this->framework()->package()->extend('View', 'route', $arrTags);
+					\Twist::framework()->package()->extend('View', 'meta', $this->resMeta->getTags());
+					\Twist::framework()->package()->extend('View', 'route', $arrTags);
 
 					\Twist::recordEvent('Route found');
 
@@ -1203,8 +1203,8 @@ class Route extends Base{
 						echo $arrTags['response'];
 					}else{
 						//Update the Meta and Route tags to be used in the base template
-						$this->framework()->package()->extend('View', 'meta', $this->resMeta->getTags());
-						$this->framework()->package()->extend('View', 'route', $arrTags);
+						\Twist::framework()->package()->extend('View', 'meta', $this->resMeta->getTags());
+						\Twist::framework()->package()->extend('View', 'route', $arrTags);
 
 						if($this->blIgnoreBaseView){
 							$strPageOut = $arrTags['response'];

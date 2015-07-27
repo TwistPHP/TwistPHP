@@ -21,7 +21,8 @@
 	 *
 	 */
 
-	namespace Twist\Core\Classes;
+	namespace Twist\Core\Models;
+	use Twist\Core\Classes\Shutdown;
 
 	/**
 	 * Register Shutdown and Event handlers, also handlers can be canceled if required

@@ -20,9 +20,18 @@
 	 * @link       https://twistphp.com
 	 *
 	 */
-	namespace Twist\Core\Classes;
+	namespace Twist\Core\Controllers;
 
-	final class Framework{
+
+	use Twist\Core\Classes\Upgrade;
+
+	use Twist\Core\Models\Package;
+	use Twist\Core\Models\Debug;
+	use Twist\Core\Models\Register;
+	use Twist\Core\Models\Settings;
+	use Twist\Core\Models\Tools;
+
+	class Framework{
 
 		private $objDebug = null;
 		private $objPackage = null;
@@ -39,7 +48,7 @@
 
 		/**
 		 * Returns and object of the debug tool, this can be used to process the debug window.
-		 * @return null|\Twist\Core\Classes\Debug
+		 * @return null|\Twist\Core\Models\Debug
 		 */
 		public function debug(){
 			$this->objDebug = (is_null($this->objDebug)) ? new Debug() : $this->objDebug;
@@ -47,8 +56,8 @@
 		}
 
 		/**
-		 * An object with usfull functions to install, uninstall and work with Twist and third party packages.
-		 * @return null|\Twist\Core\Classes\Package
+		 * An object with useful functions to install, uninstall and work with Twist and third party packages.
+		 * @return null|\Twist\Core\Models\Package
 		 */
 		public function package(){
 			$this->objPackage = (is_null($this->objPackage)) ? new Package() : $this->objPackage;
@@ -57,7 +66,7 @@
 
 		/**
 		 * An object to register and manager functions such as Shutdown handlers and Error Handlers.
-		 * @return null|\Twist\Core\Classes\Register
+		 * @return null|\Twist\Core\Models\Register
 		 */
 		public function register(){
 			$this->objRegister = (is_null($this->objRegister)) ? new Register() : $this->objRegister;
@@ -85,7 +94,7 @@
 
 		/**
 		 * Returns the settings object where settings can be added/edited/reset and installed.
-		 * @return null|\Twist\Core\Classes\Settings
+		 * @return null|\Twist\Core\Models\Settings
 		 */
 		public function settings(){
 			$this->objSettings = (is_null($this->objSettings)) ? new Settings() : $this->objSettings;
@@ -94,7 +103,7 @@
 
 		/**
 		 * Return an object of useful tools that don't really fit anywhere else in the framework at this point.
-		 * @return null|\Twist\Core\Classes\Tools
+		 * @return null|\Twist\Core\Models\Tools
 		 */
 		public function tools(){
 			$this->objTools = (is_null($this->objTools)) ? new Tools() : $this->objTools;

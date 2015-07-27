@@ -35,7 +35,7 @@
 		 * Get the default time source method if required
 		 */
 		public function __construct(){
-			$this->strTimeSource = $this->framework()->setting('DATETIME_SOURCE');
+			$this->strTimeSource = \Twist::framework()->setting('DATETIME_SOURCE');
 		}
 
 		/**

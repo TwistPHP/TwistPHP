@@ -116,7 +116,7 @@ class View extends Base{
 				$arrViewData['html_hash'] = \Twist::File()->hash($dirFullViewPath,'md5');
 				$arrViewData['tags'] = $this->getTags($arrViewData['html_raw'],false);
 
-				\Twist::Cache('twist/packages/views')->write($strCacheKey,$arrViewData,$this->framework()->setting('VIEW_PRE_PROCESS_CACHE'));
+				\Twist::Cache('twist/packages/views')->write($strCacheKey,$arrViewData,\Twist::framework()->setting('VIEW_PRE_PROCESS_CACHE'));
 			}
 
 			foreach($arrViewData['tags'] as $strEachTag){
@@ -865,7 +865,7 @@ class View extends Base{
 					}else{
 
 						if(strstr($strReference,'/')){
-							$mxdTempData = $this->framework()->tools()->arrayParse($strReference,$arrExtensions[$strType]);
+							$mxdTempData = \Twist::framework()->tools()->arrayParse($strReference,$arrExtensions[$strType]);
 							$strReplacementData = (is_array($mxdTempData) && $blReturnArray == false) ? print_r($mxdTempData,true) : $mxdTempData;
 						}else{
 							if(array_key_exists($strReference,$arrExtensions[$strType])){
@@ -905,7 +905,7 @@ class View extends Base{
 
 			if(strstr($strKey,'/')){
 
-				$mxdTempData = $this -> framework() -> tools() -> arrayParse($strKey,$arrData);
+				$mxdTempData = \Twist::framework()->tools()->arrayParse($strKey,$arrData);
 
 				$arrResponse['status'] = (is_null($mxdTempData)) ? false : true;
 				$arrResponse['return'] = (is_array($mxdTempData) && $blReturnArray == false) ? print_r($mxdTempData,true) : $mxdTempData;

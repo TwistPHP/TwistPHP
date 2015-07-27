@@ -21,7 +21,7 @@
  *
  */
 
-namespace Twist\Core\Classes;
+namespace Twist\Core\Models;
 use Twist\Core\Classes\Error;
 
 /**

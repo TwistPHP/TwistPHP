@@ -21,7 +21,7 @@
 	 *
 	 */
 	
-	namespace Twist\Core\Classes;
+	namespace Twist\Core\Models;
 	
 	/**
 	* Get, Set and update all the framework settings. Manage the update of all default tables created by packages and modules.

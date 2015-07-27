@@ -48,7 +48,7 @@
 		 */
 		public function __construct(){
 
-			$this->strHandler = \Twist::framework() -> setting('ARCHIVE_HANDLER');
+			$this->strHandler = \Twist::framework()->setting('ARCHIVE_HANDLER');
 			switch($this->strHandler){
 
 				case'pclzip';

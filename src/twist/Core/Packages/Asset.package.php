@@ -51,12 +51,12 @@
 			}
 
 			//Pre-cache the types and groups ready to be used
-			$this->arrTypes = $this->framework()->tools()->arrayReindex(\Twist::Database()->getAll(sprintf('%sasset_types',TWIST_DATABASE_TABLE_PREFIX)),'id');
-			$this->arrTypeSlugs = $this->framework()->tools()->arrayReindex($this->arrTypes,'slug');
+			$this->arrTypes = \Twist::framework()->tools()->arrayReindex(\Twist::Database()->getAll(sprintf('%sasset_types',TWIST_DATABASE_TABLE_PREFIX)),'id');
+			$this->arrTypeSlugs = \Twist::framework()->tools()->arrayReindex($this->arrTypes,'slug');
 
-			$this->arrGroups = $this->framework()->tools()->arrayReindex(\Twist::Database()->getAll(sprintf('%sasset_groups',TWIST_DATABASE_TABLE_PREFIX)),'id');
-			$this->arrGroupSlugs = $this->framework()->tools()->arrayReindex($this->arrGroups,'slug');
-			$this->arrGroupTree = $this->framework()->tools()->arrayRelationalTree($this->arrGroups,'id','parent');
+			$this->arrGroups = \Twist::framework()->tools()->arrayReindex(\Twist::Database()->getAll(sprintf('%sasset_groups',TWIST_DATABASE_TABLE_PREFIX)),'id');
+			$this->arrGroupSlugs = \Twist::framework()->tools()->arrayReindex($this->arrGroups,'slug');
+			$this->arrGroupTree = \Twist::framework()->tools()->arrayRelationalTree($this->arrGroups,'id','parent');
 		}
 
 		/**

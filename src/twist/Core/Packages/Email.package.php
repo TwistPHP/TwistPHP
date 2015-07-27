@@ -44,7 +44,7 @@ class Email extends Base{
 
 	public function __construct(){
 
-		$this->strProtocol = $this->framework()->setting('EMAIL_PROTOCOL');
+		$this->strProtocol = \Twist::framework()->setting('EMAIL_PROTOCOL');
 
 		switch($this->strProtocol){
 
@@ -52,10 +52,10 @@ class Email extends Base{
 				$this->resProtocol = new SMTP();
 
 				$this->arrSettingsSMTP = array(
-					'host' => $this->framework()->setting('EMAIL_SMTP_HOST'),
-					'port' => $this->framework()->setting('EMAIL_SMTP_PORT'),
-					'username' => $this->framework()->setting('EMAIL_SMTP_USERNAME'),
-					'password' => $this->framework()->setting('EMAIL_SMTP_PASSWORD')
+					'host' => \Twist::framework()->setting('EMAIL_SMTP_HOST'),
+					'port' => \Twist::framework()->setting('EMAIL_SMTP_PORT'),
+					'username' => \Twist::framework()->setting('EMAIL_SMTP_USERNAME'),
+					'password' => \Twist::framework()->setting('EMAIL_SMTP_PASSWORD')
 				);
 
 				break;
@@ -91,8 +91,8 @@ class Email extends Base{
 		$this->arrEmailData = array();
 		$this->arrEmailData['subject'] = '(no subject)';
 
-		$this->blMultipartEncoding = $this->framework() -> setting('EMAIL_MULTIPART_ENCODING');
-		$this->strCharEncoding = $this->framework() -> setting('EMAIL_CHAR_ENCODING');
+		$this->blMultipartEncoding = \Twist::framework()->setting('EMAIL_MULTIPART_ENCODING');
+		$this->strCharEncoding = \Twist::framework()->setting('EMAIL_CHAR_ENCODING');
 	}
 
 	/**

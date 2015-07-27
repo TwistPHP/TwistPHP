@@ -22,7 +22,7 @@
 	 */
 
 	use Twist\Core\Classes\Instance;
-	use Twist\Core\Classes\Framework;
+	use Twist\Core\Controllers\Framework;
 	use Twist\Core\Packages as Packages;
 
 	class Twist{
@@ -325,7 +325,7 @@
 
 		/**
 		 * Returns the core framework classes, these are not packages but contain some useful tools such as settings.
-		 * @return \Twist\Core\Classes\Framework
+		 * @return \Twist\Core\Controllers\Framework
 		 */
 		public static function framework(){
 

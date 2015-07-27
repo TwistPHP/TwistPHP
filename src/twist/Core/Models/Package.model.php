@@ -21,7 +21,8 @@
 	 *
 	 */
 
-	namespace Twist\Core\Classes;
+	namespace Twist\Core\Models;
+	use Twist\Core\Classes\Instance;
 
 	/**
 	 * Handle all package/package related enquiries, for instance if you want to know if a package is installed or what version it is.

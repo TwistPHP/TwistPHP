@@ -21,9 +21,9 @@
 	 *
 	 */
 
-	namespace Twist\Core\Classes;
+	namespace Twist\Core\Models;
 
-	final class Tools {
+	final class Tools{
 
 		/**
 		 * Similar to print_r but corrects issues such as booleans, also give more useful information about the data

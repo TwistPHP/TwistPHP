@@ -23,8 +23,6 @@
 
 	namespace Twist\Core\Packages;
 
-	use Twist\Core\Classes\Instance;
-
 	class Base{
 
 		/**
@@ -77,18 +75,5 @@
 		protected function __extensions(){
 			$arrData = \Twist::framework() -> package() -> information($this->__calledClass());
 			return $arrData['extensions'];
-		}
-
-		/**
-		 * Short link to the framework class itself
-		 * @deprecated
-		 * @return Framework
-		 */
-		protected function framework(){
-
-			//Only required allow IDE auto-complete of code, otherwise only return Instance::retrieveObject('CoreFramework') would be fine
-			$resTwistModule = (!Instance::isObject('CoreFramework')) ? new Framework() : Instance::retrieveObject('CoreFramework');
-			Instance::storeObject('CoreFramework',$resTwistModule);
-			return $resTwistModule;
 		}
 	}
