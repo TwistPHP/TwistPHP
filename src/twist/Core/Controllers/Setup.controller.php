@@ -356,20 +356,7 @@ class Setup extends Base{
 			header('Location: user');
 		}
 
-		$arrTags = array('interfaces' => '');
-		$arrInterfaces = \Twist::framework()->upgrade()->getInterfaces();
-
-		foreach($arrInterfaces as $arrEachInterface){
-			if($arrEachInterface['installed'] == '0' && $arrEachInterface['licenced'] == '0'){
-
-				$arrEachInterface['checked'] = ($arrEachInterface['name'] === 'Manager' && $arrEachInterface['repository'] === 'twistphp') ? ' checked' : '';
-				$arrEachInterface['recommended'] = ($arrEachInterface['name'] === 'Manager' && $arrEachInterface['repository'] === 'twistphp') ? ' (Recommended)' : '';
-
-				$arrTags['interfaces'] .= \Twist::View()->build('components/interface-each.tpl',$arrEachInterface);
-			}
-		}
-
-		return \Twist::View()->build('pages/interfaces.tpl',$arrTags);
+		//return \Twist::View()->build('pages/interfaces.tpl',$arrTags);
 	}
 
 	/**
@@ -446,21 +433,11 @@ class Setup extends Base{
 			//Disable file config as we are using database
 			\Twist::framework()->settings()->fileConfigOverride(false);
 
-			\Twist::framework()->upgrade()->databaseSettings(
-				$arrSession['database']['details']['protocol'],
-				$arrSession['database']['details']['host'],
-				$arrSession['database']['details']['name'],
-				$arrSession['database']['details']['username'],
-				$arrSession['database']['details']['password'],
-				$arrSession['database']['details']['table_prefix']
-			);
-
-			//Install the core tables - Database Only
-			\Twist::framework()->upgrade()->installCoreTables();
+			$this->importSQL(sprintf('%sinstall.sql',TWIST_FRAMEWORK_INSTALL));
 		}
 
 		//Update all the core settings, add to a file when no Database is being used
-		\Twist::framework()->upgrade()->updateCoreSettings();
+		$this->importSettings(sprintf('%ssettings.json',TWIST_FRAMEWORK_INSTALL));
 
 		//Add new settings to the chosen settings storage method
 		\Twist::framework()->setting('SITE_NAME',$arrSession['settings']['details']['site_name']);
@@ -485,16 +462,6 @@ class Setup extends Base{
 
 		\Twist::Session()->remove('twist-setup');
 
-		$arrInterfaces = array();
-
-		//Install any interfaces that has been selected at this point
-		foreach($_POST as $strKey => $arrValue){
-			if(strstr($strKey,'interface-') && array_key_exists('install',$arrValue)){
-				\Twist::framework()->upgrade()->updateInterface($arrValue['repo'],$arrValue['package'],$arrValue['package-version']);
-				$arrInterfaces[] = sprintf("Twist::Route() -> ui('/%s/%%','%s');",strtolower($arrValue['package']),$arrValue['package']);
-			}
-		}
-
 		/**
 		 * Update the index.php file to be a TwistPHP index file
 		 */
@@ -511,7 +478,7 @@ class Setup extends Base{
 			'packages_path' => _TWIST_PACKAGES,
 			'uploads_path' => _TWIST_UPLOADS,
 			'framework_path' => TWIST_FRAMEWORK,
-			'interfaces' => implode("\n\t\t",$arrInterfaces),
+			'interfaces' => '',
 			'routes' => '',
 			'serve' => 'Twist::Route() -> serve();'
 		);
@@ -525,5 +492,71 @@ class Setup extends Base{
 		file_put_contents($dirHTaccessFile,\Twist::View()->build(sprintf('%s/default-htaccess.tpl',TWIST_FRAMEWORK_VIEWS)));
 
 		return \Twist::View()->build('pages/finish.tpl');
+	}
+
+	/**
+	 * Install any DB and tables required by the framework
+	 * @param $dirInstallSQL
+	 */
+	protected function importSQL($dirInstallSQL){
+
+		if(file_exists($dirInstallSQL)) {
+
+			//Create a temp file with all the required table pre-fixes
+			$dirImportFile = tempnam(sys_get_temp_dir(), 'twist-import');
+
+			$blMBSupport = \Twist::Database()->mbSupport();
+
+			file_put_contents($dirImportFile, str_replace(
+				array(
+					'/*TWIST_DATABASE_TABLE_PREFIX*/`',
+					'/*TWIST_DATABASE_NAME*/',
+					($blMBSupport) ? 'utf8' : 'utf8mb4' //Only replace utf8mb4 with utf8 when there is no multi-byte support
+					),
+				array(
+					sprintf('`%s', TWIST_DATABASE_TABLE_PREFIX),
+					TWIST_DATABASE_NAME,
+					'utf8'
+				),
+				file_get_contents($dirInstallSQL)
+			));
+
+			//Import the SQL form the temp file
+			\Twist::Database()->importSQL($dirImportFile);
+
+			//Remove the temp file form the system
+			unlink($dirImportFile);
+		}
+	}
+
+	/**
+	 * Install any framework settings that are required by the core.
+	 * @param $dirSettingsJSON
+	 * @throws \Exception
+	 */
+	protected function importSettings($dirSettingsJSON){
+
+		if(file_exists($dirSettingsJSON)){
+
+			$arrSettings = json_decode(file_get_contents($dirSettingsJSON),true);
+			if(count($arrSettings)){
+
+				foreach($arrSettings as $strKey => $arrOptions){
+
+					\Twist::framework()->settings()->install(
+						'core',
+						'core',
+						$strKey,
+						$arrOptions['default'],
+						$arrOptions['title'],
+						$arrOptions['description'],
+						$arrOptions['default'],
+						$arrOptions['type'],
+						$arrOptions['options'],
+						$arrOptions['null']
+					);
+				}
+			}
+		}
 	}
 }

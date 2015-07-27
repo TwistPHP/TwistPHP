@@ -22,9 +22,6 @@
 	 */
 	namespace Twist\Core\Controllers;
 
-
-	use Twist\Core\Classes\Upgrade;
-
 	use Twist\Core\Models\Package;
 	use Twist\Core\Models\Debug;
 	use Twist\Core\Models\Register;
@@ -38,7 +35,6 @@
 		private $objRegister = null;
 		private $objSettings = null;
 		private $objTools = null;
-		private $objUpgrade = null;
 
 		public function __construct(){ }
 
@@ -108,16 +104,6 @@
 		public function tools(){
 			$this->objTools = (is_null($this->objTools)) ? new Tools() : $this->objTools;
 			return $this->objTools;
-		}
-
-		/**
-		 * The old framework upgrade object, this will be removed soon (need to extract some functions first)
-		 * @deprecated
-		 * @return null|\Twist\Core\Classes\Upgrade
-		 */
-		public function upgrade(){
-			$this->objUpgrade = (is_null($this->objUpgrade)) ? new Upgrade() : $this->objUpgrade;
-			return $this->objUpgrade;
 		}
 
 		/**
