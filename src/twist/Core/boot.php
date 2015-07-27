@@ -53,8 +53,8 @@
 	//TWIST_APP - Can be defined in your index file
 	TwistDefine('TWIST_APP',sprintf('%s/app/',rtrim(TWIST_PUBLIC_ROOT,'/')));
 
-	require_once sprintf('%s/Classes/Autoload.twist.php',dirname(__FILE__));
-	use \Twist\Core\Classes\Autoload;
+	require_once sprintf('%s/../Classes/Autoload.class.php',dirname(__FILE__));
+	use \Twist\Classes\Autoload;
 	Autoload::init(realpath(sprintf('%s/../../',dirname(__FILE__))));
 
 	$arrShadowCoreInfo = json_decode(file_get_contents(sprintf('%s/../info.json',dirname(__FILE__))),true);
@@ -63,7 +63,7 @@
 	//Get the base location of the site, based on this config file (should be in the doc_root)
 	TwistDefine('TWIST_FRAMEWORK',realpath(sprintf('%s/../',dirname(__FILE__))).'/');
 	TwistDefine('TWIST_FRAMEWORK_CONFIG',sprintf('%sConfig/',TWIST_FRAMEWORK));
-	TwistDefine('TWIST_FRAMEWORK_CLASSES',sprintf('%sCore/Classes/',TWIST_FRAMEWORK));
+	TwistDefine('TWIST_FRAMEWORK_CLASSES',sprintf('%sClasses/',TWIST_FRAMEWORK));
 	TwistDefine('TWIST_FRAMEWORK_MODELS',sprintf('%sCore/Models/',TWIST_FRAMEWORK));
 	TwistDefine('TWIST_FRAMEWORK_PACKAGES',sprintf('%sCore/Packages/',TWIST_FRAMEWORK));
 	TwistDefine('TWIST_FRAMEWORK_VIEWS',sprintf('%sCore/Views/',TWIST_FRAMEWORK));

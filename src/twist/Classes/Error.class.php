@@ -21,9 +21,9 @@
 	 *
 	 */
 
-	namespace Twist\Core\Classes;
+	namespace Twist\Classes;
 
-	final class Error{
+	class Error{
 
 		public static $arrErrorLog = array();
 
@@ -307,7 +307,7 @@
 
 				//throw new Exception($arrLastError['message']);
 				//A fatal error has occured, throw and exception instead.
-				$objException = new TwistException($arrLastError['message'],1,$arrLastError['file'],$arrLastError['line']);
+				$objException = new Exception($arrLastError['message'],1,$arrLastError['file'],$arrLastError['line']);
 
 				self::handleException($objException,$arrLastError);
 			}
@@ -658,12 +658,12 @@
 		 */
 		public static function outputLog(){
 
-			if(count(Error::$arrErrorLog)){
+			if(count(self::$arrErrorLog)){
 
 				if(TWIST_ERROR_LOG){
 
 					$strLog = "";
-					foreach(Error::$arrErrorLog as $arrEachItem){
+					foreach(self::$arrErrorLog as $arrEachItem){
 						if($arrEachItem['type'] != 'TWIST'){
 							$strLog .= sprintf("[%s] %s: [%s] %s - %s [line %s]\n",date('Y-m-d H:i:s'),$arrEachItem['type'],$arrEachItem['number'],$arrEachItem['message'],$arrEachItem['file'],$arrEachItem['code_line']);
 						}else{
@@ -682,7 +682,7 @@
 				}
 
 				if(TWIST_ERROR_SCREEN){
-					echo "<hr/><h1>Twist Error Handler</h1><pre>".print_r(Error::$arrErrorLog,true)."</pre>";
+					echo "<hr/><h1>Twist Error Handler</h1><pre>".print_r(self::$arrErrorLog,true)."</pre>";
 				}
 			}
 		}

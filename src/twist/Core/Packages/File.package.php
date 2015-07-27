@@ -23,6 +23,8 @@
 
 namespace Twist\Core\Packages;
 
+use Twist\Classes\Error;
+
 /**
  * Additional file system support that you have always needed but never had. Convert bytes into human readable format, sanitize file names, hash a directory or get its total size in bytes.
  * Recursive file and folder manipulation and the ability to serve files even apply download speed restrictions when running a high traffic site and bandwidth is precious.
@@ -374,13 +376,13 @@ class File extends Base{
 						}
 					}else{
 						//header("HTTP/1.1 500 Internal Server Error");
-						\Twist\Core\Classes\Error::errorPage(500);
+						Error::errorPage(500);
 					}
 				}
 			}
 		}else{
 			//header("HTTP/1.1 404 Not Found");
-			\Twist\Core\Classes\Error::errorPage(404);
+			Error::errorPage(404);
 		}
 
 		die();

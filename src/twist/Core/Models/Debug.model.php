@@ -22,7 +22,7 @@
  */
 
 namespace Twist\Core\Models;
-use Twist\Core\Classes\Error;
+use Twist\Classes\Error;
 
 /**
  * Debugging the framework and its modules, functionality to access debug data can be found here. Data will only be present if Debugging is enabled in your settings.

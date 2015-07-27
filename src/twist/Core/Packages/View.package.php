@@ -23,7 +23,8 @@
 
 namespace Twist\Core\Packages;
 
-use \Twist\Core\Classes\Instance;
+use \Twist\Classes\Instance;
+use \Twist\Classes\Exception;
 
 /**
  * Bring HTML to life with conditional tags, allowing interaction with PHP without using PHP code. Include functionality of additional views in just a fue chars
@@ -340,11 +341,11 @@ class View extends Base{
 
 			if(!is_null($this->dirCurrentView)){
 				$intLineNo = $this->locateTag($this->dirCurrentView,$this->strCurrentTag);
-				throw new \Twist\Core\Classes\TwistException(sprintf("View file <em>%s</em> was not found or does not exist in <em>%s</em>",str_replace(TWIST_DOCUMENT_ROOT,'/',$dirFullViewPath),str_replace(TWIST_DOCUMENT_ROOT,'/',$this->dirCurrentView)),11102,$this->dirCurrentView,$intLineNo);
+				throw new Exception(sprintf("View file <em>%s</em> was not found or does not exist in <em>%s</em>",str_replace(TWIST_DOCUMENT_ROOT,'/',$dirFullViewPath),str_replace(TWIST_DOCUMENT_ROOT,'/',$this->dirCurrentView)),11102,$this->dirCurrentView,$intLineNo);
 			}else{
 				//Will work as long as the error is called from build()
 				$arrBacktrace = debug_backtrace();
-				throw new \Twist\Core\Classes\TwistException(sprintf("View file <em>%s</em> was not found or does not exist",str_replace(TWIST_DOCUMENT_ROOT,'/',$dirFullViewPath)),11102,$arrBacktrace[2]['file'],$arrBacktrace[2]['line']);
+				throw new Exception(sprintf("View file <em>%s</em> was not found or does not exist",str_replace(TWIST_DOCUMENT_ROOT,'/',$dirFullViewPath)),11102,$arrBacktrace[2]['file'],$arrBacktrace[2]['line']);
 			}
 		}
 	}
@@ -852,7 +853,7 @@ class View extends Base{
 
 					}elseif(array_key_exists('instance',$arrExtensions[$strType])){
 
-						$resClass = \Twist\Core\Classes\Instance::retrieveObject($arrExtensions[$strType]['instance']);
+						$resClass = Instance::retrieveObject($arrExtensions[$strType]['instance']);
 						$strFunctionName = $arrExtensions[$strType]['function'];
 
 						$strReplacementData = $resClass -> $strFunctionName($strReference,$arrParameters);

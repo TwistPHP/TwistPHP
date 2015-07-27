@@ -23,7 +23,7 @@
 
 	namespace Twist\Core\Controllers;
 	use Twist\Core\Models\Route\Meta;
-	use Twist\Core\Classes\Error;
+	use Twist\Classes\Error;
 
 	/**
 	 * Base Controller should be used as an extension to every controller class that is made with the exception of those controllers that use BaseControllerAJAX and BaseControllerUser.

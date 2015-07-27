@@ -21,9 +21,9 @@
 	 *
 	 */
 
-	namespace Twist\Core\Classes;
+	namespace Twist\Classes;
 
-	final class Shutdown{
+	class Shutdown{
 
 		public static $blShutdownRegistered = false;
 		public static $arrCallbackEvents = array(); // array to store user callbacks
@@ -33,7 +33,7 @@
 		 * @related Twist\Core\Classes\Register
 		 */
 		public static function enableHandler(){
-			register_shutdown_function(array('Twist\Core\Classes\Shutdown', 'callEvents'));
+			register_shutdown_function(array(__NAMESPACE__ .'\Shutdown', 'callEvents'));
 			self::$blShutdownRegistered = true;
 		}
 

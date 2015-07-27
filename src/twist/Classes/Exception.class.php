@@ -21,9 +21,9 @@
 	 *
 	 */
 
-	namespace Twist\Core\Classes;
+	namespace Twist\Classes;
 
-	interface TwistExceptionInterface{
+	interface ExceptionInterface{
 
 		/* Protected methods inherited from Exception class */
 		public function getMessage();                 // Exception message
@@ -38,7 +38,7 @@
 		public function __construct($message = null, $code = 0);
 	}
 
-	class TwistException extends \Exception implements TwistExceptionInterface{
+	class Exception extends \Exception implements ExceptionInterface{
 
 		protected $message = 'Unknown exception';     // Exception message
 		private   $string;                            // Unknown

@@ -21,7 +21,7 @@
  *
  */
 
-namespace Twist\Core\Classes;
+namespace Twist\Classes;
 
 class Autoload{
 
@@ -54,7 +54,7 @@ class Autoload{
 			$strFile = str_replace('\\','/',$strRequest);
 
 			if(strstr($strRequest,'\\Classes\\')){
-				$strFile .= '.twist.php';
+				$strFile .= '.class.php';
 			}elseif(strstr($strRequest,'\\Routes\\')){
 				$strFile .= '.route.php';
 			}elseif(strstr($strRequest,'\\Controllers\\')){
