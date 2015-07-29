@@ -573,8 +573,8 @@ class Route extends Base{
 			 */
 			if(preg_match("/\{model\:([a-z0-9\_\\\]+)\}/i", $strURI, $arrModelDetails)){
 				$strModel = $arrModelDetails[1];
-				$arrParts = explode('\\',$strModel);
-				$regxMatchURI = str_replace($arrModelDetails[0],sprintf('(?<tmodel_%s>[^\/]+)',array_pop($arrParts)),$regxMatchURI);
+				$arrParts = explode("\\",$strModel);
+				$regxMatchURI = str_replace($arrModelDetails[0],sprintf("(?<tmodel_%s>[^\/]+)",array_pop($arrParts)),$regxMatchURI);
 			}
 
 			/**
