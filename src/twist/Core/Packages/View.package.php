@@ -818,6 +818,19 @@ class View extends Base{
 
 				break;
 
+			case'model':
+
+				//@todo Currently a little bit hacky but will add support for all models and params shortly
+				//Currently only supports a model that has been initiated through routes.
+				if(Instance::isObject('twist_route_model')){
+					$resModel = Instance::retrieveObject('twist_route_model');
+
+					if(method_exists($resModel,$strReference)){
+						$strRawView = $this->replaceTag($strRawView,$strTag,$resModel->$strReference(),$strFunction);
+					}
+				}
+				break;
+
 			/**
 			 * Use custom tags, set using registerTag('tagType',array('key' => 'value'))
 			 */

@@ -35,12 +35,6 @@
 		protected $arrAliasURIs = array();
 		protected $arrReplaceURIs = array();
 		protected $arrRoute = array();
-		protected $arrRouteVars = array();
-
-        /**
-         * @var \Twist\Core\Models\Route\Meta
-         */
-		protected $resMeta = null;
 
         /**
          * @var \Twist\Core\Packages\Route
@@ -50,19 +44,17 @@
         /**
          * A function that is called by Routes both to ensure that the controller has been extended and so that we can pass in resources and information required by the controller.
          *
-         * @param $arrRoute
-         * @param \Twist\Core\Models\Route\Meta $resMeta
          * @param \Twist\Core\Packages\Route $resRoute
+         * @param $arrRouteData
          * @return bool
          */
-		final public function _extended($arrRoute,$resMeta,$resRoute){
+		final public function _extended($resRoute,$arrRouteData){
 
-			$this->arrRoute = $arrRoute;
-			$this->arrRouteVars = $arrRoute['vars'];
-			$this->resMeta = $resMeta;
+			//Can be used to modify the baseView etc
+			$this->resRoute = $resRoute;
 
-            //Can be used to modify the baseView etc
-            $this->resRoute = $resRoute;
+			//Store the route data for use later
+			$this->arrRoute = $arrRouteData;
 
 			$this->_baseCalls();
 
@@ -70,10 +62,8 @@
 		}
 
 		/**
-		 * This function is called by _extended, replace this function
-		 * putting calls such as alias and replaces.
-		 * This function is needed only if creating a new expendable baseController
-		 * such as baseControllerUser and baseControllerAJAX.
+		 * This function is called by _extended, replace this function putting calls such as alias and replaces
+		 * and is only needed if creating a new expendable Base Controller such as baseUser and baseAJAX.
 		 */
 		protected function _baseCalls(){
 			//Leave empty - this is to be extended only!
@@ -222,7 +212,7 @@
 		}
 
 		/**
-		 * Process files that have been uplaoded and return an array of uploaded data, this is to help when a browser does not support teh pure AJAX uploader.
+		 * Process files that have been uploaded and return an array of uploaded data, this is to help when a browser does not support teh pure AJAX uploader.
 		 *
 		 * @param $strFileKey
 		 * @param string $strType
@@ -323,8 +313,17 @@
 		 *
 		 * @return \Twist\Core\Models\Route\Meta
 		 */
-        final public function _meta(){
-			return $this->resMeta;
+        public function _meta(){
+			return $this->resRoute->meta();
+		}
+
+		/**
+		 * Returns the Model object which is only set when {model:App\My\Model} is defined in your URI, From here all functions of the model can be called.
+		 *
+		 * @return null|Object
+		 */
+        public function _model(){
+			return $this->resRoute->model();
 		}
 
 		/**
@@ -336,9 +335,9 @@
         protected function _var($strVarKey = null){
 
 			if(is_null($strVarKey)){
-				return $this->arrRouteVars;
+				return $this->arrRoute['vars'];
 			}else{
-				return (array_key_exists($strVarKey,$this->arrRouteVars)) ? $this->arrRouteVars[$strVarKey] : null;
+				return (array_key_exists($strVarKey,$this->arrRoute['vars'])) ? $this->arrRoute['vars'][$strVarKey] : null;
 			}
 		}
 

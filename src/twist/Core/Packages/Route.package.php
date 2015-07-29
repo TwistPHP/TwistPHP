@@ -24,6 +24,7 @@
 namespace Twist\Core\Packages;
 use \Twist\Core\Controllers\BaseAJAX;
 use \Twist\Core\Models\Route\Meta;
+use \Twist\Classes\Instance;
 
 /**
  * Simply setup a website with multiple pages in minutes. Create restricted areas with login pages and dynamic sections with wild carded URI's.
@@ -55,14 +56,16 @@ class Route extends Base{
 	protected $blDebugMode = false;
 	protected $strInstance = '';
 	protected $resView = null;
-	protected $resMeta = null;
+	protected $strMetaInstanceKey = 'twist_route_meta';
+	protected $strModelInstanceKey = 'twist_route_model';
 	protected $strControllerDirectory = null;
 
 	public function __construct($strInstance){
 
 		$this->strInstance = $strInstance;
 		$this->resView = \Twist::View();
-		$this->resMeta = new Meta();
+		Instance::storeObject($this->strMetaInstanceKey,new Meta());
+
 		$this->blDebugMode = (\Twist::framework()->setting('DEVELOPMENT_MODE') && \Twist::framework()->setting('DEVELOPMENT_DEBUG_BAR'));
 
 		$strControllerPath = TWIST_APP_CONTROLLERS;
@@ -141,7 +144,7 @@ class Route extends Base{
 
 	/**
 	 * Force the base view set in routes to over-ride any route specific base view
-     * This function is called by baseController's _baseView() to ensure a custom base view is used nomatter what
+	 * This function is called by baseController's _baseView() to ensure a custom base view is used nomatter what
 	 */
 	public function baseViewForce(){
 		$this->blForceBaseView = true;
@@ -166,6 +169,20 @@ class Route extends Base{
 		if(!array_key_exists($strURI,$this->arrBypassMaintenanceMode)){
 			$this->arrBypassMaintenanceMode[$strURI] = $blWildCard;
 		}
+	}
+
+	/**
+	 * @return null|\Twist\Core\Models\Route\Meta
+	 */
+	public function meta(){
+		return (Instance::isObject($this->strMetaInstanceKey)) ? Instance::retrieveObject($this->strMetaInstanceKey) : null;
+	}
+
+	/**
+	 * @return null|Object Returns an object of the registered route model, registered in the URI using {model:\App\Models\User}
+	 */
+	public function model(){
+		return (Instance::isObject($this->strModelInstanceKey)) ? Instance::retrieveObject($this->strModelInstanceKey) : null;
 	}
 
 	/**
@@ -324,7 +341,7 @@ class Route extends Base{
 
 	/**
 	 * Serve a file form a particular route, you can change the name of the file upon download and restrict the download bandwidth (very helpful if you have limited bandwidth)
-     *
+	 *
 	 * @param $strURI
 	 * @param $dirFilePath Full path to the file that will be served
 	 * @param null $strServeName Name of the file to be served
@@ -334,18 +351,18 @@ class Route extends Base{
 		$this->addRoute($strURI,'file',array('file' => $dirFilePath, 'name' => $strServeName, 'speed' => $intLimitDownloadSpeed),false,false,array());
 	}
 
-    /**
-     * Serve all contents of a folder on a virtual route, the folder begin served dose not need to be publicly accessible,
-     * also restriction can be applied to the virtual route if user login is required to access.
-     *
-     * @param $strURI
-     * @param $dirFolderPath Full path to the folder to be served
-     * @param bool $blForceDownload Force the file to be downloaded to be browser
-     * @param null $intLimitDownloadSpeed Download speed for the end user in KB
-     */
-    public function folder($strURI,$dirFolderPath,$blForceDownload = false,$intLimitDownloadSpeed = null){
-        $this->addRoute($strURI,'folder',array('folder' => $dirFolderPath,'force-download' => $blForceDownload,'speed' => $intLimitDownloadSpeed),false,false,array());
-    }
+	/**
+	 * Serve all contents of a folder on a virtual route, the folder begin served dose not need to be publicly accessible,
+	 * also restriction can be applied to the virtual route if user login is required to access.
+	 *
+	 * @param $strURI
+	 * @param $dirFolderPath Full path to the folder to be served
+	 * @param bool $blForceDownload Force the file to be downloaded to be browser
+	 * @param null $intLimitDownloadSpeed Download speed for the end user in KB
+	 */
+	public function folder($strURI,$dirFolderPath,$blForceDownload = false,$intLimitDownloadSpeed = null){
+		$this->addRoute($strURI,'folder',array('folder' => $dirFolderPath,'force-download' => $blForceDownload,'speed' => $intLimitDownloadSpeed),false,false,array());
+	}
 
 	/**
 	 * Add a controller that will be called upon a any request (HTTP METHOD) to the given URI.
@@ -544,14 +561,28 @@ class Route extends Base{
 		$strTrailingSlash = (\Twist::framework()->setting('SITE_TAILING_SLASH')) ? '/' : '';
 		$strURI = rtrim($strURI,'/').$strTrailingSlash;
 
-		$regxMatchURI = null;
+		$regxMatchURI = $strModel = null;
 		if(strstr($strURI,'/{') && strstr($strURI,'}')){
+
+			$regxMatchURI = $strURI;
+
+			/**
+			 * Turn the URI '/my/{model:App\Models\User}/uri'
+			 * Into the Regx '#^(?<twist_uri>\/my\/(?<tmodel_user>[^\/]+)\/uri)#i'
+			 * If Wildcard '#^(?<twist_uri>\/my\/(?<tmodel_user>[^\/]+)\/uri)(?<twist_wildcard>.*)#i'
+			 */
+			if(preg_match("/\{model\:([a-z0-9\_\\\]+)\}/i", $strURI, $arrModelDetails)){
+				$strModel = $arrModelDetails[1];
+				$arrParts = explode('\\',$strModel);
+				$regxMatchURI = str_replace($arrModelDetails[0],sprintf('(?<tmodel_%s>[^\/]+)',array_pop($arrParts)),$regxMatchURI);
+			}
+
 			/**
 			 * Turn the URI '/my/{page}/uri'
-			 * Into the Regx '#^(?<twist_uri>\/my\/(?<tphp_page>[^\/]+)\/uri)#i'
-			 * If Wildcard '#^(?<twist_uri>\/my\/(?<tphp_page>[^\/]+)\/uri)(?<twist_wildcard>.*)#i'
+			 * Into the Regx '#^(?<twist_uri>\/my\/(?<tparam_page>[^\/]+)\/uri)#i'
+			 * If Wildcard '#^(?<twist_uri>\/my\/(?<tparam_page>[^\/]+)\/uri)(?<twist_wildcard>.*)#i'
 			 */
-			$regxMatchURI = sprintf("#^(?<twist_uri>%s)%s#i",str_replace(array("/","{","}"),array("\\/","(?<tphp_",">[^\/]+)"),$strURI),($blWildCard) ? '(?<twist_wildcard>.*)' : '$');
+			$regxMatchURI = sprintf("#^(?<twist_uri>%s)%s#i",str_replace(array("/","{","}"),array("\\/","(?<tparam_",">[^\/]+)"),$regxMatchURI),($blWildCard) ? '(?<twist_wildcard>.*)' : '$');
 		}
 
 		$arrRouteData = array(
@@ -566,6 +597,7 @@ class Route extends Base{
 			'type' => $strType,
 			'item' => $strItem,
 			'data' => $arrData,
+			'model' => $strModel,
 			'base_view' => $mxdBaseView,
 			'wildcard' => $blWildCard,
 			'cache' => ($mxdCache === false) ? false : true,
@@ -734,6 +766,7 @@ class Route extends Base{
 	 */
 	public function current($strReturnKey = null){
 
+		$strModelValue = null;
 		$arrOut = $arrUriParameters = array();
 		$arrMethodRoutes = $this->currentMethodRoutes();
 
@@ -772,8 +805,12 @@ class Route extends Base{
 						$arrMatchResults = array_shift($arrFoundRegxMatches);
 
 						foreach($arrMatchResults['matches'] as $strKey => $strValue){
-							if(strstr($strKey,'tphp_')){
-								$arrUriParameters[str_replace('tphp_','',$strKey)] = $strValue;
+							if(strstr($strKey,'tparam_')){
+								$arrUriParameters[str_replace('tparam_','',$strKey)] = $strValue;
+							}
+
+							if(strstr($strKey,'tmodel_')){
+								$strModelValue = $strValue;
 							}
 						}
 
@@ -825,6 +862,12 @@ class Route extends Base{
 				$arrOut['vars'] = $arrUriParameters;
 				$arrOut['dynamic'] = $strRouteDynamic;
 				$arrOut['parts'] = $arrRouteParts;
+
+				//Create an instance of the model passing in the URL value
+				if(!is_null($strModelValue)){
+					$strModelClass = '\\'.ltrim($arrOut['model'],'\\');
+					Instance::storeObject($this->strModelInstanceKey,new $strModelClass($strModelValue));
+				}
 
 				//Now sanitise the registered_uri_current and the url
 				if(!is_null($arrOut['regx'])){
@@ -1035,8 +1078,8 @@ class Route extends Base{
 
 			if(in_array("_extended", get_class_methods($objController))){
 
-				//Register the route data and meta model
-				$objController->_extended($arrRoute,$this->resMeta,$this);
+				//Register the route and route data
+				$objController->_extended($this,$arrRoute);
 
 				$arrAliases = $objController->_getAliases();
 				$arrReplacements = $objController->_getReplacements();
@@ -1080,9 +1123,6 @@ class Route extends Base{
 						$strOut = $objController->$strControllerFunction();
 					}
 				}
-
-				//Return the meta object back to routes
-				$this->resMeta = $objController->_meta();
 			}else{
 				throw new \Exception(sprintf("Controller '%s' must extend BaseController", $strControllerClass));
 			}
@@ -1161,10 +1201,10 @@ class Route extends Base{
 					\Twist::respond(403);
 				}else{
 
-					$this->resMeta->title(\Twist::framework()->setting('SITE_NAME'));
-					$this->resMeta->description(\Twist::framework()->setting('SITE_DESCRIPTION'));
-					$this->resMeta->author(\Twist::framework()->setting('SITE_AUTHOR'));
-					$this->resMeta->keywords(\Twist::framework()->setting('SITE_KEYWORDS'));
+					$this->meta()->title(\Twist::framework()->setting('SITE_NAME'));
+					$this->meta()->description(\Twist::framework()->setting('SITE_DESCRIPTION'));
+					$this->meta()->author(\Twist::framework()->setting('SITE_AUTHOR'));
+					$this->meta()->keywords(\Twist::framework()->setting('SITE_KEYWORDS'));
 
 					//Load the page from cache
 					$this->loadPageCache($arrRoute['cache_key']);
@@ -1183,7 +1223,7 @@ class Route extends Base{
 
 					$arrTags['query_string'] = http_build_query( $_GET );
 
-					\Twist::framework()->package()->extend('View', 'meta', $this->resMeta->getTags());
+					\Twist::framework()->package()->extend('View', 'meta', $this->meta()->getTags());
 					\Twist::framework()->package()->extend('View', 'route', $arrTags);
 
 					\Twist::recordEvent('Route found');
@@ -1203,7 +1243,7 @@ class Route extends Base{
 						echo $arrTags['response'];
 					}else{
 						//Update the Meta and Route tags to be used in the base template
-						\Twist::framework()->package()->extend('View', 'meta', $this->resMeta->getTags());
+						\Twist::framework()->package()->extend('View', 'meta', $this->meta()->getTags());
 						\Twist::framework()->package()->extend('View', 'route', $arrTags);
 
 						if($this->blIgnoreBaseView){
