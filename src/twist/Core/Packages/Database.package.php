@@ -166,7 +166,12 @@
 
 			if($dirSQLFile){
 
+				$arrResult = array();
 				if(\Twist::Command()->isEnabled()){
+					$arrResult = \Twist::Command()->execute('/usr/bin/mysql -v');
+				}
+
+				if(count($arrResult) && $arrResult['status']){
 
 					//Run the MYSQL import command on command line
 					$strCommand = sprintf('/usr/bin/mysql -h%s -u%s -p%s %s < %s',
@@ -179,10 +184,13 @@
 
 					$blOut = \Twist::Command()->execute($strCommand);
 				}else{
-
 					//Run the import using the query function. May want to do some sanitation here?
 					$strSQLData = file_get_contents($dirSQLFile);
-					$blOut = $this->query($strSQLData);
+					$arrQueries = explode(';',$strSQLData);
+
+					foreach($arrQueries as $strQuery){
+						$blOut = $this->query($strQuery.';');
+					}
 				}
 			}
 

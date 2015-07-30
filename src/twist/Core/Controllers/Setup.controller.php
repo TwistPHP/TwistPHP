@@ -509,8 +509,8 @@ class Setup extends Base{
 
 			file_put_contents($dirImportFile, str_replace(
 				array(
-					'/*TWIST_DATABASE_TABLE_PREFIX*/`',
-					'/*TWIST_DATABASE_NAME*/',
+					"/*TWIST_DATABASE_TABLE_PREFIX*/`",
+					"/*TWIST_DATABASE_NAME*/",
 					($blMBSupport) ? 'utf8' : 'utf8mb4' //Only replace utf8mb4 with utf8 when there is no multi-byte support
 					),
 				array(
