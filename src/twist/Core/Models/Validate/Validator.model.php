@@ -26,8 +26,19 @@ namespace Twist\Core\Models\Validate;
 class Validator{
 
 	protected $arrChecks = array();
-	protected $arrTypes = array('email','domain','url','ip','boolean','float','integer','string','telephone','postcode');
+	protected $arrTypes = array('compare','email','domain','url','ip','boolean','float','integer','string','telephone','postcode');
 	protected $arrTestResults = array();
+
+	public function checkCompare($strKey,$strKey2,$blAllowBlank = false,$blRequired = true,$blTrim = true){
+
+		$this->arrChecks[$strKey] = array(
+			'type' => 'compare',
+			'key2' => $strKey2,
+			'blank' => ($blAllowBlank == true || $blAllowBlank == 1) ? 1 : 0,
+			'required' => ($blRequired == true || $blRequired == 1) ? 1 : 0,
+			'trim' => ($blTrim == true || $blTrim == 1) ? 1 : 0
+		);
+	}
 
 	public function checkEmail($strKey,$blAllowBlank = false,$blRequired = true,$blTrim = true){
 
@@ -148,7 +159,7 @@ class Validator{
 	 *
 	 * The checks array should consist of a key (the field name you want to check) and an array of checks consisting of any of the below options:
 	 * blank = 1|0
-	 * type = email|url|ip|boolean|float|integer|string|telephone|postcode
+	 * type = compare|email|url|ip|boolean|float|integer|string|telephone|postcode
 	 * required = 1|0
 	 *
 	 * Note: When checking a multi-dimensional array the key can contain '/' for eg. 'user/name' for the array $arrData['user']['name']
@@ -203,14 +214,46 @@ class Validator{
 						case'regx':
 							$mxdTestResult = \Twist::Validate()->$arrEachCheck['type']($mxdTestValue,$arrEachCheck['expression']);
 							break;
+						case'compare':
+
+							$mxdTestValue2 = null;
+
+							//Detect value two for the comparison
+							if(array_key_exists($arrEachCheck['key2'],$arrData)){
+								$mxdTestValue2 = $arrData[$arrEachCheck['key2']];
+							}elseif(strstr($arrEachCheck['key2'],'/')){
+								$mxdTestValue2 = \Twist::framework() -> tools() -> arrayParse($arrEachCheck['key2'],$arrData);
+							}
+
+							//Trim the spaces from either side of the input before testing
+							if(array_key_exists('trim',$arrEachCheck) && $arrEachCheck['trim'] == 1){
+								$mxdTestValue2 = trim($mxdTestValue2);
+							}
+
+							$mxdTestResult = \Twist::Validate()->$arrEachCheck['type']($mxdTestValue,$mxdTestValue2);
+							break;
 						default:
 							$mxdTestResult = \Twist::Validate()->$arrEachCheck['type']($mxdTestValue);
 							break;
 					}
 
+					//On successful match put in a sanitised version of the original data
 					if($mxdTestResult !== false){
 
-						//On successful match put in a sanitised version of the original data
+						if($arrEachCheck['type'] == 'compare'){
+
+							//If it is a compare ensure the test value is applied back to the array and not the result
+							$mxdTestResult = $mxdTestValue;
+
+							//Also apply the value to key2
+							if(array_key_exists($arrEachCheck['key2'],$arrData)){
+								$arrData[$arrEachCheck['key2']] = $mxdTestResult;
+							}elseif(strstr($arrEachCheck['key2'],'/')){
+								//Todo the callback update
+							}
+						}
+
+						//apply the value to key1
 						if(array_key_exists($strKey,$arrData)){
 							$arrData[$strKey] = $mxdTestResult;
 						}elseif(strstr($strKey,'/')){

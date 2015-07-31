@@ -42,6 +42,17 @@ class Validate extends Base{
 	}
 
 	/**
+	 * Validate the comparison between two items/strings/integers.
+	 *
+	 * @param $mxdValue1 Item one to be compared
+	 * @param $mxdValue2 Item two to be compared
+	 * @return boolean True returned upon successful comparison of the two items/strings/integers
+	 */
+	public function compare($mxdValue1,$mxdValue1){
+		return ($mxdValue1 === $mxdValue1);
+	}
+
+	/**
 	 * Validate the format of a Email
 	 *
 	 * @reference http://php.net/manual/en/filter.constants.php
