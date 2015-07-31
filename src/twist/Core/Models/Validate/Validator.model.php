@@ -40,6 +40,13 @@ class Validator{
 		);
 	}
 
+	/**
+	 * @alias checkCompare
+	 */
+	public function checkComparison($strKey,$strKey2,$blAllowBlank = false,$blRequired = true,$blTrim = true){
+		$this->checkCompare($strKey,$strKey2,$blAllowBlank,$blRequired,$blTrim);
+	}
+
 	public function checkEmail($strKey,$blAllowBlank = false,$blRequired = true,$blTrim = true){
 
 		$this->arrChecks[$strKey] = array(
