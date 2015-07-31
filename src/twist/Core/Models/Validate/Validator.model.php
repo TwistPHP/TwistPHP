@@ -190,7 +190,8 @@ class Validator{
 
 		foreach($arrChecks as $strKey => $arrEachCheck){
 
-			$mxdTestValue = null;
+			$mxdTestValue = $mxdTestValue2 = null;
+			$mxdTestResult = false;
 
 			if(array_key_exists($strKey,$arrData)){
 				$mxdTestValue = $arrData[$strKey];
@@ -249,12 +250,12 @@ class Validator{
 
 						if($arrEachCheck['type'] == 'compare'){
 
-							//If it is a compare ensure the test value is applied back to the array and not the result
+							//If it is a compare ensure the test value is applied back to the array key1 and not the result
 							$mxdTestResult = $mxdTestValue;
 
 							//Also apply the value to key2
 							if(array_key_exists($arrEachCheck['key2'],$arrData)){
-								$arrData[$arrEachCheck['key2']] = $mxdTestResult;
+								$arrData[$arrEachCheck['key2']] = $mxdTestValue2;
 							}elseif(strstr($arrEachCheck['key2'],'/')){
 								//Todo the callback update
 							}
@@ -269,7 +270,12 @@ class Validator{
 
 						$this->testResult($strKey,true,sprintf("%s has passed all checks",$this->keyToText($strKey)));
 					}else{
-						$this->testResult($strKey,false,sprintf("%s contains incorrectly formatted data",$this->keyToText($strKey)),'invalid');
+
+						if($arrEachCheck['type'] == 'compare'){
+							$this->testResult($strKey,false,sprintf("%s does not match %s",$this->keyToText($strKey),$this->keyToText($arrEachCheck['key2'])),'invalid');
+						}else{
+							$this->testResult($strKey,false,sprintf("%s contains incorrectly formatted data",$this->keyToText($strKey)),'invalid');
+						}
 					}
 
 				}elseif(array_key_exists('type',$arrEachCheck) && !in_array($arrEachCheck['type'],$this->arrTypes)){
@@ -298,11 +304,15 @@ class Validator{
 
 	private function testResult($strKey,$blStatus,$strMessage,$strErrorType = 'pass'){
 
-		$this->arrTestResults['results'][$strKey] = array(
-			'status' => $blStatus,
-			'type' => $strErrorType,
-			'message' => $strMessage
-		);
+		//Allow new items to be added or successful items to be overridden by failed items
+		if(!array_key_exists($strKey,$this->arrTestResults['results']) || (array_key_exists($strKey,$this->arrTestResults['results']) && $this->arrTestResults['results'][$strKey]['status'] && $blStatus === false)){
+
+			$this->arrTestResults['results'][$strKey] = array(
+				'status' => $blStatus,
+				'type' => $strErrorType,
+				'message' => $strMessage
+			);
+		}
 
 		if($blStatus == false){
 			$this->arrTestResults['status'] = false;
