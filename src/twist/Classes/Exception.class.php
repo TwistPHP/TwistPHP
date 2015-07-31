@@ -23,6 +23,10 @@
 
 	namespace Twist\Classes;
 
+	/**
+	 * Interface ExceptionInterface
+	 * @package Twist\Classes
+	 */
 	interface ExceptionInterface{
 
 		/* Protected methods inherited from Exception class */
@@ -38,6 +42,10 @@
 		public function __construct($message = null, $code = 0);
 	}
 
+	/**
+	 * Class Exception
+	 * @package Twist\Classes
+	 */
 	class Exception extends \Exception implements ExceptionInterface{
 
 		protected $message = 'Unknown exception';     // Exception message

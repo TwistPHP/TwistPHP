@@ -23,13 +23,17 @@
 
 namespace Twist\Classes;
 
+/**
+ * A custom AutoLoader that loads in all TwistPHP files, packages and App content. The AutoLoader is included automatically by the framework when used within your site.
+ * @package Twist\Classes
+ */
 class Autoload{
 
 	public static $strBaseDir = null;
 	public static $arrClassLoaded = array();
 
 	/**
-	 * Initialise the autoloader and register the class as an autoloader
+	 * Initialise the AutoLoader and register the class as an AutoLoader
 	 * @param $strBaseDir Base directory of the framework
 	 */
 	public static function init($strBaseDir){

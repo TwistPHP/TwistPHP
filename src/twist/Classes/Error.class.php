@@ -23,6 +23,10 @@
 
 	namespace Twist\Classes;
 
+	/**
+	 * A custom error handler that handles all of TwistPHPs Errors, Exceptions and Fatal Errors, it also handles errors produced in your PHP code and outputs all HTTP status pages.
+	 * @package Twist\Classes
+	 */
 	class Error{
 
 		public static $arrErrorLog = array();
