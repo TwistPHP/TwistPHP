@@ -26,6 +26,9 @@
 	use Twist\Core\Controllers\Framework;
 	use Twist\Core\Packages as Packages;
 
+	/**
+	 * Main functionality for the Framework, when using core functionality of the framework this class is that gateway to makes it all possible.
+	 */
 	class Twist{
 
 		protected static $blLaunched = false;

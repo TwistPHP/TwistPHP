@@ -24,7 +24,7 @@
 namespace Twist\Core\Controllers;
 
 /**
- * Setup controller that provides the TwistPHP setup wizard.
+ * The route controller for the Setup wizard that provides the TwistPHP with its in intuitive in-browser setup wizard.
  * @package Twist\Core\Controllers
  */
 class Setup extends Base{

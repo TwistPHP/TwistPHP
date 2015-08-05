@@ -23,6 +23,10 @@
 
 	namespace Twist\Classes;
 
+	/**
+	 * Instance handler to store and retrieve resources and objects from anywhere withing the framework. Handy for storing instances of models and other data to help minimize repetition of processing and loading data.
+	 * @package Twist\Classes
+	 */
 	class Instance{
 
 		protected static $arrFrameworkObjects = array();

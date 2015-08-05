@@ -23,6 +23,10 @@
 
 	namespace Twist\Core\Models;
 
+	/**
+	 * A set of useful tools that have been designed to be used throughout the framework, these tools are to stop repartition of common code and data processing algorithms.
+	 * @package Twist\Core\Models
+	 */
 	final class Tools{
 
 		/**

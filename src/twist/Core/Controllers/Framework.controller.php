@@ -28,6 +28,10 @@
 	use Twist\Core\Models\Settings;
 	use Twist\Core\Models\Tools;
 
+	/**
+	 * This controller is used by the framework directly providing support for all core framework features such as debug, settings, tools and handlers.
+	 * @package Twist\Core\Controllers
+	 */
 	class Framework{
 
 		private $objDebug = null;

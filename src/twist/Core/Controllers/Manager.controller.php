@@ -23,6 +23,10 @@
 
 namespace Twist\Core\Controllers;
 
+/**
+ * The route controller for the framework manager, generates the pages of the manager tool.
+ * @package Twist\Core\Controllers
+ */
 class Manager extends BaseUser{
 
 	public function __construct(){

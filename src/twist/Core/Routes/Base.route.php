@@ -24,6 +24,10 @@
 	namespace Twist\Core\Routes;
 	use Twist\Core\Packages\Route;
 
+	/**
+	 * The base route that all route files must extend in order for Twist to be able to process them correctly. This base class added some core features required to initialise a route file.
+	 * @package Twist\Core\Routes
+	 */
 	class Base extends Route{
 
 		protected $strInterfaceKey = null;

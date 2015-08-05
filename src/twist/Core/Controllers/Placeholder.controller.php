@@ -24,7 +24,8 @@
 namespace Twist\Core\Controllers;
 
 /**
- * Placeholder image generator and serves as an image in the browser.
+ * The route controller for the Placeholder image generator and serves as an image in the browser.
+ * This route can be easily added to your site by calling the Twist::Route()->placeholder() alias function.
  * @package Twist\Core\Controllers
  */
 class Placeholder extends Base{

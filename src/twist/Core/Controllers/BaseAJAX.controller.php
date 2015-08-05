@@ -23,6 +23,10 @@
 
 namespace Twist\Core\Controllers;
 
+/**
+ * An AJAX base controller that can be used instead of Base when adding AJAX support to your site. This controller should be used as an extension to a route controller class.
+ * @package Twist\Core\Controllers
+ */
 class BaseAJAX extends Base{
 
 	protected $blAjaxResponse = true;

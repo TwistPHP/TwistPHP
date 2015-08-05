@@ -23,6 +23,10 @@
 
 	namespace Twist\Core\Packages;
 
+	/**
+	 * All core packages should extend the package base controller, this controller gives some default functionality that is required.
+	 * @package Twist\Core\Packages
+	 */
 	class Base{
 
 		/**

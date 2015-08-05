@@ -23,6 +23,11 @@
 
 namespace Twist\Core\Controllers;
 
+/**
+ *  The route controller for the File Upload manager that is used by the inline file and asset uploader.
+ *  This route can be easily added to your site by calling the Twist::Route()->upload() alias function.
+ * @package Twist\Core\Controllers
+ */
 class Upload extends Base{
 
 	public function _construct(){
