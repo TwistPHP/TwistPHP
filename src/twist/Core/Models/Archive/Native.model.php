@@ -27,38 +27,72 @@
 
 		protected $resZip = null;
 
+		/**
+		 * Create an archive resource ready to accept files and folders
+		 * @param $strZipArchive
+		 * @return boolean
+		 */
 		public function create($strZipArchive){
 			$this->resZip = new \ZipArchive();
 			$blStatus = $this->resZip->open($strZipArchive, \ZipArchive::CREATE);
 			return $blStatus;
 		}
 
+		/**
+		 * Load in an existing archive and store it as a resource ready to be manipulated/extracted.
+		 * @param $strZipArchive
+		 * @return boolean
+		 */
 		public function load($strZipArchive){
 			$this->resZip = new \ZipArchive();
 			$blStatus = $this->resZip->open($strZipArchive);
 			return $blStatus;
 		}
 
+		/**
+		 * Add a file to the archive resource
+		 * @param $strLocalFile
+		 * @param $strZipPath
+		 */
 		public function addFile($strLocalFile,$strZipPath){
 			$this->resZip->addFile($strLocalFile,$strZipPath);
 		}
 
+		/**
+		 * Extract the files from the archive resource
+		 * @param $strExtractPath
+		 */
 		public function extract($strExtractPath){
 			$this->resZip->extractTo($strExtractPath);
 		}
 
+		/**
+		 * Add an empty folder to the archive resource
+		 * @param $strDirectoryPath
+		 */
 		public function addEmptyDir($strDirectoryPath){
 			$this->resZip->addEmptyDir($strDirectoryPath);
 		}
 
+		/**
+		 * Set a comment in the archive comment field, the comment can be seen when extracting the archive on commandline or using certain GUI tools.
+		 * @param $strComment
+		 */
 		public function setArchiveComment($strComment){
 			$this->resZip->setArchiveComment($strComment);
 		}
 
+		/**
+		 * Delete a file or folder form the archive by its path.
+		 * @param $strDirectoryPath
+		 */
 		public function deleteName($strDirectoryPath){
 			$this->resZip->deleteName($strDirectoryPath);
 		}
 
+		/**
+		 * Close the resource handler, this will save the resource to disk where appropriate
+		 */
 		public function close(){
 			$this->resZip->close();
 			$this->resZip = null;
