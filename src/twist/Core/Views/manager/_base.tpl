@@ -33,6 +33,7 @@
 					--><li {route:request$='/settings'?'class="current"':''}><a href="{route:registered_uri}/settings">Settings<i class="fa fa-cogs"></i></a></li><!--
 					--><li class="hidden{route:request$='/repositories'?' current':''}"><a href="{route:registered_uri}/repositories">Repositories<i class="fa fa-cubes"></i></a></li><!--
 					--><li {route:request$='/cache'?'class="current"':''}><a href="{route:registered_uri}/cache">Cache<i class="fa fa-files-o"></i></a></li><!--
+					--><li {route:request$='/htaccess'?'class="current"':''}><a href="{route:registered_uri}/htaccess">HTAccess<i class="fa fa-files-o"></i></a></li><!--
 					--><li {route:request$='/packages'?'class="current"':''}><a href="{route:registered_uri}/packages">Packages<i class="fa fa-puzzle-piece"></i></a></li><!--
 					--><li><a href="{route:registered_uri}/logout">Logout<i class="fa fa-sign-out"></i></a></li>
 		</ul>

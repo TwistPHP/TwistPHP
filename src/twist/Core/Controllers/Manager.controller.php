@@ -78,21 +78,105 @@ class Manager extends BaseUser{
 	public function cache(){
 
 		$arrTags = array();
-		$arrFiles = scandir(TWIST_APP_CACHE);
+		$this->parseCache(TWIST_APP_CACHE);
 
-		foreach($arrFiles as $strEachCache){
-			if(!in_array($strEachCache,array('.','..')) && is_dir(TWIST_APP_CACHE.'/'.$strEachCache)){
-
-				$arrFileTags = array(
-					'file' => $strEachCache,
-					'size' => \Twist::File()->directorySize(TWIST_APP_CACHE.'/'.$strEachCache)
-				);
-
-				$arrTags['cache'] .= $this->_view('components/cache/each-file.tpl',$arrFileTags);
-			}
+		foreach($this->arrCacheFiles as $strKey => $arrData){
+			$arrTags['cache'] .= $this->_view('components/cache/each-file.tpl',$arrData);
 		}
 
 		return $this->_view('pages/cache.tpl',$arrTags);
+	}
+
+	var $arrCacheFiles = array();
+
+	/**
+	 * Run through all the cache files and build up a list of what has been cached
+	 * @param $strCacheFolder
+	 */
+	protected function parseCache($strCacheFolder){
+
+		foreach(scandir($strCacheFolder) as $strEachCache){
+			if(!in_array($strEachCache,array('.','..','.htaccess'))){
+
+				$strCurrentItem = sprintf('%s/%s',rtrim($strCacheFolder,'/'),$strEachCache);
+				$strCacheKey = str_replace(TWIST_APP_CACHE,'',rtrim($strCacheFolder,'/'));
+
+				if(is_dir($strCurrentItem)){
+					$this->parseCache($strCurrentItem);
+				}else{
+					$this->arrCacheFiles[$strCacheKey]['key'] = $strCacheKey;
+					$this->arrCacheFiles[$strCacheKey]['files']++;
+					$this->arrCacheFiles[$strCacheKey]['size'] += filesize($strCurrentItem);
+				}
+			}
+		}
+	}
+
+	/**
+	 * HTaccess manager to all the editing of browser cache settings, rewrite rules and default host name redirects such as using www. or not and forcing https.
+	 * @return string
+	 */
+	public function htaccess(){
+
+		$arrTags = array('rewrite_rules' => '');
+
+		$arrRewrites = json_decode(\Twist::framework()->setting('HTACCESS_REWRITES'),true);
+
+		if(count($arrRewrites)){
+			foreach($arrRewrites as $arrEachRewrite){
+				$arrTags['rewrite_rules'] .= $this->_view('components/htaccess/rewrite-rule.tpl',$arrEachRewrite);
+			}
+		}
+
+		return $this->_view('pages/htaccess.tpl',$arrTags);
+	}
+
+	public function postHtaccess(){
+
+		\Twist::framework()->setting('SITE_WWW',$_POST['SITE_WWW']);
+		\Twist::framework()->setting('SITE_PROTOCOL_FORCE',$_POST['SITE_PROTOCOL_FORCE']);
+		\Twist::framework()->setting('SITE_DIRECTORY_INDEX',$_POST['SITE_DIRECTORY_INDEX']);
+
+		\Twist::framework()->setting('HTACCESS_CACHE_HTML',$_POST['HTACCESS_CACHE_HTML']);
+		\Twist::framework()->setting('HTACCESS_REVALIDATE_HTML',(array_key_exists('HTACCESS_REVALIDATE_HTML',$_POST)) ? '1' : '0');
+
+		\Twist::framework()->setting('HTACCESS_CACHE_CSS',$_POST['HTACCESS_CACHE_CSS']);
+		\Twist::framework()->setting('HTACCESS_REVALIDATE_CSS',(array_key_exists('HTACCESS_REVALIDATE_CSS',$_POST)) ? '1' : '0');
+
+		\Twist::framework()->setting('HTACCESS_CACHE_JS',$_POST['HTACCESS_CACHE_JS']);
+		\Twist::framework()->setting('HTACCESS_REVALIDATE_JS',(array_key_exists('HTACCESS_REVALIDATE_JS',$_POST)) ? '1' : '0');
+
+		\Twist::framework()->setting('HTACCESS_CACHE_IMAGES',$_POST['HTACCESS_CACHE_IMAGES']);
+		\Twist::framework()->setting('HTACCESS_REVALIDATE_IMAGES',(array_key_exists('HTACCESS_REVALIDATE_IMAGES',$_POST)) ? '1' : '0');
+
+		\Twist::framework()->setting('HTACCESS_ETAG',(array_key_exists('HTACCESS_ETAG',$_POST)) ? '1' : '0');
+
+		\Twist::framework()->setting('HTACCESS_DEFLATE_HTML',(array_key_exists('HTACCESS_DEFLATE_HTML',$_POST)) ? '1' : '0');
+		\Twist::framework()->setting('HTACCESS_DEFLATE_CSS',(array_key_exists('HTACCESS_DEFLATE_CSS',$_POST)) ? '1' : '0');
+		\Twist::framework()->setting('HTACCESS_DEFLATE_JS',(array_key_exists('HTACCESS_DEFLATE_JS',$_POST)) ? '1' : '0');
+		\Twist::framework()->setting('HTACCESS_DEFLATE_IMAGES',(array_key_exists('HTACCESS_DEFLATE_IMAGES',$_POST)) ? '1' : '0');
+
+		$arrTags = array('rewrite_rules' => '');
+		$arrRewriteRules = array();
+
+		foreach($_POST['rewrite'] as $intKey => $strRewriteURI){
+			if(array_key_exists($intKey,$_POST['rewrite-redirect']) && array_key_exists($intKey,$_POST['rewrite-options']) && $strRewriteURI != '' && $_POST['rewrite-redirect'][$intKey] != ''){
+
+				$arrRewriteRules[] = array('rule' => $strRewriteURI,'redirect' => $_POST['rewrite-redirect'][$intKey],'options' => $_POST['rewrite-options'][$intKey]);
+				$arrTags['rewrite_rules'] .= sprintf("\tRewriteRule %s %s [%s]\n",$strRewriteURI,$_POST['rewrite-redirect'][$intKey],$_POST['rewrite-options'][$intKey]);
+			}
+		}
+
+		\Twist::framework()->setting('HTACCESS_REWRITES',json_encode($arrRewriteRules));
+		\Twist::framework()->setting('HTACCESS_CUSTOM',$_POST['HTACCESS_CUSTOM']);
+
+		/**
+		 * Update the .htaccess file to be a TwistPHP htaccess file
+		 */
+		$dirHTaccessFile = sprintf('%s/.htaccess',TWIST_PUBLIC_ROOT);
+		file_put_contents($dirHTaccessFile,$this->_view(sprintf('%s/default-htaccess.tpl',TWIST_FRAMEWORK_VIEWS),$arrTags));
+
+		return $this->htaccess();
 	}
 
 	/**
@@ -100,6 +184,12 @@ class Manager extends BaseUser{
 	 * @return string
 	 */
 	public function settings(){
+
+		if(array_key_exists('import',$_GET) && $_GET['import'] == 'core'){
+			$resSetup = new Setup();
+			$resSetup->importSettings(sprintf('%ssettings.json',TWIST_FRAMEWORK_INSTALL));
+			\Twist::redirect('./settings');
+		}
 
 		$arrSettings = \Twist::framework() -> settings() -> arrSettingsInfo;
 		$arrOption = array();

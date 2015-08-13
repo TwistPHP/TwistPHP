@@ -534,7 +534,7 @@ class Setup extends Base{
 	 * @param $dirSettingsJSON
 	 * @throws \Exception
 	 */
-	protected function importSettings($dirSettingsJSON){
+	public function importSettings($dirSettingsJSON){
 
 		if(file_exists($dirSettingsJSON)){
 

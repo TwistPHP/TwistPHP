@@ -1,482 +1,610 @@
 {
-	"SITE_NAME":{
-		"title":"Site Name",
-		"description":"Enter the default name of your website",
-		"default":"",
-		"type":"string",
-		"options":"",
-		"null":0
-	},
-	"SITE_DESCRIPTION":{
-		"title":"Site Description",
-		"description":"Enter the default meta description for your website",
-		"default":"",
-		"type":"string",
-		"options":"",
-		"null":0
-	},
-	"SITE_KEYWORDS":{
-		"title":"Site Keywords",
-		"description":"Enter the default set of keywords for your website",
-		"default":"",
-		"type":"string",
-		"options":"",
-		"null":0
-	},
-	"SITE_AUTHOR":{
-		"title":"Site Author",
-		"description":"Enter the default author of your website",
-		"default":"",
-		"type":"string",
-		"options":"",
-		"null":0
-	},
-	"SITE_HOST":{
-		"title":"Site Host",
-		"description":"Enter the HTTP Host name of the website for instance http://www.example.com/index.php would be 'example.com'",
-		"default":"",
-		"type":"string",
-		"options":"",
-		"null":0
-	},
-	"SITE_BASE":{
-		"title":"Site Base",
-		"description":"The base path (suffix of document root) of the site for example 'http://www.twist.com/test/index.php' the base would be '/test/' which is the main site root",
-		"default":"/",
-		"type":"string",
-		"options":"",
-		"null":0
-	},
-	"SITE_WWW":{
-		"title":"Site Use WWW",
-		"description":"Redirect the user to WWW. if they are not already on that sub-domain. Also used when building the full site URL",
-		"default":"0",
-		"type":"boolean",
-		"options":"",
-		"null":0
-	},
-	"SITE_TRAILING_SLASH":{
-		"title":"Site Trailing Slash",
-		"description":"URIs and URLs in Routes and Structure will have a trailing slash '/' suffix",
-		"default":"0",
-		"type":"boolean",
-		"options":"",
-		"null":0
-	},
-	"SITE_PROTOCOL":{
-		"title":"Site Protocol",
-		"description":"Select the primary protocol for the website",
-		"default":"http",
-		"type":"options",
-		"options":"http,https",
-		"null":0
-	},
-	"SITE_PROTOCOL_FORCE":{
-		"title":"Force Site Protocol",
-		"description":"Redirect the user to the selected SITE_PROTOCOL",
-		"default":"0",
-		"type":"boolean",
-		"options":"",
-		"null":0
-	},
-	"TIMEZONE":{
-		"title":"Timezone",
-		"description":"Set the timezone of your website",
-		"default":"Europe/London",
-		"type":"string",
-		"options":"",
-		"null":0
-	},
-	"DEFAULT_COUNTRY":{
-		"title":"Default Country",
-		"description":"Set to the default country ISO code of your site",
-		"default":"GB",
-		"type":"country_iso",
-		"options":"",
-		"null":0
-	},
-	"DEFAULT_LANGUAGE":{
-		"title":"Default Language",
-		"description":"Set to the default language ISO code of your site",
-		"default":"EN",
-		"type":"language_iso",
-		"options":"",
-		"null":0
-	},
-	"DEFAULT_CURRENCY":{
-		"title":"Default Currency",
-		"description":"Set to the default currency ISO code of your site",
-		"default":"GBP",
-		"type":"currency_iso",
-		"options":"",
-		"null":0
-	},
-	"CURRENCY_CONVERSION_API":{
-		"title":"Currency Conversion API",
-		"description":"Set the currency converter to use either Yahoo Currency API or WebserviceX.net Currency API both of which are free to use.",
-		"default":"YahooAPIs",
-		"type":"options",
-		"options":"WebserviceX.net,YahooAPIs",
-		"null":0
-	},
-	"ERROR_LOG":{
-		"title":"Log Errors to File",
-		"description":"Log Errors to File",
-		"default":1,
-		"type":"boolean",
-		"options":"1,0",
-		"null":0
-	},
-	"ERROR_SCREEN":{
-		"title":"Output Errors to Screen",
-		"description":"Output Errors to Screen",
-		"default":0,
-		"type":"boolean",
-		"options":"1,0",
-		"null":0
-	},
-	"ERROR_HANDLING":{
-		"title":"Error Handling",
-		"description":"Error handlers are very important, stops the output of errors to the screen.",
-		"default":1,
-		"type":"boolean",
-		"options":"1,0",
-		"null":0
-	},
-	"ERROR_FATAL_HANDLING":{
-		"title":"Fatal Error Handling",
-		"description":"Fatal Error handling to output a more user friendly page in the event of a fatal error.",
-		"default":1,
-		"type":"boolean",
-		"options":"1,0",
-		"null":0
-	},
-	"ERROR_EXCEPTION_HANDLING":{
-		"title":"Exception Handling",
-		"description":"Exception handling to output a more user friendly page in the event of a exception.",
-		"default":1,
-		"type":"boolean",
-		"options":"1,0",
-		"null":0
-	},
-	"DEVELOPMENT_MODE":{
-		"title":"Development Mode",
-		"description":"Output full exceptions and allow dumping of variables to screen",
-		"default":1,
-		"type":"boolean",
-		"options":"1,0",
-		"null":0
-	},
-	"DEVELOPMENT_DEBUG_BAR":{
-		"title":"Development Debug Bar",
-		"description":"Display the debug bar on the site when the framework is in development mode",
-		"default":0,
-		"type":"boolean",
-		"options":"1,0",
-		"null":0
-	},
-	"DEVELOPMENT_EVENT_RECORDER":{
-		"title":"Development Event Recorder",
-		"description":"Record loading times of various parts for the framework, the results can be seen in Debug Bar and on the exception/Inspector page. (Only works when the framework is in development mode)",
-		"default":1,
-		"type":"boolean",
-		"options":"1,0",
-		"null":0
-	},
-	"MAINTENANCE_MODE":{
-		"title":"Maintenance Mode",
-		"description":"Output the 503 SEO friendly maintenance page to all visitors of the website (search engines will not index this page)",
-		"default":0,
-		"type":"boolean",
-		"options":"1,0",
-		"null":0
-	},
-	"PHP_MEMORY_LIMIT":{
-		"title":"PHP Memory Limit",
-		"description":"Set the memory limit for all your PHP scripts that use the framework",
-		"default":"128M",
-		"type":"options",
-		"options":"32M,64M,128M,256M,512M,1G,2G,3G,4G",
-		"null":0
-	},
-	"PHP_MAX_EXECUTION":{
-		"title":"PHP Max Execution",
-		"description":"Set the max execution time for all your PHP scripts that use the framework",
-		"default":"30",
-		"type":"integer",
-		"options":"",
-		"null":0
-	},
-	"FILE_MAX_UPLOAD_SIZE":{
-		"title":"Max Upload Size",
-		"description":"Max allowed file size of assets uploaded to the system, PHP Upload and form post limits still apply",
-		"default":"50M",
-		"type":"options",
-		"options":"1M,2M,5M,10M,20M,30M,50M,100M,250M,375M,500M,750M,1000M",
-		"null":0
-	},
-	"VIEW_PRE_PROCESS_CACHE":{
-		"title":"PreProcess Cache Life",
-		"description":"The amount of time to store a Pre Processed view cache, this cache helps speed up the processing of views",
-		"default":84600,
-		"type":"integer",
-		"options":"",
-		"null":0
-	},
-	"ARCHIVE_HANDLER":{
-		"title":"Archive Handling Library",
-		"description":"Set the library that will handle the creation for archive libraries",
-		"default":"native",
-		"type":"options",
-		"options":"native,pclzip",
-		"null":0
-	},
-	"ASSET_THUMBNAIL_SIZES":{
-		"title":"Asset Default Thumbnail Sizes",
-		"description":"Comma separated pixel size, thumbnails of each size specified wil be created upon upload of an Asset. Can be left blank if no thumbnails are required",
-		"default":"32,64,128,256",
-		"type":"string",
-		"options":"",
-		"null":0
-	},
-	"ASSET_THUMBNAIL_SQUARE_SIZES":{
-		"title":"Asset Default Thumbnail Square Sizes",
-		"description":"Comma separated pixel size, square thumbnails of each size specified wil be created upon upload of an Asset. Can be left blank if no thumbnails are required",
-		"default":"32,64,128,256",
-		"type":"string",
-		"options":"",
-		"null":0
-	},
-	"EMAIL_MULTIPART_ENCODING":{
-		"title":"Default Encoding",
-		"description":"Set the default encoding type to use when sending emails",
-		"default":"7bit",
-		"type":"options",
-		"options":"7bit,base64",
-		"null":0
-	},
-	"EMAIL_CHAR_ENCODING":{
-		"title":"Default Char Encoding",
-		"description":"Set the default char encoding to be used when sending emails",
-		"default":"ISO-8859-1",
-		"type":"string",
-		"options":"",
-		"null":0
-	},
-	"EMAIL_PROTOCOL":{
-		"title":"Email Send Protocol",
-		"description":"Select the protocol to use when sending all emails",
-		"default":"native",
-		"type":"options",
-		"options":"native,smtp",
-		"null":0
-	},
-	"EMAIL_SMTP_HOST":{
-		"title":"SMTP Host",
-		"description":"Set the SMTP Host needed to login to the SMTP email server",
-		"default":"localhost",
-		"type":"string",
-		"options":"",
-		"null":0
-	},
-	"EMAIL_SMTP_PORT":{
-		"title":"SMTP Port",
-		"description":"Set the SMTP Port (Default: 25) needed to login to the SMTP email server",
-		"default":25,
-		"type":"integer",
-		"options":"",
-		"null":0
-	},
-	"EMAIL_SMTP_USERNAME":{
-		"title":"SMTP Username",
-		"description":"Set the SMTP Username (usually an email address) needed to login to the SMTP email server",
-		"default":"",
-		"type":"string",
-		"options":"",
-		"null":0
-	},
-	"EMAIL_SMTP_PASSWORD":{
-		"title":"SMTP Password",
-		"description":"Set the SMTP Password needed to login to the SMTP email server",
-		"default":"",
-		"type":"string",
-		"options":"",
-		"null":0
-	},
-	"FTP_LIBRARY":{
-		"title":"FTP Library",
-		"description":"Choose which connection library the FTP package should use, to use 'native' the ftp_ PHP functions must be installed",
-		"default":"native",
-		"type":"options",
-		"options":"native,socket",
-		"null":0
-	},
-	"SESSION_HANDLER":{
-		"title":"Session Handler",
-		"description":"Choose the PHP session handler to use, 'native' is the default builtin PHP session handler",
-		"default":"native",
-		"type":"options",
-		"options":"native,file,memcache,mysql",
-		"null":0
-	},
-	"CACHE_ENABLED":{
-		"title":"Cache Enabled",
-		"description":"Caching of data, templates and pages are handled with the Twist Cache Package. Disabling the cache will return 'null' for all cache requests, no new data will be stored. Cache files can still be removed when disabled",
-		"default":"1",
-		"type":"boolean",
-		"options":"0,1",
-		"null":0
-	},
-	"CACHE_DELAYED_WRITE":{
-		"title":"Cache Delayed Write",
-		"description":"Delay writing the cache files to disk, the files will be written during the shutdown cycle of the current PHP runtime",
-		"default":"1",
-		"type":"boolean",
-		"options":"0,1",
-		"null":0
-	},
-	"CACHE_GB_PROBABILITY":{
-		"title":"Cache Garbage Collection",
-		"description":"Set the probability of a user collecting garbage between 1-10 when and instance of cache is launched. Default is set to 0, will never collect garbage (Expired items deleted when next used)",
-		"default":"0",
-		"type":"options",
-		"options":"0,1,2,3,4,5,6,7,8,9,10",
-		"null":0
-	},
-	"DATETIME_SOURCE":{
-		"title":"Time Source",
-		"description":"Choose where the datetime class should obtain its timestamp from",
-		"default":"php",
-		"type":"options",
-		"options":"php,mysql",
-		"null":0
-	},
-	"RESOURCE_VERSION_OVERRIDE":{
-		"title":"Resource Version Override",
-		"description":"Allow calls to Resource->extendLibrary to override existing (matching) version of a file, for example jQuery v2.1.1 from the core would be over-ridden by the new jQuery v2.1.1 where as jQuery v2.1.2 would be added as a new resource.",
-		"default":1,
-		"type":"boolean",
-		"options":"1,0",
-		"null":0
-	},
-	"RANDOM_STRING_LENGTH":{
-		"title":"Random String Length",
-		"description":"Set the default length for the output of the Tools()->randomString() function call",
-		"default":16,
-		"type":"integer",
-		"options":"",
-		"null":0
-	},
-	"USER_REGISTER_PASSWORD":{
-		"title":"User Register Password",
-		"description":"The user must enter a password during the registration process (enables a password field on registration form)",
-		"default":1,
-		"type":"boolean",
-		"options":"1,0",
-		"null":0
-	},
-	"USER_PASSWORD_CHANGE_EMAIL":{
-		"title":"Send Password Change Email",
-		"description":"Determine if an email should be send when a user changes their account password (Excludes password reset)",
-		"default":0,
-		"type":"boolean",
-		"options":"1,0",
-		"null":0
-	},
-	"USER_PASSWORD_HASH":{
-		"title":"Strong Password Encryption",
-		"description":"Hash the passwords, this function requires PHP MCRYPT to be installed, More secure and reliable than SHA1",
-		"default":0,
-		"type":"boolean",
-		"options":"1,0",
-		"null":0
-	},
-	"USER_PASSWORD_ENCRYPTION":{
-		"title":"Standard Encryption",
-		"description":"If 'Strong Password Encryption' is set to false then encryption type must be set, Options 'sha1','sha512'",
-		"default":"sha1",
-		"type":"options",
-		"options":"sha1,sha512",
-		"null":0
-	},
-	"USER_AUTO_AUTHENTICATE":{
-		"title":"Auto Authenticate",
-		"description":"Automatically log the user in upon successful registration. This will only work if USER_EMAIL_VERIFICATION is 'off' and USER_REGISTER_PASSWORD is 'on'",
-		"default":0,
-		"type":"boolean",
-		"options":"1,0",
-		"null":1
-	},
-	"USER_MIN_PASSWORD_LENGTH":{
-		"title":"Min Password Length",
-		"description":"Set the minimum password length to allow",
-		"default":6,
-		"type":"integer",
-		"options":"",
-		"null":0
-	},
-	"USER_COMMON_PASSWORD_FILTER":{
-		"title":"Common Password Filter",
-		"description":"Stop the user from using any of the top 10,000 most common passwords",
-		"default":1,
-		"type":"boolean",
-		"options":"1,0",
-		"null":0
-	},
-	"USER_EMAIL_VERIFICATION":{
-		"title":"Verify Email",
-		"description":"Verify a registered user by email before they can login to their account",
-		"default":0,
-		"type":"boolean",
-		"options":"1,0",
-		"null":0
-	},
-	"USER_PASSWORD_CHANGE":{
-		"title":"Force Temporary Password Change",
-		"description":"Require a user to change there password upon login (if the password is a temporary one)",
-		"default":1,
-		"type":"boolean",
-		"options":"1,0",
-		"null":0
-	},
-	"USER_REMEMBER_LENGTH":{
-		"title":"Remember Length",
-		"description":"Set the time in Hours (Default: 168, which is 7 Days in Hours)",
-		"default":168,
-		"type":"integer",
-		"options":"",
-		"null":0
-	},
-	"USER_LEVEL_MEMBER":{
-		"title":"User Level (Member)",
-		"description":"Level (integer) of a member user used to restrict access through routes",
-		"default":10,
-		"type":"integer",
-		"options":"",
-		"null":0
-	},
-	"USER_LEVEL_ADVANCED":{
-		"title":"User Level (Advanced)",
-		"description":"Level (integer) of a advanced user used to restrict access through routes",
-		"default":20,
-		"type":"integer",
-		"options":"",
-		"null":0
-	},
-	"USER_LEVEL_ADMIN":{
-		"title":"User Level (Admin)",
-		"description":"Level (integer) of a admin user used to restrict access through routes",
-		"default":30,
-		"type":"integer",
-		"options":"",
-		"null":0
-	},
-	"USER_LEVEL_SUPERADMIN":{
-		"title":"User Level (Super Admin)",
-		"description":"Level (integer) of a super admin user used to restrict access through routes",
-		"default":40,
-		"type":"integer",
-		"options":"",
-		"null":0
-	}
+  "SITE_NAME":{
+    "title":"Site Name",
+    "description":"Enter the default name of your website",
+    "default":"",
+    "type":"string",
+    "options":"",
+    "null":0
+  },
+  "SITE_DESCRIPTION":{
+    "title":"Site Description",
+    "description":"Enter the default meta description for your website",
+    "default":"",
+    "type":"string",
+    "options":"",
+    "null":0
+  },
+  "SITE_KEYWORDS":{
+    "title":"Site Keywords",
+    "description":"Enter the default set of keywords for your website",
+    "default":"",
+    "type":"string",
+    "options":"",
+    "null":0
+  },
+  "SITE_AUTHOR":{
+    "title":"Site Author",
+    "description":"Enter the default author of your website",
+    "default":"",
+    "type":"string",
+    "options":"",
+    "null":0
+  },
+  "SITE_HOST":{
+    "title":"Site Host",
+    "description":"Enter the HTTP Host name of the website for instance http://www.example.com/index.php would be 'example.com'",
+    "default":"",
+    "type":"string",
+    "options":"",
+    "null":0
+  },
+  "SITE_BASE":{
+    "title":"Site Base",
+    "description":"The base path (suffix of document root) of the site for example 'http://www.twist.com/test/index.php' the base would be '/test/' which is the main site root",
+    "default":"/",
+    "type":"string",
+    "options":"",
+    "null":0
+  },
+  "SITE_WWW":{
+    "title":"Site Use WWW",
+    "description":"Redirect the user to WWW. if they are not already on that sub-domain. Also used when building the full site URL",
+    "default":"0",
+    "type":"boolean",
+    "options":"",
+    "null":0
+  },
+  "SITE_TRAILING_SLASH":{
+    "title":"Site Trailing Slash",
+    "description":"URIs and URLs in Routes and Structure will have a trailing slash '/' suffix",
+    "default":"0",
+    "type":"boolean",
+    "options":"",
+    "null":0
+  },
+  "SITE_PROTOCOL":{
+    "title":"Site Protocol",
+    "description":"Select the primary protocol for the website",
+    "default":"http",
+    "type":"options",
+    "options":"http,https",
+    "null":0
+  },
+  "SITE_PROTOCOL_FORCE":{
+    "title":"Force Site Protocol",
+    "description":"Redirect the user to the selected SITE_PROTOCOL",
+    "default":"0",
+    "type":"boolean",
+    "options":"",
+    "null":0
+  },
+  "TIMEZONE":{
+    "title":"Timezone",
+    "description":"Set the timezone of your website",
+    "default":"Europe/London",
+    "type":"string",
+    "options":"",
+    "null":0
+  },
+  "DEFAULT_COUNTRY":{
+    "title":"Default Country",
+    "description":"Set to the default country ISO code of your site",
+    "default":"GB",
+    "type":"country_iso",
+    "options":"",
+    "null":0
+  },
+  "DEFAULT_LANGUAGE":{
+    "title":"Default Language",
+    "description":"Set to the default language ISO code of your site",
+    "default":"EN",
+    "type":"language_iso",
+    "options":"",
+    "null":0
+  },
+  "DEFAULT_CURRENCY":{
+    "title":"Default Currency",
+    "description":"Set to the default currency ISO code of your site",
+    "default":"GBP",
+    "type":"currency_iso",
+    "options":"",
+    "null":0
+  },
+  "CURRENCY_CONVERSION_API":{
+    "title":"Currency Conversion API",
+    "description":"Set the currency converter to use either Yahoo Currency API or WebserviceX.net Currency API both of which are free to use.",
+    "default":"YahooAPIs",
+    "type":"options",
+    "options":"WebserviceX.net,YahooAPIs",
+    "null":0
+  },
+  "ERROR_LOG":{
+    "title":"Log Errors to File",
+    "description":"Log Errors to File",
+    "default":1,
+    "type":"boolean",
+    "options":"1,0",
+    "null":0
+  },
+  "ERROR_SCREEN":{
+    "title":"Output Errors to Screen",
+    "description":"Output Errors to Screen",
+    "default":0,
+    "type":"boolean",
+    "options":"1,0",
+    "null":0
+  },
+  "ERROR_HANDLING":{
+    "title":"Error Handling",
+    "description":"Error handlers are very important, stops the output of errors to the screen.",
+    "default":1,
+    "type":"boolean",
+    "options":"1,0",
+    "null":0
+  },
+  "ERROR_FATAL_HANDLING":{
+    "title":"Fatal Error Handling",
+    "description":"Fatal Error handling to output a more user friendly page in the event of a fatal error.",
+    "default":1,
+    "type":"boolean",
+    "options":"1,0",
+    "null":0
+  },
+  "ERROR_EXCEPTION_HANDLING":{
+    "title":"Exception Handling",
+    "description":"Exception handling to output a more user friendly page in the event of a exception.",
+    "default":1,
+    "type":"boolean",
+    "options":"1,0",
+    "null":0
+  },
+  "DEVELOPMENT_MODE":{
+    "title":"Development Mode",
+    "description":"Output full exceptions and allow dumping of variables to screen",
+    "default":1,
+    "type":"boolean",
+    "options":"1,0",
+    "null":0
+  },
+  "DEVELOPMENT_DEBUG_BAR":{
+    "title":"Development Debug Bar",
+    "description":"Display the debug bar on the site when the framework is in development mode",
+    "default":0,
+    "type":"boolean",
+    "options":"1,0",
+    "null":0
+  },
+  "DEVELOPMENT_EVENT_RECORDER":{
+    "title":"Development Event Recorder",
+    "description":"Record loading times of various parts for the framework, the results can be seen in Debug Bar and on the exception/Inspector page. (Only works when the framework is in development mode)",
+    "default":1,
+    "type":"boolean",
+    "options":"1,0",
+    "null":0
+  },
+  "MAINTENANCE_MODE":{
+    "title":"Maintenance Mode",
+    "description":"Output the 503 SEO friendly maintenance page to all visitors of the website (search engines will not index this page)",
+    "default":0,
+    "type":"boolean",
+    "options":"1,0",
+    "null":0
+  },
+  "PHP_MEMORY_LIMIT":{
+    "title":"PHP Memory Limit",
+    "description":"Set the memory limit for all your PHP scripts that use the framework",
+    "default":"128M",
+    "type":"options",
+    "options":"32M,64M,128M,256M,512M,1G,2G,3G,4G",
+    "null":0
+  },
+  "PHP_MAX_EXECUTION":{
+    "title":"PHP Max Execution",
+    "description":"Set the max execution time for all your PHP scripts that use the framework",
+    "default":"30",
+    "type":"integer",
+    "options":"",
+    "null":0
+  },
+  "FILE_MAX_UPLOAD_SIZE":{
+    "title":"Max Upload Size",
+    "description":"Max allowed file size of assets uploaded to the system, PHP Upload and form post limits still apply",
+    "default":"50M",
+    "type":"options",
+    "options":"1M,2M,5M,10M,20M,30M,50M,100M,250M,375M,500M,750M,1000M",
+    "null":0
+  },
+  "VIEW_PRE_PROCESS_CACHE":{
+    "title":"PreProcess Cache Life",
+    "description":"The amount of time to store a Pre Processed view cache, this cache helps speed up the processing of views",
+    "default":84600,
+    "type":"integer",
+    "options":"",
+    "null":0
+  },
+  "ARCHIVE_HANDLER":{
+    "title":"Archive Handling Library",
+    "description":"Set the library that will handle the creation for archive libraries",
+    "default":"native",
+    "type":"options",
+    "options":"native,pclzip",
+    "null":0
+  },
+  "ASSET_THUMBNAIL_SIZES":{
+    "title":"Asset Default Thumbnail Sizes",
+    "description":"Comma separated pixel size, thumbnails of each size specified wil be created upon upload of an Asset. Can be left blank if no thumbnails are required",
+    "default":"32,64,128,256",
+    "type":"string",
+    "options":"",
+    "null":0
+  },
+  "ASSET_THUMBNAIL_SQUARE_SIZES":{
+    "title":"Asset Default Thumbnail Square Sizes",
+    "description":"Comma separated pixel size, square thumbnails of each size specified wil be created upon upload of an Asset. Can be left blank if no thumbnails are required",
+    "default":"32,64,128,256",
+    "type":"string",
+    "options":"",
+    "null":0
+  },
+  "EMAIL_MULTIPART_ENCODING":{
+    "title":"Default Encoding",
+    "description":"Set the default encoding type to use when sending emails",
+    "default":"7bit",
+    "type":"options",
+    "options":"7bit,base64",
+    "null":0
+  },
+  "EMAIL_CHAR_ENCODING":{
+    "title":"Default Char Encoding",
+    "description":"Set the default char encoding to be used when sending emails",
+    "default":"ISO-8859-1",
+    "type":"string",
+    "options":"",
+    "null":0
+  },
+  "EMAIL_PROTOCOL":{
+    "title":"Email Send Protocol",
+    "description":"Select the protocol to use when sending all emails",
+    "default":"native",
+    "type":"options",
+    "options":"native,smtp",
+    "null":0
+  },
+  "EMAIL_SMTP_HOST":{
+    "title":"SMTP Host",
+    "description":"Set the SMTP Host needed to login to the SMTP email server",
+    "default":"localhost",
+    "type":"string",
+    "options":"",
+    "null":0
+  },
+  "EMAIL_SMTP_PORT":{
+    "title":"SMTP Port",
+    "description":"Set the SMTP Port (Default: 25) needed to login to the SMTP email server",
+    "default":25,
+    "type":"integer",
+    "options":"",
+    "null":0
+  },
+  "EMAIL_SMTP_USERNAME":{
+    "title":"SMTP Username",
+    "description":"Set the SMTP Username (usually an email address) needed to login to the SMTP email server",
+    "default":"",
+    "type":"string",
+    "options":"",
+    "null":0
+  },
+  "EMAIL_SMTP_PASSWORD":{
+    "title":"SMTP Password",
+    "description":"Set the SMTP Password needed to login to the SMTP email server",
+    "default":"",
+    "type":"string",
+    "options":"",
+    "null":0
+  },
+  "FTP_LIBRARY":{
+    "title":"FTP Library",
+    "description":"Choose which connection library the FTP package should use, to use 'native' the ftp_ PHP functions must be installed",
+    "default":"native",
+    "type":"options",
+    "options":"native,socket",
+    "null":0
+  },
+  "HTACCESS_DIRECTORY_INDEX":{
+    "title":"HTAccess Directory Index",
+    "description":"Set the index order for apache to lookup when serving a directory",
+    "default":"index.php index.html index.htm",
+    "type":"string",
+    "options":"",
+    "null":0
+  },
+  "HTACCESS_ETAG":{
+    "title":"HTAccess Allow ETags",
+    "description":"Allow the ETag header to be used",
+    "default":"1",
+    "type":"boolean",
+    "options":"0,1",
+    "null":0
+  },
+  "HTACCESS_CACHE_HTML":{
+    "title":"HTAccess HTML Cache Control",
+    "description":"Set the number of seconds for the HTML to be cached in the browser - Cache Control (max-age)",
+    "default":"0",
+    "type":"integer",
+    "options":"",
+    "null":0
+  },
+  "HTACCESS_REVALIDATE_HTML":{
+    "title":"HTAccess HTML Allow Revalidate",
+    "description":"Allow the cached HTML to be revalidated using the last-modified header",
+    "default":"1",
+    "type":"boolean",
+    "options":"0,1",
+    "null":0
+  },
+  "HTACCESS_DEFLATE_HTML":{
+    "title":"HTAccess HTML Compression",
+    "description":"Compress the output of HTML from the server using DEFLATE",
+    "default":"0",
+    "type":"boolean",
+    "options":"0,1",
+    "null":0
+  },
+  "HTACCESS_CACHE_CSS":{
+    "title":"HTAccess CSS Cache Control",
+    "description":"Set the number of seconds for the CSS to be cached in the browser - Cache Control (max-age)",
+    "default":"0",
+    "type":"integer",
+    "options":"",
+    "null":0
+  },
+  "HTACCESS_REVALIDATE_CSS":{
+    "title":"HTAccess CSS Allow Revalidate",
+    "description":"Allow the cached CSS to be revalidated using the last-modified header",
+    "default":"1",
+    "type":"boolean",
+    "options":"0,1",
+    "null":0
+  },
+  "HTACCESS_DEFLATE_CSS":{
+    "title":"HTAccess CSS Compression",
+    "description":"Compress the output of CSS from the server using DEFLATE",
+    "default":"0",
+    "type":"boolean",
+    "options":"0,1",
+    "null":0
+  },
+  "HTACCESS_CACHE_JS":{
+    "title":"HTAccess JS Cache Control",
+    "description":"Set the number of seconds for the JS to be cached in the browser - Cache Control (max-age)",
+    "default":"0",
+    "type":"integer",
+    "options":"",
+    "null":0
+  },
+  "HTACCESS_REVALIDATE_JS":{
+    "title":"HTAccess JS Allow Revalidate",
+    "description":"Allow the cached JS to be revalidated using the last-modified header",
+    "default":"1",
+    "type":"boolean",
+    "options":"0,1",
+    "null":0
+  },
+  "HTACCESS_DEFLATE_JS":{
+    "title":"HTAccess JS Compression",
+    "description":"Compress the output of JS from the server using DEFLATE",
+    "default":"0",
+    "type":"boolean",
+    "options":"0,1",
+    "null":0
+  },
+  "HTACCESS_CACHE_IMAGES":{
+    "title":"HTAccess Image Cache Control",
+    "description":"Set the number of seconds for the Image to be cached in the browser - Cache Control (max-age)",
+    "default":"0",
+    "type":"integer",
+    "options":"",
+    "null":0
+  },
+  "HTACCESS_REVALIDATE_IMAGES":{
+    "title":"HTAccess Image Allow Revalidate",
+    "description":"Allow the cached Image to be revalidated using the last-modified header",
+    "default":"1",
+    "type":"boolean",
+    "options":"0,1",
+    "null":0
+  },
+  "HTACCESS_DEFLATE_IMAGES":{
+    "title":"HTAccess Image Compression",
+    "description":"Compress the output of Image from the server using DEFLATE",
+    "default":"0",
+    "type":"boolean",
+    "options":"0,1",
+    "null":0
+  },
+  "HTACCESS_REWRITES":{
+    "title":"HTAccess Rewrite Rule",
+    "description":"A JSON string containing all the re-write rules format per rule {'rule':'','redirect':'','options':''}, use the manager to edit this option",
+    "default":"",
+    "type":"string",
+    "options":"",
+    "null":0
+  },
+  "HTACCESS_CUSTOM":{
+    "title":"HTAccess Custom",
+    "description":"Enter all custom .htaccess functionality here, the .htaccess file is rebuilt by TwistPHP, any changes to the file directly may be lost if rebuilt with the manager",
+    "default":"",
+    "type":"string",
+    "options":"",
+    "null":0
+  },
+  "SESSION_HANDLER":{
+    "title":"Session Handler",
+    "description":"Choose the PHP session handler to use, 'native' is the default builtin PHP session handler",
+    "default":"native",
+    "type":"options",
+    "options":"native,file,memcache,mysql",
+    "null":0
+  },
+  "CACHE_ENABLED":{
+    "title":"Cache Enabled",
+    "description":"Caching of data, templates and pages are handled with the Twist Cache Package. Disabling the cache will return 'null' for all cache requests, no new data will be stored. Cache files can still be removed when disabled",
+    "default":"1",
+    "type":"boolean",
+    "options":"0,1",
+    "null":0
+  },
+  "CACHE_DELAYED_WRITE":{
+    "title":"Cache Delayed Write",
+    "description":"Delay writing the cache files to disk, the files will be written during the shutdown cycle of the current PHP runtime",
+    "default":"1",
+    "type":"boolean",
+    "options":"0,1",
+    "null":0
+  },
+  "CACHE_GB_PROBABILITY":{
+    "title":"Cache Garbage Collection",
+    "description":"Set the probability of a user collecting garbage between 1-10 when and instance of cache is launched. Default is set to 0, will never collect garbage (Expired items deleted when next used)",
+    "default":"0",
+    "type":"options",
+    "options":"0,1,2,3,4,5,6,7,8,9,10",
+    "null":0
+  },
+  "DATETIME_SOURCE":{
+    "title":"Time Source",
+    "description":"Choose where the datetime class should obtain its timestamp from",
+    "default":"php",
+    "type":"options",
+    "options":"php,mysql",
+    "null":0
+  },
+  "RESOURCE_VERSION_OVERRIDE":{
+    "title":"Resource Version Override",
+    "description":"Allow calls to Resource->extendLibrary to override existing (matching) version of a file, for example jQuery v2.1.1 from the core would be over-ridden by the new jQuery v2.1.1 where as jQuery v2.1.2 would be added as a new resource.",
+    "default":1,
+    "type":"boolean",
+    "options":"1,0",
+    "null":0
+  },
+  "RANDOM_STRING_LENGTH":{
+    "title":"Random String Length",
+    "description":"Set the default length for the output of the Tools()->randomString() function call",
+    "default":16,
+    "type":"integer",
+    "options":"",
+    "null":0
+  },
+  "USER_REGISTER_PASSWORD":{
+    "title":"User Register Password",
+    "description":"The user must enter a password during the registration process (enables a password field on registration form)",
+    "default":1,
+    "type":"boolean",
+    "options":"1,0",
+    "null":0
+  },
+  "USER_PASSWORD_CHANGE_EMAIL":{
+    "title":"Send Password Change Email",
+    "description":"Determine if an email should be send when a user changes their account password (Excludes password reset)",
+    "default":0,
+    "type":"boolean",
+    "options":"1,0",
+    "null":0
+  },
+  "USER_PASSWORD_HASH":{
+    "title":"Strong Password Encryption",
+    "description":"Hash the passwords, this function requires PHP MCRYPT to be installed, More secure and reliable than SHA1",
+    "default":0,
+    "type":"boolean",
+    "options":"1,0",
+    "null":0
+  },
+  "USER_PASSWORD_ENCRYPTION":{
+    "title":"Standard Encryption",
+    "description":"If 'Strong Password Encryption' is set to false then encryption type must be set, Options 'sha1','sha512'",
+    "default":"sha1",
+    "type":"options",
+    "options":"sha1,sha512",
+    "null":0
+  },
+  "USER_AUTO_AUTHENTICATE":{
+    "title":"Auto Authenticate",
+    "description":"Automatically log the user in upon successful registration. This will only work if USER_EMAIL_VERIFICATION is 'off' and USER_REGISTER_PASSWORD is 'on'",
+    "default":0,
+    "type":"boolean",
+    "options":"1,0",
+    "null":1
+  },
+  "USER_MIN_PASSWORD_LENGTH":{
+    "title":"Min Password Length",
+    "description":"Set the minimum password length to allow",
+    "default":6,
+    "type":"integer",
+    "options":"",
+    "null":0
+  },
+  "USER_COMMON_PASSWORD_FILTER":{
+    "title":"Common Password Filter",
+    "description":"Stop the user from using any of the top 10,000 most common passwords",
+    "default":1,
+    "type":"boolean",
+    "options":"1,0",
+    "null":0
+  },
+  "USER_EMAIL_VERIFICATION":{
+    "title":"Verify Email",
+    "description":"Verify a registered user by email before they can login to their account",
+    "default":0,
+    "type":"boolean",
+    "options":"1,0",
+    "null":0
+  },
+  "USER_PASSWORD_CHANGE":{
+    "title":"Force Temporary Password Change",
+    "description":"Require a user to change there password upon login (if the password is a temporary one)",
+    "default":1,
+    "type":"boolean",
+    "options":"1,0",
+    "null":0
+  },
+  "USER_REMEMBER_LENGTH":{
+    "title":"Remember Length",
+    "description":"Set the time in Hours (Default: 168, which is 7 Days in Hours)",
+    "default":168,
+    "type":"integer",
+    "options":"",
+    "null":0
+  },
+  "USER_LEVEL_MEMBER":{
+    "title":"User Level (Member)",
+    "description":"Level (integer) of a member user used to restrict access through routes",
+    "default":10,
+    "type":"integer",
+    "options":"",
+    "null":0
+  },
+  "USER_LEVEL_ADVANCED":{
+    "title":"User Level (Advanced)",
+    "description":"Level (integer) of a advanced user used to restrict access through routes",
+    "default":20,
+    "type":"integer",
+    "options":"",
+    "null":0
+  },
+  "USER_LEVEL_ADMIN":{
+    "title":"User Level (Admin)",
+    "description":"Level (integer) of a admin user used to restrict access through routes",
+    "default":30,
+    "type":"integer",
+    "options":"",
+    "null":0
+  },
+  "USER_LEVEL_SUPERADMIN":{
+    "title":"User Level (Super Admin)",
+    "description":"Level (integer) of a super admin user used to restrict access through routes",
+    "default":40,
+    "type":"integer",
+    "options":"",
+    "null":0
+  }
 }
