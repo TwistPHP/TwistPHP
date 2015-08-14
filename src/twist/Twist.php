@@ -575,6 +575,17 @@
 		}
 
 		/**
+		 * Return an instance of the Device package.
+		 * @return \Twist\Core\Packages\Device
+		 */
+		public static function Device(){
+
+			$resTwistModule = (!Instance::isObject('pkgDevice')) ? new Packages\Device() : Instance::retrieveObject('pkgDevice');
+			Instance::storeObject('pkgDevice',$resTwistModule);
+			return $resTwistModule;
+		}
+
+		/**
 		 * Return an instance of the Email package.
 		 * @return \Twist\Core\Packages\Email
 		 */

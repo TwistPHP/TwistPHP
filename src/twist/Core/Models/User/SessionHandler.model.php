@@ -68,11 +68,15 @@ class SessionHandler{
 
 			$strSQL = sprintf("INSERT INTO `%s`.`%suser_sessions`
 									SET `user_id` = %d,
-										`device` = '%s'",
+										`device` = '%s',
+										`os` = '%s',
+										`browser` = '%s'",
 				TWIST_DATABASE_NAME,
 				TWIST_DATABASE_TABLE_PREFIX,
 				$objDB->escapeString($intUserID),
-				$objDB->escapeString($strDeviceID)
+				$objDB->escapeString($strDeviceID),
+				\Twist::Device()->getOSVersion(),
+				\Twist::Device()->getBrowser()
 			);
 
 			$objDB->query($strSQL);
@@ -85,11 +89,15 @@ class SessionHandler{
 
 				$strSQL = sprintf("INSERT INTO `%s`.`%suser_sessions`
 										SET `user_id` = %d,
-											`device` = '%s'",
+											`device` = '%s',
+											`os` = '%s',
+											`browser` = '%s'",
 					TWIST_DATABASE_NAME,
 					TWIST_DATABASE_TABLE_PREFIX,
 					$objDB->escapeString($intUserID),
-					$objDB->escapeString($strDeviceID)
+					$objDB->escapeString($strDeviceID),
+					\Twist::Device()->getOSVersion(),
+					\Twist::Device()->getBrowser()
 				);
 
 				$objDB->query($strSQL);
@@ -130,7 +138,7 @@ class SessionHandler{
 		$arrOut = array();
 		$objDB = \Twist::Database();
 
-		$strSQL = sprintf("SELECT `id`,`device`,`device_name`,`last_login`
+		$strSQL = sprintf("SELECT `id`,`device`,`device_name`,`os`,`browser`,`last_login`
 								FROM `%s`.`%suser_sessions`
 								WHERE `user_id` = %d
 								ORDER BY `last_login` DESC",
@@ -153,7 +161,7 @@ class SessionHandler{
 
 		if(count($_COOKIE) && array_key_exists('device',$_COOKIE)){
 
-			$strSQL = sprintf("SELECT `id`,`device`,`device_name`,`last_login`
+			$strSQL = sprintf("SELECT `id`,`device`,`device_name`,`os`,`browser`,`last_login`
 									FROM `%s`.`%suser_sessions`
 									WHERE `user_id` = %d
 									AND `device` = '%s'",

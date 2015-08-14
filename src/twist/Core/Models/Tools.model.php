@@ -486,7 +486,7 @@
 		 * @param $strString2
 		 * @return string
 		 */
-		function zipStrings( $strString1, $strString2 ) {
+		public function zipStrings( $strString1, $strString2 ) {
 			$strOut = '';
 
 			$arrString1Chars = str_split( $strString1 );
