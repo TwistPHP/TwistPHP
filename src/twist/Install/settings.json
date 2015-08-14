@@ -72,8 +72,8 @@
     "null":0
   },
   "SITE_PROTOCOL_FORCE":{
-    "title":"Force Site Protocol",
-    "description":"Redirect the user to the selected SITE_PROTOCOL",
+    "title":"Force Site Protocol/Prefix",
+    "description":"Redirect the user to the selected SITE_PROTOCOL and SITE_WWW prefix, changing this will require a rebuild of the .htaccess file",
     "default":"0",
     "type":"boolean",
     "options":"",
@@ -312,7 +312,7 @@
     "null":0
   },
   "HTACCESS_DIRECTORY_INDEX":{
-    "title":"HTAccess Directory Index",
+    "title":"Directory Index",
     "description":"Set the index order for apache to lookup when serving a directory",
     "default":"index.php index.html index.htm",
     "type":"string",
@@ -320,7 +320,7 @@
     "null":0
   },
   "HTACCESS_ETAG":{
-    "title":"HTAccess Allow ETags",
+    "title":"Allow ETags",
     "description":"Allow the ETag header to be used",
     "default":"1",
     "type":"boolean",
@@ -328,7 +328,7 @@
     "null":0
   },
   "HTACCESS_CACHE_HTML":{
-    "title":"HTAccess HTML Cache Control",
+    "title":"HTML Cache Control",
     "description":"Set the number of seconds for the HTML to be cached in the browser - Cache Control (max-age)",
     "default":"0",
     "type":"integer",
@@ -336,7 +336,7 @@
     "null":0
   },
   "HTACCESS_REVALIDATE_HTML":{
-    "title":"HTAccess HTML Allow Revalidate",
+    "title":"HTML Allow Revalidate",
     "description":"Allow the cached HTML to be revalidated using the last-modified header",
     "default":"1",
     "type":"boolean",
@@ -344,7 +344,7 @@
     "null":0
   },
   "HTACCESS_DEFLATE_HTML":{
-    "title":"HTAccess HTML Compression",
+    "title":"HTML Compression",
     "description":"Compress the output of HTML from the server using DEFLATE",
     "default":"0",
     "type":"boolean",
@@ -352,7 +352,7 @@
     "null":0
   },
   "HTACCESS_CACHE_CSS":{
-    "title":"HTAccess CSS Cache Control",
+    "title":"CSS Cache Control",
     "description":"Set the number of seconds for the CSS to be cached in the browser - Cache Control (max-age)",
     "default":"0",
     "type":"integer",
@@ -360,7 +360,7 @@
     "null":0
   },
   "HTACCESS_REVALIDATE_CSS":{
-    "title":"HTAccess CSS Allow Revalidate",
+    "title":"CSS Allow Revalidate",
     "description":"Allow the cached CSS to be revalidated using the last-modified header",
     "default":"1",
     "type":"boolean",
@@ -368,7 +368,7 @@
     "null":0
   },
   "HTACCESS_DEFLATE_CSS":{
-    "title":"HTAccess CSS Compression",
+    "title":"CSS Compression",
     "description":"Compress the output of CSS from the server using DEFLATE",
     "default":"0",
     "type":"boolean",
@@ -376,7 +376,7 @@
     "null":0
   },
   "HTACCESS_CACHE_JS":{
-    "title":"HTAccess JS Cache Control",
+    "title":"JS Cache Control",
     "description":"Set the number of seconds for the JS to be cached in the browser - Cache Control (max-age)",
     "default":"0",
     "type":"integer",
@@ -384,7 +384,7 @@
     "null":0
   },
   "HTACCESS_REVALIDATE_JS":{
-    "title":"HTAccess JS Allow Revalidate",
+    "title":"JS Allow Revalidate",
     "description":"Allow the cached JS to be revalidated using the last-modified header",
     "default":"1",
     "type":"boolean",
@@ -392,7 +392,7 @@
     "null":0
   },
   "HTACCESS_DEFLATE_JS":{
-    "title":"HTAccess JS Compression",
+    "title":"JS Compression",
     "description":"Compress the output of JS from the server using DEFLATE",
     "default":"0",
     "type":"boolean",
@@ -400,7 +400,7 @@
     "null":0
   },
   "HTACCESS_CACHE_IMAGES":{
-    "title":"HTAccess Image Cache Control",
+    "title":"Image Cache Control",
     "description":"Set the number of seconds for the Image to be cached in the browser - Cache Control (max-age)",
     "default":"0",
     "type":"integer",
@@ -408,7 +408,7 @@
     "null":0
   },
   "HTACCESS_REVALIDATE_IMAGES":{
-    "title":"HTAccess Image Allow Revalidate",
+    "title":"Image Allow Revalidate",
     "description":"Allow the cached Image to be revalidated using the last-modified header",
     "default":"1",
     "type":"boolean",
@@ -416,7 +416,7 @@
     "null":0
   },
   "HTACCESS_DEFLATE_IMAGES":{
-    "title":"HTAccess Image Compression",
+    "title":"Image Compression",
     "description":"Compress the output of Image from the server using DEFLATE",
     "default":"0",
     "type":"boolean",
@@ -424,7 +424,7 @@
     "null":0
   },
   "HTACCESS_REWRITES":{
-    "title":"HTAccess Rewrite Rule",
+    "title":"Rewrite Rule",
     "description":"A JSON string containing all the re-write rules format per rule {'rule':'','redirect':'','options':''}, use the manager to edit this option",
     "default":"",
     "type":"string",
@@ -432,7 +432,7 @@
     "null":0
   },
   "HTACCESS_CUSTOM":{
-    "title":"HTAccess Custom",
+    "title":"Custom",
     "description":"Enter all custom .htaccess functionality here, the .htaccess file is rebuilt by TwistPHP, any changes to the file directly may be lost if rebuilt with the manager",
     "default":"",
     "type":"string",
