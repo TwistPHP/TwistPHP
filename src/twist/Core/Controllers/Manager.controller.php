@@ -134,6 +134,7 @@ class Manager extends BaseUser{
 	public function postHtaccess(){
 
 		\Twist::framework()->setting('SITE_WWW',$_POST['SITE_WWW']);
+		\Twist::framework()->setting('SITE_PROTOCOL',$_POST['SITE_PROTOCOL']);
 		\Twist::framework()->setting('SITE_PROTOCOL_FORCE',$_POST['SITE_PROTOCOL_FORCE']);
 		\Twist::framework()->setting('SITE_DIRECTORY_INDEX',$_POST['SITE_DIRECTORY_INDEX']);
 

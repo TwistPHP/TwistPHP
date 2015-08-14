@@ -17,12 +17,12 @@
     {setting:HTACCESS_CUSTOM}
 
     # www redirect when enabled in the settings
-    {setting:SITE_WWW==true?'':'#'}RewriteCond %{HTTP_HOST} !^www\.
-    {setting:SITE_WWW==true?'':'#'}RewriteRule ^(.*)$ {setting:SITE_PROTOCOL}://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+    {setting:SITE_PROTOCOL_FORCE==true?'':'#'}RewriteCond %{HTTP_HOST} {setting:SITE_WWW==true?'!':''}^www\.
+    {setting:SITE_PROTOCOL_FORCE==true?'':'#'}RewriteRule ^(.*)$ {setting:SITE_PROTOCOL}://{setting:SITE_WWW==true?'www.':''}{setting:SITE_HOST}%{REQUEST_URI} [L,R=301]
 
     # HTTPS redirect when enabled in the settings
-    {setting:SITE_PROTOCOL_FORCE==true?'':'#'}RewriteCond %{HTTPS} off
-    {setting:SITE_PROTOCOL_FORCE==true?'':'#'}RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+    {setting:SITE_PROTOCOL_FORCE==true?'':'#'}RewriteCond %{HTTPS} {setting:SITE_PROTOCOL=='https'?'off':'on'}
+    {setting:SITE_PROTOCOL_FORCE==true?'':'#'}RewriteRule ^(.*)$ {setting:SITE_PROTOCOL}://{setting:SITE_WWW==true?'www.':''}{setting:SITE_HOST}%{REQUEST_URI} [L,R=301]
 
     # Rewrite rules that have been setup in the manager
     {data:rewrite_rules}

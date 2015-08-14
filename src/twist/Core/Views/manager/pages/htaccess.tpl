@@ -4,16 +4,22 @@
         <p>Manage the editing of browser cache settings, rewrite rules and default host name redirects such as using www. or not and forcing https. Saving changes will re-generate your HTAccess file, if you require any custom rules please place them in the box above.</p>
         <h3>Domain Preferences</h3>
 
-        <label>Use WWW Prefix (Auto Redirect)</label>
+        <label>Preferred Domain Prefix</label>
         <select name="SITE_WWW">
-            <option value="1"{setting:SITE_WWW==true?' selected':''}>Yes</option>
-            <option value="0"{setting:SITE_WWW==false?' selected':''}>No</option>
+            <option value="1"{setting:SITE_WWW==true?' selected':''}>With WWW</option>
+            <option value="0"{setting:SITE_WWW==false?' selected':''}>Without WWW</option>
         </select>
 
-        <label>Use HTTPS (Auto Redirect)</label>
+        <label>Preferred Protocol</label>
+        <select name="SITE_PROTOCOL">
+            <option value="http"{setting:SITE_PROTOCOL=='http'?' selected':''}>HTTP</option>
+            <option value="https"{setting:SITE_PROTOCOL=='https'?' selected':''}>HTTPS</option>
+        </select>
+
+        <label>Force Protocol/Prefix</label>
         <select name="SITE_PROTOCOL_FORCE">
-            <option value="1"{setting:SITE_PROTOCOL_FORCE==true?' selected':''}>Yes</option>
-            <option value="0"{setting:SITE_PROTOCOL_FORCE==false?' selected':''}>No</option>
+            <option value="1"{setting:SITE_PROTOCOL_FORCE==true?' selected':''}>Yes, auto redirect</option>
+            <option value="0"{setting:SITE_PROTOCOL_FORCE==false?' selected':''}>No, don't redirect</option>
         </select>
 
         <label>Directory Index Order</label>
