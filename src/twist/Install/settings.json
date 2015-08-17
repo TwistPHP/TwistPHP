@@ -39,14 +39,6 @@
     "options":"",
     "null":0
   },
-  "SITE_BASE":{
-    "title":"Site Base",
-    "description":"The base path (suffix of document root) of the site for example 'http://www.twist.com/test/index.php' the base would be '/test/' which is the main site root",
-    "default":"/",
-    "type":"string",
-    "options":"",
-    "null":0
-  },
   "SITE_WWW":{
     "title":"Site Use WWW",
     "description":"Redirect the user to WWW. if they are not already on that sub-domain. Also used when building the full site URL",
@@ -309,6 +301,22 @@
     "default":"native",
     "type":"options",
     "options":"native,socket",
+    "null":0
+  },
+  "GZIP_COMPRESSION":{
+    "title":"GZip Compress PHP Output",
+    "description":"Compress all the PHP output to the browser using GZip compression, currently this setting only applies to output when served by Routes.",
+    "default":"1",
+    "type":"boolean",
+    "options":"0,1",
+    "null":0
+  },
+  "GZIP_COMPRESSION_LEVEL":{
+    "title":"GZip Compression Level",
+    "description":"Set a level between 1 and 6, 1 being the lowest amount of compression and 6 being the highest. Yopu might want to decrease the CPU load on a busy server by lowering the compression level. Default level is 6.",
+    "default":"6",
+    "type":"option",
+    "options":"1,2,3,4,5,6",
     "null":0
   },
   "HTACCESS_DIRECTORY_INDEX":{

@@ -655,13 +655,15 @@ class Route extends Base{
 
 		if(count($arrRoutesDataRef)){
 
+			$strFullBaseURI = sprintf('%s%s',rtrim(SITE_URI_REWRITE,'/'),$this->baseURI());
+
 			foreach($arrRoutesDataRef as $strURI => $arrEachRoute){
 
-				$arrEachRoute['registered_uri'] = sprintf("%s%s",$this->baseURI(),str_replace('//','/',$strURI));
-				$arrEachRoute['base_uri'] = $this->baseURI();
-				$arrEachRoute['base_url'] = sprintf("%s://%s%s",\Twist::framework()->setting('SITE_PROTOCOL'),\Twist::framework()->setting('SITE_HOST'),$this->baseURI());
-				$arrEachRoute['url'] = sprintf("%s://%s%s%s",\Twist::framework()->setting('SITE_PROTOCOL'),\Twist::framework()->setting('SITE_HOST'),$this->baseURI(),str_replace('//','/',$strURI));
-				$arrEachRoute['cache_key'] = str_replace('/','+',trim(sprintf("%s%s",$this->baseURI(),str_replace('//','/',$strURI)),'/'));
+				$arrEachRoute['registered_uri'] = sprintf("%s%s",$strFullBaseURI,str_replace('//','/',$strURI));
+				$arrEachRoute['base_uri'] = $strFullBaseURI;
+				$arrEachRoute['base_url'] = sprintf("%s://%s%s",\Twist::framework()->setting('SITE_PROTOCOL'),\Twist::framework()->setting('SITE_HOST'),$strFullBaseURI);
+				$arrEachRoute['url'] = sprintf("%s://%s%s%s",\Twist::framework()->setting('SITE_PROTOCOL'),\Twist::framework()->setting('SITE_HOST'),$strFullBaseURI,str_replace('//','/',$strURI));
+				$arrEachRoute['cache_key'] = str_replace('/','+',trim(sprintf("%s%s",$strFullBaseURI,str_replace('//','/',$strURI)),'/'));
 
 				$arrRoutesDataRef[$strURI] = $arrEachRoute;
 			}
@@ -779,7 +781,7 @@ class Route extends Base{
 			$strTrailingSlash = (\Twist::framework()->setting('SITE_TAILING_SLASH')) ? '/' : '';
 
 			//Get the current URI to be used, added a URI key as teh regx version has 2 different variations a real URI and a param uri (the key)
-			$strCurrentURI = $strCurrentURIKey = rtrim( str_replace(rtrim(\Twist::framework()->setting('SITE_BASE'),'/'),'',$arrPartsURI[0]), '/').$strTrailingSlash;
+			$strCurrentURI = $strCurrentURIKey = rtrim( str_replace(rtrim(SITE_URI_REWRITE,'/'),'',$arrPartsURI[0]), '/').$strTrailingSlash;
 
 			$strRouteDynamic = '';
 			$arrRouteParts = array();
@@ -1217,7 +1219,7 @@ class Route extends Base{
 					$arrTags['request'] = ($arrRoute['uri'] == '') ? '/' : $arrRoute['uri'];
 					$arrTags['request_item'] = ltrim($arrRoute['dynamic'], '/');
 
-					$arrTags['base_uri'] = $this->strBaseURI;
+					$arrTags['base_uri'] = rtrim(SITE_URI_REWRITE,'/').$this->strBaseURI;
 					$arrTags['package_uri'] = $this->strPackageURI;
 					$arrTags['request_uri'] = sprintf('%s%s',$this->strBaseURI, $arrRoute['uri']);
 
@@ -1283,8 +1285,19 @@ class Route extends Base{
 
 						//Enable GZip compression output, only when no other data has been output to the screen
 						$arrOBStatus = ob_get_status();
-						if($arrOBStatus['buffer_used'] == 0 && strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false){
+						if(\Twist::framework()->setting('GZIP_COMPRESSION') && $arrOBStatus['buffer_used'] == 0 && strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false){
+
+							//Not very elegant but get the current buffer contents and clear the buffer
+							$strOBContents = ob_get_contents();
+							ob_end_clean();
+
+							ini_set('zlib.output_compression_level', \Twist::framework()->setting('GZIP_COMPRESSION_LEVEL'));
 							ob_start('ob_gzhandler');
+
+							//Re-output the buffer where all the contents can be GZIP compressed
+							if($strOBContents != ''){
+								echo $strOBContents;
+							}
 						}
 
 						//Output the page

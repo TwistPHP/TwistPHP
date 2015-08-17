@@ -58,7 +58,7 @@ class Resources{
 			$blInline = false;
 
 			if($strReference === 'core-uri'){
-				return sprintf('/%sCore/Resources/',ltrim(TWIST_FRAMEWORK_URI,'/'));
+				return sprintf('%s/%sCore/Resources/',rtrim(SITE_URI_REWRITE,'/'),ltrim(TWIST_FRAMEWORK_URI,'/'));
 			}
 
 			if( count( $arrParameters )) {
@@ -208,9 +208,9 @@ class Resources{
 
 		if(strstr(dirname($dirResourcePath),rtrim(TWIST_FRAMEWORK,'/'))){
 			//Resource is in framework (this will work for frameworks in and out of the base)
-			$arrParameters['uri'] = '/'.trim(TWIST_FRAMEWORK_URI.str_replace(TWIST_FRAMEWORK,'',$dirResourcePath),'/');
+			$arrParameters['uri'] = rtrim(SITE_URI_REWRITE,'/').'/'.trim(TWIST_FRAMEWORK_URI.str_replace(TWIST_FRAMEWORK,'',$dirResourcePath),'/');
 		}else{
-			$arrParameters['uri'] = '/'.trim(str_replace(TWIST_DOCUMENT_ROOT,'',$dirResourcePath),'/');
+			$arrParameters['uri'] = rtrim(SITE_URI_REWRITE,'/').'/'.trim(str_replace(TWIST_DOCUMENT_ROOT,'',$dirResourcePath),'/');
 		}
 
 		return $arrParameters;

@@ -47,6 +47,9 @@
 		}
 	}
 
+	//If the SITE_URI_REWRITE is not already defined then it will be defined here
+	TwistDefine('SITE_URI_REWRITE','/');
+
 	//TWIST_PUBLIC_ROOT - Can be defined in your index file
 	TwistDefine('TWIST_PUBLIC_ROOT',$_SERVER['DOCUMENT_ROOT']);
 

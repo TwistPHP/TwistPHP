@@ -261,13 +261,38 @@
 
 		public function xmlToArray($strXML){
 
+			$arrOut = array();
+			libxml_use_internal_errors(true);
+
+			$strXML = $this->fixUTF8($strXML);
+			$strXML = $this->fixAmp($strXML);
+
 			//Process the response into a usable array
 			$objXML = simplexml_load_string($strXML);
 
-			$strJSON = json_encode($objXML);
-			$arrData = json_decode($strJSON, true);
+			if ($objXML === false) {
+				echo "Failed loading XML\n";
+				foreach(libxml_get_errors() as $error) {
+					echo "\t", $error->message;
+				}
 
-			return $arrData;
+				$arrOut = false;
+
+			}else{
+				$strJSON = json_encode($objXML);
+				$arrOut = json_decode($strJSON, true);
+			}
+
+			return $arrOut;
+		}
+
+
+		public function fixUTF8($strXML){
+			return preg_replace ('/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', ' ', $strXML);
+		}
+
+		function fixAmp($strXML){
+			return preg_replace('/&(?!;{6})/', '&amp;', $strXML);
 		}
 
 		public function arrayToXML($arrData,$strRootNode = 'node'){
@@ -282,7 +307,7 @@
 				$strRootNode,
 				$strParameters,
 				$strComment,
-				processEachItem($arrData),
+				$this->processEachItem($arrData),
 				$strRootNode
 			);
 

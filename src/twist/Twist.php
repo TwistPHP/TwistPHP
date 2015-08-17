@@ -81,7 +81,6 @@
 				self::define('TWIST_BASE_URI',$strBaseURI);
 
 				date_default_timezone_set( !is_null( Twist::framework() -> setting('TIMEZONE') ) ? Twist::framework() -> setting('TIMEZONE') : 'Europe/London' );
-				$strLocation = !is_null( Twist::framework() -> setting('SITE_BASE') ) ? rtrim(Twist::framework() -> setting('SITE_BASE'),'/') : '/';
 
 				self::$blRecordEvents = (self::framework() -> setting('DEVELOPMENT_MODE') && self::framework() -> setting('DEVELOPMENT_EVENT_RECORDER'));
 
@@ -146,7 +145,7 @@
 		 */
         protected static function coreResources(){
 
-            $strResourcesURI = sprintf('/%sCore/Resources/',ltrim(TWIST_FRAMEWORK_URI,'/'));
+            $strResourcesURI = sprintf('%s/%sCore/Resources/',rtrim(SITE_URI_REWRITE,'/'),ltrim(TWIST_FRAMEWORK_URI,'/'));
 
             $arrResources = array(
                 'arable' => sprintf('%sarable/arable.min.css',$strResourcesURI),
@@ -178,7 +177,7 @@
                 'shadow-js' => sprintf('%sshadow-js/shadow-js.min.js',$strResourcesURI),
                 'unsemantic' => sprintf('%sunsemantic/unsemantic-grid-responsive-tablet-no-ie7.css',$strResourcesURI),
                 'resources_uri' => $strResourcesURI,
-                'uri' => ltrim(TWIST_FRAMEWORK_URI,'/')
+                'uri' => ltrim(sprintf('%s/%s',rtrim(SITE_URI_REWRITE,'/'),ltrim(TWIST_FRAMEWORK_URI,'/')),'/')
             );
 
             //Integrate the basic core href tag support - legacy support
