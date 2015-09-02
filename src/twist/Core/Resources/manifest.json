@@ -14,7 +14,7 @@
 		}
 	},
 	"font-awesome": {
-		"4.3.0": {
+		"4.4.0": {
 			"default": true,
 			"css": ["css/font-awesome.min.css"],
 			"js": []
