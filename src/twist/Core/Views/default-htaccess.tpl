@@ -35,22 +35,22 @@
     # Set the cache-control max-age
     {setting:HTACCESS_CACHE_HTML!=0?'':'#'}<FilesMatch "\.(html|htm)$">
     {setting:HTACCESS_CACHE_HTML!=0?'':'#'}    Header set Cache-Control "max-age={setting:HTACCESS_CACHE_HTML}{setting:HTACCESS_REVALIDATE_HTML==true?', must-revalidate':''}"
-    {setting:HTACCESS_CACHE_HTML!=0&&setting:HTACCESS_REVALIDATE_HTML==true?'#':''}    Header unset Last-Modified
+    {setting:HTACCESS_CACHE_HTML==0||(setting:HTACCESS_CACHE_HTML!=0&&setting:HTACCESS_REVALIDATE_HTML==true)?'#':''}    Header unset Last-Modified
     {setting:HTACCESS_CACHE_HTML!=0?'':'#'}</FilesMatch>
 
     {setting:HTACCESS_CACHE_CSS!=0?'':'#'}<FilesMatch "\.(css|map)$">
     {setting:HTACCESS_CACHE_CSS!=0?'':'#'}    Header set Cache-Control "max-age={setting:HTACCESS_CACHE_CSS}, public{setting:HTACCESS_REVALIDATE_CSS==true?', must-revalidate':''}"
-    {setting:HTACCESS_CACHE_CSS!=0&&setting:HTACCESS_REVALIDATE_CSS==true?'#':''}    Header unset Last-Modified
+    {setting:HTACCESS_CACHE_CSS==0||(setting:HTACCESS_CACHE_CSS!=0&&setting:HTACCESS_REVALIDATE_CSS==true)?'#':''}    Header unset Last-Modified
     {setting:HTACCESS_CACHE_CSS!=0?'':'#'}</FilesMatch>
 
     {setting:HTACCESS_CACHE_JS!=0?'':'#'}<FilesMatch "\.(js)$">
     {setting:HTACCESS_CACHE_JS!=0?'':'#'}    Header set Cache-Control "max-age={setting:HTACCESS_CACHE_JS}, public{setting:HTACCESS_REVALIDATE_JS==true?', must-revalidate':''}"
-    {setting:HTACCESS_CACHE_JS!=0&&setting:HTACCESS_REVALIDATE_JS==true?'#':''}    Header unset Last-Modified
+    {setting:HTACCESS_CACHE_JS==0||(setting:HTACCESS_CACHE_JS!=0&&setting:HTACCESS_REVALIDATE_JS==true)?'#':''}    Header unset Last-Modified
     {setting:HTACCESS_CACHE_JS!=0?'':'#'}</FilesMatch>
 
     {setting:HTACCESS_CACHE_IMAGES!=0?'':'#'}<FilesMatch "\.(ico|pdf|flv|jpg|png|gif|swf|svg)$">
     {setting:HTACCESS_CACHE_IMAGES!=0?'':'#'}    Header set Cache-Control "max-age={setting:HTACCESS_CACHE_IMAGES}, public{setting:HTACCESS_REVALIDATE_IMAGES==true?', must-revalidate':''}"
-    {setting:HTACCESS_CACHE_IMAGES!=0&&setting:HTACCESS_REVALIDATE_IMAGES==true?'#':''}    Header unset Last-Modified
+    {setting:HTACCESS_CACHE_IMAGES==0||(setting:HTACCESS_CACHE_IMAGES!=0&&setting:HTACCESS_REVALIDATE_IMAGES==true)?'#':''}    Header unset Last-Modified
     {setting:HTACCESS_CACHE_IMAGES!=0?'':'#'}</FilesMatch>
 
     # Turn off the ETags

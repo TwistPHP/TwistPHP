@@ -489,7 +489,7 @@ class Setup extends Base{
 		 * Update the .htaccess file to be a TwistPHP htaccess file
 		 */
 		$dirHTaccessFile = sprintf('%s/.htaccess',_TWIST_PUBLIC_ROOT);
-		file_put_contents($dirHTaccessFile,\Twist::View()->build(sprintf('%s/default-htaccess.tpl',TWIST_FRAMEWORK_VIEWS)));
+		file_put_contents($dirHTaccessFile,\Twist::View()->build(sprintf('%s/default-htaccess.tpl',TWIST_FRAMEWORK_VIEWS),array('rewrite_rules' => '')));
 
 		return \Twist::View()->build('pages/finish.tpl');
 	}
