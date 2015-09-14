@@ -732,7 +732,7 @@ class View extends Base{
 				trigger_error(sprintf('TwistPHP, use of deprecated template tag "%s" in %s',$strType,$this->dirCurrentView),E_USER_DEPRECATED);
 
 			case'view':
-				
+
 				$this->arrViewParams = $arrParameters;
 				$arrData = is_array($arrData) ? array_merge($arrData,$arrParameters) : $arrParameters;
 

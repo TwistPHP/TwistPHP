@@ -171,7 +171,7 @@
 					$arrResult = \Twist::Command()->execute('/usr/bin/mysql -v');
 				}
 
-				if(count($arrResult) && $arrResult['status']){
+				if(count($arrResult) && $arrResult['status'] && $arrResult['errors'] == ''){
 
 					//Run the MYSQL import command on command line
 					$strCommand = sprintf('/usr/bin/mysql -h%s -u%s -p%s %s < %s',
