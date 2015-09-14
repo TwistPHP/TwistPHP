@@ -128,8 +128,8 @@ class Route extends Base{
 	public function packageURI($strPackage = null){
 
 		if(!is_null($strPackage)){
-			$strPath = sprintf('%s/%s',TWIST_PACKAGES,$strPackage);
-			$this->strPackageURI = '/'.ltrim(rtrim(str_replace(TWIST_DOCUMENT_ROOT,"",$strPath),'/'),'/');
+            $strPath = sprintf('%s/%s',rtrim(TWIST_PACKAGES,'/'),ltrim($strPackage,'/'));
+            $this->strPackageURI = '/'.ltrim(rtrim(str_replace(TWIST_DOCUMENT_ROOT,"",$strPath),'/'),'/');
 		}
 
 		return $this->strPackageURI;
