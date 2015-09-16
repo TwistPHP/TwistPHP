@@ -280,7 +280,10 @@
 			$strOut = '';
 
 			foreach($this->arrTags as $arrEachTag) {
-				$strOut .= $this->createTag($arrEachTag)."\n";
+				//Do not output blank SEO tags, ignore them
+				if($arrEachTag['value'] != ''){
+					$strOut .= $this->createTag($arrEachTag) . "\n";
+				}
 			}
 
 			return $strOut;
