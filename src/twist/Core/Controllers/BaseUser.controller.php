@@ -265,6 +265,16 @@ class BaseUser extends Base{
 
             $arrEachDevice['current'] = ($arrCurrentDevices['id'] == $arrEachDevice['id']) ? true : false;
 
+	        if(array_key_exists('forget-device',$_GET)) {
+		        Auth::SessionHandler()->forgetDevice($arrUserData['user_id'], $_GET['forget-device']);
+		        \Twist::redirect('./device-manager');
+	        }
+
+	        if(array_key_exists('notifications',$_GET)) {
+		        Auth::SessionHandler()->notifications($arrUserData['user_id'], ($_GET['notifications'] == 'on') ? true : false);
+		        \Twist::redirect('./device-manager');
+	        }
+
             if(array_key_exists('edit-device',$_GET) && $arrEachDevice['device'] == $_GET['edit-device']){
                 $strDeviceList .= $this->_view(sprintf('%suser/device-each-edit.tpl',TWIST_FRAMEWORK_VIEWS), $arrEachDevice);
             }else{
@@ -272,7 +282,12 @@ class BaseUser extends Base{
             }
         }
 
-        return $this->_view(sprintf('%suser/devices.tpl',TWIST_FRAMEWORK_VIEWS), array('device_list' => $strDeviceList));
+	    $arrTags = array(
+		    'device_list' => $strDeviceList,
+		    'notifications' => Auth::SessionHandler()->notifications($arrUserData['user_id'])
+	    );
+
+        return $this->_view(sprintf('%suser/devices.tpl',TWIST_FRAMEWORK_VIEWS), $arrTags);
         //return $this->resUser->viewExtension('devices_form');
     }
 
@@ -285,10 +300,6 @@ class BaseUser extends Base{
 
         if(array_key_exists('save-device',$_POST) && array_key_exists('device-name',$_POST)){
             Auth::SessionHandler()->editDevice($arrUserData['user_id'],$_POST['save-device'],$_POST['device-name']);
-        }
-
-        if(array_key_exists('forget-device',$_GET)) {
-            Auth::SessionHandler()->forgetDevice($arrUserData['user_id'], $_POST['forget-device']);
         }
 
         \Twist::redirect('./device-manager');

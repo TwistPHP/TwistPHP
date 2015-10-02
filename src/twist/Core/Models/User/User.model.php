@@ -84,6 +84,7 @@ class User{
 
 	private function setData($strField,$mxdValue){
 		$this->arrUserData[$strField] = $mxdValue;
+		return $mxdValue;
 	}
 
 	public function nullData($strField = null){

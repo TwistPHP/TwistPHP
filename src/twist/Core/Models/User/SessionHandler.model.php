@@ -236,6 +236,26 @@ class SessionHandler{
 	}
 
 	/**
+	 * Get and set the device notifications status, if set a new device being used to login will send an email notification to the user.
+	 * @param $intUserID
+	 * @param null $blNotificationStatus
+	 * @return array|int|null|void
+	 */
+	public function notifications($intUserID,$blNotificationStatus = null){
+
+		$resUser = \Twist::User()->get($intUserID);
+
+		if(is_null($blNotificationStatus)){
+			$intNotificationStatus = $resUser->data('notify-new-device');
+		}else{
+			$intNotificationStatus = ($blNotificationStatus) ? 1 : 0;
+			$resUser->data('notify-new-device',$intNotificationStatus);
+		}
+
+		return $intNotificationStatus;
+	}
+
+	/**
 	 * See if the use has been remembered or not
 	 * @return bool
 	 */
