@@ -1,5 +1,7 @@
 #[TwistPHP](https://twistphp.com/) ![TwistPHP logo](http://static.twistphp.com/logo/square/32.png)
 
+[![Join the chat at https://gitter.im/Shadow-Technologies/TwistPHP](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Shadow-Technologies/TwistPHP?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ##A fresh, new open source PHP MVC micro framework
 
 We looked around for a PHP framework that suited our needs and found nothing that we were completely happy with. So we made one.
