@@ -1,6 +1,8 @@
 #[TwistPHP](https://twistphp.com/) ![TwistPHP logo](http://static.twistphp.com/logo/square/32.png)
 
-##A fresh, new open source PHP micro framework
+[![Join the chat at https://gitter.im/Shadow-Technologies/TwistPHP](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Shadow-Technologies/TwistPHP?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+##A fresh, new open source PHP MVC micro framework
 
 We looked around for a PHP framework that suited our needs and found nothing that we were completely happy with. So we made one.
 
@@ -54,18 +56,18 @@ Routing is something we saw in a lot of other frameworks and wanted it to be at 
 ```php
 Twist::Route() -> baseTemplate( '_base.tpl' );
 
-Twist::Route() -> template( '/', 'pages/home.tpl' );
+Twist::Route() -> view( '/', 'pages/home.tpl' );
 
-Twist::Route() -> element( '/languages', 'languages.php' );
-Twist::Route() -> getTemplate( '/contact', 'contact-form.tpl' );
-Twist::Route() -> postElement( '/contact', 'send-contact.php' );
+Twist::Route() -> view( '/languages', 'languages.php' );
+Twist::Route() -> getView( '/contact', 'contact-form.tpl' );
+Twist::Route() -> postView( '/contact', 'send-contact.php' );
 
 Twist::Route() -> redirect( '/about', 'http://facebook.com/Me' );
 
 Twist::Route() -> controller( '/portfolio/%', 'Portfolio' );
 
 Twist::Route() -> restrict( '/account/%', '/login' );
-Twist::Route() -> getTemplate( '/login', 'pages/login.tpl' );
+Twist::Route() -> getView( '/login', 'pages/login.tpl' );
 
 Twist::Route() -> serve();
 ```
@@ -75,36 +77,41 @@ Twist::Route() -> serve();
 You can process GET, POST, DELETE and PUT requests in your controllers using a simple and easy syntax. When extended, the BaseController class allows you some additional functionality to catch unexpected requests.
 
 ```php
-namespace TwistController;
+namespace App\Controllers;
+use Twist\Core\Classes\BaseController;
+use Twist\Core\Classes\Error;
 
 class Users extends BaseController {
-    public function _default(){
-        \TwistPHP\Error::errorPage( 404 );
-        return false;
-    }
+
+	public function _index(){
+		Error::errorPage( 404 );
+		return false;
+	}
 
 	public function member() {
 		throw new \Exception( 'No member selected' );
 	}
 
 	public function getMember() {
-		$user = \Twist::User -> get( $_SERVER['TWIST_ROUTE_PARTS'][0] );
-		return \Twist::Template -> build( 'user_details.tpl', $user );
+		$arrData = $this->_route();
+		$arrUser = \Twist::User -> get( $arrData['parts'][0] );
+		return $this->_view( 'user_details.tpl', $arrUser );
 	}
 
 	public function postMember() {
-		$user = \Twist::User -> create();
-		$user -> firstname( $_POST['first_name'] );
-		$user -> surname( $_POST['surname'] );
-		$user -> email( $_POST['email'] );
-		$user -> commit();
-		$user -> sendWelcomeEmail();
+		$resUser = \Twist::User -> create();
+		$resUser -> firstname( $_POST['first_name'] );
+		$resUser -> surname( $_POST['surname'] );
+		$resUser -> email( $_POST['email'] );
+		$resUser -> commit();
+		$resUser -> sendWelcomeEmail();
 	}
 
 	public function deleteMember() {
-		$user = \Twist::User -> get( $_SERVER['TWIST_ROUTE_PARTS'][0] );
-		$user -> delete();
-		header( 'Location: /users' );
+		$arrData = $this->_route();
+		$resUser = \Twist::User -> get( $arrData['parts'][0] );
+		$resUser -> delete();
+		Twist::redirect('/users');
 	}
 
 	public function putMember() {

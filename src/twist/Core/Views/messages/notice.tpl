@@ -1,0 +1,1 @@
+<p class="{data:type}">{data:message}</p>

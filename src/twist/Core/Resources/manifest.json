@@ -1,0 +1,252 @@
+{
+	"arable": {
+		"5.4.6": {
+			"default": true,
+			"css": ["arable.min.css"],
+			"js": []
+		}
+	},
+	"arable-reset": {
+		"5.3": {
+			"default": true,
+			"css": ["arable-reset.min.css"],
+			"js": []
+		}
+	},
+	"font-awesome": {
+		"4.4.0": {
+			"default": true,
+			"css": ["css/font-awesome.min.css"],
+			"js": []
+		}
+	},
+	"jquery": {
+		"legacy": {
+			"default": false,
+			"css": [],
+			"js": ["jquery-1.11.3.min.js"]
+		},
+		"1.11.3": {
+			"default": false,
+			"css": [],
+			"js": ["jquery-1.11.3.min.js"]
+		},
+		"2.1.4": {
+			"default": true,
+			"css": [],
+			"js": ["jquery-2.1.4.min.js"]
+		}
+	},
+	"jquery-ui": {
+		"1.11.4": {
+			"default": true,
+			"css": ["jquery-ui.min.css"],
+			"js": ["jquery-ui.min.js"]
+		},
+		"themed": {
+			"default": false,
+			"css": ["jquery-ui.min.css","jquery-ui.structure.min.css","jquery-ui.theme.min.css"],
+			"js": ["jquery-ui.min.js"]
+		}
+	},
+	"modernizr": {
+		"2.8.3": {
+			"default": true,
+			"css": [],
+			"js": ["modernizr-2.8.3.min.js"]
+		}
+	},
+	"rummage": {
+		"2.8.1": {
+			"default": true,
+			"css": [],
+			"js": ["rummage.min.js"]
+		}
+	},
+	"shadow-js": {
+		"1.16.0": {
+			"default": true,
+			"css": [],
+			"js": ["shadow-js.min.js"]
+		}
+	},
+	"twist/ajax": {
+		"all": {
+			"default": true,
+			"css": ["css/twistajax.min.css"],
+			"js": ["js/twistajax.min.js"]
+		},
+		"css": {
+			"default": false,
+			"css": ["css/twistajax.min.css"],
+			"js": []
+		},
+		"js": {
+			"default": false,
+			"css": [],
+			"js": ["js/twistajax.min.js"]
+		}
+	},
+	"twist/debug": {
+		"standard": {
+			"default": true,
+			"css": ["css/twist-debug.min.css"],
+			"js": ["js/twist-debug.js"]
+		},
+		"css": {
+			"default": false,
+			"css": ["css/twist-debug.min.css"],
+			"js": []
+		},
+		"js": {
+			"default": false,
+			"css": [],
+			"js": ["js/twist-debug.js"]
+		}
+	},
+	"twist/file-upload": {
+		"standard": {
+			"default": true,
+			"css": [],
+			"js": ["js/twistfileupload.min.js"]
+		}
+	},
+	"twist/manager": {
+		"standard": {
+			"default": true,
+			"css": ["css/base.css"],
+			"js": []
+		}
+	},
+	"twist/setup": {
+		"standard": {
+			"default": true,
+			"css": ["css/base.css"],
+			"js": []
+		}
+	},
+	"unsemantic": {
+		"desktop": {
+			"default": false,
+			"css": [
+				"unsemantic-grid-base-no-ie7.css",
+				"unsemantic-grid-desktop-no-ie7.css"
+			],
+			"js": []
+		},
+		"tablet": {
+			"default": false,
+			"css": [
+				"unsemantic-grid-base-no-ie7.css",
+				"unsemantic-grid-tablet-no-ie7.css"
+			],
+			"js": []
+		},
+		"mobile": {
+			"default": false,
+			"css": [
+				"unsemantic-grid-base-no-ie7.css",
+				"unsemantic-grid-mobile-no-ie7.css"
+			],
+			"js": []
+		},
+		"desktop-mobile": {
+			"default": false,
+			"css": ["unsemantic-grid-responsive-no-ie7.css"],
+			"js": []
+		},
+		"desktop-tablet-mobile": {
+			"default": true,
+			"css": ["unsemantic-grid-responsive-tablet-no-ie7.css"],
+			"js": []
+		}
+	},
+	"unsemantic-legacy": {
+		"desktop": {
+			"default": true,
+			"css": [
+				"unsemantic-grid-base.css",
+				"unsemantic-grid-desktop.css"
+			],
+			"js": []
+		},
+		"tablet": {
+			"default": false,
+			"css": [
+				"unsemantic-grid-base.css",
+				"unsemantic-grid-tablet.css"
+			],
+			"js": []
+		},
+		"mobile": {
+			"default": false,
+			"css": [
+				"unsemantic-grid-base.css",
+				"unsemantic-grid-mobile.css"
+			],
+			"js": []
+		}
+	},
+	"unsemantic-legacy-rtl": {
+		"desktop": {
+			"default": true,
+			"css": [
+				"unsemantic-grid-base-rtl.css",
+				"unsemantic-grid-desktop-rtl.css"
+			],
+			"js": []
+		},
+		"tablet": {
+			"default": false,
+			"css": [
+				"unsemantic-grid-base-rtl.css",
+				"unsemantic-grid-tablet-rtl.css"
+			],
+			"js": []
+		},
+		"mobile": {
+			"default": false,
+			"css": [
+				"unsemantic-grid-base-rtl.css",
+				"unsemantic-grid-mobile-rtl.css"
+			],
+			"js": []
+		}
+	},
+	"unsemantic-rtl": {
+		"desktop": {
+			"default": false,
+			"css": [
+				"unsemantic-grid-base-no-ie7-rtl.css",
+				"unsemantic-grid-desktop-no-ie7-rtl.css"
+			],
+			"js": []
+		},
+		"tablet": {
+			"default": false,
+			"css": [
+				"unsemantic-grid-base-no-ie7-rtl.css",
+				"unsemantic-grid-tablet-no-ie7-rtl.css"
+			],
+			"js": []
+		},
+		"mobile": {
+			"default": false,
+			"css": [
+				"unsemantic-grid-base-no-ie7-rtl.css",
+				"unsemantic-grid-mobile-no-ie7-rtl.css"
+			],
+			"js": []
+		},
+		"desktop-mobile": {
+			"default": false,
+			"css": ["unsemantic-grid-responsive-no-ie7-rtl.css"],
+			"js": []
+		},
+		"desktop-tablet-mobile": {
+			"default": true,
+			"css": ["unsemantic-grid-responsive-tablet-no-ie7-rtl.css"],
+			"js": []
+		}
+	}
+}

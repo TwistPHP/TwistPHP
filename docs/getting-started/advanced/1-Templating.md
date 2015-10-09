@@ -1,14 +1,14 @@
-#Further Templating
+#Further View Functionality
 
-##More Template Tags
+##More View Tags
 
 There are more template tags included to help you separate your PHP and HTML.
 
 | Tag                               | Type                   | Description                                                                                                                                 |
 | --------------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `{template:my/template/file.tpl}` | Template Include       | Include another template directly into this location, templates are processed using the template module and current data set                |
-| `{element:my/element/file.php}`   | Element Include        | Include the results of a PHP element directly onto the page                                                                                 |
-| `{data:name}`                     | Data                   | When building a template using the module you can pass in an array of tags, this option will output the selected tag to the template        |
+| `{view:my/template/file.tpl}`     | Template Include       | Include another view directly into this location, views are processed using the view package and current data set                           |
+| `{view:my/element/file.php}`      | Element Include        | Include the results of a PHP element directly onto the page                                                                                 |
+| `{data:name}`                     | Data                   | When building a view using the module you can pass in an array of tags, this option will output the selected tag to the view                |
 | `{data:products/television/name}` | Multi-dimensional Data | Same as '{data:option}' apart from multi-dimensional array of tags can be passed in. This function required 'Snipit' module to be installed |
 | `{date:Y-m-d H:i:s}`              | Date                   | Output a formatted version of today's date. See the [PHP date() function on php.net](http://php.net/manual/en/function.date.php).           |
 | `{get:option}`                    | Get Parameters         | Output the contents of any PHP $_GET parameter directly to the template                                                                     |
@@ -16,7 +16,7 @@ There are more template tags included to help you separate your PHP and HTML.
 | `{server:option}`                 | Server Parameters      | Output the contents of any PHP $_SERVER parameter directly to the template                                                                  |
 | `{cookie:option}`                 | Cookie Parameters      | Output the contents of any PHP $_COOKIE parameter directly to the template                                                                  |
 
-##Conditional Template Tags
+##Conditional View Tags
 
 Conditional template tags allow you to use logic and arguments to output dynamic data similar to an inline PHP if() statement.
 

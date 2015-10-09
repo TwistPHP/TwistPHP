@@ -1,0 +1,1 @@
+<input type="password" name="{data:name}" value="{data:value}"{data:arttributes}>

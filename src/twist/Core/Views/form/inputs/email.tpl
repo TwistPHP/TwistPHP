@@ -1,0 +1,1 @@
+<input type="email" name="{data:name}" value="{data:value}"{data:arttributes}>

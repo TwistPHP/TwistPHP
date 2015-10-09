@@ -15,8 +15,6 @@ $resFruit = Twist::Database() -> table( 'fruit' );
 You can create database fields to the table object using the `addField()` method of the database table object.
 
 ```php
-$resFruit = Twist::Database() -> table( 'fruit' );
-
 $resFruit -> addField( 'id', 'int', 11 );
 $resFruit -> addField( 'name', 'char', '64' );
 $resFruit -> addField( 'colour', 'char', '16' );
@@ -27,11 +25,6 @@ $resFruit -> addField( 'colour', 'char', '16' );
 An auto increment field can be set with the `setAutoIncrement()` method.
 
 ```php
-$resFruit = Twist::Database() -> table( 'fruit' );
-
-$resFruit -> addField( 'id', 'int', 11 );
-$resFruit -> addField( 'name', 'char', '64' );
-$resFruit -> addField( 'colour', 'char', '16' );
 $resFruit -> setAutoIncrement( 'id' );
 ```
 
@@ -40,12 +33,5 @@ $resFruit -> setAutoIncrement( 'id' );
 Commit the new table the database by calling `commit()` on the new database table object.
 
 ```php
-$resFruit = Twist::Database() -> table( 'fruit' );
-
-$resFruit -> addField( 'id', 'int', 11 );
-$resFruit -> addField( 'name', 'char', '64' );
-$resFruit -> addField( 'colour', 'char', '16' );
-$resFruit -> setAutoIncrement( 'id' );
-
 $resFruit -> create();
 ```

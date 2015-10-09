@@ -17,12 +17,12 @@
 	 *
 	 * @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
 	 * @license    https://www.gnu.org/licenses/gpl.html LGPL License
-	 * @link       http://twistphp.com
+	 * @link       https://twistphp.com
 	 *
 	 */
 
 	//Include the boot file
-	require_once sprintf('%s/core/boot.php',dirname(__FILE__));
+	require_once sprintf('%s/Core/boot.php',dirname(__FILE__));
 
 	//Launch the framework ready for use
 	Twist::launch();
