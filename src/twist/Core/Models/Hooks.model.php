@@ -29,30 +29,46 @@
 	 */
 	class Hooks{
 
+		protected $arrPermanentHooks = array();
 		protected $arrHooks = array();
+
+		public function __construct(){
+			$this->loadHooks();
+		}
 
 		/**
 		 * Register a hook to extend framework or package functionality
 		 * @param $strHook
 		 * @param $mxdUniqueKey
 		 * @param $mxdData
+		 * @param $blPermanent
 		 */
-		public function register($strHook,$mxdUniqueKey,$mxdData){
+		public function register($strHook,$mxdUniqueKey,$mxdData,$blPermanent = false){
 
 			if(!array_key_exists($strHook,$this->arrHooks)){
 				$this->arrHooks[$strHook] = array();
 			}
 
 			$this->arrHooks[$strHook][$mxdUniqueKey] = $mxdData;
+
+			if($blPermanent){
+				$this->storeHook($strHook,$mxdUniqueKey,$mxdData);
+			}
 		}
 
 		/**
 		 * Cancel a hook from being active in the system, this will cancel the hook form the current page load only
 		 * @param $strHook
 		 * @param $mxdUniqueKey
+		 * @param $blPermanent
 		 */
-		public function cancel($strHook,$mxdUniqueKey){
+		public function cancel($strHook,$mxdUniqueKey,$blPermanent = false){
+
 			unset($this->arrHooks[$strHook][$mxdUniqueKey]);
+
+			if($blPermanent){
+				$this->removeHook($strHook,$mxdUniqueKey);
+			}
 		}
 
 		/**
@@ -77,5 +93,53 @@
 			}
 
 			return (array_key_exists($strHook,$this->arrHooks)) ? $this->arrHooks[$strHook] : array();
+		}
+
+		/**
+		 * Load the hooks form storage area
+		 * @todo Make this database driven rather than cache files
+		 */
+		protected function loadHooks(){
+
+			$arrCachedHooks = \Twist::Cache('twist/hooks')->read('permanent');
+			$this->arrPermanentHooks = ($arrCachedHooks) ? $arrCachedHooks : array();
+
+			if(count($this->arrHooks) == 0){
+				$this->arrHooks = $this->arrPermanentHooks;
+			}else{
+				$this->arrHooks = \Twist::framework()->tools()->arrayMergeRecursive($this->arrHooks,$this->arrPermanentHooks);
+			}
+		}
+
+		/**
+		 * Permanently store a new hook
+		 * @param $strHook
+		 * @param $mxdUniqueKey
+		 * @param $mxdData
+		 * @todo Make this database driven rather than cache files
+		 */
+		protected function storeHook($strHook,$mxdUniqueKey,$mxdData){
+
+			if(!array_key_exists($strHook,$this->arrPermanentHooks)){
+				$this->arrPermanentHooks[$strHook] = array();
+			}
+
+			$this->arrPermanentHooks[$strHook][$mxdUniqueKey] = $mxdData;
+
+			\Twist::Cache('twist/hooks')->write('permanent',$this->arrPermanentHooks,(86400*100));
+		}
+
+		/**
+		 * Remove a permanently stored hook
+		 * @param $strHook
+		 * @param $mxdUniqueKey
+		 * @todo Make this database driven rather than cache files
+		 */
+		protected function removeHook($strHook,$mxdUniqueKey){
+
+			//Remove the hook from the permanent array
+			unset($this->arrHooks[$strHook][$mxdUniqueKey]);
+
+			\Twist::Cache('twist/hooks')->write('permanent',$this->arrPermanentHooks,(86400*100));
 		}
 	}
