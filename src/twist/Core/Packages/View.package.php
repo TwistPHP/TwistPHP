@@ -833,12 +833,12 @@ class View extends Base{
 				break;
 
 			/**
-			 * Use custom tags, set using registerTag('tagType',array('key' => 'value'))
+			 * Use custom tags, set using \Twist::framework()->hooks()->register('TWIST_VIEW_TAGS','tag_key',array('key' => 'value'))
 			 */
 			default:
 
 				//Get all registered extensions form the extension handler
-				$arrExtensions = $this -> __extensions();
+				$arrExtensions = \Twist::framework()->hooks()->getAll('TWIST_VIEW_TAG');
 
 				if(count($arrExtensions) && array_key_exists($strType,$arrExtensions)){
 

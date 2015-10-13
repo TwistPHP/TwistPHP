@@ -110,11 +110,11 @@
 				Twist::framework() -> package() -> getInstalled();
 
 				//Register the default PHP package extensions
-				Twist::framework() -> package() -> extend('View','asset',array('module' => 'Asset','function' => 'viewExtension'));
-				Twist::framework() -> package() -> extend('View','file',array('module' => 'File','function' => 'viewExtension'));
-				Twist::framework() -> package() -> extend('View','image',array('module' => 'Image','function' => 'viewExtension'));
-				Twist::framework() -> package() -> extend('View','session',array('module' => 'Session','function' => 'viewExtension'));
-				Twist::framework() -> package() -> extend('View','user',array('module' => 'User','function' => 'viewExtension'));
+				Twist::framework() -> hooks() -> register('TWIST_VIEW_TAG','asset',array('module' => 'Asset','function' => 'viewExtension'));
+				Twist::framework() -> hooks() -> register('TWIST_VIEW_TAG','file',array('module' => 'File','function' => 'viewExtension'));
+				Twist::framework() -> hooks() -> register('TWIST_VIEW_TAG','image',array('module' => 'Image','function' => 'viewExtension'));
+				Twist::framework() -> hooks() -> register('TWIST_VIEW_TAG','session',array('module' => 'Session','function' => 'viewExtension'));
+				Twist::framework() -> hooks() -> register('TWIST_VIEW_TAG','user',array('module' => 'User','function' => 'viewExtension'));
 
 				self::recordEvent('Packages prepared');
 
@@ -122,10 +122,10 @@
 				Instance::storeObject('twistCoreResources',new \Twist\Core\Models\Resources());
 
 				//Register the framework resources handler into the template system
-				Twist::framework() -> package() -> extend('View','resource',array('instance' => 'twistCoreResources','function' => 'viewExtension'));
+				Twist::framework() -> hooks() -> register('TWIST_VIEW_TAG','resource',array('instance' => 'twistCoreResources','function' => 'viewExtension'));
 
 				//Register the framework message handler into the template system
-				\Twist::framework() -> package() -> extend('View','messages',array('core' => 'messageHandler'));
+				Twist::framework() -> hooks() -> register('TWIST_VIEW_TAG','messages',array('core' => 'messageHandler'));
 
 				self::coreResources();
 
@@ -181,7 +181,7 @@
             );
 
             //Integrate the basic core href tag support - legacy support
-            Twist::framework() -> package() -> extend('Template','core',$arrResources);
+            Twist::framework() -> hooks() -> register('TWIST_VIEW_TAG','core',$arrResources);
         }
 
 		/**

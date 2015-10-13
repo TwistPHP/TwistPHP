@@ -380,33 +380,6 @@
 		}
 
 		/**
-		 * Register the package for use withing the system
-		 * @param $strPackage
-		 * @param $mxdKey
-		 * @param $mxdData
-		 */
-		public function extend($strPackage,$mxdKey,$mxdData){
-
-			//@deprecate when remove template all traces of templates
-			$strPackage = ($strPackage === 'Template') ? 'View' : $strPackage;
-
-			if(!array_key_exists($strPackage,$this->arrPackages)){
-				$this->arrPackages[$strPackage] = array('resources' => array(),'routes' => array(),'blocks' => array(),'extensions' => array());
-			}
-
-			$this->arrPackages[$strPackage]['extensions'][$mxdKey] = $mxdData;
-		}
-
-		/**
-		 * Get the array of extensions for the requested package
-		 * @param $strPackage
-		 * @return array
-		 */
-		public function extensions($strPackage){
-			return (array_key_exists($strPackage,$this->arrPackages)) ? $this->arrPackages[$strPackage]['extensions'] : array();
-		}
-
-		/**
 		 * Get all the current information for any installed package
 		 * @param $strPackage
 		 * @return array

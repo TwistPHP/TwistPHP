@@ -71,13 +71,4 @@
 			$arrData = \Twist::framework() -> package() -> information($this->__calledClass());
 			return $arrData['path'];
 		}
-
-		/**
-		 * Return the registered extensions for the current package
-		 * @return mixed
-		 */
-		protected function __extensions(){
-			$arrData = \Twist::framework() -> package() -> information($this->__calledClass());
-			return $arrData['extensions'];
-		}
 	}

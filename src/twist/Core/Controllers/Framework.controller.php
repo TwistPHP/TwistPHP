@@ -23,6 +23,7 @@
 	namespace Twist\Core\Controllers;
 
 	use Twist\Core\Models\Package;
+	use Twist\Core\Models\Hooks;
 	use Twist\Core\Models\Debug;
 	use Twist\Core\Models\Register;
 	use Twist\Core\Models\Settings;
@@ -35,6 +36,7 @@
 	class Framework{
 
 		private $objDebug = null;
+		private $objHooks = null;
 		private $objPackage = null;
 		private $objRegister = null;
 		private $objSettings = null;
@@ -53,6 +55,15 @@
 		public function debug(){
 			$this->objDebug = (is_null($this->objDebug)) ? new Debug() : $this->objDebug;
 			return $this->objDebug;
+		}
+
+		/**
+		 * Returns and object of the hooks handler to allow custom code and functionality to be hooked into the framework and its packages
+		 * @return null|\Twist\Core\Models\Hooks
+		 */
+		public function hooks(){
+			$this->objHooks = (is_null($this->objHooks)) ? new Hooks() : $this->objHooks;
+			return $this->objHooks;
 		}
 
 		/**

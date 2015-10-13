@@ -1225,8 +1225,8 @@ class Route extends Base{
 
 					$arrTags['query_string'] = http_build_query( $_GET );
 
-					\Twist::framework()->package()->extend('View', 'meta', $this->meta()->getTags());
-					\Twist::framework()->package()->extend('View', 'route', $arrTags);
+					\Twist::framework()->hooks()->register('TWIST_VIEW_TAG', 'meta', $this->meta()->getTags());
+					\Twist::framework()->hooks()->register('TWIST_VIEW_TAG', 'route', $arrTags);
 
 					\Twist::recordEvent('Route found');
 
@@ -1245,8 +1245,8 @@ class Route extends Base{
 						echo $arrTags['response'];
 					}else{
 						//Update the Meta and Route tags to be used in the base template
-						\Twist::framework()->package()->extend('View', 'meta', $this->meta()->getTags());
-						\Twist::framework()->package()->extend('View', 'route', $arrTags);
+						\Twist::framework()->hooks()->register('TWIST_VIEW_TAG', 'meta', $this->meta()->getTags());
+						\Twist::framework()->hooks()->register('TWIST_VIEW_TAG', 'route', $arrTags);
 
 						if($this->blIgnoreBaseView){
 							$strPageOut = $arrTags['response'];
