@@ -138,6 +138,13 @@ class Manager extends BaseUser{
 		\Twist::framework()->setting('SITE_PROTOCOL_FORCE',$_POST['SITE_PROTOCOL_FORCE']);
 		\Twist::framework()->setting('SITE_DIRECTORY_INDEX',$_POST['SITE_DIRECTORY_INDEX']);
 
+		\Twist::framework()->setting('HTACCESS_DISABLE_DIRBROWSING',(array_key_exists('HTACCESS_DISABLE_DIRBROWSING',$_POST)) ? '1' : '0');
+		\Twist::framework()->setting('HTACCESS_DISABLE_HTACCESS',(array_key_exists('HTACCESS_DISABLE_HTACCESS',$_POST)) ? '1' : '0');
+		\Twist::framework()->setting('HTACCESS_DISABLE_UPLOADEDPHP',(array_key_exists('HTACCESS_DISABLE_UPLOADEDPHP',$_POST)) ? '1' : '0');
+		\Twist::framework()->setting('HTACCESS_DISABLE_QUERYSTRINGS',(array_key_exists('HTACCESS_DISABLE_QUERYSTRINGS',$_POST)) ? '1' : '0');
+		\Twist::framework()->setting('HTACCESS_DISABLE_HOTLINKS',(array_key_exists('HTACCESS_DISABLE_HOTLINKS',$_POST)) ? '1' : '0');
+		\Twist::framework()->setting('HTACCESS_DISABLE_EXTENSIONS',$_POST['HTACCESS_DISABLE_EXTENSIONS']);
+
 		\Twist::framework()->setting('HTACCESS_CACHE_HTML',$_POST['HTACCESS_CACHE_HTML']);
 		\Twist::framework()->setting('HTACCESS_REVALIDATE_HTML',(array_key_exists('HTACCESS_REVALIDATE_HTML',$_POST)) ? '1' : '0');
 

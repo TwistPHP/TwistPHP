@@ -28,6 +28,28 @@
             <option value="index.html index.htm index.php"{setting:HTACCESS_DIRECTORY_INDEX=="index.html index.htm index.php"?' selected':''}>index.html index.htm index.php</option>
         </select>
 
+        <h3>Site Security</h3>
+        <p>General settings to enhance the overall security of your website, it is generally advised to enable all of the below settings.</p>
+
+        <label>Disable Directory Browsing</label>
+        <input type="checkbox"  name="HTACCESS_DISABLE_DIRBROWSING" value="1"{setting:HTACCESS_DISABLE_DIRBROWSING==true?' checked':''}>
+
+        <label>Disallow Serving of .htaccess</label>
+        <input type="checkbox"  name="HTACCESS_DISABLE_HTACCESS" value="1"{setting:HTACCESS_DISABLE_HTACCESS==true?' checked':''}>
+
+        <label>Disallow File Extensions</label>
+        <input type="text" name="HTACCESS_DISABLE_EXTENSIONS" value="{setting:HTACCESS_DISABLE_EXTENSIONS}">
+        <p><small>Each file extension must be separated by a pipe, Default value: "bash|git|hg|log|svn|swp|cvs"</small></p>
+
+        <label>Disabled Image Hotlinks</label>
+        <input type="checkbox"  name="HTACCESS_DISABLE_HOTLINKS" value="1"{setting:HTACCESS_DISABLE_HOTLINKS==true?' checked':''}>
+
+        <label>Disable Uploaded PHP</label>
+        <input type="checkbox"  name="HTACCESS_DISABLE_UPLOADEDPHP" value="1"{setting:HTACCESS_DISABLE_UPLOADEDPHP==true?' checked':''}>
+
+        <label>Disable Suspicious Query Strings</label>
+        <input type="checkbox"  name="HTACCESS_DISABLE_QUERYSTRINGS" value="1"{setting:HTACCESS_DISABLE_QUERYSTRINGS==true?' checked':''}>
+
         <h3>Browser Caching and Compression</h3>
 
         <label>Allow ETags</label>

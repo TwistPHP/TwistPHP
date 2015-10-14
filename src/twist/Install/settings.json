@@ -447,6 +447,54 @@
     "options":"",
     "null":0
   },
+  "HTACCESS_DISABLE_DIRBROWSING":{
+    "title":"Disable Directory Browsing",
+    "description":"Disallow the browsing of server/site directories in the web browser",
+    "default":"1",
+    "type":"boolean",
+    "options":"0,1",
+    "null":0
+  },
+  "HTACCESS_DISABLE_HTACCESS":{
+    "title":"Disallow serving .htaccess",
+    "description":"Do not allow the contents of HTaccess and HTPassword files to be served by apache",
+    "default":"1",
+    "type":"boolean",
+    "options":"0,1",
+    "null":0
+  },
+  "HTACCESS_DISABLE_UPLOADEDPHP":{
+    "title":"Disable Uploaded PHP",
+    "description":"Stop PHP files being executed from within the sites upload directory",
+    "default":"1",
+    "type":"boolean",
+    "options":"0,1",
+    "null":0
+  },
+  "HTACCESS_DISABLE_QUERYSTRINGS":{
+    "title":"Disable Suspicious Query Strings",
+    "description":"Disallow all page requests that contain suspicious query strings",
+    "default":"1",
+    "type":"boolean",
+    "options":"0,1",
+    "null":0
+  },
+  "HTACCESS_DISABLE_HOTLINKS":{
+    "title":"Disabled Image Hotlinks",
+    "description":"Disallow hotlinking of images from your website or server, remote image requested will not be served",
+    "default":"0",
+    "type":"boolean",
+    "options":"0,1",
+    "null":0
+  },
+  "HTACCESS_DISABLE_EXTENSIONS":{
+    "title":"Disallow File Extensions",
+    "description":"Disallow files with the extensions from being served. Each file extension must be separated with a | symbol, Default value: bash|git|hg|log|svn|swp|cvs",
+    "default":"bash|git|hg|log|svn|swp|cvs",
+    "type":"string",
+    "options":"",
+    "null":0
+  },
   "SESSION_HANDLER":{
     "title":"Session Handler",
     "description":"Choose the PHP session handler to use, 'native' is the default builtin PHP session handler",

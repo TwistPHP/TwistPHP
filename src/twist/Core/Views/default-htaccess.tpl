@@ -27,6 +27,45 @@
     # Rewrite rules that have been setup in the manager
     {data:rewrite_rules}
 
+    # Disable directory browsing
+    {setting:HTACCESS_DISABLE_DIRBROWSING==true?'':'#'}Options All -Indexes
+
+    # Disable access to HTaccess and HTpass filesincluding any other files that might end in hta or htp
+    {setting:HTACCESS_DISABLE_HTACCESS==true?'':'#'}<Files ~ "^.*\.([Hh][Tt][AaPp])">
+    {setting:HTACCESS_DISABLE_HTACCESS==true?'':'#'}    order allow,deny
+    {setting:HTACCESS_DISABLE_HTACCESS==true?'':'#'}    deny from all
+    {setting:HTACCESS_DISABLE_HTACCESS==true?'':'#'}    satisfy all
+    {setting:HTACCESS_DISABLE_HTACCESS==true?'':'#'}</Files>
+
+    # Disallow a list of file extensions form being served
+    {setting:HTACCESS_DISABLE_EXTENSIONS!=''?'':'#'}<Files ~ "^.*\.({setting:HTACCESS_DISABLE_EXTENSIONS})">
+    {setting:HTACCESS_DISABLE_EXTENSIONS!=''?'':'#'}    order allow,deny
+    {setting:HTACCESS_DISABLE_EXTENSIONS!=''?'':'#'}    deny from all
+    {setting:HTACCESS_DISABLE_EXTENSIONS!=''?'':'#'}    satisfy all
+    {setting:HTACCESS_DISABLE_EXTENSIONS!=''?'':'#'}</Files>
+
+    # Disable hotlinking of images with extensions (jpg|jpeg|png|gif|svg)
+    {setting:HTACCESS_DISABLE_HOTLINKS==true?'':'#'}RewriteCond %{HTTP_REFERER} !^$
+    {setting:HTACCESS_DISABLE_HOTLINKS==true?'':'#'}RewriteCond %{HTTP_REFERER} !^http(s)?://(www\.)?{setting:SITE_HOST}/.*$ [NC]
+    {setting:HTACCESS_DISABLE_HOTLINKS==true?'':'#'}RewriteRule \.(jpg|jpeg|png|gif|svg)$ {setting:SITE_PROTOCOL}://{setting:SITE_WWW==true?'www.':''}{setting:SITE_HOST}/hotlink.gif [R,L]
+
+    # Disable PHP files from being run within the Uploads directory
+    {setting:HTACCESS_DISABLE_UPLOADEDPHP==true?'':'#'}RewriteRule ^uploads/.*\.(?:php[1-6]?|pht|phtml?)$ - [NC,F]
+
+    # Filter suspicious query strings in the URL
+    {setting:HTACCESS_DISABLE_QUERYSTRINGS==true?'':'#'}RewriteCond %{QUERY_STRING} \.\.\/ [NC,OR]
+    {setting:HTACCESS_DISABLE_QUERYSTRINGS==true?'':'#'}RewriteCond %{QUERY_STRING} etc/passwd [NC,OR]
+    {setting:HTACCESS_DISABLE_QUERYSTRINGS==true?'':'#'}RewriteCond %{QUERY_STRING} boot\.ini [NC,OR]
+    {setting:HTACCESS_DISABLE_QUERYSTRINGS==true?'':'#'}RewriteCond %{QUERY_STRING} ftp\:  [NC,OR]
+    {setting:HTACCESS_DISABLE_QUERYSTRINGS==true?'':'#'}RewriteCond %{QUERY_STRING} http\:  [NC,OR]
+    {setting:HTACCESS_DISABLE_QUERYSTRINGS==true?'':'#'}RewriteCond %{QUERY_STRING} https\:  [NC,OR]
+    {setting:HTACCESS_DISABLE_QUERYSTRINGS==true?'':'#'}RewriteCond %{QUERY_STRING} (\<|%3C).*script.*(\>|%3E) [NC,OR]
+    {setting:HTACCESS_DISABLE_QUERYSTRINGS==true?'':'#'}RewriteCond %{QUERY_STRING} mosConfig_[a-zA-Z_]{1,21}(=|%3D) [NC,OR]
+    {setting:HTACCESS_DISABLE_QUERYSTRINGS==true?'':'#'}RewriteCond %{QUERY_STRING} base64_encode.*\(.*\) [NC,OR]
+    {setting:HTACCESS_DISABLE_QUERYSTRINGS==true?'':'#'}RewriteCond %{QUERY_STRING} ^.*(%24&x).* [NC,OR]
+    {setting:HTACCESS_DISABLE_QUERYSTRINGS==true?'':'#'}RewriteCond %{QUERY_STRING} ^.*(127\.0).* [NC]
+    {setting:HTACCESS_DISABLE_QUERYSTRINGS==true?'':'#'}RewriteRule ^.* - [F]
+
     # Rewrite rules to allow routing
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
