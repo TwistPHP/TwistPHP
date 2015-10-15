@@ -43,25 +43,24 @@ class Upload extends Base{
 	public function file($strFileKey = null,$intIndex = null){
 
 		$this->resRoute->debugMode(false);
+		$arrOut = $this->storeFile($strFileKey,$intIndex);
 
-		if(is_array($_FILES) && count($_FILES)){
-			$arrOut = \Twist::File()->upload($strFileKey,null,$intIndex);
-		}else{
-			$arrOut = \Twist::File()->uploadPUT();
+		//Now if the file upload was successful process the asset (if required)
+		if($arrOut['status']){
+
+			//Get info about the file type
+			$arrInfo = \Twist::File()->mimeTypeInfo($arrOut['file']['path']);
+
+			$arrOut['uri'] = str_replace(TWIST_DOCUMENT_ROOT,'',$arrOut['file']['path']);
+			$arrOut['uri_preview'] = $arrInfo['icon'];
+			$arrOut['uri_icon'] = $arrInfo['icon'];
+
+			//Output the file type
+			$arrOut['file_type'] = $arrInfo['name'];
+
+			//Value to be posted in a form for this file type
+			$arrOut['form_value'] = $arrOut['uri'];
 		}
-
-		//Get info about the file type
-		$arrInfo = \Twist::File()->mimeTypeInfo($arrOut['file']['path']);
-
-		$arrOut['uri'] = str_replace(TWIST_DOCUMENT_ROOT,'',$arrOut['file']['path']);
-		$arrOut['uri_preview'] = $arrInfo['icon'];
-		$arrOut['uri_icon'] = $arrInfo['icon'];
-
-		//Output the file type
-		$arrOut['file_type'] = $arrInfo['name'];
-
-		//Value to be posted in a form for this file type
-		$arrOut['form_value'] = $arrOut['uri'];
 
 		return json_encode($arrOut);
 	}
@@ -75,8 +74,7 @@ class Upload extends Base{
 	public function asset($strFileKey = null,$intIndex = null){
 
 		$this->resRoute->debugMode(false);
-
-		$arrOut = json_decode($this->file($strFileKey,$intIndex),true);
+		$arrOut = $this->storeFile($strFileKey,$intIndex);
 
 		//Now if the file upload was successful process the asset (if required)
 		if($arrOut['status']){
@@ -104,5 +102,16 @@ class Upload extends Base{
 		}
 
 		return json_encode($arrOut);
+	}
+
+	protected function storeFile($strFileKey = null,$intIndex = null){
+
+		if(is_array($_FILES) && count($_FILES)){
+			$arrOut = \Twist::File()->upload($strFileKey,null,$intIndex);
+		}else{
+			$arrOut = \Twist::File()->uploadPUT();
+		}
+
+		return $arrOut;
 	}
 }
