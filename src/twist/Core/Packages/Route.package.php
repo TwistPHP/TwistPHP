@@ -1017,28 +1017,33 @@ class Route extends Base{
 		return $intOut;
 	}
 
-	/*
-	 * Register the upload server
+	/**
+	 * Register the upload server, this will automatically call the Twist Upload Controller unless an override has been specified
+	 * @param string $strURI
+	 * @param null $strControllerOverride
 	 */
-	public function upload($strURI = '/upload/%'){
+	public function upload($strURI = '/upload/%',$strControllerOverride = null){
 		\Twist::define('UPLOAD_ROUTE_URI',$strURI);
-		$this->controller($strURI,'Twist\Core\Controllers\Upload',false);
+		$this->controller($strURI,(is_null($strControllerOverride)) ? 'Twist\Core\Controllers\Upload' : $strControllerOverride,false);
 	}
 
-	/*
-	 * Register the server manager
+	/**
+	 * Register the framework manager on a URI so that it can be accessed
+	 * @param string $strURI
 	 */
 	public function manager($strURI = '/manager/%'){
 		\Twist::define('MANAGER_ROUTE_URI',$strURI);
 		$this->package($strURI,'Twist\Core\Routes\Manager');
 	}
 
-	/*
-	 * Register the placholder server
+	/**
+	 * Register the image placholder server, this will automatically call the Twist Placeholder Controller unless an override has been specified
+	 * @param string $strURI
+	 * @param null $strControllerOverride
 	 */
-	public function placeholder($strURI = '/placeholder/%'){
+	public function placeholder($strURI = '/placeholder/%',$strControllerOverride = null){
 		\Twist::define('PLACEHOLDER_ROUTE_URI',$strURI);
-		$this->controller($strURI,'Twist\Core\Controllers\Placeholder',false);
+		$this->controller($strURI,(is_null($strControllerOverride)) ? 'Twist\Core\Controllers\Placeholder' : $strControllerOverride,false);
 	}
 
 	/*
