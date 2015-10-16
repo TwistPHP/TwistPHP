@@ -53,6 +53,9 @@ class Manager extends BaseUser{
 		$arrTags['debug-bar'] = (\Twist::framework()->setting('DEVELOPMENT_DEBUG_BAR') == '1') ? 'On' : 'Off';
 		$arrTags['data-caching'] = (\Twist::framework()->setting('CACHE_ENABLED') == '1') ? 'On' : 'Off';
 
+		$objCodeScanner = new \Twist\Core\Models\Security\CodeScanner();
+		$arrTags['scanner'] = $objCodeScanner->getLastScan(TWIST_DOCUMENT_ROOT);
+
 		$arrRoutes = \Twist::Route()->getAll();
 		$arrTags['route-data'] = sprintf('<strong>%d</strong> ANY<br><strong>%d</strong> GET<br><strong>%d</strong> POST<br><strong>%d</strong> PUT<br><strong>%d</strong> DELETE',
 			count($arrRoutes['ANY']),
@@ -185,6 +188,31 @@ class Manager extends BaseUser{
 		file_put_contents($dirHTaccessFile,$this->_view(sprintf('%s/default-htaccess.tpl',TWIST_FRAMEWORK_VIEWS),$arrTags));
 
 		return $this->htaccess();
+	}
+
+	/**
+	 * Malicious Code Scanner page, shows the results of a code scan.
+	 * @return string
+	 */
+	public function scanner(){
+
+		$arrTags = array();
+		$objCodeScanner = new \Twist\Core\Models\Security\CodeScanner();
+
+		if(array_key_exists('scan-now',$_GET)){
+			$objCodeScanner->scan(TWIST_DOCUMENT_ROOT);
+			$arrTags['scanner'] = $objCodeScanner->summary();
+		}else{
+			$arrTags['scanner'] = $objCodeScanner->getLastScan(TWIST_DOCUMENT_ROOT);
+		}
+
+		$arrTags['infected_list'] = '';
+
+		foreach($arrTags['scanner']['infected']['files'] as $arrInfectedFile){
+			$arrTags['infected_list'] .= $this->_view('components/scanner/each-infected.tpl',$arrInfectedFile);
+		}
+
+		return $this->_view('pages/scanner.tpl',$arrTags);
 	}
 
 	/**

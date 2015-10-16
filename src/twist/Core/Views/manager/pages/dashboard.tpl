@@ -14,6 +14,19 @@
 </div>
 <div class="clear"></div>
 <div class="grid-100 tablet-grid-100 mobile-grid-100">
+    <h3>Malicious Code Scanner</h3>
+    <p>Automatically scans your site for malicious PHP code, you can <a href="{route:registered_uri}/scanner">manage the code scanner</a> for more options and to see a list of any potentially infected files.</p>
+    <dl class="inline">
+        <dt>Last Scan</dt>
+        <dd>{prettytime[data:scanner/scanned]}</dd>
+        <dt>Files Scanned</dt>
+        <dd>{data:scanner/files}</dd>
+        <dt>Infected Files</dt>
+        <dd>{data:scanner/infected/count}</dd>
+    </dl>
+</div>
+<div class="clear"></div>
+<div class="grid-100 tablet-grid-100 mobile-grid-100">
 	<h3>Application Summary</h3>
 	<dl class="inline">
 		<dt>Cache Size</dt>
