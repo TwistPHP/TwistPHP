@@ -209,16 +209,18 @@ class SessionHandler{
 		$objDB = \Twist::Database();
 
 		$strSQL = sprintf("DELETE FROM `%s`.`%suser_sessions`
-								WHERE `device` = '%s'
-								AND `user_id` = %d",
+							WHERE `device` = '%s'
+							AND `user_id` = %d",
 			TWIST_DATABASE_NAME,
 			TWIST_DATABASE_TABLE_PREFIX,
 			$objDB->escapeString($mxdDevice),
 			$objDB->escapeString($intUserID)
 		);
 
-		if($objDB->query($strSQL) && $objDB->getAffectedRows() && $arrCurrent['device'] == $mxdDevice){
-			$this->forget();
+		if($objDB->query($strSQL) && $objDB->getAffectedRows()){
+			if($arrCurrent['device'] == $mxdDevice){
+				$this->forget();
+			}
 		}
 	}
 
@@ -251,6 +253,8 @@ class SessionHandler{
 			$intNotificationStatus = ($blNotificationStatus) ? 1 : 0;
 			$resUser->data('notify-new-device',$intNotificationStatus);
 		}
+
+		$resUser->commit();
 
 		return $intNotificationStatus;
 	}
