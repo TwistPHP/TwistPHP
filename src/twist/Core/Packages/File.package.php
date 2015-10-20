@@ -515,6 +515,85 @@ class File extends Base{
 	}
 
 	/**
+	 * Download/Copy a remote file over HTTP in chunks, outputting the chunks direclty to a local file handler. Download large files to the server without running out of system memory.
+	 * @param $strRemoteFile Full URL to the remote file
+	 * @param $strLocalFile Local path where the file is to be saved
+	 * @return bool|int Total bytes downloaded, false upon failure
+	 */
+	public function download($strRemoteFile, $strLocalFile){
+
+		set_time_limit(0);
+		$intChunkSize = 10 * (1024 * 1024); // 10 Megs
+		$intContentLength = 0;
+
+		//Break the request URL up into usable parts
+		$arrURLParts = parse_url($strRemoteFile);
+		$resRemoteHandle = fsockopen($arrURLParts['host'], 80, $strError, $intErrorCode, 5);
+		$resLocalHandle = fopen($strLocalFile, 'wb');
+
+		if($resRemoteHandle == false || $resLocalHandle == false){
+			return false;
+		}
+
+		if(!empty($arrURLParts['query'])){
+			$arrURLParts['path'] = sprintf('%s?%s',$arrURLParts['path'],$arrURLParts['query']);
+		}
+
+		//Request the file from the remote server, send the request headers
+		$strRequest = sprintf("GET %s HTTP/1.1\r\n",$arrURLParts['path']);
+		$strRequest .= sprintf("Host: %s\r\n",$arrURLParts['path']);
+		$strRequest .= "User-Agent: TwistPHP/Mozilla/5.0\r\n";
+		$strRequest .= "Keep-Alive: 115\r\n";
+		$strRequest .= "Connection: keep-alive\r\n\r\n";
+		fwrite($resRemoteHandle, $strRequest);
+
+		//Read the headers from the remote server and find the content length
+		$arrResponseHeaders = array();
+		while(!feof($resRemoteHandle)){
+
+			$strLine = fgets($resRemoteHandle);
+			if($strLine == "\r\n"){
+				break;
+			}
+
+			$arrHeaderParts = explode(':',$strLine);
+			$strKey = $arrHeaderParts[0];
+			unset($arrHeaderParts[0]);
+
+			$arrResponseHeaders[strtolower(trim($strKey))] = trim(implode(':',$arrHeaderParts));
+		}
+
+		//Find the content length of the data to be downloaded
+		if(array_key_exists('content-length',$arrResponseHeaders)){
+			$intContentLength = (int)$arrResponseHeaders['content-length'];
+		}
+
+		$intCurrentContentLength = 0;
+
+		//Read the remote file and write directly into the local file handler
+		while(!feof($resRemoteHandle)){
+			$intBytes = fwrite($resLocalHandle, fread($resRemoteHandle, $intChunkSize));
+
+			if($intBytes == false){
+				return false;
+			}
+
+			$intCurrentContentLength += $intBytes;
+
+			if($intCurrentContentLength >= $intContentLength){
+				//All data required has been read, stop here
+				break;
+			}
+		}
+
+		//Close all open file handlers
+		fclose($resRemoteHandle);
+		fclose($resLocalHandle);
+
+		return $intCurrentContentLength;
+	}
+
+	/**
 	 * Basic alias function of PHP's hash_file, hash a file on the local server
 	 *
 	 * @reference http://php.net/manual/en/function.hash-file.php

@@ -75,6 +75,7 @@
 								'slug' => $strPackageSlug,
 								'name' => $arrDetails['name'],
 								'version' => $arrDetails['version'],
+								'key' => $arrDetails['key'],
 								'folder' => basename($dirPackage),
 								'package' => 1,
 								'details' => $arrDetails
@@ -108,6 +109,47 @@
 			}
 
 			return $this->arrPackages;
+		}
+
+		/**
+		 * Get a list of all the packages from the remote Twist repository
+		 * @param string $strFilter
+		 * @return array
+		 */
+		public function getRepository($strFilter = 'all'){
+
+			$mxdData = \Twist::Curl()->get(sprintf('http://dev.twistphp.com/packages/%s',$strFilter));
+			$arrPackages = json_decode($mxdData,true);
+
+			return $arrPackages;
+		}
+
+		/**
+		 * Download and extract a package into the packages folder
+		 * @param string $strPackageKey
+		 * @return array
+		 */
+		public function download($strPackageKey){
+
+			$arrPackages = array();
+			$strLocalPackage = sprintf('%s/%s.zip',TWIST_PACKAGES,$strPackageKey);
+
+			$intBytesDownloaded = \Twist::File()->download(sprintf('http://dev.twistphp.com/packages/download?key=%s',$strPackageKey),$strLocalPackage);
+
+			if($intBytesDownloaded > 0){
+
+				//Extract the package into the packages folder
+				$resArchive = \Twist::Archive()->load($strLocalPackage);
+				$resArchive->extract(TWIST_PACKAGES);
+
+				//Cleanup and grab and the package information
+				unlink($strLocalPackage);
+				$this->getUninstalled();
+
+				$arrPackages = $this->getByKey($strPackageKey);
+			}
+
+			return $arrPackages;
 		}
 
 		/**
@@ -377,6 +419,23 @@
 		 */
 		public function get($strPackageSlug){
 			return (array_key_exists($strPackageSlug,$this->arrPackages)) ? $this->arrPackages[$strPackageSlug] : array();
+		}
+
+
+		/**
+		 * Get the details of a local/installed package and return them as an array
+		 * @param $strPackageKey
+		 * @return array
+		 */
+		public function getByKey($strPackageKey){
+
+			foreach($this->arrPackages as $arrEachPackage){
+				if($strPackageKey == $arrEachPackage['key']){
+					return $arrEachPackage;
+				}
+			}
+
+			return array();
 		}
 
 		/**

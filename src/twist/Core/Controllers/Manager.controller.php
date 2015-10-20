@@ -331,30 +331,40 @@ class Manager extends BaseUser{
 		$arrTags = array();
 		$arrModules = \Twist::framework()->package()->getAll();
 
-		$arrTags['packages_installed'] = '';
-		$arrTags['packages_available'] = '';
+		$arrTags['local_packages'] = '';
 
 		foreach($arrModules as $arrEachModule){
 
 			if(array_key_exists('name',$arrEachModule)){
 
 				if(array_key_exists('installed',$arrEachModule)){
-					$arrTags['packages_installed'] .= $this->_view('components/packages/each-installed.tpl',$arrEachModule);
+					$arrTags['local_packages'] .= $this->_view('components/packages/each-installed.tpl',$arrEachModule);
 				}else{
-					$arrTags['packages_available'] .= $this->_view('components/packages/each-available.tpl',$arrEachModule);
+					$arrTags['local_packages'] .= $this->_view('components/packages/each-available.tpl',$arrEachModule);
 				}
 			}
 		}
 
-		if($arrTags['packages_installed'] === ''){
-			$arrTags['packages_installed'] = '<tr><td colspan="6">No packages installed</td></tr>';
+		if($arrTags['local_packages'] === ''){
+			$arrTags['local_packages'] = '<tr><td colspan="6">No packages found in your /packages folder</td></tr>';
 		}
 
-		if($arrTags['packages_available'] === ''){
-			$arrTags['packages_available'] = '<tr><td colspan="4">No packages to install</td></tr>';
+		$arrTags['repository-packages'] = '';
+		$arrPackages = \Twist::framework()->package()->getRepository(array_key_exists('filter',$_GET) ? $_GET['filter'] : 'featured');
+
+		foreach($arrPackages as $arrEachPackage){
+			$arrTags['repository-packages'] .= $this->_view('components/packages/each-repo-package.tpl',$arrEachPackage);
 		}
 
 		return $this->_view('pages/packages.tpl',$arrTags);
+	}
+
+	protected function getPackages($strFilter = 'all'){
+
+		$mxdData = \Twist::Curl()->get(sprintf('http://dev.twistphp.com/packages/%s',$strFilter));
+		$arrPackages = json_decode($mxdData,true);
+
+		return $arrPackages;
 	}
 
 	/**
@@ -362,8 +372,13 @@ class Manager extends BaseUser{
 	 */
 	public function install(){
 
-		//Run the package installer
-		if(array_key_exists('package',$_GET)){
+		if(array_key_exists('package-key',$_GET)){
+			//Run the package download and installer
+			$arrPackageDetails = \Twist::framework()->package()->download($_GET['package-key']);
+			\Twist::framework()->package()->installer($arrPackageDetails['slug']);
+
+		}elseif(array_key_exists('package',$_GET)){
+			//Run the package installer
 			\Twist::framework()->package()->installer($_GET['package']);
 		}
 

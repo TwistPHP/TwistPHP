@@ -80,6 +80,35 @@ table select {
 	font-size: 1em !important;
 }
 
+#twist-manager-repolist ul li{
+	display: inline-block;
+	width:44%;
+	padding:2%;
+	height:130px;
+	margin-bottom:1%;
+	margin-right:1%;
+	border:1px solid #CCC;
+	font-size: 0.8em;
+}
+
+#twist-manager-repolist ul li .package-logo{
+	vertical-align: top;
+	text-align: left;
+	display: inline-block;
+	width:30%;
+}
+
+#twist-manager-repolist ul li .package-logo img{
+	display: inline-block;
+	width:90%;
+}
+
+#twist-manager-repolist ul li .package-details{
+	vertical-align: top;
+	display: inline-block;
+	width:60%;
+}
+
 #progress-percentage-wrapper {
 	margin: 10px 10px 0;
 }
