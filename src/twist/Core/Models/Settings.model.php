@@ -227,14 +227,14 @@
 
 			}else{
 				if(is_null($strKey)){
-					\Twist::Database()->query("DELETE * FROM `%s`.`%ssettings` WHERE `package` = '%s' AND `group` = '%s'",
+					\Twist::Database()->query("DELETE FROM `%s`.`%ssettings` WHERE `package` = '%s' AND `group` = '%s'",
 						TWIST_DATABASE_NAME,
 						TWIST_DATABASE_TABLE_PREFIX,
 						$strPackage,
 						$strGroup
 					);
 				}else{
-					\Twist::Database()->query("DELETE * FROM `%s`.`%ssettings` WHERE `package` = '%s' AND `group` = '%s' AND `key` = '%s'",
+					\Twist::Database()->query("DELETE FROM `%s`.`%ssettings` WHERE `package` = '%s' AND `group` = '%s' AND `key` = '%s'",
 						TWIST_DATABASE_NAME,
 						TWIST_DATABASE_TABLE_PREFIX,
 						$strPackage,
