@@ -1,7 +1,7 @@
 <div class="grid-100 tablet-grid-100 mobile-grid-100">
     <form class="inline foldable" action="{uri:}" method="post">
-        <h2 class="no-top-padding">HTAccess Manager</h2>
-        <p>Manage the editing of browser cache settings, rewrite rules and default host name redirects such as using www. or not and forcing https. Saving changes will re-generate your HTAccess file, if you require any custom rules please place them in the custom rules box at the bottom of this page.</p>
+        <h2 class="no-top-padding">.htaccess Manager</h2>
+        <p>Manage the editing of browser cache settings, rewrite rules and default host name redirects such as using www. or not and forcing https. Saving changes will re-generate your .htaccess file, if you require any custom rules please place them in the custom rules box at the bottom of this page.</p>
         <h3>Domain Preferences</h3>
 
         <label>Preferred Domain Prefix</label>
@@ -145,37 +145,36 @@
         </script>
         <table id="rewriteRules">
             <thead>
-            <tr>
-                <th>URI</th>
-                <th>Redirect URL</th>
-                <th>Options</th>
-                <th></th>
-            </tr>
+	            <tr>
+	                <th>URI</th>
+	                <th>Redirect URL</th>
+	                <th>Options</th>
+	                <th></th>
+	            </tr>
             </thead>
             <tfoot>
-            <tr>
-                <td></td>
-                <td></td>
-                <td><a href="#" class="button" onclick="return addRewriteRule();">+ Add Rule</a></td>
-            </tr>
+	            <tr>
+	                <td colspan="4" class="align-center"><a href="#" class="button" onclick="return addRewriteRule();">Add Rule</a></td>
+	            </tr>
             </tfoot>
             <tbody>
-            {data:rewrite_rules}
-            <tr>
-                <td><input type="text" name="rewrite[]" value=""></td>
-                <td><input type="text" name="rewrite-redirect[]" value=""></td>
-                <td><select name="rewrite-options[]"><option value="L">[L]</option><option value="R,L">[R,L]</option><option value="R=301,L">[R=301,L]</option><option value="NC,L">[NC,L]</option><option value="NC,R,L">[NC,R,L]</option><option value="NC,R=301,L">[NC,R=301,L]</option></select></td>
-                <td><a href="#" class="button" title="Remove Rule" onclick="return removeRewriteRule(this);">X</a></td>
-            </tr>
+	            {data:rewrite_rules}
+	            {view:../components/htaccess/rewrite-rule.tpl}
+	            <!--<tr>
+	                <td><input type="text" name="rewrite[]" value=""></td>
+	                <td><input type="text" name="rewrite-redirect[]" value=""></td>
+	                <td><select name="rewrite-options[]"><option value="L">[L]</option><option value="R,L">[R,L]</option><option value="R=301,L">[R=301,L]</option><option value="NC,L">[NC,L]</option><option value="NC,R,L">[NC,R,L]</option><option value="NC,R=301,L">[NC,R=301,L]</option></select></td>
+	                <td><a href="#" class="button" title="Remove Rule" onclick="return removeRewriteRule(this);">X</a></td>
+	            </tr>-->
             </tbody>
         </table>
 
         <h3>Custom Rules</h3>
-        <label>Custom htaccess rules, these will be applied at the top of the .htaccess file</label>
+        <label>Custom rules will be applied at the top of the .htaccess file</label>
         <textarea name="HTACCESS_CUSTOM" rows="12">{setting:HTACCESS_CUSTOM}</textarea>
 
 
-        <button type="submit">Save Changes</button>
+        <button type="submit" class="fat"><i class="fa fa-save"></i> Save Changes</button>
         <div class="clear"></div>
     </form>
 </div>

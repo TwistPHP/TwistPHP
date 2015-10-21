@@ -29,9 +29,10 @@ body {
 }
 
 .grid-container {
-	padding: 20px 0;
+	padding: 20px 0 50px;
 
-	background: rgba(255, 255, 255, 0.85);
+	/*background: rgba(255, 255, 255, 0.85);*/
+	background: #FFF;
 
 	border: 1px #CCC solid;
 	border-radius: 3px;
@@ -53,8 +54,11 @@ h1 {
 	}
 
 ul.tabs {
+	margin-bottom: 30px;
 	padding-right: 10px;
 	padding-left: 10px;
+
+	background-color: inherit;
 }
 
 	ul.tabs li a i {
@@ -68,6 +72,10 @@ ul.tabs {
 h2,
 h3 {
 	margin-top: 0.5em;
+}
+
+.button {
+	margin-left: 10px;
 }
 
 table .button,
