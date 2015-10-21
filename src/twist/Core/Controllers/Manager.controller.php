@@ -359,14 +359,6 @@ class Manager extends BaseUser{
 		return $this->_view('pages/packages.tpl',$arrTags);
 	}
 
-	protected function getPackages($strFilter = 'all'){
-
-		$mxdData = \Twist::Curl()->get(sprintf('http://dev.twistphp.com/packages/%s',$strFilter));
-		$arrPackages = json_decode($mxdData,true);
-
-		return $arrPackages;
-	}
-
 	/**
 	 * Install a package into the system, pass the package slug in the GET param 'package'.
 	 */

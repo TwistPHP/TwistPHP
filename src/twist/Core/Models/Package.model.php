@@ -139,8 +139,8 @@
 			if($intBytesDownloaded > 0){
 
 				//Extract the package into the packages folder
-				$resArchive = \Twist::Archive()->load($strLocalPackage);
-				$resArchive->extract(TWIST_PACKAGES);
+				\Twist::Archive()->load($strLocalPackage);
+				\Twist::Archive()->extract(TWIST_PACKAGES);
 
 				//Cleanup and grab and the package information
 				unlink($strLocalPackage);
@@ -479,20 +479,5 @@
 			}else{
 				throw new \Exception(sprintf("TwistPHP: There is no registered package route '%s'",$arrParts[0]));
 			}
-		}
-
-		/**
-		 * Register a package route into a routes array
-		 * @param $strPackage
-		 * @param $strRouteName
-		 */
-		public function registerRoute($strPackage,$strRouteName){
-
-			if(!array_key_exists($strPackage,$this->arrPackages)){
-				$this->arrPackages[$strPackage] = array('type' => null,'name' => null,'description' => null,'version' => null,'author' => null,'class' => null,'instances' => null,'path' => '','uri' => '','routes' => array(),'extensions' => array(),'installed' => 0);
-			}
-
-			$this->arrPackages[$strPackage]['routes'][$strRouteName] = $strRouteName;
-			$this->arrRoutes[$strRouteName] = $strPackage;
 		}
 	}

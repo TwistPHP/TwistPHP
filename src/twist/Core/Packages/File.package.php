@@ -541,8 +541,8 @@ class File extends Base{
 
 		//Request the file from the remote server, send the request headers
 		$strRequest = sprintf("GET %s HTTP/1.1\r\n",$arrURLParts['path']);
-		$strRequest .= sprintf("Host: %s\r\n",$arrURLParts['path']);
-		$strRequest .= "User-Agent: TwistPHP/Mozilla/5.0\r\n";
+		$strRequest .= sprintf("Host: %s\r\n",$arrURLParts['host']);
+		$strRequest .= "User-Agent: TwistPHP/3.0\r\n";
 		$strRequest .= "Keep-Alive: 115\r\n";
 		$strRequest .= "Connection: keep-alive\r\n\r\n";
 		fwrite($resRemoteHandle, $strRequest);
