@@ -6,10 +6,11 @@
 </p>
 <table>
     <thead>
-    <tr><th colspan="3">Your Devices</th></tr>
+        <tr>
+	        <th colspan="3">Your Devices</th>
+        </tr>
     </thead>
     <tbody>
-    {data:device_list}
+        {data:device_list}
     </tbody>
 </table>
-<p><strong>Hint:</strong> You can edit the name of your devices to help you identify them in the future.</p>

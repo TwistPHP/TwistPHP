@@ -263,7 +263,7 @@ class BaseUser extends Base{
         $strDeviceList = '';
         foreach($arrDevices as $arrEachDevice){
 
-            $arrEachDevice['current'] = ($arrCurrentDevices['id'] == $arrEachDevice['id']) ? true : false;
+            $arrEachDevice['current'] = ($arrCurrentDevices['id'] === $arrEachDevice['id']);
 
 	        if(array_key_exists('forget-device',$_GET)) {
 		        Auth::SessionHandler()->forgetDevice($arrUserData['user_id'], $_GET['forget-device']);
