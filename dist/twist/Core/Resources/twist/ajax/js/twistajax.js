@@ -27,18 +27,16 @@
 	function( root, factory ) {
 		if( typeof define === 'function'
 				&& define.amd ) {
-			//console.info( 'TwistAJAX Loaded into AMD' );
-			define( ['postal'],
-					function( postal ) {
-						return ( root.twistajax = factory( postal ) );
-					}
+			define( 'twistajax',
+				['postal'],
+				function( postal ) {
+					return ( root.twistajax = factory( postal ) );
+				}
 			);
 		} else if( typeof module === 'object'
 				&& module.exports ) {
-			//console.info( 'TwistAJAX Loaded into CommonJS' );
 			module.exports = ( root.twistajax = factory( require( 'postal' ) ) );
 		} else {
-			//console.info( 'TwistAJAX Loaded into Window' );
 			root.twistajax = factory( root.postal );
 		}
 	}(

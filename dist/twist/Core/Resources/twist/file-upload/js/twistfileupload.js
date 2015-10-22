@@ -27,18 +27,16 @@
 	function( root, factory ) {
 		if( typeof define === 'function'
 				&& define.amd ) {
-			//console.info( 'TwistUploader Loaded into AMD' );
-			define( ['postal'],
-					function( postal ) {
-						return ( root.twistfileupload = factory( postal ) );
-					}
+			define( 'twistfileupload',
+				['postal'],
+				function( postal ) {
+					return ( root.twistfileupload = factory( postal ) );
+				}
 			);
 		} else if( typeof module === 'object'
 				&& module.exports ) {
-			//console.info( 'TwistUploader Loaded into CommonJS' );
 			module.exports = ( root.twistfileupload = factory( require( 'postal' ) ) );
 		} else {
-			//console.info( 'TwistUploader Loaded into Window' );
 			root.twistfileupload = factory( root.postal );
 		}
 	}(
