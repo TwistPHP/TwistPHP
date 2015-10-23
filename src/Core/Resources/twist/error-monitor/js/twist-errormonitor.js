@@ -1,4 +1,4 @@
-/**
+/*!
  * This file is part of TwistPHP.
  *
  * TwistPHP is free software: you can redistribute it and/or modify
@@ -69,29 +69,27 @@
 				}
 
 				return false;
-			}
+			};
 		}
 
 		var funOriginalError = window.onerror,
 				log = function() {
 					var arrArguements = arguments;
-					if( this.isSet( window.console )
-							&& this.isSet( window.console.log )
-							&& arrArguements.length > 0 ) {
+					if( this.isSet( window.console ) &&
+							this.isSet( window.console.log ) &&
+							arrArguements.length > 0 ) {
 						for( var intArguement in arrArguements ) {
 							window.console.log( arrArguements[intArguement] );
 						}
 					}
 				},
 				error = function() {
-					if( arguments.length > 0
-							&& window.console ) {
-						if( window.console.error ) {
-							for( var intArguement in arguments ) {
+					if( arguments.length > 0 &&
+							window.console ) {
+						for( var intArguement in arguments ) {
+							if( window.console.error ) {
 								window.console.error( arguments[intArguement] );
-							}
-						} else {
-							for( var intArguement in arguments ) {
+							} else {
 								log( arguments[intArguement] );
 							}
 						}

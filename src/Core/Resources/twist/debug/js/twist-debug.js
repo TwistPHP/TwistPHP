@@ -1,4 +1,4 @@
-/**
+/*!
  * This file is part of TwistPHP.
  *
  * TwistPHP is free software: you can redistribute it and/or modify
@@ -26,17 +26,17 @@
 (
 	function( window, document ) {
 		var log = function() {
-					if( window.console
-							&& window.console.log
-							&& arguments.length ) {
+					if( window.console &&
+							window.console.log &&
+							arguments.length ) {
 						for( var intArguement in arguments ) {
 							window.console.log( arguments[intArguement] );
 						}
 					}
 				},
 				info = function() {
-					if( window.console
-							&& arguments.length ) {
+					if( window.console &&
+							arguments.length ) {
 						for( var intArguement in arguments ) {
 							if( window.console.info ) {
 								window.console.info( arguments[intArguement] );
@@ -47,8 +47,8 @@
 					}
 				},
 				error = function() {
-					if( window.console
-							&& arguments.length ) {
+					if( window.console &&
+							arguments.length ) {
 						for( var intArguement in arguments ) {
 							if( window.console.error ) {
 								window.console.error( arguments[intArguement] );
@@ -59,8 +59,8 @@
 					}
 				},
 				warn = function() {
-					if( window.console
-							&& arguments.length ) {
+					if( window.console &&
+							arguments.length ) {
 						for( var intArguement in arguments ) {
 							if( window.console.warn ) {
 								window.console.warn( arguments[intArguement] );
@@ -82,10 +82,10 @@
 
 						domScript.src = strURL,
 								domScript.onload = domScript.onreadystatechange = function() {
-									if( !blDone
-											&& ( !this.readyState
-												|| this.readyState === 'loaded'
-												|| this.readyState === 'complete' ) ) {
+									if( !blDone &&
+											( !this.readyState ||
+												this.readyState === 'loaded' ||
+												this.readyState === 'complete' ) ) {
 										blDone = true;
 										try {
 											funSuccess();
@@ -130,8 +130,8 @@
 									jqoTwistDebugBlocks.find( 'a.current' ).removeClass( 'current' ),
 									jqoThisBlock.addClass( 'current' );
 
-									if( !blMemoryChartLoaded
-											&& jqsTarget === '#twist-debug-memory' ) {
+									if( !blMemoryChartLoaded &&
+											jqsTarget === '#twist-debug-memory' ) {
 										/*google.load('visualization', '1.1', {packages: ['line']});
 										var data = new google.visualization.DataTable();
 

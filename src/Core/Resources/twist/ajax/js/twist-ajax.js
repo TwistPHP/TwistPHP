@@ -1,4 +1,4 @@
-/**
+/*!
  * This file is part of TwistPHP.
  *
  * TwistPHP is free software: you can redistribute it and/or modify
@@ -25,16 +25,17 @@
 
 (
 	function( root, factory ) {
-		if( typeof define === 'function'
-				&& define.amd ) {
-			define( 'twistajax',
+		if( typeof define === 'function' &&
+				define.amd ) {
+			define(
+				'twistajax',
 				['postal'],
 				function( postal ) {
 					return ( root.twistajax = factory( postal ) );
 				}
 			);
-		} else if( typeof module === 'object'
-				&& module.exports ) {
+		} else if( typeof module === 'object' &&
+				module.exports ) {
 			module.exports = ( root.twistajax = factory( require( 'postal' ) ) );
 		} else {
 			root.twistajax = factory( root.postal );
@@ -58,16 +59,16 @@
 									return ( oldIE() && Object.prototype.hasOwnProperty.call( objSubject, strProperty ) ) || objSubject.hasOwnProperty( strProperty );
 								},
 								isBlank = function( mxdValue ) {
-									return mxdValue.replace( /[\s\t\r\n]*/g, '' ) == '';
+									return mxdValue.replace( /[\s\t\r\n]*/g, '' ) === '';
 								},
 								oldIE = function() {
 									return navigator.userAgent.indexOf( 'MSIE ' );
 								},
 								log = function() {
 									var arrArguements = arguments;
-									if( window.console
-											&& window.console.log
-											&& arrArguements.length > 0 ) {
+									if( window.console &&
+											window.console.log &&
+											arrArguements.length > 0 ) {
 										for( var intArguement in arrArguements ) {
 											window.console.log( arrArguements[intArguement] );
 										}
@@ -87,8 +88,8 @@
 								prettySize = function( intBytes, blUseSpace ) {
 									var arrLimits = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
 											intLimit = 0;
-									while( arrLimits[intLimit]
-									&& intBytes > Math.pow( 1024, intLimit + 1 ) ) {
+									while( arrLimits[intLimit] &&
+											intBytes > Math.pow( 1024, intLimit + 1 ) ) {
 										intLimit++;
 									}
 									return round( intBytes / Math.pow( 1024, intLimit ), 2 ) + ( typeof blUseSpace === 'boolean' && blUseSpace ? ' ' : '' ) + arrLimits[intLimit];
@@ -102,16 +103,16 @@
 											arrFormElements = [];
 
 									jQuery.map( jqoForm.serializeArray(),
-											function( arrElement, intIndex ) {
-												arrFormElements.push( {name: arrElement.name, value: arrElement.value} );
-											}
+										function( arrElement, intIndex ) {
+											arrFormElements.push( {name: arrElement.name, value: arrElement.value} );
+										}
 									),
-											jqoForm.find( 'input[type="submit"][name][value], input[type="reset"][name][value], input[type="button"][name][value], button[name][value]' ).each(
-													function() {
-														var jqoElement = $( this );
-														arrFormElements.push( {name: jqoElement.attr( 'name' ), value: jqoElement.val()} );
-													}
-											);
+									jqoForm.find( 'input[type="submit"][name][value], input[type="reset"][name][value], input[type="button"][name][value], button[name][value]' ).each(
+											function() {
+												var jqoElement = $( this );
+												arrFormElements.push( {name: jqoElement.attr( 'name' ), value: jqoElement.val()} );
+											}
+									);
 
 									var returnNameObject = function( strFullName, strNameSoFar, strName, mxdValue ) {
 										var objOut = {},
@@ -127,26 +128,26 @@
 												do {
 													var blKeyFree = true;
 													$.each( arrFormElements,
-															function( intIndex, arrFormElement ) {
-																if( contains( strNameSoFar + '[' + intKey + ']', arrFormElement.name ) ) {
-																	intKey++;
-																	blKeyFree = false;
-																}
+														function( intIndex, arrFormElement ) {
+															if( contains( strNameSoFar + '[' + intKey + ']', arrFormElement.name ) ) {
+																intKey++;
+																blKeyFree = false;
 															}
+														}
 													);
 
 													if( blKeyFree ) {
 														var blKeyReplaced = false;
 
 														$.each( arrFormElements,
-																function( intIndex, arrFormElement ) {
-																	if( !blKeyReplaced
-																			&& arrFormElement.name === strNameSoFar + '[]'
-																			&& arrFormElement.value === mxdValue ) {
-																		arrFormElements[intIndex].name = strNameSoFar + '[' + intKey + ']';
-																		blKeyReplaced = true;
-																	}
+															function( intIndex, arrFormElement ) {
+																if( !blKeyReplaced &&
+																		arrFormElement.name === strNameSoFar + '[]' &&
+																		arrFormElement.value === mxdValue ) {
+																	arrFormElements[intIndex].name = strNameSoFar + '[' + intKey + ']';
+																	blKeyReplaced = true;
 																}
+															}
 														);
 
 														blKeyExists = false;
@@ -210,14 +211,14 @@
 											funCallbackSuccess = function() {},
 											funCallbackFailure = function() {};
 
-									if( typeof b === 'object'
-											|| ( typeof b === 'string'
-											&& ( /^\#[0-9a-z_\-]+$/i ).test( b )
-											&& ( $( b ) instanceof jQuery
-											|| b.jquery ) ) ) {
+									if( typeof b === 'object' ||
+											( typeof b === 'string' &&
+												( /^\#[0-9a-z_\-]+$/i ).test( b ) &&
+												( $( b ) instanceof jQuery ||
+												b.jquery ) ) ) {
 										if( typeof b === 'object' ) {
-											if( b instanceof jQuery
-													|| b.jquery ) {
+											if( b instanceof jQuery ||
+													b.jquery ) {
 												objData = serializeJSON( b );
 											} else {
 												objData = ( objectLength( b ) === 0 ) ? objData : b;
@@ -304,10 +305,10 @@
 														success: function( objResponse, strStatusText, jqXHR ) {
 															var strContentLength = prettySize( jqXHR.getResponseHeader( 'Content-Length' ) );
 															$( '#twist-ajax-loader-size' ).text( 'Downloading ' + strContentLength + '...' );
-															if( objResponse
-																	&& typeof objResponse === 'object'
-																	&& hasOwnProperty( objResponse, 'status' )
-																	&& objResponse.status === true ) {
+															if( objResponse &&
+																	typeof objResponse === 'object' &&
+																	hasOwnProperty( objResponse, 'status' ) &&
+																	objResponse.status === true ) {
 																funCallbackSuccessEnd( objResponse );
 															} else {
 																funCallbackFailureEnd( objResponse );
@@ -337,9 +338,9 @@
 																		var strResponse = jqXHR.responseText.match( rexJSON )[0];
 																		if( $.parseJSON( strResponse ) !== null ) {
 																			var objResponse = $.parseJSON( strResponse );
-																			if( typeof objResponse === 'object'
-																					&& 'status' in objResponse
-																					&& objResponse.status === true ) {
+																			if( typeof objResponse === 'object' &&
+																					'status' in objResponse &&
+																					objResponse.status === true ) {
 																				funCallbackSuccessEnd( objResponse );
 																			} else {
 																				funCallbackFailureEnd( objResponse );
@@ -380,8 +381,8 @@
 									return xhrThis;
 								};
 
-						if( typeof strAJAXPostLocation !== 'string'
-								|| strAJAXPostLocation == '' ) {
+						if( typeof strAJAXPostLocation !== 'string' ||
+								strAJAXPostLocation === '' ) {
 							throw new Error( 'Need to specify a valid AJAX post location' );
 						} else {
 							strAJAXPostLocation = strAJAXPostLocation.replace( /\/$/, '' );
@@ -521,8 +522,8 @@
 					throw 'Twist AJAX requires jQuery to run';
 				}
 			} catch( err ) {
-				if( window.console
-						&& window.console.log ) {
+				if( window.console &&
+						window.console.log ) {
 					console.log( err );
 				}
 			}

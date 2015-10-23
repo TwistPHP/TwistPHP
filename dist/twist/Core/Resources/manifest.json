@@ -57,7 +57,7 @@
 		}
 	},
 	"rummage": {
-		"2.8.1": {
+		"2.9.0": {
 			"default": true,
 			"css": [],
 			"js": ["rummage.min.js"]

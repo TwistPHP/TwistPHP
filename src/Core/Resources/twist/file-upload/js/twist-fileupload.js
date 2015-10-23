@@ -1,4 +1,4 @@
-/**
+/*!
  * This file is part of TwistPHP.
  *
  * TwistPHP is free software: you can redistribute it and/or modify
@@ -25,16 +25,17 @@
 
 (
 	function( root, factory ) {
-		if( typeof define === 'function'
-				&& define.amd ) {
-			define( 'twistfileupload',
+		if( typeof define === 'function' &&
+				define.amd ) {
+			define(
+				'twistfileupload',
 				['postal'],
 				function( postal ) {
 					return ( root.twistfileupload = factory( postal ) );
 				}
 			);
-		} else if( typeof module === 'object'
-				&& module.exports ) {
+		} else if( typeof module === 'object' &&
+				module.exports ) {
 			module.exports = ( root.twistfileupload = factory( require( 'postal' ) ) );
 		} else {
 			root.twistfileupload = factory( root.postal );
@@ -45,9 +46,9 @@
 			var TwistUploader = function( strInputID, strUri, objSettings ) {
 				var debug = false,
 				log = function( mxdData, strType, blOverride ) {
-					if( ( debug
-							|| blOverride === true )
-							&& window.console ) {
+					if( ( debug ||
+								blOverride === true ) &&
+							window.console ) {
 						if( window.console[strType] ) {
 							window.console[strType]( mxdData );
 						} else if( window.console.log ) {
@@ -72,8 +73,8 @@
 					var arrLimits = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
 							intLimit = 0;
 
-					while( arrLimits[intLimit]
-					&& intBytes > Math.pow( 1024, intLimit + 1 ) ) {
+					while( arrLimits[intLimit] &&
+							intBytes > Math.pow( 1024, intLimit + 1 ) ) {
 						intLimit++;
 					}
 
@@ -196,12 +197,7 @@
 						thisUploader.upload = function( e, arrFiles ) {
 							try {
 								if( e ) {
-									if( !arrFiles ) {
-										var domCaller = e.target || e.srcElement,
-												resFiles = domCaller.files;
-									} else {
-										resFiles = arrFiles;
-									}
+									var resFiles = ( !arrFiles ? ( e.target || e.srcElement ).files : arrFiles );
 
 									thisUploader.queue.push.apply( thisUploader.queue, resFiles );
 									thisUploader.queueCount += resFiles.length;
@@ -469,21 +465,21 @@
 					thisUploader.settings.clearoncomplete = true;
 				}
 
-				if( thisUploader.domPseudo
-						&& thisUploader.domPseudo.value
-						&& thisUploader.domPseudo.value !== '' ) {
+				if( thisUploader.domPseudo &&
+						thisUploader.domPseudo.value &&
+						thisUploader.domPseudo.value !== '' ) {
 					thisUploader.uploaded = thisUploader.domPseudo.value.split( ',' ) || [];
 				}
 
 				debug = ( thisUploader.settings.debug === true );
 
-				if( thisUploader.domCountWrapper
-						&& !thisUploader.settings.counter ) {
+				if( thisUploader.domCountWrapper &&
+						!thisUploader.settings.counter ) {
 					thisUploader.domCountWrapper.style.display = 'none';
 				}
 
-				if( thisUploader.domCancelUpload
-						&& !thisUploader.settings.abortable ) {
+				if( thisUploader.domCancelUpload &&
+						!thisUploader.settings.abortable ) {
 					thisUploader.domCancelUpload.style.display = 'none';
 				}
 
@@ -541,8 +537,8 @@
 					}
 				}
 
-				if( thisUploader.domPseudo
-						&& thisUploader.domInput ) {
+				if( thisUploader.domPseudo &&
+						thisUploader.domInput ) {
 					thisUploader.domPseudo.name = thisUploader.domInput.name.replace( '[]', '' );
 					thisUploader.domInput.removeAttribute( 'name' );
 				}

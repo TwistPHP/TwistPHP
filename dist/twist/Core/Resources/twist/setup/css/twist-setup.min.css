@@ -1,76 +1,26 @@
-/*
- * ================================================================================
+/*!
+ * This file is part of TwistPHP.
+ *
+ * TwistPHP is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TwistPHP is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with TwistPHP.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
+ * @license    https://www.gnu.org/licenses/gpl.html LGPL License
+ * @link       https://twistphp.com
+ *
  * Twist Setup
- * --------------------------------------------------------------------------------
- * Author:      Andrew Hosgood
- * Date:        05/08/2014
- * ================================================================================
- */
+ * --------------
+ * @version 3.0.0
+ */html::after{width:475px;height:500px;display:block;position:fixed;right:-50px;bottom:-50px;background:url("../images/background.png") left no-repeat;content:"";z-index:-1}body{margin:35px}.grid-container{padding:20px 0;background:rgba(255,255,255,0.85);border:1px #CCC solid;border-radius:3px}h1{margin:10px 20px;text-align:center}h1 img{height:43px;margin-right:0.5em;display:inline-block;vertical-align:bottom}ul.tabs{padding-right:10px;padding-left:10px}ul.tabs li a i{margin-left:0.5em;display:inline-block;vertical-align:middle}h2{margin-top:0.5em}#completed{display:block;font-size:7em !important}
 
-html::after {
-	width: 475px;
-	height: 500px;
-
-	display: block;
-
-	position: fixed;
-	right: -50px;
-	bottom: -50px;
-
-	background: url("../images/background.png") left no-repeat;
-
-	content: "";
-
-	z-index: -1;
-}
-
-body {
-	margin: 35px;
-}
-
-.grid-container {
-	padding: 20px 0;
-
-	background: rgba(255, 255, 255, 0.85);
-
-	border: 1px #CCC solid;
-	border-radius: 3px;
-}
-
-h1 {
-	margin: 10px 20px;
-
-	text-align: center;
-}
-
-	h1 img {
-		height: 43px;
-		margin-right: 0.5em;
-
-		display: inline-block;
-
-		vertical-align: bottom;
-	}
-
-ul.tabs {
-	padding-right: 10px;
-	padding-left: 10px;
-}
-
-	ul.tabs li a i {
-		margin-left: 0.5em;
-
-		display: inline-block;
-
-		vertical-align: middle;
-	}
-
-h2 {
-	margin-top: 0.5em;
-}
-
-#completed {
-	display: block;
-
-	font-size: 7em !important;
-}
+/*# sourceMappingURL=twist-setup.min.css.map */
