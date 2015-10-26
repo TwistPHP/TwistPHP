@@ -273,7 +273,22 @@ class User extends Base{
      * @return array
      */
     public function getDetailsByID($intUserID){
-        return \Twist::Database()->get(sprintf('%suser_data',TWIST_DATABASE_TABLE_PREFIX),$intUserID,'user_id');
+
+	    $arrUserDetails = array();
+
+	    $blQuery = \Twist::Database()->query("SELECT `ud`.`data`,`udf`.`slug` FROM `%suser_data` AS `ud` JOIN `%suser_data_fields` AS `udf` ON `ud`.`field_id` = `udf`.`id` WHERE `ud`.`user_id` = %d",
+		    TWIST_DATABASE_TABLE_PREFIX,
+		    TWIST_DATABASE_TABLE_PREFIX,
+		    $intUserID
+	    );
+
+	    if($blQuery && \Twist::Database()->getNumberRows()){
+		    foreach(\Twist::Database()->getFullArray() as $arrEachItem){
+			    $arrUserDetails[$arrEachItem['slug']] = $arrEachItem['data'];
+		    }
+	    }
+
+        return $arrUserDetails;
     }
 
     /**
