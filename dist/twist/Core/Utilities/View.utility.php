@@ -705,6 +705,17 @@ class View extends Base{
 				if(strstr($mxdItem,'=')){
 					//Update the parameters with custom values
 					list($strKey,$mxdValue) = explode('=',$mxdItem);
+
+					//See if the value is a tag to be processed, return the value of the tag
+					if(strstr($mxdValue,':')){
+						$arrParamTagParts = explode(':',$mxdValue);
+
+						//A tag should only have 2 parts, only process is there are 2 parts (no more, no less)
+						if(count($arrParamTagParts) == 2){
+							$mxdValue = $this->runTags(sprintf('{%s}',$mxdValue),$mxdValue,$arrParamTagParts[0],$arrParamTagParts[1],$arrData);
+						}
+					}
+
 					$mxdValue = $this->detectType($mxdValue);
 					$arrParameters[$strKey] = (strstr($mxdValue,'|')) ? explode('|',$mxdValue) : $mxdValue;
 				}else{

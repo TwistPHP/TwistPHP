@@ -641,27 +641,47 @@
 
 				case'inline':
 
-					//Detect the file type
-					switch($arrAsset['type']['slug']){
-						case'image':
-							$strOut = $this->resTemplate->build('image.tpl',$arrAsset);
-							break;
-						case'video':
-							$strOut = $this->resTemplate->build('video.tpl',$arrAsset);
-							break;
-						case'gmap':
-							$strOut = $this->resTemplate->build('gmap.tpl',$arrAsset);
-							break;
-						case'youtube':
-							$strOut = $this->resTemplate->build('youtube.tpl',$arrAsset);
-							break;
-						case'vimeo':
-							$strOut = $this->resTemplate->build('vimeo.tpl',$arrAsset);
-							break;
-						default:
-							$strOut = $this->resTemplate->build('link.tpl',$arrAsset);
-							break;
+					if(count($arrAsset)){
+
+						//By default the full asset uri and title are used, overrides can be passed in as parameters
+						//uri = icon or supporting content types i.e thumb-64
+						//title = A string, the new title to be displayed
+						$arrAsset['output-uri'] = $arrAsset['uri'];
+						$arrAsset['output-title'] = (array_key_exists('title',$arrParameters)) ? $arrParameters['title'] : $arrAsset['title'];
+
+						//See if the icon or supporting size has been requested
+						if(array_key_exists('uri',$arrParameters)){
+							if($arrParameters['uri'] == 'icon'){
+								$arrAsset['output-uri'] = $arrAsset['icon'];
+
+							}elseif(array_key_exists($arrParameters['uri'],$arrAsset['support'])){
+								$arrAsset['output-uri'] = $arrAsset['support'][$arrParameters['uri']];
+							}
+						}
+
+						//Detect the file type
+						switch($arrAsset['type']['slug']){
+							case'image':
+								$strOut = $this->resTemplate->build('image.tpl',$arrAsset);
+								break;
+							case'video':
+								$strOut = $this->resTemplate->build('video.tpl',$arrAsset);
+								break;
+							case'gmap':
+								$strOut = $this->resTemplate->build('gmap.tpl',$arrAsset);
+								break;
+							case'youtube':
+								$strOut = $this->resTemplate->build('youtube.tpl',$arrAsset);
+								break;
+							case'vimeo':
+								$strOut = $this->resTemplate->build('vimeo.tpl',$arrAsset);
+								break;
+							default:
+								$strOut = $this->resTemplate->build('link.tpl',$arrAsset);
+								break;
+						}
 					}
+
 					break;
 			}
 

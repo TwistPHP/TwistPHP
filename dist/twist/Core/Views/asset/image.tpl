@@ -1,1 +1,1 @@
-<img src="" alt="" title="">
+<img src="{data:output-uri}" alt="{data:title}" title="{data:output-title}">
