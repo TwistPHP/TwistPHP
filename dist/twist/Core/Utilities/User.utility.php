@@ -591,8 +591,14 @@ class User extends Base{
                 break;
 
             case'level_description':
-                $arrLevelData = $this->getLevel($this->loggedInData('level'));
-                $strData = $arrLevelData['description'];
+				$intUsersLevel = $this->loggedInData('level');
+
+				if($intUsersLevel == 0){
+					$strData = 'Root';
+				}else{
+					$arrLevelData = $this->getLevel($intUsersLevel);
+					$strData = $arrLevelData['description'];
+				}
                 break;
 
             case'email':
