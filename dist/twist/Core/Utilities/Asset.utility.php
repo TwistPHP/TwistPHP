@@ -561,7 +561,7 @@
 		}
 
 		/**
-		 * Extends the default functionality of the Template utility, adding the ability to output simple upload forms and asset information directly into a template
+		 * Extends the default functionality of the View utility, adding the ability to output simple upload forms and asset information directly into a template
 		 * {asset:upload}
 		 * {asset:upload-html}
 		 * {asset:upload-init}
@@ -578,7 +578,7 @@
 		 *
 		 * @extends Template
 		 * @param $strReference Template tag passed in from a template
-		 * @return string Formatted HTML/Markup to be output by the template utility
+		 * @return string Formatted HTML/Markup to be output by the View utility
 		 */
 		public function viewExtension($strReference,$arrParameters = array()){
 
