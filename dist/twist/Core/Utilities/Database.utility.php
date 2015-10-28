@@ -26,12 +26,11 @@
 	use \Twist\Classes\Instance;
 
 	/**
-	 * A package to simplify database connections for your PHP projects. Allowing connections to be made using MySQL, MySQLi and PDO.
-	 * Connections to multiple database servers can be created and used side by site with this unique instanceable package.
+	 * A utility to simplify database connections for your PHP projects. Allowing connections to be made using MySQL, MySQLi and PDO.
+	 * Connections to multiple database servers can be created and used side by site with this unique instancable utility.
 	 */
 	class Database extends Base{
 
-		public $version = "3.0";
 		protected $resLibrary = null;
 		protected $resResult = null;
 		protected $strConnectionKey = null;
@@ -258,7 +257,7 @@
 				'function' => $arrTrace[$intKey]['function']
 			);
 
-			while(strstr($arrTrace[$intKey]['file'],'Database.package.php')){
+			while(strstr($arrTrace[$intKey]['file'],'Database.utility.php')){
 
 				$intKey++;
 				$arrStack[] = array(
@@ -733,7 +732,7 @@
 			$arrStructure = null;
 			$strDatabaseName = (is_null($strDatabase)) ? $this->strDatabaseName : $strDatabase;
 
-			$arrStructure = \Twist::Cache('twist/packages/database')->read(sprintf('dbStructure-%s+%s',$strDatabaseName,$strTable));
+			$arrStructure = \Twist::Cache('twist/utility/database')->read(sprintf('dbStructure-%s+%s',$strDatabaseName,$strTable));
 
 			if(is_null($arrStructure)){
 
@@ -772,7 +771,7 @@
 					}
 
 					//PHP session cache only expire when page is loaded
-					\Twist::Cache('twist/packages/database')->write(sprintf('dbStructure-%s+%s',$strDatabaseName,$strTable),$arrStructure,0);
+					\Twist::Cache('twist/utility/database')->write(sprintf('dbStructure-%s+%s',$strDatabaseName,$strTable),$arrStructure,0);
 				}
 			}
 

@@ -63,7 +63,7 @@ class View extends Base{
 	}
 
 	/**
-	 * Get the current View directory/path that is in use by the View package
+	 * Get the current View directory/path that is in use by the View utility
 	 * @return directory Returns the current View path
 	 */
 	public function getDirectory(){
@@ -102,11 +102,11 @@ class View extends Base{
 			$arrViewData['html_raw'] = $this->processElement($dirFullViewPath,$arrViewTags);
 		}else{
 			$strCacheKey = ltrim(str_replace(array(TWIST_FRAMEWORK_VIEWS,TWIST_PACKAGES,TWIST_APP),array('core','packages','app'),$dirFullViewPath),'/');
-			$arrViewData = \Twist::Cache('twist/packages/views')->read($strCacheKey);
+			$arrViewData = \Twist::Cache('twist/utility/views')->read($strCacheKey);
 
 			//Detect if the file has changed, if changed remove cache and rebuild
 			if(!is_null($arrViewData) && $arrViewData['html_hash'] !== \Twist::File()->hash($dirFullViewPath,'md5')){
-				\Twist::Cache('twist/packages/views')->remove($strCacheKey);
+				\Twist::Cache('twist/utility/views')->remove($strCacheKey);
 				$arrViewData = null;
 			}
 
@@ -117,7 +117,7 @@ class View extends Base{
 				$arrViewData['html_hash'] = \Twist::File()->hash($dirFullViewPath,'md5');
 				$arrViewData['tags'] = $this->getTags($arrViewData['html_raw'],false);
 
-				\Twist::Cache('twist/packages/views')->write($strCacheKey,$arrViewData,\Twist::framework()->setting('VIEW_PRE_PROCESS_CACHE'));
+				\Twist::Cache('twist/utility/views')->write($strCacheKey,$arrViewData,\Twist::framework()->setting('VIEW_PRE_PROCESS_CACHE'));
 			}
 
 			foreach($arrViewData['tags'] as $strEachTag){

@@ -28,9 +28,6 @@
 	 */
 	class CSV extends Base{
 
-		public function __construct() {
-		}
-
 		/**
 		 * Create a CSV file on the server, pass in a multi-dimensional array of data containing keys and values, the keys will be used as the field names and the values will be each for in the CSV. By default the Delimiter, Enclosure and Escape are already set.
 		 *

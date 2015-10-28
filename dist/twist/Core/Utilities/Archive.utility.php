@@ -27,7 +27,7 @@
 	use \Twist\Core\Models\Archive\Native;
 
 	/**
-	 * Create ZIP archives of compressed files, easily zip up whole directories and single files. Default handler is PHP's native ZipArchive, the option to use the thrid party class PclZip can be selected in the framework settings.
+	 * Create ZIP archives of compressed files, easily zip up whole directories and single files. Default handler is PHP's native ZipArchive, the option to use the third party class PclZip can be selected in the framework settings.
 	 *
 	 * @package Twist\Core\Utilities
 	 * @reference http://www.phpconcept.net/pclzip/ PclZip Package included as fallback option

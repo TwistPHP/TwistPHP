@@ -26,9 +26,9 @@ namespace Twist\Core\Utilities;
 use \Twist\Core\Models\Validate\Validator;
 
 /**
- * Data validation package can validate different types of data i.e Email Address, URLS, Telephone numbers, UK Postcodes and much more.
+ * Data validation utility can validate different types of data i.e Email Address, URLS, Telephone numbers, UK Postcodes and much more.
  * Also includes a testing suite that allows testing of an array of data providing detailed results, very useful for HTML form validation.
- * @package TwistPHP\Packages
+ * @package TwistPHP\utilities
  */
 class Validate extends Base{
 
