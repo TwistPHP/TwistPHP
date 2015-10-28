@@ -47,7 +47,7 @@
 		public function getOS($strUserAgent = null){
 
 			$arrInfo = $this->get($strUserAgent);
-			return $arrInfo['os'];
+			return $arrInfo['os']['title'];
 		}
 
 		/**
@@ -59,7 +59,7 @@
 		public function getOSVersion($strUserAgent = null){
 
 			$arrInfo = $this->get($strUserAgent);
-			return $arrInfo['version'];
+			return $arrInfo['os']['version'];
 		}
 
 		/**
@@ -83,7 +83,7 @@
 		public function getBrowser($strUserAgent = null){
 
 			$arrInfo = $this->get($strUserAgent);
-			return $arrInfo['browser'];
+			return $arrInfo['browser']['title'];
 		}
 
 	}

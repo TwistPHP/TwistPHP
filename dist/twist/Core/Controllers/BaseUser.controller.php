@@ -23,6 +23,7 @@
 
 namespace Twist\Core\Controllers;
 use \Twist\Core\Models\User\Auth;
+use \Twist\Core\Models\UserAgent;
 
 /**
  *  An User base controller that can be used instead of Base when you require login, authentication and other user pages. This controller should be used as an extension to a route controller class.
@@ -274,6 +275,10 @@ class BaseUser extends Base{
 		        Auth::SessionHandler()->notifications($arrUserData['user_id'], ($_GET['notifications'] == 'on') ? true : false);
 		        \Twist::redirect('./device-manager');
 	        }
+
+	        //Lookup the details of both browser and OS
+	        $arrEachDevice['os'] = UserAgent::getOS($arrEachDevice['os']);
+	        $arrEachDevice['browser'] = UserAgent::getBrowser($arrEachDevice['browser']);
 
             if(array_key_exists('edit-device',$_GET) && $arrEachDevice['device'] == $_GET['edit-device']){
                 $strDeviceList .= $this->_view(sprintf('%suser/device-each-edit.tpl',TWIST_FRAMEWORK_VIEWS), $arrEachDevice);
