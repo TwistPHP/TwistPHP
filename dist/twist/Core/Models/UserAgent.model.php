@@ -55,8 +55,8 @@
 
 			if(self::$blLoaded == false){
 
-				self::$arrDevices = json_decode(sprintf('%sCore/Data/user-agents/devices.json',TWIST_FRAMEWORK),true);
-				self::$arrBrowsers = json_decode(sprintf('%sCore/Data/user-agents/browsers.json',TWIST_FRAMEWORK),true);
+				self::$arrDevices = json_decode(file_get_contents(sprintf('%sCore/Data/user-agents/devices.json',TWIST_FRAMEWORK)),true);
+				self::$arrBrowsers = json_decode(file_get_contents(sprintf('%sCore/Data/user-agents/browsers.json',TWIST_FRAMEWORK)),true);
 
 				self::$blLoaded = true;
 			}
