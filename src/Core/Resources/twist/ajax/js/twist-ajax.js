@@ -510,7 +510,9 @@
 
 						$( document ).ready(
 							function() {
-								$( 'body' ).prepend( '<div id="twist-ajax-loader" class="' + strLoaderSize + '"><span id="twist-ajax-loader-count"></span><span id="twist-ajax-loader-size"></span></div>' );
+								if( !$( '#twist-ajax-loader' ).length ) {
+									$( 'body' ).prepend( '<div id="twist-ajax-loader" class="' + strLoaderSize + '"><span id="twist-ajax-loader-count"></span><span id="twist-ajax-loader-size"></span></div>' );
+								}
 							}
 						);
 
