@@ -1,10 +1,11 @@
 <form action="{uri:./device-manager}" method="post">
     <tr>
-        <td>IMG</td>
+        <td>
+            <i class="fa {data:os/fa-icon}" title="{data:os/title}"></i> <small>{data:os/version}</small><br>
+            <i class="fa {data:browser/fa-icon}" title="{data:browser/title}"></i> <small>{data:browser/title}</small>
         <td>
             <input type="text" name="device-name" value="{data:device_name}" maxlength="32" placeholder="Home PC" autofocus><br>
-            <span>Last Active {prettytime[data:last_login]}</span><br>
-            <small>{data:os} - {data:browser}</small>
+            <small>Last Active {prettytime[data:last_login]}</small>
         </td>
         <td>
             <input type="hidden" name="save-device" value="{data:device}">

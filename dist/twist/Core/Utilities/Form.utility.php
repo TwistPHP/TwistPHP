@@ -26,7 +26,7 @@
 	use \Twist\Core\Models\Form\Builder;
 
 	/**
-	 * Simply Form Builder Package
+	 * Simply Form Builder utility
 	 */
 	class Form extends Base{
 

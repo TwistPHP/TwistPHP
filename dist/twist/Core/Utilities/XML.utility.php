@@ -23,6 +23,10 @@
 
 	namespace Twist\Core\Utilities;
 
+	/**
+	 * Import and Export XML files, turn XML into a usable PHP array. The utility supports XML files with UTF8 Encoding.
+	 * @package Twist\Core\Utilities
+	 */
 	class XML extends Base{
 
 		protected $resDOM = null;

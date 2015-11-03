@@ -28,7 +28,7 @@
 
 	/**
 	 * ICS Calendar and Event Handler, can import, edita nd create ics files that are compatible with Google Calendars and iCAl/Mac Calendar
-	 * @package TwistPHP\Packages
+	 * @package TwistPHP\utilities
 	 */
 	class ICS extends Base{
 
@@ -54,9 +54,7 @@
 		 * Load in an existing ICS file in to be converted into an usable ICS Event/Calendar object
 		 *
 		 * @param $dirICSFile Path of the ICS file to be imported
-		 * @return_object ICSCalendar core/packages/models/ICS/Calendar.model.php
-		 * @return_object ICSEvent core/packages/models/ICS/Event.model.php
-		 * @return null|object Returns NULL or either the ICS Event or Calendar Object
+		 * @return null|\Twist\Core\Models\ICS\Event|\Twist\Core\Models\ICS\Calendar Returns NULL or either the ICS Event or Calendar Object
 		 */
 		public function loadFile($dirICSFile){
 
@@ -74,9 +72,7 @@
 		 * Turns the raw ICS data into an object and returns
 		 *
 		 * @param $strRawData
-		 * @return_object ICSCalendar core/packages/models/ICS/Calendar.model.php
-		 * @return_object ICSEvent core/packages/models/ICS/Event.model.php
-		 * @return null|object Returns NULL or either the ICS Event or Calendar Object
+		 * @return null|\Twist\Core\Models\ICS\Event|\Twist\Core\Models\ICS\Calendar Returns NULL or either the ICS Event or Calendar Object
 		 */
 		protected function parseRawData($strRawData){
 

@@ -29,6 +29,39 @@
 	 */
 	class UserAgent{
 
+		protected static $blLoaded = false;
+		protected static $arrDevices = array();
+		protected static $arrBrowsers = array();
+		protected static $arrUnknown = array(
+			'type' => 'Unknown',
+			'os' => array(
+				'key' => 'unknown',
+				'title' => 'Unknown',
+				'version' => '',
+				'fa-icon' => 'fa-question-circle',
+			),
+			'browser' => array(
+				'key' => 'unknown',
+				'title' => 'Unknown',
+				'version' => '',
+				'fa-icon' => 'fa-question-circle',
+			)
+		);
+
+		/**
+		 * Load in the detection data from the data store. Ensure that all generic matches are at the top, as the matches are found the last correct match is the one that is chosen.
+		 */
+		protected static function loadData(){
+
+			if(self::$blLoaded == false){
+
+				self::$arrDevices = json_decode(file_get_contents(sprintf('%sCore/Data/user-agents/devices.json',TWIST_FRAMEWORK)),true);
+				self::$arrBrowsers = json_decode(file_get_contents(sprintf('%sCore/Data/user-agents/browsers.json',TWIST_FRAMEWORK)),true);
+
+				self::$blLoaded = true;
+			}
+		}
+
 		/**
 		 * Get the User Agent string form the PHP Server array
 		 * @return string User Agent Header
@@ -44,69 +77,102 @@
 		 */
 		public static function detect($strUserAgent = null){
 
-			$arrOut = array('device' => 'Unknown','os' => 'Unknown','version' => 'Unknown','browser' => 'Unknown');
+			self::loadData();
+
+			$arrOut = self::$arrUnknown;
 			$strUserAgent = (is_null($strUserAgent)) ? self::get() : $strUserAgent;
 
-			$arrOSDetections = array(
-				'/windows nt 10/i'      =>  array('device' => 'Desktop','os' => 'Windows','version' => 'Windows 10'),
-				'/windows nt 6.3/i'     =>  array('device' => 'Desktop','os' => 'Windows','version' => 'Windows 8.1'),
-				'/windows nt 6.2/i'     =>  array('device' => 'Desktop','os' => 'Windows','version' => 'Windows 8'),
-				'/windows nt 6.1/i'     =>  array('device' => 'Desktop','os' => 'Windows','version' => 'Windows 7'),
-				'/windows nt 6.0/i'     =>  array('device' => 'Desktop','os' => 'Windows','version' => 'Windows Vista'),
-				'/windows nt 5.2/i'     =>  array('device' => 'Desktop','os' => 'Windows','version' => 'Windows Server 2003/XP x64'),
-				'/windows nt 5.1/i'     =>  array('device' => 'Desktop','os' => 'Windows','version' => 'Windows XP'),
-				'/windows xp/i'         =>  array('device' => 'Desktop','os' => 'Windows','version' => 'Windows XP'),
-				'/windows nt 5.0/i'     =>  array('device' => 'Desktop','os' => 'Windows','version' => 'Windows 2000'),
-				'/windows me/i'         =>  array('device' => 'Desktop','os' => 'Windows','version' => 'Windows ME'),
-				'/win98/i'              =>  array('device' => 'Desktop','os' => 'Windows','version' => 'Windows 98'),
-				'/win95/i'              =>  array('device' => 'Desktop','os' => 'Windows','version' => 'Windows 95'),
-				'/win16/i'              =>  array('device' => 'Desktop','os' => 'Windows','version' => 'Windows 3.11'),
-				'/macintosh|mac os x/i' =>  array('device' => 'Mac','os' => 'OSX','version' => 'Mac OS X'),
-				'/mac_powerpc/i'        =>  array('device' => 'Mac PowerPC','os' => 'MacOS','version' => 'Mac OS 9'),
-				'/linux/i'              =>  array('device' => 'Desktop','os' => 'Linux','version' => 'Linux'),
-				'/ubuntu/i'             =>  array('device' => 'Desktop','os' => 'Linux','version' => 'Ubuntu'),
-				'/fedora/i'             =>  array('device' => 'Desktop','os' => 'Linux','version' => 'Fedora'),
-				'/kubuntu/i'            =>  array('device' => 'Desktop','os' => 'Linux','version' => 'Kubuntu'),
-				'/debian/i'             =>  array('device' => 'Desktop','os' => 'Linux','version' => 'Debian'),
-				'/CentOS/i'             =>  array('device' => 'Desktop','os' => 'Linux','version' => 'CentOS'),
-				'/Mandriva.([0-9]{1,3}(\.[0-9]{1,3})?(\.[0-9]{1,3})?)/i'    =>  array('device' => 'Desktop','os' => 'Linux','version' => 'Mandriva'),
-				'/SUSE.([0-9]{1,3}(\.[0-9]{1,3})?(\.[0-9]{1,3})?)/i'        =>  array('device' => 'Desktop','os' => 'Linux','version' => 'SUSE'),
-				'/Dropline/i'           =>  array('device' => 'Desktop','os' => 'Linux','version' => 'Slackware (Dropline GNOME)'),
-				'/ASPLinux/i'           =>  array('device' => 'Desktop','os' => 'Linux','version' => 'ASPLinux'),
-				'/Red Hat/i'            =>  array('device' => 'Desktop','os' => 'Linux','version' => 'Red Hat'),
-				'/iphone/i'             =>  array('device' => 'Phone','os' => 'iOS','version' => 'iPhone'),
-				'/ipod/i'               =>  array('device' => 'Device','os' => 'iOS','version' => 'iPod'),
-				'/ipad/i'               =>  array('device' => 'Tablet','os' => 'iOS','version' => 'iPad'),
-				'/android/i'            =>  array('device' => 'Phone','os' => 'Android','version' => 'Android'),
-				'/blackberry/i'         =>  array('device' => 'Phone','os' => 'BlackBerry','version' => 'BlackBerry'),
-				'/webos/i'              =>  array('device' => 'Phone','os' => 'Phone','version' => 'Generic Phone')
-			);
-
 			//Loop through all the detections to find the OS
-			foreach($arrOSDetections as $strRegX => $arrDevice){
-				if(preg_match($strRegX, $strUserAgent)){
-					$arrOut = $arrDevice;
-					//break; Removed the break to enable run to the end, first match is not always the correct match
+			foreach(self::$arrDevices as $strDeviceKey => $arrDevice){
+
+				foreach($arrDevice['regx'] as $strRegX){
+					if(preg_match($strRegX, $strUserAgent)){
+
+						$arrOut['type'] = $arrDevice['device'];
+
+						$arrOut['os']['key'] = $strDeviceKey;
+						$arrOut['os']['title'] = $arrDevice['os'];
+						$arrOut['os']['version'] = $arrDevice['version'];
+						$arrOut['os']['fa-icon'] = $arrDevice['fa-icon'];
+						break;
+					}
 				}
+				//Don't break out of this loop as a more precise match may be found
 			}
 
-			$arrBrowserDetections = array(
-				'/mobile/i'     =>  'Handheld Browser',
-				'/msie/i'       =>  'Internet Explorer',
-				'/firefox/i'    =>  'Firefox',
-				'/safari/i'     =>  'Safari',
-				'/chrome/i'     =>  'Chrome',
-				'/opera/i'      =>  'Opera',
-				'/netscape/i'   =>  'Netscape',
-				'/maxthon/i'    =>  'Maxthon',
-				'/konqueror/i'  =>  'Konqueror'
-			);
+			foreach(self::$arrBrowsers as $strBrowserKey => $arrBrowserInfo){
 
-			foreach($arrBrowserDetections as $strRegX => $strBrowser){
-				if(preg_match($strRegX, $strUserAgent)){
-					$arrOut['browser'] = $strBrowser;
-					//break; Removed the break to enable run to the end, first match is not always the correct match
+				foreach($arrBrowserInfo['regx'] as $strRegX){
+					if(preg_match($strRegX, $strUserAgent)){
+
+						$arrOut['browser']['key'] = $strBrowserKey;
+						$arrOut['browser']['title'] = $arrBrowserInfo['browser'];
+						$arrOut['browser']['fa-icon'] = $arrBrowserInfo['fa-icon'];
+						break;
+					}
 				}
+				//Don't break out of this loop as a more precise match may be found
+			}
+
+			return $arrOut;
+		}
+
+		/**
+		 * Get device type by device key, these are the keys found in the devices.json file
+		 * @param $strDeviceKey
+		 * @return string
+		 */
+		public static function getDeviceType($strDeviceKey){
+
+			self::loadData();
+
+			if(array_key_exists($strDeviceKey,self::$arrDevices)){
+				$strOut = self::$arrDevices[$strDeviceKey]['device'];
+			}else{
+				$strOut = self::$arrUnknown['device'];
+			}
+
+			return $strOut;
+		}
+
+		/**
+		 * Get OS details from a device key, these are the keys found in the devices.json file
+		 * @param $strDeviceKey
+		 * @return array
+		 */
+		public static function getOS($strDeviceKey){
+
+			self::loadData();
+			$arrOut = array();
+
+			if(array_key_exists($strDeviceKey,self::$arrDevices)){
+				$arrOut['key'] = $strDeviceKey;
+				$arrOut['title'] = self::$arrDevices[$strDeviceKey]['os'];
+				$arrOut['version'] = self::$arrDevices[$strDeviceKey]['version'];
+				$arrOut['fa-icon'] = self::$arrDevices[$strDeviceKey]['fa-icon'];
+			}else{
+				$arrOut = self::$arrUnknown['os'];
+			}
+
+			return $arrOut;
+		}
+
+		/**
+		 * Get Browser details from a browser key, these are the keys found in the browsers.json file
+		 * @param $strBrowserKey
+		 * @return array
+		 */
+		public static function getBrowser($strBrowserKey){
+
+			self::loadData();
+			$arrOut = array();
+
+			if(array_key_exists($strBrowserKey,self::$arrBrowsers)){
+				$arrOut['key'] = $strBrowserKey;
+				$arrOut['title'] = self::$arrBrowsers[$strBrowserKey]['browser'];
+				$arrOut['fa-icon'] = self::$arrBrowsers[$strBrowserKey]['fa-icon'];
+			}else{
+				$arrOut = self::$arrUnknown['browser'];
 			}
 
 			return $arrOut;

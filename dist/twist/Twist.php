@@ -27,7 +27,7 @@
 	use Twist\Core\Utilities as Utilities;
 
 	/**
-	 * Main functionality for the Framework, when using core functionality of the framework this class is that gateway to makes it all possible.
+	 * Main functionality for the Framework, this main class is that gateway to makes it all possible to use the framework in a simple yet powerful way.
 	 */
 	class Twist{
 
@@ -140,7 +140,7 @@
 		}
 
 		/**
-		 * Add the ability to serve some basic core resources, this functionality will soon be deprecated in favour of using the resources package.
+		 * Add the ability to serve some basic core resources, this functionality will soon be deprecated in favour of using the resources utility.
 		 * @deprecated
 		 */
         protected static function coreResources(){
@@ -455,7 +455,7 @@
 		}
 
 		/**
-		 * Return an instance of the Archive package.
+		 * Return an instance of the Archive utility.
 		 * @return \Twist\Core\Utilities\Archive
 		 */
 		public static function Archive(){
@@ -466,7 +466,7 @@
 		}
 
 		/**
-		 * Return an instance of the Asset package.
+		 * Return an instance of the Asset utility.
 		 * @return \Twist\Core\Utilities\Asset
 		 */
 		public static function Asset(){
@@ -477,7 +477,7 @@
 		}
 
 		/**
-		 * Return an instance of the Cookie package.
+		 * Return an instance of the Cookie utility.
 		 * @return \Twist\Core\Utilities\Cookie
 		 */
 		public static function Cookie(){
@@ -488,7 +488,7 @@
 		}
 
 		/**
-		 * Return an instance of the CSV package.
+		 * Return an instance of the CSV utility.
 		 * @return \Twist\Core\Utilities\CSV
 		 */
 		public static function CSV(){
@@ -499,7 +499,7 @@
 		}
 
 		/**
-		 * Return an instance of the Cache package.
+		 * Return an instance of the Cache utility.
 		 * @return \Twist\Core\Utilities\Cache
 		 */
 		public static function Cache(){
@@ -520,7 +520,7 @@
 		}
 
 		/**
-		 * Return an instance of the Command package.
+		 * Return an instance of the Command utility.
 		 * @return \Twist\Core\Utilities\Command
 		 */
 		public static function Command(){
@@ -531,7 +531,7 @@
 		}
 
 		/**
-		 * Return an instance of the Curl package.
+		 * Return an instance of the Curl utility.
 		 * @return \Twist\Core\Utilities\Curl
 		 */
 		public static function Curl(){
@@ -542,7 +542,7 @@
 		}
 
 		/**
-		 * Return an instance of the Database package.
+		 * Return an instance of the Database utility.
 		 * @return \Twist\Core\Utilities\Database
 		 */
 		public static function Database(){
@@ -563,7 +563,7 @@
 		}
 
 		/**
-		 * Return an instance of the DateTime package.
+		 * Return an instance of the DateTime utility.
 		 * @return \Twist\Core\Utilities\DateTime
 		 */
 		public static function DateTime(){
@@ -574,7 +574,7 @@
 		}
 
 		/**
-		 * Return an instance of the Device package.
+		 * Return an instance of the Device utility.
 		 * @return \Twist\Core\Utilities\Device
 		 */
 		public static function Device(){
@@ -585,7 +585,7 @@
 		}
 
 		/**
-		 * Return an instance of the Email package.
+		 * Return an instance of the Email utility.
 		 * @return \Twist\Core\Utilities\Email
 		 */
 		public static function Email(){
@@ -596,7 +596,7 @@
 		}
 
 		/**
-		 * Return an instance of the File package.
+		 * Return an instance of the File utility.
 		 * @return \Twist\Core\Utilities\File
 		 */
 		public static function File(){
@@ -607,7 +607,7 @@
 		}
 
 		/**
-		 * Return an instance of the FTP package.
+		 * Return an instance of the FTP utility.
 		 * @return \Twist\Core\Utilities\FTP
 		 */
 		public static function FTP(){
@@ -618,7 +618,7 @@
 		}
 
 		/**
-		 * Return an instance of the ICS package.
+		 * Return an instance of the ICS utility.
 		 * @return \Twist\Core\Utilities\ICS
 		 */
 		public static function ICS(){
@@ -629,7 +629,7 @@
 		}
 
 		/**
-		 * Return an instance of the Image package.
+		 * Return an instance of the Image utility.
 		 * @return \Twist\Core\Utilities\Image
 		 */
 		public static function Image(){
@@ -640,7 +640,7 @@
 		}
 
 		/**
-		 * Return an instance of the Localisation package.
+		 * Return an instance of the Localisation utility.
 		 * @return \Twist\Core\Utilities\Localisation
 		 */
 		public static function Localisation(){
@@ -651,7 +651,7 @@
 		}
 
 		/**
-		 * Return an instance of the Route package.
+		 * Return an instance of the Route utility.
 		 * @return \Twist\Core\Utilities\Route
 		 */
 		public static function Route(){
@@ -672,7 +672,7 @@
 		}
 
 		/**
-		 * Return an instance of the Session package.
+		 * Return an instance of the Session utility.
 		 * @return \Twist\Core\Utilities\Session
 		 */
 		public static function Session(){
@@ -683,7 +683,7 @@
 		}
 
 		/**
-		 * Return an instance of the Timer package.
+		 * Return an instance of the Timer utility.
 		 * @return \Twist\Core\Utilities\Timer
 		 */
 		public static function Timer(){
@@ -704,7 +704,7 @@
 		}
 
 		/**
-		 * Return an instance of the User package.
+		 * Return an instance of the User utility.
 		 * @return \Twist\Core\Utilities\User
 		 */
 		public static function User(){
@@ -715,7 +715,7 @@
 		}
 
 		/**
-		 * Return an instance of the Validate package.
+		 * Return an instance of the Validate utility.
 		 * @return \Twist\Core\Utilities\Validate
 		 */
 		public static function Validate(){
@@ -726,7 +726,7 @@
 		}
 
 		/**
-		 * Return an instance of the View package.
+		 * Return an instance of the View utility.
 		 * @return \Twist\Core\Utilities\View
 		 */
 		public static function View(){
@@ -747,7 +747,7 @@
 		}
 
 		/**
-		 * Return an instance of the XML package.
+		 * Return an instance of the XML utility.
 		 * @return \Twist\Core\Utilities\XML
 		 */
 		public static function XML(){

@@ -65,6 +65,7 @@ class SessionHandler{
 			//echo "Create Cookie";
 			//die();
 			$_COOKIE['device'] = $strDeviceID;
+			$arrDevice = \Twist::Device()->get();
 
 			$strSQL = sprintf("INSERT INTO `%s`.`%suser_sessions`
 									SET `user_id` = %d,
@@ -75,8 +76,8 @@ class SessionHandler{
 				TWIST_DATABASE_TABLE_PREFIX,
 				$objDB->escapeString($intUserID),
 				$objDB->escapeString($strDeviceID),
-				\Twist::Device()->getOSVersion(),
-				\Twist::Device()->getBrowser()
+				$arrDevice['os']['key'],
+				$arrDevice['browser']['key']
 			);
 
 			$objDB->query($strSQL);
@@ -87,6 +88,8 @@ class SessionHandler{
 
 			if(!count($this->getCurrentDevice($intUserID))){
 
+				$arrDevice = \Twist::Device()->get();
+
 				$strSQL = sprintf("INSERT INTO `%s`.`%suser_sessions`
 										SET `user_id` = %d,
 											`device` = '%s',
@@ -96,8 +99,8 @@ class SessionHandler{
 					TWIST_DATABASE_TABLE_PREFIX,
 					$objDB->escapeString($intUserID),
 					$objDB->escapeString($strDeviceID),
-					\Twist::Device()->getOSVersion(),
-					\Twist::Device()->getBrowser()
+					$arrDevice['os']['key'],
+					$arrDevice['browser']['key']
 				);
 
 				$objDB->query($strSQL);

@@ -24,13 +24,13 @@
 	namespace Twist\Core\Utilities;
 
 	/**
-	 * All core packages should extend the package base controller, this controller gives some default functionality that is required.
+	 * All core utilities should extend the utility base controller, this controller gives some default functionality that is required.
 	 * @package Twist\Core\Utilities
 	 */
 	class Base{
 
 		/**
-		 * Return the name of the package class
+		 * Return the name of the utility class
 		 * @return string
 		 */
 		protected function __calledClass(){
@@ -38,7 +38,7 @@
 		}
 
 		/**
-		 * Return information about the current package as an array
+		 * Return information about the current utility as an array
 		 * @return array
 		 */
 		protected function __info(){
@@ -46,7 +46,7 @@
 		}
 
 		/**
-		 * Return the version number of the current package
+		 * Return the version number of the current utility
 		 * @return mixed
 		 */
 		protected function __version(){
@@ -55,7 +55,7 @@
 		}
 
 		/**
-		 * Return the URI of the current package
+		 * Return the URI of the current utility
 		 * @return mixed
 		 */
 		protected function __uri(){
@@ -64,7 +64,7 @@
 		}
 
 		/**
-		 * Return the path to the current package
+		 * Return the path to the current utility
 		 * @return mixed
 		 */
 		protected function __path(){

@@ -27,7 +27,7 @@
 
 	/**
 	 * Image editing suite that allows for new images to be created and existing images to be loaded in for modification
-	 * @package TwistPHP\Packages
+	 * @package TwistPHP\utilities
 	 */
 	class Image extends Base{
 
