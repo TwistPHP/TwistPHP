@@ -35,6 +35,24 @@ class Manager extends BaseUser{
 	}
 
 	/**
+	 * Over-ride the base view for the login page
+	 * @return string
+	 */
+	public function login(){
+		$this->_baseView('_login.tpl');
+		return parent::login();
+	}
+
+	/**
+	 * Over-ride the base view for the forgotten password page
+	 * @return string
+	 */
+	public function forgottenPassword(){
+		$this->_baseView('_login.tpl');
+		return parent::forgottenPassword();
+	}
+
+	/**
 	 * @alias dashboard
 	 * @return string
 	 */
