@@ -1,6 +1,6 @@
 <?php
 
-	require_once '../dist/twist/framework.php';
+	require_once( 'dist/twist/framework.php' );
 
 	$arrSession = array(
 		'checks' => array(

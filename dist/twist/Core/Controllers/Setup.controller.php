@@ -371,6 +371,8 @@ class Setup extends Base{
 
 		$arrSession = \Twist::Session()->data('twist-setup');
 
+		return '<pre>'.print_r($arrSession, true).'</pre>';
+
 		//Create all the required folders for twist
 		$strApplicationPath = sprintf('%s%s/',$arrSession['settings']['details']['relative_path'],$arrSession['settings']['details']['app_path']);
 

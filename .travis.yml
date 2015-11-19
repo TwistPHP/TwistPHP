@@ -34,4 +34,5 @@ script: phpunit tests/install.php tests --verbose
 
 notifications:
   on_success: never
-  on_failure: always
+  #on_failure: always
+  on_failure: never
