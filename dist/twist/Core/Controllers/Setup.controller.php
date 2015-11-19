@@ -371,8 +371,6 @@ class Setup extends Base{
 
 		$arrSession = \Twist::Session()->data('twist-setup');
 
-		return '<pre>'.print_r($arrSession, true).'</pre>';
-
 		//Create all the required folders for twist
 		$strApplicationPath = sprintf('%s%s/',$arrSession['settings']['details']['relative_path'],$arrSession['settings']['details']['app_path']);
 
@@ -492,6 +490,11 @@ class Setup extends Base{
 		 */
 		$dirHTaccessFile = sprintf('%s/.htaccess',_TWIST_PUBLIC_ROOT);
 		file_put_contents($dirHTaccessFile,\Twist::View()->build(sprintf('%s/default-htaccess.tpl',TWIST_FRAMEWORK_VIEWS),array('rewrite_rules' => '')));
+
+		if(defined('TWIST_QUICK_INSTALL')){
+			//If this was a quick install then output a simple message
+			die('INSTALLED 200 OK');
+		}
 
 		return \Twist::View()->build('pages/finish.tpl');
 	}
