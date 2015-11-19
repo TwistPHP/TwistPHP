@@ -20,7 +20,7 @@ mysql:
 
 install:
   # install php packages required for running a web server
-  - sudo apt-get install -y --force-yes php5-cgi php5-mysql
+  #- sudo apt-get install -y --force-yes php5-cgi php5-mysql
 
 before_script:
   # navigate
