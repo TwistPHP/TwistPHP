@@ -1,0 +1,30 @@
+language: php
+
+php:
+  - 5.4
+  - 5.5
+  - 5.6
+  - hhvm
+  - nightly
+
+services:
+  - mysql
+
+env:
+  - DB=mysql
+
+mysql:
+  database: travis_ci_twist_test
+  username: root
+  encoding: utf8
+
+install:
+  # install php packages required for running a web server
+  - sudo apt-get install -y --force-yes php5-cgi php5-mysql
+
+before_script:
+  # navigate
+  #- cd .
+
+  # create new db
+  - mysql -e "CREATE database IF NOT EXISTS travis_ci_twist_test" -uroot; fi
