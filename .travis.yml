@@ -34,3 +34,4 @@ before_script:
   - mysql -e "CREATE DATABASE IF NOT EXISTS `twist_test`;" -utwist_test -ptwist_test
   - mysql -e "GRANT ALL PRIVILEGES ON `twist_test`.* TO 'twist_test'@'%';" -utwist_test -ptwist_test
   - mysql -e "GRANT ALL PRIVILEGES ON `twist_test\_%`.* TO 'twist_test'@'%';" -utwist_test -ptwist_test
+
