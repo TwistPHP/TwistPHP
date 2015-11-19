@@ -1,11 +1,11 @@
 language: php
 
 php:
-  - 5.4
+  #- 5.4
   - 5.5
   - 5.6
-  - hhvm
-  - nightly
+  #- hhvm
+  #- nightly
 
 services:
   - mysql
@@ -30,7 +30,8 @@ before_script:
   # create new db
   - mysql -V
   - mysql -e "CREATE USER 'twist_test'@'%' IDENTIFIED BY 'twist_test';"
-  - mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'twist_test'@'%' IDENTIFIED BY 'twist_test' REQUIRE NONE WITH GRANT OPTION MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;"
+  #- mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'twist_test'@'%' IDENTIFIED BY 'twist_test' REQUIRE NONE WITH GRANT OPTION MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;"
+  - mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'twist_test'@'%' IDENTIFIED BY 'twist_test';"
   - mysql -e "CREATE DATABASE IF NOT EXISTS `twist_test`;"
   - mysql -e "GRANT ALL PRIVILEGES ON `twist_test`.* TO 'twist_test'@'%';"
   - mysql -e "GRANT ALL PRIVILEGES ON `twist_test\_%`.* TO 'twist_test'@'%';"
