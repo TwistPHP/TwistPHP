@@ -29,7 +29,8 @@ before_script:
 
 #script: php dist/index.php
 #script: phpunit --bootstrap dist/twist/framework.php tests --verbose
-script: phpunit dist/twist/framework.php tests --verbose
+#script: phpunit dist/twist/framework.php tests --verbose
+script: phpunit tests/install.php tests --verbose
 
 notifications:
   on_success: never
