@@ -463,6 +463,10 @@
 
 				//Call the interface
 				$objInterface = new $strPackageRoute($arrParts[1]);
+
+				//Store the new version of routes for all to use
+				Instance::storeObject('pkgRoute',$objInterface);
+
 				$objInterface->baseURI($strRegisteredURI);
 
 				//Set the view directory to the one in the package
