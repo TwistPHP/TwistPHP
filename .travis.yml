@@ -7,9 +7,6 @@ php:
   - hhvm
   - nightly
 
-addons:
-  mysql: "9.3"
-
 services:
   - mysql
 
@@ -31,6 +28,7 @@ before_script:
   #- cd .
 
   # create new db
+  - mysql -V
   - mysql -e "CREATE USER twist_test WITH CREATEUSER PASSWORD 'twist_test'" -uroot; fi
   - mysql -e "ALTER USER twist_test CREATEDB" -uroot; fi
   - mysql -e "CREATE database IF NOT EXISTS travis_ci_twist_test" -uroot; fi
