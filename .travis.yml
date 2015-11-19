@@ -28,9 +28,9 @@ before_script:
 
   # create new db
   - mysql -V
-  - mysql -e "CREATE USER 'twist_test'@'%' IDENTIFIED BY 'twist_test';" -uroot
-  - mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'twist_test'@'%' IDENTIFIED BY 'twist_test' REQUIRE NONE WITH GRANT OPTION MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;" -uroot
-  #- mysql -e "CREATE DATABASE IF NOT EXISTS `twist_test`;"
+  #- mysql -e "CREATE USER 'twist_test'@'%' IDENTIFIED BY 'twist_test';" -uroot
+  #- mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'twist_test'@'%' IDENTIFIED BY 'twist_test' REQUIRE NONE WITH GRANT OPTION MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;" -uroot
+  #- mysql -e "CREATE DATABASE IF NOT EXISTS `travis_ci_twist_test`;"
   #- mysql -e "GRANT ALL PRIVILEGES ON `twist_test`.* TO 'twist_test'@'%';" -uroot
   #- mysql -e "GRANT ALL PRIVILEGES ON `twist_test\_%`.* TO 'twist_test'@'%';" -uroot
   - mysql -e "CREATE TABLE IF NOT EXISTS `test` (`user_id` int(11) NOT NULL,`field_id` int(11) NOT NULL,`data` text COLLATE utf8mb4_unicode_ci,UNIQUE KEY `user_id` (`user_id`,`field_id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;"
