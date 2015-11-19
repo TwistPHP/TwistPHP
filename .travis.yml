@@ -7,6 +7,9 @@ php:
   - hhvm
   - nightly
 
+addons:
+  mysql: "9.3"
+
 services:
   - mysql
 
@@ -15,7 +18,8 @@ env:
 
 mysql:
   database: travis_ci_twist_test
-  username: root
+  username: twist_test
+  password: twist_test
   encoding: utf8
 
 install:
@@ -27,4 +31,6 @@ before_script:
   #- cd .
 
   # create new db
+  - mysql -e "CREATE USER twist_test WITH CREATEUSER PASSWORD 'twist_test'" -uroot; fi
+  - mysql -e "ALTER USER twist_test CREATEDB" -uroot; fi
   - mysql -e "CREATE database IF NOT EXISTS travis_ci_twist_test" -uroot; fi
