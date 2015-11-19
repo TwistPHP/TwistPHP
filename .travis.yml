@@ -5,8 +5,8 @@ php:
   - 5.4
   - 5.5
   - 5.6
-  - hhvm
-  - nightly
+  #- hhvm
+  #- nightly
 
 services:
   - mysql
@@ -28,7 +28,8 @@ before_script:
   - mysql -e "USE travis_ci_twist_test; SHOW TABLES;"
 
 #script: php dist/index.php
-script: phpunit dist/index.php tests --verbose
+script: phpunit --bootstrap dist/twist/framework.php tests --verbose
+script: phpunit dist/twist/framework.php tests --verbose
 
 notifications:
   on_success: never
