@@ -29,7 +29,7 @@ install: php ./tests/install.php
 before_script:
    - mysql -e "USE travis_ci_twist_test; SHOW TABLES;"
    - ls -lah ./tests
-   - sed -i 's/Twist::Route() -> serve();/Twist::Route() -> serve();/g' ./tests/index.php
+   - sed -i 's/Twist::Route() -> serve();/echo 'TwistPHP Loaded!';/g' ./tests/index.php
 
 #script: phpunit --bootstrap ./tests/index.php \App\Models\ViewTest --verbose
 script: phpunit ./tests/ViewTest.php
