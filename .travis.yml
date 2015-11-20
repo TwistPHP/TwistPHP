@@ -19,18 +19,19 @@ mysql:
   username: root
   encoding: utf8
 
-before_script:
+before_install:
    - mysql -V
-   - mysql -e "SHOW DATABASES"
    - mysql -e "CREATE DATABASE IF NOT EXISTS travis_ci_twist_test;"
    - mysql -e "SHOW DATABASES"
-   - php ./tests/install.php
-   - mysql -e "USE travis_ci_twist_test; SHOW TABLES;"
 
-#script: php dist/index.php
-#script: phpunit --bootstrap dist/twist/framework.php tests --verbose
-#script: phpunit dist/twist/framework.php tests --verbose
-script: phpunit ./tests/index.php tests --verbose
+install: php ./tests/install.php
+
+before_script:
+   - mysql -e "USE travis_ci_twist_test; SHOW TABLES;"
+   - ls -lah ./tests
+   - sed -i 's/Twist::Route() -> serve();/Twist::Route() -> serve();/g' ./tests/index.php
+
+script: phpunit --bootstrap ./tests/index.php ./tests/all/viewTest.php --verbose
 
 notifications:
   on_success: never
