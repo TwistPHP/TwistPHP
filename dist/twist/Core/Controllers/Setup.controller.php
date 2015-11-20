@@ -371,6 +371,8 @@ class Setup extends Base{
 
 		$arrSession = \Twist::Session()->data('twist-setup');
 
+		echo "---> 8";
+
 		//Create all the required folders for twist
 		$strApplicationPath = sprintf('%s%s/',$arrSession['settings']['details']['relative_path'],$arrSession['settings']['details']['app_path']);
 
@@ -391,6 +393,8 @@ class Setup extends Base{
 		$resFile->recursiveCreate(sprintf('%sViews',$strApplicationPath));
 		$resFile->recursiveCreate(sprintf('%sTwist',$strApplicationPath));
 		$resFile->recursiveCreate(sprintf('%sPackages',$strApplicationPath));
+
+		echo "---> 7";
 
 		//Create the config in the apps/config folder
 		$arrConfigTags = array(
@@ -415,6 +419,8 @@ class Setup extends Base{
 
 		if($arrSession['database']['details']['type'] === 'database'){
 
+			echo "---> 6";
+
 			\Twist::Database()->connect(
 				$arrSession['database']['details']['host'],
 				$arrSession['database']['details']['username'],
@@ -436,10 +442,12 @@ class Setup extends Base{
 			$this->importSQL(sprintf('%sinstall.sql',TWIST_FRAMEWORK_INSTALL));
 		}
 
+		echo "---> 5";
+
 		//Update all the core settings, add to a file when no Database is being used
 		$this->importSettings(sprintf('%ssettings.json',TWIST_FRAMEWORK_INSTALL));
 
-		echo 4;
+		echo "---> 4";
 
 		//Add new settings to the chosen settings storage method
 		\Twist::framework()->setting('SITE_NAME',$arrSession['settings']['details']['site_name']);
@@ -449,12 +457,12 @@ class Setup extends Base{
 		\Twist::framework()->setting('SITE_PROTOCOL_FORCE',$arrSession['settings']['details']['http_protocol_force']);
 		\Twist::framework()->setting('TIMEZONE',$arrSession['settings']['details']['timezone']);
 
-		echo 3;
+		echo "---> 3";
 
 		//Create the level 0 user into the system - this will only occur is a database connection is present
 		if($arrSession['user']['status'] && $arrSession['database']['details']['protocol'] != 'none'){
 
-			echo 2;
+			echo "---> 2";
 
 			$objUser = \Twist::User()->create();
 
@@ -466,7 +474,7 @@ class Setup extends Base{
 			$intUserID = $objUser->commit();
 		}
 
-		echo 1;
+		echo "---> 1";
 
 		\Twist::Session()->remove('twist-setup');
 
