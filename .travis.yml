@@ -26,6 +26,7 @@ before_script:
    - mysql -e "SHOW DATABASES"
    - php ./tests/install.php
    - mysql -e "USE travis_ci_twist_test; SHOW TABLES;"
+   - mysql -e "USE travis_ci_twist_test; SELECT * FROM `twist_settings`;"
    - tail -n 10 ./tests/app/Config/config.php
    - cd ./tests
    - ls -lah
