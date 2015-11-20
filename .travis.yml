@@ -31,7 +31,6 @@ before_script:
    - ls -lah
    - cd ./tests
    - ls -lah
-   - locate index.php
 
 #script: php dist/index.php
 #script: phpunit --bootstrap dist/twist/framework.php tests --verbose
