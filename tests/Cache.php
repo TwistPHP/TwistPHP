@@ -12,7 +12,7 @@ class Cache extends \PHPUnit_Framework_TestCase{
 
 	public function testExpiredCache(){
 		\Twist::Cache()->write('cache-test2','pass',1);
-		sleep(1);
+		sleep(2);
 		$this -> assertEquals(null,\Twist::Cache()->read('cache-test2'));
 	}
 }
