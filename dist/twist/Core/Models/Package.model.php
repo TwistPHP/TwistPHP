@@ -215,36 +215,15 @@
 		public function install(){
 
 			$arrBacktrace = debug_backtrace();
-
 			if(count($arrBacktrace)){
 
 				$dirInstallFile = $arrBacktrace[0]['file'];
-				$dirPackage = dirname($dirInstallFile);
+				$dirPackageJSON = sprintf('%s/info.json',dirname($dirInstallFile));
 
-				$rawJson = file_get_contents(sprintf('%s/info.json',$dirPackage));
-				$arrDetails = json_decode($rawJson,true);
+				$intPackage = Install::package($dirPackageJSON);
 
-				$strSlug = strtolower(basename($dirPackage));
-
-				$arrResources = $arrRoutes = $arrBlocks = $arrExtensions = array();
-
-				$resPackage = \Twist::Database()->createRecord(TWIST_DATABASE_TABLE_PREFIX.'packages');
-
-				$resPackage->set('slug',$strSlug);
-				$resPackage->set('name',$arrDetails['name']);
-				$resPackage->set('version',$arrDetails['version']);
-				$resPackage->set('folder',basename($dirPackage));
-				$resPackage->set('package',(is_file(sprintf('%s/package.php',$dirPackage))) ? '1' : '0');
-				$resPackage->set('installed',date('Y-m-d H:i:s'));
-				$resPackage->set('resources',json_encode($arrResources));
-				$resPackage->set('routes',json_encode($arrRoutes));
-				$resPackage->set('blocks',json_encode($arrBlocks));
-				$resPackage->set('extensions',json_encode($arrExtensions));
-
-				$intPackage = $resPackage->commit();
-
-				//Update the list of installed packages
-				$this->load($strSlug,$resPackage->values());
+				//Update the installed package list
+				$this->getInstalled(true);
 
 				return $intPackage;
 			}
@@ -267,18 +246,7 @@
 				//Install the SQL tables when required
 				$dirInstallSQL = (!file_exists($dirInstallSQL)) ? sprintf('%s/%s', $dirPackage, $dirInstallSQL) : $dirInstallSQL;
 
-				if(file_exists($dirInstallSQL)){
-
-					//Create a temp file with all the required table pre-fixes
-					$dirImportFile = tempnam(sys_get_temp_dir(), 'twist-import');
-					file_put_contents($dirImportFile, str_replace('/*TWIST_DATABASE_TABLE_PREFIX*/`', sprintf('`%s', TWIST_DATABASE_TABLE_PREFIX), file_get_contents($dirInstallSQL)));
-
-					//Import the SQL form the temp file
-					\Twist::Database()->importSQL($dirImportFile);
-
-					//Remove the temp file form the system
-					unlink($dirImportFile);
-				}
+				Install::importSQL($dirInstallSQL);
 			}
 		}
 
@@ -299,28 +267,7 @@
 				//Install the SQL tables when required
 				$dirSettingsJSON = (!file_exists($dirSettingsJSON)) ? sprintf('%s/%s', $dirPackage, $dirSettingsJSON) : $dirSettingsJSON;
 
-				if(file_exists($dirSettingsJSON)){
-
-					$arrSettings = json_decode(file_get_contents($dirSettingsJSON),true);
-					if(count($arrSettings)){
-
-						foreach($arrSettings as $strKey => $arrOptions){
-
-							\Twist::framework()->settings()->install(
-								$strSlug,
-								'package',
-								$strKey,
-								$arrOptions['default'],
-								$arrOptions['title'],
-								$arrOptions['description'],
-								$arrOptions['default'],
-								$arrOptions['type'],
-								$arrOptions['options'],
-								$arrOptions['null']
-							);
-						}
-					}
-				}
+				Install::importSettings($dirSettingsJSON);
 			}
 		}
 
@@ -336,7 +283,7 @@
 				$dirPackage = dirname($dirInstallFile);
 				$strSlug = strtolower(basename($dirPackage));
 
-				\Twist::framework()->settings()->uninstall($strSlug,'package');
+				Install::removeSettings($strSlug,'package');
 			}
 		}
 
@@ -370,17 +317,9 @@
 			if(count($arrBacktrace)){
 
 				$dirInstallFile = $arrBacktrace[0]['file'];
-				$dirPackage = dirname($dirInstallFile);
+				$strSlug = strtolower(basename(dirname($dirInstallFile)));
 
-				$rawJson = file_get_contents(sprintf('%s/info.json',$dirPackage));
-				$arrDetails = json_decode($rawJson,true);
-
-				$strSlug = strtolower(basename($dirPackage));
-
-				$resPackage = \Twist::Database()->getRecord(TWIST_DATABASE_TABLE_PREFIX.'packages',$strSlug,'slug');
-				$resPackage->delete();
-
-				return true;
+				return Install::removePackage($strSlug);
 			}
 
 			return false;

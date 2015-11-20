@@ -29,7 +29,7 @@
 	class Install{
 		
 		/**
-		 * Final step, all the settings and tables are created, the user is then shown a finish page.
+		 * Install/Configure the framework, this is required before the framework will function
 		 * @param $arrConfiguration
 		 * @return string
 		 */
@@ -157,6 +157,53 @@
 		}
 
 		/**
+		 * Install a package, this is required before a package can be run by the framework
+		 * @param $dirPackageJSON
+		 * @return bool|int|null
+		 */
+		public static function package($dirPackageJSON){
+
+			$intPackage = null;
+
+			if(file_exists($dirPackageJSON)){
+
+				$dirPackage = dirname($dirPackageJSON);
+				$rawJson = file_get_contents($dirPackageJSON);
+				$arrDetails = json_decode($rawJson,true);
+
+				$strSlug = strtolower(basename($dirPackage));
+
+				$arrResources = $arrRoutes = $arrBlocks = $arrExtensions = array();
+
+				$resPackage = \Twist::Database()->createRecord(TWIST_DATABASE_TABLE_PREFIX.'packages');
+
+				$resPackage->set('slug',$strSlug);
+				$resPackage->set('name',$arrDetails['name']);
+				$resPackage->set('version',$arrDetails['version']);
+				$resPackage->set('folder',basename($dirPackage));
+				$resPackage->set('package',(is_file(sprintf('%s/package.php',$dirPackage))) ? '1' : '0');
+				$resPackage->set('installed',date('Y-m-d H:i:s'));
+				$resPackage->set('resources',json_encode($arrResources));
+				$resPackage->set('routes',json_encode($arrRoutes));
+				$resPackage->set('blocks',json_encode($arrBlocks));
+				$resPackage->set('extensions',json_encode($arrExtensions));
+
+				$intPackage = $resPackage->commit();
+			}
+
+			return $intPackage;
+		}
+
+		/**
+		 * Remove a package, un-registers it from the framework
+		 * @param $strPackageSlug
+		 * @return null
+		 */
+		public static function removePackage($strPackageSlug){
+			return \Twist::Database()->getRecord(TWIST_DATABASE_TABLE_PREFIX.'packages',$strPackageSlug,'slug')->delete();
+		}
+
+		/**
 		 * Install any DB and tables required by the framework
 		 * @param $dirInstallSQL
 		 */
@@ -220,5 +267,15 @@
 					}
 				}
 			}
+		}
+
+		/**
+		 * Remove settings from the framework, these settings can be package or code settings
+		 * @param $strSlug
+		 * @param $strType
+		 * @param null $strKey to remove a single settings only pass its key
+		 */
+		public static function removeSettings($strSlug,$strType,$strKey = null){
+			\Twist::framework()->settings()->uninstall($strSlug,$strType);
 		}
 	}
