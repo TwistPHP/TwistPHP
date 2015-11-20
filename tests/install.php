@@ -1,6 +1,6 @@
 <?php
 
-	define('TWIST_QUICK_INSTALL', array(
+	define("TWIST_QUICK_INSTALL", array(
 		'checks' => array(
 			'status' => 1,
 			'details' => array(
