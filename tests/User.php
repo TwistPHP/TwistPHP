@@ -10,7 +10,7 @@ class User extends \PHPUnit_Framework_TestCase{
 
 		$resUser->firstname('Travis');
 		$resUser->surname('CI');
-		$resUser->email('travisci@test.com');
+		$resUser->email('travisci@unit-test-twistphp.com');
 		$resUser->password('X123Password');
 
 		$this -> assertEquals(1,$resUser->commit());
@@ -18,13 +18,19 @@ class User extends \PHPUnit_Framework_TestCase{
 
 	public function testLogin(){
 
-		$arrSessionArray = \Twist::User()->authenticate('travisci@test.com','X123Password');
+		$arrSessionArray = \Twist::User()->authenticate('travisci@unit-test-twistphp.com','X123Password');
 		$this -> assertEquals(true,$arrSessionArray['status']);
+	}
+
+	public function testLogout(){
+
+		\Twist::User()->logout();
+		$this -> assertEquals(false,\Twist::User()->loggedIn());
 	}
 
 	public function testLoginFail(){
 
-		$arrSessionArray = \Twist::User()->authenticate('travisci@test.com','IncorrectPassword');
+		$arrSessionArray = \Twist::User()->authenticate('travisci@unit-test-twistphp.com','IncorrectPassword');
 		$this -> assertEquals(false,$arrSessionArray['status']);
 	}
 
@@ -48,8 +54,8 @@ class User extends \PHPUnit_Framework_TestCase{
 		$this -> assertEquals(true,$resUser->commit());
 		unset($resUser);
 
-		$arrSessionArray = \Twist::User()->authenticate('travisci@test.com','X123Password');
-		$this -> assertEquals(true,$arrSessionArray['status']);
+		$arrSessionArray = \Twist::User()->authenticate('travisci@unit-test-twistphp.com','X123Password');
+		$this -> assertEquals(false,$arrSessionArray['status']);
 	}
 
 	public function testDelete(){
