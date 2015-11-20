@@ -131,7 +131,7 @@
 
 				self::recordEvent('Resources prepared');
 
-				self::showSetup();
+				self::showInstallWizard();
 				self::phpSettings();
 
 				self::recordEvent('Framework ready');
@@ -185,26 +185,24 @@
         }
 
 		/**
-		 * Show the setup wizard, if the wizard is required to be output all existing routes will be cleared and the wizard will be served.
+		 * Show the install wizard, if the wizard is required to be output all existing routes will be cleared and the wizard will be served.
 		 */
-		protected static function showSetup(){
+		protected static function showInstallWizard(){
 
-			if(Twist::framework() -> settings() -> showSetup()){
+			if(Twist::framework() -> settings() -> showInstallWizard()){
 
-				self::Route()->purge();
-				self::Route()->setDirectory(sprintf('%ssetup/',TWIST_FRAMEWORK_VIEWS));
-				self::Route()->baseView('_base.tpl');
-				self::Route()->baseURI(TWIST_BASE_URI);
-
-				//If TWIST_QUICK_INSTALL is defined as a setup session array process a quick install
 				if(defined("TWIST_QUICK_INSTALL")){
-					\Twist::Session()->data('twist-setup',json_decode(TWIST_QUICK_INSTALL,true));
-					self::Route()->controller('/%',array('\Twist\Core\Controllers\Setup','finish'));
+					\Twist\Core\Models\Install::framework(json_decode(TWIST_QUICK_INSTALL,true));
+					echo "200 OK - Installation Complete";
+					die();
 				}else{
-					self::Route()->controller('/%','\Twist\Core\Controllers\Setup');
+					self::Route()->purge();
+					self::Route()->setDirectory(sprintf('%ssetup/',TWIST_FRAMEWORK_VIEWS));
+					self::Route()->baseView('_base.tpl');
+					self::Route()->baseURI(TWIST_BASE_URI);
+					self::Route()->controller('/%','\Twist\Core\Controllers\InstallWizard');
+					self::Route()->serve();
 				}
-
-				self::Route()->serve();
 			}
 		}
 

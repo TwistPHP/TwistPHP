@@ -23,12 +23,13 @@
 
 namespace Twist\Core\Controllers;
 use Twist\Classes\Exception;
+use Twist\Core\Models\Install;
 
 /**
- * The route controller for the Setup wizard that provides the TwistPHP with its in intuitive in-browser setup wizard.
+ * The route controller for the Install wizard that provides the TwistPHP with its in intuitive in-browser install wizard.
  * @package Twist\Core\Controllers
  */
-class Setup extends Base{
+class InstallWizard extends Base{
 
 	/**
 	 * @alias welcome
@@ -372,198 +373,15 @@ class Setup extends Base{
 
 		$arrSession = \Twist::Session()->data('twist-setup');
 
-		//Create all the required folders for twist
-		$strApplicationPath = sprintf('%s%s/',$arrSession['settings']['details']['relative_path'],$arrSession['settings']['details']['app_path']);
-
-		$resFile = \Twist::File();
-		$resFile->recursiveCreate(sprintf('%s%s',$arrSession['settings']['details']['relative_path'],$arrSession['settings']['details']['packages_path']));
-		$resFile->recursiveCreate(sprintf('%s%s',$arrSession['settings']['details']['relative_path'],$arrSession['settings']['details']['uploads_path']));
-		$resFile->recursiveCreate(sprintf('%sAssets',$strApplicationPath));
-		$resFile->recursiveCreate(sprintf('%sCache',$strApplicationPath));
-		$resFile->recursiveCreate(sprintf('%sConfig',$strApplicationPath));
-		$resFile->recursiveCreate(sprintf('%sControllers',$strApplicationPath));
-		$resFile->recursiveCreate(sprintf('%sLogs',$strApplicationPath));
-		$resFile->recursiveCreate(sprintf('%sModels',$strApplicationPath));
-		$resFile->recursiveCreate(sprintf('%sResources',$strApplicationPath));
-		$resFile->recursiveCreate(sprintf('%sResources/css',$strApplicationPath));
-		$resFile->recursiveCreate(sprintf('%sResources/fonts',$strApplicationPath));
-		$resFile->recursiveCreate(sprintf('%sResources/images',$strApplicationPath));
-		$resFile->recursiveCreate(sprintf('%sResources/js',$strApplicationPath));
-		$resFile->recursiveCreate(sprintf('%sViews',$strApplicationPath));
-		$resFile->recursiveCreate(sprintf('%sTwist',$strApplicationPath));
-		$resFile->recursiveCreate(sprintf('%sPackages',$strApplicationPath));
-
-		//Create the config in the apps/config folder
-		$arrConfigTags = array(
-			'account_token' => '',
-			'licence_key' => '',
-			'database_protocol' => $arrSession['database']['details']['protocol'],
-			'database_server' => $arrSession['database']['details']['host'],
-			'database_username' => $arrSession['database']['details']['username'],
-			'database_password' => $arrSession['database']['details']['password'],
-			'database_name' => $arrSession['database']['details']['name'],
-			'database_table_prefix' => $arrSession['database']['details']['table_prefix'],
+		$arrConfiguration = array(
+			'database' => $arrSession['database']['details'],
+			'settings' => $arrSession['settings']['details'],
+			'user' => $arrSession['user']['details']
 		);
 
-		file_put_contents(sprintf('%sConfig/config.php',$strApplicationPath),\Twist::View()->build('config.tpl',$arrConfigTags));
-
-		\Twist::define('_TWIST_PUBLIC_ROOT',TWIST_DOCUMENT_ROOT.'/'.$arrSession['settings']['details']['site_root']);
-
-		\Twist::define('_TWIST_APP',TWIST_DOCUMENT_ROOT.'/'.$arrSession['settings']['details']['app_path']);
-		\Twist::define('_TWIST_APP_CONFIG',_TWIST_APP.'/Config/');
-		\Twist::define('_TWIST_PACKAGES',TWIST_DOCUMENT_ROOT.'/'.$arrSession['settings']['details']['packages_path']);
-		\Twist::define('_TWIST_UPLOADS',TWIST_DOCUMENT_ROOT.'/'.$arrSession['settings']['details']['uploads_path']);
-
-		if($arrSession['database']['details']['type'] === 'database'){
-
-			\Twist::Database()->connect(
-				$arrSession['database']['details']['host'],
-				$arrSession['database']['details']['username'],
-				$arrSession['database']['details']['password'],
-				$arrSession['database']['details']['name'],
-				$arrSession['database']['details']['protocol']
-			);
-
-			\Twist::define('TWIST_DATABASE_PROTOCOL',$arrSession['database']['details']['protocol']);
-			\Twist::define('TWIST_DATABASE_NAME',$arrSession['database']['details']['name']);
-			\Twist::define('TWIST_DATABASE_HOST',$arrSession['database']['details']['host']);
-			\Twist::define('TWIST_DATABASE_USERNAME',$arrSession['database']['details']['username']);
-			\Twist::define('TWIST_DATABASE_PASSWORD',$arrSession['database']['details']['password']);
-			\Twist::define('TWIST_DATABASE_TABLE_PREFIX',$arrSession['database']['details']['table_prefix']);
-
-			//Disable file config as we are using database
-			\Twist::framework()->settings()->fileConfigOverride(false);
-
-			$this->importSQL(sprintf('%sinstall.sql',TWIST_FRAMEWORK_INSTALL));
-		}
-
-		//Update all the core settings, add to a file when no Database is being used
-		$this->importSettings(sprintf('%ssettings.json',TWIST_FRAMEWORK_INSTALL));
-
-		//Add new settings to the chosen settings storage method
-		\Twist::framework()->setting('SITE_NAME',$arrSession['settings']['details']['site_name']);
-		\Twist::framework()->setting('SITE_HOST',$arrSession['settings']['details']['site_host']);
-		\Twist::framework()->setting('SITE_WWW',$arrSession['settings']['details']['site_www']);
-		\Twist::framework()->setting('SITE_PROTOCOL',$arrSession['settings']['details']['http_protocol']);
-		\Twist::framework()->setting('SITE_PROTOCOL_FORCE',$arrSession['settings']['details']['http_protocol_force']);
-		\Twist::framework()->setting('TIMEZONE',$arrSession['settings']['details']['timezone']);
-
-		//Create the level 0 user into the system - this will only occur is a database connection is present
-		if($arrSession['user']['status'] && $arrSession['database']['details']['protocol'] != 'none'){
-
-			$objUser = \Twist::User()->create();
-
-			$objUser->firstname($arrSession['user']['details']['firstname']);
-			$objUser->surname($arrSession['user']['details']['lastname']);
-			$objUser->email($arrSession['user']['details']['email']);
-			$objUser->password($arrSession['user']['details']['password']);
-			$objUser->level(0);
-			$intUserID = $objUser->commit();
-		}
-
+		Install::framework($arrConfiguration);
 		\Twist::Session()->remove('twist-setup');
 
-		/**
-		 * Update the index.php file to be a TwistPHP index file
-		 */
-		$dirIndexFile = sprintf('%s/index.php',_TWIST_PUBLIC_ROOT);
-
-		if(file_exists($dirIndexFile)){
-			\Twist::File()->move($dirIndexFile,sprintf('%s/old-index.php',_TWIST_PUBLIC_ROOT));
-		}
-
-		//Later on we can add in example templates etc if required
-		$arrIndexTags = array(
-			'public_path' => rtrim(_TWIST_PUBLIC_ROOT,'/'),
-			'app_path' => _TWIST_APP,
-			'packages_path' => _TWIST_PACKAGES,
-			'uploads_path' => _TWIST_UPLOADS,
-			'framework_path' => TWIST_FRAMEWORK,
-			'interfaces' => '',
-			'routes' => '',
-			'serve' => 'Twist::Route() -> serve();'
-		);
-
-		file_put_contents($dirIndexFile,\Twist::View()->build(sprintf('%s/default-index.tpl',TWIST_FRAMEWORK_VIEWS),$arrIndexTags));
-
-		/**
-		 * Update the .htaccess file to be a TwistPHP htaccess file
-		 */
-		$dirHTaccessFile = sprintf('%s/.htaccess',_TWIST_PUBLIC_ROOT);
-		file_put_contents($dirHTaccessFile,\Twist::View()->build(sprintf('%s/default-htaccess.tpl',TWIST_FRAMEWORK_VIEWS),array('rewrite_rules' => '')));
-
-		if(defined('TWIST_QUICK_INSTALL')){
-			//If this was a quick install then output a simple message
-			echo 'INSTALLED 200 OK';
-			die();
-		}
-
 		return \Twist::View()->build('pages/finish.tpl');
-	}
-
-	/**
-	 * Install any DB and tables required by the framework
-	 * @param $dirInstallSQL
-	 */
-	protected function importSQL($dirInstallSQL){
-
-		if(file_exists($dirInstallSQL)) {
-
-			//Create a temp file with all the required table pre-fixes
-			$dirImportFile = tempnam(sys_get_temp_dir(), 'twist-import');
-
-			$blMBSupport = \Twist::Database()->mbSupport();
-
-			file_put_contents($dirImportFile, str_replace(
-				array(
-					"/*TWIST_DATABASE_TABLE_PREFIX*/`",
-					"/*TWIST_DATABASE_NAME*/",
-					($blMBSupport) ? 'utf8' : 'utf8mb4' //Only replace utf8mb4 with utf8 when there is no multi-byte support
-					),
-				array(
-					sprintf('`%s', TWIST_DATABASE_TABLE_PREFIX),
-					TWIST_DATABASE_NAME,
-					'utf8'
-				),
-				file_get_contents($dirInstallSQL)
-			));
-
-			//Import the SQL form the temp file
-			\Twist::Database()->importSQL($dirImportFile);
-
-			//Remove the temp file form the system
-			unlink($dirImportFile);
-		}
-	}
-
-	/**
-	 * Install any framework settings that are required by the core.
-	 * @param $dirSettingsJSON
-	 * @throws \Exception
-	 */
-	public function importSettings($dirSettingsJSON){
-
-		if(file_exists($dirSettingsJSON)){
-
-			$arrSettings = json_decode(file_get_contents($dirSettingsJSON),true);
-			if(count($arrSettings)){
-
-				foreach($arrSettings as $strKey => $arrOptions){
-
-					\Twist::framework()->settings()->install(
-						'core',
-						'core',
-						$strKey,
-						$arrOptions['default'],
-						$arrOptions['title'],
-						$arrOptions['description'],
-						$arrOptions['default'],
-						$arrOptions['type'],
-						$arrOptions['options'],
-						$arrOptions['null']
-					);
-				}
-			}
-		}
 	}
 }

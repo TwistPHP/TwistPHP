@@ -33,13 +33,13 @@
 	    public $intStatus = 0;
 
 	    protected $blFileConfig = true;
-	    protected $blShowSetup = false;
+	    protected $blShowInstallWizard = false;
 	    protected $blLoaded = false;
 
 	    public function __construct(){
 
 	        //Check if the framework is setup or not setup
-	        $this->blShowSetup = !(defined('TWIST_APP_CONFIG') && file_exists(sprintf("%sconfig.php",TWIST_APP_CONFIG)));
+	        $this->blShowInstallWizard = !(defined('TWIST_APP_CONFIG') && file_exists(sprintf("%sconfig.php",TWIST_APP_CONFIG)));
 	        $this->load();
 	    }
 
@@ -47,8 +47,8 @@
 		 * Return a boolean status, if true the framework has not been setup.
 		 * @return bool
 		 */
-		public function showSetup(){
-			return $this->blShowSetup;
+		public function showInstallWizard(){
+			return $this->blShowInstallWizard;
 		}
 
 		/**
@@ -69,7 +69,7 @@
 
 				$this->arrSettings = $this->arrSettingsInfo = array();
 
-				if($this->blShowSetup){
+				if($this->blShowInstallWizard){
 					$this->loadTempSettings();
 				}else{
 
