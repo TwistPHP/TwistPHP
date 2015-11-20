@@ -23,7 +23,6 @@
 
 	use Twist\Classes\Instance;
 	use Twist\Classes\Error;
-	use Twist\Core\Controllers\Framework;
 	use Twist\Core\Utilities as Utilities;
 
 	/**
@@ -80,20 +79,20 @@
 				self::define('TWIST_BASE_PATH',dirname($_SERVER['SCRIPT_FILENAME']));
 				self::define('TWIST_BASE_URI',$strBaseURI);
 
-				date_default_timezone_set( !is_null( Twist::framework() -> setting('TIMEZONE') ) ? Twist::framework() -> setting('TIMEZONE') : 'Europe/London' );
+				date_default_timezone_set( !is_null( self::framework() -> setting('TIMEZONE') ) ? self::framework() -> setting('TIMEZONE') : 'Europe/London' );
 
 				self::$blRecordEvents = (self::framework() -> setting('DEVELOPMENT_MODE') && self::framework() -> setting('DEVELOPMENT_EVENT_RECORDER'));
 
 				//Log the framework boot time, this is the point in which the framework code was required
-				Twist::Timer('TwistEventRecorder')->start($_SERVER['TWIST_BOOT']);
+				self::Timer('TwistEventRecorder')->start($_SERVER['TWIST_BOOT']);
 
 				self::define('E_TWIST_NOTICE',E_USER_NOTICE);
 				self::define('E_TWIST_WARNING',E_USER_WARNING);
 				self::define('E_TWIST_ERROR',E_USER_ERROR);
 				self::define('E_TWIST_DEPRECATED',E_USER_DEPRECATED);
 
-				self::define('TWIST_ERROR_LOG',Twist::framework() -> setting('ERROR_LOG'));
-				self::define('TWIST_ERROR_SCREEN',Twist::framework() -> setting('ERROR_SCREEN'));
+				self::define('TWIST_ERROR_LOG',self::framework() -> setting('ERROR_LOG'));
+				self::define('TWIST_ERROR_SCREEN',self::framework() -> setting('ERROR_SCREEN'));
 
 				//Register the PHP handlers
 				self::errorHandlers();
@@ -107,14 +106,14 @@
 				self::define('TWIST_AJAX_REQUEST',array_key_exists('HTTP_X_REQUESTED_WITH',$_SERVER) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest');
 
 				//Register all the installed packages
-				Twist::framework() -> package() -> getInstalled();
+				self::framework() -> package() -> getInstalled();
 
 				//Register the default PHP package extensions
-				Twist::framework() -> hooks() -> register('TWIST_VIEW_TAG','asset',array('module' => 'Asset','function' => 'viewExtension'));
-				Twist::framework() -> hooks() -> register('TWIST_VIEW_TAG','file',array('module' => 'File','function' => 'viewExtension'));
-				Twist::framework() -> hooks() -> register('TWIST_VIEW_TAG','image',array('module' => 'Image','function' => 'viewExtension'));
-				Twist::framework() -> hooks() -> register('TWIST_VIEW_TAG','session',array('module' => 'Session','function' => 'viewExtension'));
-				Twist::framework() -> hooks() -> register('TWIST_VIEW_TAG','user',array('module' => 'User','function' => 'viewExtension'));
+				self::framework() -> hooks() -> register('TWIST_VIEW_TAG','asset',array('module' => 'Asset','function' => 'viewExtension'));
+				self::framework() -> hooks() -> register('TWIST_VIEW_TAG','file',array('module' => 'File','function' => 'viewExtension'));
+				self::framework() -> hooks() -> register('TWIST_VIEW_TAG','image',array('module' => 'Image','function' => 'viewExtension'));
+				self::framework() -> hooks() -> register('TWIST_VIEW_TAG','session',array('module' => 'Session','function' => 'viewExtension'));
+				self::framework() -> hooks() -> register('TWIST_VIEW_TAG','user',array('module' => 'User','function' => 'viewExtension'));
 
 				self::recordEvent('Packages prepared');
 
@@ -122,10 +121,10 @@
 				Instance::storeObject('twistCoreResources',new \Twist\Core\Models\Resources());
 
 				//Register the framework resources handler into the template system
-				Twist::framework() -> hooks() -> register('TWIST_VIEW_TAG','resource',array('instance' => 'twistCoreResources','function' => 'viewExtension'));
+				self::framework() -> hooks() -> register('TWIST_VIEW_TAG','resource',array('instance' => 'twistCoreResources','function' => 'viewExtension'));
 
 				//Register the framework message handler into the template system
-				Twist::framework() -> hooks() -> register('TWIST_VIEW_TAG','messages',array('core' => 'messageHandler'));
+				self::framework() -> hooks() -> register('TWIST_VIEW_TAG','messages',array('core' => 'messageHandler'));
 
 				self::coreResources();
 
@@ -181,7 +180,7 @@
             );
 
             //Integrate the basic core href tag support - legacy support
-            Twist::framework() -> hooks() -> register('TWIST_VIEW_TAG','core',$arrResources);
+	        self::framework() -> hooks() -> register('TWIST_VIEW_TAG','core',$arrResources);
         }
 
 		/**
@@ -189,14 +188,14 @@
 		 */
 		protected static function showInstallWizard(){
 
-			if(Twist::framework() -> settings() -> showInstallWizard()){
+			if(self::framework() -> settings() -> showInstallWizard()){
 
 				if(defined("TWIST_QUICK_INSTALL")){
 
 					//Turn off all error handlers for quick/inline installation
-					Twist::framework()->register()->cancelHandler('error');
-					Twist::framework()->register()->cancelHandler('fatal');
-					Twist::framework()->register()->cancelHandler('exception');
+					self::framework()->register()->cancelHandler('error');
+					self::framework()->register()->cancelHandler('fatal');
+					self::framework()->register()->cancelHandler('exception');
 
 					\Twist\Core\Models\Install::framework(json_decode(TWIST_QUICK_INSTALL,true));
 					echo "200 OK - Installation Complete";
@@ -217,12 +216,12 @@
 		 */
 		protected static function phpSettings(){
 
-			if(!is_null(Twist::framework()->setting('PHP_MEMORY_LIMIT'))){
-				ini_set('memory_limit',Twist::framework()->setting('PHP_MEMORY_LIMIT'));
+			if(!is_null(self::framework()->setting('PHP_MEMORY_LIMIT'))){
+				ini_set('memory_limit',self::framework()->setting('PHP_MEMORY_LIMIT'));
 			}
 
-			if(!is_null(Twist::framework()->setting('PHP_MAX_EXECUTION'))){
-				ini_set('max_executions_time',Twist::framework()->setting('PHP_MAX_EXECUTION'));
+			if(!is_null(self::framework()->setting('PHP_MAX_EXECUTION'))){
+				ini_set('max_executions_time',self::framework()->setting('PHP_MAX_EXECUTION'));
 			}
 		}
 
@@ -231,20 +230,20 @@
 		 */
 		protected static function errorHandlers(){
 
-			if(Twist::framework()->setting('ERROR_HANDLING')){
-				Twist::framework() -> register() -> handler('error','Twist\Classes\Error','handleError');
+			if(self::framework()->setting('ERROR_HANDLING')){
+				self::framework() -> register() -> handler('error','Twist\Classes\Error','handleError');
 			}
 
-			if(Twist::framework()->setting('ERROR_FATAL_HANDLING')){
-				Twist::framework() -> register() -> handler('fatal','Twist\Classes\Error','handleFatal');
+			if(self::framework()->setting('ERROR_FATAL_HANDLING')){
+				self::framework() -> register() -> handler('fatal','Twist\Classes\Error','handleFatal');
 			}
 
-			if(Twist::framework()->setting('ERROR_EXCEPTION_HANDLING')){
-				Twist::framework() -> register() -> handler('exception','Twist\Classes\Error','handleException');
+			if(self::framework()->setting('ERROR_EXCEPTION_HANDLING')){
+				self::framework() -> register() -> handler('exception','Twist\Classes\Error','handleException');
 			}
 
-			if(Twist::framework()->setting('ERROR_LOG')){
-				Twist::framework() -> register() -> shutdownEvent('errorLog','Twist\Classes\Error','outputLog');
+			if(self::framework()->setting('ERROR_LOG')){
+				self::framework() -> register() -> shutdownEvent('errorLog','Twist\Classes\Error','outputLog');
 			}
 		}
 
@@ -292,7 +291,7 @@
 		 */
 		public static function redirect($urlRedirect,$blPermanent = false){
 
-			$urlRedirect = \Twist::framework()->tools()->traverseURI($urlRedirect);
+			$urlRedirect = self::framework()->tools()->traverseURI($urlRedirect);
 
 			header(sprintf('Location: %s',$urlRedirect),true,($blPermanent) ? 301 : 302);
 			die();
@@ -322,7 +321,7 @@
 		 */
 		public static function recordEvent($strEventName){
 			if(self::$blRecordEvents){
-				Twist::Timer('TwistEventRecorder')->log($strEventName);
+				self::Timer('TwistEventRecorder')->log($strEventName);
 			}
 		}
 
@@ -333,18 +332,7 @@
 		 * @return array|mixed
 		 */
 		public static function getEvents($blStopTimer = false){
-			return (self::$blRecordEvents) ? (($blStopTimer) ? \Twist::Timer('TwistEventRecorder')->stop() : \Twist::Timer('TwistEventRecorder')->results()) : array();
-		}
-
-		/**
-		 * Returns the core framework classes, these are not packages but contain some useful tools such as settings.
-		 * @return \Twist\Core\Controllers\Framework
-		 */
-		public static function framework(){
-
-			$resTwistUtility = (!Instance::isObject('CoreFramework')) ? new Framework() : Instance::retrieveObject('CoreFramework');
-			Instance::storeObject('CoreFramework',$resTwistUtility);
-			return $resTwistUtility;
+			return (self::$blRecordEvents) ? (($blStopTimer) ? self::Timer('TwistEventRecorder')->stop() : self::Timer('TwistEventRecorder')->results()) : array();
 		}
 
 		/**
@@ -355,7 +343,7 @@
 		 */
 		protected static function messageProcess($strMessage,$strKey,$strType){
 
-			$arrMessages = \Twist::Cache()->read('twistUserMessages');
+			$arrMessages = self::Cache()->read('twistUserMessages');
 			$arrMessages = (is_null($arrMessages)) ? array() : $arrMessages;
 
 			$strMessageKey = sprintf('%s-%s',$strKey,$strType);
@@ -371,7 +359,7 @@
 				);
 			}
 
-			\Twist::Cache()->write('twistUserMessages',$arrMessages,0);
+			self::Cache()->write('twistUserMessages',$arrMessages,0);
 		}
 
 		/**
@@ -396,7 +384,7 @@
 
 			$strOut = '';
 			$arrCombine = array();
-			$arrMessages = \Twist::Cache()->read('twistUserMessages');
+			$arrMessages = self::Cache()->read('twistUserMessages');
 
 			//Combine is enabled by default it not passed in (combines all messages by type)
 			$blCombine = (!array_key_exists('combine',$arrParameters) || $arrParameters['combine']);
@@ -448,6 +436,17 @@
 			}
 
 			return $strOut;
+		}
+
+		/**
+		 * Returns the core framework classes, these are not packages but contain some useful tools such as settings.
+		 * @return \Twist\Core\Utilities\Framework
+		 */
+		public static function framework(){
+
+			$resTwistUtility = (!Instance::isObject('CoreFramework')) ? new Utilities\Framework() : Instance::retrieveObject('CoreFramework');
+			Instance::storeObject('CoreFramework',$resTwistUtility);
+			return $resTwistUtility;
 		}
 
 		/**

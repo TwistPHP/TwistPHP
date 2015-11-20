@@ -20,7 +20,7 @@
 	 * @link       https://twistphp.com
 	 *
 	 */
-	namespace Twist\Core\Controllers;
+	namespace Twist\Core\Utilities;
 
 	use Twist\Core\Models\Package;
 	use Twist\Core\Models\Hooks;
@@ -30,8 +30,8 @@
 	use Twist\Core\Models\Tools;
 
 	/**
-	 * This controller is used by the framework directly providing support for all core framework features such as debug, settings, tools and handlers.
-	 * @package Twist\Core\Controllers
+	 * This utility is used by the framework directly providing support for all core framework features such as debug, settings, tools and handlers.
+	 * @package Twist\Core\Utilities
 	 */
 	class Framework{
 
