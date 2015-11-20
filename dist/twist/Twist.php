@@ -192,7 +192,12 @@
 			if(Twist::framework() -> settings() -> showInstallWizard()){
 
 				if(defined("TWIST_QUICK_INSTALL")){
+
+					//Turn off all error handlers for quick/inline installation
+					Twist::framework()->register()->cancelHandler('error');
+					Twist::framework()->register()->cancelHandler('fatal');
 					Twist::framework()->register()->cancelHandler('exception');
+
 					\Twist\Core\Models\Install::framework(json_decode(TWIST_QUICK_INSTALL,true));
 					echo "200 OK - Installation Complete";
 					die();
