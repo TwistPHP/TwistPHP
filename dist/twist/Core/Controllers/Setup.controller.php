@@ -439,6 +439,8 @@ class Setup extends Base{
 		//Update all the core settings, add to a file when no Database is being used
 		$this->importSettings(sprintf('%ssettings.json',TWIST_FRAMEWORK_INSTALL));
 
+		echo 4;
+
 		//Add new settings to the chosen settings storage method
 		\Twist::framework()->setting('SITE_NAME',$arrSession['settings']['details']['site_name']);
 		\Twist::framework()->setting('SITE_HOST',$arrSession['settings']['details']['site_host']);
@@ -447,8 +449,12 @@ class Setup extends Base{
 		\Twist::framework()->setting('SITE_PROTOCOL_FORCE',$arrSession['settings']['details']['http_protocol_force']);
 		\Twist::framework()->setting('TIMEZONE',$arrSession['settings']['details']['timezone']);
 
+		echo 3;
+
 		//Create the level 0 user into the system - this will only occur is a database connection is present
 		if($arrSession['user']['status'] && $arrSession['database']['details']['protocol'] != 'none'){
+
+			echo 2;
 
 			$objUser = \Twist::User()->create();
 
@@ -459,6 +465,8 @@ class Setup extends Base{
 			$objUser->level(0);
 			$intUserID = $objUser->commit();
 		}
+
+		echo 1;
 
 		\Twist::Session()->remove('twist-setup');
 
