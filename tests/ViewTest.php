@@ -1,6 +1,6 @@
 <?php
 
-require_once './index.php';
+require_once sprintf('%s/index.php',dirname(__FILE__));
 
 class ViewTest extends \PHPUnit_Framework_TestCase{
 
