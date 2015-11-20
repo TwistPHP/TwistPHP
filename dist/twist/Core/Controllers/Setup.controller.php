@@ -493,7 +493,8 @@ class Setup extends Base{
 
 		if(defined('TWIST_QUICK_INSTALL')){
 			//If this was a quick install then output a simple message
-			die('INSTALLED 200 OK');
+			echo 'INSTALLED 200 OK';
+			die();
 		}
 
 		return \Twist::View()->build('pages/finish.tpl');
