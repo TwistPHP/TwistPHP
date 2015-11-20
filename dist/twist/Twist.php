@@ -203,7 +203,7 @@
 					die();
 				}else{
 					self::Route()->purge();
-					self::Route()->setDirectory(sprintf('%ssetup/',TWIST_FRAMEWORK_VIEWS));
+					self::Route()->setDirectory(sprintf('%sinstall-wizard/',TWIST_FRAMEWORK_VIEWS));
 					self::Route()->baseView('_base.tpl');
 					self::Route()->baseURI(TWIST_BASE_URI);
 					self::Route()->controller('/%','\Twist\Core\Controllers\InstallWizard');

@@ -68,7 +68,7 @@
 				'database_table_prefix' => $arrConfiguration['database']['table_prefix'],
 			);
 
-			file_put_contents(sprintf('%sConfig/config.php',$strApplicationPath),\Twist::View()->build('config.tpl',$arrConfigTags));
+			file_put_contents(sprintf('%sConfig/config.php',$strApplicationPath),\Twist::View()->build(sprintf('%s/default-config.tpl',TWIST_FRAMEWORK_VIEWS),$arrConfigTags));
 
 			\Twist::define('_TWIST_PUBLIC_ROOT',TWIST_DOCUMENT_ROOT.'/'.$arrConfiguration['settings']['site_root']);
 
