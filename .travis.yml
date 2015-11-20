@@ -33,9 +33,10 @@ before_script:
 
 #script: phpunit --bootstrap ./tests/index.php \App\Models\ViewTest --verbose
 script:
+   - phpunit ./tests/Database.php
    - phpunit ./tests/Settings.php
-   - phpunit ./tests/Views.php
    - phpunit ./tests/Cache.php
+   - phpunit ./tests/Views.php
 
 notifications:
   on_success: never
