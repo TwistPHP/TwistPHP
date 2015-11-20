@@ -195,7 +195,7 @@
 				self::Route()->setDirectory(sprintf('%ssetup/',TWIST_FRAMEWORK_VIEWS));
 				self::Route()->baseView('_base.tpl');
 				self::Route()->baseURI(TWIST_BASE_URI);
-				
+
 				//If TWIST_QUICK_INSTALL is defined as a setup session array process a quick install
 				if(defined("TWIST_QUICK_INSTALL")){
 					\Twist::Session()->data('twist-setup',json_decode(TWIST_QUICK_INSTALL,true));

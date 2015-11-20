@@ -18,7 +18,7 @@
 			'status' => 1,
 			'details' => array(
 				'type' => 'database',
-				'protocol' => 'none',
+				'protocol' => 'mysqli',
 				'host' => 'localhost',
 				'username' => 'root',
 				'password' => '',
