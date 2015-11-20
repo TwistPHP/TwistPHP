@@ -49,6 +49,22 @@
 		}
 
 		/**
+		 * Return the version number of the framework, optionally you can return a single part of the version number (major, minor, build)
+		 * @param null|string $strVersionPart Pass in major,minor or build. Null for full output
+		 * @return string
+		 */
+		public static function version($strVersionPart = null){
+
+			$arrVersion = array(
+				'major' => 3,
+				'minor' => 0,
+				'build' => 0,
+			);
+
+			return (is_null($strVersionPart)) ? implode('.',$arrVersion) : $arrVersion[$strVersionPart];
+		}
+
+		/**
 		 * Main function called by the boot.php file, this function will boot the framework setting all the variables and initialising required functionality to ensure that TwistPHP runs as expected.
 		 */
 		public static function launch(){
