@@ -22,6 +22,7 @@
  */
 
 namespace Twist\Core\Controllers;
+use Twist\Classes\Exception;
 
 /**
  * The route controller for the Setup wizard that provides the TwistPHP with its in intuitive in-browser setup wizard.
@@ -461,6 +462,8 @@ class Setup extends Base{
 		}
 
 		\Twist::Session()->remove('twist-setup');
+
+		throw new \Exception("Error: "._TWIST_PUBLIC_ROOT);
 
 		/**
 		 * Update the index.php file to be a TwistPHP index file
