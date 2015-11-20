@@ -463,8 +463,6 @@ class Setup extends Base{
 
 		\Twist::Session()->remove('twist-setup');
 
-		throw new \Exception("Error: "._TWIST_PUBLIC_ROOT);
-
 		/**
 		 * Update the index.php file to be a TwistPHP index file
 		 */

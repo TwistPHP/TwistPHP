@@ -1,5 +1,7 @@
 <?php
 
+	$_SERVER['DOCUMENT_ROOT'] = dirname(__FILE__).'/';
+
 	define("TWIST_QUICK_INSTALL", json_encode(array(
 		'checks' => array(
 			'status' => 1,
