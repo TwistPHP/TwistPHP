@@ -1,6 +1,6 @@
 <?php
 
-	define("TWIST_QUICK_INSTALL", array(
+	define("TWIST_QUICK_INSTALL", json_encode(array(
 		'checks' => array(
 			'status' => 1,
 			'details' => array(
@@ -52,6 +52,6 @@
 				'confirm_password' => 'travisci'
 			)
 		)
-	));
+	)));
 
 	require_once( 'dist/twist/framework.php' );
