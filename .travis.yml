@@ -24,18 +24,19 @@ before_script:
    - mysql -e "SHOW DATABASES"
    - mysql -e "CREATE DATABASE IF NOT EXISTS travis_ci_twist_test;"
    - mysql -e "SHOW DATABASES"
-#   - php ./tests/install.php
-#   - mysql -e "USE travis_ci_twist_test; SHOW TABLES;"
-#   - mysql -e "SELECT * FROM travis_ci_twist_test.twist_settings;"
-#   - tail -n 10 ./tests/app/Config/config.php
-#   - ls -lah
-#   - cd ./tests
-#   - ls -lah
+   - php ./tests/install.php
+   - mysql -e "USE travis_ci_twist_test; SHOW TABLES;"
+   - mysql -e "SELECT * FROM travis_ci_twist_test.twist_settings;"
+   - tail -n 10 ./tests/app/Config/config.php
+   - ls -lah
+   - cd ./tests
+   - ls -lah
+   - locate index.php
 
 #script: php dist/index.php
 #script: phpunit --bootstrap dist/twist/framework.php tests --verbose
 #script: phpunit dist/twist/framework.php tests --verbose
-script: phpunit ./tests/install.php tests --verbose
+script: phpunit ./tests/index.php tests --verbose
 
 notifications:
   on_success: never
