@@ -142,7 +142,8 @@
 					throw new \Exception('No database connection has been setup for this installation');
 				}
 			}else{
-				if(!defined('TWIST_DATABASE_HOST') || !defined('TWIST_DATABASE_USERNAME') || !defined('TWIST_DATABASE_PASSWORD') || is_null(TWIST_DATABASE_HOST) || is_null(TWIST_DATABASE_USERNAME) || is_null(TWIST_DATABASE_PASSWORD) || is_null(TWIST_DATABASE_NAME) ||	TWIST_DATABASE_HOST == '' ||  TWIST_DATABASE_USERNAME == '' ||  TWIST_DATABASE_PASSWORD == '' ||  TWIST_DATABASE_NAME == '' ){
+				//TWIST_DATABASE_PASSWORD must be defined but can be set to blank (although not recommended)
+				if(!defined('TWIST_DATABASE_HOST') || !defined('TWIST_DATABASE_USERNAME') || !defined('TWIST_DATABASE_PASSWORD') || is_null(TWIST_DATABASE_HOST) || is_null(TWIST_DATABASE_USERNAME) || is_null(TWIST_DATABASE_PASSWORD) || is_null(TWIST_DATABASE_NAME) ||	TWIST_DATABASE_HOST == '' ||  TWIST_DATABASE_USERNAME == '' ||  TWIST_DATABASE_NAME == '' ){
 					$blOut = false;
 					if($blThrowException == true){
 						throw new \Exception('Missing parameters passed into database connect');
