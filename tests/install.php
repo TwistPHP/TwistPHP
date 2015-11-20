@@ -43,7 +43,7 @@
 			)
 		),
 		'user' => array(
-			'status' => '1',
+			'status' => 0,
 			'details' => array(
 				'firstname' => 'Travis',
 				'lastname' => 'CI',
