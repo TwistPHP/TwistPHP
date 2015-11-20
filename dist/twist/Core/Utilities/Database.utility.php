@@ -173,10 +173,10 @@
 				if(count($arrResult) && $arrResult['status'] && $arrResult['errors'] == ''){
 
 					//Run the MYSQL import command on command line
-					$strCommand = sprintf('/usr/bin/mysql -h%s -u%s -p%s %s < %s',
+					$strCommand = sprintf('/usr/bin/mysql -h%s -u%s%s %s < %s',
 						TWIST_DATABASE_HOST,
 						TWIST_DATABASE_USERNAME,
-						TWIST_DATABASE_PASSWORD,
+						(TWIST_DATABASE_PASSWORD == '') ? sprintf(' -p%s',TWIST_DATABASE_PASSWORD) : '',
 						(is_null($strDatabaseName)) ? TWIST_DATABASE_NAME : trim($strDatabaseName),
 						$dirSQLFile
 					);
