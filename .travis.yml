@@ -36,7 +36,9 @@ script:
    - phpunit ./tests/Database.php
    - phpunit ./tests/Settings.php
    - phpunit ./tests/Cache.php
+   - phpunit ./tests/Session.php
    - phpunit ./tests/Views.php
+   - phpunit ./tests/User.php
 
 notifications:
   on_success: never

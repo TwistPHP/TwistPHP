@@ -11,4 +11,11 @@ class Database extends \PHPUnit_Framework_TestCase{
 		$this -> assertEquals(true,$blQuery);
 		$this -> assertEquals(1,\Twist::Database()->getNumberRows());
 	}
+
+	public function testGet(){
+
+		$arrResult = \Twist::Database()->get('twist_settings','SITE_NAME','key');
+
+		$this -> assertEquals('Travis CI Test',$arrResult['value']);
+	}
 }
