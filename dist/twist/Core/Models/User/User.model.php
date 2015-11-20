@@ -230,8 +230,17 @@ class User{
 	}
 
 	public function delete(){
-		$blOut = \Twist::Database()->delete('users',$this->resDatabaseRecord->get('id'));
-		\Twist::Database()->delete('user_details',$this->resDatabaseRecord->get('id'),'user_id');
+
+		$blOut = \Twist::Database()->delete(sprintf('%susers',TWIST_DATABASE_TABLE_PREFIX),$this->resDatabaseRecord->get('id'));
+
+		//Delete all the user data for that user
+		\Twist::Database()->query("DELETE FROM `%suser_data` WHERE `user_id` = %d",
+			TWIST_DATABASE_TABLE_PREFIX,
+			$this->resDatabaseRecord->get('id')
+		);
+
+		//@todo remove sessions and devices
+
 		return $blOut;
 	}
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-	    <title>Setup | TwistPHP</title>
+	    <title>Installation Wizard | TwistPHP</title>
 	    <!--================================ META ================================-->
 	    <meta charset="utf-8">
 		<meta name="robots" content="none">
@@ -26,7 +26,7 @@
 	<body>
 	    <div class="grid-container">
 	    <div class="grid-100 tablet-grid-100 mobile-grid-100">
-	        <h1 class="no-top-margin"><img src="{resource:core-uri}twist/logos/logo.png">TwistPHP Setup</h1>
+	        <h1 class="no-top-margin"><img src="{resource:core-uri}twist/logos/logo.png">TwistPHP Installation Wizard</h1>
 	    </div>
 	    <ul class="tabs">
 	        {view:components/tabs.php}

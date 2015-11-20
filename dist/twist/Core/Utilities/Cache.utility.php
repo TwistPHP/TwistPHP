@@ -46,7 +46,7 @@
 		public function __construct($strInstanceKey){
 
 			//Get the status of the cache system, disabled cache wil return null for all requests (no data will be stored)
-			$this->blCacheEnabled = (\Twist::framework()->setting('CACHE_ENABLED') && !\Twist::framework() -> settings() -> showSetup());
+			$this->blCacheEnabled = (\Twist::framework()->setting('CACHE_ENABLED') && !\Twist::framework() -> settings() -> showInstallWizard());
 
 			if($this->blCacheEnabled){
 

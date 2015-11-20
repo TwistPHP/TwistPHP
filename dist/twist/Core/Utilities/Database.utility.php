@@ -142,7 +142,8 @@
 					throw new \Exception('No database connection has been setup for this installation');
 				}
 			}else{
-				if(!defined('TWIST_DATABASE_HOST') || !defined('TWIST_DATABASE_USERNAME') || !defined('TWIST_DATABASE_PASSWORD') || is_null(TWIST_DATABASE_HOST) || is_null(TWIST_DATABASE_USERNAME) || is_null(TWIST_DATABASE_PASSWORD) || is_null(TWIST_DATABASE_NAME) ||	TWIST_DATABASE_HOST == '' ||  TWIST_DATABASE_USERNAME == '' ||  TWIST_DATABASE_PASSWORD == '' ||  TWIST_DATABASE_NAME == '' ){
+				//TWIST_DATABASE_PASSWORD must be defined but can be set to blank (although not recommended)
+				if(!defined('TWIST_DATABASE_HOST') || !defined('TWIST_DATABASE_USERNAME') || !defined('TWIST_DATABASE_PASSWORD') || is_null(TWIST_DATABASE_HOST) || is_null(TWIST_DATABASE_USERNAME) || is_null(TWIST_DATABASE_PASSWORD) || is_null(TWIST_DATABASE_NAME) ||	TWIST_DATABASE_HOST == '' ||  TWIST_DATABASE_USERNAME == '' ||  TWIST_DATABASE_NAME == '' ){
 					$blOut = false;
 					if($blThrowException == true){
 						throw new \Exception('Missing parameters passed into database connect');
@@ -173,10 +174,10 @@
 				if(count($arrResult) && $arrResult['status'] && $arrResult['errors'] == ''){
 
 					//Run the MYSQL import command on command line
-					$strCommand = sprintf('/usr/bin/mysql -h%s -u%s -p%s %s < %s',
+					$strCommand = sprintf('/usr/bin/mysql -h%s -u%s%s %s < %s',
 						TWIST_DATABASE_HOST,
 						TWIST_DATABASE_USERNAME,
-						TWIST_DATABASE_PASSWORD,
+						(TWIST_DATABASE_PASSWORD == '') ? '' : sprintf(' -p%s',TWIST_DATABASE_PASSWORD),
 						(is_null($strDatabaseName)) ? TWIST_DATABASE_NAME : trim($strDatabaseName),
 						$dirSQLFile
 					);
