@@ -31,7 +31,8 @@ before_script:
    - ls -lah ./tests
    - sed -i 's/Twist::Route() -> serve();/Twist::Route() -> serve();/g' ./tests/index.php
 
-script: phpunit --bootstrap ./tests/index.php \App\Models\ViewTest --verbose
+#script: phpunit --bootstrap ./tests/index.php \App\Models\ViewTest --verbose
+script: phpunit ./tests/ViewTest.php
 
 notifications:
   on_success: never
