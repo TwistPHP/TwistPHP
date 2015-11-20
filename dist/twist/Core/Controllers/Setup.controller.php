@@ -392,6 +392,8 @@ class Setup extends Base{
 		$resFile->recursiveCreate(sprintf('%sTwist',$strApplicationPath));
 		$resFile->recursiveCreate(sprintf('%sPackages',$strApplicationPath));
 
+		echo 'DIR____ '.$strApplicationPath;
+
 		//Create the config in the apps/config folder
 		$arrConfigTags = array(
 			'account_token' => '',
