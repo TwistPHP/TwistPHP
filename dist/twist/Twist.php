@@ -63,13 +63,13 @@
 				$blAboveDocumentRoot = false;
 				$strInstallationFolder = realpath(sprintf('%s/../',TWIST_FRAMEWORK));
 
-				if(!($strInstallationFolder === TWIST_DOCUMENT_ROOT || strstr($strInstallationFolder,TWIST_DOCUMENT_ROOT))){
+				if(!($strInstallationFolder === TWIST_DOCUMENT_ROOT || (defined("TWIST_DOCUMENT_ROOT") && TWIST_DOCUMENT_ROOT != '' && strstr($strInstallationFolder,TWIST_DOCUMENT_ROOT)))){
 					$blAboveDocumentRoot = true;
 				}
 
 				$strBaseURI = str_replace('//','','/'.trim(str_replace(TWIST_DOCUMENT_ROOT,"",dirname($_SERVER['SCRIPT_FILENAME'])),'/').'/');
 
-				if(strstr(TWIST_FRAMEWORK,TWIST_DOCUMENT_ROOT)){
+				if(defined("TWIST_DOCUMENT_ROOT") && TWIST_DOCUMENT_ROOT != '' && strstr(TWIST_FRAMEWORK,TWIST_DOCUMENT_ROOT)){
 					$strFrameworkURI = '/'.ltrim(str_replace(TWIST_DOCUMENT_ROOT,"",TWIST_FRAMEWORK),'/');
 				}else{
 					$strFrameworkURI = sprintf('%stwist/',$strBaseURI);
