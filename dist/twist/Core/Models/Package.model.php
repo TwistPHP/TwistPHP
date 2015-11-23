@@ -118,7 +118,7 @@
 		 */
 		public function getRepository($strFilter = 'all'){
 
-			$mxdData = \Twist::Curl()->get(sprintf('http://dev.twistphp.com/packages/%s',$strFilter));
+			$mxdData = \Twist::Curl()->get(sprintf('http://dev.twistphp.com/packages/api/%s',$strFilter));
 			$arrPackages = json_decode($mxdData,true);
 
 			return $arrPackages;
