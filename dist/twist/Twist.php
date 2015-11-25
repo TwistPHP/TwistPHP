@@ -100,7 +100,9 @@
 				self::$blRecordEvents = (self::framework() -> setting('DEVELOPMENT_MODE') && self::framework() -> setting('DEVELOPMENT_EVENT_RECORDER'));
 
 				//Log the framework boot time, this is the point in which the framework code was required
-				self::Timer('TwistEventRecorder')->start($_SERVER['TWIST_BOOT']);
+				if(self::$blRecordEvents){
+					self::Timer('TwistEventRecorder')->start($_SERVER['TWIST_BOOT']);
+				}
 
 				self::define('E_TWIST_NOTICE',E_USER_NOTICE);
 				self::define('E_TWIST_WARNING',E_USER_WARNING);
@@ -112,39 +114,17 @@
 
 				//Register the PHP handlers
 				self::errorHandlers();
-
 				self::recordEvent('Handlers prepared');
+
+				//Initialise the resource handler
+				Instance::storeObject('twistCoreResources',new \Twist\Core\Models\Resources());
+				self::recordEvent('Resources prepared');
 
 				/**
 				 * Override the error handlers and exception handlers and turn on AJAX debugging
 				 * Note: In the future we could use this to enable the log handler instead
 				 */
 				self::define('TWIST_AJAX_REQUEST',array_key_exists('HTTP_X_REQUESTED_WITH',$_SERVER) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest');
-
-				//Register all the installed packages
-				self::framework() -> package() -> getInstalled();
-
-				//Register the default PHP package extensions
-				self::framework() -> hooks() -> register('TWIST_VIEW_TAG','asset',array('module' => 'Asset','function' => 'viewExtension'));
-				self::framework() -> hooks() -> register('TWIST_VIEW_TAG','file',array('module' => 'File','function' => 'viewExtension'));
-				self::framework() -> hooks() -> register('TWIST_VIEW_TAG','image',array('module' => 'Image','function' => 'viewExtension'));
-				self::framework() -> hooks() -> register('TWIST_VIEW_TAG','session',array('module' => 'Session','function' => 'viewExtension'));
-				self::framework() -> hooks() -> register('TWIST_VIEW_TAG','user',array('module' => 'User','function' => 'viewExtension'));
-
-				self::recordEvent('Packages prepared');
-
-				//Initalise the resource handler
-				Instance::storeObject('twistCoreResources',new \Twist\Core\Models\Resources());
-
-				//Register the framework resources handler into the template system
-				self::framework() -> hooks() -> register('TWIST_VIEW_TAG','resource',array('instance' => 'twistCoreResources','function' => 'viewExtension'));
-
-				//Register the framework message handler into the template system
-				self::framework() -> hooks() -> register('TWIST_VIEW_TAG','messages',array('core' => 'messageHandler'));
-
-				self::coreResources();
-
-				self::recordEvent('Resources prepared');
 
 				self::showInstallWizard();
 				self::phpSettings();
@@ -153,51 +133,6 @@
 				self::define('TWIST_LAUNCHED',1);
 			}
 		}
-
-		/**
-		 * Add the ability to serve some basic core resources, this functionality will soon be deprecated in favour of using the resources utility.
-		 * @deprecated
-		 */
-        protected static function coreResources(){
-
-            $strResourcesURI = sprintf('%s/%sCore/Resources/',rtrim(SITE_URI_REWRITE,'/'),ltrim(TWIST_FRAMEWORK_URI,'/'));
-
-            $arrResources = array(
-                'arable' => sprintf('%sarable/arable.min.css',$strResourcesURI),
-                'arable-reset' => sprintf('%sarable/arable-reset.min.css',$strResourcesURI),
-                'font-awesome' => sprintf('%sfont-awesome/css/font-awesome.min.css',$strResourcesURI),
-                'jquery' => sprintf('%sjquery/jquery-2.1.3.min.js',$strResourcesURI),
-                'jquery-legacy' => sprintf('%sjquery/jquery-1.11.2.min.js',$strResourcesURI),
-                'logo' => sprintf('%stwist/logos/logo.png',$strResourcesURI),
-                'logo-favicon' => sprintf('%stwist/logos/favicon.ico',$strResourcesURI),
-                'logo-32' => sprintf('%stwist/logos/logo-32.png',$strResourcesURI),
-                'logo-48' => sprintf('%stwist/logos/logo-48.png',$strResourcesURI),
-                'logo-57' => sprintf('%stwist/logos/logo-57.png',$strResourcesURI),
-                'logo-64' => sprintf('%stwist/logos/logo-64.png',$strResourcesURI),
-                'logo-72' => sprintf('%stwist/logos/logo-72.png',$strResourcesURI),
-                'logo-96' => sprintf('%stwist/logos/logo-96.png',$strResourcesURI),
-                'logo-114' => sprintf('%stwist/logos/logo-114.png',$strResourcesURI),
-                'logo-128' => sprintf('%stwist/logos/logo-128.png',$strResourcesURI),
-                'logo-144' => sprintf('%stwist/logos/logo-144.png',$strResourcesURI),
-                'logo-192' => sprintf('%stwist/logos/logo-192.png',$strResourcesURI),
-                'logo-256' => sprintf('%stwist/logos/logo-256.png',$strResourcesURI),
-                'logo-512' => sprintf('%stwist/logos/logo-512.png',$strResourcesURI),
-                'logo-640' => sprintf('%stwist/logos/logo-640.png',$strResourcesURI),
-                'logo-800' => sprintf('%stwist/logos/logo-800.png',$strResourcesURI),
-                'logo-1024' => sprintf('%stwist/logos/logo-1024.png',$strResourcesURI),
-                'logo-large' => sprintf('%stwist/logos/logo-512.png',$strResourcesURI),
-                'logo-small' => sprintf('%stwist/logos/logo-32.png',$strResourcesURI),
-                'modernizr' => sprintf('%smodernizr/modernizr-2.8.3.min.js',$strResourcesURI),
-                'rummage' => sprintf('%srummage/rummage.min.js',$strResourcesURI),
-                'shadow-js' => sprintf('%sshadow-js/shadow-js.min.js',$strResourcesURI),
-                'unsemantic' => sprintf('%sunsemantic/unsemantic-grid-responsive-tablet-no-ie7.css',$strResourcesURI),
-                'resources_uri' => $strResourcesURI,
-                'uri' => ltrim(sprintf('%s/%s',rtrim(SITE_URI_REWRITE,'/'),ltrim(TWIST_FRAMEWORK_URI,'/')),'/')
-            );
-
-            //Integrate the basic core href tag support - legacy support
-	        self::framework() -> hooks() -> register('TWIST_VIEW_TAG','core',$arrResources);
-        }
 
 		/**
 		 * Show the install wizard, if the wizard is required to be output all existing routes will be cleared and the wizard will be served.

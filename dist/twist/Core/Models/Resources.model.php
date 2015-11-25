@@ -31,16 +31,14 @@ class Resources{
 	var $arrLibraries = array();
 	protected $arrIncluded = array();
 
-	public function __construct(){
-		$this->loadLibraryManifest();
-	}
-
 	/**
 	 * The main template function to output the correct details
 	 * @param $strReference
 	 * @return string
 	 */
 	public function viewExtension($strReference,$arrParameters = array()){
+
+		$this->loadLibraryManifest();
 
 		$strOut = '';
 		$strIncludeKey = $strReference.(count($arrParameters) ? ','.implode(',',$arrParameters) : '');
@@ -156,14 +154,17 @@ class Resources{
 	 */
 	protected function loadLibraryManifest(){
 
-		//Get the resource libraries
-		$strJSON = file_get_contents(sprintf('%sCore/Resources/manifest.json',TWIST_FRAMEWORK));
-		$this->arrLibraries = json_decode($strJSON,true);
+		if(!count($this->arrLibraries)){
 
-		//Pre-process the paths and uris into the libraries
-		foreach($this->arrLibraries as $strKey => $arrOptions){
-			foreach($arrOptions as $strOptionKey => $arrOptionParameters){
-				$this->arrLibraries[$strKey][$strOptionKey] = $this->applyPath($arrOptionParameters,sprintf('%sCore/Resources/',TWIST_FRAMEWORK));
+			//Get the resource libraries
+			$strJSON = file_get_contents(sprintf('%sCore/Resources/manifest.json',TWIST_FRAMEWORK));
+			$this->arrLibraries = json_decode($strJSON,true);
+
+			//Pre-process the paths and uris into the libraries
+			foreach($this->arrLibraries as $strKey => $arrOptions){
+				foreach($arrOptions as $strOptionKey => $arrOptionParameters){
+					$this->arrLibraries[$strKey][$strOptionKey] = $this->applyPath($arrOptionParameters,sprintf('%sCore/Resources/',TWIST_FRAMEWORK));
+				}
 			}
 		}
 	}
@@ -224,6 +225,8 @@ class Resources{
 	 * @throws \Exception
 	 */
 	public function extendLibrary($dirManifest,$dirResourcePath){
+
+		$this->loadLibraryManifest();
 
 		if(file_exists($dirManifest)){
 			if(is_dir($dirResourcePath)){

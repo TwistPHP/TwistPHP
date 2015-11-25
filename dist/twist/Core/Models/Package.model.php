@@ -32,6 +32,13 @@
 		protected $arrPackages = array();
 
 		/**
+		 * Load the installed packages upon request of the model
+		 */
+		public function __construct(){
+			$this->getInstalled();
+		}
+
+		/**
 		 * Get an array of all packages in the system, both installed and not installed (but in the packages folder)
 		 * @return array
 		 */
