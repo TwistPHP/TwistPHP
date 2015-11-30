@@ -23,6 +23,8 @@
 
 namespace Twist\Core\Controllers;
 
+use \Twist\Core\Models\Install;
+
 /**
  * The route controller for the framework manager, generates the pages of the manager tool.
  * @package Twist\Core\Controllers
@@ -240,8 +242,7 @@ class Manager extends BaseUser{
 	public function settings(){
 
 		if(array_key_exists('import',$_GET) && $_GET['import'] == 'core'){
-			$resSetup = new Setup();
-			$resSetup->importSettings(sprintf('%ssettings.json',TWIST_FRAMEWORK_INSTALL));
+			Install::importSettings(sprintf('%ssettings.json',TWIST_FRAMEWORK_INSTALL));
 			\Twist::redirect('./settings');
 		}
 
