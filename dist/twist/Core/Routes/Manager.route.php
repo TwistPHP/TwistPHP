@@ -19,5 +19,16 @@
 			$this->restrictSuperAdmin('/%','/login');
 			$this->unrestrict('/authenticate');
 			$this->unrestrict('/forgotten-password');
+
+			//Load in all any hooks registered to extend the Twist Manager
+			$arrRoutes = \Twist::framework() -> hooks() -> getAll( 'TWIST_MANAGER_ROUTE' );
+
+			if( count( $arrRoutes ) ) {
+				foreach( $arrRoutes as $strEachHook ) {
+					if( file_exists( $strEachHook ) ) {
+						include $strEachHook;
+					}
+				}
+			}
 		}
 	}
