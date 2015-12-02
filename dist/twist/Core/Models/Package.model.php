@@ -185,7 +185,7 @@
 			//Register any resources into the framework from the package
 			if(file_exists(sprintf('%s/resources.json',$dirPath))){
 				$resCoreResources = Instance::retrieveObject('twistCoreResources');
-				$resCoreResources->extendLibrary(sprintf('%s/resources.json',$dirPath),sprintf('%s/resources',$dirPath));
+				$resCoreResources->extendLibrary(sprintf('%s/resources.json',$dirPath),sprintf('%s/Resources',$dirPath));
 			}
 
 			//Expand the JSON data
