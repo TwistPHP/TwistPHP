@@ -687,7 +687,7 @@ class View extends Base{
 		$strFunction = null;
 		$arrParameters = array();
 		$this->strCurrentTag = $strTag;
-		
+
 		if(strstr($strType,'[') && strstr($strReference,']')){
 
 			$arrFunctionParts = explode('[',$strType);
