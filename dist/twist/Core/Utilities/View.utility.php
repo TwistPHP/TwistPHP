@@ -687,8 +687,16 @@ class View extends Base{
 		$strFunction = null;
 		$arrParameters = array();
 		$this->strCurrentTag = $strTag;
+		
+		if(strstr($strType,'[') && strstr($strReference,']')){
 
-		if(preg_match("#(.*)\[(.*)\:(.*)\]#",$strTag,$srtMatchResults)){
+			$arrFunctionParts = explode('[',$strType);
+			$strFunction = $arrFunctionParts[0];
+			$strType = $arrFunctionParts[1];
+			$strReference = rtrim($strReference,']');
+
+		}elseif(preg_match("#(.*)\[(.*)\:(.*)\]#",$strTag,$srtMatchResults)){
+
 			$strFunction = $srtMatchResults[1];
 			$strType = $srtMatchResults[2];
 			$strReference = $srtMatchResults[3];
