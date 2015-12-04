@@ -39,6 +39,7 @@ class View extends Base{
 	protected $dirCurrentView = null;
 	protected $strCurrentTag = null;
 	protected $blDebugMode = false;
+	protected $arrCacheData = array();
 
 	public function __construct($strInstanceKey){
 	    $this->strInstanceKey = $strInstanceKey;
@@ -68,6 +69,75 @@ class View extends Base{
 	 */
 	public function getDirectory(){
 		return $this->dirViews;
+	}
+
+	/**
+	 * Function called by readCache, writeCache, removeCache
+	 * @param $strViewPath
+	 * @return string
+	 */
+	protected function getCacheKey($strViewPath){
+
+		$strCacheKey = 'other-views';
+
+		if(strstr($strViewPath,TWIST_FRAMEWORK_VIEWS)){
+			$strCacheKey = 'framework-views';
+		}elseif(strstr($strViewPath,TWIST_PACKAGES)){
+			$strCacheKey = 'package-views';
+		}elseif(strstr($strViewPath,TWIST_APP)){
+			$strCacheKey = 'application-views';
+		}
+
+		return $strCacheKey;
+	}
+
+	/**
+	 * Read the view cache file for the relevant cache key
+	 * @param $strViewPath
+	 * @return null
+	 */
+	protected function readCache($strViewPath){
+
+		$strCacheKey = $this->getCacheKey($strViewPath);
+
+		//Load in the cache data
+		if(!array_key_exists($strCacheKey,$this->arrCacheData)){
+			$this->arrCacheData[$strCacheKey] = \Twist::Cache('twist/utility/views')->read($strCacheKey);
+		}
+
+		//Find the tpl cache data if it exists
+		return (array_key_exists($strViewPath,$this->arrCacheData[$strCacheKey])) ? $this->arrCacheData[$strCacheKey][$strViewPath] : null;
+	}
+
+	/**
+	 * Write the cache file back for the correct cache key
+	 * @param $strViewPath
+	 * @param $arrData
+	 */
+	protected function writeCache($strViewPath,$arrData){
+
+		$strCacheKey = $this->getCacheKey($strViewPath);
+		$this->readCache($strViewPath);
+
+		$this->arrCacheData[$strCacheKey][$strViewPath] = $arrData;
+
+		\Twist::Cache('twist/utility/views')->write($strCacheKey,$this->arrCacheData[$strCacheKey],\Twist::framework()->setting('VIEW_PRE_PROCESS_CACHE'));
+	}
+
+	/**
+	 * Remove an item from the cache file for the correct cache key
+	 * @param $strViewPath
+	 */
+	protected function removeCache($strViewPath){
+
+		$strCacheKey = $this->getCacheKey($strViewPath);
+		$this->readCache($strViewPath);
+
+		if(array_key_exists($strViewPath,$this->arrCacheData[$strCacheKey])){
+			unset($this->arrCacheData[$strCacheKey][$strViewPath]);
+		}
+
+		\Twist::Cache('twist/utility/views')->write($strCacheKey,$this->arrCacheData[$strCacheKey],\Twist::framework()->setting('VIEW_PRE_PROCESS_CACHE'));
 	}
 
 	/**
@@ -101,12 +171,11 @@ class View extends Base{
 		if(substr($dirFullViewPath,-4) == '.php'){
 			$arrViewData['html_raw'] = $this->processElement($dirFullViewPath,$arrViewTags);
 		}else{
-			$strCacheKey = ltrim(str_replace(array(TWIST_FRAMEWORK_VIEWS,TWIST_PACKAGES,TWIST_APP),array('core','packages','app'),$dirFullViewPath),'/');
-			$arrViewData = \Twist::Cache('twist/utility/views')->read($strCacheKey);
+			$arrViewData = $this->readCache($dirFullViewPath);
 
 			//Detect if the file has changed, if changed remove cache and rebuild
 			if(!is_null($arrViewData) && $arrViewData['html_hash'] !== \Twist::File()->hash($dirFullViewPath,'md5')){
-				\Twist::Cache('twist/utility/views')->remove($strCacheKey);
+				$this->removeCache($dirFullViewPath);
 				$arrViewData = null;
 			}
 
@@ -117,7 +186,7 @@ class View extends Base{
 				$arrViewData['html_hash'] = \Twist::File()->hash($dirFullViewPath,'md5');
 				$arrViewData['tags'] = $this->getTags($arrViewData['html_raw'],false);
 
-				\Twist::Cache('twist/utility/views')->write($strCacheKey,$arrViewData,\Twist::framework()->setting('VIEW_PRE_PROCESS_CACHE'));
+				$this->writeCache($dirFullViewPath,$arrViewData);
 			}
 
 			foreach($arrViewData['tags'] as $strEachTag){
