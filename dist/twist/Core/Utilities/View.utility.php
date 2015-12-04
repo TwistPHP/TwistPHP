@@ -83,7 +83,13 @@ class View extends Base{
 		if(strstr($strViewPath,TWIST_FRAMEWORK_VIEWS)){
 			$strCacheKey = 'framework-views';
 		}elseif(strstr($strViewPath,TWIST_PACKAGES)){
-			$strCacheKey = 'package-views';
+
+			//Each package will have its own individual cache file
+			$dirPackage = ltrim(str_replace(TWIST_PACKAGES,'',$strViewPath),'/');
+			$arrPathParts = explode('/',$dirPackage);
+
+			$strCacheKey = sprintf('package-%s-views',strtolower(array_shift($arrPathParts)));
+
 		}elseif(strstr($strViewPath,TWIST_APP)){
 			$strCacheKey = 'application-views';
 		}
