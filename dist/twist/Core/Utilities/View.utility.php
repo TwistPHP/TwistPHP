@@ -673,34 +673,13 @@ class View extends Base{
 	}
 
 	/**
-	 * Run the tag processing on each tag that was found in the View and process them accordingly (Snipit module is required to process multi-dimensional tag arrays)
-	 *
-	 * @param $strRawView
-	 * @param $strTag
-	 * @param $strType
-	 * @param $strReference
-	 * @param $arrData
-	 * @return mixed
+	 * Explode parameters they must be set as key=value pairs comma separated. To pass a unassociated array in the values split by  pipe symbol '|'
+	 * @param $strReference Tag reference (passed in by &reference)
+	 * @return array
 	 */
-	public function runTags($strRawView,$strTag,$strType,$strReference,$arrData = array(),$blReturnArray = false){
+	protected function extractParameters(&$strReference){
 
-		$strFunction = null;
 		$arrParameters = array();
-		$this->strCurrentTag = $strTag;
-
-		if(strstr($strType,'[') && strstr($strReference,']')){
-
-			$arrFunctionParts = explode('[',$strType);
-			$strFunction = $arrFunctionParts[0];
-			$strType = $arrFunctionParts[1];
-			$strReference = rtrim($strReference,']');
-
-		}elseif(preg_match("#(.*)\[(.*)\:(.*)\]#",$strTag,$srtMatchResults)){
-
-			$strFunction = $srtMatchResults[1];
-			$strType = $srtMatchResults[2];
-			$strReference = $srtMatchResults[3];
-		}
 
 		//Explode parameters they must be set as key=value pairs comma separated. To pass a unassociated array in the values split by  pipe symbol '|'
 		if(strstr($strReference,',')){
@@ -733,6 +712,40 @@ class View extends Base{
 			}
 		}
 
+		return $arrParameters;
+	}
+
+	/**
+	 * Run the tag processing on each tag that was found in the View and process them accordingly (Snipit module is required to process multi-dimensional tag arrays)
+	 *
+	 * @param $strRawView
+	 * @param $strTag
+	 * @param $strType
+	 * @param $strReference
+	 * @param $arrData
+	 * @return mixed
+	 */
+	public function runTags($strRawView,$strTag,$strType,$strReference,$arrData = array(),$blReturnArray = false){
+
+		$strFunction = null;
+		$this->strCurrentTag = $strTag;
+
+		if(strstr($strType,'[') && strstr($strReference,']')){
+
+			$arrFunctionParts = explode('[',$strType);
+			$strFunction = $arrFunctionParts[0];
+			$strType = $arrFunctionParts[1];
+			$strReference = rtrim($strReference,']');
+
+		}elseif(preg_match("#(.*)\[(.*)\:(.*)\]#",$strTag,$srtMatchResults)){
+
+			$strFunction = $srtMatchResults[1];
+			$strType = $srtMatchResults[2];
+			$strReference = $srtMatchResults[3];
+		}
+
+		$arrParameters = $this->extractParameters($strReference);
+
 		switch($strType){
 
 			case'data':
@@ -740,7 +753,7 @@ class View extends Base{
 				$arrResult = $this->processArrayItem($strReference,$arrData,$blReturnArray);
 
 				if($arrResult['status'] == true){
-					$strRawView = $this->replaceTag($strRawView,$strTag,$arrResult['return'],$strFunction,$arrResult['return_raw']);
+					$strRawView = $this->replaceTag($strRawView,$strTag,$arrResult['return'],$strFunction,$arrResult['return_raw'],$arrParameters);
 				}
 
 				break;
@@ -756,7 +769,7 @@ class View extends Base{
 				$arrData = is_array($arrData) ? array_merge($arrData,$arrParameters) : $arrParameters;
 
 				$strTagData = $this->build($strReference,$arrData);
-				$strRawView = $this->replaceTag($strRawView,$strTag,$strTagData,$strFunction);
+				$strRawView = $this->replaceTag($strRawView,$strTag,$strTagData,$strFunction,array(),$arrParameters);
 
 				break;
 
@@ -771,7 +784,7 @@ class View extends Base{
 				if($arrResult['status'] == true){
 					//Protect against XSS attacks
 					$arrResult['return'] = ($strType == 'raw-get') ? $arrResult['return'] : htmlspecialchars($arrResult['return']);
-					$strRawView = $this->replaceTag($strRawView,$strTag,$arrResult['return'],$strFunction,$arrResult['return_raw']);
+					$strRawView = $this->replaceTag($strRawView,$strTag,$arrResult['return'],$strFunction,$arrResult['return_raw'],$arrParameters);
 				}
 
 				break;
@@ -784,14 +797,14 @@ class View extends Base{
 				if($arrResult['status'] == true){
 					//Protect against XSS attacks
 					$arrResult['return'] = ($strType == 'raw-post') ? $arrResult['return'] : htmlspecialchars($arrResult['return']);
-					$strRawView = $this->replaceTag($strRawView,$strTag,$arrResult['return'],$strFunction,$arrResult['return_raw']);
+					$strRawView = $this->replaceTag($strRawView,$strTag,$arrResult['return'],$strFunction,$arrResult['return_raw'],$arrParameters);
 				}
 				break;
 
 			case'setting':
 
 				$strOut = \Twist::framework()->setting(strtoupper($strReference));
-				$strRawView = $this->replaceTag($strRawView,$strTag,$strOut,$strFunction);
+				$strRawView = $this->replaceTag($strRawView,$strTag,$strOut,$strFunction,array(),$arrParameters);
 				break;
 
 			case'server':
@@ -799,7 +812,7 @@ class View extends Base{
 				$arrResult = $this->processArrayItem($strReference,$_SERVER,$blReturnArray);
 
 				if($arrResult['status'] == true){
-					$strRawView = $this->replaceTag($strRawView,$strTag,$arrResult['return'],$strFunction,$arrResult['return_raw']);
+					$strRawView = $this->replaceTag($strRawView,$strTag,$arrResult['return'],$strFunction,$arrResult['return_raw'],$arrParameters);
 				}
 
 				break;
@@ -808,23 +821,23 @@ class View extends Base{
 
 				if(array_key_exists($strReference,$_COOKIE)){
 					$strOut = $_COOKIE[$strReference];
-					$strRawView = $this->replaceTag($strRawView,$strTag,$strOut,$strFunction);
+					$strRawView = $this->replaceTag($strRawView,$strTag,$strOut,$strFunction,array(),$arrParameters);
 				}
 				break;
 
 			case'static':
 				$strReference = trim($strReference,'"');
 				$strReference = trim($strReference,"'");
-				$strRawView = $this->replaceTag($strRawView,$strTag,$strReference,$strFunction);
+				$strRawView = $this->replaceTag($strRawView,$strTag,$strReference,$strFunction,array(),$arrParameters);
 				break;
 
 			case'date':
-				$strRawView = $this->replaceTag($strRawView,$strTag,\Twist::DateTime()->date($strReference),$strFunction);
+				$strRawView = $this->replaceTag($strRawView,$strTag,\Twist::DateTime()->date($strReference),$strFunction,array(),$arrParameters);
 				break;
 
 			case'uri':
 				$urlTraversed = \Twist::framework()->tools()->traverseURI($strReference);
-				$strRawView = $this->replaceTag($strRawView,$strTag,$urlTraversed,$strFunction);
+				$strRawView = $this->replaceTag($strRawView,$strTag,$urlTraversed,$strFunction,array(),$arrParameters);
 				break;
 
 			case'twist':
@@ -832,7 +845,7 @@ class View extends Base{
 				switch($strReference){
 
 					case'version':
-						$strRawView = $this->replaceTag($strRawView,$strTag,TWIST_VERSION,$strFunction);
+						$strRawView = $this->replaceTag($strRawView,$strTag,TWIST_VERSION,$strFunction,array(),$arrParameters);
 						break;
 				}
 
@@ -846,7 +859,7 @@ class View extends Base{
 					$resModel = Instance::retrieveObject('twist_route_model');
 
 					if(method_exists($resModel,$strReference)){
-						$strRawView = $this->replaceTag($strRawView,$strTag,$resModel->$strReference(),$strFunction);
+						$strRawView = $this->replaceTag($strRawView,$strTag,$resModel->$strReference(),$strFunction,array(),$arrParameters);
 					}
 				}
 				break;
@@ -908,7 +921,7 @@ class View extends Base{
 						}
 					}
 
-					$strRawView = $this->replaceTag($strRawView,$strTag,$strReplacementData,$strFunction);
+					$strRawView = $this->replaceTag($strRawView,$strTag,$strReplacementData,$strFunction,array(),$arrParameters);
 				}
 
 				//if(count($this->arrCustomTags) && array_key_exists($strType,$this->arrCustomTags) && array_key_exists($strReference,$this->arrCustomTags[$strType])){
@@ -967,7 +980,7 @@ class View extends Base{
 	 * @param $mxdRawData
 	 * @return mixed
 	 */
-	protected function replaceTag($strRawView,$strTag,$strData,$strFunction = null,$mxdRawData = array()){
+	protected function replaceTag($strRawView,$strTag,$strData,$strFunction = null,$mxdRawData = array(),$arrParameters = array()){
 
 	    if(!is_null($strFunction)){
 
@@ -983,23 +996,24 @@ class View extends Base{
 	            'strlen','strtolower','strtoupper',
 	            'ucfirst','ucwords',
 	            'prettytime','bytestosize',
-	            'date'
+	            'date',
+		        'syntaxhighlight'
 	        );
 
 	        if(in_array($strFunction,$arrAllowedFunctions) || $strFunction == 'escape'){
 
-	            if(in_array($strFunction,array('count','json_encode',))){
+	            if(in_array($strFunction,array('count','json_encode'))){
 	                //This is used when processing arrays
 	                $strData = call_user_func($strFunction,$mxdRawData);
 	            }elseif($strFunction == 'date'){
 
 	                $strDateFormat = 'Y-m-d H:i:s';
 
-	                if(strstr($strTag,',')){
-	                    $arrParts = explode(',',$strTag);
-	                    unset($arrParts[0]);
-	                    $strDateFormat = rtrim(implode(',',$arrParts),']');
-	                }
+		            if(array_key_exists('format',$arrParameters)){
+			            $strDateFormat = $arrParameters['format'];
+		            }elseif(array_key_exists(0,$arrParameters)){
+			            $strDateFormat = $arrParameters[0];
+		            }
 
 	                $strData = date($strDateFormat,strtotime($strData));
 
@@ -1013,6 +1027,14 @@ class View extends Base{
 	                $strData = \Twist::DateTime() -> getAge($strData);
 	            }elseif($strFunction == 'bytestosize'){
 	                $strData = \Twist::File() -> bytesToSize($strData);
+	            }elseif($strFunction == 'syntaxhighlight'){
+
+		            //Only allow raw code to be passed in to SyntaxHighlight::code (allowing a file path using SyntaxHighlight::file would be a potential security hole!)
+			        $strType = (array_key_exists('type',$arrParameters)) ? $arrParameters['type'] : 'plain';
+			        $strFocusLine = (array_key_exists('focus',$arrParameters)) ? $arrParameters['focus'] : null;
+			        $strFocusRange = (array_key_exists('range',$arrParameters)) ?$arrParameters['range'] : 3;
+
+	                $strData = \Twist\Core\Models\String\SyntaxHighlight::code($strData,$strType,$strFocusLine,$strFocusRange);
 	            }
 	        }else{
 	            trigger_error(sprintf("Twist View: function '%s' is disabled",$strFunction),E_USER_NOTICE);

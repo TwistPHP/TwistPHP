@@ -181,14 +181,14 @@
 					$arrTags['dump_data'] = '';
 				}
 
-				$arrTags['php_code'] = self::codeOutput($resException->getFile(),$resException->getLine(),5);
+				$arrTags['php_code'] = \Twist\Core\Models\String\SyntaxHighlight::file($resException->getFile(),'em',$resException->getLine(),5);
 
 				$arrTags['trace'] = '';
 				if(count($resException->getTrace())){
 					$arrTags['trace'] = '<h3>Backtrace</h3>';
 					foreach($resException->getTrace() as $arrEachCall){
 						if(array_key_exists('file',$arrEachCall)){
-							$arrTags['trace'] .= sprintf('<pre class="code" lang="php" title="%s">%s</pre>',$arrEachCall['file'],self::codeOutput($arrEachCall['file'],$arrEachCall['line'],2));
+							$arrTags['trace'] .= sprintf('<pre class="code" lang="php" title="%s">%s</pre>',$arrEachCall['file'],\Twist\Core\Models\String\SyntaxHighlight::file($arrEachCall['file'],'em',$arrEachCall['line'],2));
 						}
 					}
 				}
@@ -207,49 +207,6 @@
             }else{
                 die(\Twist::View('Exception')->build($strExceptionTemplate,$arrTags));
             }
-		}
-
-		/**
-		 * Grab some code from a file and line number, highlight the code and return and a HTML string to be used within the exception page and debug window.
-		 * @param $strFile
-		 * @param $strLine
-		 * @param int $intLinesAboveBelow
-		 * @return string
-		 */
-		protected static function codeOutput($strFile,$strLine,$intLinesAboveBelow = 3){
-
-			$strOut = '';
-
-			//Grab the offending lines of code and then unset the var
-			$arrFileCode = (file_exists($strFile)) ? file($strFile) : array();
-			$intErrorLine = ($strLine-1);
-			if(is_array($arrFileCode) && count($arrFileCode) >= $intErrorLine){
-				if(array_key_exists($intErrorLine,$arrFileCode)){
-					$intMaxChar = strlen($intErrorLine+$intLinesAboveBelow);
-					$arrTags['php_code'] = '';
-					for($intLine=-$intLinesAboveBelow; $intLine<=$intLinesAboveBelow; $intLine++){
-
-						if(array_key_exists($intErrorLine+$intLine,$arrFileCode)){
-
-							$strCode = highlight_string('<?php '.str_replace("\t","    ",$arrFileCode[$intErrorLine+$intLine]),true);
-							$strCode = str_replace('&lt;?php&nbsp;','',$strCode);
-							$strCode = str_replace("\n",'',$strCode);
-							$strCode = str_replace(array("<br>",'<br >','<br />','<br/>'),'',$strCode);
-							$strCode = str_replace(array('<code>','</code>'),'',$strCode);
-							$strCode .= "\n";
-
-							if($intLine === 0){
-								$strOut .= '<em>'.str_pad(($intErrorLine+$intLine)+1,$intMaxChar,' ',STR_PAD_LEFT).' | '.$strCode.'</em>';
-							}else{
-								$strOut .= (array_key_exists($intErrorLine+$intLine,$arrFileCode)) ? str_pad(($intErrorLine+$intLine)+1,$intMaxChar,' ',STR_PAD_LEFT).' | '.$strCode : '';
-							}
-						}
-					}
-					unset($arrFileCode);
-				}
-			}
-
-			return $strOut;
 		}
 
 		protected static function debugDataOutput($arrData){
@@ -291,7 +248,7 @@
 					'file' => $strErrorFile,
 					'file_size' => (file_exists($strErrorFile)) ? filesize($strErrorFile) : 0,
 					'code_line' => $intErrorLine,
-					'code' => self::codeOutput($strErrorFile,$intErrorLine,3)
+					'code' => \Twist\Core\Models\String\SyntaxHighlight::file($strErrorFile,'em',$intErrorLine,3)
 				);
 
 				\Twist::framework()->debug()->log('Error','php',$arrError);
