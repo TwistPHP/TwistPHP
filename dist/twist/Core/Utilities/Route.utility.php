@@ -34,6 +34,10 @@ class Route extends Base{
 
 	protected $bl404 = true;
 
+	protected $strMainDomain = null;
+	protected $arrAliasDomains = array();
+	protected $blDisabled = false;
+
 	protected $arrRoutes = array();
 	protected $arrRoutesGET = array();
 	protected $arrRoutesPOST = array();
@@ -54,15 +58,19 @@ class Route extends Base{
 	protected $strPageTitle = '';
 	protected $intCacheTime = 3600;
 	protected $blDebugMode = false;
-	protected $strInstance = '';
 	protected $resView = null;
 	protected $strMetaInstanceKey = 'twist_route_meta';
 	protected $strModelInstanceKey = 'twist_route_model';
 	protected $strControllerDirectory = null;
 
-	public function __construct($strInstance){
+	/**
+	 * Start up an instance of Routes, pass in the main domain name for the instance. Routes registered to this instance will only be served if the domain or IP matches those entered as an alias or main domain.
+	 * If null is passed in these routes will be served on any domain or IP address.
+	 * @param null|string $strMainListener Domain or IP address to listen for
+	 */
+	public function __construct($strMainListener = null){
 
-		$this->strInstance = $strInstance;
+		$this->strMainDomain = $strMainListener;
 		$this->resView = \Twist::View();
 		Instance::storeObject($this->strMetaInstanceKey,new Meta());
 
@@ -72,6 +80,33 @@ class Route extends Base{
 		if(file_exists($strControllerPath)){
 			$this->setControllerDirectory($strControllerPath);
 		}
+	}
+
+	/**
+	 * Add an alias domain or IP address to listen on, routes registered to this instance will only be served if the domain or IP matches those entered as an alias or main domain.
+	 * @param null|string $strAliasListener Domain or IP address to listen for
+	 */
+	public function aliasDomain($strAliasListener){
+		$this->arrAliasDomains[] = $strAliasListener;
+	}
+
+	/**
+	 * Disable this instance of routes from being served, this can be used as a temporary measure if you need to stop a particular domain from being served.
+	 */
+	public function disable(){
+		$this->blDisabled = true;
+	}
+
+	/**
+	 * Get the details of which domains/IPs this route instance is listening for
+	 * @return array Passed back in the array are Domain, Aliases, Disabled
+	 */
+	public function listeners(){
+		return array(
+			'domain' => $this->strMainDomain,
+			'aliases' => $this->arrAliasDomains,
+			'disabled' => $this->blDisabled
+		);
 	}
 
 	/**

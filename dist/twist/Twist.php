@@ -618,19 +618,41 @@
 		 */
 		public static function Route(){
 
-			$strObjectKey = (count(func_get_args())) ? func_get_arg(0) : 'twist';
-
 			//Could be done in 2 lines of code but PHP editors are not smart enough to auto-complete
 			if(count(func_get_args())){
-				$strInstanceKey = sprintf('pkgRoute-%s',$strObjectKey);
-				$resTwistUtility = (!Instance::isObject($strInstanceKey)) ? new Utilities\Route($strObjectKey) : Instance::retrieveObject($strInstanceKey);
+				$strInstanceKey = sprintf('pkgRoute-%s',func_get_arg(0));
+				$resTwistUtility = (!Instance::isObject($strInstanceKey)) ? new Utilities\Route(func_get_arg(0)) : Instance::retrieveObject($strInstanceKey);
 				Instance::storeObject($strInstanceKey,$resTwistUtility);
 			}else{
-				$resTwistUtility = (!Instance::isObject('pkgRoute')) ? new Utilities\Route($strObjectKey) : Instance::retrieveObject('pkgRoute');
+				$resTwistUtility = (!Instance::isObject('pkgRoute')) ? new Utilities\Route() : Instance::retrieveObject('pkgRoute');
 				Instance::storeObject('pkgRoute',$resTwistUtility);
 			}
 
 			return $resTwistUtility;
+		}
+
+
+
+		/**
+		 * Return an instance of the Route utility.
+		 * @return \Twist\Core\Utilities\Route
+		 */
+		public static function ServeRoutes(){
+
+			$strCurrentDomain = '';
+			$strViewerHost = '';
+
+			$arrInstances = Instance::listObjects();
+
+			foreach($arrInstances as $strInstanceKey => $resInstance){
+				if(substr($strInstanceKey,0,8) == 'pkgRoute'){
+
+					//Get all the listeners for this route
+					$arrRouteListeners = $resInstance->listeners();
+
+					//Check the domain and host for a match and serve, otherwise move on to the next iteration
+				}
+			}
 		}
 
 		/**
