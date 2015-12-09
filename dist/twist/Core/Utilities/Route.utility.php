@@ -1214,7 +1214,7 @@ class Route extends Base{
 		$arrRoute = $this->current();
 
 		if(count($arrRoute)){
-
+						
 			$arrRoute['request_method'] = strtoupper($_SERVER['REQUEST_METHOD']);
 
 			//First of all check for a package interface and do that
