@@ -631,27 +631,52 @@
 			return $resTwistUtility;
 		}
 
-
-
 		/**
-		 * Return an instance of the Route utility.
-		 * @return \Twist\Core\Utilities\Route
+		 * Run through all registered instances of the route object, check for domain name matches and serve the correct route accordingly.
+		 * @param bool $blExitOnComplete
 		 */
-		public static function ServeRoutes(){
+		public static function ServeRoutes($blExitOnComplete = true){
 
-			$strCurrentDomain = '';
-			$strViewerHost = '';
+			$blHTTPS = (!empty($_SERVER['HTTPS'])) ? true : false;
+			$strHost = $_SERVER['HTTP_HOST'];
+			$strViewerIP = $_SERVER['REMOTE_ADDR'];
 
+			$resFallback = null;
+			$blFoundMatch = false;
 			$arrInstances = Instance::listObjects();
 
-			foreach($arrInstances as $strInstanceKey => $resInstance){
+			foreach($arrInstances as $strInstanceKey){
+
 				if(substr($strInstanceKey,0,8) == 'pkgRoute'){
+
+					//Get the Route instance
+					$resInstance = Instance::retrieveObject($strInstanceKey);
 
 					//Get all the listeners for this route
 					$arrRouteListeners = $resInstance->listeners();
 
-					//Check the domain and host for a match and serve, otherwise move on to the next iteration
+					if(is_null($arrRouteListeners['domain'])){
+
+						//Store as a fallback, if no domain/alias match has been found run the fallback
+						$resFallback = $resInstance;
+					}elseif($arrRouteListeners['enabled'] && (strtolower($arrRouteListeners['domain']) == $strHost || in_array($strHost,$arrRouteListeners['aliases']))){
+
+						//Check to see if the domain matches the string
+						$blFoundMatch = true;
+						$resInstance->serve($blExitOnComplete);
+						break;
+					}
 				}
+			}
+
+			//If no match was found and a fallback is set, serve the fallback
+			if($blFoundMatch == false && !is_null($resFallback)){
+				$resFallback->serve($blExitOnComplete);
+			}
+
+			//Nothing was found and we need to exit, serve a 404 page
+			if($blExitOnComplete){
+				self::respond(404);
 			}
 		}
 

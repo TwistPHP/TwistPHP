@@ -22,4 +22,4 @@
 	{data:routes}
 
 	//TWISTPHP Serve
-	{data:serve}
+	Twist::ServeRoutes();

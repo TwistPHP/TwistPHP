@@ -65,7 +65,7 @@ class Route extends Base{
 
 	/**
 	 * Start up an instance of Routes, pass in the main domain name for the instance. Routes registered to this instance will only be served if the domain or IP matches those entered as an alias or main domain.
-	 * If null is passed in these routes will be served on any domain or IP address.
+	 * If null is passed in these routes will be served only if a domain/alias match has not been found.
 	 * @param null|string $strMainListener Domain or IP address to listen for
 	 */
 	public function __construct($strMainListener = null){
@@ -84,7 +84,7 @@ class Route extends Base{
 
 	/**
 	 * Add an alias domain or IP address to listen on, routes registered to this instance will only be served if the domain or IP matches those entered as an alias or main domain.
-	 * @param null|string $strAliasListener Domain or IP address to listen for
+	 * @param string $strAliasListener Domain or IP address to listen for
 	 */
 	public function aliasDomain($strAliasListener){
 		$this->arrAliasDomains[] = $strAliasListener;
@@ -99,13 +99,13 @@ class Route extends Base{
 
 	/**
 	 * Get the details of which domains/IPs this route instance is listening for
-	 * @return array Passed back in the array are Domain, Aliases, Disabled
+	 * @return array Passed back in the array are domain, aliases, enabled
 	 */
 	public function listeners(){
 		return array(
 			'domain' => $this->strMainDomain,
 			'aliases' => $this->arrAliasDomains,
-			'disabled' => $this->blDisabled
+			'enabled' => ($this->blDisabled) ? false : true
 		);
 	}
 
@@ -1212,9 +1212,10 @@ class Route extends Base{
 		\Twist::recordEvent('Routes Prepared');
 
 		$arrRoute = $this->current();
-		$arrRoute['request_method'] = strtoupper($_SERVER['REQUEST_METHOD']);
 
-		if (count($arrRoute)) {
+		if(count($arrRoute)){
+
+			$arrRoute['request_method'] = strtoupper($_SERVER['REQUEST_METHOD']);
 
 			//First of all check for a package interface and do that
 			if($arrRoute['type'] == 'package'){
