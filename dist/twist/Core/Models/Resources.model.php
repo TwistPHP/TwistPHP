@@ -80,7 +80,21 @@ class Resources{
 				}
 			}
 
-			$arrResource = $this->getFromLibrary($strReference,$arrParameters[0]);
+			//Check the app resources first before loading another resource
+			$strLocalFile = sprintf('%s/Resources/%s',TWIST_APP,ltrim($strReference,'/'));
+
+			if(file_exists($strLocalFile)){
+
+				$arrResource = array(
+					'uri' => '',
+					'path' => $strLocalFile,
+					'css' => array(),
+					'js' => array()
+				);
+
+			}else{
+				$arrResource = $this->getFromLibrary($strReference,$arrParameters[0]);
+			}
 
 			//If the count is bigger than 0 then output the data
 			if(count($arrResource)){
