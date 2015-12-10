@@ -34,7 +34,6 @@ class Resources{
 	/**
 	 * Outputs framework resources in a view, multiple versions of a resource might be available to use. The option to load the resources inline or asynchronously can be used. Additional resources can be added to the library by packages or by following the online examples.
 	 * Each unique resource request will only be output once per page to stop unnecessary content duplication. The first part of the tag is the resource key e.g 'jquery', if you want to include the default version use the following tag {resource:jquery}.
-	 *
 	 * Other parameters can be included in the tag, you can use a single or combination of parameters (some examples below):
 	 *
 	 * inline = 1
@@ -92,6 +91,19 @@ class Resources{
 	}
 
 	/**
+	 * Outputs a CSS resource to the HTML using the view tag {css:}. The option to load the resources inline or asynchronously can be used.
+	 * The first part of the tag is the resource path e.g 'packages/Lavish/Resources/css/base.css', the tag for this would be {css:packages/Lavish/Resources/css/base.css}.
+	 *
+	 * You can override CSS files that are located in twist or an installed package by placing a copy of the file and path in your apps folder. The override file would be included in the page rather than the original file, the example override file would need ot be created here [app/packages/Lavish/Resources/css/base.css].
+	 * Other parameters can be included in the tag, you can use a single or combination of parameters (some examples below):
+	 *
+	 * inline = 1
+	 * Output the resource directly to the page, this will stop any additional js/css files being loaded into the page.
+	 *
+	 * async = async|defer
+	 * Define the type of asynchronously loading, the choice of async or defer can be optionally set.
+	 *
+	 * An example of the tag with all the above parameters in use {css:packages/Lavish/Resources/css/base.css,inline=1,async=async}
 	 * @param $strReference
 	 * @param array $arrParameters
 	 * @return string
@@ -104,22 +116,33 @@ class Resources{
 			$strReference .= '.css';
 		}
 
-		$dirLocalPath = $this->locateFile($strReference);
+		$arrFileInfo = $this->locateFile($strReference);
 
-		if(file_exists($dirLocalPath)){
-
-			$strURI = '';
+		if(!is_null($arrFileInfo['path'])){
 
 			$blInline = (array_key_exists('inline',$arrParameters)) ? true : false;
 			$mxdAsyncType = (array_key_exists('async',$arrParameters) && in_array($arrParameters['async'],array('async','defer'))) ? $arrParameters['async'] : null;
 
-			$this->processCSS(array($strReference),$dirLocalPath,$strURI,$blInline,$mxdAsyncType);
+			$this->processCSS(array($arrFileInfo['file']),$arrFileInfo['path'],$arrFileInfo['uri'],$blInline,$mxdAsyncType);
 		}
 
 		return $strOut;
 	}
 
 	/**
+	 * Outputs a JS resource to the HTML using the view tag {js:}. The option to load the resources inline or asynchronously can be used.
+	 * The first part of the tag is the resource path e.g 'packages/Lavish/Resources/js/base.js', the tag for this would be {js:packages/Lavish/Resources/js/base.js}.
+	 *
+	 * You can override JS files that are located in twist or an installed package by placing a copy of the file and path in your apps folder. The override file would be included in the page rather than the original file, the example override file would need ot be created here [app/packages/Lavish/Resources/js/base.js].
+	 * Other parameters can be included in the tag, you can use a single or combination of parameters (some examples below):
+	 *
+	 * inline = 1
+	 * Output the resource directly to the page, this will stop any additional js/css files being loaded into the page.
+	 *
+	 * async = async|defer
+	 * Define the type of asynchronously loading, the choice of async or defer can be optionally set.
+	 *
+	 * An example of the tag with all the above parameters in use {js:packages/Lavish/Resources/js/base.js,inline=1,async=async}
 	 * @param $strReference
 	 * @param array $arrParameters
 	 * @return string
@@ -132,27 +155,36 @@ class Resources{
 			$strReference .= '.js';
 		}
 
-		$dirLocalPath = $this->locateFile($strReference);
+		$arrFileInfo = $this->locateFile($strReference);
 
-		if(file_exists($dirLocalPath)){
-
-			$strURI = '';
+		if(!is_null($arrFileInfo['path'])){
 
 			$blInline = (array_key_exists('inline',$arrParameters)) ? true : false;
 			$mxdAsyncType = (array_key_exists('async',$arrParameters) && in_array($arrParameters['async'],array('async','defer'))) ? $arrParameters['async'] : null;
 
-			$this->processJS(array($strReference),$dirLocalPath,$strURI,$blInline,$mxdAsyncType);
+			$this->processJS(array($arrFileInfo['file']),$arrFileInfo['path'],$arrFileInfo['uri'],$blInline,$mxdAsyncType);
 		}
 
 		return $strOut;
 	}
 
+	/**
+	 * Locate the resource file by its path, can be app/*, packages/*, twist/* or any path in the document root.
+	 * If requesting a file in either twist or packages it can be over-ridden by placing a corresponding file in the apps folder, for example:
+	 *
+	 * [packages/Lavish/Resources/css/base.css] is over-ridden by [app/packages/Lavish/Resources/css/base.css]
+	 *
+	 * @param $dirPath
+	 * @return array An array of teh file name and the path and URI to the file
+	 */
 	protected function locateFile($dirPath){
 
-		//First check to see if an over-ride exists in the app folder
-		$dirLocalPath = sprintf('%s/%s',TWIST_APP,ltrim($dirPath,'/'));
+		$arrOut = array('file' => null,'path' => null,'uri' => null);
 
-		if(!file_exists($dirLocalPath)){
+		//First check to see if an over-ride exists in the app folder
+		$dirAppPath = sprintf('%s/%s',TWIST_APP,ltrim($dirPath,'/'));
+
+		if(!file_exists($dirAppPath)){
 
 			//If not then we now need to see if we can find the file in its requested location
 			$arrRequestParts = explode('/',ltrim($dirPath,'/'));
@@ -161,18 +193,26 @@ class Resources{
 
 			if(count($arrRequestParts)){
 				if($strType == 'app'){
-					$dirLocalPath = sprintf('%s/%s',TWIST_APP,$strRequestFile);
+					$dirAppPath = sprintf('%s/%s',TWIST_APP,$strRequestFile);
 				}elseif($strType == 'packages'){
-					$dirLocalPath = sprintf('%s/%s',TWIST_PACKAGES,$strRequestFile);
+					$dirAppPath = sprintf('%s/%s',TWIST_PACKAGES,$strRequestFile);
 				}elseif($strType == 'twist'){
-					$dirLocalPath = sprintf('%s/%s',TWIST_FRAMEWORK,$strRequestFile);
+					$dirAppPath = sprintf('%s/%s',TWIST_FRAMEWORK,$strRequestFile);
 				}else{
-					$dirLocalPath = sprintf('%s/%s',TWIST_DOCUMENT_ROOT,ltrim($dirPath,'/'));
+					$dirAppPath = sprintf('%s/%s',TWIST_DOCUMENT_ROOT,ltrim($dirPath,'/'));
 				}
 			}
+
+			if(file_exists($dirAppPath)){
+				$arrOut['file'] = basename($dirAppPath);
+				$arrOut = $this->applyPath($arrOut,dir($dirAppPath));
+			}
+		}else{
+			$arrOut['file'] = basename($dirAppPath);
+			$arrOut = $this->applyPath($arrOut,dir($dirAppPath));
 		}
 
-		return $dirLocalPath;
+		return $arrOut;
 	}
 
 	/**
