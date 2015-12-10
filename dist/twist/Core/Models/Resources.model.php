@@ -48,7 +48,7 @@ class Resources{
 	 * An example of the tag with all the above parameters in use {resource:jquery,inline=1,async=async,version=2.0.0}
 	 *
 	 * @param $strReference
-	 * @return string
+	 * @return string Processed HTML output for the resource view tag
 	 */
 	public function viewResource($strReference,$arrParameters = array()){
 
@@ -106,7 +106,7 @@ class Resources{
 	 * An example of the tag with all the above parameters in use {css:packages/Lavish/Resources/css/base.css,inline=1,async=async}
 	 * @param $strReference
 	 * @param array $arrParameters
-	 * @return string
+	 * @return string Processed HTML output for the CSS view tag
 	 */
 	public function viewCSS($strReference,$arrParameters = array()){
 
@@ -145,7 +145,7 @@ class Resources{
 	 * An example of the tag with all the above parameters in use {js:packages/Lavish/Resources/js/base.js,inline=1,async=async}
 	 * @param $strReference
 	 * @param array $arrParameters
-	 * @return string
+	 * @return string Processed HTML output for the JS view tag
 	 */
 	public function viewJS($strReference,$arrParameters = array()){
 
