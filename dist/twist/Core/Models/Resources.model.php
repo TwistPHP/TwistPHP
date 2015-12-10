@@ -24,7 +24,7 @@
 namespace Twist\Core\Models;
 
 /**
- * Core resource handler for the framework, can be extended by installing the Official Resource module
+ * Core resource handler for the framework, output resources, App and Package JS and CSS files.
  */
 class Resources{
 
@@ -32,132 +32,224 @@ class Resources{
 	protected $arrIncluded = array();
 
 	/**
-	 * The main template function to output the correct details
+	 * Outputs framework resources in a view, multiple versions of a resource might be available to use. The option to load the resources inline or asynchronously can be used. Additional resources can be added to the library by packages or by following the online examples.
+	 * Each unique resource request will only be output once per page to stop unnecessary content duplication. The first part of the tag is the resource key e.g 'jquery', if you want to include the default version use the following tag {resource:jquery}.
+	 *
+	 * Other parameters can be included in the tag, you can use a single or combination of parameters (some examples below):
+	 *
+	 * inline = 1
+	 * Output the resource directly to the page, this will stop any additional js/css files being loaded into the page.
+	 *
+	 * async = async|defer
+	 * Define the type of asynchronously loading, the choice of async or defer can be optionally set.
+	 *
+	 * version = 2.0.0
+	 * The version of the resource that will be loaded, check the recourse library in the docs to find out what versions are available.
+	 *
+	 * An example of the tag with all the above parameters in use {resource:jquery,inline=1,async=async,version=2.0.0}
+	 *
 	 * @param $strReference
 	 * @return string
 	 */
-	public function viewExtension($strReference,$arrParameters = array()){
+	public function viewResource($strReference,$arrParameters = array()){
 
 		$this->loadLibraryManifest();
-
 		$strOut = '';
-		$strIncludeKey = $strReference.(count($arrParameters) ? ','.implode(',',$arrParameters) : '');
 
-		//Only allow each resource to be output once
+		if($strReference === 'core-uri'){
+			return sprintf('%s/%sCore/Resources/',rtrim(SITE_URI_REWRITE,'/'),ltrim(TWIST_FRAMEWORK_URI,'/'));
+		}
+
+		$blInline = (array_key_exists('inline',$arrParameters)) ? true : false;
+		$mxdAsyncType = (array_key_exists('async',$arrParameters) && in_array($arrParameters['async'],array('async','defer'))) ? $arrParameters['async'] : null;
+		$mxdVersion = (array_key_exists('version',$arrParameters)) ? $arrParameters['version'] : null;
+
+		$strIncludeKey = sprintf('%s,inline=%s,async=%s,version=%s',$strReference,($blInline) ? '1' : '0',$mxdAsyncType,$mxdVersion);
+
+		//Only allow each unique resource to be output once per page
 		if(!array_key_exists($strIncludeKey,$this->arrIncluded)){
 
 			$this->arrIncluded[$strIncludeKey] = $strReference;
-
-			if(!count($arrParameters)){
-				$arrParameters[0] = null;
-			}
-
-			$strAsyncType = null;
-			$blInline = false;
-
-			if($strReference === 'core-uri'){
-				return sprintf('%s/%sCore/Resources/',rtrim(SITE_URI_REWRITE,'/'),ltrim(TWIST_FRAMEWORK_URI,'/'));
-			}
-
-			if( count( $arrParameters )) {
-				if( $arrParameters[count( $arrParameters ) - 1] === 'inline' ) {
-					$blInline = true;
-					if( $arrParameters[count( $arrParameters ) - 2] === 'async'
-						|| $arrParameters[count( $arrParameters ) - 2] === 'defer' ) {
-						$strAsyncType = $arrParameters[count( $arrParameters ) - 2];
-						if( count( $arrParameters ) === 2 ) {
-							$arrParameters[0] = null;
-						}
-					} else if( count( $arrParameters ) === 1 ) {
-						$arrParameters[0] = null;
-					}
-				} else if( $arrParameters[count( $arrParameters ) - 1] === 'async'
-					|| $arrParameters[count( $arrParameters ) - 1] === 'defer' ) {
-					$strAsyncType = $arrParameters[count( $arrParameters ) - 1];
-					if( count( $arrParameters ) === 1 ) {
-						$arrParameters[0] = null;
-					}
-				}
-			}
-
-			//Check the app resources first before loading another resource
-			$strLocalFile = sprintf('%s/Resources/%s',TWIST_APP,ltrim($strReference,'/'));
-
-			if(file_exists($strLocalFile)){
-
-				$arrResource = array(
-					'uri' => '',
-					'path' => $strLocalFile,
-					'css' => array(),
-					'js' => array()
-				);
-
-			}else{
-				$arrResource = $this->getFromLibrary($strReference,$arrParameters[0]);
-			}
+			$arrResource = $this->getFromLibrary($strReference,$mxdVersion);
 
 			//If the count is bigger than 0 then output the data
 			if(count($arrResource)){
 
-				$strModuleURI = $arrResource['uri'];
-				$strModulePath = $arrResource['path'];
+				$strURI = ($strReference == '') ? $arrResource['uri'] : sprintf('%s/%s',$arrResource['uri'],$strReference);
+				$strPath = ($strReference == '') ? $arrResource['path'] : sprintf('%s/%s',$arrResource['path'],$strReference);
 
 				if(count($arrResource['css'])){
-					foreach($arrResource['css'] as $strEachItem){
-						if( $blInline ) {
-							if(substr($strEachItem,0,2) === '//'){
-								$strOut .= sprintf( '%s ', file_get_contents($strEachItem) );
-							} else {
-								$strOut .= sprintf( '%s ', file_get_contents(sprintf("%s/%s/%s",$strModulePath,$strReference,$strEachItem)) );
-							}
-						} else if( !is_null( $strAsyncType ) ) {
-							if(substr($strEachItem,0,2) === '//'){
-								//$strOut .= sprintf( "(function(d){var g=d.createElement('link'),s=d.getElementsByTagName('script')[0];g.type='text/css';g.rel='stylesheet';g.href='%s';s.parentNode.insertBefore(g,s);}(document));", $strEachItem );
-								$strOut .= sprintf( "(function(d){var g=d.createElement('link');g.type='text/css';g.rel='stylesheet';g.href='%s';d.getElementsByTagName('head')[0].appendChild(g);}(document));", $strEachItem );
-							} else {
-								//$strOut .= sprintf( "(function(d){var g=d.createElement('link'),s=d.getElementsByTagName('script')[0];g.type='text/css';g.rel='stylesheet';g.href='%slibraries/%s/%s';s.parentNode.insertBefore(g,s);}(document));", $strModuleURI,$arrParameters[0],$strEachItem );
-								$strOut .= sprintf( "(function(d){var g=d.createElement('link');g.type='text/css';g.rel='stylesheet';g.href='%slibraries/%s/%s';d.getElementsByTagName('head')[0].appendChild(g);}(document));", $strModuleURI,$strReference,$strEachItem );
-							}
-						} else {
-							if(substr($strEachItem,0,2) === '//'){
-								$strOut .= sprintf('<link href="%s" type="text/css" rel="stylesheet" property="stylesheet">',$strEachItem);
-							}else{
-								$strOut .= sprintf('<link href="%s/%s/%s" type="text/css" rel="stylesheet" property="stylesheet">',$strModuleURI,$strReference,$strEachItem);
-							}
-						}
-					}
-
-					if( !is_null( $strAsyncType ) ) {
-						$strOut = sprintf( '<script async>%s</script>', $strOut );
-					} else if( $blInline ) {
-						$strOut = sprintf( '<style type="text/css">%s</style>', $strOut );
-					}
+					$strOut .= $this->processCSS($arrResource['css'],$strPath,$strURI,$blInline,$mxdAsyncType);
 				}
 
 				if(count($arrResource['js'])){
-					foreach($arrResource['js'] as $strEachItem){
-						//$strItemPath = (substr($strEachItem,0,2) == '//') ? $strEachItem : sprintf("%slibraries/%s/%s",$strModulePath,$arrParameters[0],$strEachItem);
-
-						if( $blInline ) {
-							if(substr($strEachItem,0,2) === '//'){
-								$strOut .= sprintf( '%s ', file_get_contents($strEachItem) );
-							} else {
-								$strOut .= sprintf( '%s ', file_get_contents(sprintf("%s/%s/%s",$strModulePath,$strReference,$strEachItem) ) );
-							}
-						} else {
-							if(substr($strEachItem,0,2) === '//'){
-								$strOut .= sprintf('<script src="%s"%s></script>',$strEachItem,(is_null( $strAsyncType ) ? '' : sprintf( ' %s', $strAsyncType )));
-							}else{
-								$strOut .= sprintf('<script src="%s/%s/%s"%s></script>',$strModuleURI,$strReference,$strEachItem,(is_null( $strAsyncType ) ? '' : sprintf( ' %s', $strAsyncType )));
-							}
-						}
-					}
-
-					if( $blInline ) {
-						$strOut = sprintf( '<script%s>%s</script>',(is_null( $strAsyncType ) ? '' : sprintf( ' %s', $strAsyncType ) ), $strOut );
-					}
+					$strOut .= $this->processJS($arrResource['js'],$strPath,$strURI,$blInline,$mxdAsyncType);
 				}
 			}
+		}
+
+		return $strOut;
+	}
+
+	/**
+	 * @param $strReference
+	 * @param array $arrParameters
+	 * @return string
+	 */
+	public function viewCSS($strReference,$arrParameters = array()){
+
+		$strOut = '';
+
+		if(substr($strReference,-4) != '.css'){
+			$strReference .= '.css';
+		}
+
+		$dirLocalPath = $this->locateFile($strReference);
+
+		if(file_exists($dirLocalPath)){
+
+			$strURI = '';
+
+			$blInline = (array_key_exists('inline',$arrParameters)) ? true : false;
+			$mxdAsyncType = (array_key_exists('async',$arrParameters) && in_array($arrParameters['async'],array('async','defer'))) ? $arrParameters['async'] : null;
+
+			$this->processCSS(array($strReference),$dirLocalPath,$strURI,$blInline,$mxdAsyncType);
+		}
+
+		return $strOut;
+	}
+
+	/**
+	 * @param $strReference
+	 * @param array $arrParameters
+	 * @return string
+	 */
+	public function viewJS($strReference,$arrParameters = array()){
+
+		$strOut = '';
+
+		if(substr($strReference,-3) != '.js'){
+			$strReference .= '.js';
+		}
+
+		$dirLocalPath = $this->locateFile($strReference);
+
+		if(file_exists($dirLocalPath)){
+
+			$strURI = '';
+
+			$blInline = (array_key_exists('inline',$arrParameters)) ? true : false;
+			$mxdAsyncType = (array_key_exists('async',$arrParameters) && in_array($arrParameters['async'],array('async','defer'))) ? $arrParameters['async'] : null;
+
+			$this->processJS(array($strReference),$dirLocalPath,$strURI,$blInline,$mxdAsyncType);
+		}
+
+		return $strOut;
+	}
+
+	protected function locateFile($dirPath){
+
+		//First check to see if an over-ride exists in the app folder
+		$dirLocalPath = sprintf('%s/%s',TWIST_APP,ltrim($dirPath,'/'));
+
+		if(!file_exists($dirLocalPath)){
+
+			//If not then we now need to see if we can find the file in its requested location
+			$arrRequestParts = explode('/',ltrim($dirPath,'/'));
+			$strType = array_shift($arrRequestParts);
+			$strRequestFile = implode('/',$arrRequestParts);
+
+			if(count($arrRequestParts)){
+				if($strType == 'app'){
+					$dirLocalPath = sprintf('%s/%s',TWIST_APP,$strRequestFile);
+				}elseif($strType == 'packages'){
+					$dirLocalPath = sprintf('%s/%s',TWIST_PACKAGES,$strRequestFile);
+				}elseif($strType == 'twist'){
+					$dirLocalPath = sprintf('%s/%s',TWIST_FRAMEWORK,$strRequestFile);
+				}else{
+					$dirLocalPath = sprintf('%s/%s',TWIST_DOCUMENT_ROOT,ltrim($dirPath,'/'));
+				}
+			}
+		}
+
+		return $dirLocalPath;
+	}
+
+	/**
+	 * Process the JS files and output them in the desired HTML format
+	 * @param $arrFiles
+	 * @param $strPath
+	 * @param $strURI
+	 * @param bool $blInline
+	 * @param null|string $mxdAsyncType
+	 * @return string
+	 */
+	protected function processJS($arrFiles,$strPath,$strURI,$blInline = false,$mxdAsyncType = null){
+
+		$strOut = '';
+
+		foreach($arrFiles as $strEachItem){
+			if($blInline){
+				if(substr($strEachItem,0,2) === '//'){
+					$strOut .= sprintf( '%s ', file_get_contents($strEachItem) );
+				}else{
+					$strOut .= sprintf( '%s ', file_get_contents(sprintf("%s/%s",$strPath,$strEachItem) ) );
+				}
+			}else{
+				if(substr($strEachItem,0,2) === '//'){
+					$strOut .= sprintf('<script src="%s"%s></script>',$strEachItem,(is_null( $mxdAsyncType ) ? '' : sprintf( ' %s', $mxdAsyncType )));
+				}else{
+					$strOut .= sprintf('<script src="%s/%s"%s></script>',$strURI,$strEachItem,(is_null( $mxdAsyncType ) ? '' : sprintf( ' %s', $mxdAsyncType )));
+				}
+			}
+		}
+
+		if($blInline){
+			$strOut = sprintf( '<script%s>%s</script>',(is_null( $mxdAsyncType ) ? '' : sprintf( ' %s', $mxdAsyncType ) ), $strOut );
+		}
+
+		return $strOut;
+	}
+
+	/**
+	 * Process the CSS files and output them in the desired HTML format
+	 * @param $arrFiles
+	 * @param $strPath
+	 * @param $strURI
+	 * @param bool $blInline
+	 * @param null|string $mxdAsyncType
+	 * @return string
+	 */
+	protected function processCSS($arrFiles,$strPath,$strURI,$blInline = false,$mxdAsyncType = null){
+
+		$strOut = '';
+
+		foreach($arrFiles as $strEachItem){
+			if($blInline){
+				if(substr($strEachItem,0,2) === '//'){
+					$strOut .= sprintf('%s ',file_get_contents($strEachItem));
+				}else{
+					$strOut .= sprintf('%s ',file_get_contents(sprintf("%s/%s",$strPath,$strEachItem)));
+				}
+			}else if(!is_null($mxdAsyncType)){
+				if(substr($strEachItem,0,2) === '//'){
+					$strOut .= sprintf("(function(d){var g=d.createElement('link');g.type='text/css';g.rel='stylesheet';g.href='%s';d.getElementsByTagName('head')[0].appendChild(g);}(document));", $strEachItem);
+				}else{
+					$strOut .= sprintf("(function(d){var g=d.createElement('link');g.type='text/css';g.rel='stylesheet';g.href='%s/%s';d.getElementsByTagName('head')[0].appendChild(g);}(document));", $strURI,$strEachItem);
+				}
+			}else{
+				if(substr($strEachItem,0,2) === '//'){
+					$strOut .= sprintf('<link href="%s" type="text/css" rel="stylesheet" property="stylesheet">',$strEachItem);
+				}else{
+					$strOut .= sprintf('<link href="%s/%s" type="text/css" rel="stylesheet" property="stylesheet">',$strURI,$strEachItem);
+				}
+			}
+		}
+
+		if(!is_null( $mxdAsyncType)){
+			$strOut = sprintf('<script async>%s</script>', $strOut);
+		}else if($blInline){
+			$strOut = sprintf('<style type="text/css">%s</style>', $strOut);
 		}
 
 		return $strOut;
