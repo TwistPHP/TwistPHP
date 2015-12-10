@@ -416,11 +416,11 @@ class View extends Base{
 
 			if(!is_null($this->dirCurrentView)){
 				$intLineNo = $this->locateTag($this->dirCurrentView,$this->strCurrentTag);
-				throw new Exception(sprintf("View file <em>%s</em> was not found or does not exist in <em>%s</em>",str_replace(TWIST_DOCUMENT_ROOT,'/',$dirFullViewPath),str_replace(TWIST_DOCUMENT_ROOT,'/',$this->dirCurrentView)),11102,$this->dirCurrentView,$intLineNo);
+				throw new Exception(sprintf("View file <em>%s</em> was not found or does not exist in <em>%s</em>",str_replace(array(TWIST_DOCUMENT_ROOT,'//'),'/',$dirFullViewPath),str_replace(array(TWIST_DOCUMENT_ROOT,'//'),'/',$this->dirCurrentView)),11102,$this->dirCurrentView,$intLineNo);
 			}else{
 				//Will work as long as the error is called from build()
 				$arrBacktrace = debug_backtrace();
-				throw new Exception(sprintf("View file <em>%s</em> was not found or does not exist",str_replace(TWIST_DOCUMENT_ROOT,'/',$dirFullViewPath)),11102,$arrBacktrace[2]['file'],$arrBacktrace[2]['line']);
+				throw new Exception(sprintf("View file <em>%s</em> was not found or does not exist",str_replace(array(TWIST_DOCUMENT_ROOT,'//'),'/',$dirFullViewPath)),11102,$arrBacktrace[2]['file'],$arrBacktrace[2]['line']);
 			}
 		}
 	}
