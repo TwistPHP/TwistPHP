@@ -117,13 +117,12 @@ class Resources{
 		}
 
 		$arrFileInfo = $this->locateFile($strReference);
-
 		if(!is_null($arrFileInfo['path'])){
 
 			$blInline = (array_key_exists('inline',$arrParameters)) ? true : false;
 			$mxdAsyncType = (array_key_exists('async',$arrParameters) && in_array($arrParameters['async'],array('async','defer'))) ? $arrParameters['async'] : null;
 
-			$this->processCSS(array($arrFileInfo['file']),$arrFileInfo['path'],$arrFileInfo['uri'],$blInline,$mxdAsyncType);
+			$strOut = $this->processCSS(array($arrFileInfo['file']),$arrFileInfo['path'],$arrFileInfo['uri'],$blInline,$mxdAsyncType);
 		}
 
 		return $strOut;
@@ -156,13 +155,12 @@ class Resources{
 		}
 
 		$arrFileInfo = $this->locateFile($strReference);
-
 		if(!is_null($arrFileInfo['path'])){
 
 			$blInline = (array_key_exists('inline',$arrParameters)) ? true : false;
 			$mxdAsyncType = (array_key_exists('async',$arrParameters) && in_array($arrParameters['async'],array('async','defer'))) ? $arrParameters['async'] : null;
 
-			$this->processJS(array($arrFileInfo['file']),$arrFileInfo['path'],$arrFileInfo['uri'],$blInline,$mxdAsyncType);
+			$strOut = $this->processJS(array($arrFileInfo['file']),$arrFileInfo['path'],$arrFileInfo['uri'],$blInline,$mxdAsyncType);
 		}
 
 		return $strOut;
@@ -205,7 +203,7 @@ class Resources{
 
 			if(file_exists($dirAppPath)){
 				$arrOut['file'] = basename($dirAppPath);
-				$arrOut = $this->applyPath($arrOut,dir($dirAppPath));
+				$arrOut = $this->applyPath($arrOut,dirname($dirAppPath));
 			}
 		}else{
 			$arrOut['file'] = basename($dirAppPath);
