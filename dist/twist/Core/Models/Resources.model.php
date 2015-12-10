@@ -167,6 +167,59 @@ class Resources{
 	}
 
 	/**
+	 * Outputs a Image resource to the HTML using the view tag {img:}. The options to output the image as a URI or as a base64 encoded string are also available.
+	 * The first part of the tag is the image path e.g 'packages/Lavish/Resources/images/user.png', the tag for this would be {img:packages/Lavish/Resources/images/user.png}.
+	 *
+	 * You can override Image files that are located in twist or an installed package by placing a copy of the file and path in your apps folder. The override file would be included in the page rather than the original file, the example override file would need ot be created here [app/packages/Lavish/Resources/images/user.png].
+	 * Other parameters can be included in the tag, you can use a single or combination of parameters (some examples below):
+	 *
+	 * uri = 1
+	 * Output the image URI in plain text, no IMG tag will be output
+	 *
+	 * base64 = 1
+	 * Output the image as a base64 encoded string, when used in conjunction with uri the base64 string will be output instead of the URI.
+	 *
+	 * All other parameters passed in will be output as attributes of the IMG tag, for example title='Hello World'
+	 *
+	 * An example of the tag with the title and id parameters set {img:packages/Lavish/Resources/images/user.png,title='Hello World',id='user-77'}
+	 * @param $strReference
+	 * @param array $arrParameters
+	 * @return string
+	 */
+	public function viewImage($strReference,$arrParameters = array()){
+
+		$strOut = '';
+
+		$arrFileInfo = $this->locateFile($strReference);
+		if(!is_null($arrFileInfo['path'])){
+
+			if(array_key_exists('base64',$arrParameters)){
+				$resImage = \Twist::Image()->load(sprintf('%s/%s',$arrFileInfo['path'],$arrFileInfo['file']));
+				$strImageSRC = $resImage->outputBase64();
+				unset($resImage);
+			}else{
+				$strImageSRC = sprintf('%s/%s',$arrFileInfo['uri'],$arrFileInfo['file']);
+			}
+
+			if(array_key_exists('uri',$arrParameters)){
+				$strOut = $strImageSRC;
+			}else{
+
+				$strAttributes = '';
+				foreach($arrParameters as $strKey => $mxdValue){
+					if(!in_array(strtolower($strKey),array('src','base64','uri'))){
+						$strAttributes .= sprintf(' %s="%s"',strtolower($strKey),htmlentities($mxdValue));
+					}
+				}
+
+				$strOut = sprintf('<img src="%s"%s>',$strImageSRC,$strAttributes);
+			}
+		}
+
+		return $strOut;
+	}
+
+	/**
 	 * Locate the resource file by its path, can be app/*, packages/*, twist/* or any path in the document root.
 	 * If requesting a file in either twist or packages it can be over-ridden by placing a corresponding file in the apps folder, for example:
 	 *
