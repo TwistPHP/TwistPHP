@@ -253,7 +253,9 @@ class Resources{
 		$arrOut = array('file' => null,'path' => null,'uri' => null);
 
 		//First check to see if an over-ride exists in the app folder
-		$dirAppPath = sprintf('%s/%s',TWIST_APP,ltrim($dirPath,'/'));
+		$dirPrePaired = ltrim($dirPath,'/');
+		$dirPrePaired = (substr($dirPrePaired,0,6) == 'twist/' || substr($dirPrePaired,0,6) == 'packages/') ? ucfirst($dirPrePaired) : $dirPrePaired;
+		$dirAppPath = sprintf('%s/%s',TWIST_APP,$dirPrePaired);
 
 		if(!file_exists($dirAppPath)){
 
