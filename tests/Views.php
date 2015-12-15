@@ -40,7 +40,7 @@ class Views extends \PHPUnit_Framework_TestCase{
 		$this -> assertEquals('pass',$strTagStatus);
 
 		//Create an override JS file
-		mkdir(sprintf('%s/twist/Core/Resources/arable/',TWIST_APP),0777,true);
+		mkdir(sprintf('%stwist/Core/Resources/arable/',TWIST_APP),0777,true);
 		file_put_contents(sprintf('%s/twist/Core/Resources/arable/arable.min.css',TWIST_APP),'test over-ride file');
 
 		$strTagStatus = \Twist::View()->replace("{css:twist/Core/Resources/arable/arable.min.css}");
@@ -61,7 +61,7 @@ class Views extends \PHPUnit_Framework_TestCase{
 		$this -> assertEquals('pass',$strTagStatus);
 
 		//Create an override JS file
-		mkdir(sprintf('%s/twist/Core/Resources/jquery/',TWIST_APP),0777,true);
+		mkdir(sprintf('%stwist/Core/Resources/jquery/',TWIST_APP),0777,true);
 		file_put_contents(sprintf('%s/twist/Core/Resources/jquery/jquery-2.1.4.min.js',TWIST_APP),'test over-ride file');
 
 		$strTagStatus = \Twist::View()->replace("{css:twist/Core/Resources/jquery/jquery-2.1.4.min.js}");
@@ -89,7 +89,7 @@ class Views extends \PHPUnit_Framework_TestCase{
 		$this -> assertEquals('param-pass',$strTagStatus);
 
 		//Create an override JS file
-		mkdir(sprintf('%s/twist/Core/Resources/twist/logos/',TWIST_APP),0777,true);
+		mkdir(sprintf('%stwist/Core/Resources/twist/logos/',TWIST_APP),0777,true);
 		file_put_contents(sprintf('%s/twist/Core/Resources/twist/logos/logo.png',TWIST_APP),'test over-ride file');
 
 		$strTagStatus = \Twist::View()->replace("{css:twist/Core/Resources/twist/logos/logo.png}");
