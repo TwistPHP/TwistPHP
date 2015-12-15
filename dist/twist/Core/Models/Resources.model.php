@@ -285,10 +285,8 @@ class Resources{
 			}
 		}else{
 			$arrOut['file'] = basename($dirAppPath);
-			$arrOut = $this->applyPath($arrOut,dir($dirAppPath));
+			$arrOut = $this->applyPath($arrOut,dirname($dirAppPath));
 		}
-
-		printf(print_r($arrOut,true));
 
 		return $arrOut;
 	}
