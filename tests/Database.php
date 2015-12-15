@@ -36,14 +36,18 @@ class Database extends \PHPUnit_Framework_TestCase{
 		$resRecord->set('key','SITE_NAME_TEST');
 		$resRecord->commit();
 
-		$arrResult = \Twist::Database()->get('twist_settings','SITE_NAME_TEST','key');
+		$arrResult = \Twist::Database()->getAll('twist_settings','SITE_NAME_TEST','key');
 		$this -> assertEquals('clone passed',(count($arrResult) == 1) ? 'clone passed' : 'incorrect number of results, expecting 1, got '.count($arrResult));
 
 		$resRecord->delete();
 		unset($resRecord);
 
-		$arrResult = \Twist::Database()->get('twist_settings','SITE_NAME_TEST','key');
+		$arrResult = \Twist::Database()->getAll('twist_settings','SITE_NAME_TEST','key');
 		$this -> assertEquals('delete passed',(count($arrResult) == 0) ? 'delete passed' : 'incorrect number of results, expecting 0, got '.count($arrResult));
 
+		//Reset the site name as settings uses it for a test also
+		$resRecord = \Twist::Database()->getRecord('twist_settings','SITE_NAME','key');
+		$resRecord->set('value','Travis CI Test');
+		$resRecord->commit();
 	}
 }
