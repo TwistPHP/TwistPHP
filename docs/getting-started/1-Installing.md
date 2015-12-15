@@ -1,6 +1,6 @@
-#Installing the framework
+#Installing
 
-Get the ZIP of TwistPHP framework and extract the folders contents into your public_html directory.
+Download the TwistPHP framework and extract the folders contents to your `public_html` directory.
 
 Your directory should now look like this:
 

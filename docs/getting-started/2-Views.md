@@ -50,7 +50,7 @@ Update your *index.php* file:
 
 If you view your site in a browser now, you should see that the view tags have been populated with the relevant data, in this case the date (using the same syntax as the PHP `date()` function) and the `$_SERVER['REMOTE_ADDR']` value.
 
-##Passing parameters
+###Passing parameters
 
 Update your view file:
 ```html
@@ -88,7 +88,7 @@ In your *index.php* file, we now need to pass in some data to populate the view 
 
 When run now, the content is inserted into the view.
 
-##Extending your views
+###Extending your views
 
 The real power behind the template engine after pre-defined variables and content lies in including other files within your view to minimise HTML duplication.
 

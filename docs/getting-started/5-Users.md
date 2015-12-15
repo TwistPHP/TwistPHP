@@ -71,6 +71,6 @@ When you now try to visit `/count` in your browser, you will be redirected to th
 
 After logging in, you will be redirected to the `/count` page. You can add a link to `/login?logout` which will allow ou to log out of the system.
 
-###No more registrations
+####No more registrations
 
 After creating a user account, you can revert to just using a standard login form with no register link: `{user:login_form,/count}`

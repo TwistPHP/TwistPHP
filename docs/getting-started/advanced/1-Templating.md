@@ -1,6 +1,6 @@
 #Further View Functionality
 
-##More View Tags
+###More View Tags
 
 There are more template tags included to help you separate your PHP and HTML.
 
@@ -16,7 +16,7 @@ There are more template tags included to help you separate your PHP and HTML.
 | `{server:option}`                 | Server Parameters      | Output the contents of any PHP $_SERVER parameter directly to the template                                                                  |
 | `{cookie:option}`                 | Cookie Parameters      | Output the contents of any PHP $_COOKIE parameter directly to the template                                                                  |
 
-##Conditional View Tags
+###Conditional View Tags
 
 Conditional template tags allow you to use logic and arguments to output dynamic data similar to an inline PHP if() statement.
 
@@ -39,7 +39,7 @@ Below are all the comparison types that you can use between your condition and v
 | ^=    | `variable^=value`  | The variable begins with the value                                      |
 | $=    | `variable$=value`  | The variable ends with the value                                        |
 
-###Examples
+####Examples
 
 ```
 {date:L==1?"It's a leap year!":"It's just another year"}
@@ -49,7 +49,7 @@ Below are all the comparison types that you can use between your condition and v
 {date:g<12?template:morning.tpl:element:afternoon.php}
 ```
 
-##Function Modifiers
+###Function Modifiers
 
 Using some predefined functions, you can modify the data before it is output to the screen without having to resort to PHP.
 
