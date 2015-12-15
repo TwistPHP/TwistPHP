@@ -50,7 +50,7 @@
 			switch($strOutputType){
 
 				case 'em':
-					$strCodeContainer = "<code>\n%s</code>";
+					$strCodeContainer = "<code>%s</code>";
 					$strLineContainer = "<em%s>%s</em>%s\n";
 					break;
 
@@ -66,7 +66,7 @@
 
 				case 'plain':
 				default:
-					$strCodeContainer = "<code>\n%s</code>";
+					$strCodeContainer = "<code>%s</code>";
 					$strLineContainer = "<!-- %s, Line: %s -->%s\n";
 					break;
 			}
