@@ -40,13 +40,14 @@ class Views extends \PHPUnit_Framework_TestCase{
 		$this -> assertEquals('pass',$strTagStatus);
 
 		//Create an override JS file
-		echo " -> ".sprintf('%sTwist/Core/Resources/arable/',TWIST_APP);
+		$this -> assertEquals('pass',sprintf('%sTwist/Core/Resources/arable/',TWIST_APP));
+
 		mkdir(sprintf('%sTwist/Core/Resources/arable/',TWIST_APP),0777,true);
 
 		if(is_dir(sprintf('%sTwist/Core/Resources/arable/',TWIST_APP))){
-			echo " [Created]";
+			$this -> assertEquals('pass','Created');
 		}else{
-			echo " [Failed]";
+			$this -> assertEquals('pass','Failed to Create');
 		}
 
 		file_put_contents(sprintf('%sTwist/Core/Resources/arable/arable.min.css',TWIST_APP),'test over-ride file');
