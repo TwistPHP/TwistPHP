@@ -11,4 +11,92 @@ class Views extends \PHPUnit_Framework_TestCase{
 	public function testTagIf(){
 		$this -> assertEquals('pass',\Twist::View()->replace("{data:test=='OK'?'pass':'fail'}",array('test' => 'OK')));
 	}
+
+	public function testTagYear(){
+		$this -> assertEquals(date('Y'),\Twist::View()->replace("{date:Y}"));
+	}
+
+	public function testTagMD5(){
+		$this -> assertEquals(md5('pass'),\Twist::View()->replace("{md5[data:test]}",array('test' => 'pass')));
+	}
+
+	public function testTagResource(){
+
+		$strJqueryStatus = \Twist::View()->replace("{resource:jquery}");
+		if(strstr($strJqueryStatus,'<script') && strstr($strJqueryStatus,'twist/Core/Resources/jquery/jquery-2.1.4.min.js')){
+			$strJqueryStatus = 'pass';
+		}
+
+		$this -> assertEquals('pass',$strJqueryStatus);
+	}
+
+	public function testTagCSS(){
+
+		$strTagStatus = \Twist::View()->replace("{css:twist/Core/Resources/arable/arable.min.css}");
+		if(strstr($strTagStatus,'<link') && strstr($strTagStatus,'twist/Core/Resources/arable/arable.min.css')){
+			$strTagStatus = 'pass';
+		}
+
+		$this -> assertEquals('pass',$strTagStatus);
+
+		//Create an override JS file
+		mkdir(sprintf('%s/twist/Core/Resources/arable/',TWIST_APP),0777,true);
+		file_put_contents(sprintf('%s/twist/Core/Resources/arable/arable.min.css',TWIST_APP),'test over-ride file');
+
+		$strTagStatus = \Twist::View()->replace("{css:twist/Core/Resources/arable/arable.min.css}");
+		if(strstr($strTagStatus,'<link') && strstr($strTagStatus,'app/twist/Core/Resources/arable/arable.min.css')){
+			$strTagStatus = 'pass';
+		}
+
+		$this -> assertEquals('pass',$strTagStatus);
+	}
+
+	public function testTagJS(){
+
+		$strTagStatus = \Twist::View()->replace("{js:jquery}");
+		if(strstr($strTagStatus,'<script') && strstr($strTagStatus,'twist/Core/Resources/jquery/jquery-2.1.4.min.js')){
+			$strTagStatus = 'pass';
+		}
+
+		$this -> assertEquals('pass',$strTagStatus);
+
+		//Create an override JS file
+		mkdir(sprintf('%s/twist/Core/Resources/jquery/',TWIST_APP),0777,true);
+		file_put_contents(sprintf('%s/twist/Core/Resources/jquery/jquery-2.1.4.min.js',TWIST_APP),'test over-ride file');
+
+		$strTagStatus = \Twist::View()->replace("{css:twist/Core/Resources/jquery/jquery-2.1.4.min.js}");
+		if(strstr($strTagStatus,'<script') && strstr($strTagStatus,'app/twist/Core/Resources/jquery/jquery-2.1.4.min.js')){
+			$strTagStatus = 'pass';
+		}
+
+		$this -> assertEquals('pass',$strTagStatus);
+	}
+
+	public function testTagImg(){
+
+		$strTagStatus = \Twist::View()->replace("{img:twist/Core/Resources/twist/logos/logo.png}");
+		if(strstr($strTagStatus,'<img') && strstr($strTagStatus,'twist/Core/Resources/twist/logos/logo.png')){
+			$strTagStatus = 'pass';
+		}
+
+		$this -> assertEquals('pass',$strTagStatus);
+
+		$strTagStatus = \Twist::View()->replace("{img:twist/Core/Resources/twist/logos/logo.png,id=test1}");
+		if(strstr($strTagStatus,'<img') && strstr($strTagStatus,'twist/Core/Resources/twist/logos/logo.png') && strstr($strTagStatus,' id="test1"')){
+			$strTagStatus = 'pass';
+		}
+
+		$this -> assertEquals('pass',$strTagStatus);
+
+		//Create an override JS file
+		mkdir(sprintf('%s/twist/Core/Resources/twist/logos/',TWIST_APP),0777,true);
+		file_put_contents(sprintf('%s/twist/Core/Resources/twist/logos/logo.png',TWIST_APP),'test over-ride file');
+
+		$strTagStatus = \Twist::View()->replace("{css:twist/Core/Resources/twist/logos/logo.png}");
+		if(strstr($strTagStatus,'<link') && strstr($strTagStatus,'app/twist/Core/Resources/twist/logos/logo.png')){
+			$strTagStatus = 'pass';
+		}
+
+		$this -> assertEquals('pass',$strTagStatus);
+	}
 }
