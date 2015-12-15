@@ -39,7 +39,7 @@ class User extends \PHPUnit_Framework_TestCase{
 		$resUser = \Twist::User()->get(1);
 		$resUser->surname('CI_2');
 
-		$this -> assertTrue($resUser->commit());
+		$this -> assertEquals(1,$resUser->commit());
 		unset($resUser);
 
 		$resUser = \Twist::User()->get(1);
@@ -51,7 +51,7 @@ class User extends \PHPUnit_Framework_TestCase{
 		$resUser = \Twist::User()->get(1);
 		$resUser->disable();
 
-		$this -> assertTrue($resUser->commit());
+		$this -> assertEquals(1,$resUser->commit());
 		unset($resUser);
 
 		$arrSessionArray = \Twist::User()->authenticate('travisci@unit-test-twistphp.com','X123Password');
