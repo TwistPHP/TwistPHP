@@ -59,6 +59,10 @@ class Resources{
 			return sprintf('%s/%sCore/Resources/',rtrim(SITE_URI_REWRITE,'/'),ltrim(TWIST_FRAMEWORK_URI,'/'));
 		}
 
+		$blURI = (array_key_exists('uri',$arrParameters)) ? true : false;
+		$blOnlyJS = (array_key_exists('js',$arrParameters)) ? true : false;
+		$blOnlyCSS = (array_key_exists('css',$arrParameters)) ? true : false;
+
 		$blInline = (array_key_exists('inline',$arrParameters)) ? true : false;
 		$mxdAsyncType = (array_key_exists('async',$arrParameters) && in_array($arrParameters['async'],array('async','defer'))) ? $arrParameters['async'] : null;
 		$mxdVersion = (array_key_exists('version',$arrParameters)) ? $arrParameters['version'] : null;
@@ -74,15 +78,23 @@ class Resources{
 			//If the count is bigger than 0 then output the data
 			if(count($arrResource)){
 
-				$strURI = ($strReference == '') ? $arrResource['uri'] : sprintf('%s/%s',$arrResource['uri'],$strReference);
-				$strPath = ($strReference == '') ? $arrResource['path'] : sprintf('%s/%s',$arrResource['path'],$strReference);
+				$intCountCSS = count($arrResource['css']);
+				$intCountJS = count($arrResource['js']);
 
-				if(count($arrResource['css'])){
-					$strOut .= $this->processCSS($arrResource['css'],$strPath,$strURI,$blInline,$mxdAsyncType);
-				}
+				if($blURI && (($blOnlyJS == $blOnlyCSS && ($intCountCSS+$intCountJS) > 1) || ($blOnlyCSS && !$blOnlyJS && $intCountCSS > 1) || ($blOnlyJS && !$blOnlyCSS && $intCountJS > 1))){
+					trigger_error(sprintf("Ambiguous resource: more than one URI is output, uri parameter cannot be used for '%s'",$strReference), E_USER_NOTICE);
+					$strOut = 'ambiguous-resource';
+				}else{
+					$strURI = ($strReference == '') ? $arrResource['uri'] : sprintf('%s/%s',$arrResource['uri'],$strReference);
+					$strPath = ($strReference == '') ? $arrResource['path'] : sprintf('%s/%s',$arrResource['path'],$strReference);
 
-				if(count($arrResource['js'])){
-					$strOut .= $this->processJS($arrResource['js'],$strPath,$strURI,$blInline,$mxdAsyncType);
+					if(($blOnlyJS == $blOnlyCSS || $blOnlyCSS == true) && $intCountCSS){
+						$strOut .= $this->processCSS($arrResource['css'],$strPath,$strURI,$blInline,$mxdAsyncType);
+					}
+
+					if(($blOnlyJS == $blOnlyCSS || $blOnlyJS == true) && $intCountJS){
+						$strOut .= $this->processJS($arrResource['js'],$strPath,$strURI,$blInline,$mxdAsyncType);
+					}
 				}
 			}
 		}
