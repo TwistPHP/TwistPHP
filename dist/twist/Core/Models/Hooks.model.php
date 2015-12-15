@@ -48,7 +48,10 @@
 			$this->arrHooks['TWIST_VIEW_TAG']['messages'] = array('core' => 'messageHandler');
 
 			//Register the framework resources handler into the template system
-			$this->arrHooks['TWIST_VIEW_TAG']['resource'] = array('instance' => 'twistCoreResources','function' => 'viewExtension');
+			$this->arrHooks['TWIST_VIEW_TAG']['resource'] = array('instance' => 'twistCoreResources','function' => 'viewResource');
+			$this->arrHooks['TWIST_VIEW_TAG']['css'] = array('instance' => 'twistCoreResources','function' => 'viewCSS');
+			$this->arrHooks['TWIST_VIEW_TAG']['js'] = array('instance' => 'twistCoreResources','function' => 'viewJS');
+			$this->arrHooks['TWIST_VIEW_TAG']['img'] = array('instance' => 'twistCoreResources','function' => 'viewImage');
 
 			//Integrate the basic core href tag support
 			$strResourcesURI = sprintf('%s/%sCore/Resources/',rtrim(SITE_URI_REWRITE,'/'),ltrim(TWIST_FRAMEWORK_URI,'/'));
