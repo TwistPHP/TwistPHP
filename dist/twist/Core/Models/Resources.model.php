@@ -274,6 +274,9 @@ class Resources{
 				}
 			}
 
+			//Tidy up any double slashes
+			$dirAppPath = str_replace('//','/',$dirAppPath);
+
 			if(file_exists($dirAppPath)){
 				$arrOut['file'] = basename($dirAppPath);
 				$arrOut = $this->applyPath($arrOut,dirname($dirAppPath));

@@ -45,15 +45,15 @@ class Views extends \PHPUnit_Framework_TestCase{
 
 		$strTagStatus = \Twist::View()->replace("{css:twist/Core/Resources/arable/arable.min.css}");
 		if(strstr($strTagStatus,'<link') && strstr($strTagStatus,'app/twist/Core/Resources/arable/arable.min.css')){
-			$strTagStatus = 'pass';
+			$strTagStatus = 'override-pass';
 		}
 
-		$this -> assertEquals('pass',$strTagStatus);
+		$this -> assertEquals('override-pass',$strTagStatus);
 	}
 
 	public function testTagJS(){
 
-		$strTagStatus = \Twist::View()->replace("{js:jquery}");
+		$strTagStatus = \Twist::View()->replace("{js:twist/Core/Resources/jquery/jquery-2.1.4.min.js}");
 		if(strstr($strTagStatus,'<script') && strstr($strTagStatus,'twist/Core/Resources/jquery/jquery-2.1.4.min.js')){
 			$strTagStatus = 'pass';
 		}
