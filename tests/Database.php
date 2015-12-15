@@ -47,7 +47,7 @@ class Database extends \PHPUnit_Framework_TestCase{
 		$arrResult = \Twist::Database()->getAll('twist_settings','SITE_NAME_TEST','key');
 		$this -> assertEquals('delete passed',(count($arrResult) == 0) ? 'delete passed' : 'incorrect number of results, expecting 0, got '.count($arrResult));
 		*/
-	
+
 		//Reset the site name as settings uses it for a test also
 		$resRecord = \Twist::Database()->getRecord('twist_settings','SITE_NAME','key');
 		$resRecord->set('value','Travis CI Test');

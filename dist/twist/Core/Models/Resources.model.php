@@ -288,6 +288,8 @@ class Resources{
 			$arrOut = $this->applyPath($arrOut,dir($dirAppPath));
 		}
 
+		printf(print_r($arrOut,true));
+
 		return $arrOut;
 	}
 
