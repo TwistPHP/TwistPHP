@@ -93,7 +93,7 @@ class Views extends \PHPUnit_Framework_TestCase{
 		file_put_contents(sprintf('%s/Twist/Core/Resources/twist/logos/logo.png',TWIST_APP),'test over-ride file');
 
 		$strTagStatus = \Twist::View()->replace("{img:twist/Core/Resources/twist/logos/logo.png}");
-		if(strstr($strTagStatus,'<link') && strstr($strTagStatus,'app/Twist/Core/Resources/twist/logos/logo.png')){
+		if(strstr($strTagStatus,'<img') && strstr($strTagStatus,'app/Twist/Core/Resources/twist/logos/logo.png')){
 			$strTagStatus = 'override-pass';
 		}
 
