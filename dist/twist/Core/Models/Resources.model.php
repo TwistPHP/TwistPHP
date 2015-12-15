@@ -254,7 +254,7 @@ class Resources{
 
 		//First check to see if an over-ride exists in the app folder
 		$dirPrePaired = ltrim($dirPath,'/');
-		$dirPrePaired = (substr($dirPrePaired,0,6) == 'twist/' || substr($dirPrePaired,0,6) == 'packages/') ? ucfirst($dirPrePaired) : $dirPrePaired;
+		$dirPrePaired = (substr($dirPrePaired,0,6) == 'twist/' || substr($dirPrePaired,0,9) == 'packages/') ? ucfirst($dirPrePaired) : $dirPrePaired;
 		$dirAppPath = sprintf('%s/%s',TWIST_APP,$dirPrePaired);
 
 		if(!file_exists($dirAppPath)){
