@@ -66,10 +66,10 @@ class Views extends \PHPUnit_Framework_TestCase{
 
 		$strTagStatus = \Twist::View()->replace("{css:twist/Core/Resources/jquery/jquery-2.1.4.min.js}");
 		if(strstr($strTagStatus,'<script') && strstr($strTagStatus,'app/twist/Core/Resources/jquery/jquery-2.1.4.min.js')){
-			$strTagStatus = 'pass';
+			$strTagStatus = 'override-pass';
 		}
 
-		$this -> assertEquals('pass',$strTagStatus);
+		$this -> assertEquals('override-pass',$strTagStatus);
 	}
 
 	public function testTagImg(){
@@ -83,10 +83,10 @@ class Views extends \PHPUnit_Framework_TestCase{
 
 		$strTagStatus = \Twist::View()->replace("{img:twist/Core/Resources/twist/logos/logo.png,id=test1}");
 		if(strstr($strTagStatus,'<img') && strstr($strTagStatus,'twist/Core/Resources/twist/logos/logo.png') && strstr($strTagStatus,' id="test1"')){
-			$strTagStatus = 'pass';
+			$strTagStatus = 'param-pass';
 		}
 
-		$this -> assertEquals('pass',$strTagStatus);
+		$this -> assertEquals('param-pass',$strTagStatus);
 
 		//Create an override JS file
 		mkdir(sprintf('%s/twist/Core/Resources/twist/logos/',TWIST_APP),0777,true);
@@ -94,9 +94,9 @@ class Views extends \PHPUnit_Framework_TestCase{
 
 		$strTagStatus = \Twist::View()->replace("{css:twist/Core/Resources/twist/logos/logo.png}");
 		if(strstr($strTagStatus,'<link') && strstr($strTagStatus,'app/twist/Core/Resources/twist/logos/logo.png')){
-			$strTagStatus = 'pass';
+			$strTagStatus = 'override-pass';
 		}
 
-		$this -> assertEquals('pass',$strTagStatus);
+		$this -> assertEquals('override-pass',$strTagStatus);
 	}
 }
