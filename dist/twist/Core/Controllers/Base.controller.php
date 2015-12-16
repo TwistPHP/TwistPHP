@@ -141,8 +141,8 @@
 		 * Register an alias URI for a response function for instance if you had thankYou() as the function name you could register 'thank-you' as an alias URI.
 		 * All aliases must be registered from within a __construct function in your controller. Adding an alias means that the original thankYou() will still be callable by routes.
 		 *
-		 * @param $strURI
-		 * @param $strFunctionName
+		 * @param string $strURI Relative part of the URI to use as an alias
+		 * @param string $strFunctionName Function to call upon URI match
 		 */
         protected function _aliasURI($strURI,$strFunctionName){
 			$this->arrAliasURIs[$strURI] = $strFunctionName;
@@ -161,8 +161,8 @@
 		 * Register an replace URI for a response function for instance if you had thankYou() as the function name you could register 'thank-you' as an replace URI.
 		 * All replaces must be registered from within a __construct function in your controller. Adding a replace means that the original thankYou() will no-longer be callable by routes.
 		 *
-		 * @param $strURI
-		 * @param $strFunctionName
+		 * @param string $strURI Relative part of the URI to use as a replacement
+		 * @param string $strFunctionName Function to replace/call upon URI match
 		 */
         protected function _replaceURI($strURI,$strFunctionName){
 			$this->arrReplaceURIs[$strFunctionName] = $strURI;
@@ -214,7 +214,7 @@
 		/**
 		 * Process files that have been uploaded and return an array of uploaded data, this is to help when a browser does not support teh pure AJAX uploader.
 		 *
-		 * @param $strFileKey
+		 * @param string $strFileKey
 		 * @param string $strType
 		 * @return array|mixed
 		 */
@@ -259,8 +259,8 @@
 		/**
 		 * Halts all scripts and outputs the desired error page by response code (for example 404 or 403) to the screen.
 		 *
-		 * @param $intError HTTP Response code of the error page to be output
-		 * @param null $strCustomDescription Custom description to be included in the response page
+		 * @param int $intError HTTP Response code of the error page to be output
+		 * @param null|string $strCustomDescription Custom description to be included in the response page
 		 * @return bool
 		 */
 		final public function _response($intError,$strCustomDescription = null){
@@ -271,8 +271,8 @@
 		/**
 		 * Add an error message, the messages can be output using the {messages:error} template tag, you can also output all messages using {messages:all}.
 		 *
-		 * @param $strMessage
-		 * @param null $strKey
+		 * @param string $strMessage Message to be output as an error
+		 * @param null|string $strKey
 		 */
 		public function _errorMessage($strMessage,$strKey = null){
 			\Twist::errorMessage($strMessage,$strKey);
@@ -281,8 +281,8 @@
 		/**
 		 * Add an warning message, the messages can be output using the {messages:warning} template tag, you can also output all messages using {messages:all}.
 		 *
-		 * @param $strMessage
-		 * @param null $strKey
+		 * @param string $strMessage Message to be output as a warning
+		 * @param null|string $strKey
 		 */
 		public function _warningMessage($strMessage,$strKey = null){
 			\Twist::warningMessage($strMessage,$strKey);
@@ -291,8 +291,8 @@
 		/**
 		 * Add an notice message, the messages can be output using the {messages:notice} template tag, you can also output all messages using {messages:all}.
 		 *
-		 * @param $strMessage
-		 * @param null $strKey
+		 * @param string $strMessage Message to be output as a notice
+		 * @param null|string $strKey
 		 */
 		public function _noticeMessage($strMessage,$strKey = null){
 			\Twist::noticeMessage($strMessage,$strKey);
@@ -301,8 +301,8 @@
 		/**
 		 * Add an success message, the messages can be output using the {messages:success} template tag, you can also output all messages using {messages:all}.
 		 *
-		 * @param $strMessage
-		 * @param null $strKey
+		 * @param string $strMessage Message to be output as successful
+		 * @param null|string $strKey
 		 */
 		public function _successMessage($strMessage,$strKey = null){
 			\Twist::successMessage($strMessage,$strKey);
