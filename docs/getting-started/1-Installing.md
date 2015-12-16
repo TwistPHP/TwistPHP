@@ -1,6 +1,6 @@
 #Installing
 
-Download the TwistPHP framework and extract the folders contents to your `public_html` directory.
+Download the TwistPHP framework and extract, copy the contents of `/dist` to your `public_html` directory.
 
 Your directory should now look like this:
 
@@ -10,4 +10,4 @@ Your directory should now look like this:
     * .htaccess
     * index.php
 
-Open your site in a browser and you should be presented with the setup wizard. Follow the steps to set up your framework.
+Open your site in a browser and you should be presented with the install wizard. Follow the steps to set up your framework.
