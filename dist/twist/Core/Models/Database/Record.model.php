@@ -24,7 +24,7 @@
 	namespace Twist\Core\Models\Database;
 
 	/**
-	 * Simply edit/delete a mysql record from any table in an object orientated way
+	 * Simply edit/delete a mysql record from any table in an object orientated way. Commit must be called in order to may changes permanent apart from delete which will also make a permanent deletion upon method call.
 	 */
 	class Record{
 

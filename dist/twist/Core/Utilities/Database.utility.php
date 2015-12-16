@@ -297,7 +297,7 @@
 		 * Create a new database record (row) an empty object will be returned from this function, you can then populate the record and commit your changes
 		 *
 		 * @param $strTable
-		 * @return null|\Twist\Core\Models\Database\Record Returns and object of the database table
+		 * @return null|\Twist\Core\Models\Database\Record Returns an editable object of the database record
 		 */
 		public function createRecord($strTable){
 
@@ -320,7 +320,7 @@
 		 * @param $strTable
 		 * @param $mxdValue
 		 * @param string $strField
-		 * @return null|\Twist\Core\Models\Database\Record Returns and object of the database table
+		 * @return null|\Twist\Core\Models\Database\Record Returns an editable object of the database record
 		 */
 		public function getRecord($strTable,$mxdValue,$strField = 'id'){
 
@@ -345,7 +345,7 @@
 		 *
 		 * @param $strTable
 		 * @param array $arrFieldValues
-		 * @return null|array Returns an array of objects of the database table
+		 * @return null|array Returns an array of editable database record objects
 		 */
 		public function getRecords($strTable,$arrFieldValues = array()){
 
@@ -373,14 +373,14 @@
 		}
 
 		/**
-		 * Get a clone of a database record as an object to be stored as a new record (auto-increment fields will be nulled)
+		 * Get a clone of a database record as an object to be stored as a new record (auto-increment fields will be nulled). The cloned record will not be created/stored until commit has been called on the returned record object.
 	     * The where clause is generated from the second parameter, must be an array
 		 * For example to get the user with the 'id' of 1 pass in array('id' => 1)
 		 *
 		 * @param $strTable
 		 * @param $mxdValue
 		 * @param string $strField
-		 * @return null|\Twist\Core\Models\Database\Record Returns and object of the database table
+		 * @return null|\Twist\Core\Models\Database\Record Returns an editable object of the database record
 		 */
 		public function cloneRecord($strTable,$mxdValue,$strField = 'id'){
 
@@ -413,9 +413,9 @@
 		 * @param $strTable
 		 * @param $mxdValue
 		 * @param string $strField
-		 * @return array
+		 * @return array Array of the database record containing Field => Value pairs
 		 */
-		public function get($strTable,$mxdValue,$strField = 'id'){
+ 		public function get($strTable,$mxdValue,$strField = 'id'){
 
 			$arrRecord = array();
 
@@ -438,7 +438,7 @@
 		 *
 		 * @param $strTable
 		 * @param $strOrderBy
-		 * @return array
+		 * @return array Multi-dimensional array of each record containing it's Field => Value pairs
 		 */
 		public function getAll($strTable,$strOrderBy = null,$strDirection = 'ASC'){
 
@@ -458,7 +458,7 @@
 		}
 
 		/**
-		 * Delete a record form the database
+		 * Delete a record permanent form the database
 		 *
 		 * @return boolean
 		 */
