@@ -41,7 +41,7 @@ class Placeholder extends Base{
 	 * @related \Twist\Core\Utilities\Route
 	 */
 	public function _index(){
-		$this->_response(400);
+
 		//ob_start( 'ob_gzhandler' );
 		//header( 'Content-type: image/png; charset: UTF-8' );
 		//header( 'Cache-Control: must-revalidate' );
