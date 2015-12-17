@@ -6,8 +6,8 @@
     "homepage": "https://twistphp.com",
     "license": "LGPL",
     "support": {
-        "issues": "https://github.com/Shadow-Technologies/TwistPHP/issues",
-        "source": "https://github.com/Shadow-Technologies/TwistPHP"
+        "issues": "https://github.com/TwistPHP/TwistPHP/issues",
+        "source": "https://github.com/TwistPHP/TwistPHP"
     },
     "require": {
         "php": ">=5.3.0"

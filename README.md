@@ -142,7 +142,7 @@ Full documentation of the framework can be found on the [TwistPHP site](https://
 
 ##Issues
 
-Please use the [GitHub's issue tracker](https://github.com/Shadow-Technologies/TwistPHP/issues) to report any problems.
+Please use the [GitHub's issue tracker](https://github.com/TwistPHP/TwistPHP/issues) to report any problems.
 
 ###Branches
 
