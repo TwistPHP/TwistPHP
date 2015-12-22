@@ -14,9 +14,7 @@ Your directory should now look like this:
     
 Create the folder path `app/Config` in your `public_html` directory
 
-Copy the file `public_html/twist/Config/default.php` into the `public_html/app/Config` directory.
-
-Rename the file `public_html/app/Config/default.php` to `public_html/app/Config/config.php`
+Copy the file `public_html/twist/Config/default.php` into the `public_html/app/Config` directory and rename to `config.php`
 
 Open the `public_html/app/Config/config.php` file in your favourite editor and edit accordingly
 
