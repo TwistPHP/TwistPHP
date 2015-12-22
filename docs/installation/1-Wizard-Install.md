@@ -2,7 +2,7 @@
 
 Download a copy of the TwistPHP framework from the our website, you will find the latest version on our homepage.
 
-Extract the archive and copy the contents of the /dist folder into the `public_html` directory of your website.
+Extract the archive and copy the contents of the `/dist` folder into the `public_html` directory of your website.
 
 Your directory should now look like this:
 

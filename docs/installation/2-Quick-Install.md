@@ -2,7 +2,7 @@
 
 Download a copy of the TwistPHP framework from the our website, you will find the latest version on our homepage.
 
-Extract the archive and copy the contents of the /dist folder into the `public_html` directory of your website.
+Extract the archive and copy the contents of the `/dist` folder into the `public_html` directory of your website.
 
 Your directory should now look like this:
 
@@ -15,7 +15,9 @@ Your directory should now look like this:
 Edit your index file `public_html/index.php` and add the following code:
 
 ```php
-
+    
+    <?php
+    
     define("TWIST_QUICK_INSTALL", json_encode(array(
         'database' => array(
             'type' => 'database',
