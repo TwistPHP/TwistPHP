@@ -1,4 +1,4 @@
-#Wizard Installation
+#Wizard Installation (Recommended)
 
 Download a copy of the TwistPHP framework from the our website, you will find the latest version on our homepage.
 
