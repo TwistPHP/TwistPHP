@@ -207,6 +207,7 @@
 				$resPackage->set('extensions',json_encode($arrExtensions));
 
 				$intPackage = $resPackage->commit();
+				\Twist::framework()->package()->anonymousStats('install',$strSlug,$arrDetails['version']);
 			}
 
 			return $intPackage;
@@ -218,6 +219,7 @@
 		 * @return null
 		 */
 		public static function removePackage($strPackageSlug){
+			\Twist::framework()->package()->anonymousStats('uninstall',$strPackageSlug,null);
 			return \Twist::Database()->getRecord(TWIST_DATABASE_TABLE_PREFIX.'packages',$strPackageSlug,'slug')->delete();
 		}
 

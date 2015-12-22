@@ -243,7 +243,10 @@ class Resources{
 	 * Locate the resource file by its path, can be app/*, packages/*, twist/* or any path in the document root.
 	 * If requesting a file in either twist or packages it can be over-ridden by placing a corresponding file in the apps folder, for example:
 	 *
-	 * [packages/Lavish/Resources/css/base.css] is over-ridden by [app/packages/Lavish/Resources/css/base.css]
+	 * [packages/Lavish/Resources/css/base.css] is over-ridden by [app/Packages/Lavish/Resources/css/base.css]
+	 * [twist/Core/Resources/jquery/jquery-1.11.3.min.js] is over-ridden by [app/Twist/Core/Resources/jquery/jquery-1.11.3.min.js]
+	 *
+	 * To allow these overrides you must place a .htaccess file containing "Allow from all" in "app/Twist/Core/Resources/" or "app/Packages/Lavish/Resources/"
 	 *
 	 * @param $dirPath
 	 * @return array An array of teh file name and the path and URI to the file

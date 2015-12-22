@@ -160,6 +160,29 @@
 		}
 
 		/**
+		 * Report some Anonymous usage stats on packages that are installed/uninstalled, this helps to show popular packages in the TwistPHP package repository server.
+		 * This information is solely for use of the package repository, no identifying information is stored with with your usage contribution.
+		 * @param string $strType Can be set to stats, install, uninstall
+		 * @param null $strSlug Slug of package, only required when type of install or uninstall is set
+		 * @param null $mxdVersion Version of package, only required when type of install or uninstall is set
+		 */
+		public function anonymousStats($strType = 'stats',$strSlug = null,$mxdVersion = null){
+
+			$arrPackageInfo = array();
+
+			if($strType == 'status'){
+				foreach($this->getInstalled() as $arrEachPackage){
+					$arrPackageInfo[$arrEachPackage['slug']] = $arrEachPackage['version'];
+				}
+			}else{
+				$arrPackageInfo[$strSlug] = $mxdVersion;
+			}
+
+			$arrPackageInfo['stats-type'] = $strType;
+			\Twist::Curl()->post('http://dev.twistphp.com/packages/api/anonymous-stats',$arrPackageInfo);
+		}
+
+		/**
 		 * Load the package into the framework for us
 		 * @param $strSlug
 		 * @param $arrPackageData
