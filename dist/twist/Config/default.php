@@ -21,6 +21,15 @@
 	 *
 	 */
 
+	/**
+	 * Database Configuration Settings
+	 * TWIST_DATABASE_NAME			- The name of your primary database
+	 * TWIST_DATABASE_HOST			- Host IP / Name of the database server
+	 * TWIST_DATABASE_USERNAME		- Username to use whilst connecting to the database
+	 * TWIST_DATABASE_PASSWORD		- Password to use whilst connecting to the database
+	 * TWIST_DATABASE_PROTOCOL		- Select the protocol to use (mysql,mysqli) default: mysqli
+	 * TWIST_DATABASE_TABLE_PREFIX 	- Prefix that will be applied to all tables installed by Twist
+	 */
 	//Twist::define('TWIST_DATABASE_NAME','');
 	Twist::define('TWIST_DATABASE_HOST','localhost');
 	//Twist::define('TWIST_DATABASE_USERNAME','');

@@ -1,6 +1,9 @@
 # TWISTPHP
     # ================================================================================
     # TwistPHP - Default .htaccess
+    #
+    # All the options in this .htaccess can be edited within the farmework manager
+    #
     # DO NOT REMOVE!
     # --------------------------------------------------------------------------------
     # Author:      	    Shadow Technologies Ltd.

@@ -1,7 +1,8 @@
 <div class="grid-66 tablet-grid-66 mobile-grid-100">
 	<h2 class="no-top-padding">Dashboard</h2>
 	<dl class="inline">
-        <dt>Version Installed</dt><dd>3</dd>
+        <dt>TwistPHP Version</dt><dd>{data:version}</dd>
+        <dt>Status</dt><dd>{data:version_status}</dd>
     </dl>
 	<div class="clear"></div>
 </div>

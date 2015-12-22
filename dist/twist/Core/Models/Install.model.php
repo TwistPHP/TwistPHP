@@ -56,6 +56,8 @@
 			$resFile->recursiveCreate(sprintf('%sTwist',$strApplicationPath));
 			$resFile->recursiveCreate(sprintf('%sPackages',$strApplicationPath));
 
+			self::secureAppFolder($strApplicationPath);
+
 			//Create the config in the apps/config folder
 			$arrConfigTags = array(
 				'account_token' => '',
@@ -154,6 +156,22 @@
 			file_put_contents($dirHTaccessFile,\Twist::View()->build(sprintf('%s/default-htaccess.tpl',TWIST_FRAMEWORK_VIEWS),array('rewrite_rules' => '')));
 
 			return true;
+		}
+
+		/**
+		 * Secure the APP folder by placing .htaccess files in the correct locations. These files will block access to all apart from Resources and Assets.
+		 * @param string $dirAppFolder Path to the app folder
+		 */
+		public static function secureAppFolder($dirAppFolder){
+
+			$dirAppFolder = rtrim($dirAppFolder,'/');
+
+			//Deny access form all in the apps folder (two specific overrides are below)
+			file_put_contents(sprintf('%s.htaccess',$dirAppFolder),"# Refuse direct access to all files and folders\nOrder deny,allow\nDeny from all\nAllow from 127.0.0.1");
+
+			//Allow access to the Assets and Resources folder
+			file_put_contents(sprintf('%sAssets/.htaccess',$dirAppFolder),"# Allow direct access to Assets\nAllow from all");
+			file_put_contents(sprintf('%sResources/.htaccess',$dirAppFolder),"# Allow direct access to Resources\nAllow from all");
 		}
 
 		/**

@@ -323,6 +323,10 @@
 			curl_setopt($resCurl, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($resCurl, CURLOPT_TIMEOUT, $this->intTimeout);
 			curl_setopt($resCurl, CURLOPT_FAILONERROR, true);
+			curl_setopt($resCurl, CURLOPT_REFERER, sprintf('%s://%s/',
+				\Twist::framework()->setting('SITE_PROTOCOL'),
+				\Twist::framework()->setting('HTTP_HOST'))
+			);
 
 			//Set the custom headers
 			if(is_array($arrHeaders) && count($arrHeaders) > 0){

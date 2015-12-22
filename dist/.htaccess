@@ -1,0 +1,23 @@
+# TWISTPHP
+    # ================================================================================
+    # TwistPHP - Default .htaccess
+    #
+    # Temporary .htaccess configuration, this file will be replaced after installtion
+    # All the options in the .htaccess can be edited within the farmework manager
+    #
+    # DO NOT REMOVE!
+    # --------------------------------------------------------------------------------
+    # Author:      	    Shadow Technologies Ltd.
+    # Documentation:    https://twistphp.com/docs
+    # Note:             Do not edit information inside the '# TWISTPHP' tags
+    # ================================================================================
+
+    DirectoryIndex index.php index.html
+    RewriteEngine on
+
+    # Rewrite rules to allow routing
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php [L,QSA]
+
+# /TWISTPHP

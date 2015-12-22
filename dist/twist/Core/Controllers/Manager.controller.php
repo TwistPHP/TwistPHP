@@ -73,6 +73,15 @@ class Manager extends BaseUser{
 		$arrTags['debug-bar'] = (\Twist::framework()->setting('DEVELOPMENT_DEBUG_BAR') == '1') ? 'On' : 'Off';
 		$arrTags['data-caching'] = (\Twist::framework()->setting('CACHE_ENABLED') == '1') ? 'On' : 'Off';
 
+		$arrLatestVersion = \Twist::framework()->package()->getRepository('twistphp');
+		$arrTags['version'] = \Twist::version();
+
+		if(array_key_exists('stable',$arrLatestVersion)){
+			$arrTags['version_status'] = (\Twist::version() == $arrLatestVersion['stable']['version']) ? '<span class="success">Up-to-date</span>' : '<span class="warning">A new version of TwistPHP is available!</span>';
+		}else{
+			$arrTags['version_status'] = '<span class="error">Failed to retrieve version information, try again later!</span>';
+		}
+
 		$objCodeScanner = new \Twist\Core\Models\Security\CodeScanner();
 		$arrTags['scanner'] = $objCodeScanner->getLastScan(TWIST_DOCUMENT_ROOT);
 
