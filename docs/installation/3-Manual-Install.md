@@ -12,7 +12,9 @@ Your directory should now look like this:
     * .htaccess
     * index.php
     
-Create the folder path `app/Config` in your `public_html` directory and copy the file `public_html/twist/Config/default.php` into the `public_html/app/Config` directory.
+Create the folder path `app/Config` in your `public_html` directory
+
+Copy the file `public_html/twist/Config/default.php` into the `public_html/app/Config` directory.
 
 Rename the file `public_html/app/Config/default.php` to `public_html/app/Config/config.php`
 
