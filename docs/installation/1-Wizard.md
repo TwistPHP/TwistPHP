@@ -1,8 +1,8 @@
 #Wizard Installation (Recommended)
 
-Download a copy of the TwistPHP framework from the our website, you will find the latest version on our homepage.
+Download the latest copy of [TwistPHP](https://github.com/TwistPHP/TwistPHP/releases/latest).
 
-Extract the archive and copy the contents of the `/dist` folder into the `public_html` directory of your website.
+Extract the archive and copy the contents of the `/dist` folder into your website's `public_html` directory.
 
 Your directory should now look like this:
 
