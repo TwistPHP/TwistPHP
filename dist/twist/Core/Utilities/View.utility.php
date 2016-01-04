@@ -847,7 +847,7 @@ class View extends Base{
 				$arrData = is_array($arrData) ? array_merge($arrData,$arrParameters) : $arrParameters;
 
 				$blRemoveTags = (array_key_exists('remove-tags',$this->arrViewParams) && $this->arrViewParams['remove-tags'] == true) ? true : false;
-				$blProcessTags = (array_key_exists('process-tags',$this->arrViewParams) && $this->arrViewParams['process-tags'] == true) ? true : false;
+				$blProcessTags = (array_key_exists('process-tags',$this->arrViewParams) && $this->arrViewParams['process-tags'] == false) ? false : true;
 
 				$strTagData = $this->build($strReference,$arrData,$blRemoveTags,$blProcessTags);
 				$strRawView = $this->replaceTag($strRawView,$strTag,$strTagData,$strFunction,array(),$arrParameters);
