@@ -151,10 +151,11 @@ class View extends Base{
 	 *
 	 * @param $dirView
 	 * @param $arrViewTags
-	 * @param $blRemoveUnusedTags
+	 * @param bool $blRemoveUnusedTags Remove all un-used tags from the tpl after processing
+	 * @param bool $blProcessTags Outputs that raw contents of the TPL file when set to false (dose not work for PHP views)
 	 * @return string
 	 */
-	public function build($dirView,$arrViewTags = null,$blRemoveUnusedTags = false) {
+	public function build($dirView,$arrViewTags = null,$blRemoveUnusedTags = false,$blProcessTags = true) {
 
 	    $strViewDataOut = null;
 	    $this->validDataTags($arrViewTags);
@@ -195,8 +196,10 @@ class View extends Base{
 				$this->writeCache($dirFullViewPath,$arrViewData);
 			}
 
-			foreach($arrViewData['tags'] as $strEachTag){
-				$arrViewData['html_raw'] = $this->processTag($arrViewData['html_raw'],$strEachTag,$arrViewTags);
+			if($blProcessTags){
+				foreach($arrViewData['tags'] as $strEachTag){
+					$arrViewData['html_raw'] = $this->processTag($arrViewData['html_raw'],$strEachTag,$arrViewTags);
+				}
 			}
 
 			//Remove all un-used View tags
@@ -843,7 +846,10 @@ class View extends Base{
 				$this->arrViewParams = $arrParameters;
 				$arrData = is_array($arrData) ? array_merge($arrData,$arrParameters) : $arrParameters;
 
-				$strTagData = $this->build($strReference,$arrData);
+				$blRemoveTags = (array_key_exists('remove-tags',$this->arrViewParams) && $this->arrViewParams['remove-tags'] == true) ? true : false;
+				$blProcessTags = (array_key_exists('process-tags',$this->arrViewParams) && $this->arrViewParams['process-tags'] == true) ? true : false;
+
+				$strTagData = $this->build($strReference,$arrData,$blRemoveTags,$blProcessTags);
 				$strRawView = $this->replaceTag($strRawView,$strTag,$strTagData,$strFunction,array(),$arrParameters);
 
 				break;
