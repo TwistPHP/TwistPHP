@@ -51,10 +51,11 @@
 
 			$this->packageURI($strPackageKey);
 
-			if(array_key_exists('path',$arrPackageParams)){
-				$this->setDirectory(sprintf('%s/views/', rtrim($arrPackageParams['path'], '/')));
-				$this->setControllerDirectory(sprintf('%s/controllers/', rtrim($arrPackageParams['path'], '/')));
+			if(!array_key_exists('path',$arrPackageParams)){
+				$arrPackageParams['path'] = TWIST_FRAMEWORK.'Core';
 			}
+			$this->setDirectory(sprintf('%s/Views/', rtrim($arrPackageParams['path'], '/')));
+			$this->setControllerDirectory(sprintf('%s/Controllers/', rtrim($arrPackageParams['path'], '/')));
 		}
 
 		/**
