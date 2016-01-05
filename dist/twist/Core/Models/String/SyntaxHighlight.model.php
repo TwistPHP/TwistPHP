@@ -101,7 +101,6 @@
 			//Loose the first and last 2 lines as they are the base color, we will re-add that to the main container
 			array_shift($arrCodeLines);
 			array_pop($arrCodeLines);
-			array_pop($arrCodeLines);
 
 			$strLastOpenTag = $strNextLastOpenTag = '';
 
