@@ -489,4 +489,50 @@ class Resources{
 			throw new \Exception(sprintf("TwistPHP: Error loading resource manifest '%s' of and extension library",$dirManifest));
 		}
 	}
+
+	/**
+	 * Get the URI for a placeholder image, the placeholder image can be generated in an range of sizes and colors.
+	 * The image contains some basic information about the site and its size, you must have the Placeholder controller/route registered to use this functionality.
+	 *
+	 * Parameters can be included in the tag, you can use a single or combination of parameters (some examples below):
+	 *
+	 * width = 400
+	 * Output width of the image placeholder
+	 *
+	 * height = 300
+	 * Output height of the image placeholder
+	 *
+	 * background-color = #999999
+	 * Background colour of the image placeholder
+	 *
+	 * color = #ffffff
+	 * line and font color used on the image placeholder
+	 *
+	 * An example of the tag with all the above parameters in use {placholder:'Banner Image',width=400,height=300,background-color='#999999',color='#ffffff'}
+	 *
+	 * @param string $strReference Message to be displayed on the image, pass in '' for site name
+	 * @param array $arrParameters
+	 * @return mixed|string
+	 */
+	public function viewPlaceholder($strReference,$arrParameters = array()){
+
+		$strMessage = ($strReference == '') ? \Twist::framework()->setting('SITE_NAME') : $strReference;
+		$intWidth = (array_key_exists('width',$arrParameters)) ? $arrParameters['width'] : 400;
+		$intHeight = (array_key_exists('height',$arrParameters)) ? $arrParameters['height'] : 300;
+		$strBackgroundColour = (array_key_exists('background-color',$arrParameters)) ? $arrParameters['background-color'] : '#999999';
+		$strLineColour = (array_key_exists('color',$arrParameters)) ? $arrParameters['color'] : '#ffffff';
+
+		$strURL = sprintf('%s://%s%s?width=%s&height=%d&bg=%s&line=%s&msg=%s',
+			\Twist::framework()->setting('HTTP_PROTOCOL'),
+			\Twist::framework()->setting('HTTP_HOST'),
+			TWIST_FRAMEWORK_URI,
+			$intWidth,
+			$intHeight,
+			str_replace('#','',$strBackgroundColour),
+			str_replace('#','',$strLineColour),
+			$strMessage
+		);
+
+		return $strURL;
+	}
 }

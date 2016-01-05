@@ -40,7 +40,6 @@
 			//Register the default Twist utility extensions
 			$this->arrHooks['TWIST_VIEW_TAG']['asset'] = array('module' => 'Asset','function' => 'viewExtension');
 			$this->arrHooks['TWIST_VIEW_TAG']['file'] = array('module' => 'File','function' => 'viewExtension');
-			$this->arrHooks['TWIST_VIEW_TAG']['image'] = array('module' => 'Image','function' => 'viewExtension');
 			$this->arrHooks['TWIST_VIEW_TAG']['session'] = array('module' => 'Session','function' => 'viewExtension');
 			$this->arrHooks['TWIST_VIEW_TAG']['user'] = array('module' => 'User','function' => 'viewExtension');
 
@@ -52,6 +51,7 @@
 			$this->arrHooks['TWIST_VIEW_TAG']['css'] = array('instance' => 'twistCoreResources','function' => 'viewCSS');
 			$this->arrHooks['TWIST_VIEW_TAG']['js'] = array('instance' => 'twistCoreResources','function' => 'viewJS');
 			$this->arrHooks['TWIST_VIEW_TAG']['img'] = array('instance' => 'twistCoreResources','function' => 'viewImage');
+			$this->arrHooks['TWIST_VIEW_TAG']['placeholder'] = array('instance' => 'twistCoreResources','function' => 'viewPlaceholder');
 
 			//Integrate the basic core href tag support
 			$strResourcesURI = sprintf('%s/%sCore/Resources/',rtrim(SITE_URI_REWRITE,'/'),ltrim(TWIST_FRAMEWORK_URI,'/'));
