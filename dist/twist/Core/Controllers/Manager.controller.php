@@ -397,8 +397,10 @@ class Manager extends BaseUser{
 		$arrTags['repository-packages'] = '';
 		$arrPackages = \Twist::framework()->package()->getRepository(array_key_exists('filter',$_GET) ? $_GET['filter'] : 'featured');
 
-		foreach($arrPackages as $arrEachPackage){
-			$arrTags['repository-packages'] .= $this->_view('components/packages/each-repo-package.tpl',$arrEachPackage);
+		if(count($arrPackages)){
+			foreach($arrPackages as $arrEachPackage){
+				$arrTags['repository-packages'] .= $this->_view('components/packages/each-repo-package.tpl',$arrEachPackage);
+			}
 		}
 
 		return $this->_view('pages/packages.tpl',$arrTags);
