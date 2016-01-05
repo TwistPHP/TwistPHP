@@ -76,7 +76,7 @@ class Manager extends BaseUser{
 		$arrLatestVersion = \Twist::framework()->package()->getRepository('twistphp');
 		$arrTags['version'] = \Twist::version();
 
-		if(array_key_exists('stable',$arrLatestVersion)){
+		if(count($arrLatestVersion) && array_key_exists('stable',$arrLatestVersion)){
 			$arrTags['version_status'] = (\Twist::version() == $arrLatestVersion['stable']['version']) ? '<span class="success">Twist is Up-to-date</span>' : '<span class="warning">A new version of TwistPHP is available, <a href="https://twistphp.com/">download from twist.com</a>!</span>';
 		}else{
 			$arrTags['version_status'] = '<span class="error">Failed to retrieve version information, try again later!</span>';
@@ -109,9 +109,9 @@ class Manager extends BaseUser{
 	 */
 	public function cache(){
 
-		$arrTags = array();
 		$this->parseCache(TWIST_APP_CACHE);
 
+		$arrTags = array('cache' => '');
 		foreach($this->arrCacheFiles as $strKey => $arrData){
 			$arrTags['cache'] .= $this->_view('components/cache/each-file.tpl',$arrData);
 		}
@@ -136,7 +136,16 @@ class Manager extends BaseUser{
 				if(is_dir($strCurrentItem)){
 					$this->parseCache($strCurrentItem);
 				}else{
-					$this->arrCacheFiles[$strCacheKey]['key'] = $strCacheKey;
+
+					//Define the array key before appending files and sizes
+					if(!array_key_exists($strCacheKey,$this->arrCacheFiles)){
+						$this->arrCacheFiles[$strCacheKey] = array(
+							'key' => $strCacheKey,
+							'files' => 0,
+							'size' => 0
+						);
+					}
+
 					$this->arrCacheFiles[$strCacheKey]['files']++;
 					$this->arrCacheFiles[$strCacheKey]['size'] += filesize($strCurrentItem);
 				}
@@ -295,10 +304,15 @@ class Manager extends BaseUser{
 			//Output the original settings in hidden inputs
 			$arrEachItem['input'] .= sprintf('<input type="hidden" name="original[%s]" value="%s">',$arrEachItem['key'],$arrEachItem['value']);
 
+			//Fix any undefined index's
+			if(!array_key_exists($arrEachItem['package'],$arrOption)){
+				$arrOption[$arrEachItem['package']] = '';
+			}
+
 			$arrOption[$arrEachItem['package']] .= $this->_view('components/settings/each-setting.tpl', $arrEachItem );
 		}
 
-		$arrTags = array();
+		$arrTags = array('settings' => '');
 		foreach($arrOption as $strKey => $strList){
 
 			//if($strKey != 'Core'){
@@ -362,14 +376,16 @@ class Manager extends BaseUser{
 
 		$arrTags['local_packages'] = '';
 
-		foreach($arrModules as $arrEachModule){
+		if(count($arrModules)){
+			foreach($arrModules as $arrEachModule){
 
-			if(array_key_exists('name',$arrEachModule)){
+				if(array_key_exists('name',$arrEachModule)){
 
-				if(array_key_exists('installed',$arrEachModule)){
-					$arrTags['local_packages'] .= $this->_view('components/packages/each-installed.tpl',$arrEachModule);
-				}else{
-					$arrTags['local_packages'] .= $this->_view('components/packages/each-available.tpl',$arrEachModule);
+					if(array_key_exists('installed',$arrEachModule)){
+						$arrTags['local_packages'] .= $this->_view('components/packages/each-installed.tpl',$arrEachModule);
+					}else{
+						$arrTags['local_packages'] .= $this->_view('components/packages/each-available.tpl',$arrEachModule);
+					}
 				}
 			}
 		}

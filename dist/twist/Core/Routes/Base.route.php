@@ -50,8 +50,11 @@
 			$arrPackageParams = \Twist::framework()->package()->information(strtolower($strPackageKey));
 
 			$this->packageURI($strPackageKey);
-			$this->setDirectory(sprintf('%s/views/', rtrim($arrPackageParams['path'], '/')));
-			$this->setControllerDirectory(sprintf('%s/controllers/', rtrim($arrPackageParams['path'], '/')));
+
+			if(array_key_exists('path',$arrPackageParams)){
+				$this->setDirectory(sprintf('%s/views/', rtrim($arrPackageParams['path'], '/')));
+				$this->setControllerDirectory(sprintf('%s/controllers/', rtrim($arrPackageParams['path'], '/')));
+			}
 		}
 
 		/**

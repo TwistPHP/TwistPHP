@@ -59,34 +59,37 @@
 			$arrOut = array();
 			$this->getInstalled();
 
-			//Find Packages
-			foreach(scandir(TWIST_PACKAGES) as $strFile){
+			if(is_dir(TWIST_PACKAGES)){
 
-				$dirPackage = sprintf('%s/%s',TWIST_PACKAGES,$strFile);
+				//Find Packages
+				foreach(scandir(TWIST_PACKAGES) as $strFile){
 
-				if(!in_array($strFile,array('.','..')) && is_dir($dirPackage)){
+					$dirPackage = sprintf('%s/%s',TWIST_PACKAGES,$strFile);
 
-					$strPackageSlug = strtolower(basename($dirPackage));
+					if(!in_array($strFile,array('.','..')) && is_dir($dirPackage)){
 
-					//Check to see if the package is already installed
-					if(!array_key_exists($strPackageSlug,$this->arrPackages)){
+						$strPackageSlug = strtolower(basename($dirPackage));
 
-						if(is_file(sprintf('%s/info.json',$dirPackage)) &&
-							is_file(sprintf('%s/install.php',$dirPackage)) &&
-							is_file(sprintf('%s/uninstall.php',$dirPackage))){
+						//Check to see if the package is already installed
+						if(!array_key_exists($strPackageSlug,$this->arrPackages)){
 
-							$rawJson = file_get_contents(sprintf('%s/info.json',$dirPackage));
-							$arrDetails = json_decode($rawJson,true);
+							if(is_file(sprintf('%s/info.json',$dirPackage)) &&
+								is_file(sprintf('%s/install.php',$dirPackage)) &&
+								is_file(sprintf('%s/uninstall.php',$dirPackage))){
 
-							$arrOut[$strPackageSlug] = array(
-								'slug' => $strPackageSlug,
-								'name' => $arrDetails['name'],
-								'version' => $arrDetails['version'],
-								'key' => $arrDetails['key'],
-								'folder' => basename($dirPackage),
-								'package' => 1,
-								'details' => $arrDetails
-							);
+								$rawJson = file_get_contents(sprintf('%s/info.json',$dirPackage));
+								$arrDetails = json_decode($rawJson,true);
+
+								$arrOut[$strPackageSlug] = array(
+									'slug' => $strPackageSlug,
+									'name' => $arrDetails['name'],
+									'version' => $arrDetails['version'],
+									'key' => $arrDetails['key'],
+									'folder' => basename($dirPackage),
+									'package' => 1,
+									'details' => $arrDetails
+								);
+							}
 						}
 					}
 				}
