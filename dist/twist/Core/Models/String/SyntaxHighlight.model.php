@@ -41,6 +41,11 @@
 			$strOut = '';
 			$intLineNo = 0;
 
+			//If the first line is not a linebreak remove any trailing line-breaks
+			if(substr($strCode,0,1) != "\n"){
+				$strCode = rtrim($strCode,"\n");
+			}
+
 			//Get all the lines of code as individual lines
 			$arrCodeLines = self::explodeLines(highlight_string($strCode, true));
 
