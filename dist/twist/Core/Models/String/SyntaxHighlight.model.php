@@ -41,11 +41,6 @@
 			$strOut = '';
 			$intLineNo = 0;
 
-			//If the first line is not a linebreak remove any trailing line-breaks
-			if(substr($strCode,0,1) != "\n"){
-				$strCode = rtrim($strCode,"\n");
-			}
-
 			//Get all the lines of code as individual lines
 			$arrCodeLines = self::explodeLines(highlight_string($strCode, true));
 
@@ -107,7 +102,8 @@
 			array_shift($arrCodeLines);
 			array_pop($arrCodeLines);
 
-			$strLastOpenTag = $strNextLastOpenTag = '';
+			$strLastOpenTag = $strNextLastOpenTag = $strCodeLine = '';
+			$intPosition = 0;
 
 			foreach($arrCodeLines as $intPosition => $strCodeLine){
 
@@ -137,6 +133,11 @@
 
 				//Remove any empty span tags (Clean up essentially)
 				$arrCodeLines[$intPosition] = preg_replace('#<span style="[^\"]*"></span>#i',"",$strCodeLine);
+			}
+
+			//Check the last line of code entered, if it is now empty (where not before) then remove it.
+			if($arrCodeLines[$intPosition] == '' && $strCodeLine != ''){
+				array_pop($arrCodeLines);
 			}
 
 			return $arrCodeLines;
