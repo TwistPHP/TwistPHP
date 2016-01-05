@@ -112,7 +112,7 @@ class View extends Base{
 		}
 
 		//Find the tpl cache data if it exists
-		return (array_key_exists($strViewPath,$this->arrCacheData[$strCacheKey])) ? $this->arrCacheData[$strCacheKey][$strViewPath] : null;
+		return (is_array($this->arrCacheData[$strCacheKey]) && array_key_exists($strViewPath,$this->arrCacheData[$strCacheKey])) ? $this->arrCacheData[$strCacheKey][$strViewPath] : null;
 	}
 
 	/**
