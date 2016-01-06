@@ -625,7 +625,11 @@ class Route extends Base{
 			 * Into the Regx '#^(?<twist_uri>\/my\/(?<tparam_page>[^\/]+)\/uri)#i'
 			 * If Wildcard '#^(?<twist_uri>\/my\/(?<tparam_page>[^\/]+)\/uri)(?<twist_wildcard>.*)#i'
 			 */
-			$regxMatchURI = sprintf("#^(?<twist_uri>%s)%s#i",str_replace(array("/","{","}"),array("\\/","(?<tparam_",">[^\/]+)"),$regxMatchURI),($blWildCard) ? '(?<twist_wildcard>.*)' : '$');
+			$regxMatchURI = sprintf("#^(?<twist_uri>%s)%s#%s",
+				str_replace(array("/","{","}"),array("\\/","(?<tparam_",">[^\/]+)"),$regxMatchURI),
+				($blWildCard) ? '(?<twist_wildcard>.*)' : '$',
+				\Twist::framework()->setting('ROUTE_CASE_SENSITIVE') ? '' : 'i'
+			);
 		}
 
 		$arrRouteData = array(

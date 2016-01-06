@@ -172,7 +172,7 @@ class Manager extends BaseUser{
 		return $this->_view('pages/htaccess.tpl',$arrTags);
 	}
 
-	public function postHtaccess(){
+	public function posthtaccess(){
 
 		\Twist::framework()->setting('SITE_WWW',$_POST['SITE_WWW']);
 		\Twist::framework()->setting('SITE_PROTOCOL',$_POST['SITE_PROTOCOL']);
@@ -327,7 +327,7 @@ class Manager extends BaseUser{
 	/**
 	 * Store all the setting changes POST'ed  form the settings page.
 	 */
-	public function postSettings(){
+	public function postsettings(){
 
 		$arrSettingsInfo = \Twist::framework()->settings()->arrSettingsInfo;
 
@@ -335,11 +335,11 @@ class Manager extends BaseUser{
 			foreach($_POST['original'] as $strKey => $strValue){
 				if(array_key_exists($strKey,$_POST['settings'])){
 					//Store the new setting
-					\Twist::framework() ->setting($strKey,$_POST['settings'][$strKey]);
+					\Twist::framework()->setting($strKey,$_POST['settings'][$strKey]);
 				}else{
 					//Store '0' as we can consider this an unchecked checkbox
 					if($arrSettingsInfo[$strKey]['type'] === 'boolean'){
-						\Twist::framework() ->setting($strKey,0);
+						\Twist::framework()->setting($strKey,0);
 					}
 				}
 			}
@@ -353,7 +353,7 @@ class Manager extends BaseUser{
 	/**
 	 * Allow a select few settings to be updated using GET parameters, these are settings that are displayed as buttons throughout the manager.
 	 */
-	public function getUpdateSetting(){
+	public function getupdatesetting(){
 
 		$arrAllowedSettings = array('DEVELOPMENT_MODE','MAINTENANCE_MODE','DEVELOPMENT_DEBUG_BAR','CACHE_ENABLED');
 
