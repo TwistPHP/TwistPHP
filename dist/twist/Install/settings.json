@@ -543,6 +543,14 @@
     "options":"1,0",
     "null":0
   },
+  "ROUTE_CASE_SENSITIVE":{
+    "title":"Case Sensitive URI Routing",
+    "description":"Enable case sensitive URI routing in the routes module, turning this off may result in multiples of a single page being indexed by search engines. This setting dose not effect the wild card portion of URIs.",
+    "default":1,
+    "type":"boolean",
+    "options":"1,0",
+    "null":0
+  },
   "RANDOM_STRING_LENGTH":{
     "title":"Random String Length",
     "description":"Set the default length for the output of the Tools()->randomString() function call",

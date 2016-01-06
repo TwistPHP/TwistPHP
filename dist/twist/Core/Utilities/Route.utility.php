@@ -259,6 +259,10 @@ class Route extends Base{
 			throw new \Exception('TwistPHP: You must have a database connection enabled to restricted pages using Routes');
 		}
 
+		if(!\Twist::framework()->setting('ROUTE_CASE_SENSITIVE')){
+			$strURI = strtolower($strURI);
+		}
+
 		$blWildCard = strstr($strURI,'%');
 		$strURI = rtrim(str_replace('%','',$strURI),'/').'/';
 
@@ -292,6 +296,10 @@ class Route extends Base{
 	 * Add an exception to the restrictions applied
 	 */
 	public function unrestrict($strURI){
+
+		if(!\Twist::framework()->setting('ROUTE_CASE_SENSITIVE')){
+			$strURI = strtolower($strURI);
+		}
 
 		$blWildCard = (strstr($strURI,'%'));
 		$strURI = rtrim(str_replace('%','',$strURI),'/').'/';
@@ -640,6 +648,10 @@ class Route extends Base{
 			'cache_life' => ($mxdCache === true) ? $this->intCacheTime : ($mxdCache !== false) ? $mxdCache : 0
 		);
 
+		if(!\Twist::framework()->setting('ROUTE_CASE_SENSITIVE')){
+			$strURI = strtolower($strURI);
+		}
+
 		switch($arrRouteData['method']){
 			case'GET':
 				$this->arrRoutesGET[$strURI] = $arrRouteData;
@@ -822,8 +834,13 @@ class Route extends Base{
 			$arrRouteParts = array();
 			$blMatched = false;
 
+			//Lower case the URI key that is used to match the URI (Only when running in insensitive mode)
+			if(!\Twist::framework()->setting('ROUTE_CASE_SENSITIVE')){
+				$strCurrentURIKey = strtolower($strCurrentURIKey);
+			}
+
 			//Only go into these wildcard and regx matches is there is not exact match found
-			if(!array_key_exists($strCurrentURIKey,$arrMethodRoutes) && !array_key_exists($strCurrentURIKey,$this->arrRoutes)) {
+			if(!array_key_exists($strCurrentURIKey,$arrMethodRoutes) && !array_key_exists($strCurrentURIKey,$this->arrRoutes)){
 
 				//Check the regX matched first if there are any to be checked
 				if(count($this->arrRegxMatches)){
@@ -1126,22 +1143,32 @@ class Route extends Base{
 				$arrAliases = $objController->_getAliases();
 				$arrReplacements = $objController->_getReplacements();
 
+				$blCaseSensitive = \Twist::framework()->setting('ROUTE_CASE_SENSITIVE');
+
 				$arrControllerFunctions = array();
 				foreach(get_class_methods($objController) as $strFunctionName){
 					if(array_key_exists($strFunctionName, $arrReplacements)){
-						$arrControllerFunctions[strtolower($arrReplacements[$strFunctionName])] = $strFunctionName;
+						$arrControllerFunctions[($blCaseSensitive) ? $arrReplacements[$strFunctionName] : strtolower($arrReplacements[$strFunctionName])] = $strFunctionName;
 					}else{
-						$arrControllerFunctions[strtolower($strFunctionName)] = $strFunctionName;
+						$arrControllerFunctions[($blCaseSensitive) ? $strFunctionName : strtolower($strFunctionName)] = $strFunctionName;
 					}
+				}
+
+				//Correct the case of the function to match
+				$strControllerFunction = ($blCaseSensitive) ? $strControllerFunction : strtolower($strControllerFunction);
+
+				//Lower the case of all aliases if we are in case insesivtie mode
+				if(!$blCaseSensitive){
+					$arrAliases = array_change_key_case($arrAliases, CASE_LOWER);
 				}
 
 				//Update the request if an alias has been registered
 				if(array_key_exists($strControllerFunction,$arrAliases)){
-					$strControllerFunction = $arrAliases[$strControllerFunction];
+					$strControllerFunction = ($blCaseSensitive) ? $arrAliases[$strControllerFunction] : strtolower($arrAliases[$strControllerFunction]);
 				}
 
-				$strRequestMethodFunction = (substr($strControllerFunction,0,1) == '_') ? sprintf('_%s%s', strtolower($_SERVER['REQUEST_METHOD']), ltrim(strtolower($strControllerFunction),'_')) : sprintf('%s%s', strtolower($_SERVER['REQUEST_METHOD']), strtolower($strControllerFunction));
-				$strControllerFunction = strtolower($strControllerFunction);
+				//Create a method function key as well in the correct case
+				$strRequestMethodFunction = (substr($strControllerFunction,0,1) == '_') ? sprintf('_%s%s', strtolower($_SERVER['REQUEST_METHOD']), ltrim($strControllerFunction,'_')) : sprintf('%s%s', strtolower($_SERVER['REQUEST_METHOD']), $strControllerFunction);
 
 				if(array_key_exists($strRequestMethodFunction, $arrControllerFunctions)){
 

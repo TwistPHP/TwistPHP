@@ -60,9 +60,6 @@
 	use \Twist\Classes\Autoload;
 	Autoload::init(realpath(sprintf('%s/../../',dirname(__FILE__))));
 
-	$arrShadowCoreInfo = json_decode(file_get_contents(sprintf('%s/../info.json',dirname(__FILE__))),true);
-	TwistDefine('TWIST_VERSION',$arrShadowCoreInfo['version']);
-
 	//Get the base location of the site, based on this config file (should be in the doc_root)
 	TwistDefine('TWIST_FRAMEWORK',realpath(sprintf('%s/../',dirname(__FILE__))).'/');
 	TwistDefine('TWIST_FRAMEWORK_CONFIG',sprintf('%sConfig/',TWIST_FRAMEWORK));
@@ -89,6 +86,9 @@
 
 	/** From this point onwards you now have to use Twist::define() rather than TwistDefine */
 	require_once sprintf('%sTwist.php',TWIST_FRAMEWORK);
+
+	//Define the version number of the TwistPHP installation
+	TwistDefine('TWIST_VERSION',Twist::version());
 
 	if(defined('TWIST_APP_CONFIG') && file_exists(sprintf('%sconfig.php',TWIST_APP_CONFIG))){
 		require_once sprintf('%sconfig.php',TWIST_APP_CONFIG);
