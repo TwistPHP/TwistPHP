@@ -41,7 +41,7 @@ class BaseUser extends Base{
     public function _baseCalls(){
 
         $this->resUser = \Twist::User();
-	    
+
         $this -> _replaceURI( 'change-password', 'changePassword' );
         $this -> _replaceURI( 'forgotten-password', 'forgottenPassword' );
         $this -> _replaceURI( 'verify-account', 'verifyAccount' );

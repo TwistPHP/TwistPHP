@@ -33,7 +33,7 @@ class Manager extends BaseUser{
 
 	public function __construct(){
 		\Twist::Route()->setDirectory(sprintf('%smanager/',TWIST_FRAMEWORK_VIEWS));
-		$this->_aliasURI('update-setting','getUpdateSetting');
+		$this->_aliasURI('update-setting','getupdatesetting');
 	}
 
 	/**
