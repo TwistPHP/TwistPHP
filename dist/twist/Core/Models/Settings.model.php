@@ -107,6 +107,8 @@
 
 	                    $this->arrSettings[$arrEachSetting['key']] = $arrEachSetting['value'];
 	                }
+
+		            $this->arrSettingsInfo = \Twist::framework()->tools()->arrayReindex($this->arrSettingsInfo,'key');
 	            }
 
 	            $this->blLoaded = true;
