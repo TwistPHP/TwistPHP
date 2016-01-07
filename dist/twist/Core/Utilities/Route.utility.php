@@ -841,6 +841,7 @@ class Route extends Base{
 			//Lower case the URI key that is used to match the URI (Only when running in insensitive mode)
 			if(!\Twist::framework()->setting('ROUTE_CASE_SENSITIVE')){
 				$strCurrentURIKey = strtolower($strCurrentURIKey);
+				$strCurrentURI = strtolower($strCurrentURI);
 			}
 
 			//Only go into these wildcard and regx matches is there is not exact match found
@@ -948,6 +949,11 @@ class Route extends Base{
 
 		$strCurrentURI = ($this->strBaseURI == '/') ? $strCurrentURI : str_replace($this->strBaseURI,'',$strCurrentURI);
 		$strFullLoginURI = str_replace('//','/',sprintf('%s/login',$this->strBaseURI));
+
+		//Lower case the URI key that is used to match the URI (Only when running in insensitive mode)
+		if(!\Twist::framework()->setting('ROUTE_CASE_SENSITIVE')){
+			$strCurrentURI = strtolower($strCurrentURI);
+		}
 
 		if(\Twist::Database()->checkSettings()){
 
