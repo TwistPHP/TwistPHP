@@ -88,14 +88,13 @@ public function contact() {
 /*
  * --------------------------------
  * By prefixing any of your methods
- * with either 'post', 'get', 'put'
- * or 'delete' and making sure your
- * method name uses lower camelCase
- * you can selectively respond only
- * to certain HTTP requests
+ * with either 'POST', 'GET', 'PUT'
+ * or 'DELETE' in uppercase you can
+ * selectively respond only to HTTP
+ * requests for that verb
  * --------------------------------
  */
-public function postContact() {
+public function POSTcontact() {
 
     /*
      * --------------------------------

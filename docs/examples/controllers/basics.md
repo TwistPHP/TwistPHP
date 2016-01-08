@@ -2,7 +2,7 @@
 
 ## Create a controller
 
-Create a new file called `Test.controller.php` in your `app/Controllers` directory:
+Create a new file called `Basics.controller.php` in your `app/Controllers` directory:
 
 ```php
 <?php
@@ -30,7 +30,7 @@ Create a new file called `Test.controller.php` in your `app/Controllers` directo
      * base controller
      * --------------------------------
      */
-    class Test extends Base {
+    class Basics extends Base {
     
         /*
          * --------------------------------
@@ -65,12 +65,13 @@ Register your controller by adding the following lines to your main `index.php` 
     
     /*
      * --------------------------------
-     * Register the Test controller for
-     * all requests that start with the
-     * URI '/' (the base for the site)
+     * Register the 'Basics' controller
+     * for all requests that start with
+     * the URI '/' (which should be the
+     * base for the site)
      * --------------------------------
      */
-    Twist::Route() -> controller( '/%', 'Test' );
+    Twist::Route() -> controller( '/%', 'Basics' );
     
     /*
      * --------------------------------
@@ -133,6 +134,12 @@ public function _fallback() {
 To add custom responses to your controller, simply add a method with the name or the URI you want to capture into your controller:
 
 ```php
+/*
+ * --------------------------------
+ * Remember that controller methods
+ * are case sensitive
+ * --------------------------------
+ */
 public function whendoesthenarwhalbacon() {
 	return 'Midnight';
 }
