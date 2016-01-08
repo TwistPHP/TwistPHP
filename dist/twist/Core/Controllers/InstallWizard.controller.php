@@ -53,7 +53,7 @@ class InstallWizard extends Base{
 			'database' => array('status' => false,'details' => array('table_prefix' => 'twist_')),
 			'settings' => array('status' => false),
 			'user' => array('status' => false),
-			'interfaces' => array('status' => false),
+			'packages' => array('status' => false),
 		));
 
 		/**
@@ -304,17 +304,18 @@ class InstallWizard extends Base{
 			$arrSession['user']['status'] = true;
 			\Twist::Session()->data('twist-setup',$arrSession);
 
-			header('Location: interfaces');
+			header('Location: packages');
 		}
 
 		return \Twist::View()->build('pages/user.tpl',$arrTags);
 	}
 
 	/**
-	 * @deprecated
+	 * Pre-install some packages and setup some systems like the manager
+	 * Currently skips this step in initial release of V3
 	 * @return string
 	 */
-	public function interfaces(){
+	public function packages(){
 
 		$arrSession = \Twist::Session()->data('twist-setup');
 
@@ -358,7 +359,7 @@ class InstallWizard extends Base{
 			header('Location: user');
 		}
 
-		//return \Twist::View()->build('pages/interfaces.tpl',$arrTags);
+		//return \Twist::View()->build('pages/packages.tpl',$arrTags);
 	}
 
 	/**

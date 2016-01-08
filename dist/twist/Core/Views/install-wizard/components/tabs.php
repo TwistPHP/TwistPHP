@@ -34,10 +34,10 @@
 			'current' => ($arrRoute['parts'][$intRouteKey] == 'user') ? 'current' : '',
 			'icon' => (in_array($arrRoute['parts'][$intRouteKey],array('welcome','licence','checks','database','settings','user'))) ? 'fa-circle-o' : 'fa-check-circle-o'
 		),
-		'interfaces' => array(
-			'disabled' => ($arrRoute['parts'][$intRouteKey] != 'interfaces') ? 'disabled' : '',
-			'current' => ($arrRoute['parts'][$intRouteKey] == 'interfaces') ? 'current' : '',
-			'icon' => (in_array($arrRoute['parts'][$intRouteKey],array('welcome','licence','checks','database','settings','user','interfaces'))) ? 'fa-circle-o' : 'fa-check-circle-o'
+		'packages' => array(
+			'disabled' => ($arrRoute['parts'][$intRouteKey] != 'packages') ? 'disabled' : '',
+			'current' => ($arrRoute['parts'][$intRouteKey] == 'packages') ? 'current' : '',
+			'icon' => (in_array($arrRoute['parts'][$intRouteKey],array('welcome','licence','checks','database','settings','user','packages'))) ? 'fa-circle-o' : 'fa-check-circle-o'
 		)
 	);
 
