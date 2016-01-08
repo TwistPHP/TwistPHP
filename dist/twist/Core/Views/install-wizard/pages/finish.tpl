@@ -1,4 +1,5 @@
+<i id="completed" class="fa fa-thumbs-o-up float-right" style=""></i>
 <h3>Completed!</h3>
-<p>Congratulations - your Twist framework is ready to use</p>
-<i id="completed" class="fa fa-thumbs-o-up" style=""></i>
-<!--<p><a href="{data:framework_uri}core/manager">Continue to the framework manager</a> &rarr;</p>-->
+<p>Congratulations &mdash; your installation of TwistPHP is now ready to use</p>
+<p>Login to your copy of TwistPHP Manager using your developer account where you will be able configure and install packages.</p>
+<p><a href="manager" class="button blue">TwistPHP Manager &rsaquo;</a></p>

@@ -1,3 +1,3 @@
 <h3>Welcome</h3>
-<p>This tool will guide you through the installation of your Twist framework.</p>
+<p>This wizard will guide you through the installation of TwistPHP.</p>
 <a href="licence" class="button blue">Begin &rsaquo;</a>

@@ -15,11 +15,8 @@
 
 	require_once '{data:framework_path}framework.php';
 
-	//TWISTPHP Interfaces
-	{data:interfaces}
+    //Register the framework manager
+    Twist::Route()->manager('/manager');
 
-	//TWISTPHP Routes
-	{data:routes}
-
-	//TWISTPHP Serve
+	//Serve all routes
 	Twist::ServeRoutes(false);

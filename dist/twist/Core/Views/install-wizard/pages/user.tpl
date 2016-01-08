@@ -1,6 +1,6 @@
-<form class="inline foldable" action="interfaces" method="post" autocomplete="off">
+<form class="inline foldable" action="packages" method="post" autocomplete="off">
     <h2>Root User</h2>
-    <p>Create a root user account that will have full access to all interfaces and user systems.</p>
+    <p>Create a root level developer account that will have unrestricted access to all interfaces and user-based systems.</p>
     {data:error_message}
 
     <label>Firstname</label>

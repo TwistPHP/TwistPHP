@@ -1,6 +1,6 @@
 <form class="inline foldable" action="settings" method="post">
     <h2>Database Settings</h2>
-    <p>Setup database connection settings, alternatively you can use Twist without a database but this will limit what you can do and use.</p>
+    <p>Set up your database connection settings here. Alternatively, you can use TwistPHP without a database at the cost of limiting what features are available.</p>
     {data:error_message}
     <label>Protocol</label>
     <input name="protocol" type="radio" id="database-none" value="none">

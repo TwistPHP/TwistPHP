@@ -141,10 +141,7 @@
 				'app_path' => _TWIST_APP,
 				'packages_path' => _TWIST_PACKAGES,
 				'uploads_path' => _TWIST_UPLOADS,
-				'framework_path' => TWIST_FRAMEWORK,
-				'interfaces' => '',
-				'routes' => '',
-				'serve' => 'Twist::Route() -> serve();'
+				'framework_path' => TWIST_FRAMEWORK
 			);
 
 			file_put_contents($dirIndexFile,\Twist::View()->build(sprintf('%s/default-index.tpl',TWIST_FRAMEWORK_VIEWS),$arrIndexTags));
@@ -167,11 +164,11 @@
 			$dirAppFolder = rtrim($dirAppFolder,'/');
 
 			//Deny access form all in the apps folder (two specific overrides are below)
-			file_put_contents(sprintf('%s.htaccess',$dirAppFolder),"# Refuse direct access to all files and folders\nOrder deny,allow\nDeny from all\nAllow from 127.0.0.1");
+			file_put_contents(sprintf('%s/.htaccess',$dirAppFolder),"# Refuse direct access to all files and folders\nOrder deny,allow\nDeny from all\nAllow from 127.0.0.1");
 
 			//Allow access to the Assets and Resources folder
-			file_put_contents(sprintf('%sAssets/.htaccess',$dirAppFolder),"# Allow direct access to Assets\nAllow from all");
-			file_put_contents(sprintf('%sResources/.htaccess',$dirAppFolder),"# Allow direct access to Resources\nAllow from all");
+			file_put_contents(sprintf('%s/Assets/.htaccess',$dirAppFolder),"# Allow direct access to Assets\nAllow from all");
+			file_put_contents(sprintf('%s/Resources/.htaccess',$dirAppFolder),"# Allow direct access to Resources\nAllow from all");
 		}
 
 		/**
