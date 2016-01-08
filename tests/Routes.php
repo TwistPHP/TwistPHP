@@ -1,5 +1,7 @@
 <?php
 
+require_once sprintf('%s/index.php',dirname(__FILE__));
+
 class Routes extends \PHPUnit_Framework_TestCase{
 
 	public function testViewRequest(){
