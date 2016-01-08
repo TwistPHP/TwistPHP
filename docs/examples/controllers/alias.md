@@ -1,4 +1,4 @@
-# Aliases
+# Method aliasing
 
 If you would like to use hyphens in your URIs, simply adding a method to controller won't work, as PHP doesn't support functions with non-alphanumeric characters.
 
