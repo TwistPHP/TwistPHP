@@ -42,10 +42,10 @@ class BaseUser extends Base{
 
         $this->resUser = \Twist::User();
 
-        $this -> _replaceURI( 'change-password', 'changePassword' );
-        $this -> _replaceURI( 'forgotten-password', 'forgottenPassword' );
-        $this -> _replaceURI( 'verify-account', 'verifyAccount' );
-        $this -> _replaceURI( 'device-manager', 'deviceManager' );
+        $this -> _replaceURI( 'change-password', 'changepassword' );
+        $this -> _replaceURI( 'forgotten-password', 'forgottenpassword' );
+        $this -> _replaceURI( 'verify-account', 'verifyaccount' );
+        $this -> _replaceURI( 'device-manager', 'devicemanager' );
     }
 
 	/**
@@ -122,7 +122,7 @@ class BaseUser extends Base{
 	 *
 	 * @return string
 	 */
-    public function forgottenPassword(){
+    public function forgottenpassword(){
         return $this->resUser->viewExtension('forgotten_password_form');
     }
 
@@ -130,7 +130,7 @@ class BaseUser extends Base{
 	 * The forgotten password request is processed by this function, if the details are correct the user is emailed a temporary password and then redirected to the login page.
 	 * If the request has failed the user will be shown the forgotten password form again.
 	 */
-    public function postForgottenPassword(){
+    public function postforgottenpassword(){
 
         //Process the forgotten password request
         if(array_key_exists('forgotten_email',$_POST) && $_POST['forgotten_email'] != ''){
@@ -157,7 +157,7 @@ class BaseUser extends Base{
 	 *
 	 * @return string
 	 */
-    public function changePassword(){
+    public function changepassword(){
         return $this->resUser->viewExtension('change_password_form');
     }
 
@@ -165,7 +165,7 @@ class BaseUser extends Base{
 	 * The change password request is processed by this function, if the details are all correct the user will be redirected to the entry page or './'.
 	 * If there is a problem with the data entered the user will see the change password page again.
 	 */
-    public function postChangePassword(){
+    public function postchangepassword(){
 
         if(array_key_exists('password',$_POST) && array_key_exists('confirm_password',$_POST)){
 
@@ -219,14 +219,14 @@ class BaseUser extends Base{
 	 * This will then confirm that the user has received the email and that the email address is valid.
 	 * @return string
 	 */
-    public function verifyAccount(){
+    public function verifyaccount(){
         return $this->resUser->viewExtension('account_verification');
     }
 
 	/**
 	 * Process the email verification code that has been submitted for validation, upon successful process that user will be redirected to the login page.
 	 */
-    public function postVerifyAccount(){
+    public function postverifyaccount(){
 
         //Resend a new verification code
         if(array_key_exists('verification_email',$_POST) && $_POST['verification_email'] != ''){
@@ -254,7 +254,7 @@ class BaseUser extends Base{
 	 * rename the device so that at a glance you know which device is which.
 	 * @return string
 	 */
-    public function deviceManager(){
+    public function devicemanager(){
 
         $arrUserData = Auth::current();
 
@@ -299,7 +299,7 @@ class BaseUser extends Base{
 	/**
 	 * Processes the requested to forget a users connected device and or rename a users connected device.
 	 */
-    public function postDeviceManager(){
+    public function postdevicemanager(){
 
         $arrUserData = Auth::current();
 
@@ -321,7 +321,7 @@ class BaseUser extends Base{
 	/**
 	 * Process the users registration request and then redirect onto the relevant page.
 	 */
-    public function postRegister(){
+    public function postregister(){
 
         //Process the register user request
         if(array_key_exists('register',$_POST) && $_POST['register'] != ''){
