@@ -825,8 +825,12 @@ class Route extends Base{
 
 		if(count($arrMethodRoutes) || count($this->arrRoutes)){
 
+			$blCaseSensitive = \Twist::framework()->setting('ROUTE_CASE_SENSITIVE');
+
 			$arrPartsURI = explode('?',$_SERVER['REQUEST_URI']);
+			$arrPartsURI[0] = (!$blCaseSensitive) ? strtolower($arrPartsURI[0]) : $arrPartsURI[0];
 			$strPageCacheKey = str_replace('/','+',trim($arrPartsURI[0],'/'));
+
 			$arrPartsURI[0] = (!in_array($this->strBaseURI,array(null,'/'))) ? str_replace($this->strBaseURI,'',$arrPartsURI[0]) : $arrPartsURI[0];
 
 			$strTrailingSlash = (\Twist::framework()->setting('SITE_TAILING_SLASH')) ? '/' : '';
@@ -839,7 +843,7 @@ class Route extends Base{
 			$blMatched = false;
 
 			//Lower case the URI key that is used to match the URI (Only when running in insensitive mode)
-			if(!\Twist::framework()->setting('ROUTE_CASE_SENSITIVE')){
+			if(!$blCaseSensitive) {
 				$strCurrentURIKey = strtolower($strCurrentURIKey);
 				$strCurrentURI = strtolower($strCurrentURI);
 			}
