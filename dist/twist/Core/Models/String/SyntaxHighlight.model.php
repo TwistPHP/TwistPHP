@@ -51,23 +51,33 @@
 
 				case 'em':
 					$strCodeContainer = "<code>%s</code>";
-					$strLineContainer = "<em%s>%s</em>%s\n";
+					$strLineContainer = "<em%s>%s</em><span%s>%s</span>\n";
+					break;
+
+				case 'em-no-container':
+					$strCodeContainer = "%s";
+					$strLineContainer = "<em%s>%s</em><span%s>%s</span>\n";
 					break;
 
 				case 'table':
 					$strCodeContainer = "<table>\n%s</table>";
-					$strLineContainer = "<tr%s><th>%s</th><td>%s</td></tr>";
+					$strLineContainer = "<tr><th%s>%s</th><td%s>%s</td></tr>";
 					break;
 
 				case 'dl':
 					$strCodeContainer = "<dl>\n%s</dl>";
-					$strLineContainer = "<dt%s>%s</dt><dd>%s</dd>";
+					$strLineContainer = "<dt%s>%s</dt><dd%s>%s</dd>";
+					break;
+
+				case 'plain-no-container':
+					$strCodeContainer = "%s";
+					$strLineContainer = "<!-- %s, Line: %s --><span%s>%s</span>\n";
 					break;
 
 				case 'plain':
 				default:
 					$strCodeContainer = "<code>%s</code>";
-					$strLineContainer = "<!-- %s, Line: %s -->%s\n";
+					$strLineContainer = "<!-- %s, Line: %s --><span%s>%s</span>\n";
 					break;
 			}
 
@@ -78,7 +88,7 @@
 				if($intLineNo >= $intStartLine && $intLineNo <= $intEndLine){
 
 					$strFocusLine = ($intLineNo == $intFocusLineNo) ? ' class="codeFocus"' : '';
-					$strOut .= sprintf($strLineContainer,$strFocusLine,$intLineNo,self::convertStyles($strEachLine));
+					$strOut .= sprintf($strLineContainer,$strFocusLine,$intLineNo,$strFocusLine,self::convertStyles($strEachLine));
 				}
 			}
 
