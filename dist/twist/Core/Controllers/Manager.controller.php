@@ -49,9 +49,9 @@ class Manager extends BaseUser{
 	 * Over-ride the base view for the forgotten password page
 	 * @return string
 	 */
-	public function forgottenPassword(){
+	public function forgottenpassword(){
 		$this->_baseView('_login.tpl');
-		return parent::forgottenPassword();
+		return parent::forgottenpassword();
 	}
 
 	/**
@@ -172,7 +172,7 @@ class Manager extends BaseUser{
 		return $this->_view('pages/htaccess.tpl',$arrTags);
 	}
 
-	public function posthtaccess(){
+	public function POSThtaccess(){
 
 		\Twist::framework()->setting('SITE_WWW',$_POST['SITE_WWW']);
 		\Twist::framework()->setting('SITE_PROTOCOL',$_POST['SITE_PROTOCOL']);
@@ -327,7 +327,7 @@ class Manager extends BaseUser{
 	/**
 	 * Store all the setting changes POST'ed  form the settings page.
 	 */
-	public function postsettings(){
+	public function POSTsettings(){
 
 		$arrSettingsInfo = \Twist::framework()->settings()->arrSettingsInfo;
 
@@ -353,7 +353,7 @@ class Manager extends BaseUser{
 	/**
 	 * Allow a select few settings to be updated using GET parameters, these are settings that are displayed as buttons throughout the manager.
 	 */
-	public function getupdatesetting(){
+	public function GETupdatesetting(){
 
 		$arrAllowedSettings = array('DEVELOPMENT_MODE','MAINTENANCE_MODE','DEVELOPMENT_DEBUG_BAR','CACHE_ENABLED');
 
