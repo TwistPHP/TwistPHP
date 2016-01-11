@@ -1,4 +1,4 @@
-# mySQL tables
+# Create new database tables
 
 TwistPHP uses its own database object to add and edit mySQL tables.
 
@@ -7,31 +7,39 @@ TwistPHP uses its own database object to add and edit mySQL tables.
 To create a new table, grab a copy of the database object and use the method `table()` to return a new database table object.
 
 ```php
-$resFruit = Twist::Database() -> table( 'fruit' );
+<?php
+
+    $resFruit = Twist::Database() -> table( 'fruit' );
 ```
 
-### Add fields
+## Add the fields
 
 You can create database fields to the table object using the `addField()` method of the database table object.
 
 ```php
-$resFruit -> addField( 'id', 'int', 11 );
-$resFruit -> addField( 'name', 'char', '64' );
-$resFruit -> addField( 'colour', 'char', '16' );
+<?php
+
+    $resFruit -> addField( 'id', 'int', 11 );
+    $resFruit -> addField( 'name', 'char', '64' );
+    $resFruit -> addField( 'colour', 'char', '16' );
 ```
 
-### Set auto increment
+### Set an auto increment field
 
 An auto increment field can be set with the `setAutoIncrement()` method.
 
 ```php
-$resFruit -> setAutoIncrement( 'id' );
+<?php
+
+    $resFruit -> setAutoIncrement( 'id' );
 ```
 
-### Commit the new table
+## Commit the new table
 
 Commit the new table the database by calling `commit()` on the new database table object.
 
 ```php
-$resFruit -> create();
+<?php
+
+    $resFruit -> create();
 ```
