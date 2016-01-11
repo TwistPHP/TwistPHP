@@ -1,8 +1,15 @@
-#[TwistPHP](https://twistphp.com/) ![TwistPHP logo](http://static.twistphp.com/logo/square/32.png)
+# [TwistPHP](https://twistphp.com/) ![TwistPHP logo](http://static.twistphp.com/logo/square/32.png)
 
 [![Development build status](https://travis-ci.org/TwistPHP/TwistPHP.svg?branch=development)](https://travis-ci.org/TwistPHP/TwistPHP) [![Join the chat at https://gitter.im/TwistPHP/TwistPHP](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/TwistPHP/TwistPHP?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-##A fresh, new open source PHP MVC micro framework
+## A fresh, new open source PHP MVC micro framework
+
+* Full MVC architecture
+* Open source
+* Completely bespoke
+* Quick and memory-efficient
+* Easily expandable without editing the core
+* Loads of pre-built tools included
 
 One line is all it takes:
 
@@ -10,16 +17,16 @@ One line is all it takes:
 require_once( 'twist/framework.php' );
 ```
 
-##Documentation
-
-This framework includes [basic documentation](docs/README.md), including code examples.
+## Documentation
 
 Full documentation of the framework can be found on the [TwistPHP site](https://twistphp.com/docs).
 
-##Issues
+Code examples can also be found [in the examples area](https://twistphp.com/examples).
+
+## Issues
 
 Please use the [GitHub's issue tracker](https://github.com/TwistPHP/TwistPHP/issues) to report any problems.
 
-###Branches
+### Branches
 
 For branching, please use the 'development' branch. All updates apart from hotfixes will get pushed from the [development branch](https://github.com/TwistPHP/TwistPHP/tree/development) to the master.
