@@ -119,7 +119,7 @@ class Auth{
             $objSession->data('user-surname',self::$arrCurrentSession['user_data']['surname']);
 
             //Set shutdown function to log activity and IP address upon script shutdown
-            \Twist::framework()->register()->shutdownEvent('auth-user-lastactive','Twist\Core\Models\User\Auth','logLastActive');
+            \Twist::framework()->register()->shutdownEvent('auth-user-lastlogin','Twist\Core\Models\User\Auth','logLastLogin');
         }
 
         return self::$arrCurrentSession;
@@ -225,8 +225,20 @@ class Auth{
         if(!is_null(self::$arrCurrentSession['user_id'])){
 
             $resUser = \Twist::User()->get(self::$arrCurrentSession['user_id']);
-            $resUser->lastLogin($_SERVER['REMOTE_ADDR']);
             $resUser->lastActive();
+            $resUser->commit();
+        }
+    }
+
+    /**
+     * Log the time and IP address of the user upon las login, by default this is called as a PHP shutdown function for users that are logged in
+     */
+    public static function logLastLogin(){
+
+        if(!is_null(self::$arrCurrentSession['user_id'])){
+
+            $resUser = \Twist::User()->get(self::$arrCurrentSession['user_id']);
+            $resUser->lastLogin($_SERVER['REMOTE_ADDR']);
             $resUser->commit();
         }
     }
