@@ -130,7 +130,7 @@ class BaseUser extends Base{
 	 * The forgotten password request is processed by this function, if the details are correct the user is emailed a temporary password and then redirected to the login page.
 	 * If the request has failed the user will be shown the forgotten password form again.
 	 */
-    public function postforgottenpassword(){
+    public function POSTforgottenpassword(){
 
         //Process the forgotten password request
         if(array_key_exists('forgotten_email',$_POST) && $_POST['forgotten_email'] != ''){
@@ -165,7 +165,7 @@ class BaseUser extends Base{
 	 * The change password request is processed by this function, if the details are all correct the user will be redirected to the entry page or './'.
 	 * If there is a problem with the data entered the user will see the change password page again.
 	 */
-    public function postchangepassword(){
+    public function POSTchangepassword(){
 
         if(array_key_exists('password',$_POST) && array_key_exists('confirm_password',$_POST)){
 
@@ -226,7 +226,7 @@ class BaseUser extends Base{
 	/**
 	 * Process the email verification code that has been submitted for validation, upon successful process that user will be redirected to the login page.
 	 */
-    public function postverifyaccount(){
+    public function POSTverifyaccount(){
 
         //Resend a new verification code
         if(array_key_exists('verification_email',$_POST) && $_POST['verification_email'] != ''){
@@ -299,7 +299,7 @@ class BaseUser extends Base{
 	/**
 	 * Processes the requested to forget a users connected device and or rename a users connected device.
 	 */
-    public function postdevicemanager(){
+    public function POSTdevicemanager(){
 
         $arrUserData = Auth::current();
 
@@ -321,7 +321,7 @@ class BaseUser extends Base{
 	/**
 	 * Process the users registration request and then redirect onto the relevant page.
 	 */
-    public function postregister(){
+    public function POSTregister(){
 
         //Process the register user request
         if(array_key_exists('register',$_POST) && $_POST['register'] != ''){

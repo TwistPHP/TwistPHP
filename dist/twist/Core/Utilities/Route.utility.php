@@ -1167,7 +1167,7 @@ class Route extends Base{
 				//Correct the case of the function to match
 				$strControllerFunction = ($blCaseSensitive) ? $strControllerFunction : strtolower($strControllerFunction);
 
-				//Lower the case of all aliases if we are in case insesivtie mode
+				//Lower the case of all aliases if we are in case insensitive mode
 				if(!$blCaseSensitive){
 					$arrAliases = array_change_key_case($arrAliases, CASE_LOWER);
 				}
@@ -1178,7 +1178,12 @@ class Route extends Base{
 				}
 
 				//Create a method function key as well in the correct case
-				$strRequestMethodFunction = (substr($strControllerFunction,0,1) == '_') ? sprintf('_%s%s', strtolower($_SERVER['REQUEST_METHOD']), ltrim($strControllerFunction,'_')) : sprintf('%s%s', strtolower($_SERVER['REQUEST_METHOD']), $strControllerFunction);
+				$strRequestMethodFunction = (substr($strControllerFunction,0,1) == '_') ? sprintf('_%s%s', strtoupper($_SERVER['REQUEST_METHOD']), ltrim($strControllerFunction,'_')) : sprintf('%s%s', strtoupper($_SERVER['REQUEST_METHOD']), $strControllerFunction);
+
+				//Lower the case of all aliases if we are in case insensitive mode
+				if(!$blCaseSensitive){
+					$strRequestMethodFunction = strtolower($strRequestMethodFunction);
+				}
 
 				if(array_key_exists($strRequestMethodFunction, $arrControllerFunctions)){
 
@@ -1192,7 +1197,7 @@ class Route extends Base{
 				}else{
 
 					//Check for method fallback before calling the standard fallback
-					$strRequestMethodFunction = sprintf('_%sfallback', strtolower($_SERVER['REQUEST_METHOD']));
+					$strRequestMethodFunction = sprintf('_%sfallback', strtoupper($_SERVER['REQUEST_METHOD']));
 					$strControllerFunction = '_fallback';
 
 					if(array_key_exists($strRequestMethodFunction, $arrControllerFunctions)){
