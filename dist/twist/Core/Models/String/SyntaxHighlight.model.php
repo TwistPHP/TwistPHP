@@ -87,7 +87,7 @@
 				//Only output lines that are within the correct range
 				if($intLineNo >= $intStartLine && $intLineNo <= $intEndLine){
 
-					$strFocusLine = ($intLineNo == $intFocusLineNo) ? ' class="codeFocus"' : '';
+					$strFocusLine = ($intLineNo == $intFocusLineNo) ? ' class="highlight"' : '';
 					$strOut .= sprintf($strLineContainer,$strFocusLine,$intLineNo,$strFocusLine,self::convertStyles($strEachLine));
 				}
 			}
