@@ -5,7 +5,7 @@
             <i class="fa {data:browser/fa-icon}" title="{data:browser/title}"></i> <small>{data:browser/title}</small>
         <td>
             <input type="text" name="device-name" value="{data:device_name}" maxlength="32" placeholder="Home PC" autofocus><br>
-            <small>Last Active {prettytime[data:last_login]}</small>
+            <small>Last Active {prettytime[data:last_validated]}</small>
         </td>
         <td>
             <input type="hidden" name="save-device" value="{data:device}">

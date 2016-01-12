@@ -170,7 +170,7 @@ CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`user_sessions` (
   `remote_addr` char(16) COLLATE utf8mb4_unicode_ci NOT NULL,
   `os` char(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `browser` char(32) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `last_login` datetime NOT NULL,
+  `last_validated` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_device` (`user_id`,`device`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1 ;

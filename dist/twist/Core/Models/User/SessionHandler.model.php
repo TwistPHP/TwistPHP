@@ -141,10 +141,10 @@ class SessionHandler{
 		$arrOut = array();
 		$objDB = \Twist::Database();
 
-		$strSQL = sprintf("SELECT `id`,`device`,`device_name`,`os`,`browser`,`last_login`
+		$strSQL = sprintf("SELECT `id`,`device`,`device_name`,`os`,`browser`,`last_validated`
 								FROM `%s`.`%suser_sessions`
 								WHERE `user_id` = %d
-								ORDER BY `last_login` DESC",
+								ORDER BY `last_validated` DESC",
 			TWIST_DATABASE_NAME,
 			TWIST_DATABASE_TABLE_PREFIX,
 			$objDB->escapeString($intUserID)
@@ -164,7 +164,7 @@ class SessionHandler{
 
 		if(count($_COOKIE) && array_key_exists('device',$_COOKIE)){
 
-			$strSQL = sprintf("SELECT `id`,`device`,`device_name`,`os`,`browser`,`last_login`
+			$strSQL = sprintf("SELECT `id`,`device`,`device_name`,`os`,`browser`,`last_validated`
 									FROM `%s`.`%suser_sessions`
 									WHERE `user_id` = %d
 									AND `device` = '%s'",
@@ -403,7 +403,7 @@ class SessionHandler{
 		$strSQL = sprintf("UPDATE `%s`.`%suser_sessions`
 								SET `token` = '%s',
 									`remote_addr` = '%s',
-									`last_login` = NOW()
+									`last_validated` = NOW()
 								WHERE sha1(`device`) = '%s'
 								AND md5(concat(`user_id`,'%s')) = '%s'",
 			TWIST_DATABASE_NAME,
