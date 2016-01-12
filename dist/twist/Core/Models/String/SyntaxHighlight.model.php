@@ -51,12 +51,12 @@
 
 				case 'em':
 					$strCodeContainer = "<code>%s</code>";
-					$strLineContainer = "<em%s>%s</em><span%s>%s</span>\n";
+					$strLineContainer = "<em%s>%s</em> | <span%s>%s</span>\n";
 					break;
 
 				case 'em-no-container':
 					$strCodeContainer = "%s";
-					$strLineContainer = "<em%s>%s</em><span%s>%s</span>\n";
+					$strLineContainer = "<em%s>%s</em> | <span%s>%s</span>\n";
 					break;
 
 				case 'table':
