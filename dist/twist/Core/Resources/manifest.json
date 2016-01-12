@@ -1,6 +1,6 @@
 {
 	"arable": {
-		"5.4.6": {
+		"5.5.0": {
 			"default": true,
 			"css": ["arable.min.css"],
 			"js": []
