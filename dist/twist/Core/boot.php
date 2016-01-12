@@ -64,6 +64,7 @@
 	TwistDefine('TWIST_FRAMEWORK',realpath(sprintf('%s/../',dirname(__FILE__))).'/');
 	TwistDefine('TWIST_FRAMEWORK_CONFIG',sprintf('%sConfig/',TWIST_FRAMEWORK));
 	TwistDefine('TWIST_FRAMEWORK_CLASSES',sprintf('%sClasses/',TWIST_FRAMEWORK));
+	TwistDefine('TWIST_FRAMEWORK_DATA',sprintf('%sCore/Data/',TWIST_FRAMEWORK));
 	TwistDefine('TWIST_FRAMEWORK_MODELS',sprintf('%sCore/Models/',TWIST_FRAMEWORK));
 	TwistDefine('TWIST_FRAMEWORK_UTILITIES',sprintf('%sCore/Utilities/',TWIST_FRAMEWORK));
 	TwistDefine('TWIST_FRAMEWORK_VIEWS',sprintf('%sCore/Views/',TWIST_FRAMEWORK));

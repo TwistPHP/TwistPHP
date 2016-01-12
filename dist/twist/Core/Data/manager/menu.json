@@ -1,0 +1,44 @@
+[
+  {
+    "name": "Dashboard",
+    "uri": "",
+    "icon": "fa-tachometer",
+    "order": 1,
+    "sections": []
+  },
+  {
+    "name": "Settings",
+    "uri": "settings",
+    "icon": "fa-cogs",
+    "order": 2,
+    "sections": []
+  },
+  {
+    "name": "Cache",
+    "uri": "cache",
+    "icon": "fa-file-archive-o",
+    "order": 3,
+    "sections": []
+  },
+  {
+    "name": ".htaccess",
+    "uri": "htaccess",
+    "icon": "fa-map-signs",
+    "order": 4,
+    "sub-sections": []
+  },
+  {
+    "name": "Packages",
+    "uri": "packages",
+    "icon": "fa-puzzle-piece",
+    "order": 5,
+    "sections": []
+  },
+  {
+    "name": "Logout",
+    "uri": "logout",
+    "icon": "fa-sign-out",
+    "order": 6,
+    "sections": []
+  }
+]
