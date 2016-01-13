@@ -23,7 +23,7 @@
 
 namespace Twist\Core\Models\Email;
 
-class SMTP{
+class ProtocolSMTP{
 
 	protected $resConnection = null;
 	protected $strLastMessage = '';

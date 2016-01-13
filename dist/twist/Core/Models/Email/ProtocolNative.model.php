@@ -23,7 +23,7 @@
 
 	namespace Twist\Core\Models\Email;
 
-	class Native{
+	class ProtocolNative{
 
 		protected $resConnection = null;
 		protected $strLastMessage = '';
