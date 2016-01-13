@@ -52,27 +52,28 @@ $this -> _var( 'myVar' );
 
 You can access the route variables using the `_route()` method in your controller:
 
-| Key                      | Type                           | Description | Example |
-| ------------------------ | ------------------------------ | ----------- | ------- |
-| `regx`                   | String                         | ? | ? |
-| `registered_uri`         | String                         | ? | ? |
-| `registered_uri_current` | String                         | ? | ? |
-| `base_uri`               | String                         | ? | ? |
-| `dynamic`                | String                         | ? | ? |
-| `parts`                  | Array                          | ? | ? |
-| `uri`                    | String                         | ? | ? |
-| `url`                    | String                         | ? | ? |
-| `method`                 | String ANY/GET/POST/DELETE/PUT | ? | `'ANY'` |
-| `request_method`         | String ANY/GET/POST/DELETE/PUT | ? | `'GET'` |
-| `type`                   | String                         | ? | `'controller'` |
-| `item`                   | Array                          | ? | ? |
-| `data`                   | Array                          | ? | ? |
-| `model`                  | String                         | ? | ? |
-| `base_view`              | Integer                        | ? | ? |
-| `wildcard`               | Integer                        | ? | ? |
-| `cache`                  | String                         | ? | ? |
-| `cache`                  | String                         | ? | ? |
-| `cache_key`              | String                         | ? | ? |
-| `cache_life`             | Integer                        | ? | ? |
-| `title`                  | String                         | ? | ? |
-| `vars`                   | Array                          | ? | ? |
+| Key                      | Type                                 | Description | Example |
+| ------------------------ | ------------------------------------ | ----------- | ------- |
+| `base_url`               | String                               | ? | `'https://twistphp.com'` |
+| `url`                    | String                               | ? | `'https://twistphp.com/examples/routes/variables'` |
+| `base_uri`               | String                               | ? | ? |
+| `uri`                    | String                               | ? | `'/examples/routes/variables'` |
+| `registered_uri`         | String                               | ? | `'/examples'` |
+| `registered_uri_current` | String                               | ? | ? |
+| `dynamic`                | String                               | ? | ? |
+| `parts`                  | Array                                | ? | ? |
+| `wildcard`               | Integer                              | ? | `1` |
+| `regx`                   | String                               | ? | ? |
+| `type`                   | String                               | ? | `'controller'` |
+| `method`                 | String (ANY, GET, POST, DELETE, PUT) | ? | `'ANY'` |
+| `request_method`         | String (ANY, GET, POST, DELETE, PUT) | ? | `'GET'` |
+| `item`                   | Array                                | ? | ? |
+| `data`                   | Array                                | ? | ? |
+| `model`                  | String                               | ? | ? |
+| `base_view`              | Integer                              | ? | `1` |
+| `cache`                  | String                               | ? | ? |
+| `cache`                  | String                               | ? | ? |
+| `cache_key`              | String                               | ? | ? |
+| `cache_life`             | Integer                              | ? | ? |
+| `title`                  | String                               | ? | ? |
+| `vars`                   | Array                                | ? | ? |
