@@ -312,7 +312,7 @@ class User{
 
 		$strEmailSubject = (is_null($this->strTempPassword)) ? sprintf('%s: Password Updated',$strSiteName) : sprintf('%s: Password Reset',$strSiteName);
 
-		$resEmail = \Twist::Email();
+		$resEmail = \Twist::Email()->create();
 		$resEmail->setSubject($strEmailSubject);
 		$resEmail->setFrom(sprintf('no-reply@%s',str_replace('www.','',$strSiteHost)));
 		$resEmail->setReplyTo(sprintf('no-reply@%s',str_replace('www.','',$strSiteHost)));
@@ -347,7 +347,7 @@ class User{
 		$strSiteName = \Twist::framework()->setting('SITE_NAME');
 		$strSiteHost = \Twist::framework()->setting('SITE_HOST');
 
-		$resEmail = \Twist::Email();
+		$resEmail = \Twist::Email()->create();
 
 		$strEmailSubject = sprintf('Welcome to %s',$strSiteName);
 
@@ -407,7 +407,7 @@ class User{
 			$strVerificationString = $this->base64url_encode(sprintf("%s|%s",$this->arrOriginalData['email'],$strVerificationCode));
 			$strVerificationLink = sprintf('http://%s/%s?verify=%s',$strSiteHost,ltrim($strLoginURL,'/'),$strVerificationString);
 
-			$resEmail = \Twist::Email();
+			$resEmail = \Twist::Email()->create();
 
 			$strEmailSubject = sprintf('%s: Verify your Account',$strSiteName);
 
