@@ -24,6 +24,10 @@
 namespace Twist\Core\Models\Email;
 use \Twist\Core\Models\String\Html2Text;
 
+/**
+ * Generate and send full multi-lingual multi-part HTML emails with the ability to add attachments. Fully customisable with Char encoding, message encoding, priority and sensitivity.
+ * @package Twist\Core\Models\Email
+ */
 class Create{
 
 	protected $blMultipartEncoding = '7bit';

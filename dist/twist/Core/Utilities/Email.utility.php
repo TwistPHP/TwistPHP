@@ -24,8 +24,7 @@
 namespace Twist\Core\Utilities;
 
 /**
- * Generate and send full multi-lingual multi-part HTML emails with the ability to add attachments. Fully customisable with Char encoding, message encoding,
- * priority and sensitivity. The ability to parse raw email source and turn it into usable data using a single method call.
+ * Process and send full HTML emails with attachments and parse the raw source of email messages into a usable data array.
  */
 class Email extends Base{
 

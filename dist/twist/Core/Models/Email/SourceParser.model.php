@@ -23,6 +23,10 @@
 
 namespace Twist\Core\Models\Email;
 
+/**
+ * The ability to parse raw email source and turn it into usable data using a single method call.
+ * @package Twist\Core\Models\Email
+ */
 class SourceParser{
 
 	protected $arrTempData = array();
