@@ -108,10 +108,7 @@
 				self::define('E_TWIST_WARNING',E_USER_WARNING);
 				self::define('E_TWIST_ERROR',E_USER_ERROR);
 				self::define('E_TWIST_DEPRECATED',E_USER_DEPRECATED);
-
-				self::define('TWIST_ERROR_LOG',self::framework() -> setting('ERROR_LOG'));
-				self::define('TWIST_ERROR_SCREEN',self::framework() -> setting('ERROR_SCREEN'));
-
+				
 				//Register the PHP handlers
 				self::errorHandlers();
 				self::recordEvent('Handlers prepared');

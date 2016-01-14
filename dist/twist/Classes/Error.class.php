@@ -621,7 +621,7 @@
 
 			if(count(self::$arrErrorLog)){
 
-				if(TWIST_ERROR_LOG){
+				if(\Twist::framework() -> setting('ERROR_LOG')){
 
 					$strLog = "";
 					foreach(self::$arrErrorLog as $arrEachItem){
@@ -638,11 +638,11 @@
 							mkdir(sprintf('%s/Logs',TWIST_APP),0777,true);
 						}
 
-						file_put_contents(sprintf('%s/Logs/php-errors.log',TWIST_APP),$strLog);
+						file_put_contents(sprintf('%s/Logs/php-errors.log',TWIST_APP),$strLog,FILE_APPEND);
 					}
 				}
 
-				if(TWIST_ERROR_SCREEN){
+				if(\Twist::framework() -> setting('ERROR_SCREEN')){
 					echo "<hr/><h1>Twist Error Handler</h1><pre>".print_r(self::$arrErrorLog,true)."</pre>";
 				}
 			}
