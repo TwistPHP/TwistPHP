@@ -621,24 +621,69 @@
 
 			if(count(self::$arrErrorLog)){
 
-				if(\Twist::framework() -> setting('ERROR_LOG')){
+				//Get the PHP Error Log setting
+				$strErrorLog = strtoupper(\Twist::framework() -> setting('ERROR_LOG'));
+				if($strErrorLog != 'OFF'){
 
-					$strLog = "";
+					$intMaxErrorLogs = \Twist::framework() -> setting('ERROR_LOGS_MAX');
+
+					switch($strErrorLog){
+						case'DAY':
+							$strLogFile = sprintf('%s/Logs/php-errors_%s.log',TWIST_APP,date('Y-m-d'));
+							break;
+
+						case'WEEK':
+							$strLogFile = sprintf('%s/Logs/php-errors_%s.log',TWIST_APP,date('Y').'-week'.str_pad(date('W'), 2, "0", STR_PAD_LEFT));
+							break;
+
+						case'MONTH':
+							$strLogFile = sprintf('%s/Logs/php-errors_%s.log',TWIST_APP,date('Y-m'));
+							break;
+
+						case'SINGLE':
+						default:
+							$strLogFile = sprintf('%s/Logs/php-errors.log',TWIST_APP);
+
+							//If a single log file has reached the split level (5MB) then delete it of split it
+							if(filesize($strLogFile) >= 5242880){
+								if($intMaxErrorLogs > 1){
+									\Twist::File()->move($strLogFile,sprintf('%s/Logs/php-errors_%s.log',TWIST_APP,date('Y-m-d')));
+								}else{
+									\Twist::File()->delete($strLogFile);
+								}
+							}
+
+							break;
+					}
+
+					$strErrorLog = "";
 					foreach(self::$arrErrorLog as $arrEachItem){
 						if($arrEachItem['type'] != 'TWIST'){
-							$strLog .= sprintf("[%s] %s: [%s] %s - %s [line %s]\n",date('Y-m-d H:i:s'),$arrEachItem['type'],$arrEachItem['number'],$arrEachItem['message'],$arrEachItem['file'],$arrEachItem['code_line']);
+							$strErrorLog .= sprintf("[%s] %s: [%s] %s - %s [line %s]\n",date('Y-m-d H:i:s'),$arrEachItem['type'],$arrEachItem['number'],$arrEachItem['message'],$arrEachItem['file'],$arrEachItem['code_line']);
 						}else{
-							$strLog .= sprintf("[%s] %s: %s - %s [line %s]\n",date('Y-m-d H:i:s'),$arrEachItem['type'],$arrEachItem['message'],$arrEachItem['file'],$arrEachItem['code_line']);
+							$strErrorLog .= sprintf("[%s] %s: %s - %s [line %s]\n",date('Y-m-d H:i:s'),$arrEachItem['type'],$arrEachItem['message'],$arrEachItem['file'],$arrEachItem['code_line']);
 						}
 					}
 
+					//Output the errors to the error log
 					if(defined('TWIST_APP')){
+						file_put_contents($strLogFile,$strErrorLog,FILE_APPEND);
+					}
 
-						if(!is_dir(sprintf('%s/Logs',TWIST_APP))){
-							mkdir(sprintf('%s/Logs',TWIST_APP),0777,true);
+					//Get the Error Log storage age
+					$arrErrorLogs = array();
+					$strLogFolder = sprintf('%s/Logs/',TWIST_APP);
+
+					foreach(scandir($strLogFolder) as $strEachFile){
+						//Check to see we are looking at an php error file
+						if(strstr($strEachFile,'php-errors')){
+							$arrErrorLogs[$strEachFile] = sprintf('%s%s',$strLogFolder,$strEachFile);
 						}
+					}
 
-						file_put_contents(sprintf('%s/Logs/php-errors.log',TWIST_APP),$strLog,FILE_APPEND);
+					ksort($arrErrorLogs);
+					while(count($arrErrorLogs) > $intMaxErrorLogs){
+						\Twist::File()->delete(array_shift($arrErrorLogs),true);
 					}
 				}
 

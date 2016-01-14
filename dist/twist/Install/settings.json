@@ -112,11 +112,19 @@
     "null":0
   },
   "ERROR_LOG":{
-    "title":"Log Errors to File",
-    "description":"Log Errors to File",
-    "default":1,
-    "type":"boolean",
-    "options":"1,0",
+    "title":"PHP Error Logging",
+    "description":"Log all PHP errors to a file in app/Logs, the output can either be one file (Single) or split into Daily, Weekly or Monthly files. Single log files will be split when they reach 5MB in size.",
+    "default":"Daily",
+    "type":"options",
+    "options":"Off,Single,Daily,Weekly,Monthly",
+    "null":0
+  },
+  "ERROR_LOGS_MAX":{
+    "title":"Max PHP Error Logs",
+    "description":"Number of PHP Error log files file keep, log files will be removed starting with the oldest first.",
+    "default":"7",
+    "type":"options",
+    "options":"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,31,62,365",
     "null":0
   },
   "ERROR_SCREEN":{
