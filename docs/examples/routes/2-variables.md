@@ -5,6 +5,8 @@ If you need to catch variables in your requests then you can just add the variab
 ```php
 <?php
 
+    require_once( 'twist/framework.php' );
+
     /*
      * --------------------------------
      * Any request URI that begins with
@@ -24,6 +26,8 @@ If you need to catch variables in your requests then you can just add the variab
      * --------------------------------
      */
     Twist::Route() -> controller( '/vars/{p}/%', '' );
+
+    Twist::Route() -> serve();
 ```
 
 The variables can be retrieved within your controller with the `_var()` method:
@@ -54,27 +58,27 @@ The variables can be retrieved within your controller with the `_var()` method:
 
 You can access the route variables using the `_route()` method in your controller. Pass in the key as the first parameter to get a single value, e.g. `$this -> _route( 'base_uri' );`.
 
-| Key                      | Type    | Description | Example |
-| ------------------------ | ------- | ----------- | ------- |
-| `base_url`               | String  | ? | `'https://twistphp.com'` |
-| `url`                    | String  | ? | `'https://twistphp.com/examples/routes/variables'` |
-| `base_uri`               | String  | ? | ? |
-| `uri`                    | String  | ? | `'/examples/routes/variables'` |
-| `registered_uri`         | String  | ? | `'/examples'` |
-| `registered_uri_current` | String  | ? | `'variables'` |
-| `dynamic`                | String  | ? | ? |
-| `parts`                  | Array   | ? | `Array( [0] => debug )` |
-| `vars`                   | Array   | ? | ? |
-| `wildcard`               | Boolean | ? | `1` |
-| `regx`                   | String  | ? | ? |
-| `type`                   | String  | ? | `'controller'` |
-| `method`                 | String  | (ANY, GET, POST, DELETE, PUT) | `'ANY'` |
-| `request_method`         | String  | (ANY, GET, POST, DELETE, PUT) | `'GET'` |
-| `item`                   | Array   | ? | ? |
-| `data`                   | Array   | ? | ? |
-| `model`                  | String  | ? | ? |
-| `base_view`              | Boolean | ? | `1` |
-| `cache`                  | Boolean | ? | ? |
-| `cache_key`              | String  | ? | ? |
-| `cache_life`             | Integer | ? | ? |
-| `title`                  | String  | ? | `'Variables | Routes | Code Examples | TwistPHP'` |
+| Key                      | Type    | Description                   | Example                                            |
+| ------------------------ | ------- | ----------------------------- | -------------------------------------------------- |
+| `base_url`               | String  | ?                             | `'https://twistphp.com'`                           |
+| `url`                    | String  | ?                             | `'https://twistphp.com/examples/routes/variables'` |
+| `base_uri`               | String  | ?                             | ?                                                  |
+| `uri`                    | String  | ?                             | `'/examples/routes/variables'`                     |
+| `registered_uri`         | String  | ?                             | `'/examples'`                                      |
+| `registered_uri_current` | String  | ?                             | `'variables'`                                      |
+| `dynamic`                | String  | ?                             | ?                                                  |
+| `parts`                  | Array   | ?                             | `Array( [0] => debug )`                            |
+| `vars`                   | Array   | ?                             | ?                                                  |
+| `wildcard`               | Boolean | ?                             | `1`                                                |
+| `regx`                   | String  | ?                             | ?                                                  |
+| `type`                   | String  | ?                             | `'controller'`                                     |
+| `method`                 | String  | (ANY, GET, POST, DELETE, PUT) | `'ANY'`                                            |
+| `request_method`         | String  | (ANY, GET, POST, DELETE, PUT) | `'GET'`                                            |
+| `item`                   | Array   | ?                             | ?                                                  |
+| `data`                   | Array   | ?                             | ?                                                  |
+| `model`                  | String  | ?                             | ?                                                  |
+| `base_view`              | Boolean | ?                             | `1`                                                |
+| `cache`                  | Boolean | ?                             | ?                                                  |
+| `cache_key`              | String  | ?                             | ?                                                  |
+| `cache_life`             | Integer | ?                             | ?                                                  |
+| `title`                  | String  | ?                             | `'Route Variables Code Examples - TwistPHP'`       |

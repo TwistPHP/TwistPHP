@@ -1,76 +1,154 @@
 # Creating restrictions
 
-```php
-Twist::Route() -> restrict( '/admin/%' );
-Twist::Route() -> restrictMembers( '/admin/%' );
-Twist::Route() -> restrictAdvanced( '/admin/%' );
-Twist::Route() -> restrictAdmin( '/admin/%' );
-Twist::Route() -> restrictSuperAdmin( '/admin/%' );
-Twist::Route() -> restrictRoot( '/admin/%' );
-```
+TwistPHP allows you to easily restrict certain areas of your site to any of the preset user levels:
 
-## Unresting a page
+* Members (have an active account in the `users` database table)
+* Advanced ('premium' members that may require more access than a standard member)
+* Admin (you can use this to allow access to tools that administer site content, for example)
+* Super admin (the highest level of general access)
+* Developer (root level accounts which have unrestricted access to everything)
 
-You can unrestrict a page, subpage or whole section to allow both logged in and guest access.
+## Using the TwistPHP user controller
 
-```php
-Twist::Route() -> unrestrict( '/admin/contact' );
-```
+Instead of the standard base controller (`\Twist\Core\Controllers\Base`) that all your controllers should extend, for restricted areas of the site you need to extend the TwistPHP base user controller, `\Twist\Core\Controllers\BaseUser`.
 
-## User authentication and login pages
+The BaseUser controller comes with several methods to facilitate login forms, forgotten password screens and various other features:
 
-Allowing a user to login in to your website has never been so simple, you will need to extend your admin controller with the baseUser controller.
+| Method/URI             | Description                                                                                  |
+| ---------------------- | -------------------------------------------------------------------------------------------- |
+| `login()`              | Display a login form and handle the various post requests needed to log in                   |
+| `change-password()`    | The change password form, used when the user is logged in but wants to change their password |
+| `verify()`             | If user verification is enabled, this displays the verification screen                       |
+| `forgotten-password()` | A form to enter an email address into when the user has forgotten their password             |
+| `device-manager()`     | Shows a list of all the users logged in devices with the ability to delete open sessions     |
+| `authenticate()`       | The method used to authenticate logins and other posts                                       |
+| `logout()`             | Logs the user out                                                                            |
 
-```php
-<?php
-
-    namespace App\Controllers;
-        
-    use \Twist\Core\Controllers\BaseUser;
-    
-    class Admin extends BaseUser{
-    
-        public function _index(){
-            return '<h1>Index page</h1>' . print_r( $this -> _route() );
-        }
-    
-        ...
-    }
-```
-
-The BaseUser controller adds the following pages to your controller. You do not have to extend all your restricted controllers with BaseUser only the ones that you want a login page on
-
-| URI                      | Description                          |
-| ------------------------ | ------------------------------------ |
-| login                    | String                               |
-| change-password          | String                               |
-| verify                   | String                               |
-| forgotten-password       | String                               |
-| device-manager           | String                               |
-| authenticate             | String                               |
-| logout                   | String                               |
-
-You can add the restricted controller to your index file but you will need to un-restrict some pages in order for a user to be able to login.
+Your user controller should look something like this:
 
 ```php
 <?php
 
     /*
      * --------------------------------
-     * Register the following routes to
-     * allow all requests to be handled
-     * by the MySite controller
-     * --------------------------------
-     * URI | METHOD
-     * /   | _index
-     * /a  | alpha
-     * /b  | beta
-     * /c  | gamma
+     * Same namespace as before - it is
+     * all just your controllers is the
+     * app namespace
      * --------------------------------
      */
-    Twist::Route() -> controller( '/admin/%', 'Admin' );
+    namespace App\Controllers;
     
-    Twist::Route() -> restrict( '/admin/%' );
+    /*
+     * --------------------------------
+     * Use the BaseUser controller that
+     * comes with TwistPHP
+     * --------------------------------
+     */
+    use \Twist\Core\Controllers\BaseUser;
+    
+    /*
+     * --------------------------------
+     * Extend the BaseUser class so you
+     * can inherit all the user goodies
+     * --------------------------------
+     */
+    class AdminArea extends BaseUser {
+    
+        /*
+         * --------------------------------
+         * For any custom methods it's just
+         * business as usual
+         * --------------------------------
+         */
+        public function _index() {
+            return '<h1>Welcome to the restricted area</h1>';
+        }
+    
+        public function help() {
+            return '<h1>Don\'t panic!</h1>';
+        }
+        
+    }
+```
+
+## Applying restrictions to routes
+
+You can apply your restrictions after you are done registering your routes in your project's `index.php` file. 
+
+
+```php
+<?php
+
+    require_once( 'twist/framework.php' );
+    
+    /*
+     * --------------------------------
+     * Let's register the new AdminArea
+     * controller for any requests that
+     * start with /admin
+     * --------------------------------
+     */
+    Twist::Route() -> controller( '/admin/%', 'AdminArea' );
+
+    /*
+     * --------------------------------
+     * Now we are going to restrict the
+     * access for anyone requesting one
+     * of our admin pages - the default
+     * level for admin users is 30, but
+     * this can quite easily be changed
+     * in the project settings database
+     * table
+     * --------------------------------
+     */
+    Twist::Route() -> restrictAdmin( '/admin/%' );
+    
+    /*
+     * --------------------------------
+     * These are all the standard level
+     * restrictions that are available,
+     * although developers with a level
+     * 0 account are able to access all
+     * restricted areas after they have
+     * logged in
+     * --------------------------------
+     */
+    //Twist::Route() -> restrict( '/admin/%' ); // Must be a valid user
+    //Twist::Route() -> restrictMembers( '/admin/%' ); // Must be a valid user, at least level 10
+    //Twist::Route() -> restrictAdvanced( '/admin/%' ); // Must be a valid user, at least level 20
+    //Twist::Route() -> restrictAdmin( '/admin/%' ); // Must be a valid user, at least level 30
+    //Twist::Route() -> restrictSuperAdmin( '/admin/%' ); // Must be a valid user, at least level 40
+    //Twist::Route() -> restrictRoot( '/admin/%' ); // Only valid root users (level 0) can access
+    
+    /*
+     * --------------------------------
+     * When we are ready, go go go!
+     * --------------------------------
+     */
+    Twist::Route() -> serve();
+```
+
+### Unresting certain URIs
+
+If needed, you can unrestrict a page, sub page or a whole area of your project to allow open access.
+
+```php
+<?php
+
+    /*
+     * --------------------------------
+     * Here we want the help page to be
+     * access by everyone, not just the
+     * users who are logged in
+     * --------------------------------
+     */
+    Twist::Route() -> unrestrict( '/admin/help' );
+```
+
+In order to allow the user to log in, we must unrestrict some pages:
+
+```php
+<?php
     
     Twist::Route() -> unrestrict( '/admin/login' );
     Twist::Route() -> unrestrict( '/admin/authenticate' );

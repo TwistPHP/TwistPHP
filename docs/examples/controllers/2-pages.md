@@ -47,4 +47,4 @@ public function viewtest() {
 }
 ```
 
-Visiting the page `/viewtest` in your browser should now display the above template, populated with your data.
+After registering the controller, visiting the page `/viewtest` in your browser should now display the above template, populated with your data.

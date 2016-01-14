@@ -1,6 +1,6 @@
-# Routing rules
+# Routing basics
 
-When registering controllers in your site's `index.php` file, you need two variables: the path to match and the controller to pass the request on to.
+When registering controllers in your project's `index.php` file, you need two variables: the path to match and the controller to pass the request on to.
 
 For this example, our controller looks like this:
 
@@ -39,6 +39,8 @@ You will most likely need a controller that handles the main pages of your proje
 ```php
 <?php
 
+    require_once( 'twist/framework.php' );
+
     /*
      * --------------------------------
      * Register the following routes to
@@ -60,6 +62,8 @@ To specify controllers for different areas of the site just update the URI to ma
 ```php
 <?php
 
+    require_once( 'twist/framework.php' );
+
     /*
      * --------------------------------
      * Any request URI that begins with
@@ -74,4 +78,14 @@ To specify controllers for different areas of the site just update the URI to ma
      * --------------------------------
      */
     Twist::Route() -> controller( '/shop/%', 'MySite' );
+```
+
+## Serving the registered routes
+
+To serve your app's registered routes, simply add the following line to your project's `index.php` file:
+
+```php
+<?php
+
+    Twist::Route() -> serve();
 ```
