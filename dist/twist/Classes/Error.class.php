@@ -622,21 +622,21 @@
 			if(count(self::$arrErrorLog)){
 
 				//Get the PHP Error Log setting
-				$strErrorLog = strtoupper(\Twist::framework() -> setting('ERROR_LOG'));
-				if($strErrorLog != 'OFF'){
+				$strErrorLogType = strtoupper(\Twist::framework() -> setting('ERROR_LOG'));
+				if($strErrorLogType != 'OFF'){
 
 					$intMaxErrorLogs = \Twist::framework() -> setting('ERROR_LOGS_MAX');
 
-					switch($strErrorLog){
-						case'DAY':
+					switch($strErrorLogType){
+						case'DAILY':
 							$strLogFile = sprintf('%s/Logs/php-errors_%s.log',TWIST_APP,date('Y-m-d'));
 							break;
 
-						case'WEEK':
+						case'WEEKLY':
 							$strLogFile = sprintf('%s/Logs/php-errors_%s.log',TWIST_APP,date('Y').'-week'.str_pad(date('W'), 2, "0", STR_PAD_LEFT));
 							break;
 
-						case'MONTH':
+						case'MONTHLY':
 							$strLogFile = sprintf('%s/Logs/php-errors_%s.log',TWIST_APP,date('Y-m'));
 							break;
 
@@ -675,8 +675,11 @@
 					$strLogFolder = sprintf('%s/Logs/',TWIST_APP);
 
 					foreach(scandir($strLogFolder) as $strEachFile){
+
 						//Check to see we are looking at an php error file
-						if(strstr($strEachFile,'php-errors')){
+						if($strErrorLogType == 'SINGLE' && $strEachFile == 'php-errors.log'){
+							$arrErrorLogs['zzz-'.$strEachFile] = sprintf('%s%s',$strLogFolder,$strEachFile);
+						}elseif(strstr($strEachFile,'php-errors')){
 							$arrErrorLogs[$strEachFile] = sprintf('%s%s',$strLogFolder,$strEachFile);
 						}
 					}
