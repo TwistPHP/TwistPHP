@@ -128,7 +128,7 @@ You can apply your restrictions after you are done registering your routes in yo
     Twist::Route() -> serve();
 ```
 
-### Unresting certain URIs
+### Unrestricting certain URIs
 
 If needed, you can unrestrict a page, sub page or a whole area of your project to allow open access.
 
