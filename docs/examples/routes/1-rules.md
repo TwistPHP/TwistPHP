@@ -9,7 +9,7 @@ For this example, our controller looks like this:
 
     namespace App\Controllers;
     
-    use Twist\Core\Controllers\Base;
+    use \Twist\Core\Controllers\Base;
     
     class MySite extends Base {
     
