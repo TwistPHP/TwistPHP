@@ -82,10 +82,16 @@ To specify controllers for different areas of the site just update the URI to ma
 
 ## Serving the registered routes
 
-To serve your app's registered routes, simply add the following line to your project's `index.php` file:
+To serve your app's registered routes, simply add the following line to the end of your project's `index.php` file:
 
 ```php
 <?php
 
+    /*
+     * --------------------------------
+     * Serve anything that has been set
+     * up in the routing
+     * --------------------------------
+     */
     Twist::Route() -> serve();
 ```
