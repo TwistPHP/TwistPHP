@@ -19,6 +19,7 @@
 
 			$this->restrictSuperAdmin('/%','/login');
 			$this->unrestrict('/authenticate');
+			$this->unrestrict('/cookies');
 			$this->unrestrict('/forgotten-password');
 
 			//Load in all any hooks registered to extend the Twist Manager

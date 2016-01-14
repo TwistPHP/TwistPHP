@@ -55,6 +55,15 @@ class Manager extends BaseUser{
 	}
 
 	/**
+	 * Over-ride the base view for the cookies page
+	 * @return string
+	 */
+	public function cookies(){
+		$this->_baseView('_login.tpl');
+		return parent::cookies();
+	}
+
+	/**
 	 * @alias dashboard
 	 * @return string
 	 */

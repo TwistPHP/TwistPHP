@@ -66,6 +66,8 @@ class BaseUser extends Base{
             $this->logout();
         }
 
+	    \Twist::Cookie()->set('twistphp-cookie-test','login-cookie-test',time()+3600);
+
         return $this->resUser->viewExtension('login_form');
     }
 
@@ -74,6 +76,14 @@ class BaseUser extends Base{
 	 * if hte login request has failed the user will be forwarded on to the relevan page i.e Change Password, Verify Account or the login page with an error message.
 	 */
     public function authenticate(){
+
+	    //Do the TwistPHP cookie test
+	    if(\Twist::Cookie()->exists('twistphp-cookie-test')){
+		    \Twist::Cookie()->delete('twistphp-cookie-test');
+	    }else{
+		    //You are not logged in
+		    \Twist::redirect('./cookies');
+	    }
 
         $arrResult = Auth::login($_POST['email'],$_POST['password'],(array_key_exists('remember',$_POST) && $_POST['remember'] == '1'));
 
@@ -115,6 +125,14 @@ class BaseUser extends Base{
         Auth::logout();
         \Twist::redirect('./login');
     }
+
+	/**
+	 * Page that informs that user they must have cookies enabled in-order to login to this website.
+	 * @return string
+	 */
+	public function cookies(){
+		return  $this->_view(sprintf('%suser/enable-cookies.tpl',TWIST_FRAMEWORK_VIEWS));
+	}
 
 	/**
 	 * Forgotten password page, form here you can enter your email address and you will then be emailed a temporary password.
