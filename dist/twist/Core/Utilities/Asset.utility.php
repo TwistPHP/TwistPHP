@@ -51,10 +51,10 @@
 			}
 
 			//Pre-cache the types and groups ready to be used
-			$this->arrTypes = \Twist::framework()->tools()->arrayReindex(\Twist::Database()->getAll(sprintf('%sasset_types',TWIST_DATABASE_TABLE_PREFIX)),'id');
+			$this->arrTypes = \Twist::framework()->tools()->arrayReindex(\Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'asset_types')->find(),'id');
 			$this->arrTypeSlugs = \Twist::framework()->tools()->arrayReindex($this->arrTypes,'slug');
 
-			$this->arrGroups = \Twist::framework()->tools()->arrayReindex(\Twist::Database()->getAll(sprintf('%sasset_groups',TWIST_DATABASE_TABLE_PREFIX)),'id');
+			$this->arrGroups = \Twist::framework()->tools()->arrayReindex(\Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'asset_groups')->find(),'id');
 			$this->arrGroupSlugs = \Twist::framework()->tools()->arrayReindex($this->arrGroups,'slug');
 			$this->arrGroupTree = \Twist::framework()->tools()->arrayRelationalTree($this->arrGroups,'id','parent');
 		}
@@ -67,7 +67,7 @@
 		 */
 		public function get($intAssetID){
 
-			$arrAsset = \Twist::Database()->get(sprintf('%sassets',TWIST_DATABASE_TABLE_PREFIX),$intAssetID);
+			$arrAsset = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'assets')->get($intAssetID,'id',true);
 			$arrAsset = (count($arrAsset)) ? $this->expand($arrAsset) : array();
 
 			return $arrAsset;
@@ -82,7 +82,7 @@
 		public function getAll($strOrderBy='added',$strOrderDirection='DESC'){
 
 			$arrOut = array();
-			$arrAssets = \Twist::Database()->getAll(sprintf('%sassets',TWIST_DATABASE_TABLE_PREFIX),$strOrderBy,$strOrderDirection);
+			$arrAssets = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'assets')->find(null,null,$strOrderBy,$strOrderDirection);
 
 			if(count($arrAssets)){
 				foreach($arrAssets as $arrEachAsset){
@@ -105,7 +105,7 @@
 		public function getByGroup($intGroupID,$strOrderBy='added',$strOrderDirection='DESC'){
 
 			$arrOut = array();
-			$arrAssets = \Twist::Database()->find(sprintf('%sassets',TWIST_DATABASE_TABLE_PREFIX),$intGroupID,'group_id',$strOrderBy,$strOrderDirection);
+			$arrAssets = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'assets')->find($intGroupID,'group_id',$strOrderBy,$strOrderDirection);
 
 			if(count($arrAssets)){
 				foreach($arrAssets as $arrEachAsset){
@@ -128,7 +128,7 @@
 		public function getByType($intTypeID,$strOrderBy='added',$strOrderDirection='DESC'){
 
 			$arrOut = array();
-			$arrAssets = \Twist::Database()->find(sprintf('%sassets',TWIST_DATABASE_TABLE_PREFIX),$intTypeID,'type_id',$strOrderBy,$strOrderDirection);
+			$arrAssets = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'assets')->find($intTypeID,'type_id',$strOrderBy,$strOrderDirection);
 
 			if(count($arrAssets)){
 				foreach($arrAssets as $arrEachAsset){
@@ -177,7 +177,7 @@
 		public function getSupportingContent($arrAsset){
 
 			$arrOut = array();
-			$arrSupport = \Twist::Database()->find(sprintf('%sasset_support',TWIST_DATABASE_TABLE_PREFIX),$arrAsset['id'],'asset_id');
+			$arrSupport = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'asset_support')->find($arrAsset['id'],'asset_id');
 
 			if(count($arrSupport)){
 				foreach($arrSupport as $arrEachItem){
@@ -288,7 +288,7 @@
 		public function addGroup($strDescription,$srtSlug){
 
 			//Create the asset group record in the database
-			$resRecord = \Twist::Database()->createRecord(sprintf('%sasset_groups',TWIST_DATABASE_TABLE_PREFIX));
+			$resRecord = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'asset_groups')->create();
 			$resRecord->set('description',$strDescription);
 			$resRecord->set('slug',$srtSlug);
 			$resRecord->set('created',\Twist::DateTime()->date('Y-m-d H:i:s'));
@@ -307,7 +307,7 @@
 		public function editGroup($intGroupID,$strDescription,$srtSlug){
 
 			//Create the asset group record in the database
-			$resRecord = \Twist::Database()->getRecord(sprintf('%sasset_groups',TWIST_DATABASE_TABLE_PREFIX),$intGroupID);
+			$resRecord = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'asset_groups')->get($intGroupID);
 			$resRecord->set('description',$strDescription);
 			$resRecord->set('slug',$srtSlug);
 			$resRecord->set('created',\Twist::DateTime()->date('Y-m-d H:i:s'));
@@ -428,7 +428,7 @@
 			}
 
 			//Create the asset record in the database
-			$resRecord = \Twist::Database()->createRecord(sprintf('%sassets',TWIST_DATABASE_TABLE_PREFIX));
+			$resRecord = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'assets')->create();
 			$resRecord->set('title',$strTitle);
 			$resRecord->set('description',$strDescription);
 			$resRecord->set('type_id',$intTypeID);
@@ -446,7 +446,7 @@
 
 				foreach($arrSupportingAssets as $strType => $strURI){
 					//Create the asset record in the database
-					$resSupportingRecord = \Twist::Database()->createRecord(sprintf('%sasset_support',TWIST_DATABASE_TABLE_PREFIX));
+					$resSupportingRecord = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'asset_support')->create();
 					$resSupportingRecord->set('asset_id',$intOut);
 					$resSupportingRecord->set('type',$strType);
 					$resSupportingRecord->set('data',$strURI);
@@ -513,7 +513,7 @@
 		 */
 		public function edit($intAssetID,$strTitle,$strDescription=''){
 
-			$resRecord = \Twist::Database()->getRecord(sprintf('%sasset',TWIST_DATABASE_TABLE_PREFIX),$intAssetID);
+			$resRecord = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'assets')->get($intAssetID);
 			$resRecord->set('title',$strTitle);
 			$resRecord->set('description',$strDescription);
 
@@ -529,7 +529,7 @@
 		 */
 		public function active($intAssetID,$blActive=true){
 
-			$resRecord = \Twist::Database()->getRecord(sprintf('%sassets',TWIST_DATABASE_TABLE_PREFIX),$intAssetID);
+			$resRecord = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'assets')->get($intAssetID);
 			$resRecord->set('enabled',($blActive) ? '1' : '0');
 
 			return $resRecord->commit();
@@ -554,7 +554,7 @@
 				}
 
 				//Delete the asset record
-				$blOut = \Twist::Database()->delete(sprintf('%sassets',TWIST_DATABASE_TABLE_PREFIX),$intAssetID);
+				$blOut = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'assets')->delete($intAssetID);
 			}
 
 			return $blOut;

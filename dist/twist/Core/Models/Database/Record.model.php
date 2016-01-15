@@ -141,7 +141,6 @@
 		public function delete(){
 
 			$blOut = false;
-			$objDatabase = \Twist::Database();
 
 			$strSQL = sprintf("DELETE FROM `%s`.`%s` WHERE %s LIMIT 1",
 				$this->strDatabase,
@@ -149,7 +148,7 @@
 				$this->whereClause()
 			);
 
-			if($objDatabase->query($strSQL)){
+			if(\Twist::Database()->query($strSQL)->status()){
 				$this->__destruct();
 				$blOut = true;
 			}
@@ -168,15 +167,15 @@
 
 			if(json_encode($this->arrOriginalRecord) !== json_encode($this->arrRecord)){
 
-				$objDatabase = \Twist::Database();
 				$strSQL = $this->sql($blInsert);
+				$resResult = \Twist::Database()->query($strSQL);
 
-				if($objDatabase->query($strSQL)){
+				if($resResult->status()){
 					//Now that the record has been updated in the database the original data must equal the current data
 					$this->arrOriginalRecord = $this->arrRecord;
 
 					if(substr($strSQL,0,6) === 'INSERT'){
-						$mxdOut = $objDatabase->getInsertID();
+						$mxdOut = $resResult->insertID();
 
 						//Find an auto increment field and update the ID in the record
 						foreach($this->arrStructure['columns'] as $strField => $arrOptions){
@@ -186,8 +185,8 @@
 								break;
 							}
 						}
-					}else if($objDatabase->getAffectedRows() !== 0){
-						$mxdOut = $objDatabase->getAffectedRows();
+					}else if($resResult->affectedRows() !== 0){
+						$mxdOut = $resResult->affectedRows();
 					}
 				} else {
 					$mxdOut = false;
@@ -233,7 +232,6 @@
 		protected function queryValues(){
 
 			$arrValueClause = array();
-			$objDatabase = \Twist::Database();
 
 			foreach($this->arrRecord as $strField => $strValue){
 
@@ -251,7 +249,7 @@
 						}
 					}
 
-					$arrValueClause[] = sprintf($strFieldString, $objDatabase->escapeString($strField), $objDatabase->escapeString($strValue));
+					$arrValueClause[] = sprintf($strFieldString, \Twist::Database()->escapeString($strField), \Twist::Database()->escapeString($strValue));
 				}
 			}
 
@@ -265,13 +263,12 @@
 		protected function whereClause(){
 
 			$arrWhereClause = array();
-			$objDatabase = \Twist::Database();
 
 			//It would be possible to detect for unique keys here to minimize where clause id no autoincrement is set.
 			$strAutoIncrementField = $this->detectAutoIncrement();
 
 			if(!is_null($strAutoIncrementField)){
-				$arrWhereClause[] = sprintf("`%s` = %d", $objDatabase->escapeString($strAutoIncrementField), $objDatabase->escapeString($this->arrOriginalRecord[$strAutoIncrementField]));
+				$arrWhereClause[] = sprintf("`%s` = %d", \Twist::Database()->escapeString($strAutoIncrementField), \Twist::Database()->escapeString($this->arrOriginalRecord[$strAutoIncrementField]));
 			}else{
 				foreach($this->arrOriginalRecord as $strField => $strValue){
 
@@ -286,7 +283,7 @@
 						}
 					}
 
-					$arrWhereClause[] = sprintf($strFieldString, $objDatabase->escapeString($strField), $objDatabase->escapeString($strValue));
+					$arrWhereClause[] = sprintf($strFieldString, \Twist::Database()->escapeString($strField), \Twist::Database()->escapeString($strValue));
 				}
 			}
 

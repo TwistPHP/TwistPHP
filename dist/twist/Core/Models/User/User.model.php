@@ -51,16 +51,16 @@ class User{
 		$this->blNewAccount = is_null($intUserID);
 
 		//Get the array of user fields
-		$this->arrUserDataFields = \Twist::framework()->tools()->arrayReindex(\Twist::Database()->getAll(sprintf('%suser_data_fields',TWIST_DATABASE_TABLE_PREFIX)),'slug');
+		$this->arrUserDataFields = \Twist::framework()->tools()->arrayReindex(\Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'user_data_fields')->find(),'slug');
 
-		$blQuery = \Twist::Database()->query("SELECT `ud`.`data`,`udf`.`slug` FROM `%suser_data` AS `ud` JOIN `%suser_data_fields` AS `udf` ON `ud`.`field_id` = `udf`.`id` WHERE `ud`.`user_id` = %d",
+		$resResult = \Twist::Database()->query("SELECT `ud`.`data`,`udf`.`slug` FROM `%suser_data` AS `ud` JOIN `%suser_data_fields` AS `udf` ON `ud`.`field_id` = `udf`.`id` WHERE `ud`.`user_id` = %d",
 			TWIST_DATABASE_TABLE_PREFIX,
 			TWIST_DATABASE_TABLE_PREFIX,
 			$intUserID
 		);
 
-		if($blQuery && \Twist::Database()->getNumberRows()){
-			foreach(\Twist::Database()->getFullArray() as $arrEachItem){
+		if($resResult->status() && $resResult->numberRows()){
+			foreach($resResult->getFullArray() as $arrEachItem){
 				$this->arrUserData[$arrEachItem['slug']] = $this->arrOriginalUserData[$arrEachItem['slug']] = $arrEachItem['data'];
 			}
 		}
@@ -115,7 +115,7 @@ class User{
 				if(!array_key_exists($strKey,$this->arrUserDataFields)){
 
 					//The field is a new filed, insert into the database
-					$resUserDataField = \Twist::Database()->createRecord(sprintf('%suser_data_fields',TWIST_DATABASE_TABLE_PREFIX));
+					$resUserDataField = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'user_data_fields')->create();
 					$resUserDataField->set('slug',$strKey);
 					$resUserDataField->commit();
 					$this->arrUserDataFields[$strKey] = $resUserDataField->values();
@@ -145,7 +145,7 @@ class User{
 				}elseif(!array_key_exists($strKey,$this->arrOriginalUserData)){
 
 					//If the key is not in the original array we need to insert the value
-					$resUserData = \Twist::Database()->createRecord(sprintf('%suser_data',TWIST_DATABASE_TABLE_PREFIX));
+					$resUserData = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'user_data')->create();
 					$resUserData->set('user_id',$this->resDatabaseRecord->get('id'));
 					$resUserData->set('field_id',$this->arrUserDataFields[$strKey]['id']);
 					$resUserData->set('data',$mxdData);
@@ -231,17 +231,11 @@ class User{
 
 	public function delete(){
 
-		$blOut = \Twist::Database()->delete(sprintf('%susers',TWIST_DATABASE_TABLE_PREFIX),$this->resDatabaseRecord->get('id'));
-
-		//Delete all the user data for that user
-		\Twist::Database()->query("DELETE FROM `%suser_data` WHERE `user_id` = %d",
-			TWIST_DATABASE_TABLE_PREFIX,
-			$this->resDatabaseRecord->get('id')
-		);
+		\Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'user_data')->delete($this->resDatabaseRecord->get('id'),'user_id',null);
 
 		//@todo remove sessions and devices
 
-		return $blOut;
+		return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->delete($this->resDatabaseRecord->get('id'),'id');
 	}
 
 	public function requireVerification(){

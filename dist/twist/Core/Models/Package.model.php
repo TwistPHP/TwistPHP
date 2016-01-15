@@ -107,7 +107,7 @@
 			if(\Twist::Database()->checkSettings() && !count($this->arrPackages) || $blRebuild){
 
 				$this->arrPackages = array();
-				$arrPackages = \Twist::Database()->getAll(TWIST_DATABASE_TABLE_PREFIX.'packages');
+				$arrPackages = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'packages')->find();
 
 				if(count($arrPackages)){
 					$arrPackages = \Twist::framework()->tools()->arrayReindex($arrPackages,'slug');
@@ -364,7 +364,7 @@
 		 * @return bool
 		 */
 		public function isInstalled($strPackageSlug){
-			return (count(\Twist::Database()->get(TWIST_DATABASE_TABLE_PREFIX.'packages',$strPackageSlug,'slug'))) ? true : false;
+			return (\Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'packages')->count($strPackageSlug,'slug')) ? true : false;
 		}
 
 		/**

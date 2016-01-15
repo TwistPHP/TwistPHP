@@ -136,20 +136,9 @@ class Auth{
         //If the user is still not valid then check email and password
         if(!is_null($strEmail) && !is_null($strPassword)){
 
-            $objDB = \Twist::Database();
+	        $arrUserData = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->get($strEmail,'email',true);
 
-            $strSQL = sprintf("SELECT `id`,`password`,`enabled`,`verified`,`level`,`temp_password`,`firstname`,`surname`
-									FROM `%s`.`%susers`
-									WHERE `email` = '%s'
-									LIMIT 1",
-                TWIST_DATABASE_NAME,
-                TWIST_DATABASE_TABLE_PREFIX,
-                $objDB->escapeString($strEmail)
-            );
-
-            if($objDB->query($strSQL) && $objDB->getNumberRows()){
-                $arrUserData = $objDB->getArray();
-
+            if(count($arrUserData)){
                 if($arrUserData['password'] == sha1($strPassword)){
                     if($arrUserData['enabled'] == '1'){
                         if(\Twist::framework()->setting('USER_EMAIL_VERIFICATION') == false || (\Twist::framework()->setting('USER_EMAIL_VERIFICATION') && $arrUserData['verified'] == '1')){

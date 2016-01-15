@@ -88,7 +88,7 @@
 						$this->blFileConfig = false;
 						\Twist::Database()->connect();
 
-						$this->arrSettingsInfo = \Twist::Database()->getAll(sprintf('%ssettings',TWIST_DATABASE_TABLE_PREFIX));
+						$this->arrSettingsInfo = \Twist::Database()->records(sprintf('%ssettings',TWIST_DATABASE_TABLE_PREFIX))->find();
 					}
 	            }
 
@@ -173,20 +173,18 @@
 	            }
 	        }else{
 
-	            $objDB = \Twist::Database();
-
-	            //Only update the setting in the table if the key exists
-	            $strSQL = sprintf("UPDATE `%s`.`%ssettings`
+		        //Only update the setting in the table if the key exists
+	            $resResult = \Twist::Database()->query("UPDATE `%s`.`%ssettings`
 	                                SET `value` = '%s'
 	                                WHERE `key` = '%s'
 	                                LIMIT 1",
-	                TWIST_DATABASE_NAME,
-	                TWIST_DATABASE_TABLE_PREFIX,
-	                $objDB->escapeString($mxdData),
-	                $objDB->escapeString(strtoupper($strKey))
+		            TWIST_DATABASE_NAME,
+		            TWIST_DATABASE_TABLE_PREFIX,
+		            $mxdData,
+		            strtoupper($strKey)
 	            );
 
-	            if($objDB->query($strSQL) && $objDB->getAffectedRows()){
+	            if($resResult->status() && $resResult->affectedRows()){
 	                $this->arrSettings[$strKey] = $mxdData;
 					$this->arrSettingsInfo[$strKey]['value'] = $mxdData;
 	                $blOut = true;
@@ -311,9 +309,7 @@
 				return true;
 			}else{
 
-				$resDatabase = \Twist::Database();
-
-				$strSQL = sprintf("INSERT INTO `%s`.`%ssettings`
+				return \Twist::Database()->query("INSERT INTO `%s`.`%ssettings`
 									SET `package` = '%s',
 										`group` = '%s',
 										`key` = '%s',
@@ -335,25 +331,23 @@
 										`deprecated` = '0'",
 					TWIST_DATABASE_NAME,
 					TWIST_DATABASE_TABLE_PREFIX,
-					$resDatabase->escape($strPackage),
-					$resDatabase->escape(strtolower($strGroup)),
-					$resDatabase->escape(strtoupper($strKey)),
-					$resDatabase->escape($mxdValue),
-					$resDatabase->escape($strTitle),
-					$resDatabase->escape($strDescription),
-					$resDatabase->escape($strDefault),
-					$resDatabase->escape($strType),
-					$resDatabase->escape($strOptions),
+					$strPackage,
+					strtolower($strGroup),
+					strtoupper($strKey),
+					$mxdValue,
+					$strTitle,
+					$strDescription,
+					$strDefault,
+					$strType,
+					$strOptions,
 					($blNull) ? '1' : '0',
-					$resDatabase->escape($strTitle),
-					$resDatabase->escape($strDescription),
-					$resDatabase->escape($strDefault),
-					$resDatabase->escape($strType),
-					$resDatabase->escape($strOptions),
+					$strTitle,
+					$strDescription,
+					$strDefault,
+					$strType,
+					$strOptions,
 					($blNull) ? '1' : '0'
-				);
-
-				return \Twist::Database()->query($strSQL);
+				)->status();
 			}
 		}
 	}
