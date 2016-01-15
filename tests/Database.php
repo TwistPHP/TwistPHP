@@ -21,44 +21,43 @@ class Database extends \PHPUnit_Framework_TestCase{
 
 	public function testGet(){
 
-		$arrResult = \Twist::Database()->get('twist_settings','SITE_NAME','key',true);
+		$arrResult = \Twist::Database()->records('twist_settings')->get('SITE_NAME','key',true);
 
 		$this -> assertEquals('Travis CI Test',$arrResult['value']);
 	}
 
-	public function testRecordObject(){
+	public function testGetModify(){
 
-		$resRecord = \Twist::Database()->get('twist_settings','SITE_NAME','key');
+		$resRecord = \Twist::Database()->records('twist_settings')->get('SITE_NAME','key');
 		$resRecord->set('value','Travis CI Test - Updated');
 		$resRecord->commit();
 
 		$this->assertEquals('Travis CI Test - Updated',$resRecord->get('value'));
 		unset($resRecord);
 
-		$resRecord = \Twist::Database()->getRecord('twist_settings','SITE_NAME','key');
+		$resRecord = \Twist::Database()->records('twist_settings')->get('SITE_NAME','key');
 		$this->assertEquals('Travis CI Test - Updated',$resRecord->get('value'));
 		unset($resRecord);
 
-		/**
-		 There is a bug here somewhere, to be fixed
-		$resRecord = \Twist::Database()->records('twist_settings')->copy('SITE_NAME','key');
-		$resRecord->set('key','SITE_NAME_TEST');
-		$resRecord->commit();
-
-		$arrResult = \Twist::Database()->getAll('twist_settings','SITE_NAME_TEST','key');
-		$this -> assertEquals('clone passed',(count($arrResult) == 1) ? 'clone passed' : 'incorrect number of results, expecting 1, got '.count($arrResult));
-
-		$resRecord->delete();
-		unset($resRecord);
-
-		$arrResult = \Twist::Database()->getAll('twist_settings','SITE_NAME_TEST','key');
-		$this -> assertEquals('delete passed',(count($arrResult) == 0) ? 'delete passed' : 'incorrect number of results, expecting 0, got '.count($arrResult));
-		*/
-
 		//Reset the site name as settings uses it for a test also
-		$resRecord = \Twist::Database()->getRecord('twist_settings','SITE_NAME','key');
+		$resRecord = \Twist::Database()->records('twist_settings')->get('SITE_NAME','key');
 		$resRecord->set('value','Travis CI Test');
 		$resRecord->commit();
+	}
+
+	public function testCopy(){
+
+		$resRecord = \Twist::Database()->records('twist_settings')->copy('SITE_NAME','key');
+		$resRecord->set('key','SITE_NAME_TEST');
+		$resRecord->set('value','copy-test');
+		$resRecord->commit();
+		unset($resRecord);
+
+		$arrResult = \Twist::Database()->records('twist_settings')->get('SITE_NAME_TEST','key',true);
+		$this -> assertEquals('copy-test',$arrResult['value']);
+
+		$resRecord = \Twist::Database()->records('twist_settings')->copy('SITE_NAME_TEST','key');
+		$this->assertTrue($resRecord->delete());
 	}
 
 	public function testCreateDelete(){
@@ -70,12 +69,12 @@ class Database extends \PHPUnit_Framework_TestCase{
 
 		$intLevelID = $resNewRecord->commit();
 
-		$arrResult1 = \Twist::Database()->get('user_levels',$intLevelID,'id',true);
+		$arrResult1 = \Twist::Database()->records('user_levels')->get($intLevelID,'id',true);
 		$this->assertEquals('test',$arrResult1['slug']);
 
 		$this -> assertTrue(\Twist::Database()->records('user_levels')->delete($intLevelID,'id'));
 
-		$arrResult2 = \Twist::Database()->get('user_levels',$intLevelID,'id',true);
+		$arrResult2 = \Twist::Database()->records('user_levels')->get($intLevelID,'id',true);
 		$this->assertEquals(0,count($arrResult2));
 	}
 
