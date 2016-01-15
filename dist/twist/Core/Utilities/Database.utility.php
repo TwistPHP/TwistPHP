@@ -255,9 +255,7 @@ class Database extends Base{
 			while($arrRow = $this->resLibrary->fetchArray($this->resResult)){
 				$arrResults[] = $arrRow;
 			}
-		}
 
-		if($this->resResult){
 			$this->resLibrary->freeResult($this->resResult);
 		}
 
