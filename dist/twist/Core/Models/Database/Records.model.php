@@ -24,23 +24,32 @@
 	namespace Twist\Core\Models\Database;
 
 	/**
-	 * Simply create tables in an object orientated way with no need to write a mysql query
+	 * Manage rows in your SQL database in an object orientated way. The model allows you to call up single records as objects or arrays.
+	 * You can edit a record object and commit back to the database or count, search or delete from your tables with a single function call.
 	 */
 	class Records{
 
 		protected $strTable = null;
 		protected $strDatabase = TWIST_DATABASE_NAME;
 
+		/**
+		 * Set the table that is being used in the current request
+		 * @param string $strTable SQL table name
+		 */
 		public function __setTable($strTable){
 			$this->strTable = $strTable;
 		}
 
+		/**
+		 * Set the database that is being used in the current request if it is different from TWIST_DATABASE_NAME.
+		 * @param string $strTable SQL database name
+		 */
 		public function __setDatabase($strDatabase){
 			$this->strDatabase = $strDatabase;
 		}
 
 		/**
-		 * Create a new database record (row) an empty object will be returned from this function, you can then populate the record and commit your changes
+		 * Create an object of a new database record, the object must be filled out and committed before it will be a record in the database. Once committed you can carry on editing the object if required.
 		 * @return null|\Twist\Core\Models\Database\Record Returns an editable object of the database record
 		 */
 		public function create(){
@@ -52,9 +61,10 @@
 		}
 
 		/**
-		 * Get an object of a database record with the ability to update and delete A WHERE clause is generated in the form "WHERE $strField = $mxdValue", the default field being "id"
-		 * @param $mxdValue
-		 * @param string $strField
+		 * Get an object of a database record with the ability to update and delete, pass in the
+		 * If the filter value contains a '%' it will be filtered as a LIKE, if the value contains an array it will be imploded and filtered as an IN otherwise filtering will be done as an EQUALS.
+		 * @param null|string|array $mxdValue Value(s) to filter by
+		 * @param null|string $strField Field to be filtered
 		 * @param bool $blReturnArray Output the raw record array rather an an object (Default: returns an object)
 		 * @return null|\Twist\Core\Models\Database\Record Returns an editable object of the database record
 		 */
@@ -89,9 +99,9 @@
 
 		/**
 		 * Get a clone of a database record as an object to be stored as a new record (auto-increment fields will be nulled). The cloned record will not be created/stored until commit has been called on the returned record object.
-		 * The where clause is generated from the second parameter, must be an array for example to get the user with the 'id' of 1 pass in array('id' => 1)
-		 * @param $mxdValue
-		 * @param string $strField
+		 * If the filter value contains a '%' it will be filtered as a LIKE, if the value contains an array it will be imploded and filtered as an IN otherwise filtering will be done as an EQUALS.
+		 * @param null|string|array $mxdValue Value(s) to filter by
+		 * @param null|string $strField Field to be filtered
 		 * @return null|\Twist\Core\Models\Database\Record Returns an editable object of the database record
 		 */
 		public function copy($mxdValue,$strField = 'id'){
@@ -119,9 +129,10 @@
 		}
 
 		/**
-		 * Delete a record permanent form the database
-		 * @param $mxdValue
-		 * @param string $strField
+		 * Permanently delete a record form the selected database table, you can set a limit if you only want to delete a specific amount of records.
+		 * If the filter value contains a '%' it will be filtered as a LIKE, if the value contains an array it will be imploded and filtered as an IN otherwise filtering will be done as an EQUALS.
+		 * @param null|string|array $mxdValue Value(s) to filter by
+		 * @param null|string $strField Field to be filtered
 		 * @param int $intLimit Limit the number of records to be deleted if more than one match found, pass in NULL to remove the limit
 		 * @return bool Status of the delete query
 		 */
@@ -144,11 +155,10 @@
 		}
 
 		/**
-		 * Get a count of records (rows) as an array. The where clause is generated from the second parameter, must be an array.
-		 * For example to get the user with the 'id' of 1 pass in array('id' => 1) you could look for the user by email with a wild card array('email' => 'dan@%')
-		 * The where array accepts multiple parameters at a time
-		 * @param $mxdValue
-		 * @param $strField
+		 * Get a record count of rows in the selected table. You can filter the results using the field and value parameters.
+		 * If the filter value contains a '%' it will be filtered as a LIKE, if the value contains an array it will be imploded and filtered as an IN otherwise filtering will be done as an EQUALS.
+		 * @param null|string|array $mxdValue Value(s) to filter by
+		 * @param null|string $strField Field to be filtered
 		 * @return int Number of rows found when searching by the field and value pair
 		 */
 		public function count($mxdValue = null,$strField = null){
@@ -170,15 +180,15 @@
 		}
 
 		/**
-		 * Get a set of records (rows) as an array. The where clause is generated from the second parameter, must be an array. For example to get the user with the 'id' of 1 pass in array('id' => 1) you could look for the user by email with a wild card array('email' => 'dan@%')
-		 * The where array accepts multiple parameters at a time.
-		 *
-		 * @param $mxdValue
-		 * @param $strField
-		 * @param $strOrderBy
-		 * @param $intLimit
-		 * @param $intOffset
-		 * @return array
+		 * Get/Search data in the database, leaving all the parameters blank will return all records form the database. Set the parameters accordingly if you need to filter, order or limit.
+		 * If the filter value contains a '%' it will be filtered as a LIKE, if the value contains an array it will be imploded and filtered as an IN otherwise filtering will be done as an EQUALS.
+		 * @param null|string|array $mxdValue Value(s) to filter by
+		 * @param null|string $strField Field to be filtered
+		 * @param null|string $strOrderBy Field to order the search by
+		 * @param string $strDirection Direction to order the results in ASC,DESC
+		 * @param null|int $intLimit X number of rows to be returned, pass in NULL for no limit
+		 * @param null|int $intOffset Offset the results by X amount
+		 * @return array Multi-dimensional array of database records/rows
 		 */
 		public function find($mxdValue = null,$strField = null,$strOrderBy = null,$strDirection = 'ASC',$intLimit = null,$intOffset = null){
 
@@ -214,9 +224,11 @@
 		}
 
 		/**
-		 * @param $mxdValue
-		 * @param $strField
-		 * @return string
+		 * Dynamically build a where clause that will be used to get, search and delete records form the database.
+		 * The where clause contains a single parameter and can be a LIKE, Equals or an IN statement.
+		 * @param null|string|array $mxdValue Value(s) to filter by
+		 * @param null|string $strField Field to be filtered
+		 * @return string Formatted where clause that can be used from the query methods in this model
 		 */
 		protected function buildWhereClause($mxdValue,$strField){
 

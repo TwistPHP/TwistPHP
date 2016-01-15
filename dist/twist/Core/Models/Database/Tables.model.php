@@ -31,10 +31,18 @@
 		protected $strTable = null;
 		protected $strDatabase = TWIST_DATABASE_NAME;
 
+		/**
+		 * Set the table that is being used in the current request
+		 * @param string $strTable SQL table name
+		 */
 		public function __setTable($strTable){
 			$this->strTable = $strTable;
 		}
 
+		/**
+		 * Set the database that is being used in the current request if it is different from TWIST_DATABASE_NAME.
+		 * @param string $strTable SQL database name
+		 */
 		public function __setDatabase($strDatabase){
 			$this->strDatabase = $strDatabase;
 		}

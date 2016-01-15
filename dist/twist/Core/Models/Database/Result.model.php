@@ -24,7 +24,7 @@
 	namespace Twist\Core\Models\Database;
 
 	/**
-	 * Database result object
+	 * Object containing the results of a query run by the TwistPHP database utility. The object contains all the information from the query run including SQL the query itself.
 	 */
 	class Result{
 
@@ -45,10 +45,18 @@
 			$this->intInsertID = $intInsID;
 		}
 
+		/**
+		 * Status of the result set, if the query was successful this will return true. If the status is true this only means the query did not fail, it dose not indicate if you have any results.
+		 * @return bool Status of the query run.
+		 */
 		public function status(){
 			return $this->blStatus;
 		}
 
+		/**
+		 * SQL query that was run to produce this result object.
+		 * @return string SQL Query that was run
+		 */
 		public function sql(){
 			return $this->strQuery;
 		}
