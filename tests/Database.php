@@ -8,22 +8,23 @@ class Database extends \PHPUnit_Framework_TestCase{
 
 		$resResult = \Twist::Database()->query("SELECT * FROM `twist_settings` LIMIT 1");
 
-		$this -> assertTrue($resResult->status());
-		$this -> assertEquals(1,$resResult->numberRows());
+		$this->assertTrue($resResult->status());
+		$this->assertEquals(1,$resResult->numberRows());
 	}
 
 	public function testQueryFail(){
 
 		$resResult = \Twist::Database()->query("SELECT * FROM `--table-failed--` LIMIT 1");
 
-		$this -> assertFalse($resResult->status());
+		$this->assertFalse($resResult->status());
 	}
 
 	public function testGet(){
 
 		$arrResult = \Twist::Database()->records('twist_settings')->get('SITE_NAME','key',true);
 
-		$this -> assertEquals('Travis CI Test',$arrResult['value']);
+		$this->assertTrue(is_array($arrResult));
+		$this->assertEquals('Travis CI Test',$arrResult['value']);
 	}
 
 	public function testGetModify(){
@@ -72,7 +73,7 @@ class Database extends \PHPUnit_Framework_TestCase{
 		$arrResult1 = \Twist::Database()->records('user_levels')->get($intLevelID,'id',true);
 		$this->assertEquals('test',$arrResult1['slug']);
 
-		$this -> assertTrue(\Twist::Database()->records('user_levels')->delete($intLevelID,'id'));
+		$this->assertTrue(\Twist::Database()->records('user_levels')->delete($intLevelID,'id'));
 
 		$arrResult2 = \Twist::Database()->records('user_levels')->get($intLevelID,'id',true);
 		$this->assertEquals(0,count($arrResult2));
