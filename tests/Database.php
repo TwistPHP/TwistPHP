@@ -57,7 +57,7 @@ class Database extends \PHPUnit_Framework_TestCase{
 		$arrResult = \Twist::Database()->records('twist_settings')->get('SITE_NAME_TEST','key',true);
 		$this -> assertEquals('copy-test',$arrResult['value']);
 
-		$resRecord = \Twist::Database()->records('twist_settings')->copy('SITE_NAME_TEST','key');
+		$resRecord = \Twist::Database()->records('twist_settings')->get('SITE_NAME_TEST','key');
 		$this->assertTrue($resRecord->delete());
 	}
 

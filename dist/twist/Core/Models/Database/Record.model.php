@@ -149,7 +149,7 @@
 			);
 
 			if(\Twist::Database()->query($strSQL)->status()){
-				//$this->__destruct();
+				$this->__destruct();
 				$blOut = true;
 			}
 
