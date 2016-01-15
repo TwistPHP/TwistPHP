@@ -209,10 +209,10 @@ class Database extends Base{
 	}
 
 	/**
-	 * Run the query on the database, optionally pass the query in as a raw sprintf() string "SELECT * FROM `table` WHERE `id` = %d" followed by all the parameters to fill the string
-	 * All parameters are escaped before being entered into the sprintf()
-	 * @param $strQuery
-	 * @return \Twist\Core\Models\Database\Result
+	 * Run a fully formed SQL query on the database, optionally pass the query in as a raw sprintf() string "SELECT * FROM `table` WHERE `id` = %d" followed by all the parameters to fill the string
+	 * All parameters are escaped before being entered into the sprintf(). A Database result object will be returned containing all the stats and results for the query.
+	 * @param string $strQuery SQL query to be run against the database
+	 * @return \Twist\Core\Models\Database\Result Database result model
 	 * @throws \Exception
 	 */
 	public function query($strQuery){
@@ -270,9 +270,9 @@ class Database extends Base{
 
 	/**
 	 * Get, Create, Copy and Manipulate database records/rows as objects. Find an array of database records/rows, count and delete others with a single function call.
-	 * @param string $strTable
-	 * @param null $strDatabase
-	 * @return \Twist\Core\Models\Database\Records
+	 * @param string $strTable Name of the database table
+	 * @param null|string $strDatabase Database name if different from TWIST_DATABASE_NAME
+	 * @return \Twist\Core\Models\Database\Records Database records model
 	 */
 	public function records($strTable,$strDatabase = null){
 
@@ -291,9 +291,9 @@ class Database extends Base{
 
 	/**
 	 * Get, Create and Manipulate the structure of database tables using a table object. Truncate, Optimize, Rename and Drop tables with a single function call. All dependant on your database privileges.
-	 * @param string $strTable
-	 * @param null $strDatabase
-	 * @return \Twist\Core\Models\Database\Tables
+	 * @param string $strTable Name of the database table
+	 * @param null|string $strDatabase Database name if different from TWIST_DATABASE_NAME
+	 * @return \Twist\Core\Models\Database\Tables Database tables model
 	 */
 	public function tables($strTable,$strDatabase = null){
 
@@ -312,7 +312,7 @@ class Database extends Base{
 
 	/**
 	 * Return the last run query by that database class
-	 * @return string
+	 * @return string Last SQL query to be run
 	 */
 	public function lastQuery(){
 		return $this->strLastRunQuery;
@@ -331,8 +331,8 @@ class Database extends Base{
 
 	/**
 	 * Import the contents of an SQL file '.sql' directly into your database, providing a database name will allow you to deviate from the default if required
-	 * @param $dirSQLFile Full local path to the SQL file
-	 * @param $strDatabaseName Name of the database to import into
+	 * @param string $dirSQLFile Path to the SQL file that will be imported
+	 * @param null|string $strDatabaseName Database name if different from TWIST_DATABASE_NAME
 	 * @return bool|null
 	 */
 	public function importSQL($dirSQLFile,$strDatabaseName = null){
@@ -374,9 +374,9 @@ class Database extends Base{
 
 	/**
 	 * Export/dump the contents of a database to an SQL file
-	 * @param $dirSQLFile
-	 * @param null $strDatabaseName
-	 * @return array|bool
+	 * @param string $dirSQLFile Path to the file that will contain the exported database
+	 * @param null|string $strDatabaseName Database name if different from TWIST_DATABASE_NAME
+	 * @return boolean
 	 */
 	public function exportSQL($dirSQLFile,$strDatabaseName = null){
 
@@ -419,7 +419,7 @@ class Database extends Base{
 	/**
 	 * Change the status of autocommit on the current database connection
 	 * @related commit
-	 * @param $blStatus Required status of autocommit
+	 * @param boolean $blStatus Required status of autocommit
 	 * @return boolean Returns the status of the call
 	 */
 	public function autoCommit($blStatus = true){
@@ -464,7 +464,7 @@ class Database extends Base{
 
 	/**
 	 * Detect if the database debug mode is enabled or disabled, based upon the DEVELOPMENT_MODE and DEVELOPMENT_DEBUG_BAR settings.
-	 * @return bool
+	 * @return boolean Debug status
 	 */
 	public function debugMode(){
 
