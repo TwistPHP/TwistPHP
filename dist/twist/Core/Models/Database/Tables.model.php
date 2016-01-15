@@ -24,7 +24,7 @@
 	namespace Twist\Core\Models\Database;
 
 	/**
-	 * Simply create tables in an object orientated way with no need to write a mysql query
+	 * Simply create and maintain tables in an object orientated way with no need to write a SQL queries
 	 */
 	class Tables{
 
