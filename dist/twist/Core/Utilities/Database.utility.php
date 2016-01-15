@@ -111,6 +111,38 @@ class Database extends Base{
 	}
 
 	/**
+	 * Check to see if a connection is present to a database server
+	 * @return bool Returns status of connection
+	 * @throws \Exception
+	 */
+	protected function connected(){
+
+		if($this->blNoDatabase == false){
+			if($this->blConnectionAttempt == false){
+				$this->blConnectionAttempt = true;
+				$this->connect();
+			}
+
+			if(is_object($this->resLibrary) && !$this->resLibrary->connected()){
+				$strErrorMessage = $this->resLibrary->connectionError();
+				$this->resLibrary = null;
+				throw new \Exception('Failed to connect to the database server');
+			}
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check to see if a connection is present and return true/false (does not attempt to make a connection if not already)
+	 * @return bool Returns status of connection
+	 */
+	public function isConnected(){
+		return (is_object($this->resLibrary) && $this->resLibrary->connected());
+	}
+
+	/**
 	 * Closes the connection and removes the database instance
 	 */
 	public function close(){
@@ -149,38 +181,6 @@ class Database extends Base{
 		}
 
 		return $blOut;
-	}
-
-	/**
-	 * Check to see if a connection is present to a database server
-	 * @return bool Returns status of connection
-	 * @throws \Exception
-	 */
-	protected function connected(){
-
-		if($this->blNoDatabase == false){
-			if($this->blConnectionAttempt == false){
-				$this->blConnectionAttempt = true;
-				$this->connect();
-			}
-
-			if(is_object($this->resLibrary) && !$this->resLibrary->connected()){
-				$strErrorMessage = $this->resLibrary->connectionError();
-				$this->resLibrary = null;
-				throw new \Exception('Failed to connect to the database server');
-			}
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Check to see if a connection is present and return true/false (does not attempt to make a connection if not already)
-	 * @return bool Returns status of connection
-	 */
-	public function isConnected(){
-		return (is_object($this->resLibrary) && $this->resLibrary->connected());
 	}
 
 	/**
