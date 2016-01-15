@@ -91,7 +91,8 @@
 				//$resCallbackEvent = array_shift($arrArguments);
 				if(strstr($arrArguments[0],'Twist::')){
 					$strPackage = str_replace('Twist::','',$arrArguments[0]);
-					\Twist::$strPackage()->$arrArguments[1]();
+					$strMethod = $arrArguments[1];
+					\Twist::$strPackage()->$strMethod();
 				}else{
 					call_user_func_array($arrArguments, array());
 				}
