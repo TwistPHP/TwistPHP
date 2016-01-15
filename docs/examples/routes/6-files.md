@@ -12,7 +12,7 @@ You can use routes to serve files and folders with nice URIs.
      * We can serve a file by way of an
      * 'alias' URI which means the real
      * is safely hidden from the world,
-     * in this case, th URI /my-file is
+     * in this case the URI /my-file is
      * a nice alias to a file elsewhere
      * on your server, with the options
      * to serve your file under another
