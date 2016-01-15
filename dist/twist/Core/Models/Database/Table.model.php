@@ -46,9 +46,26 @@
 		 * @param $strDatabase
 		 * @param $strTable
 		 */
-		public function __construct($strDatabase,$strTable){
+		public function __construct($strDatabase,$strTable,$arrStructure = array()){
+
 			$this->strDatabase = $strDatabase;
 			$this->strTable = $strTable;
+
+			if(count($arrStructure)){
+				$this->arrStructure = $arrStructure['columns'];
+
+				if(!is_null($arrStructure['auto_increment'])){
+					$this->setAutoIncrement($arrStructure['auto_increment'],$arrStructure['auto_increment_start']);
+				}
+
+				//Set all the other key information for this table
+				$this->arrUniqueKey = $arrStructure['unique_keys'];
+				$this->arrIndexs = $arrStructure['indexes'];
+				$this->mxdTableComment = $arrStructure['table_comment'];
+				$this->strCollation = $arrStructure['collation'];
+				$this->strCharset = $arrStructure['charset'];
+				$this->strEngine = $arrStructure['engine'];
+			}
 		}
 
 		/**
@@ -67,6 +84,20 @@
 			$this->strCollation = null;
 			$this->strCharset = null;
 			$this->strEngine = null;
+		}
+
+		/**
+		 * Set a new table/database, this is only to be used when cloning/copying a database
+		 * @param string $strTable
+		 * @param null|string $strDatabase
+		 */
+		public function copyTo($strTable,$strDatabase = null){
+
+			$this->strTable = $strTable;
+
+			if(!is_null($strDatabase)){
+				$this->strDatabase = $strDatabase;
+			}
 		}
 
 		/**
@@ -178,7 +209,8 @@
 						'character_length' => (in_array(strtolower($strDataType),array('text','date','datetime'))) ? null : $mxdCharLength,
 						'nullable' => $blNullable,
 						'default_value' => $strDefaultValue,
-						'comment' => null
+						'comment' => null,
+						'order' => count($this->arrStructure)+1
 					);
 				}else{
 					//Field is not an allowed type
@@ -196,16 +228,10 @@
 		 */
 		public function create(){
 
-			$blOut = false;
 			$strSQL = $this->createSQL();
-
-			$objDatabase = \Twist::Database();
-
-			if($objDatabase->query($strSQL)){
-				$blOut = true;
-			}
-
+			$blOut = \Twist::Database()->query($strSQL)->status();
 			$this->__destruct();
+
 			return $blOut;
 		}
 
