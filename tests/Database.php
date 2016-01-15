@@ -63,19 +63,19 @@ class Database extends \PHPUnit_Framework_TestCase{
 
 	public function testCreateDelete(){
 
-		$resNewRecord = \Twist::Database()->records('user_levels')->create();
+		$resNewRecord = \Twist::Database()->records('twist_user_levels')->create();
 		$resNewRecord->set('slug','test');
 		$resNewRecord->set('description','test level');
 		$resNewRecord->set('level',1000);
 
 		$intLevelID = $resNewRecord->commit();
 
-		$arrResult1 = \Twist::Database()->records('user_levels')->get($intLevelID,'id',true);
+		$arrResult1 = \Twist::Database()->records('twist_user_levels')->get($intLevelID,'id',true);
 		$this->assertEquals('test',$arrResult1['slug']);
 
-		$this->assertTrue(\Twist::Database()->records('user_levels')->delete($intLevelID,'id'));
+		$this->assertTrue(\Twist::Database()->records('twist_user_levels')->delete($intLevelID,'id'));
 
-		$arrResult2 = \Twist::Database()->records('user_levels')->get($intLevelID,'id',true);
+		$arrResult2 = \Twist::Database()->records('twist_user_levels')->get($intLevelID,'id',true);
 		$this->assertEquals(0,count($arrResult2));
 	}
 
