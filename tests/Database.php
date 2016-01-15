@@ -87,4 +87,32 @@ class Database extends \PHPUnit_Framework_TestCase{
 
 		$this->assertEquals($intResult,count($arrResult));
 	}
+
+	public function testCreateTable(){
+
+		$resNewTable = \Twist::Database()->tables('test_table')->create();
+		$resNewTable->addField('id','int',11);
+		$resNewTable->addField('name','char',30);
+		$resNewTable->setAutoIncrement('id');
+		$this->assertTrue($resNewTable->create());
+
+		$this->assertTrue(\Twist::Database()->tables('test_table')->exists());
+
+		$resNewRecord = \Twist::Database()->records('test_table')->create();
+		$resNewRecord->set('name','test');
+		$this->assertEquals(1,$resNewRecord->commit());
+
+		$this->assertEquals(1,\Twist::Database()->records('test_table')->count());
+
+		$arrResult = \Twist::Database()->records('test_table')->get(1,'id',true);
+		$this->assertEquals('test',$arrResult['name']);
+
+		$this->assertTrue(\Twist::Database()->tables('test_table')->truncate());
+
+		$this->assertEquals(0,\Twist::Database()->records('test_table')->count());
+
+		$this->assertTrue(\Twist::Database()->tables('test_table')->drop());
+
+		$this->assertFalse(\Twist::Database()->tables('test_table')->exists());
+	}
 }

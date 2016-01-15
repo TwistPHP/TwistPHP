@@ -79,7 +79,7 @@
 
 		/**
 		 * Create a database table as an object, if the table already exists you are returned null
-		 * @return null|\Twist\Core\Models\Database\Record Returns and object of the database table
+		 * @return null|\Twist\Core\Models\Database\Table Returns and object of the database table
 		 */
 		public function create(){
 
