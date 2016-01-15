@@ -223,6 +223,23 @@
 		}
 
 		/**
+		 * Set the order of any given field by its name, this will adjust all other field accordingly
+		 * @param string $strColumnName Name of field to ne reordered
+		 * @param int $intOrder New order position within the table
+		 */
+		public function setFieldOrder($strColumnName,$intOrder){
+
+			foreach($this->arrStructure as $strKey => $arrEachField){
+
+				if($arrEachField['column_name'] == $strColumnName){
+					$this->arrStructure[$strKey]['order'] = $intOrder;
+				}elseif($arrEachField['order'] >= $intOrder && $arrEachField['column_name'] != $strColumnName){
+					$this->arrStructure[$strKey]['order']++;
+				}
+			}
+		}
+
+		/**
 		 * Final call, this will create the table in the database, once created this resource will become unusable
 		 * @return bool
 		 */
@@ -346,7 +363,11 @@
 
 			$strOut = '';
 
-			foreach($this->arrStructure as $strEachColumn){
+			//Sort the fields by order
+			$arrStructure = \Twist::framework()->tools()->arrayReindex($this->arrStructure,'order');
+			ksort($arrStructure);
+
+			foreach($arrStructure as $strEachColumn){
 
 				switch($strEachColumn['data_type']){
 
