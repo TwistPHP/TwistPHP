@@ -58,17 +58,6 @@ class Database extends Base{
 		$this->close();
 	}
 
-	public function debugMode(){
-
-		if($this->blDebugMode == false && defined('TWIST_LAUNCHED')){
-			if(\Twist::framework()->setting('DEVELOPMENT_MODE') && \Twist::framework()->setting('DEVELOPMENT_DEBUG_BAR')){
-				$this->blDebugMode = true;
-			}
-		}
-
-		return $this->blDebugMode;
-	}
-
 	/**
 	 * Make the main connection to the database, automatically called if a custom connection is not required
 	 * @param $strHost
@@ -243,7 +232,17 @@ class Database extends Base{
 		$this->connected();
 		$this->strLastRunQuery = $strQuery;
 
-		$blQueryStatus = ($this->debugMode()) ? $this->queryDebug($strQuery) : $this->queryStandard($strQuery);
+		if($this->debugMode()){
+			//Time how long the query took to run
+			\Twist::Timer('database-query')->start();
+			$this->resResult = $this->resLibrary->query($strQuery);
+			$this->debug($strQuery,\Twist::Timer('database-query')->stop());
+
+		}else{
+			$this->resResult = $this->resLibrary->query($strQuery);
+		}
+
+		$blQueryStatus = (is_object($this->resResult) || $this->resResult);
 
 		$intNumberRows = ($this->resResult) ? $this->resLibrary->numberRows($this->resResult) : 0;
 		$intAffectedRows = ($this->resResult) ? $this->resLibrary->affectedRows($this->resResult) : 0;
@@ -267,83 +266,6 @@ class Database extends Base{
 			$intInsertID,
 			$arrResults
 		);
-	}
-
-	/**
-	 * Escape and sanitise a string ready to be used in a SQL database query
-	 * @param string $strRawString Raw unescaped string
-	 * @return string Sanitised and escaped string
-	 */
-	public function escapeString($strRawString){
-		$strOut = strval($strRawString);
-		$strOut = (get_magic_quotes_gpc()) ? stripslashes($strOut) : $strOut;
-		return (!is_numeric($strOut) && $this->connected()) ? $this->resLibrary->escapeString($strOut) : $strOut;
-	}
-
-	/**
-	 * Run the standard SQL query with no debug enabled
-	 * @param string $strQuery A fully formed SQL query
-	 * @return bool Query result status
-	 */
-	private function queryStandard($strQuery){
-		$this->resResult = $this->resLibrary->query($strQuery);
-		return (is_object($this->resResult) || $this->resResult);
-	}
-
-	/**
-	 * Run the standard SQL query debugging and logging the results for use within the TwistPHP debug bar.
-	 * @param string $strQuery A fully formed SQL query
-	 * @return bool Query result status
-	 */
-	private function queryDebug($strQuery){
-
-		//Time how long the query took to run
-		\Twist::Timer('database-query')->start();
-		$this->resResult = $this->resLibrary->query($strQuery);
-		$arrResult = \Twist::Timer('database-query')->stop();
-
-		$arrTrace = debug_backtrace();
-		$arrStack = array();
-
-		$intKey = 1;
-		$arrStack[] = array(
-			'file' => $arrTrace[$intKey]['file'],
-			'line' => $arrTrace[$intKey]['line'],
-			'function' => $arrTrace[$intKey]['function']
-		);
-
-		while(strstr($arrTrace[$intKey]['file'],'Database.utility.php')){
-
-			$intKey++;
-			$arrStack[] = array(
-				'file' => $arrTrace[$intKey]['file'],
-				'line' => $arrTrace[$intKey]['line'],
-				'function' => $arrTrace[$intKey]['function']
-			);
-		}
-
-		//Log the stats of the query
-		\Twist::framework()->debug()->log('Database','queries',array(
-			'instance' => $this->strConnectionKey,
-			'query' => $strQuery,
-			'time' => $arrResult['total'],
-			'status' => (is_object($this->resResult) || $this->resResult),
-			'error' => $this->resLibrary->errorString(),
-			'affected_rows' => ($this->resResult) ? $this->resLibrary->affectedRows($this->resResult) : 0,
-			'insert_id' => $this->resLibrary->insertId(),
-			'num_rows' => ($this->resResult) ? $this->resLibrary->numberRows($this->resResult) : 0,
-			'trace' => array_reverse($arrStack)
-		));
-
-		return ($this->resResult);
-	}
-
-	/**
-	 * Return the last run query by that database class
-	 * @return string
-	 */
-	public function lastQuery(){
-		return $this->strLastRunQuery;
 	}
 
 	/**
@@ -386,6 +308,25 @@ class Database extends Base{
 		}
 
 		return $this->resTables;
+	}
+
+	/**
+	 * Return the last run query by that database class
+	 * @return string
+	 */
+	public function lastQuery(){
+		return $this->strLastRunQuery;
+	}
+
+	/**
+	 * Escape and sanitise a string ready to be used in a SQL database query
+	 * @param string $strRawString Raw unescaped string
+	 * @return string Sanitised and escaped string
+	 */
+	public function escapeString($strRawString){
+		$strOut = strval($strRawString);
+		$strOut = (get_magic_quotes_gpc()) ? stripslashes($strOut) : $strOut;
+		return (!is_numeric($strOut) && $this->connected()) ? $this->resLibrary->escapeString($strOut) : $strOut;
 	}
 
 	/**
@@ -519,5 +460,62 @@ class Database extends Base{
 	 */
 	public function uncommittedQueries(){
 		return $this->resLibrary->blActiveTransaction;
+	}
+
+	/**
+	 * Detect if the database debug mode is enabled or disabled, based upon the DEVELOPMENT_MODE and DEVELOPMENT_DEBUG_BAR settings.
+	 * @return bool
+	 */
+	public function debugMode(){
+
+		if($this->blDebugMode == false && defined('TWIST_LAUNCHED')){
+			if(\Twist::framework()->setting('DEVELOPMENT_MODE') && \Twist::framework()->setting('DEVELOPMENT_DEBUG_BAR')){
+				$this->blDebugMode = true;
+			}
+		}
+
+		return $this->blDebugMode;
+	}
+
+	/**
+	 * Log the SQL query debug results for use within the TwistPHP debug bar.
+	 * @param string $strQuery A fully formed SQL query
+	 * @param array $arrExecTime Stats for the time taken to run the query
+	 * @return bool Query result status
+	 */
+	private function debug($strQuery,$arrExecTime){
+
+		$arrTrace = debug_backtrace();
+		$arrStack = array();
+
+		$intKey = 1;
+		$arrStack[] = array(
+			'file' => $arrTrace[$intKey]['file'],
+			'line' => $arrTrace[$intKey]['line'],
+			'function' => $arrTrace[$intKey]['function']
+		);
+
+		while(strstr($arrTrace[$intKey]['file'],'Database.utility.php')){
+
+			$intKey++;
+			$arrStack[] = array(
+				'file' => $arrTrace[$intKey]['file'],
+				'line' => $arrTrace[$intKey]['line'],
+				'function' => $arrTrace[$intKey]['function']
+			);
+		}
+
+		//Log the stats of the query
+		\Twist::framework()->debug()->log('Database','queries',array(
+			'instance' => $this->strConnectionKey,
+			'query' => $strQuery,
+			'time' => $arrExecTime['total'],
+			'status' => (is_object($this->resResult) || $this->resResult),
+			'error' => $this->resLibrary->errorString(),
+			'affected_rows' => ($this->resResult) ? $this->resLibrary->affectedRows($this->resResult) : 0,
+			'insert_id' => $this->resLibrary->insertId(),
+			'num_rows' => ($this->resResult) ? $this->resLibrary->numberRows($this->resResult) : 0,
+			'trace' => array_reverse($arrStack)
+		));
 	}
 }
