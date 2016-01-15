@@ -48,8 +48,11 @@
 			switch($this->strTimeSource){
 
 				case'mysql':
-					if(\Twist::Database()->query("SELECT UNIX_TIMESTAMP() AS `timestamp`")){
-						$arrDate = \Twist::Database()->getArray();
+
+					$resResult = \Twist::Database()->query("SELECT UNIX_TIMESTAMP() AS `timestamp`");
+
+					if($resResult->status()){
+						$arrDate = $resResult->getArray();
 						return $arrDate['timestamp'];
 					}else{
 						return time();

@@ -190,7 +190,7 @@
 
 				$arrResources = $arrRoutes = $arrBlocks = $arrExtensions = array();
 
-				$resPackage = \Twist::Database()->createRecord(TWIST_DATABASE_TABLE_PREFIX.'packages');
+				$resPackage = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'packages')->create();
 
 				$resPackage->set('slug',$strSlug);
 				$resPackage->set('name',$arrDetails['name']);
@@ -217,7 +217,7 @@
 		 */
 		public static function removePackage($strPackageSlug){
 			\Twist::framework()->package()->anonymousStats('uninstall',$strPackageSlug,null);
-			return \Twist::Database()->getRecord(TWIST_DATABASE_TABLE_PREFIX.'packages',$strPackageSlug,'slug')->delete();
+			return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'packages')->delete($strPackageSlug,'slug');
 		}
 
 		/**

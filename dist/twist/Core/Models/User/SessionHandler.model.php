@@ -53,7 +53,6 @@ class SessionHandler{
 	protected function createDeviceID($intUserID){
 
 		$strDeviceID = null;
-		$objDB = \Twist::Database();
 
 		if(count($_COOKIE) && !array_key_exists('device',$_COOKIE)){
 
@@ -67,20 +66,18 @@ class SessionHandler{
 			$_COOKIE['device'] = $strDeviceID;
 			$arrDevice = \Twist::Device()->get();
 
-			$strSQL = sprintf("INSERT INTO `%s`.`%suser_sessions`
+			\Twist::Database()->query("INSERT INTO `%s`.`%suser_sessions`
 									SET `user_id` = %d,
 										`device` = '%s',
 										`os` = '%s',
 										`browser` = '%s'",
 				TWIST_DATABASE_NAME,
 				TWIST_DATABASE_TABLE_PREFIX,
-				$objDB->escapeString($intUserID),
-				$objDB->escapeString($strDeviceID),
+				$intUserID,
+				$strDeviceID,
 				$arrDevice['os']['key'],
 				$arrDevice['browser']['key']
 			);
-
-			$objDB->query($strSQL);
 		}else{
 
 			//Get the device ID
@@ -90,26 +87,27 @@ class SessionHandler{
 
 				$arrDevice = \Twist::Device()->get();
 
-				$strSQL = sprintf("INSERT INTO `%s`.`%suser_sessions`
+				\Twist::Database()->query("INSERT INTO `%s`.`%suser_sessions`
 										SET `user_id` = %d,
 											`device` = '%s',
 											`os` = '%s',
 											`browser` = '%s'",
 					TWIST_DATABASE_NAME,
 					TWIST_DATABASE_TABLE_PREFIX,
-					$objDB->escapeString($intUserID),
-					$objDB->escapeString($strDeviceID),
+					$intUserID,
+					$strDeviceID,
 					$arrDevice['os']['key'],
 					$arrDevice['browser']['key']
 				);
-
-				$objDB->query($strSQL);
 			}
 		}
 
 		return $strDeviceID;
 	}
 
+	/**
+	 * @return null
+	 */
 	public function getDeviceID(){
 
 		$strDeviceID = null;
@@ -122,60 +120,44 @@ class SessionHandler{
 		return $strDeviceID;
 	}
 
+	/**
+	 * @param $strDeviceID
+	 * @return bool
+	 */
 	public function deleteDeviceID($strDeviceID){
-
-		$objDB = \Twist::Database();
-
-		$strSQL = sprintf("DELETE FROM `%s`.`%suser_sessions`
-								WHERE `device` = '%s'",
-			TWIST_DATABASE_NAME,
-			TWIST_DATABASE_TABLE_PREFIX,
-			$objDB->escapeString($strDeviceID)
-		);
-
-		$objDB->query($strSQL);
+		return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'user_sessions')->delete($strDeviceID,'device');
 	}
 
+	/**
+	 * @param $intUserID
+	 * @return array
+	 */
 	public function getDeviceList($intUserID){
-
-		$arrOut = array();
-		$objDB = \Twist::Database();
-
-		$strSQL = sprintf("SELECT `id`,`device`,`device_name`,`os`,`browser`,`last_validated`
-								FROM `%s`.`%suser_sessions`
-								WHERE `user_id` = %d
-								ORDER BY `last_validated` DESC",
-			TWIST_DATABASE_NAME,
-			TWIST_DATABASE_TABLE_PREFIX,
-			$objDB->escapeString($intUserID)
-		);
-
-		if($objDB->query($strSQL) && $objDB->getNumberRows()){
-			$arrOut = $objDB->getFullArray();
-		}
-
-		return $arrOut;
+		return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'user_sessions')->find($intUserID,'user_id','last_validated','DESC');
 	}
 
+	/**
+	 * @param $intUserID
+	 * @return array
+	 */
 	public function getCurrentDevice($intUserID){
 
 		$arrOut = array();
-		$objDB = \Twist::Database();
 
 		if(count($_COOKIE) && array_key_exists('device',$_COOKIE)){
 
-			$strSQL = sprintf("SELECT `id`,`device`,`device_name`,`os`,`browser`,`last_validated`
+			$resResult = \Twist::Database()->query("SELECT `id`,`device`,`device_name`,`os`,`browser`,`last_validated`
 									FROM `%s`.`%suser_sessions`
 									WHERE `user_id` = %d
 									AND `device` = '%s'",
 				TWIST_DATABASE_NAME,
 				TWIST_DATABASE_TABLE_PREFIX,
-				$objDB->escapeString($intUserID),
+				$intUserID,
 				$_COOKIE['device']
 			);
 
-			if($objDB->query($strSQL) && $objDB->getNumberRows()){
-				$arrOut = $objDB->getArray();
+			if($resResult->status() && $resResult->numberRows()){
+				$arrOut = $resResult->getArray();
 			}
 		}
 
@@ -184,23 +166,23 @@ class SessionHandler{
 
 	/**
 	 * Edit the name of a given device
+	 * @param $intUserID
+	 * @param $mxdDevice
+	 * @param $strDeviceName
+	 * @return bool
 	 */
 	public function editDevice($intUserID,$mxdDevice,$strDeviceName){
 
-		$objDB = \Twist::Database();
-
-		$strSQL = sprintf("UPDATE `%s`.`%suser_sessions`
+		return \Twist::Database()->query("UPDATE `%s`.`%suser_sessions`
 							SET `device_name` = '%s'
 							WHERE `device` = '%s'
 							AND `user_id` = %d",
 			TWIST_DATABASE_NAME,
 			TWIST_DATABASE_TABLE_PREFIX,
-			$objDB->escapeString($strDeviceName),
-			$objDB->escapeString($mxdDevice),
-			$objDB->escapeString($intUserID)
-		);
-
-		$objDB->query($strSQL);
+			$strDeviceName,
+			$mxdDevice,
+			$intUserID
+		)->status();
 	}
 
 	/**
@@ -209,18 +191,17 @@ class SessionHandler{
 	public function forgetDevice($intUserID,$mxdDevice){
 
 		$arrCurrent = $this->getCurrentDevice($intUserID);
-		$objDB = \Twist::Database();
 
-		$strSQL = sprintf("DELETE FROM `%s`.`%suser_sessions`
+		$resResult = \Twist::Database()->query("DELETE FROM `%s`.`%suser_sessions`
 							WHERE `device` = '%s'
 							AND `user_id` = %d",
 			TWIST_DATABASE_NAME,
 			TWIST_DATABASE_TABLE_PREFIX,
-			$objDB->escapeString($mxdDevice),
-			$objDB->escapeString($intUserID)
+			$mxdDevice,
+			$intUserID
 		);
 
-		if($objDB->query($strSQL) && $objDB->getAffectedRows()){
+		if($resResult->status() && $resResult->affectedRows()){
 			if($arrCurrent['device'] == $mxdDevice){
 				$this->forget();
 			}
@@ -316,7 +297,6 @@ class SessionHandler{
 	protected function validateSessionKey($strSessionKey,$blRemember = false,$blUpdateKey = true){
 
 		$intOut = 0;
-		$objDB = \Twist::Database();
 
 		//Session Length is 104 chars
 		preg_match("/([0-9a-z]{40})([0-9a-z]{32})([0-9a-z]{32})/i",$strSessionKey,$arrMatches);
@@ -334,10 +314,10 @@ class SessionHandler{
 			TWIST_DATABASE_TABLE_PREFIX,
 			TWIST_DATABASE_NAME,
 			TWIST_DATABASE_TABLE_PREFIX,
-			$objDB->escapeString($arrMatches[1]),
-			$objDB->escapeString($arrMatches[2]),
-			$objDB->escapeString($this->strSecretKey),
-			$objDB->escapeString($arrMatches[3])
+			\Twist::Database()->escapeString($arrMatches[1]),
+			\Twist::Database()->escapeString($arrMatches[2]),
+			\Twist::Database()->escapeString($this->strSecretKey),
+			\Twist::Database()->escapeString($arrMatches[3])
 		);
 
 		$this->debug("SQL: {$strSQL}");
@@ -348,16 +328,18 @@ class SessionHandler{
 									AND md5(concat(`user_id`,'%s')) = '%s'",
 			TWIST_DATABASE_NAME,
 			TWIST_DATABASE_TABLE_PREFIX,
-			$objDB->escapeString($arrMatches[1]),
-			$objDB->escapeString($this->strSecretKey),
-			$objDB->escapeString($arrMatches[2])
+			\Twist::Database()->escapeString($arrMatches[1]),
+			\Twist::Database()->escapeString($this->strSecretKey),
+			\Twist::Database()->escapeString($arrMatches[2])
 		);
 
 		$this->debug("SQL Attack: {$strAttackSQL}");
 
+		$resResult = \Twist::Database()->query($strSQL);
+
 		//If their is only one session key
-		if($objDB->query($strSQL) && $objDB->getNumberRows() == 1){
-			$arrUserData = $objDB->getArray();
+		if($resResult->status() && $resResult->numberRows() == 1){
+			$arrUserData = $resResult->getArray();
 
 			$this->debug("Query OK");
 
@@ -368,7 +350,7 @@ class SessionHandler{
 
 			$intOut = $arrUserData['user_id'];
 
-		}elseif($objDB->query($strAttackSQL) && $objDB->getNumberRows() == 1){
+		}elseif(\Twist::Database()->query($strAttackSQL)->numberRows() == 1){
 
 			$this->debug("Query Attack");
 
@@ -395,12 +377,10 @@ class SessionHandler{
 
 	protected function updateSession($strDevice,$strHash,$blRemember = false){
 
-		$objDB = \Twist::Database();
-
 		$strNewToken = md5(uniqid(rand(), true));
 
 		//Delete all session data for this key
-		$strSQL = sprintf("UPDATE `%s`.`%suser_sessions`
+		$resResult = \Twist::Database()->query("UPDATE `%s`.`%suser_sessions`
 								SET `token` = '%s',
 									`remote_addr` = '%s',
 									`last_validated` = NOW()
@@ -408,14 +388,14 @@ class SessionHandler{
 								AND md5(concat(`user_id`,'%s')) = '%s'",
 			TWIST_DATABASE_NAME,
 			TWIST_DATABASE_TABLE_PREFIX,
-			$objDB->escapeString($strNewToken),
-			$objDB->escapeString($_SERVER['REMOTE_ADDR']),
-			$objDB->escapeString($strDevice),
-			$objDB->escapeString($this->strSecretKey),
-			$objDB->escapeString($strHash)
+			$strNewToken,
+			$_SERVER['REMOTE_ADDR'],
+			$strDevice,
+			$this->strSecretKey,
+			$strHash
 		);
 
-		if($objDB->query($strSQL)){
+		if($resResult->status()){
 
 			$strTokenKey = sprintf("%s%s%s",$strDevice,$strNewToken,$strHash);
 
@@ -438,22 +418,23 @@ class SessionHandler{
 		return $strTokenKey;
 	}
 
+	/**
+	 * Delete all session data for this key
+	 * @param $strDevice
+	 * @param $strHash
+	 * @return bool
+	 */
 	protected function wipeSession($strDevice,$strHash){
 
-		$objDB = \Twist::Database();
-
-		//Delete all session data for this key
-		$strSQL = sprintf("UPDATE `%s`.`%suser_sessions`
+		return \Twist::Database()->query("UPDATE `%s`.`%suser_sessions`
 								SET `token` = ''
 								WHERE md5(`device`) = '%s'
 								AND md5(concat(`user_id`,'%s')) = '%s'",
 			TWIST_DATABASE_NAME,
 			TWIST_DATABASE_TABLE_PREFIX,
-			$objDB->escapeString($strDevice),
-			$objDB->escapeString($this->strSecretKey),
-			$objDB->escapeString($strHash)
-		);
-
-		$objDB->query($strSQL);
+			$strDevice,
+			$this->strSecretKey,
+			$strHash
+		)->status();
 	}
 }

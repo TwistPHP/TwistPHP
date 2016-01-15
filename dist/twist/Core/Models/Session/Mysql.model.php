@@ -27,7 +27,6 @@
 
 		protected $savePath;
 		protected $sessionName;
-		protected $objDB = null;
 		protected $maxLifetime = 0;
 
 		public function __construct(){
@@ -62,9 +61,6 @@
 			$this->savePath = $sessionName;
 			$this->maxLifetime = ini_get('session.gc_maxlifetime');
 
-			//Check to see if the session table has been created
-			$this->objDB = \Twist::Database();
-
 			return true;
 		}
 
@@ -79,17 +75,9 @@
 			$mxdOut = null;
 
 			//Read from the current session
-			$strSQL = sprintf("SELECT *
-								FROM `%s`.`%ssession`
-								WHERE `id` = '%s'
-								LIMIT 1",
-				TWIST_DATABASE_NAME,
-				TWIST_DATABASE_TABLE_PREFIX,
-				$this->objDB->escapeString($intSessionID)
-			);
+			$arrData = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'session')->get($intSessionID,'id',true);
 
-			if($this->objDB->query($strSQL) && $this->objDB->getNumberRows()){
-				$arrData = $this->objDB->getArray();
+			if(count($arrData)){
 				$mxdOut = $arrData['data'];
 			}
 
@@ -98,56 +86,31 @@
 
 		public function write($intSessionID, $mxdData){
 
-			$blOut = false;
-
 			//Write to the current session
-			$strSQL = sprintf("INSERT INTO `%s`.`%ssession`
+			$resResult = \Twist::Database()->query("INSERT INTO `%s`.`%ssession`
 								(`id`,`data`,`last_modified`) VALUES ('%s','%s',NOW())
 								ON DUPLICATE KEY UPDATE `data` = '%s',`last_modified` = NOW()",
 				TWIST_DATABASE_NAME,
 				TWIST_DATABASE_TABLE_PREFIX,
-				$this->objDB->escapeString($intSessionID),
-				$this->objDB->escapeString($mxdData),
-				$this->objDB->escapeString($mxdData)
+				$intSessionID,
+				$mxdData,
+				$mxdData
 			);
 
-			if($this->objDB->query($strSQL)){
-				$blOut = true;
-			}
-
-			return $blOut;
+			return $resResult->status();
 		}
 
 		public function destroy($intSessionID){
-
-			//Destroy the current session
-			$strSQL = sprintf("DELETE
-								FROM `%s`.`%ssession`
-								WHERE `id` = '%s'
-								LIMIT 1",
-				TWIST_DATABASE_NAME,
-				TWIST_DATABASE_TABLE_PREFIX,
-				$this->objDB->escapeString($intSessionID)
-			);
-
-			$this->objDB->query($strSQL);
-
-			return true;
+			return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'session')->delete($intSessionID,'id');
 		}
 
 		public function gc($intMaxLifetime){
 
 			//Remove all the expired sessions form the database
-			$strSQL = sprintf("DELETE
-								FROM `%s`.`%ssession`
-								WHERE `last_modified` < %d",
+			return \Twist::Database()->query("DELETE FROM `%s`.`%ssession` WHERE `last_modified` < %d",
 				TWIST_DATABASE_NAME,
 				TWIST_DATABASE_TABLE_PREFIX,
-				$this->objDB->escapeString(\Twist::DateTime()->time()-$intMaxLifetime)
-			);
-
-			$this->objDB->query($strSQL);
-
-			return true;
+				\Twist::DateTime()->time()-$intMaxLifetime
+			)->status();
 		}
 	}

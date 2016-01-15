@@ -238,7 +238,7 @@ class User extends Base{
      * @return \Twist\Core\Models\User\User
      */
     public function get($intUserID){
-        return new UserObject(\Twist::Database()->getRecord(sprintf('%susers',TWIST_DATABASE_TABLE_PREFIX),$intUserID),$this);
+        return new UserObject(\Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->get($intUserID),$this);
     }
 
     /**
@@ -246,7 +246,7 @@ class User extends Base{
      * @return \Twist\Core\Models\User\User
      */
     public function create(){
-        return new UserObject(\Twist::Database()->createRecord(sprintf('%susers',TWIST_DATABASE_TABLE_PREFIX)),$this);
+        return new UserObject(\Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->create(),$this);
     }
 
     /**
@@ -255,7 +255,7 @@ class User extends Base{
      * @return array
      */
     public function getData($intUserID){
-        return \Twist::Database()->get(sprintf('%susers',TWIST_DATABASE_TABLE_PREFIX),$intUserID);
+        return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->get($intUserID,'id',true);
     }
 
     /**
@@ -264,7 +264,7 @@ class User extends Base{
      * @return array
      */
     public function getByEmail($strEmail){
-        return \Twist::Database()->get(sprintf('%susers',TWIST_DATABASE_TABLE_PREFIX),$strEmail,'email');
+	    return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->get($strEmail,'email',true);
     }
 
     /**
@@ -276,14 +276,14 @@ class User extends Base{
 
 	    $arrUserDetails = array();
 
-	    $blQuery = \Twist::Database()->query("SELECT `ud`.`data`,`udf`.`slug` FROM `%suser_data` AS `ud` JOIN `%suser_data_fields` AS `udf` ON `ud`.`field_id` = `udf`.`id` WHERE `ud`.`user_id` = %d",
+	    $resResult = \Twist::Database()->query("SELECT `ud`.`data`,`udf`.`slug` FROM `%suser_data` AS `ud` JOIN `%suser_data_fields` AS `udf` ON `ud`.`field_id` = `udf`.`id` WHERE `ud`.`user_id` = %d",
 		    TWIST_DATABASE_TABLE_PREFIX,
 		    TWIST_DATABASE_TABLE_PREFIX,
 		    $intUserID
 	    );
 
-	    if($blQuery && \Twist::Database()->getNumberRows()){
-		    foreach(\Twist::Database()->getFullArray() as $arrEachItem){
+	    if($resResult->status() && $resResult->numberRows()){
+		    foreach($resResult->getFullArray() as $arrEachItem){
 			    $arrUserDetails[$arrEachItem['slug']] = $arrEachItem['data'];
 		    }
 	    }
@@ -297,7 +297,7 @@ class User extends Base{
      * @return array
      */
     public function getAll($strOrderBy = 'id'){
-        return \Twist::Database()->getAll(sprintf('%susers',TWIST_DATABASE_TABLE_PREFIX),$strOrderBy);
+        return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->find(null,null,$strOrderBy);
     }
 
     /**
@@ -306,7 +306,7 @@ class User extends Base{
      * @return array
      */
     public function getAllByLevel($intLevelID){
-        return \Twist::Database()->find(sprintf('%susers',TWIST_DATABASE_TABLE_PREFIX),$intLevelID,'level');
+        return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->find($intLevelID,'level');
     }
 
     /**
@@ -315,7 +315,7 @@ class User extends Base{
      * @return array
      */
     public function getLevel($intLevelID){
-        return \Twist::Database()->get(sprintf('%suser_levels',TWIST_DATABASE_TABLE_PREFIX),$intLevelID,'level');
+        return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'user_levels')->get($intLevelID,'level',true);
     }
 
     /**
@@ -323,7 +323,7 @@ class User extends Base{
      * @return int
      */
     public function getLevels(){
-        return \Twist::Database()->getAll(sprintf('%suser_levels',TWIST_DATABASE_TABLE_PREFIX));
+	    return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'user_levels')->find();
     }
 
     public function verifyEmail($strVerificationCode){
@@ -338,7 +338,7 @@ class User extends Base{
             //Check that the email address is semi valid and code is long enough
             if(strstr($arrParts[0],'@') && strstr($arrParts[0],'.') && strlen($arrParts[1]) == 16){
 
-                $strSQL = sprintf("UPDATE `%s`.`%susers`
+	            $resResult = \Twist::Database()->query("UPDATE `%s`.`%susers`
 												SET `verified` = '1',
 													`verification_code` = ''
 												WHERE `email` = '%s'
@@ -346,11 +346,11 @@ class User extends Base{
 												LIMIT 1",
                     TWIST_DATABASE_NAME,
                     TWIST_DATABASE_TABLE_PREFIX,
-                    \Twist::Database()->escapeString($arrParts[0]),
-                    \Twist::Database()->escapeString($arrParts[1])
+                    $arrParts[0],
+                    $arrParts[1]
                 );
 
-                if(\Twist::Database()->query($strSQL) && \Twist::Database()->getAffectedRows()){
+                if($resResult->status() && $resResult->affectedRows()){
                     $blOut = true;
                     \Twist::Session()->data('site-login_message','Your account has been verified');
                 }

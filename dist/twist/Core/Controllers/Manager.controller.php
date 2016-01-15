@@ -102,11 +102,13 @@ class Manager extends BaseUser{
 			count($arrRoutes['PUT']),
 			count($arrRoutes['DELETE']));
 
+		$strUsersTable = sprintf('%susers',TWIST_DATABASE_TABLE_PREFIX);
+
 		$arrTags['user-accounts'] = sprintf('<strong>%d</strong> Superadmin,<br><strong>%d</strong> Admin,<br><strong>%d</strong> Advanced,<br><strong>%d</strong> Member',
-			\Twist::Database()->count(sprintf('%susers',TWIST_DATABASE_TABLE_PREFIX),\Twist::framework()->setting('USER_LEVEL_SUPERADMIN'),'level'),
-			\Twist::Database()->count(sprintf('%susers',TWIST_DATABASE_TABLE_PREFIX),\Twist::framework()->setting('USER_LEVEL_ADMIN'),'level'),
-			\Twist::Database()->count(sprintf('%susers',TWIST_DATABASE_TABLE_PREFIX),\Twist::framework()->setting('USER_LEVEL_ADVANCED'),'level'),
-			\Twist::Database()->count(sprintf('%susers',TWIST_DATABASE_TABLE_PREFIX),\Twist::framework()->setting('USER_LEVEL_MEMBER'),'level')
+			\Twist::Database()->records($strUsersTable)->count(\Twist::framework()->setting('USER_LEVEL_SUPERADMIN'),'level'),
+			\Twist::Database()->records($strUsersTable)->count(\Twist::framework()->setting('USER_LEVEL_ADMIN'),'level'),
+			\Twist::Database()->records($strUsersTable)->count(\Twist::framework()->setting('USER_LEVEL_ADVANCED'),'level'),
+			\Twist::Database()->records($strUsersTable)->count(\Twist::framework()->setting('USER_LEVEL_MEMBER'),'level')
 		);
 
 		return $this->_view('pages/dashboard.tpl',$arrTags);

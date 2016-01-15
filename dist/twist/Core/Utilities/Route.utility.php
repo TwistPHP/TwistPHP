@@ -1062,27 +1062,6 @@ class Route extends Base{
 		return $arrMatch;
 	}
 
-	public function getID($strURI){
-
-		$intOut = null;
-		$objDB = \Twist::Database();
-
-		if($objDB->checkSettings()){
-
-			$strSQL = sprintf("SELECT * FROM `%s`.`structure_routes` WHERE `uri` = '%s' LIMIT 1",
-				TWIST_DATABASE_NAME,
-				$objDB->escapeString($strURI)
-			);
-
-			if($objDB->query($strSQL) && $objDB->getNumberRows()){
-				$arrItems = $objDB->getArray();
-				$intOut = $arrItems['id'];
-			}
-		}
-
-		return $intOut;
-	}
-
 	/**
 	 * Register the upload server, this will automatically call the Twist Upload Controller unless an override has been specified
 	 * @param string $strURI
