@@ -142,12 +142,20 @@
 
 		/**
 		 * Load the hooks form storage area
-		 * @todo Make this database driven rather than cache files
 		 */
 		protected function loadHooks(){
 
-			$arrCachedHooks = \Twist::Cache('twist/hooks')->read('permanent');
-			$this->arrPermanentHooks = ($arrCachedHooks) ? $arrCachedHooks : array();
+			$arrCachedHooks = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'hooks')->find();
+
+			$this->arrPermanentHooks = array();
+			foreach($arrCachedHooks as $arrEachHook){
+
+				if(!array_key_exists($arrEachHook['hook'],$this->arrPermanentHooks)){
+					$this->arrPermanentHooks[$arrEachHook['hook']] = array();
+				}
+
+				$this->arrPermanentHooks[$arrEachHook['hook']][$arrEachHook['key']] = json_decode($arrEachHook['data'],true);
+			}
 
 			if(count($this->arrHooks) == 0){
 				$this->arrHooks = $this->arrPermanentHooks;
@@ -161,7 +169,6 @@
 		 * @param $strHook
 		 * @param $mxdUniqueKey
 		 * @param $mxdData
-		 * @todo Make this database driven rather than cache files
 		 */
 		protected function storeHook($strHook,$mxdUniqueKey,$mxdData){
 
@@ -171,20 +178,29 @@
 
 			$this->arrPermanentHooks[$strHook][$mxdUniqueKey] = $mxdData;
 
-			\Twist::Cache('twist/hooks')->write('permanent',$this->arrPermanentHooks,(86400*100));
+			$resRecord = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'hooks')->create();
+			$resRecord->set('hook',$strHook);
+			$resRecord->set('key',$mxdUniqueKey);
+			$resRecord->set('data',json_encode($mxdData));
+			$resRecord->set('registered',date('Y-m-d H:i:s'));
+			$resRecord->commit();
 		}
 
 		/**
 		 * Remove a permanently stored hook
 		 * @param $strHook
 		 * @param $mxdUniqueKey
-		 * @todo Make this database driven rather than cache files
 		 */
 		protected function removeHook($strHook,$mxdUniqueKey){
 
 			//Remove the hook from the permanent array
-			unset($this->arrHooks[$strHook][$mxdUniqueKey]);
+			unset($this->arrPermanentHooks[$strHook][$mxdUniqueKey]);
 
-			\Twist::Cache('twist/hooks')->write('permanent',$this->arrPermanentHooks,(86400*100));
+			\Twist::Database()->query("DELETE FROM `%s`.`%s` WHERE `hook` = '%s' AND `key` = '%s' LIMIT 1",
+				TWIST_DATABASE_NAME,
+				TWIST_DATABASE_TABLE_PREFIX.'hooks',
+				$strHook,
+				$mxdUniqueKey
+			);
 		}
 	}

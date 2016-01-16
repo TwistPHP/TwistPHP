@@ -57,6 +57,20 @@ CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`packages` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `hooks`
+--
+
+CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`hooks` (
+  `hook` char(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `key` char(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `data` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `registered` datetime NOT NULL COMMENT 'Date that the hook was registered',
+  UNIQUE KEY `hook` (`hook`,`key`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
