@@ -61,8 +61,8 @@ CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`packages` (
 --
 
 CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`hooks` (
-  `hook` char(128) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `key` char(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `hook` char(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `key` char(64) COLLATE utf8mb4_unicode_ci NOT NULL,
   `data` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `registered` datetime NOT NULL COMMENT 'Date that the hook was registered',
   UNIQUE KEY `hook` (`hook`,`key`)

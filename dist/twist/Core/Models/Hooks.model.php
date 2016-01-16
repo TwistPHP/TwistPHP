@@ -145,16 +145,26 @@
 		 */
 		protected function loadHooks(){
 
-			$arrCachedHooks = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'hooks')->find();
-
 			$this->arrPermanentHooks = array();
-			foreach($arrCachedHooks as $arrEachHook){
 
-				if(!array_key_exists($arrEachHook['hook'],$this->arrPermanentHooks)){
-					$this->arrPermanentHooks[$arrEachHook['hook']] = array();
+			if(\Twist::Database()->isConnected()){
+
+				$arrCachedHooks = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'hooks')->find();
+
+				foreach($arrCachedHooks as $arrEachHook){
+
+					if(!array_key_exists($arrEachHook['hook'],$this->arrPermanentHooks)){
+						$this->arrPermanentHooks[$arrEachHook['hook']] = array();
+					}
+
+					$this->arrPermanentHooks[$arrEachHook['hook']][$arrEachHook['key']] = json_decode($arrEachHook['data'],true);
 				}
-
-				$this->arrPermanentHooks[$arrEachHook['hook']][$arrEachHook['key']] = json_decode($arrEachHook['data'],true);
+			}else{
+				//Fallback for those that are not using a Database
+				$arrCacheData = \Twist::Cache('twist/hooks')->read('permanent');
+				if(!is_null($arrCacheData)){
+					$this->arrPermanentHooks = $arrCacheData;
+				}
 			}
 
 			if(count($this->arrHooks) == 0){
@@ -178,16 +188,21 @@
 
 			$this->arrPermanentHooks[$strHook][$mxdUniqueKey] = $mxdData;
 
-			$resRecord = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'hooks')->create();
-			$resRecord->set('hook',$strHook);
-			$resRecord->set('key',$mxdUniqueKey);
-			$resRecord->set('data',json_encode($mxdData));
-			$resRecord->set('registered',date('Y-m-d H:i:s'));
-			$resRecord->commit();
+			if(\Twist::Database()->isConnected()) {
+				$resRecord = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX . 'hooks')->create();
+				$resRecord->set('hook', $strHook);
+				$resRecord->set('key', $mxdUniqueKey);
+				$resRecord->set('data', json_encode($mxdData));
+				$resRecord->set('registered', date('Y-m-d H:i:s'));
+				$resRecord->commit();
+			}else{
+				//Fallback for those that are not using a Database
+				\Twist::Cache('twist/hooks')->write('permanent',$this->arrPermanentHooks,(3600*24)*365);
+			}
 		}
 
 		/**
-		 * Remove a permanently stored hook
+		 * Remove a permanently stored hook, only wo
 		 * @param $strHook
 		 * @param $mxdUniqueKey
 		 */
@@ -196,11 +211,16 @@
 			//Remove the hook from the permanent array
 			unset($this->arrPermanentHooks[$strHook][$mxdUniqueKey]);
 
-			\Twist::Database()->query("DELETE FROM `%s`.`%s` WHERE `hook` = '%s' AND `key` = '%s' LIMIT 1",
-				TWIST_DATABASE_NAME,
-				TWIST_DATABASE_TABLE_PREFIX.'hooks',
-				$strHook,
-				$mxdUniqueKey
-			);
+			if(\Twist::Database()->isConnected()) {
+				\Twist::Database()->query("DELETE FROM `%s`.`%s` WHERE `hook` = '%s' AND `key` = '%s' LIMIT 1",
+					TWIST_DATABASE_NAME,
+					TWIST_DATABASE_TABLE_PREFIX . 'hooks',
+					$strHook,
+					$mxdUniqueKey
+				);
+			}else{
+				//Fallback for those that are not using a Database
+				\Twist::Cache('twist/hooks')->write('permanent',$this->arrPermanentHooks,(3600*24)*365);
+			}
 		}
 	}

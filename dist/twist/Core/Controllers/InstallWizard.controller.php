@@ -304,7 +304,7 @@ class InstallWizard extends Base{
 			$arrSession['user']['status'] = true;
 			\Twist::Session()->data('twist-setup',$arrSession);
 
-			header('Location: packages');
+			header('Location: package');
 		}
 
 		return \Twist::View()->build('pages/user.tpl',$arrTags);
@@ -315,7 +315,7 @@ class InstallWizard extends Base{
 	 * Currently skips this step in initial release of V3
 	 * @return string
 	 */
-	public function packages(){
+	public function package(){
 
 		$arrSession = \Twist::Session()->data('twist-setup');
 
