@@ -2,7 +2,7 @@
     "name": "twistphp/twistphp",
     "type": "library",
     "description": "The TwistPHP MVC micro framework",
-    "keywords": ["framework","twistphp"],
+    "keywords": ["framework","twistphp","MVC"],
     "homepage": "https://twistphp.com",
     "license": "LGPL",
     "support": {
