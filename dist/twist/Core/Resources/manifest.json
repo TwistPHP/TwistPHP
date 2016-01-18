@@ -24,17 +24,17 @@
 		"legacy": {
 			"default": false,
 			"css": [],
-			"js": ["jquery-1.11.3.min.js"]
+			"js": ["jquery-1.12.0.min.js"]
 		},
-		"1.11.3": {
+		"1.12.0": {
 			"default": false,
 			"css": [],
-			"js": ["jquery-1.11.3.min.js"]
+			"js": ["jquery-1.12.0.min.js"]
 		},
-		"2.1.4": {
+		"2.2.0": {
 			"default": true,
 			"css": [],
-			"js": ["jquery-2.1.4.min.js"]
+			"js": ["jquery-2.2.0.min.js"]
 		}
 	},
 	"jquery-ui": {
