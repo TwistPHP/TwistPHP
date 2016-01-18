@@ -24,7 +24,14 @@ class Views extends \PHPUnit_Framework_TestCase{
 
 		$strTagOutput = \Twist::View()->replace("{resource:jquery}");
 		$this->assertContains('<script', $strTagOutput);
-		$this->assertContains('twist/Core/Resources/jquery/jquery-2.1.4.min.js', $strTagOutput);
+		$this->assertContains('twist/Core/Resources/jquery/jquery-', $strTagOutput);
+	}
+
+	public function testTwistTagResource(){
+
+		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax}");
+		$this->assertContains('<script', $strTagOutput);
+		$this->assertContains('twist/Core/Resources/twist/ajax/js/twist-ajax.min.js', $strTagOutput);
 	}
 
 	public function testTagCSS(){
