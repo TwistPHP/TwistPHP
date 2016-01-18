@@ -10,6 +10,7 @@ class Views extends \PHPUnit_Framework_TestCase{
 
 	public function testTagIf(){
 		$this -> assertEquals('pass',\Twist::View()->replace("{data:test=='OK'?'pass':'fail'}",array('test' => 'OK')));
+		$this -> assertEquals('fail',\Twist::View()->replace("{data:test=='OK'?'pass':'fail'}",array('test' => 'NOT-OK')));
 	}
 
 	public function testTagYear(){
