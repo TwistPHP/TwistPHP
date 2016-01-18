@@ -5,6 +5,8 @@ The easiest way of getting data out of the database is with the helpers that com
 The `records()` method returns an object designed to make working with your database OO (and easy!). It accepts two parameters, the first being the table name and optionally the second parameter is the database name.
 Parameter two by default is set to the value of the 'TWIST_DATABASE_NAME' config variable.
 
+All data passed in to any of the `records()` methods is automatically escaped before being used in an SQL query.
+
 ## Get a single row
 
 You can get a single row from the database as an object by using the `get()` method. It will always return one row.

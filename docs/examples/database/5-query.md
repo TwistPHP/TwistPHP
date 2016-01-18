@@ -9,7 +9,9 @@ When running a SQL simply pass the query into the `query()` function and get you
 ```php
 <?php
 
-    $result = Twist::Database() -> query( "SELECT * FROM `devices` WHERE `screen_width` > 720");
+    $result = Twist::Database() -> query( "SELECT *
+                                            FROM `devices`
+                                            WHERE `screen_width` > 720");
     
 ```
 
@@ -21,7 +23,12 @@ When running a SQL query in the query function you can pass in additional parame
     $tablet_min_screen_width = 720;
     $tablet_max_screen_width = 1024;
     
-    $result = Twist::Database() -> query( "SELECT * FROM `devices` WHERE `screen_width` > %d AND `screen_width` < %d", $tablet_min_screen_width, $tablet_max_screen_width );
+    $result = Twist::Database() -> query( "SELECT *
+                                            FROM `devices`
+                                            WHERE `screen_width` > %d AND `screen_width` < %d",
+                                            $tablet_min_screen_width,
+                                            $tablet_max_screen_width
+                                         );
     
 ```
 
@@ -47,7 +54,7 @@ Now we can check to see that the query ran successfully and that we have some re
 
 When using the result object you will get a range of functionality, see below for a full list.
 
-| Method                   | Type     | Description                                               |
+| Method                   | Returns  | Description                                               |
 | ------------------------ | -------- | --------------------------------------------------------- |
 | `status()`               | Boolean  | Status of the SQL query (true if successfully run)        |
 | `sql()`                  | String   | SQL statement that was run to produce the result          |
@@ -58,3 +65,14 @@ When using the result object you will get a range of functionality, see below fo
 | `getFullArray()`         | Array    | All rows returned in multi-dimensional field value array  |
 | `errorNo()`              | Integer  | Error number in relation to a failed query (status false) |
 | `errorMessage()`         | String   | Error message in relation to a failed query (status false)|
+
+## Manually escape data
+
+If you are manually building your SQL query and need to escape any data before adding it to a query you can use the `escapeString()` method.
+
+```php
+<?php
+
+    $escaped_string = \Twist::Database() -> escapeString('My Raw String');
+    
+```
