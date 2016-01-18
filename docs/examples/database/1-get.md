@@ -1,10 +1,13 @@
-# Getting data from the databse
+# Getting data from the database
 
 The easiest way of getting data out of the database is with the helpers that come with TwistPHP.
 
+The `records()` method returns an object designed to make working with your database OO (and easy!). It accepts two parameters, the first being the table name and optionally the second parameter is the database name.
+Parameter two by default is set to the value of the 'TWIST_DATABASE_NAME' config variable.
+
 ## Get a single row
 
-You can get a single row from the database by using the `getRecord()` method. It will always return one row.
+You can get a single row from the database as an object by using the `get()` method. It will always return one row.
 
 ```php
 <?php
@@ -19,10 +22,27 @@ You can get a single row from the database by using the `getRecord()` method. It
      * 7EX' for the postcode
      * --------------------------------
      */
-    $resArea = Twist::Database() -> getRecord( 'areas', 'PL4 7EX', 'postcode' );
+    $area = Twist::Database() -> records( 'areas' ) -> get( 'PL4 7EX', 'postcode' );
     
-    echo $resArea -> get( 'city' ); // Plymouth
+    echo $area -> get( 'city' ); // Plymouth
 ```
+
+Alternatively you can get a single row as an array rather than an object, to do this pass in `true` as a third paramter.
+ 
+```php
+ <?php
+     
+     /*
+      * --------------------------------
+      * Passing in the third parameter
+      * of true will return an array as
+      * the result rather than an object
+      * --------------------------------
+      */
+     $area = Twist::Database() -> records( 'areas' ) -> get( 'PL4 7EX', 'postcode', true );
+     
+     echo $area['city']; // Plymouth
+ ```
 
 ## Get multiple rows
 
@@ -39,9 +59,9 @@ When using the `find()` method, all the rows that match your string are returned
      * this as an example
      * --------------------------------
      */
-    $arrHatchbacks = Twist::Database() -> find( 'cars', 'layout', 'hatchback' );
+    $hatchbacks = Twist::Database() -> records( 'cars' ) -> find( 'layout', 'hatchback' );
     
-    foreach( $arrHatchbacks as $arrHatchback ) {
+    foreach( $hatchbacks as $hatchback ) {
         /*
          * --------------------------------
          * Each array item is a separate DB
@@ -50,13 +70,13 @@ When using the `find()` method, all the rows that match your string are returned
          * required
          * --------------------------------
          */
-        echo $arrHatchback['model']; // Fiesta etc.
+        echo $hatchback['model']; // Fiesta etc.
     }
 ```
 
 ## Get all rows in a table
 
-You can get an array of objects for every row in a table by using the `getRecords()` method.
+You can get an array of all the rows in the table by using the `find()` method, passing no parameters will return everything.
 
 ```php
 <?php
@@ -68,9 +88,9 @@ You can get an array of objects for every row in a table by using the `getRecord
      * number of rows in your table
      * --------------------------------
      */
-    $arrDevices = Twist::Database() -> getRecords( 'devices' );
+    $devices = Twist::Database() -> records( 'devices' ) -> find();
     
-    foreach( $arrDevices as $resDevice ) {
-        echo $resDevice -> get( 'make' ); // Nexus etc.
+    foreach( $devices as $device ) {
+        echo $device['make']; // Nexus etc.
     }
 ```

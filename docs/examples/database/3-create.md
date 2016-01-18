@@ -4,7 +4,7 @@ Database objects allow the creation of database rows in a simple, OO manner.
 
 ## Initialise a new table row
 
-Use the `createRecord()` method in the database class to create an object for insertion into the database.
+Use the `create()` method in the database class to create an object for insertion into the database.
 
 ```php
 <?php
@@ -16,7 +16,7 @@ Use the `createRecord()` method in the database class to create an object for in
      * data
      * --------------------------------
      */
-    $book = Twist::Database() -> createRecord( 'books' );
+    $book = Twist::Database() -> records( 'books' ) -> create();
 ```
 
 ## Set the values of the fields

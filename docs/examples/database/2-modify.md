@@ -14,11 +14,11 @@ Use the `get()` method in the database class to retrieve an object of a table ro
      * This query is getting a row with
      * the ID of 84 - another field can
      * be used by inserting it into the
-     * third parameter, but 'id' is the
-     * default
+     * second parameter, the default is
+     * 'id'
      * --------------------------------
      */
-    $film = Twist::Database() -> get( 'films', 84 );
+    $film = Twist::Database() -> records( 'films' ) -> get( 84 );
 ```
 
 ## Modify the necessary data
