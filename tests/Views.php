@@ -54,18 +54,18 @@ class Views extends \PHPUnit_Framework_TestCase{
 
 	public function testTagJS(){
 
-		$strTagOutput = \Twist::View()->replace("{js:twist/Core/Resources/jquery/jquery-2.1.4.min.js}");
+		$strTagOutput = \Twist::View()->replace("{js:twist/Core/Resources/jquery/jquery-2.2.0.min.js}");
 		$this->assertContains('<script', $strTagOutput);
-		$this->assertContains('twist/Core/Resources/jquery/jquery-2.1.4.min.js', $strTagOutput);
+		$this->assertContains('twist/Core/Resources/jquery/jquery-2.2.0.min.js', $strTagOutput);
 
 		//Create an override JS file
 		mkdir(sprintf('%s/Twist/Core/Resources/jquery/',TWIST_APP),0777,true);
-		file_put_contents(sprintf('%s/Twist/Core/Resources/jquery/jquery-2.1.4.min.js',TWIST_APP),'test over-ride file');
-		$this -> assertTrue(file_exists(sprintf('%s/Twist/Core/Resources/jquery/jquery-2.1.4.min.js',TWIST_APP)));
+		file_put_contents(sprintf('%s/Twist/Core/Resources/jquery/jquery-2.2.0.min.js',TWIST_APP),'test override file');
+		$this -> assertTrue(file_exists(sprintf('%s/Twist/Core/Resources/jquery/jquery-2.2.0.min.js',TWIST_APP)));
 
-		$strTagOutput = \Twist::View()->replace("{js:twist/Core/Resources/jquery/jquery-2.1.4.min.js}");
+		$strTagOutput = \Twist::View()->replace("{js:twist/Core/Resources/jquery/jquery-2.2.0.min.js}");
 		$this->assertContains('<script', $strTagOutput);
-		$this->assertContains('app/Twist/Core/Resources/jquery/jquery-2.1.4.min.js', $strTagOutput);
+		$this->assertContains('app/Twist/Core/Resources/jquery/jquery-2.2.0.min.js', $strTagOutput);
 		
 	}
 
