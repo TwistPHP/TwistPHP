@@ -75,7 +75,7 @@
 			$mxdOut = null;
 
 			//Read from the current session
-			$arrData = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'session')->get($intSessionID,'id',true);
+			$arrData = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'sessions')->get($intSessionID,'id',true);
 
 			if(count($arrData)){
 				$mxdOut = $arrData['data'];
@@ -87,7 +87,7 @@
 		public function write($intSessionID, $mxdData){
 
 			//Write to the current session
-			$resResult = \Twist::Database()->query("INSERT INTO `%s`.`%ssession`
+			$resResult = \Twist::Database()->query("INSERT INTO `%s`.`%ssessions`
 								(`id`,`data`,`last_modified`) VALUES ('%s','%s',NOW())
 								ON DUPLICATE KEY UPDATE `data` = '%s',`last_modified` = NOW()",
 				TWIST_DATABASE_NAME,
@@ -101,13 +101,13 @@
 		}
 
 		public function destroy($intSessionID){
-			return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'session')->delete($intSessionID,'id');
+			return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'sessions')->delete($intSessionID,'id');
 		}
 
 		public function gc($intMaxLifetime){
 
 			//Remove all the expired sessions form the database
-			return \Twist::Database()->query("DELETE FROM `%s`.`%ssession` WHERE `last_modified` < %d",
+			return \Twist::Database()->query("DELETE FROM `%s`.`%ssessions` WHERE `last_modified` < %d",
 				TWIST_DATABASE_NAME,
 				TWIST_DATABASE_TABLE_PREFIX,
 				\Twist::DateTime()->time()-$intMaxLifetime
