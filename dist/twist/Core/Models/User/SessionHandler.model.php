@@ -28,6 +28,7 @@ class SessionHandler{
 	protected $strSecretKey = 'mySecretKey';
 	protected $intSessionLife = 604800;
 	protected $intDeviceLife = 31536000;
+	protected $blNewDeviceCreated = false;
 
 	/**
 	 * Set the device cookie life in seconds (Default: 31536000 == 1 year)
@@ -52,7 +53,9 @@ class SessionHandler{
 	 */
 	protected function createDeviceID($intUserID){
 
+		$blCreatedNewDevice = false;
 		$strDeviceID = null;
+		$arrDevice = array();
 
 		if(count($_COOKIE) && !array_key_exists('device',$_COOKIE)){
 
@@ -78,6 +81,8 @@ class SessionHandler{
 				$arrDevice['os']['key'],
 				$arrDevice['browser']['key']
 			);
+
+			$blCreatedNewDevice = true;
 		}else{
 
 			//Get the device ID
@@ -99,7 +104,36 @@ class SessionHandler{
 					$arrDevice['os']['key'],
 					$arrDevice['browser']['key']
 				);
+
+				$blCreatedNewDevice = true;
 			}
+		}
+
+		//If a new device has been added to the users session list send notification (if enabled)
+		if($blCreatedNewDevice && $this->notifications($intUserID)){
+
+			$arrUserInfo = \Twist::User()->getData($intUserID);
+
+			$strEmailSubject = sprintf('%s: Login from a new device',\Twist::framework()->setting('SITE_NAME'));
+
+			$resEmail = \Twist::Email()->create();
+			$resEmail->addTo($arrUserInfo['email']);
+			$resEmail->setSubject($strEmailSubject);
+			$resEmail->setFrom(sprintf('no-reply@%s',str_replace('www.','',\Twist::framework()->setting('SITE_HOST'))));
+			$resEmail->setReplyTo(sprintf('no-reply@%s',str_replace('www.','',\Twist::framework()->setting('SITE_HOST'))));
+
+			$arrTags = array();
+			$arrTags['subject'] = $strEmailSubject;
+			$arrTags['firstname'] = $arrUserInfo['firstname'];
+			$arrTags['site_name'] = \Twist::framework()->setting('SITE_NAME');
+			$arrTags['device'] = $arrDevice['os']['version'];
+			$arrTags['browser'] = $arrDevice['browser']['title'];
+			$arrTags['url'] = sprintf('http://%s/%s',\Twist::framework()->setting('SITE_HOST'),'login');
+
+			$strHTML = \Twist::View()->build(sprintf('%suser/device-notification-email.tpl',TWIST_FRAMEWORK_VIEWS),$arrTags);
+
+			$resEmail->setBodyHTML($strHTML);
+			$resEmail->send();
 		}
 
 		return $strDeviceID;
