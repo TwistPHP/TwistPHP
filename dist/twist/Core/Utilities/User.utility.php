@@ -283,7 +283,7 @@ class User extends Base{
 	    );
 
 	    if($resResult->status() && $resResult->numberRows()){
-		    foreach($resResult->getFullArray() as $arrEachItem){
+		    foreach($resResult->rows() as $arrEachItem){
 			    $arrUserDetails[$arrEachItem['slug']] = $arrEachItem['data'];
 		    }
 	    }

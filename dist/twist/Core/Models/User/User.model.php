@@ -60,7 +60,7 @@ class User{
 		);
 
 		if($resResult->status() && $resResult->numberRows()){
-			foreach($resResult->getFullArray() as $arrEachItem){
+			foreach($resResult->rows() as $arrEachItem){
 				$this->arrUserData[$arrEachItem['slug']] = $this->arrOriginalUserData[$arrEachItem['slug']] = $arrEachItem['data'];
 			}
 		}

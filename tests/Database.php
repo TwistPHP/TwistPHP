@@ -10,6 +10,20 @@ class Database extends \PHPUnit_Framework_TestCase{
 
 		$this->assertTrue($resResult->status());
 		$this->assertEquals(1,$resResult->numberRows());
+
+		$resResult = \Twist::Database()->query("SELECT * FROM `twist_settings` LIMIT 3");
+
+		$this->assertTrue($resResult->status());
+		$this->assertEquals(3,$resResult->numberRows());
+
+		$this->assertTrue(array_key_exists('key',$resResult->row()));
+		$this->assertEquals(3,count($resResult->rows()));
+
+		$arrResults = $resResult->rows();
+		$arrResult = $resResult->row(2);
+
+		$this->assertEquals($arrResults[2]['key'],$arrResult['key']);
+
 	}
 
 	public function testQueryFail(){

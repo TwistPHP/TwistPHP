@@ -80,7 +80,7 @@
 			);
 
 			if($resResult->status() && $resResult->numberRows()){
-				$mxdRecord = $resResult->getArray();
+				$mxdRecord = $resResult->row();
 
 				if($blReturnArray == false){
 
@@ -172,7 +172,7 @@
 			));
 
 			if($resResult->status() && $resResult->numberRows()){
-				$arrRecord = $resResult->getArray();
+				$arrRecord = $resResult->row();
 				$intOut = $arrRecord['total'];
 			}
 
@@ -217,10 +217,19 @@
 			));
 
 			if($resResult->status() && $resResult->numberRows()){
-				$arrRecords = $resResult->getFullArray();
+				$arrRecords = $resResult->rows();
 			}
 
 			return $arrRecords;
+		}
+
+		/**
+		 * Get all the records from a database table.
+		 * @alias find
+		 * @return array Multi-dimensional array of database records/rows
+		 */
+		public function all(){
+			return $this->find();
 		}
 
 		/**

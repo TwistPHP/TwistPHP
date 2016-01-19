@@ -201,7 +201,7 @@ class Database extends Base{
 		$resResult = $this->query("SELECT VERSION() as mysql_version");
 
 		if($resResult->status() && $resResult->numberRows()){
-			$arrSQLData = $resResult->getArray();
+			$arrSQLData = $resResult->row();
 			$blMultibyteSupport = version_compare($arrSQLData['mysql_version'], '5.5.3', '>=');
 		}
 

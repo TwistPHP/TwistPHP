@@ -52,7 +52,7 @@
 					$resResult = \Twist::Database()->query("SELECT UNIX_TIMESTAMP() AS `timestamp`");
 
 					if($resResult->status()){
-						$arrDate = $resResult->getArray();
+						$arrDate = $resResult->row();
 						return $arrDate['timestamp'];
 					}else{
 						return time();
