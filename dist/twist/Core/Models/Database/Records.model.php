@@ -224,6 +224,15 @@
 		}
 
 		/**
+		 * Get all the records from a database table.
+		 * @alias find
+		 * @return array Multi-dimensional array of database records/rows
+		 */
+		public function all(){
+			return $this->find();
+		}
+
+		/**
 		 * Dynamically build a where clause that will be used to get, search and delete records form the database.
 		 * The where clause contains a single parameter and can be a LIKE, Equals or an IN statement.
 		 * @param null|string|array $mxdValue Value(s) to filter by
