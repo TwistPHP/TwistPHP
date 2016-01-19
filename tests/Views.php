@@ -31,7 +31,7 @@ class Views extends \PHPUnit_Framework_TestCase{
 	}
 
 	public function testTagBase64(){
-		$this -> assertEquals(base64_encode('pass'),\Twist::View()->replace("{base64_encode[data:test]}",array('test' => base64_encode('pass'))));
+		$this -> assertEquals(base64_encode('pass'),\Twist::View()->replace("{base64_encode[data:test]}",array('test' => 'pass')));
 		$this -> assertEquals('pass',\Twist::View()->replace("{base64_decode[data:test]}",array('test' => base64_encode('pass'))));
 	}
 
@@ -45,11 +45,25 @@ class Views extends \PHPUnit_Framework_TestCase{
 
 		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,js}");
 		$this->assertContains('<script', $strTagOutput);
-		$this->assertContains('twist/Core/Resources/twist/ajax/js/twist-ajax.min.js', $strTagOutput);
+		$this->assertContains('twist-ajax.min.js', $strTagOutput);
 
 		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,css}");
 		$this->assertContains('<link', $strTagOutput);
-		$this->assertContains('twist/Core/Resources/twist/ajax/css/twist-ajax.min.css', $strTagOutput);
+		$this->assertContains('twist-ajax.min.css', $strTagOutput);
+
+		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,js,async}");
+		$this->assertContains('<script', $strTagOutput);
+		$this->assertContains('async', $strTagOutput);
+		$this->assertContains('twist-ajax.min.js', $strTagOutput);
+
+		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,js,defer}");
+		$this->assertContains('<script', $strTagOutput);
+		$this->assertContains('defer', $strTagOutput);
+		$this->assertContains('twist-ajax.min.js', $strTagOutput);
+
+		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,js,inline}");
+		$this->assertContains('<script', $strTagOutput);
+		$this->assertContains('twistajax=', $strTagOutput);
 	}
 
 	public function testTagCSS(){
@@ -84,19 +98,6 @@ class Views extends \PHPUnit_Framework_TestCase{
 		$strTagOutput = \Twist::View()->replace("{js:twist/Core/Resources/twist/ajax/js/twist-ajax.min.js}");
 		$this->assertContains('<script', $strTagOutput);
 		$this->assertContains('app/Twist/Core/Resources/twist/ajax/js/twist-ajax.min.js', $strTagOutput);
-
-		$strTagOutput = \Twist::View()->replace("{js:twist/Core/Resources/twist/ajax/js/twist-ajax.min.js,async}");
-		$this->assertContains('<script', $strTagOutput);
-		$this->assertContains('async', $strTagOutput);
-
-		$strTagOutput = \Twist::View()->replace("{js:twist/Core/Resources/twist/ajax/js/twist-ajax.min.js,refer}");
-		$this->assertContains('<script', $strTagOutput);
-		$this->assertContains('refer', $strTagOutput);
-
-		$strTagOutput = \Twist::View()->replace("{js:twist/Core/Resources/twist/ajax/js/twist-ajax.min.js,inline}");
-		$this->assertContains('<script', $strTagOutput);
-		$this->assertContains('twistajax=', $strTagOutput);
-		
 	}
 
 	public function testTagImg(){
