@@ -191,7 +191,7 @@ class SessionHandler{
 			);
 
 			if($resResult->status() && $resResult->numberRows()){
-				$arrOut = $resResult->getArray();
+				$arrOut = $resResult->row();
 			}
 		}
 
@@ -373,7 +373,7 @@ class SessionHandler{
 
 		//If their is only one session key
 		if($resResult->status() && $resResult->numberRows() == 1){
-			$arrUserData = $resResult->getArray();
+			$arrUserData = $resResult->row();
 
 			$this->debug("Query OK");
 

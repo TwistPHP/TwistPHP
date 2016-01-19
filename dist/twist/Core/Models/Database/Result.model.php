@@ -89,11 +89,12 @@
 		}
 
 		/*
-		 * Get a single row (first result) from the current result set as a single dimensional array
+		 * Get a single row (first result) from the current result set as a single dimensional array, passing in a row will return a particular row.
+		 * @param integer $intRowNumber The row to be returned, passing 3 would return the 3rd row of the result set (Default 0)
 		 * @return array Returns as single dimensional array
 		 */
-		public function getArray(){
-			return ($this->intNumberRows > 0) ? $this->arrResults[0] : array();
+		public function row($intRowNumber = 0){
+			return ($this->intNumberRows > 0 && $this->intNumberRows > $intRowNumber) ? $this->arrResults[$intRowNumber] : array();
 		}
 
 		/**
@@ -101,7 +102,7 @@
 		 * @related getArray
 		 * @return array Returns a multi-dimensional array
 		 */
-		public function getFullArray(){
+		public function rows(){
 			return $this->arrResults;
 		}
 

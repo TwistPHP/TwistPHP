@@ -123,7 +123,7 @@
 				);
 
 				if($resResult->status() && $resResult->numberRows()){
-					$arrStructureData = $resResult->getFullArray();
+					$arrStructureData = $resResult->rows();
 
 					$arrStructure = array(
 						'columns' => array(),
