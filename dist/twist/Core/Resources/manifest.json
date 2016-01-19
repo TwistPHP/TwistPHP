@@ -161,58 +161,6 @@
 			"js": []
 		}
 	},
-	"unsemantic-legacy": {
-		"desktop": {
-			"default": true,
-			"css": [
-				"unsemantic-grid-base.css",
-				"unsemantic-grid-desktop.css"
-			],
-			"js": []
-		},
-		"tablet": {
-			"default": false,
-			"css": [
-				"unsemantic-grid-base.css",
-				"unsemantic-grid-tablet.css"
-			],
-			"js": []
-		},
-		"mobile": {
-			"default": false,
-			"css": [
-				"unsemantic-grid-base.css",
-				"unsemantic-grid-mobile.css"
-			],
-			"js": []
-		}
-	},
-	"unsemantic-legacy-rtl": {
-		"desktop": {
-			"default": true,
-			"css": [
-				"unsemantic-grid-base-rtl.css",
-				"unsemantic-grid-desktop-rtl.css"
-			],
-			"js": []
-		},
-		"tablet": {
-			"default": false,
-			"css": [
-				"unsemantic-grid-base-rtl.css",
-				"unsemantic-grid-tablet-rtl.css"
-			],
-			"js": []
-		},
-		"mobile": {
-			"default": false,
-			"css": [
-				"unsemantic-grid-base-rtl.css",
-				"unsemantic-grid-mobile-rtl.css"
-			],
-			"js": []
-		}
-	},
 	"unsemantic-rtl": {
 		"desktop": {
 			"default": false,

@@ -55,7 +55,7 @@
 				$this->arrStructure = $arrStructure['columns'];
 
 				if(!is_null($arrStructure['auto_increment'])){
-					$this->setAutoIncrement($arrStructure['auto_increment'],$arrStructure['auto_increment_start']);
+					$this->autoIncrement($arrStructure['auto_increment'],$arrStructure['auto_increment_start']);
 				}
 
 				//Set all the other key information for this table
@@ -104,7 +104,7 @@
 		 * Set the Collation for the database table
 		 * @param $strCollation
 		 */
-		public function setCollation($strCollation){
+		public function collation($strCollation){
 			$this->strCollation = $strCollation;
 		}
 
@@ -112,7 +112,7 @@
 		 * Set the character set for the database table
 		 * @param $strCharset
 		 */
-		public function setCharset($strCharset){
+		public function charset($strCharset){
 			$this->strCharset = $strCharset;
 		}
 
@@ -120,7 +120,7 @@
 		 * Set the database engine to use for this table
 		 * @param $strEngine
 		 */
-		public function setEngine($strEngine){
+		public function engine($strEngine){
 			$this->strEngine = $strEngine;
 		}
 
@@ -128,7 +128,7 @@
 		 * Set the main Database comment
 		 * @param $strComment
 		 */
-		public function setComment($strComment){
+		public function comment($strComment){
 			$this->mxdTableComment = $strComment;
 		}
 
@@ -138,12 +138,12 @@
 		 * @param int $intStartNumber
 		 * @throws \Exception
 		 */
-		public function setAutoIncrement($strField,$intStartNumber = 1){
+		public function autoIncrement($strField,$intStartNumber = 1){
 
 			if(array_key_exists($strField,$this->arrStructure) && $this->arrStructure[$strField]['data_type'] == 'int'){
 				$this->mxdAutoIncrement = null;
 
-				$this->setPrimaryKey($strField);
+				$this->primaryKey($strField);
 				$this->mxdAutoIncrement = $strField;
 				$this->intAutoIncrementStart = $intStartNumber;
 			}else{
@@ -157,7 +157,7 @@
 		 * @param $strField
 		 * @throws \Exception
 		 */
-		public function setPrimaryKey($strField){
+		public function primaryKey($strField){
 
 			if(is_null($this->mxdAutoIncrement)){
 				$this->mxdPrimaryKey = $strField;
@@ -178,7 +178,7 @@
 		}
 
 		/**
-		 * Set a Index, you can have multiple indexs per table. To create a index from more than 1 field pass the second parameter as an array of fields
+		 * Set a Index, you can have multiple indexes per table. To create a index from more than 1 field pass the second parameter as an array of fields
 		 * @param $strName
 		 * @param $mxdFields
 		 */
@@ -245,7 +245,7 @@
 		 */
 		public function create(){
 
-			$strSQL = $this->createSQL();
+			$strSQL = $this->sql();
 			$blOut = \Twist::Database()->query($strSQL)->status();
 			$this->__destruct();
 
@@ -256,7 +256,7 @@
 		 * This will generate the create SQL command and output for you to use.
 		 * @return string
 		 */
-		public function createSQL(){
+		public function sql(){
 
 			$strKeyList = $this->generatePrimaryKey();
 			$strKeyList .= $this->generateUniqueKey();

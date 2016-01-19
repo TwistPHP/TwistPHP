@@ -107,7 +107,7 @@ class Database extends \PHPUnit_Framework_TestCase{
 		$resNewTable = \Twist::Database()->tables('test_table')->create();
 		$resNewTable->addField('id','int',11);
 		$resNewTable->addField('name','char',30);
-		$resNewTable->setAutoIncrement('id');
+		$resNewTable->autoIncrement('id');
 		$this->assertTrue($resNewTable->create());
 
 		$this->assertTrue(\Twist::Database()->tables('test_table')->exists());

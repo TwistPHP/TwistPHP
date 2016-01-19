@@ -1,6 +1,6 @@
 # Running a normal SQL query
 
-While the database objects in TwistPHP provide a huge range of functionality, there will be that odd occasion you need to run an old skool query.
+While the database objects in TwistPHP provide a huge range of functionality, there will be that odd occasion you need to run an 'old skool' query.
 
 ## Running a query
 
