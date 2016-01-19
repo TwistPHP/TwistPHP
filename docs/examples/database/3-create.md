@@ -1,6 +1,6 @@
 # Adding a new table row
 
-Database objects allow the creation of database rows in a simple, OO manner.
+Database objects allow the creation of database rows in a simple, object-oriented manner.
 
 ## Initialise a new table row
 
@@ -30,18 +30,18 @@ Using the new object, you can set the properties (fields) of the new database ro
      * --------------------------------
      * This is an unbelievable book and
      * we really strongly recommend you
-     * read it!
+     * read it
      * --------------------------------
      */
-    $book -> set( 'title', 'The Hitchhiker\'s Guide to the Galaxy' );
+    $book -> set( 'title', 'The Hitchhiker\'s Guide to the Galaxy' ); // DON'T PANIC
     $book -> set( 'author', 'Douglas Adams' );
     $book -> set( 'isbn10', '0330508539' );
     $book -> set( 'isbn13', '978-0330508537' );
 ```
 
-## Write the changes back to the database
+## Write your changes back to the database
 
-Once you are ready to commit the new row to the database, simply use the `commit()` method to write the changes. The method will return the auto increment field if there is one, else true if the query was successful.
+Once you are ready to commit the new row to the database, simply use the `commit()` method to write the changes. The method will return the auto increment field if there is one, else `true` if the query was successful.
 
 ```php
 <?php

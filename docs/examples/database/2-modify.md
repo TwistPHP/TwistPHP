@@ -1,6 +1,6 @@
 # Modify table rows
 
-Database objects allow really easy modifying of database rows in a simple, OO manner.
+Database objects allow really easy modifying of database rows in a simple, object-oriented manner.
 
 ## Get a row from the database
 
@@ -14,16 +14,16 @@ Use the `get()` method in the database class to retrieve an object of a table ro
      * This query is getting a row with
      * the ID of 84 - another field can
      * be used by inserting it into the
-     * second parameter, the default is
-     * 'id'
+     * second parameter but the default
+     * is 'id'
      * --------------------------------
      */
     $film = Twist::Database() -> records( 'films' ) -> get( 84 );
 ```
 
-## Modify the necessary data
+## Read and modify the values
 
-Now you are able to get and pass in any new values.
+Now you are able to get and set any new values using the `get()` and `set()` methods.
 
 ```php
 <?php

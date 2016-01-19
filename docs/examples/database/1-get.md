@@ -2,8 +2,9 @@
 
 The easiest way of getting data out of the database is with the helpers that come with TwistPHP.
 
-The `records()` method returns an object designed to make working with your database OO (and easy!). It accepts two parameters, the first being the table name and optionally the second parameter is the database name.
-Parameter two by default is set to the value of the 'TWIST_DATABASE_NAME' config variable.
+Using the `records()` method, you are given an object with all the functionality to read and write data to the database.
+
+It accepts two parameters, the first being the table name and optionally the second parameter is the database name, which by default is set to the value of the `TWIST_DATABASE_NAME` config variable.
 
 All data passed in to any of the `records()` methods is automatically escaped before being used in an SQL query.
 
@@ -20,16 +21,17 @@ You can get a single row from the database as an object by using the `get()` met
      * row that matches your string and
      * in the field that you specified,
      * for example this will return the
-     * one area that has the value 'PL4
-     * 7EX' for the postcode
+     * one area in the areas table that
+     * matches the postcode field value
+     * of 'PL4 7EX'
      * --------------------------------
      */
     $area = Twist::Database() -> records( 'areas' ) -> get( 'PL4 7EX', 'postcode' );
     
-    echo $area -> get( 'city' ); // Plymouth
+    echo $area -> get( 'city' ); // The 'city' field of this row object
 ```
 
-Alternatively you can get a single row as an array rather than an object, to do this pass in `true` as a third paramter.
+Alternatively you can get a single row as an array rather than an object, to do this pass in `true` as a third parameter.
  
 ```php
  <?php
@@ -43,7 +45,7 @@ Alternatively you can get a single row as an array rather than an object, to do 
       */
      $area = Twist::Database() -> records( 'areas' ) -> get( 'PL4 7EX', 'postcode', true );
      
-     echo $area['city']; // Plymouth
+     echo $area['city']; // The row data is now in an array
  ```
 
 ## Get multiple rows
@@ -66,10 +68,9 @@ When using the `find()` method, all the rows that match your string are returned
     foreach( $hatchbacks as $hatchback ) {
         /*
          * --------------------------------
-         * Each array item is a separate DB
-         * object which can be modified and
-         * then committed back to the DB as
-         * required
+         * The returned value for find() is
+         * an array of values which you can
+         * iterate through
          * --------------------------------
          */
         echo $hatchback['model']; // Fiesta etc.
@@ -85,14 +86,13 @@ You can get an array of all the rows in the table by using the `find()` method, 
     
     /*
      * --------------------------------
-     * The getAll method should be used
-     * sparingly as you may have a huge
-     * number of rows in your table
+     * Exercise caution using the all()
+     * method, as you may be returned a
+     * huge number of rows depending on
+     * your database size
      * --------------------------------
      */
-    $devices = Twist::Database() -> records( 'devices' ) -> find();
+    $likes = Twist::Database() -> records( 'likes' ) -> all();
     
-    foreach( $devices as $device ) {
-        echo $device['make']; // Nexus etc.
-    }
+    count( $likes ) // We hope you get loads!
 ```
