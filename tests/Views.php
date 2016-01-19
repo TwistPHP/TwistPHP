@@ -40,6 +40,16 @@ class Views extends \PHPUnit_Framework_TestCase{
 		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax}");
 		$this->assertContains('<script', $strTagOutput);
 		$this->assertContains('twist/Core/Resources/twist/ajax/js/twist-ajax.min.js', $strTagOutput);
+		$this->assertContains('<link', $strTagOutput);
+		$this->assertContains('twist/Core/Resources/twist/ajax/css/twist-ajax.min.css', $strTagOutput);
+
+		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,js}");
+		$this->assertContains('<script', $strTagOutput);
+		$this->assertContains('twist/Core/Resources/twist/ajax/js/twist-ajax.min.js', $strTagOutput);
+
+		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,css}");
+		$this->assertContains('<link', $strTagOutput);
+		$this->assertContains('twist/Core/Resources/twist/ajax/css/twist-ajax.min.css', $strTagOutput);
 	}
 
 	public function testTagCSS(){
@@ -62,18 +72,30 @@ class Views extends \PHPUnit_Framework_TestCase{
 
 	public function testTagJS(){
 
-		$strTagOutput = \Twist::View()->replace("{js:twist/Core/Resources/twist/ajax/css/twist-ajax.min.js}");
+		$strTagOutput = \Twist::View()->replace("{js:twist/Core/Resources/twist/ajax/js/twist-ajax.min.js}");
 		$this->assertContains('<script', $strTagOutput);
-		$this->assertContains('twist/Core/Resources/twist/ajax/css/twist-ajax.min.js', $strTagOutput);
+		$this->assertContains('twist/Core/Resources/twist/ajax/js/twist-ajax.min.js', $strTagOutput);
 
 		//Create an override JS file
 		mkdir(sprintf('%s/Twist/Core/Resources/twist/ajax/js',TWIST_APP),0777,true);
-		file_put_contents(sprintf('%s/Twist/Core/Resources/twist/ajax/css/twist-ajax.min.js',TWIST_APP),'test override file');
-		$this -> assertTrue(file_exists(sprintf('%s/Twist/Core/Resources/twist/ajax/css/twist-ajax.min.js',TWIST_APP)));
+		file_put_contents(sprintf('%s/Twist/Core/Resources/twist/ajax/js/twist-ajax.min.js',TWIST_APP),'test override file');
+		$this -> assertTrue(file_exists(sprintf('%s/Twist/Core/Resources/twist/ajax/js/twist-ajax.min.js',TWIST_APP)));
 
-		$strTagOutput = \Twist::View()->replace("{js:twist/Core/Resources/twist/ajax/css/twist-ajax.min.js}");
+		$strTagOutput = \Twist::View()->replace("{js:twist/Core/Resources/twist/ajax/js/twist-ajax.min.js}");
 		$this->assertContains('<script', $strTagOutput);
-		$this->assertContains('app/Twist/Core/Resources/twist/ajax/css/twist-ajax.min.js', $strTagOutput);
+		$this->assertContains('app/Twist/Core/Resources/twist/ajax/js/twist-ajax.min.js', $strTagOutput);
+
+		$strTagOutput = \Twist::View()->replace("{js:twist/Core/Resources/twist/ajax/js/twist-ajax.min.js,async}");
+		$this->assertContains('<script', $strTagOutput);
+		$this->assertContains('async', $strTagOutput);
+
+		$strTagOutput = \Twist::View()->replace("{js:twist/Core/Resources/twist/ajax/js/twist-ajax.min.js,refer}");
+		$this->assertContains('<script', $strTagOutput);
+		$this->assertContains('refer', $strTagOutput);
+
+		$strTagOutput = \Twist::View()->replace("{js:twist/Core/Resources/twist/ajax/js/twist-ajax.min.js,inline}");
+		$this->assertContains('<script', $strTagOutput);
+		$this->assertContains('twistajax=', $strTagOutput);
 		
 	}
 
