@@ -55,7 +55,7 @@
 		public function create(){
 
 			//Get the structure of the table
-			$arrStructure = \Twist::Database()->tables($this->strTable,$this->strDatabase)->structure();
+			$arrStructure = \Twist::Database()->table($this->strTable,$this->strDatabase)->structure();
 
 			return (is_null($arrStructure)) ? null : new \Twist\Core\Models\Database\Record($this->strDatabase,$this->strTable,$arrStructure,array());
 		}
@@ -88,7 +88,7 @@
 					$mxdRecord = new \Twist\Core\Models\Database\Record(
 						$this->strDatabase,
 						$this->strTable,
-						\Twist::Database()->tables($this->strTable,$this->strDatabase)->structure(),
+						\Twist::Database()->table($this->strTable,$this->strDatabase)->structure(),
 						$mxdRecord
 					);
 				}
@@ -109,7 +109,7 @@
 			$resRecord = null;
 
 			//Get the structure of the table
-			$arrStructure = \Twist::Database()->tables($this->strTable,$this->strDatabase)->structure();
+			$arrStructure = \Twist::Database()->table($this->strTable,$this->strDatabase)->structure();
 
 			if(!is_null($arrStructure)){
 
