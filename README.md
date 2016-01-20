@@ -1,6 +1,6 @@
 # [TwistPHP](https://twistphp.com/) ![TwistPHP logo](http://static.twistphp.com/logo/square/32.png)
 
-[![Master build status](https://img.shields.io/travis/TwistPHP/TwistPHP/master.svg)](https://travis-ci.org/TwistPHP/TwistPHP) ![Latest Release](https://img.shields.io/github/release/TwistPHP/TwistPHP.svg) ![Licence](https://img.shields.io/github/license/TwistPHP/TwistPHP.svg) [![Join the chat at https://gitter.im/TwistPHP/TwistPHP](https://img.shields.io/gitter/room/TwistPHP/TwistPHP.svg)](https://gitter.im/TwistPHP/TwistPHP)
+[![Master build status](https://img.shields.io/travis/TwistPHP/TwistPHP/master.svg)](https://travis-ci.org/TwistPHP/TwistPHP) [![Join the chat at https://gitter.im/TwistPHP/TwistPHP](https://img.shields.io/gitter/room/TwistPHP/TwistPHP.svg)](https://gitter.im/TwistPHP/TwistPHP)
 
 ## A fresh, new open source PHP MVC micro framework
 
