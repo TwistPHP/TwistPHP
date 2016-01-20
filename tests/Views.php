@@ -43,25 +43,25 @@ class Views extends \PHPUnit_Framework_TestCase{
 		$this->assertContains('<link', $strTagOutput);
 		$this->assertContains('twist/Core/Resources/twist/ajax/css/twist-ajax.min.css', $strTagOutput);
 
-		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,js}");
+		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,js=true}");
 		$this->assertContains('<script', $strTagOutput);
 		$this->assertContains('twist-ajax.min.js', $strTagOutput);
 
-		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,css}");
+		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,css=true}");
 		$this->assertContains('<link', $strTagOutput);
 		$this->assertContains('twist-ajax.min.css', $strTagOutput);
 
-		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,js,async}");
+		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,js,async=async}");
 		$this->assertContains('<script', $strTagOutput);
 		$this->assertContains('async', $strTagOutput);
 		$this->assertContains('twist-ajax.min.js', $strTagOutput);
 
-		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,js,defer}");
+		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,js,async=defer}");
 		$this->assertContains('<script', $strTagOutput);
 		$this->assertContains('defer', $strTagOutput);
 		$this->assertContains('twist-ajax.min.js', $strTagOutput);
 
-		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,js,inline}");
+		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,js=true,inline=true}");
 		$this->assertContains('<script', $strTagOutput);
 		$this->assertContains('twistajax=', $strTagOutput);
 	}
