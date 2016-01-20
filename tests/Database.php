@@ -104,13 +104,13 @@ class Database extends \PHPUnit_Framework_TestCase{
 
 	public function testCreateTable(){
 
-		$resNewTable = \Twist::Database()->tables('test_table')->create();
+		$resNewTable = \Twist::Database()->table('test_table')->create();
 		$resNewTable->addField('id','int',11);
 		$resNewTable->addField('name','char',30);
 		$resNewTable->autoIncrement('id');
-		$this->assertTrue($resNewTable->create());
+		$this->assertTrue($resNewTable->commit());
 
-		$this->assertTrue(\Twist::Database()->tables('test_table')->exists());
+		$this->assertTrue(\Twist::Database()->table('test_table')->exists());
 
 		$resNewRecord = \Twist::Database()->records('test_table')->create();
 		$resNewRecord->set('name','test');
@@ -121,12 +121,12 @@ class Database extends \PHPUnit_Framework_TestCase{
 		$arrResult = \Twist::Database()->records('test_table')->get(1,'id',true);
 		$this->assertEquals('test',$arrResult['name']);
 
-		$this->assertTrue(\Twist::Database()->tables('test_table')->truncate());
+		$this->assertTrue(\Twist::Database()->table('test_table')->truncate());
 
 		$this->assertEquals(0,\Twist::Database()->records('test_table')->count());
 
-		$this->assertTrue(\Twist::Database()->tables('test_table')->drop());
+		$this->assertTrue(\Twist::Database()->table('test_table')->drop());
 
-		$this->assertFalse(\Twist::Database()->tables('test_table')->exists());
+		$this->assertFalse(\Twist::Database()->table('test_table')->exists());
 	}
 }

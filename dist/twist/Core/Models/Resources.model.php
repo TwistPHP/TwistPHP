@@ -70,7 +70,7 @@ class Resources{
 		$strIncludeKey = sprintf('%s,inline=%s,async=%s,version=%s',$strReference,($blInline) ? '1' : '0',$mxdAsyncType,$mxdVersion);
 
 		//Only allow each unique resource to be output once per page
-		if(!array_key_exists($strIncludeKey,$this->arrIncluded)){
+		if(\Twist::framework()->setting('RESOURCE_INCLUDE_ONCE') == false || !array_key_exists($strIncludeKey,$this->arrIncluded)){
 
 			$this->arrIncluded[$strIncludeKey] = $strReference;
 			$arrResource = $this->getFromLibrary($strReference,$mxdVersion);

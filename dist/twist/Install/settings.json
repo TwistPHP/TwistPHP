@@ -551,6 +551,14 @@
     "options":"1,0",
     "null":0
   },
+  "RESOURCE_INCLUDE_ONCE":{
+    "title":"Resource Include Once",
+    "description":"When using the resource View tags, css and js resources will only be included once per page load/render.",
+    "default":1,
+    "type":"boolean",
+    "options":"1,0",
+    "null":0
+  },
   "ROUTE_CASE_SENSITIVE":{
     "title":"Case Sensitive URI Routing",
     "description":"Enable case sensitive URI routing in the routes module, turning this off may result in multiples of a single page being indexed by search engines. This setting dose not effect the wild card portion of URIs.",

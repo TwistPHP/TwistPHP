@@ -24,408 +24,180 @@
 	namespace Twist\Core\Models\Database;
 
 	/**
-	 * Simply create tables in an object orientated way with no need to write a mysql query
+	 * Simply create and maintain tables in an object orientated way with no need to write a SQL queries
 	 */
 	class Table{
 
-		protected $strDatabase = null;
 		protected $strTable = null;
-		protected $arrStructure = array();
-		protected $mxdAutoIncrement = null;
-		protected $intAutoIncrementStart = 1;
-		protected $mxdPrimaryKey = null;
-		protected $arrUniqueKey = array();
-		protected $arrIndexs = array();
-		protected $mxdTableComment = null;
-		protected $strCollation = 'utf8_unicode_ci';
-		protected $strCharset = 'utf8';
-		protected $strEngine = 'MyISAM';
+		protected $strDatabase = TWIST_DATABASE_NAME;
 
 		/**
-		 * Construct the class with all the required data to make usable
-		 * @param $strDatabase
-		 * @param $strTable
+		 * Set the table that is being used in the current request
+		 * @param string $strTable SQL table name
 		 */
-		public function __construct($strDatabase,$strTable,$arrStructure = array()){
+		public function __setTable($strTable){
+			$this->strTable = $strTable;
+		}
 
+		/**
+		 * Set the database that is being used in the current request if it is different from TWIST_DATABASE_NAME.
+		 * @param string $strTable SQL database name
+		 */
+		public function __setDatabase($strDatabase){
 			$this->strDatabase = $strDatabase;
-			$this->strTable = $strTable;
-
-			if(count($arrStructure)){
-				$this->arrStructure = $arrStructure['columns'];
-
-				if(!is_null($arrStructure['auto_increment'])){
-					$this->autoIncrement($arrStructure['auto_increment'],$arrStructure['auto_increment_start']);
-				}
-
-				//Set all the other key information for this table
-				$this->arrUniqueKey = $arrStructure['unique_keys'];
-				$this->arrIndexs = $arrStructure['indexes'];
-				$this->mxdTableComment = $arrStructure['table_comment'];
-				$this->strCollation = $arrStructure['collation'];
-				$this->strCharset = $arrStructure['charset'];
-				$this->strEngine = $arrStructure['engine'];
-			}
 		}
 
 		/**
-		 * Destruct the class so it cannot be used anymore
-		 */
-		public function __destruct(){
-			$this->strDatabase = null;
-			$this->strTable = null;
-			$this->arrStructure = null;
-			$this->mxdAutoIncrement = null;
-			$this->intAutoIncrementStart = null;
-			$this->mxdPrimaryKey = null;
-			$this->arrUniqueKey = null;
-			$this->arrIndexs = null;
-			$this->mxdTableComment = null;
-			$this->strCollation = null;
-			$this->strCharset = null;
-			$this->strEngine = null;
-		}
-
-		/**
-		 * Set a new table/database, this is only to be used when cloning/copying a database
-		 * @param string $strTable
-		 * @param null|string $strDatabase
-		 */
-		public function copyTo($strTable,$strDatabase = null){
-
-			$this->strTable = $strTable;
-
-			if(!is_null($strDatabase)){
-				$this->strDatabase = $strDatabase;
-			}
-		}
-
-		/**
-		 * Set the Collation for the database table
-		 * @param $strCollation
-		 */
-		public function collation($strCollation){
-			$this->strCollation = $strCollation;
-		}
-
-		/**
-		 * Set the character set for the database table
-		 * @param $strCharset
-		 */
-		public function charset($strCharset){
-			$this->strCharset = $strCharset;
-		}
-
-		/**
-		 * Set the database engine to use for this table
-		 * @param $strEngine
-		 */
-		public function engine($strEngine){
-			$this->strEngine = $strEngine;
-		}
-
-		/**
-		 * Set the main Database comment
-		 * @param $strComment
-		 */
-		public function comment($strComment){
-			$this->mxdTableComment = $strComment;
-		}
-
-		/**
-		 * Set a field to be autoincrement
-		 * @param $strField
-		 * @param int $intStartNumber
-		 * @throws \Exception
-		 */
-		public function autoIncrement($strField,$intStartNumber = 1){
-
-			if(array_key_exists($strField,$this->arrStructure) && $this->arrStructure[$strField]['data_type'] == 'int'){
-				$this->mxdAutoIncrement = null;
-
-				$this->primaryKey($strField);
-				$this->mxdAutoIncrement = $strField;
-				$this->intAutoIncrementStart = $intStartNumber;
-			}else{
-				//Field must have already been added and can only be an integer
-				throw new \Exception(sprintf("Field '%s' must have already been added to the table and can only be an integer",$strField));
-			}
-		}
-
-		/**
-		 * Set a field to be a primary key
-		 * @param $strField
-		 * @throws \Exception
-		 */
-		public function primaryKey($strField){
-
-			if(is_null($this->mxdAutoIncrement)){
-				$this->mxdPrimaryKey = $strField;
-			}else{
-				//error cannot set primary key, when using auto increment
-				throw new \Exception("Error, cannot set a primary key when using auto increment");
-			}
-		}
-
-		/**
-		 * Set a unique key, you can have multiple unique keys per table. To create a unique key from more than 1 field pass the second parameter as an array of fields
-		 * @param $strName
-		 * @param $mxdFields
-		 * @return string
-		 */
-		public function addUniqueKey($strName,$mxdFields){
-			$this->arrUniqueKey[$strName] = $mxdFields;
-		}
-
-		/**
-		 * Set a Index, you can have multiple indexes per table. To create a index from more than 1 field pass the second parameter as an array of fields
-		 * @param $strName
-		 * @param $mxdFields
-		 */
-		public function addIndex($strName,$mxdFields){
-			$this->arrIndexs[$strName] = $mxdFields;
-		}
-
-		/**
-		 * Add a field into the table, the fields will be added into the table in the order they have been entered
-		 * @param $strColumnName
-		 * @param $strDataType
-		 * @param null $mxdCharLength
-		 * @param null $strDefaultValue
-		 * @param bool $blNullable
-		 * @throws \Exception
-		 */
-		public function addField($strColumnName,$strDataType,$mxdCharLength=null,$strDefaultValue = null,$blNullable = false){
-
-			$arrAllowedTypes = array('int', 'char', 'varchar', 'text', 'enum', 'date', 'datetime');
-
-			if(!array_key_exists($strColumnName,$this->arrStructure)){
-
-				if(in_array(strtolower($strDataType),$arrAllowedTypes)){
-
-					$this->arrStructure[$strColumnName] = array(
-						'column_name' => $strColumnName,
-						'data_type' => $strDataType,
-						'character_length' => (in_array(strtolower($strDataType),array('text','date','datetime'))) ? null : $mxdCharLength,
-						'nullable' => $blNullable,
-						'default_value' => $strDefaultValue,
-						'comment' => null,
-						'order' => count($this->arrStructure)+1
-					);
-				}else{
-					//Field is not an allowed type
-					throw new \Exception(sprintf("Field type '%s' is not currently supported in this system",$strDataType));
-				}
-			}else{
-				//Field already created
-				throw new \Exception(sprintf("Field '%s' has already been added to the tables structure",$strColumnName));
-			}
-		}
-
-		/**
-		 * Set the order of any given field by its name, this will adjust all other field accordingly
-		 * @param string $strColumnName Name of field to ne reordered
-		 * @param int $intOrder New order position within the table
-		 */
-		public function setFieldOrder($strColumnName,$intOrder){
-
-			foreach($this->arrStructure as $strKey => $arrEachField){
-
-				if($arrEachField['column_name'] == $strColumnName){
-					$this->arrStructure[$strKey]['order'] = $intOrder;
-				}elseif($arrEachField['order'] >= $intOrder && $arrEachField['column_name'] != $strColumnName){
-					$this->arrStructure[$strKey]['order']++;
-				}
-			}
-		}
-
-		/**
-		 * Final call, this will create the table in the database, once created this resource will become unusable
+		 * Test to see if a database table exists already, returns a boolean stats for the table
+		 * @param bool $blAddTwistPrefix Add the TWIST_DATABASE_TABLE_PREFIX to the start of the table name
 		 * @return bool
+		 */
+		public function exists($blAddTwistPrefix = false){
+
+			$strFindTable = ($blAddTwistPrefix) ? sprintf('%s%s',TWIST_DATABASE_TABLE_PREFIX,$this->strTable) : $this->strTable;
+
+			$resResult = \Twist::Database()->query("SELECT 'exists' AS `status` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '%s' AND  TABLE_NAME = '%s'",
+				$this->strDatabase,
+				$strFindTable
+			);
+
+			return ($resResult->status() && $resResult->numberRows());
+		}
+
+		/**
+		 * Get a database table as an object, if the table does not exist you are returned null
+		 * @return null|\Twist\Core\Models\Database\TableStructure Returns and object of the database table
+		 */
+		public function get(){
+
+			if($this->exists()){
+				return new \Twist\Core\Models\Database\TableStructure($this->strDatabase,$this->strTable,$this->structure());
+			}
+
+			return null;
+		}
+
+		/**
+		 * Create a database table as an object, if the table already exists you are returned null
+		 * @return null|\Twist\Core\Models\Database\TableStructure Returns and object of the database table
 		 */
 		public function create(){
 
-			$strSQL = $this->sql();
-			$blOut = \Twist::Database()->query($strSQL)->status();
-			$this->__destruct();
-
-			return $blOut;
-		}
-
-		/**
-		 * This will generate the create SQL command and output for you to use.
-		 * @return string
-		 */
-		public function sql(){
-
-			$strKeyList = $this->generatePrimaryKey();
-			$strKeyList .= $this->generateUniqueKey();
-			$strKeyList .= $this->generateIndexes();
-
-			$strKeyList = ($strKeyList != '') ? substr($strKeyList,0,-2)."\n" : '';
-
-			$strFieldList = $this->generateFieldList();
-			$strFieldList = ($strKeyList == '') ? substr($strFieldList,0,-2)."\n" : $strFieldList;
-
-			$strSQL = sprintf("CREATE TABLE IF NOT EXISTS `%s`.`%s` (\n%s%s) ENGINE=%s DEFAULT CHARSET=%s COLLATE=%s%s%s;",
-				$this->strDatabase,
-				$this->strTable,
-				$strFieldList,
-				$strKeyList,
-				$this->strEngine,
-				$this->strCharset,
-				$this->strCollation,
-				(!is_null($this->mxdTableComment)) ? sprintf(" COMMENT='%s'",$this->mxdTableComment) : '',
-				(!is_null($this->mxdAutoIncrement)) ? sprintf(' AUTO_INCREMENT=%d',$this->intAutoIncrementStart) : ''
-			);
-
-			return $strSQL;
-		}
-
-		/**
-		 * Generate the primary keys that can be used in the create query
-		 * @return string
-		 */
-		protected function generatePrimaryKey(){
-
-			$strOut = '';
-
-			if(!is_null($this->mxdPrimaryKey)){
-				$strOut .= sprintf("\tPRIMARY KEY (`%s`),\n",$this->mxdPrimaryKey);
+			if(!$this->exists()){
+				return new \Twist\Core\Models\Database\TableStructure($this->strDatabase,$this->strTable);
 			}
 
-			return $strOut;
+			return null;
 		}
 
 		/**
-		 * Generate the unique keys that can be used in the create query
-		 * @return string
+		 * Get the structure information of a database table, the structure is returned as an array.
+		 * @related table
+		 * @return array Single dimensional array of structure info
 		 */
-		protected function generateUniqueKey(){
+		public function structure(){
 
-			$strOut = '';
+			$arrStructure = null;
+			$strTable = $this->strTable;
+			$strDatabaseName = $this->strDatabase;
 
-			if(count($this->arrUniqueKey) > 0){
-				foreach($this->arrUniqueKey as $strName => $mxdFields){
+			$arrStructure = \Twist::Cache('twist/utility/database')->read(sprintf('dbStructure-%s+%s',$strDatabaseName,$strTable));
 
-					$arrFields = array();
+			if(is_null($arrStructure)){
 
-					if(is_array($mxdFields)){
+				$resResult = \Twist::Database()->query("SELECT `COLUMN_NAME` AS `column_name`,
+										`DATA_TYPE` AS `data_type`,
+										`CHARACTER_MAXIMUM_LENGTH` AS `character_length`,
+										`IS_NULLABLE` AS `nullable`,
+										`COLUMN_DEFAULT` AS `default_value`,
+										`EXTRA` AS `extra`,
+										`COLUMN_COMMENT` AS `comment`,
+										`CHARACTER_SET_NAME` AS `charset`,
+										`COLLATION_NAME` AS `collation`,
+										`ORDINAL_POSITION` AS `order`
+									FROM `information_schema`.`COLUMNS`
+									WHERE `TABLE_NAME` = '%s'
+									AND `TABLE_SCHEMA` = '%s'",
+					$strTable,
+					$strDatabaseName
+				);
 
-						foreach($mxdFields as $strFiled){
-							$arrFields[] = sprintf("`%s`",$strFiled);
-						}
+				if($resResult->status() && $resResult->numberRows()){
+					$arrStructureData = $resResult->rows();
 
-						$strOut .= sprintf("\tUNIQUE KEY `%s` ( %s ),\n",$strName,implode(',',$arrFields));
-					}else{
-						$strOut .= sprintf("\tUNIQUE KEY `%s` ( %s ),\n",$strName,$mxdFields);
+					$arrStructure = array(
+						'columns' => array(),
+						'auto_increment' => null,
+						'auto_increment_start' => 1,
+						'unique_keys' => array(),
+						'indexes' => array(),
+						'table_comment' => null,
+						'collation' => 'utf8_unicode_ci',
+						'charset' => 'utf8',
+						'engine' => 'MyISAM',
+					);
+
+					foreach($arrStructureData as $arrEachItem){
+						$arrEachItem['auto_increment'] = ($arrEachItem['extra'] == 'auto_increment');
+						$arrEachItem['nullable'] = ($arrEachItem['nullable'] == 'YES');
+
+						//Set the data back into the structure array
+						$arrStructure['auto_increment'] = ($arrEachItem['auto_increment']) ? $arrEachItem['column_name'] : null;
+						$arrStructure['columns'][$arrEachItem['column_name']] = $arrEachItem;
 					}
+
+					//PHP session cache only expire when page is loaded
+					\Twist::Cache('twist/utility/database')->write(sprintf('dbStructure-%s+%s',$strDatabaseName,$strTable),$arrStructure,0);
 				}
 			}
 
-			return $strOut;
+			return $arrStructure;
 		}
 
 		/**
-		 * Generate the indexes that can be used in the create query
-		 * @return string
+		 * Copy an excising table structure into a new object, the new table will not exists until you commit the returned object.
+		 * @param string $strNewTable
+		 * @param null $strNewDatabase
+		 * @return null|\Twist\Core\Models\Database\Table Returns and object of the database table
 		 */
-		protected function generateIndexes(){
+		public function copy($strNewTable,$strNewDatabase = null){
 
-			$strOut = '';
+			$resTable = $this->get();
+			$resTable->copyTo($strNewTable,$strNewDatabase);
 
-			if(count($this->arrIndexs) > 0){
-				foreach($this->arrIndexs as $strName => $mxdFields){
-
-					$arrFields = array();
-
-					if(is_array($mxdFields)){
-
-						foreach($mxdFields as $strFiled){
-							$arrFields[] = sprintf("`%s`",$strFiled);
-						}
-
-						$strOut .= sprintf("\tKEY `%s` ( %s ),\n",$strName,implode(',',$arrFields));
-					}else{
-						$strOut .= sprintf("\tKEY `%s` ( %s ),\n",$strName,$mxdFields);
-					}
-				}
-			}
-
-			return $strOut;
+			return $resTable;
 		}
 
 		/**
-		 * Generate a field list to be added to the create query
-		 * @return string
+		 * Rename the table to a new name withing your database, this command will only work if your database user has the RENAME privilege or above.
+		 * @param string $strNewTable New table name to be used
+		 * @return bool
 		 */
-		protected function generateFieldList(){
+		public function rename($strNewTable){
+			return \Twist::Database()->query("RENAME TABLE `%s`.`%s` TO `%s`.`%s`;",$this->strDatabase,$this->strTable,$this->strDatabase,$strNewTable)->status();
+		}
 
-			$strOut = '';
+		/**
+		 * Optimize the table in your database, this command will only work if your database user has the OPTIMIZE privilege or above.
+		 * @return bool
+		 */
+		public function optimize(){
+			return \Twist::Database()->query("OPTIMIZE TABLE `%s`.`%s`;",$this->strDatabase,$this->strTable)->status();
+		}
 
-			//Sort the fields by order
-			$arrStructure = \Twist::framework()->tools()->arrayReindex($this->arrStructure,'order');
-			ksort($arrStructure);
+		/**
+		 * Truncate the table in your database, this command will only work if your database user has the TRUNCATE privilege or above.
+		 * @return bool
+		 */
+		public function truncate(){
+			return \Twist::Database()->query("TRUNCATE TABLE `%s`.`%s`;",$this->strDatabase,$this->strTable)->status();
+		}
 
-			foreach($arrStructure as $strEachColumn){
-
-				switch($strEachColumn['data_type']){
-
-					case'char':
-
-						$strOut .= sprintf("\t`%s` %s(%d) COLLATE %s%s%s,\n",
-							$strEachColumn['column_name'],
-							$strEachColumn['data_type'],
-							$strEachColumn['character_length'],
-							$this->strCollation,
-							($strEachColumn['nullable'] == true) ? '' : ' NOT NULL',
-							(is_null($strEachColumn['default_value'])) ? '' : sprintf(" DEFAULT '%s'",$strEachColumn['default_value'])
-
-						);
-
-						break;
-
-					case'text':
-
-						$strOut .= sprintf("\t`%s` %s COLLATE %s%s%s,\n",
-							$strEachColumn['column_name'],
-							$strEachColumn['data_type'],
-							$this->strCollation,
-							($strEachColumn['nullable'] == true) ? '' : ' NOT NULL',
-							(is_null($strEachColumn['default_value'])) ? '' : sprintf(" DEFAULT '%s'",$strEachColumn['default_value'])
-
-						);
-
-						break;
-
-					case'date':
-					case'datetime':
-
-						$strOut .= sprintf("\t`%s` %s%s%s,\n",
-							$strEachColumn['column_name'],
-							$strEachColumn['data_type'],
-							($strEachColumn['nullable'] == true) ? '' : ' NOT NULL',
-							(is_null($strEachColumn['default_value'])) ? '' : sprintf(" DEFAULT '%s'",$strEachColumn['default_value'])
-						);
-
-						break;
-
-					default:
-
-						$strOut .= sprintf("\t`%s` %s(%s)%s%s%s,\n",
-							$strEachColumn['column_name'],
-							$strEachColumn['data_type'],
-							$strEachColumn['character_length'],
-							($strEachColumn['nullable'] == true) ? '' : ' NOT NULL',
-							(is_null($strEachColumn['default_value'])) ? '' : sprintf(" DEFAULT '%s'",$strEachColumn['default_value']),
-							(!is_null($this->mxdAutoIncrement) && $this->mxdAutoIncrement == $strEachColumn['column_name']) ?  ' AUTO_INCREMENT' : ''
-
-						);
-
-						break;
-				}
-			}
-
-			return $strOut;
+		/**
+		 * Drop the requested table form your database, this command will only work if your database user has the DROP privilege or above.
+		 * @return bool
+		 */
+		public function drop(){
+			return \Twist::Database()->query("DROP TABLE IF EXISTS `%s`.`%s`;",$this->strDatabase,$this->strTable)->status();
 		}
 	}

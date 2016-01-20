@@ -37,11 +37,20 @@ class Views extends \PHPUnit_Framework_TestCase{
 
 	public function testTagResource(){
 
+		\Twist::framework()->setting('RESOURCE_INCLUDE_ONCE',false);
+
 		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax}");
 		$this->assertContains('<script', $strTagOutput);
 		$this->assertContains('twist/Core/Resources/twist/ajax/js/twist-ajax.min.js', $strTagOutput);
 		$this->assertContains('<link', $strTagOutput);
 		$this->assertContains('twist/Core/Resources/twist/ajax/css/twist-ajax.min.css', $strTagOutput);
+
+		//A resource an only be included once per page load when RESOURCE_INCLUDE_ONCE is enabled
+		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,js=true}");
+		$this->assertEquals('', $strTagOutput);
+
+		//Turn include once off so that we can test multiple times with the same resource
+		\Twist::framework()->setting('RESOURCE_INCLUDE_ONCE',false);
 
 		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,js=true}");
 		$this->assertContains('<script', $strTagOutput);
@@ -64,6 +73,8 @@ class Views extends \PHPUnit_Framework_TestCase{
 		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,js=true,inline=true}");
 		$this->assertContains('<script', $strTagOutput);
 		$this->assertContains('twistajax=', $strTagOutput);
+
+		\Twist::framework()->setting('RESOURCE_INCLUDE_ONCE',true);
 	}
 
 	public function testTagCSS(){

@@ -293,12 +293,12 @@ class Database extends Base{
 	 * Get, Create and Manipulate the structure of database tables using a table object. Truncate, Optimize, Rename and Drop tables with a single function call. All dependant on your database privileges.
 	 * @param string $strTable Name of the database table
 	 * @param null|string $strDatabase Database name if different from TWIST_DATABASE_NAME
-	 * @return \Twist\Core\Models\Database\Tables Database tables model
+	 * @return \Twist\Core\Models\Database\Table Database tables model
 	 */
-	public function tables($strTable,$strDatabase = null){
+	public function table($strTable,$strDatabase = null){
 
 		if(is_null($this->resTables)){
-			$this->resTables = new \Twist\Core\Models\Database\Tables();
+			$this->resTables = new \Twist\Core\Models\Database\Table();
 		}
 
 		$this->resTables->__setTable($strTable);

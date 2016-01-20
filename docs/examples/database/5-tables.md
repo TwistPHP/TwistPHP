@@ -17,7 +17,7 @@ The `tables()` method returns an object with methods like `exists()`, `structure
      * or may not exist
      * --------------------------------
      */
-    $tableInfo = Twist::Database() -> tables( 'fruit' );
+    $table = Twist::Database() -> table( 'fruit' );
     
     $fruit = null;
     
@@ -26,7 +26,7 @@ The `tables()` method returns an object with methods like `exists()`, `structure
      * Check to see if the table exists
      * --------------------------------
      */
-    if( $tableInfo -> exists() ) {
+    if( $table -> exists() ) {
         /*
          * --------------------------------
          * Get a proper table object of the
@@ -35,7 +35,7 @@ The `tables()` method returns an object with methods like `exists()`, `structure
          * and indexes to
          * --------------------------------
          */
-        $fruit = $tableInfo -> get();
+        $fruit = $table -> get();
     } else {
         /*
          * --------------------------------
@@ -44,12 +44,12 @@ The `tables()` method returns an object with methods like `exists()`, `structure
          * add fields and parameters to
          * --------------------------------
          */
-        $fruit = $tableInfo -> create();
+        $fruit = $table -> create();
     }
 ```
 
 
-The second parameter of the `tables()` method is optional. It is the name of the database which by default is set to the value of the `TWIST_DATABASE_NAME` config variable.
+The second parameter of the `table()` method is optional. It is the name of the database which by default is set to the value of the `TWIST_DATABASE_NAME` config variable.
 
 ## Set up the table's data
 
@@ -108,7 +108,7 @@ You can create database fields to the table object using the `addField()` method
 
 ## Save the table
 
-To commit the table back to the database, simply use the `create()` method on the database table object.
+To commit the table back to the database, simply use the `commit()` method on the database table object.
 
 ```php
 <?php
