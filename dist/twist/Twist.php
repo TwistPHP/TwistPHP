@@ -58,7 +58,7 @@
 			$arrVersion = array(
 				'major' => 3,
 				'minor' => 0,
-				'build' => 0,
+				'build' => 1
 			);
 
 			return (is_null($strVersionPart)) ? implode('.',$arrVersion) : $arrVersion[$strVersionPart];
