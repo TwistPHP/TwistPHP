@@ -37,7 +37,7 @@ class Views extends \PHPUnit_Framework_TestCase{
 
 	public function testTagResource(){
 
-		\Twist::framework()->setting('RESOURCE_INCLUDE_ONCE',false);
+		\Twist::framework()->setting('RESOURCE_INCLUDE_ONCE',true);
 
 		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax}");
 		$this->assertContains('<script', $strTagOutput);
