@@ -22,29 +22,31 @@ Create a template file called `viewtest.tpl` in your `app/Views` directory:
 To output the view to the user, add the following method to your controller:
 
 ```php
-public function viewtest() {
+<?php
 
-    /*
-     * --------------------------------
-     * Set up an array of the data that
-     * you want to pass into your view
-     * --------------------------------
-     */
-    $arrData = array(
-        'title' => 'My test view',
-        'uid' => uniqid()
-    );
+    public function viewtest() {
     
-    /*
-     * --------------------------------
-     * Pass the array into the standard
-     * view method and return it to the
-     * user
-     * --------------------------------
-     */
-	return $this -> _view( 'viewtest.tpl', $arrData );
-	
-}
+        /*
+         * --------------------------------
+         * Set up an array of the data that
+         * you want to pass into your view
+         * --------------------------------
+         */
+        $arrData = array(
+            'title' => 'My test view',
+            'uid' => uniqid()
+        );
+        
+        /*
+         * --------------------------------
+         * Pass the array into the standard
+         * view method and return it to the
+         * user
+         * --------------------------------
+         */
+        return $this -> _view( 'viewtest.tpl', $arrData );
+        
+    }
 ```
 
 After registering the controller, visiting the page `/viewtest` in your browser should now display the above template, populated with your data.

@@ -95,9 +95,11 @@ The index method is used when the root URI of the controller is requested.
 Add the following `_index()` method function into your controller:
 
 ```php
-public function _index() {
-	return 'Hello world!';
-}
+<?php
+
+    public function _index() {
+        return 'Hello world!';
+    }
 ```
 
 When visiting your site in the browser, you should now see the welcome of "Hello world!".
@@ -109,24 +111,26 @@ The fallback method is used whenever a controller method is not found. By defaul
 You can overwrite the method and provide whatever response you need. To return another response, you can use the following code:
 
 ```php
-public function _fallback() {
-    /*
-     * --------------------------------
-     * A standard response to a missing
-     * request is a 404 page
-     * --------------------------------
-     */
-	//return $this -> _404();
-	
-    /*
-     * --------------------------------
-     * You can respond with any RFC7231
-     * code, maybe even one that claims
-     * you are a teapot
-     * --------------------------------
-     */
-	return $this -> _response( 418 );
-}
+<?php
+
+    public function _fallback() {
+        /*
+         * --------------------------------
+         * A standard response to a missing
+         * request is a 404 page
+         * --------------------------------
+         */
+        //return $this -> _404();
+        
+        /*
+         * --------------------------------
+         * You can respond with any RFC7231
+         * code, maybe even one that claims
+         * you are a teapot
+         * --------------------------------
+         */
+        return $this -> _response( 418 );
+    }
 ```
 
 ## Custom methods
@@ -134,15 +138,17 @@ public function _fallback() {
 To add custom responses to your controller, simply add a method with the name or the URI you want to capture into your controller:
 
 ```php
-/*
- * --------------------------------
- * Remember that controller methods
- * are case sensitive
- * --------------------------------
- */
-public function whendoesthenarwhalbacon() {
-	return 'Midnight';
-}
+<?php
+
+    /*
+     * --------------------------------
+     * Remember that controller methods
+     * are case sensitive
+     * --------------------------------
+     */
+    public function whendoesthenarwhalbacon() {
+        return 'Midnight';
+    }
 ```
 
 Now when visiting your site, go to the URI `/whendoesthenarwhalbacon` to see the response 'Midnight'.
