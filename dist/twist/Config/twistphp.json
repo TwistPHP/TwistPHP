@@ -1,0 +1,9 @@
+{
+	"name": "TwistPHP Package Server",
+	"key": "twistphp",
+	"url": "https:\/\/twistphp.com\/packages\/api\/",
+	"homepage": "https:\/\/twistphp.com\/",
+	"enabled": "1",
+    "licence": "",
+    "token": ""
+}

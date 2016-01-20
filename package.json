@@ -1,0 +1,29 @@
+{
+  "name": "twistphp",
+  "version": "0.1.0",
+  "description": "##The PHP MVC framework with a twist",
+  "main": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TwistPHP/TwistPHP.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TwistPHP/TwistPHP/issues"
+  },
+  "homepage": "https://twistphp.com",
+  "devDependencies": {
+    "gulp": "*",
+    "gulp-jshint": "*",
+    "gulp-sass": "*",
+    "gulp-concat": "*",
+    "gulp-uglify": "*",
+    "gulp-rename": "*",
+    "gulp-sourcemaps": "*",
+    "gulp-using": "*"
+  }
+}

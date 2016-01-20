@@ -1,0 +1,47 @@
+{
+	"mobile": {
+		"browser": "Handheld Browser",
+		"fa-icon": "fa-mobile",
+		"regx": ["\/mobile\/i"]
+	},
+	"ie": {
+		"browser": "Internet Explorer",
+		"fa-icon": "fa-internet-explorer",
+		"regx": ["\/msie\/i"]
+	},
+	"firefox": {
+		"browser": "Firefox",
+		"fa-icon": "fa-firefox",
+		"regx": ["\/firefox\/i"]
+	},
+	"safari": {
+		"browser": "Safari",
+		"fa-icon": "fa-safari",
+		"regx": ["\/safari\/i"]
+	},
+	"chrome": {
+		"browser": "Chrome",
+		"fa-icon": "fa-chrome",
+		"regx": ["\/chrome\/i"]
+	},
+	"opera": {
+		"browser": "Opera",
+		"fa-icon": "fa-opera",
+		"regx": ["\/opera\/i"]
+	},
+	"netscape": {
+		"browser": "Netscape",
+		"fa-icon": "fa-desktop",
+		"regx": ["\/netscape\/i"]
+	},
+	"maxthon": {
+		"browser": "Maxthon",
+		"fa-icon": "fa-desktop",
+		"regx": ["\/maxthon\/i"]
+	},
+	"konqueror": {
+		"browser": "Konqueror",
+		"fa-icon": "fa-desktop",
+		"regx": ["\/konqueror\/i"]
+	}
+}

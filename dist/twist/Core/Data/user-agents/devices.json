@@ -1,0 +1,222 @@
+{
+	"win10": {
+		"device": "Desktop",
+		"os": "Windows",
+		"version": "Windows 10",
+		"fa-icon": "fa-windows",
+		"regx": ["\/windows nt 10\/i"]
+	},
+	"win81": {
+		"device": "Desktop",
+		"os": "Windows",
+		"version": "Windows 8.1",
+		"fa-icon": "fa-windows",
+		"regx": ["\/windows nt 6.3\/i"]
+	},
+	"win8": {
+		"device": "Desktop",
+		"os": "Windows",
+		"version": "Windows 8",
+		"fa-icon": "fa-windows",
+		"regx": ["\/windows nt 6.2\/i"]
+	},
+	"win7": {
+		"device": "Desktop",
+		"os": "Windows",
+		"version": "Windows 7",
+		"fa-icon": "fa-windows",
+		"regx": ["\/windows nt 6.1\/i"]
+	},
+	"winvista": {
+		"device": "Desktop",
+		"os": "Windows",
+		"version": "Windows Vista",
+		"fa-icon": "fa-windows",
+		"regx": ["\/windows nt 6.0\/i"]
+	},
+	"win03": {
+		"device": "Desktop",
+		"os": "Windows",
+		"version": "Windows Server 2003\/XP x64",
+		"fa-icon": "fa-windows",
+		"regx": ["\/windows nt 5.2\/i"]
+	},
+	"winxp": {
+		"device": "Desktop",
+		"os": "Windows",
+		"version": "Windows XP",
+		"fa-icon": "fa-windows",
+		"regx": [
+			"\/windows nt 5.1\/i",
+			"\/windows xp\/i"
+		]
+	},
+	"win2000": {
+		"device": "Desktop",
+		"os": "Windows",
+		"version": "Windows 2000",
+		"fa-icon": "fa-windows",
+		"regx": ["\/windows nt 5.0\/i"]
+	},
+	"winme": {
+		"device": "Desktop",
+		"os": "Windows",
+		"version": "Windows ME",
+		"fa-icon": "fa-windows",
+		"regx": ["\/windows me\/i"]
+	},
+	"win98": {
+		"device": "Desktop",
+		"os": "Windows",
+		"version": "Windows 98",
+		"fa-icon": "fa-windows",
+		"regx": ["\/win98\/i"]
+	},
+	"win95": {
+		"device": "Desktop",
+		"os": "Windows",
+		"version": "Windows 95",
+		"fa-icon": "fa-windows",
+		"regx": ["\/win95\/i"]
+	},
+	"win311": {
+		"device": "Desktop",
+		"os": "Windows",
+		"version": "Windows 3.11",
+		"fa-icon": "fa-windows",
+		"regx": ["\/win16\/i"]
+	},
+	"osx": {
+		"device": "Mac",
+		"os": "OSX",
+		"version": "Mac OS X",
+		"fa-icon": "fa-apple",
+		"regx": ["\/macintosh|mac os x\/i"]
+	},
+	"osx9": {
+		"device": "Mac PowerPC",
+		"os": "MacOS",
+		"version": "Mac OS 9",
+		"fa-icon": "fa-apple",
+		"regx": ["\/mac_powerpc\/i"]
+	},
+	"linux": {
+		"device": "Desktop",
+		"os": "Linux",
+		"version": "Linux",
+		"fa-icon": "fa-linux",
+		"regx": ["\/linux\/i"]
+	},
+	"ubuntu": {
+		"device": "Desktop",
+		"os": "Linux",
+		"version": "Ubuntu",
+		"fa-icon": "fa-linux",
+		"regx": ["\/ubuntu\/i"]
+	},
+	"fedora": {
+		"device": "Desktop",
+		"os": "Linux",
+		"version": "Fedora",
+		"fa-icon": "fa-linux",
+		"regx": ["\/fedora\/i"]
+	},
+	"kubuntu": {
+		"device": "Desktop",
+		"os": "Linux",
+		"version": "Kubuntu",
+		"fa-icon": "fa-linux",
+		"regx": ["\/kubuntu\/i"]
+	},
+	"debian": {
+		"device": "Desktop",
+		"os": "Linux",
+		"version": "Debian",
+		"fa-icon": "fa-linux",
+		"regx": ["\/debian\/i"]
+	},
+	"centos": {
+		"device": "Desktop",
+		"os": "Linux",
+		"version": "CentOS",
+		"fa-icon": "fa-linux",
+		"regx": ["\/CentOS\/i"]
+	},
+	"mandriva": {
+		"device": "Desktop",
+		"os": "Linux",
+		"version": "Mandriva",
+		"fa-icon": "fa-linux",
+		"regx": ["\/Mandriva.([0-9]{1,3}(\\.[0-9]{1,3})?(\\.[0-9]{1,3})?)\/i"]
+	},
+	"suse": {
+		"device": "Desktop",
+		"os": "Linux",
+		"version": "SUSE",
+		"fa-icon": "fa-linux",
+		"regx": ["\/SUSE.([0-9]{1,3}(\\.[0-9]{1,3})?(\\.[0-9]{1,3})?)\/i"]
+	},
+	"slackware": {
+		"device": "Desktop",
+		"os": "Linux",
+		"version": "Slackware (Dropline GNOME)",
+		"fa-icon": "fa-linux",
+		"regx": ["\/Dropline\/i"]
+	},
+	"asplinux": {
+		"device": "Desktop",
+		"os": "Linux",
+		"version": "ASPLinux",
+		"fa-icon": "fa-linux",
+		"regx": ["\/ASPLinux\/i"]
+	},
+	"redhat": {
+		"device": "Desktop",
+		"os": "Linux",
+		"version": "Red Hat",
+		"fa-icon": "fa-linux",
+		"regx": ["\/Red Hat\/i"]
+	},
+	"iphone": {
+		"device": "Phone",
+		"os": "iOS",
+		"version": "iPhone",
+		"fa-icon": "fa-apple",
+		"regx": ["\/iphone\/i"]
+	},
+	"ipod": {
+		"device": "Device",
+		"os": "iOS",
+		"version": "iPod",
+		"fa-icon": "fa-apple",
+		"regx": ["\/ipod\/i"]
+	},
+	"ipad": {
+		"device": "Tablet",
+		"os": "iOS",
+		"version": "iPad",
+		"fa-icon": "fa-apple",
+		"regx": ["\/ipad\/i"]
+	},
+	"android": {
+		"device": "Phone",
+		"os": "Android",
+		"version": "Android",
+		"fa-icon": "fa-android",
+		"regx": ["\/android\/i"]
+	},
+	"blackberry": {
+		"device": "Phone",
+		"os": "BlackBerry",
+		"version": "BlackBerry",
+		"fa-icon": "fa-mobile",
+		"regx": ["\/blackberry\/i"]
+	},
+	"generic": {
+		"device": "Phone",
+		"os": "Phone",
+		"version": "Generic Phone",
+		"fa-icon": "fa-mobile",
+		"regx": ["\/webos\/i"]
+	}
+}

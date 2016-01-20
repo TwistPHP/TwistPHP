@@ -1,0 +1,827 @@
+/*!
+ * This file is part of TwistPHP.
+ *
+ * TwistPHP is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TwistPHP is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with TwistPHP.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
+ * @license    https://www.gnu.org/licenses/gpl.html LGPL License
+ * @link       https://twistphp.com
+ *
+ * Twist Debug
+ * --------------
+ * @version 3.0.0
+ */
+
+@charset "UTF-8";
+
+// ===================================================== VARIABLES =====================================================
+$bar-height: 30px;
+$bar-block-height: 30px;
+$bar-logo-width: 32px;
+$bar-fade-width: 10px;
+$text: #212121;
+$highlight: #FFF59D;
+$bar-background: #424242; //#455A64
+$bar-background-hover: #616161;
+$bar-border: #757575;
+$subtle-text: #BDBDBD;
+$border: #E0E0E0;
+$background: #EEE;
+$red: #D32F2F;
+$red-light: #D32F2F;
+$yellow: #FBC02D;
+$green: #689F38;
+$blue: #1976D2;
+$z-index: 1337;
+
+// ===================================================== MIXINS =====================================================
+@function blackorwhite($colour) {
+	@return if(lightness($colour) > 50, $text, #FFF);
+}
+
+/* ===================================================== ANIMATION KEYFRAMES ===================================================== */
+// https://github.com/daneden/animate.css
+
+/* ===================================================== GENERIC ===================================================== */
+#twist-debug,
+#twist-debug-details {
+	font-size: 13px;
+	font-family: "Helvetica Neue Light", "Helvetica Neue", HelveticaNeue, Helvetica, "Open Sans", Arial, sans-serif;
+	font-weight: 400;
+	line-height: 1;
+	font-style: normal;
+
+	* {
+		margin: 0;
+		padding: 0;
+
+		color: inherit;
+		text-align: inherit;
+		direction: inherit;
+		text-size-adjust: none;
+		-moz-text-size-adjust: none;
+		-webkit-text-size-adjust: none;
+		-ms-text-size-adjust: none;
+		text-rendering: optimizeLegibility;
+	}
+
+	h1, h2, h3, h4, h5, h6, p, ul, ol, li, dl, dt, dd, a, span, em, strong, pre {
+		color: inherit;
+		line-height: inherit;
+	}
+
+	h1, h2, h3, h4, h5, h6, strong {
+		font-weight: 700;
+	}
+
+	ul {
+		list-style: disc outside;
+	}
+
+	ol {
+		list-style: decimal outside;
+	}
+
+	sub,
+	sup,
+	small {
+		font-size: smaller;
+	}
+
+	ul ul,
+	ol ul,
+	ul ol,
+	ol ol {
+		font-size: 1em;
+	}
+
+	img {
+		display: inline-block;
+	}
+
+	a img {
+		border: none;
+	}
+
+	input,
+	button {
+		-webkit-font-smoothing: antialiased;
+	}
+
+	.twist-debug-hidden {
+		display: none !important;
+	}
+}
+
+/* ===================================================== DEBUG BAR ===================================================== */
+#twist-debug {
+	height: $bar-height;
+	padding: 0 #{$bar-logo-width + 15} 0 0;
+
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	left: 0;
+
+	overflow: visible;
+
+	background-color: $bar-background;
+
+	z-index: $z-index + 1;
+
+	&::after {
+		width: $bar-fade-width;
+
+		position: absolute;
+		top: 0;
+		right: #{$bar-logo-width + 15};
+		bottom: 0;
+
+		background: $bar-background;
+		background: -moz-linear-gradient(0deg, rgba($bar-background, 0) 0%, rgba($bar-background, 1) 100%);
+		background: -webkit-linear-gradient(0deg, rgba($bar-background, 0) 0%, rgba($bar-background, 1) 100%);
+		background: -o-linear-gradient(0deg, rgba($bar-background, 0) 0%, rgba($bar-background, 1) 100%);
+		background: -ms-linear-gradient(0deg, rgba($bar-background, 0) 0%, rgba($bar-background, 1) 100%);
+		background: linear-gradient(90deg, rgba($bar-background, 0) 0%, rgba($bar-background, 1) 100%);
+
+		content: "";
+	}
+}
+
+	#twist-debug-icon {
+		display: block;
+
+		position: absolute;
+		right: 10px;
+		bottom: 5px;
+
+		-webkit-transition: padding ease 400ms;
+		transition: padding ease 400ms;
+
+		&:hover {
+			padding-bottom: 3px;
+
+			-webkit-transition: padding ease 50ms;
+			transition: padding ease 50ms;
+		}
+
+		img {
+			width: $bar-logo-width;
+
+			display: block;
+		}
+	}
+
+	#twist-debug-blocks {
+		width: 100%;
+
+		overflow: auto;
+
+		list-style: none;
+		white-space: nowrap;
+
+		> li {
+			display: inline-block;
+
+			font-size: 12px;
+
+			border-right: 1px $bar-border solid;
+
+			/*&::before {
+				width: 1px;
+				height: $bar-height;
+
+				display: block;
+
+				float: right;
+
+				background: $bar-border;
+				background: -moz-linear-gradient(left, $bar-border 0%, $bar-background 100%);
+				background: -webkit-gradient(linear, left top, right top, color-stop(0%, $bar-border), color-stop(100%, $bar-background));
+				background: -webkit-linear-gradient(left, $bar-border 0%, $bar-background 100%);
+				background: -o-linear-gradient(left, $bar-border 0%, $bar-background 100%);
+				background: -ms-linear-gradient(left, $bar-border 0%, $bar-background 100%);
+				background: linear-gradient(to right, $bar-border 0%, $bar-background 100%);
+				filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$bar-border', endColorstr='$bar-background',GradientType=1);
+				//background: -moz-linear-gradient(left, $bar-border 50%, $bar-background 50%);
+				//background: -webkit-gradient(linear, left top, right top, color-stop(50%, $bar-border), color-stop(50%, $bar-background));
+				//background: -webkit-linear-gradient(left, $bar-border 50%, $bar-background 50%);
+				//background: -o-linear-gradient(left, $bar-border 50%, $bar-background 50%);
+				//background: -ms-linear-gradient(left, $bar-border 50%, $bar-background 50%);
+				//background: linear-gradient(to right, $bar-border 50%, $bar-background 50%);
+				//filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$bar-border', endColorstr='$bar-background', GradientType=1);
+
+				content: "";
+			}*/
+
+			&:first-child {
+				border-right: none;
+				a {
+					padding-right: (($bar-height - $bar-block-height) / 2);
+					padding-left: (($bar-height - $bar-block-height) / 2);
+				}
+			}
+
+			&:last-child {
+				margin-right: $bar-fade-width;
+			}
+
+			a {
+				padding: 0 10px;
+
+				display: block;
+
+				color: blackorwhite($bar-background);
+				line-height: $bar-height;
+				text-decoration: none;
+
+				-webkit-transition: background ease 400ms;
+				transition: background ease 400ms;
+
+				&:hover {
+					background-color: $bar-background-hover;
+
+					-webkit-transition: background ease 100ms;
+					transition: background ease 100ms;
+				}
+
+				&.current {
+					background-color: $bar-background-hover;
+				}
+
+				i {
+					width: 1.3em;
+					margin-right: 5px;
+
+					display: inline-block;
+
+					color: inherit;
+					text-align: left;
+				}
+			}
+
+			.fa-stack-2x {
+				text-shadow: 0 0 3px $bar-background;
+			}
+		}
+	}
+
+			#twist-debug-errors,
+			#twist-debug-warnings,
+			#twist-debug-dumps {
+				min-width: 8px;
+				padding: 0 10px;
+
+				display: inline-block;
+
+				font-weight: 700;
+				text-align: center;
+				line-height: $bar-block-height;
+
+				//border-radius: 2px;
+
+				//transform: translate3d(-3000px, 0, 0);
+			}
+
+			#twist-debug-errors {
+				background-color: $red;
+				//@include animate(bounceInLeft, 1s, 0);
+			}
+
+			#twist-debug-warnings {
+				background-color: $yellow;
+				//@include animate(bounceInLeft, 1s, 100ms);
+			}
+
+			#twist-debug-dumps {
+				background-color: $blue;
+				//@include animate(bounceInLeft, 1s, 200ms);
+			}
+
+/* ===================================================== DETAILS WINDOW ===================================================== */
+#twist-debug-details {
+	position: fixed;
+	top: 100%;
+	right: 0;
+	bottom: $bar-height;
+	left: 0;
+
+	background-color: $background;
+
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+
+	-webkit-transition: top ease 800ms;
+	transition: top ease 800ms;
+
+	z-index: $z-index;
+
+	&.show {
+		top: 0;
+	}
+
+	> a {
+		width: 25px;
+		height: 25px;
+
+		position: absolute;
+		top: 10px;
+		right: 10px;
+
+		z-index: 2;
+
+		&::before,
+		&::after {
+			height: 1px;
+
+			position: absolute;
+			top: 12px;
+			right: 0;
+			left: 0;
+
+			background-color: $border;
+
+			content: "";
+		}
+
+		&::before {
+			transform: rotate(45deg);
+		}
+
+		&::after {
+			transform: rotate(135deg);
+		}
+
+		&:hover {
+			&::before,
+			&::after {
+				background-color: #FFF;
+			}
+		}
+	}
+
+	> div {
+		display: none;
+
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+
+		h6 {
+			height: 25px;
+			padding: 10px 65px 10px 20px;
+
+			color: #FFF;
+			font-size: 20px;
+			line-height: 25px;
+
+			background-color: $bar-background;
+
+			z-index: 2;
+		}
+
+		z-index: 1;
+	}
+
+	th,
+	td {
+		padding: 0.5em 0.75em;
+	}
+
+	dt {
+		margin-top: 0.5em;
+		padding-top: 0.5em;
+
+		&:first-child {
+			margin-top: 0;
+		}
+	}
+
+	.twist-debug-column-wrapper {
+		position: absolute;
+		top: 45px;
+		right: 0;
+		bottom: 0;
+		left: 0;
+
+		overflow: auto;
+
+		z-index: 1;
+	}
+
+	[class^="twist-debug-column-"],
+	[class*=" twist-debug-column-"] {
+		padding: 10px;
+
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+
+		float: left;
+	}
+
+	.twist-debug-column-100 {
+		width: 100%;
+
+		clear: both;
+	}
+
+	.twist-debug-column-50 {
+		width: 50%;
+	}
+
+	.twist-debug-column-33 {
+		width: 33.33333%;
+	}
+
+	.twist-debug-column-25 {
+		width: 25%;
+	}
+
+	.twist-debug-column-clear {
+		padding: 0;
+
+		display: block;
+
+		float: none;
+		clear: both;
+	}
+
+	.twist-debug-box,
+	[class^="twist-debug-box-"],
+	[class*=" twist-debug-box-"] {
+		margin-left: 4px;
+
+		position: relative;
+
+		overflow: visible;
+
+		color: $text;
+
+		background-color: #FFF;
+
+		border: 1px $border solid;
+		border-left-width: 0;
+
+		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+
+		&[data-title] {
+			border-top-width: 0;
+
+			&::before {
+				margin-right: -1px;
+				//padding: 10px;
+				padding: 10px 10px 0;
+
+				display: block;
+
+				float: right;
+
+				//color: #FFF;
+				color: $subtle-text;
+				font-size: 14px;
+				text-align: right;
+				font-style: italic;
+
+				//background-color: $bar-border;
+
+				content: attr(data-title);
+			}
+
+			&::after {
+				top: 0;
+			}
+		}
+
+		&::after {
+			width: 4px;
+
+			position: absolute;
+			top: -1px;
+			right: 100%;
+			bottom: -1px;
+
+			background-color: $bar-border;
+
+			content: "";
+		}
+
+		> a.twist-debug-more-details {
+			height: 20px;
+
+			display: block;
+
+			color: $subtle-text;
+			font-size: 20px;
+			text-decoration: none;
+			text-align: center;
+			line-height: 1;
+
+			//background-color: $background;
+
+			border-top: 1px $background solid;
+
+			/*-webkit-transition: line-height ease 400ms;
+			transition: line-height ease 400ms;
+
+			&:hover {
+				line-height: 2;
+
+				-webkit-transition: line-height ease 100ms;
+				transition: line-height ease 100ms;
+			}*/
+
+			&:hover {
+				color: $text;
+			}
+		}
+
+
+		+ .twist-debug-box,
+		+ [class^="twist-debug-box-"],
+		+ [class*=" twist-debug-box-"] {
+			margin-top: 20px;
+		}
+
+		div.twist-debug-more-details {
+			padding: 20px 20px 40px;
+
+			display: none;
+
+			position: relative;
+
+			overflow: hidden;
+
+			//background-color: $background;
+
+			&::before,
+			&::after {
+				height: 20px;
+
+				position: absolute;
+				right: 0;
+				left: 0;
+
+				background-color: #FFF;
+
+				border-radius: 100%;
+
+				box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+
+				content: "";
+			}
+
+			&::before {
+				top: -21px;
+			}
+
+			&::after {
+				bottom: -23px;
+			}
+
+			> :first-child,
+			> :last-child {
+				margin-top: 0;
+			}
+		}
+
+		p,
+		pre {
+			padding: 20px;
+
+			font-size: 14px;
+
+			+ p,
+			+ pre {
+				padding-top: 0;
+			}
+		}
+
+		p {}
+
+		pre {
+			width: 100%;
+
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			box-sizing: border-box;
+
+			overflow: auto;
+
+			font-family: "Courier New", Courier, monospace, mono;
+			line-height: 1.25;
+
+			white-space: pre-line;
+		}
+	}
+
+	.twist-debug-box-red {
+		//&[data-title]::before,
+		&::after {
+			background-color: $red;
+		}
+	}
+
+	.twist-debug-box-yellow {
+		//&[data-title]::before,
+		&::after {
+			background-color: $yellow;
+		}
+	}
+
+	.twist-debug-box-blue {
+		//&[data-title]::before,
+		&::after {
+			background-color: $blue;
+		}
+	}
+
+	.twist-debug-box-green {
+		//&[data-title]::before,
+		&::after {
+			background-color: $green;
+		}
+	}
+
+	#twist-debug-messages {}
+
+	#twist-debug-timeline {}
+
+		#twist-debug-timeline-chart {
+			padding-top: 50px;
+
+			position: relative;
+
+			overflow: hidden;
+
+			&::before {
+				height: 50px;
+
+				position: absolute;
+				top: 0;
+				right: 0;
+				left: 200px;
+
+				background-color: #F09;
+
+				content: "";
+			}
+
+			ul {
+				margin-top: 10px;
+				padding-left: 200px;
+			}
+
+				li {
+					width: 195px;
+					height: 10px;
+					margin-left: -200px;
+					padding-right: 5px;
+					padding-bottom: 10px;
+
+					display: block;
+
+					position: relative;
+
+					overflow: visible;
+
+					text-align: right;
+					line-height: 20px;
+
+					&::after {
+						height: 1000px;
+
+						position: absolute;
+						right: 0;
+						bottom: 10px;
+
+						border-right: 1px #000 solid;
+
+						content: "";
+					}
+				}
+		}
+
+	#twist-debug-memory {}
+
+	#twist-debug-database {}
+
+	#twist-debug-route {}
+
+	/* ===================================================== TEMP ===================================================== */
+	pre,
+	code {
+		margin-bottom: 1em;
+
+		display: block;
+
+		font-family: "Courier New", Courier, monospace, mono;
+		line-height: 1.25;
+		font-weight: 400;
+		white-space: pre-wrap;
+	}
+
+	pre {
+		font-size: 1.33em;
+	}
+
+	code {
+		font-size: 1em;
+	}
+
+	code,
+	pre.code {
+		position: relative;
+
+		overflow: auto;
+
+		color: $text;
+		white-space: pre;
+
+		border: 1px $border solid;
+	}
+
+	pre.code {
+		padding: 1em;
+
+		background-color: #FFF;
+
+		border: 1px $border solid;
+		border-left-width: 0;
+
+		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+
+		em {
+			font-style: normal;
+
+			background-color: $highlight;
+
+			box-shadow: 0 0 0 1px $highlight;
+		}
+
+		&[title] {
+			padding-top: 3em;
+
+			&::before {
+				padding: 0.25em 0.75em;
+
+				position: absolute;
+				top: 0;
+				right: 0;
+				left: 0;
+
+				//color: blackorwhite(table-colour(header));
+				//@include base-font-face;
+				font-weight: 700;
+				line-height: 1.5;
+				white-space: nowrap;
+
+				//background-color: table-colour(header);
+
+				content: attr(title);
+			}
+		}
+
+		&[lang] {
+			&::after {
+				height: 1.5em;
+				padding: 0 0.5em;
+
+				position: absolute;
+				top: 0.25em;
+				right: 0.25em;
+
+				//color: if(lightness(table-colour(header)) > 50, base-font(colour), #FFF);
+				//@include base-font-face;
+				line-height: 1.5;
+				text-transform: uppercase;
+
+				//background-color: table-colour(header);
+
+				//border-radius: $border-radius;
+
+				content: attr(lang);
+			}
+
+			&[title]::after {
+				padding: 0;
+
+				right: 0.75em;
+
+				background-color: transparent;
+			}
+		}
+	}
+}
