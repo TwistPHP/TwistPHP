@@ -18,7 +18,7 @@
  * @license    https://www.gnu.org/licenses/gpl.html LGPL License
  * @link       https://twistphp.com
  *
- * Twist File Uploader
+ * TwistPHP File Uploader
  * --------------
  * @version 3.0.0
  */

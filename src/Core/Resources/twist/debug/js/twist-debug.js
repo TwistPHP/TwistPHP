@@ -24,10 +24,112 @@
  */
 
 (
+	function( root, factory ) {
+		if( typeof define === 'function' &&
+				define.amd ) {
+			define(
+				'twistdebug',
+				['postal'],
+				function( postal ) {
+					return ( root.twistdebug = factory( postal ) );
+				}
+			);
+		} else if( typeof module === 'object' &&
+				module.exports ) {
+			module.exports = ( root.twistdebug = factory( require( 'postal' ) ) );
+		} else {
+			root.twistdebug = factory( root.postal );
+		}
+	}(
+		this,
+		function( postal ) {
+			var TwistDebug = function() {
+				var arrThingsToLog = [],
+						logJavaScriptError = function( strColour, strTitle, strErrorMessage, strURL, intLineNumber, intColumn, objError ) {
+							var objToStack = {
+								colour: strColour,
+								title: strTitle,
+								message: strErrorMessage,
+								url: strURL,
+								line: intLineNumber,
+								column: intColumn,
+								error: objError
+							};
+
+							arrThingsToLog.push( objToStack );
+						};
+
+
+				window.onerror = function( strErrorMessage, strURL, intLineNumber, intColumn, objError ) {
+					logJavaScriptError( 'red', 'JS Error', strErrorMessage, strURL, intLineNumber, intColumn, objError );
+
+					return true;
+				};
+
+				this.log = function() {
+					if( window.console &&
+							window.console.log &&
+							arguments.length ) {
+						for( var intArguement in arguments ) {
+							window.console.log( arguments[intArguement] );
+						}
+					}
+				};
+
+				this.info = function() {
+					if( window.console &&
+							arguments.length ) {
+						for( var intArguement in arguments ) {
+							if( window.console.info ) {
+								window.console.info( arguments[intArguement] );
+							} else {
+								log( 'INFO: ', arguments[intArguement] );
+							}
+						}
+					}
+				};
+
+				this.error = function() {
+					if( window.console &&
+							arguments.length ) {
+						for( var intArguement in arguments ) {
+							if( window.console.error ) {
+								window.console.error( arguments[intArguement] );
+							} else {
+								log( 'ERROR: ', arguments[intArguement] );
+							}
+						}
+					}
+				};
+
+				this.warn = function() {
+					if( window.console &&
+							arguments.length ) {
+						for( var intArguement in arguments ) {
+							if( window.console.warn ) {
+								window.console.warn( arguments[intArguement] );
+							} else {
+								log( 'WARNING: ', arguments[intArguement] );
+							}
+						}
+					}
+				};
+			};
+
+			return TwistDebug;
+		}
+	)
+);
+
+
+
+(
 	function( window, document ) {
 		var arrThingsToLog = [],
-				logToDebugConsole = function( strErrorMessage, strURL, intLineNumber, intColumn, objError ) {
+				logToDebugConsole = function( strColour, strTitle, strErrorMessage, strURL, intLineNumber, intColumn, objError ) {
 					var objToStack = {
+						colour: strColour,
+						title: strTitle,
 						message: strErrorMessage,
 						url: strURL,
 						line: intLineNumber,
@@ -86,7 +188,7 @@
 				blUseOriginalError = false;
 
 		window.onerror = function( strErrorMessage, strURL, intLineNumber, intColumn, objError ) {
-					logToDebugConsole( strErrorMessage, strURL, intLineNumber, intColumn, objError );
+					logToDebugConsole( 'red', 'JS Error', strErrorMessage, strURL, intLineNumber, intColumn, objError );
 
 					return true;
 				};
@@ -127,12 +229,12 @@
 
 					info( 'jQuery v.' + $.fn.jquery + ' is ready' );
 
-					logToDebugConsole = function( strErrorMessage, strURL, intLineNumber, intColumn, objError ) {
-						var jqoLog = $( '<p/>' ).html( '<strong>JavaScript Error:</strong> ' + strErrorMessage );
+					logToDebugConsole = function( strTitle, strColour, strErrorMessage, strURL, intLineNumber, intColumn, objError ) {
+						var jqoLog = $( '<p/>' ).html( '<strong>' + strTitle + ':</strong> ' + strErrorMessage );
 
 						$( '#twist-debug-messages' ).find( '.twist-debug-column-wrapper' ).append( jqoLog );
 
-						jqoLog.wrap( '<div class="twist-debug-column-100"/>' ).wrap( '<div class="twist-debug-box-red twist-debug-message" data-title="' + strURL + ', line ' + intLineNumber + '"/>' );
+						jqoLog.wrap( '<div class="twist-debug-column-100"/>' ).wrap( '<div class="twist-debug-box-' + strColour + ' twist-debug-message" data-title="' + strURL + ', line ' + intLineNumber + '"/>' );
 
 						var jqoErrorCount = $( '#twist-debug-errors' );
 
@@ -140,7 +242,7 @@
 					};
 
 					for( var intStackedLog in arrThingsToLog ) {
-						logToDebugConsole( arrThingsToLog[intStackedLog].message, arrThingsToLog[intStackedLog].url, arrThingsToLog[intStackedLog].line, arrThingsToLog[intStackedLog].column, arrThingsToLog[intStackedLog].error );
+						logToDebugConsole( arrThingsToLog[intStackedLog].colour, arrThingsToLog[intStackedLog].title, arrThingsToLog[intStackedLog].message, arrThingsToLog[intStackedLog].url, arrThingsToLog[intStackedLog].line, arrThingsToLog[intStackedLog].column, arrThingsToLog[intStackedLog].error );
 					}
 
 					$( '.twist-debug-box, [class^="twist-debug-box-"], [class*=" twist-debug-box-"]' ).has( '.twist-debug-more-details' ).each(
