@@ -128,7 +128,7 @@
 		 */
 		public function getRepository($strFilter = 'all'){
 
-			$mxdData = \Twist::Curl()->get(sprintf('http://dev.twistphp.com/packages/api/%s',$strFilter));
+			$mxdData = \Twist::Curl()->get(sprintf('https://twistphp.com/packages/api/%s',$strFilter));
 			$arrPackages = json_decode($mxdData,true);
 
 			return $arrPackages;
@@ -144,7 +144,7 @@
 			$arrPackages = array();
 			$strLocalPackage = sprintf('%s/%s.zip',TWIST_PACKAGES,$strPackageKey);
 
-			$intBytesDownloaded = \Twist::File()->download(sprintf('http://dev.twistphp.com/packages/download?key=%s',$strPackageKey),$strLocalPackage);
+			$intBytesDownloaded = \Twist::File()->download(sprintf('https://twistphp.com/packages/download?key=%s',$strPackageKey),$strLocalPackage);
 
 			if($intBytesDownloaded > 0){
 
@@ -182,7 +182,7 @@
 			}
 
 			$arrPackageInfo['stats-type'] = $strType;
-			\Twist::Curl()->post('http://dev.twistphp.com/packages/api/anonymous-stats',$arrPackageInfo);
+			\Twist::Curl()->post('https://twistphp.com/packages/api/anonymous-stats',$arrPackageInfo);
 		}
 
 		/**
