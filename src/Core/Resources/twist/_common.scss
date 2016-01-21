@@ -1,0 +1,70 @@
+$twistphp-green: #539F00;
+$twistphp-black: #212121;
+$twistphp-dark-grey: #424242;
+$twistphp-grey: #727272;
+$twistphp-light-grey: #BDBDBD;
+$twistphp-really-light-grey: #EEE;
+
+$breakpoints: (
+	"mobile": 320px,
+	"tablet": 600px,
+	"desktop": 800px
+);
+
+@function breakpoint($key) {
+	@if map-has-key($breakpoints, $key) {
+		@return map-get($breakpoints, $key);
+	}
+
+	@warn "Unknown '#{$key}' in $breakpoints.";
+
+	@return null;
+}
+
+@mixin responsive-mobile($deviceWidth: false) {
+	@if $deviceWidth == true {
+		@media (max-device-width: breakpoint(tablet) - 1) {
+			@content;
+		}
+	} @else {
+		@media (max-width: breakpoint(tablet) - 1) {
+			@content;
+		}
+	}
+}
+
+@mixin responsive-tablet($deviceWidth: false) {
+	@if $deviceWidth == true {
+		@media (min-device-width: breakpoint(tablet)) and (max-device-width: breakpoint(desktop) - 1) {
+			@content;
+		}
+	} @else {
+		@media (min-width: breakpoint(tablet)) and (max-width: breakpoint(desktop) - 1) {
+			@content;
+		}
+	}
+}
+
+@mixin responsive-tablet-mobile($deviceWidth: false) {
+	@if $deviceWidth == true {
+		@media (max-device-width: breakpoint(desktop) - 1) {
+			@content;
+		}
+	} @else {
+		@media (max-width: breakpoint(desktop) - 1) {
+			@content;
+		}
+	}
+}
+
+@mixin responsive-desktop($deviceWidth: false) {
+	@if $deviceWidth == true {
+		@media (min-device-width: breakpoint(desktop)) {
+			@content;
+		}
+	} @else {
+		@media (min-width: breakpoint(desktop)) {
+			@content;
+		}
+	}
+}

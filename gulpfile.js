@@ -40,7 +40,7 @@ gulp.task( 'debug-js',
 				.pipe( jshint() )
 				.pipe( jshint.reporter( 'default' ) )
 				.pipe( concat( 'twist-debug.min.js' ) )
-				.pipe( uglify() )
+				//.pipe( uglify() )
 				.pipe( gulp.dest( strTwistDestination + 'debug/js' ) );
 	}
 );
@@ -159,5 +159,43 @@ gulp.task( 'error-monitor', ['error-monitor-js', 'error-monitor-css'] );
 gulp.task( 'file-upload', ['file-upload-js', 'file-upload-css'] );
 gulp.task( 'manager', ['manager-js', 'manager-css'] );
 gulp.task( 'setup', ['setup-js', 'setup-css'] );
+
+gulp.task( 'watch-ajax',
+	function() {
+		return gulp.watch( strTwistSource + 'ajax/**/*', ['ajax'] );
+	}
+);
+
+gulp.task( 'watch-debug',
+	function() {
+		return gulp.watch( strTwistSource + 'debug/**/*', ['debug'] );
+	}
+);
+
+gulp.task( 'watch-error-monitor',
+	function() {
+		return gulp.watch( strTwistSource + 'error-monitor/**/*', ['error-monitor'] );
+	}
+);
+
+gulp.task( 'watch-file-upload',
+	function() {
+		return gulp.watch( strTwistSource + 'file-upload/**/*', ['file-upload'] );
+	}
+);
+
+gulp.task( 'watch-manager',
+	function() {
+		return gulp.watch( strTwistSource + 'manager/**/*', ['manager'] );
+	}
+);
+
+gulp.task( 'watch-setup',
+	function() {
+		return gulp.watch( strTwistSource + 'setup/**/*', ['setup'] );
+	}
+);
+
+gulp.task( 'watch', ['default', 'watch-ajax', 'watch-debug', 'watch-error-monitor', 'watch-file-upload', 'watch-manager', 'watch-setup'] );
 
 gulp.task( 'default', ['ajax', 'debug', 'error-monitor', 'file-upload', 'manager', 'setup'] );

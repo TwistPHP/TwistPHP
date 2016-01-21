@@ -1342,7 +1342,9 @@ class Route extends Base{
 
 						//Output the Debug window to the screen when in debug mode
 						if($this->blDebugMode){
-							if(strstr($strPageOut, '</body>')){
+							if(strstr($strPageOut, '<body>')){
+								$strPageOut = str_replace('<body>', '<body>' . \Twist::framework()->debug()->window($arrRoute), $strPageOut);
+							}elseif(strstr($strPageOut, '</body>')){
 								$strPageOut = str_replace('</body>', \Twist::framework()->debug()->window($arrRoute) . '</body>', $strPageOut);
 							}else{
 								$strPageOut .= \Twist::framework()->debug()->window($arrRoute);
