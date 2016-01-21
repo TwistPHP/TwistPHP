@@ -10,9 +10,9 @@
 		<label>Last Name</label>
 		<input type="text" name="lastname" value="{post:lastname}" maxlength="128" placeholder="Last Name" tabindex="103" required>
 		<label>Password</label>
-		<input type="text" name="password" tabindex="104" autocomplete="off" required>
+		<input type="password" name="password" tabindex="104" autocomplete="off" required>
 		<label>Confirm Password</label>
-		<input type="text" name="confirm_password" tabindex="105" autocomplete="off" required>
+		<input type="password" name="confirm_password" tabindex="105" autocomplete="off" required>
 		<input type="hidden" name="register" value="1">
 		<button type="submit" tabindex="106">Register</button>
 		<div class="clear"></div>
