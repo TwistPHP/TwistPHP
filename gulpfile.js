@@ -57,30 +57,6 @@ gulp.task( 'debug-css',
 	}
 );
 
-gulp.task( 'error-monitor-js',
-	function() {
-		return gulp.src( strTwistSource + 'error-monitor/js/twist-errormonitor.js' )
-				.pipe( using() )
-				.pipe( jshint() )
-				.pipe( jshint.reporter( 'default' ) )
-				.pipe( concat( 'twist-errormonitor.min.js' ) )
-				.pipe( uglify() )
-				.pipe( gulp.dest( strTwistDestination + 'error-monitor/js' ) );
-	}
-);
-
-gulp.task( 'error-monitor-css',
-	function() {
-		return gulp.src( strTwistSource + 'error-monitor/scss/twist-errormonitor.scss' )
-				.pipe( using() )
-				.pipe( sourcemaps.init() )
-				.pipe( sass( { errLogToConsole: true, outputStyle: 'compressed' } ) )
-				.pipe( rename( 'twist-errormonitor.min.css' ) )
-				.pipe( sourcemaps.write( './' ) )
-				.pipe( gulp.dest( strTwistDestination + 'error-monitor/css' ) );
-	}
-);
-
 gulp.task( 'file-upload-js',
 	function() {
 		return gulp.src( strTwistSource + 'file-upload/js/twist-fileupload.js' )
@@ -155,7 +131,6 @@ gulp.task( 'setup-css',
 
 gulp.task( 'ajax', ['ajax-js', 'ajax-css'] );
 gulp.task( 'debug', ['debug-js', 'debug-css'] );
-gulp.task( 'error-monitor', ['error-monitor-js', 'error-monitor-css'] );
 gulp.task( 'file-upload', ['file-upload-js', 'file-upload-css'] );
 gulp.task( 'manager', ['manager-js', 'manager-css'] );
 gulp.task( 'setup', ['setup-js', 'setup-css'] );
@@ -169,12 +144,6 @@ gulp.task( 'watch-ajax',
 gulp.task( 'watch-debug',
 	function() {
 		return gulp.watch( strTwistSource + 'debug/**/*', ['debug'] );
-	}
-);
-
-gulp.task( 'watch-error-monitor',
-	function() {
-		return gulp.watch( strTwistSource + 'error-monitor/**/*', ['error-monitor'] );
 	}
 );
 
@@ -196,6 +165,6 @@ gulp.task( 'watch-setup',
 	}
 );
 
-gulp.task( 'watch', ['default', 'watch-ajax', 'watch-debug', 'watch-error-monitor', 'watch-file-upload', 'watch-manager', 'watch-setup'] );
+gulp.task( 'watch', ['default', 'watch-ajax', 'watch-debug', 'watch-file-upload', 'watch-manager', 'watch-setup'] );
 
-gulp.task( 'default', ['ajax', 'debug', 'error-monitor', 'file-upload', 'manager', 'setup'] );
+gulp.task( 'default', ['ajax', 'debug', 'file-upload', 'manager', 'setup'] );
