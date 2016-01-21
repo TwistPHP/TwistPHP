@@ -47,11 +47,11 @@ You will most likely need a controller that handles the main pages of your proje
      * allow all requests to be handled
      * by the MySite controller
      * --------------------------------
-     * URI | METHOD
-     * /   | _index
-     * /a  | alpha
-     * /b  | beta
-     * /c  | gamma
+     * URI    | METHOD
+     * /      | _index
+     * /alpha | alpha
+     * /beta  | beta
+     * /gamma | gamma
      * --------------------------------
      */
     Twist::Route() -> controller( '/%', 'MySite' );
@@ -70,11 +70,11 @@ To specify controllers for different areas of the site just update the URI to ma
      * shop will match this rule and be
      * sent on to the MySite controller
      * --------------------------------
-     * URI     | METHOD
-     * /shop   | _index
-     * /shop/a | alpha
-     * /shop/b | beta
-     * /shop/c | gamma
+     * URI         | METHOD
+     * /shop       | _index
+     * /shop/alpha | alpha
+     * /shop/beta  | beta
+     * /shop/gamma | gamma
      * --------------------------------
      */
     Twist::Route() -> controller( '/shop/%', 'MySite' );

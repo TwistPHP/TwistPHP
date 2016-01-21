@@ -752,10 +752,11 @@ class View extends Base{
 
 	/**
 	 * Explode parameters they must be set as key=value pairs comma separated. To pass a unassociated array in the values split by  pipe symbol '|'
-	 * @param $strReference Tag reference (passed in by &reference)
-	 * @return array
+	 * @param string $strReference Tag reference (passed in by &reference)
+	 * @param array $arrData Data {data:} array for the current view
+	 * @return array Array of processed tag parameters
 	 */
-	protected function extractParameters(&$strReference){
+	protected function extractParameters(&$strReference,$arrData = array()){
 
 		$arrParameters = array();
 
@@ -822,7 +823,7 @@ class View extends Base{
 			$strReference = $srtMatchResults[3];
 		}
 
-		$arrParameters = $this->extractParameters($strReference);
+		$arrParameters = $this->extractParameters($strReference,$arrData);
 
 		switch($strType){
 

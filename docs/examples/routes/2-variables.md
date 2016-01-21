@@ -13,19 +13,20 @@ If you need to catch variables in your requests then you can just add the variab
      * shop will match this rule and be
      * sent on to the MySite controller
      * --------------------------------
-     * URI       | METHOD | _var( 'p' )
-     * /vars     | _index | undefined
-     * /vars/x   | _index | x
-     * /vars/x/a | alpha  | x
-     * /vars/x/b | beta   | x
-     * /vars/x/c | gamma  | x
-     * /vars/y   | _index | y
-     * /vars/y/a | alpha  | y
-     * /vars/y/b | beta   | y
-     * /vars/y/c | gamma  | y
+     * URI           | METHOD | myVar
+     * /vars         | _index | ''
+     * /vars/alpha   | _index | 'alpha'
+     * /vars/x       | _index | 'x'
+     * /vars/x/alpha | alpha  | 'x'
+     * /vars/x/beta  | beta   | 'x'
+     * /vars/x/gamma | gamma  | 'x'
+     * /vars/y       | _index | 'y'
+     * /vars/y/alpha | alpha  | 'y'
+     * /vars/y/beta  | beta   | 'y'
+     * /vars/y/gamma | gamma  | 'y'
      * --------------------------------
      */
-    Twist::Route() -> controller( '/vars/{p}/%', '' );
+    Twist::Route() -> controller( '/vars/{myVar}/%', '' );
 
     Twist::Route() -> serve();
 ```
@@ -58,27 +59,27 @@ The variables can be retrieved within your controller with the `_var()` method:
 
 You can access the route variables using the `_route()` method in your controller. Pass in the key as the first parameter to get a single value, e.g. `$this -> _route( 'base_uri' );`.
 
-| Key                      | Type    | Description                   | Example                                            |
-| ------------------------ | ------- | ----------------------------- | -------------------------------------------------- |
-| `base_url`               | String  | ?                             | `'https://twistphp.com'`                           |
-| `url`                    | String  | ?                             | `'https://twistphp.com/examples/routes/variables'` |
-| `base_uri`               | String  | ?                             | ?                                                  |
-| `uri`                    | String  | ?                             | `'/examples/routes/variables'`                     |
-| `registered_uri`         | String  | ?                             | `'/examples'`                                      |
-| `registered_uri_current` | String  | ?                             | `'variables'`                                      |
-| `dynamic`                | String  | ?                             | ?                                                  |
-| `parts`                  | Array   | ?                             | `Array( [0] => debug )`                            |
-| `vars`                   | Array   | ?                             | ?                                                  |
-| `wildcard`               | Boolean | ?                             | `1`                                                |
-| `regx`                   | String  | ?                             | ?                                                  |
-| `type`                   | String  | ?                             | `'controller'`                                     |
-| `method`                 | String  | (ANY, GET, POST, DELETE, PUT) | `'ANY'`                                            |
-| `request_method`         | String  | (ANY, GET, POST, DELETE, PUT) | `'GET'`                                            |
-| `item`                   | Array   | ?                             | ?                                                  |
-| `data`                   | Array   | ?                             | ?                                                  |
-| `model`                  | String  | ?                             | ?                                                  |
-| `base_view`              | Boolean | ?                             | `1`                                                |
-| `cache`                  | Boolean | ?                             | ?                                                  |
-| `cache_key`              | String  | ?                             | ?                                                  |
-| `cache_life`             | Integer | ?                             | ?                                                  |
-| `title`                  | String  | ?                             | `'Route Variables Code Examples - TwistPHP'`       |
+| Key                      | Type    | Description                                                  | Example                                  |
+| ------------------------ | ------- | ------------------------------------------------------------ | ---------------------------------------- |
+| `base_url`               | String  | URL of the site requested                                    | `'https://twistphp.com'`                 |
+| `url`                    | String  | Full URL of the page requested                               | `'https://twistphp.com/examples/routes'` |
+| `base_uri`               | String  | Base URI set                                                 | `'/'`                                    |
+| `uri`                    | String  | URI portion of the URL requested                             | `'/examples/routes'`                     |
+| `registered_uri`         | String  | URI that features in the registered route                    | `'/examples/%'`                          |
+| `registered_uri_current` | String  | Current matched URI                                          | `'/examples/routes'`                     |
+| `dynamic`                | String  | Dynamic part of your URI is the `%` that relates to a method | ?                                        |
+| `parts`                  | Array   | The 'parts' that make up your URI (exploded by `/`)          | `Array( [0] => 'debug' )`                |
+| `vars`                   | Array   | Variables caught in the registered route                     | `Array( [version] => '3.0.0' )`          |
+| `wildcard`               | Boolean | Does the URI have a wildcard `%`?                            | `1`                                      |
+| `regx`                   | String  | ?                                                            | ?                                        |
+| `type`                   | String  | Type of route that was matched                               | `'controller'`                           |
+| `method`                 | String  | Controller method verb matched (ANY, GET, POST, DELETE, PUT) | `'ANY'`                                  |
+| `request_method`         | String  | HTTP verb requested (ANY, GET, POST, DELETE, PUT)            | `'GET'`                                  |
+| `item`                   | Array   | ?                                                            | ?                                        |
+| `data`                   | Array   | ?                                                            | ?                                        |
+| `model`                  | String  | ?                                                            | ?                                        |
+| `base_view`              | Boolean | Registered base view file                                    | `1`                                      |
+| `cache`                  | Boolean | ?                                                            | ?                                        |
+| `cache_key`              | String  | ?                                                            | ?                                        |
+| `cache_life`             | Integer | ?                                                            | ?                                        |
+| `title`                  | String  | ?                                                            | `'Route Examples - TwistPHP'`            |
