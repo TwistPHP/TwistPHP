@@ -564,7 +564,9 @@
 				}
 			};
 
-			return TwistUploader;
+			return function( strInputID, strUri, objSettings ) {
+				return new TwistUploader( strInputID, strUri, objSettings );
+			};
 		}
 	)
 );

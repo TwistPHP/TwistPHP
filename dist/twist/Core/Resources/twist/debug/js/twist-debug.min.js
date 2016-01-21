@@ -83,39 +83,10 @@
 					}
 				},
 				funOriginalWindowError = window.onerror || function() {},
-				blUseOriginalError = true;
+				blUseOriginalError = false;
 
 		window.onerror = function( strErrorMessage, strURL, intLineNumber, intColumn, objError ) {
-					console.error( 'Twist caught a script error!' );
-					console.log( 'A', strErrorMessage );
-					//console.log( 'B', strURL );
-					//console.log( 'C', intLineNumber );
-
-					if( intColumn ) {
-						//console.log( 'D', intColumn );
-						if( objError ) {
-							//console.log( 'E', objError );
-							//console.log( 'F', objError.stack );
-
-							logToDebugConsole( strErrorMessage, strURL, intLineNumber, intColumn, objError );
-
-							if( blUseOriginalError ) {
-								return funOriginalWindowError( strErrorMessage, strURL, intLineNumber, intColumn, objError );
-							}
-						} else {
-							logToDebugConsole( strErrorMessage, strURL, intLineNumber, intColumn );
-
-							if( blUseOriginalError ) {
-								return funOriginalWindowError( strErrorMessage, strURL, intLineNumber, intColumn );
-							}
-						}
-					} else {
-						logToDebugConsole( strErrorMessage, strURL, intLineNumber );
-
-						if( blUseOriginalError ) {
-							return funOriginalWindowError( strErrorMessage, strURL, intLineNumber );
-						}
-					}
+					logToDebugConsole( strErrorMessage, strURL, intLineNumber, intColumn, objError );
 
 					return true;
 				};
@@ -247,7 +218,6 @@
 		if( typeof window.jQuery === 'undefined' ) {
 			blOtherJSLibrary = ( typeof window.$ === 'function' );
 
-			//getScript( 'http' + ( location.protocol === 'https:' ? 's' : '' ) + '://code.jquery.com/jquery-2.2.0.min.js',
 			getScript( 'http' + ( location.protocol === 'https:' ? 's' : '' ) + '://code.jquery.com/jquery-1.12.0.min.js',
 				function() {
 					if( typeof window.jQuery === 'undefined' ) {
