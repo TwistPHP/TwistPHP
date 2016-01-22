@@ -238,7 +238,7 @@
 									strFileDetails += '<li data-key="' + strFileDetail + '"><span>' + strFileDetail.replace( /[\/_]/g, ' ' ) + ' :</span>' + strProperty + '</li>';
 								}
 
-								strListHTML += '<li><img src="' + strFilePreview + '"><ul>' + strFileDetails + '</ul><button id="' + strInputID + '-remove-' + intUploadedFile + '" data-file="' + intUploadedFile + '">Remove</button></li>';
+								strListHTML += '<li class="twistupload-file-list-item"><img src="' + strFilePreview + '"><ul class="twistupload-file-info">' + strFileDetails + '</ul><button id="' + strInputID + '-remove-' + intUploadedFile + '" data-file="' + intUploadedFile + '">Remove</button></li>';
 							}
 
 							thisUploader.domPseudo.value = arrUploadedFormValues.join( ',' );
