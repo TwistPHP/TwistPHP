@@ -101,15 +101,26 @@
 						thisUploader.acceptExtentions = [];
 						thisUploader.acceptRaw = [];
 						thisUploader.acceptTypes = [];
+						thisUploader.addRemoveFileListener = function() {
+							console.info( 'addRemoveFileListener' );
+
+							for( var intUploadedFile in thisUploader.uploaded ) {
+								var domRemoveButton = document.getElementById( strInputID + '-remove-' + intUploadedFile ),
+										funRemoveFile = ( function( intUploadedFileIndex ) {
+											return function() {
+												thisUploader.removeFileFromListFunction( intUploadedFileIndex );
+											};
+										} )( intUploadedFile );
+
+								domRemoveButton.removeEventListener( 'click', funRemoveFile );
+								domRemoveButton.addEventListener( 'click', funRemoveFile );
+							}
+						};
 						thisUploader.created = ( new Date() ).getTime();
-						thisUploader.cancelUpload = function( e ) {
-							e.preventDefault();
+						thisUploader.cancelUpload = function() {
 							thisUploader.request.abort();
 						};
-						thisUploader.clearInput = function( e ) {
-							if( e ) {
-								e.preventDefault();
-							}
+						thisUploader.clearInput = function() {
 							thisUploader.domInput.value = '';
 
 							if( thisUploader.domInput.value ) {
@@ -161,6 +172,11 @@
 						thisUploader.queueSize = 0;
 						thisUploader.queueUploadedCount = 0;
 						thisUploader.queueUploadedSize = 0;
+						thisUploader.removeFileFromListFunction = function( intFileIndex ) {
+							console.info( 'Removed file #' + intFileIndex );
+							thisUploader.uploaded.splice( intFileIndex, 1 );
+							thisUploader.updateUploadedList();
+						};
 						thisUploader.request = new XMLHttpRequest();
 						thisUploader.settings = {
 							abortable: true,
@@ -196,6 +212,7 @@
 						thisUploader.supported = false;
 						thisUploader.uid = strInputID;
 						thisUploader.updateUploadedList = function() {
+							console.info( 'updateUploadedList' );
 							var strListHTML = '',
 									arrUploadedFormValues = [];
 
@@ -231,14 +248,16 @@
 										strProperty = objToDelve;
 									}
 
-									strFileDetails += '<li data-key="' + strFileDetail + '"><span>' + strFileDetail + ' :</span>' + strProperty + '</li>';
+									strFileDetails += '<li data-key="' + strFileDetail + '"><span>' + strFileDetail.replace( /[\/_]/g, ' ' ) + ' :</span>' + strProperty + '</li>';
 								}
 
-								strListHTML += '<li><img src="' + strFilePreview + '">' + objUploadedFile.file.name + '<ul>' + strFileDetails + '</ul></li>';
+								strListHTML += '<li><img src="' + strFilePreview + '"><ul>' + strFileDetails + '</ul><button id="' + strInputID + '-remove-' + intUploadedFile + '" data-file="' + intUploadedFile + '">Remove</button></li>';
 							}
 
 							thisUploader.domPseudo.value = arrUploadedFormValues.join( ',' );
 							thisUploader.domList.innerHTML = strListHTML;
+
+							thisUploader.addRemoveFileListener();
 						};
 						thisUploader.upload = function( e, arrFiles ) {
 							try {
@@ -521,7 +540,7 @@
 
 						debug = ( thisUploader.settings.debug === true );
 						//TODO - Remove after testing
-						debug = true;
+						//debug = true;
 
 						if( thisUploader.domCountWrapper && !thisUploader.settings.counter ) {
 							thisUploader.domCountWrapper.style.display = 'none';
