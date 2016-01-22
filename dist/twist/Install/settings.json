@@ -247,6 +247,14 @@
     "options":"",
     "null":0
   },
+  "ASSET_DEFAULT_GROUP":{
+    "title":"Default Asset Group",
+    "description":"Default group for assets to be uploaded and browsed",
+    "default":1,
+    "type":"integer",
+    "options":"",
+    "null":0
+  },
   "EMAIL_MULTIPART_ENCODING":{
     "title":"Default Encoding",
     "description":"Set the default encoding type to use when sending emails",
