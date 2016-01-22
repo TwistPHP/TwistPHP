@@ -24,88 +24,88 @@
  */
 
 (
-	function( root, factory ) {
-		if( typeof define === 'function' &&
-				define.amd ) {
-			define(
-				'twistfileupload',
-				['postal'],
-				function( postal ) {
-					return ( root.twistfileupload = factory( postal ) );
-				}
-			);
-		} else if( typeof module === 'object' &&
-				module.exports ) {
-			module.exports = ( root.twistfileupload = factory( require( 'postal' ) ) );
-		} else {
-			root.twistfileupload = factory( root.postal );
-		}
-	}(
-		this,
-		function( postal ) {
-			var TwistUploader = function( strInputID, strUri, objSettings ) {
-				var debug = false,
-				log = function( mxdData, strType, blOverride ) {
-					if( ( debug ||
-								blOverride === true ) &&
-							window.console ) {
-						if( window.console[strType] ) {
-							window.console[strType]( mxdData );
-						} else if( window.console.log ) {
-							console.log( mxdData );
+		function( root, factory ) {
+			if( typeof define === 'function' &&
+					define.amd ) {
+				define(
+						'twistfileupload',
+						['postal'],
+						function( postal ) {
+							return ( root.twistfileupload = factory( postal ) );
 						}
-					}
-				},
-				hasClass = function( domElement, strClass ) {
-					return domElement.className.indexOf( strClass ) !== -1;
-				},
-				addClass = function( domElement, strClass ) {
-					if( !hasClass( domElement, strClass ) ) {
-						domElement.className += ' ' + strClass;
-					}
-				},
-				removeClass = function( domElement, strClass ) {
-					if( hasClass( domElement, strClass ) ) {
-						domElement.className = domElement.className.replace( new RegExp( '^' + strClass + '$', 'g' ), '' ).replace( new RegExp( '^' + strClass + ' ', 'g' ), '' ).replace( new RegExp( ' ' + strClass + '$', 'g' ), '' ).replace( new RegExp( ' ' + strClass + ' ', 'g' ), ' ' );
-					}
-				},
-				prettySize = function( intBytes ) {
-					var arrLimits = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
-							intLimit = 0;
+				);
+			} else if( typeof module === 'object' &&
+					module.exports ) {
+				module.exports = ( root.twistfileupload = factory( require( 'postal' ) ) );
+			} else {
+				root.twistfileupload = factory( root.postal );
+			}
+		}(
+				this,
+				function( postal ) {
+					var TwistUploader = function( strInputID, strUri, objSettings ) {
+						var debug = true,
+								log = function( mxdData, strType, blOverride ) {
+									if( ( debug ||
+											blOverride === true ) &&
+											window.console ) {
+										if( window.console[strType] ) {
+											window.console[strType]( mxdData );
+										} else if( window.console.log ) {
+											console.log( mxdData );
+										}
+									}
+								},
+								hasClass = function( domElement, strClass ) {
+									return domElement.className.indexOf( strClass ) !== -1;
+								},
+								addClass = function( domElement, strClass ) {
+									if( !hasClass( domElement, strClass ) ) {
+										domElement.className += ' ' + strClass;
+									}
+								},
+								removeClass = function( domElement, strClass ) {
+									if( hasClass( domElement, strClass ) ) {
+										domElement.className = domElement.className.replace( new RegExp( '^' + strClass + '$', 'g' ), '' ).replace( new RegExp( '^' + strClass + ' ', 'g' ), '' ).replace( new RegExp( ' ' + strClass + '$', 'g' ), '' ).replace( new RegExp( ' ' + strClass + ' ', 'g' ), ' ' );
+									}
+								},
+								prettySize = function( intBytes ) {
+									var arrLimits = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+											intLimit = 0;
 
-					while( arrLimits[intLimit] &&
-							intBytes > Math.pow( 1024, intLimit + 1 ) ) {
-						intLimit++;
-					}
+									while( arrLimits[intLimit] &&
+									intBytes > Math.pow( 1024, intLimit + 1 ) ) {
+										intLimit++;
+									}
 
-					return round( intBytes / Math.pow( 1024, intLimit ), ( intLimit > 1 ? 2 : 0 ) ) + arrLimits[intLimit];
-				},
-				round = function( intNumber, intDP ) {
-					intDP = ( typeof intDP !== 'number' ) ? 0 : intDP;
-					return intDP === 0 ? parseInt( Math.round( intNumber * Math.pow( 10, intDP ) ) / Math.pow( 10, intDP ) ) : parseFloat( Math.round( intNumber * Math.pow( 10, intDP ) ) / Math.pow( 10, intDP ) );
-				},
-				uploadSupported = ( typeof new XMLHttpRequest().responseType === 'string' && 'withCredentials' in new XMLHttpRequest() );
+									return round( intBytes / Math.pow( 1024, intLimit ), ( intLimit > 1 ? 2 : 0 ) ) + arrLimits[intLimit];
+								},
+								round = function( intNumber, intDP ) {
+									intDP = ( typeof intDP !== 'number' ) ? 0 : intDP;
+									return intDP === 0 ? parseInt( Math.round( intNumber * Math.pow( 10, intDP ) ) / Math.pow( 10, intDP ) ) : parseFloat( Math.round( intNumber * Math.pow( 10, intDP ) ) / Math.pow( 10, intDP ) );
+								},
+								uploadSupported = ( typeof new XMLHttpRequest().responseType === 'string' && 'withCredentials' in new XMLHttpRequest() );
 
-				if( uploadSupported ) {
-					var requestTest = new XMLHttpRequest();
-					requestTest.open( 'GET', '/' );
-					try {
-						requestTest.responseType = 'arraybuffer';
-					} catch( e ) {
-						uploadSupported = false;
-					}
-				}
+						if( uploadSupported ) {
+							var requestTest = new XMLHttpRequest();
+							requestTest.open( 'GET', '/' );
+							try {
+								requestTest.responseType = 'arraybuffer';
+							} catch( e ) {
+								uploadSupported = false;
+							}
+						}
 
-				var thisUploader = this;
+						var thisUploader = this;
 
-				thisUploader.acceptExtentions = [],
-						thisUploader.acceptRaw = [],
-						thisUploader.acceptTypes = [],
-						thisUploader.created = ( new Date() ).getTime(),
+						thisUploader.acceptExtentions = [];
+						thisUploader.acceptRaw = [];
+						thisUploader.acceptTypes = [];
+						thisUploader.created = ( new Date() ).getTime();
 						thisUploader.cancelUpload = function( e ) {
 							e.preventDefault();
 							thisUploader.request.abort();
-						},
+						};
 						thisUploader.clearInput = function( e ) {
 							if( e ) {
 								e.preventDefault();
@@ -122,25 +122,26 @@
 							thisUploader.domPseudo.value = '';
 
 							thisUploader.settings.onclear();
-						},
-						thisUploader.domCancelUpload = document.getElementById( strInputID + '-cancel' ),
-						thisUploader.domCancelUploadDisplay = null,
-						thisUploader.domClearUpload = document.getElementById( strInputID + '-clear' ),
-						thisUploader.domCount = document.getElementById( strInputID + '-count' ),
-						thisUploader.domCountWrapper = document.getElementById( strInputID + '-count-wrapper' ),
-						thisUploader.domCountWrapperDisplay = null,
-						thisUploader.domCountTotal = document.getElementById( strInputID + '-total' ),
-						thisUploader.domInput = document.getElementById( strInputID ),
-						thisUploader.domInputDisplay = null,
-						thisUploader.domProgress = document.getElementById( strInputID + '-progress' ),
-						thisUploader.domProgressWrapper = document.getElementById( strInputID + '-progress-wrapper' ),
-						thisUploader.domPseudo = document.getElementById( strInputID + '-pseudo' ),
+						};
+						thisUploader.domCancelUpload = document.getElementById( strInputID + '-cancel' );
+						thisUploader.domCancelUploadDisplay = null;
+						thisUploader.domClearUpload = document.getElementById( strInputID + '-clear' );
+						thisUploader.domCount = document.getElementById( strInputID + '-count' );
+						thisUploader.domCountWrapper = document.getElementById( strInputID + '-count-wrapper' );
+						thisUploader.domCountWrapperDisplay = null;
+						thisUploader.domCountTotal = document.getElementById( strInputID + '-total' );
+						thisUploader.domInput = document.getElementById( strInputID );
+						thisUploader.domInputDisplay = null;
+						thisUploader.domList = document.getElementById( strInputID + '-list' );
+						thisUploader.domProgress = document.getElementById( strInputID + '-progress' );
+						thisUploader.domProgressWrapper = document.getElementById( strInputID + '-progress-wrapper' );
+						thisUploader.domPseudo = document.getElementById( strInputID + '-pseudo' );
 						thisUploader.hideClear = function() {
 							if( thisUploader.domClearUpload ) {
 								thisUploader.domClearUpload.style.display = 'none';
 								thisUploader.domClearUpload.removeEventListener( 'click', thisUploader.clearInput );
 							}
-						},
+						};
 						thisUploader.hideProgress = function() {
 							if( thisUploader.domInput ) {
 								thisUploader.domInput.style.display = thisUploader.domInputDisplay;
@@ -153,14 +154,14 @@
 							if( thisUploader.domCancelUpload ) {
 								thisUploader.domCancelUpload.removeEventListener( 'click', thisUploader.cancelUpload );
 							}
-						},
-						thisUploader.multiple = ( thisUploader.domInput && thisUploader.domInput.hasAttribute( 'multiple' ) ),
-						thisUploader.queue = [],
-						thisUploader.queueCount = 0,
-						thisUploader.queueSize = 0,
-						thisUploader.queueUploadedCount = 0,
-						thisUploader.queueUploadedSize = 0,
-						thisUploader.request = new XMLHttpRequest(),
+						};
+						thisUploader.multiple = ( thisUploader.domInput && thisUploader.domInput.hasAttribute( 'multiple' ) );
+						thisUploader.queue = [];
+						thisUploader.queueCount = 0;
+						thisUploader.queueSize = 0;
+						thisUploader.queueUploadedCount = 0;
+						thisUploader.queueUploadedSize = 0;
+						thisUploader.request = new XMLHttpRequest();
 						thisUploader.settings = {
 							abortable: true,
 							clearoncomplete: true,
@@ -174,13 +175,13 @@
 							onerror: function() {},
 							onprogress: function() {},
 							onstart: function() {}
-						},
+						};
 						thisUploader.showClear = function() {
 							if( thisUploader.domClearUpload ) {
 								thisUploader.domClearUpload.style.display = this.domInputDisplay;
 								thisUploader.domClearUpload.addEventListener( 'click', thisUploader.clearInput );
 							}
-						},
+						};
 						thisUploader.showProgress = function() {
 							thisUploader.domInput.style.display = 'none';
 
@@ -191,9 +192,54 @@
 							if( thisUploader.domCancelUpload ) {
 								thisUploader.domCancelUpload.addEventListener( 'click', thisUploader.cancelUpload );
 							}
-						},
-						thisUploader.supported = false,
-						thisUploader.uid = strInputID,
+						};
+						thisUploader.supported = false;
+						thisUploader.uid = strInputID;
+						thisUploader.updateUploadedList = function() {
+							var strListHTML = '',
+									arrUploadedFormValues = [];
+
+							for( var intUploadedFile in thisUploader.uploaded ) {
+								var objUploadedFile = thisUploader.uploaded[intUploadedFile],
+										strFilePreview = objUploadedFile.uri_preview,
+										strFileDetails = '',
+										arrFileDetails = ['file/name', 'file/size', 'file_type'];
+
+								log( objUploadedFile );
+
+								arrUploadedFormValues.push( objUploadedFile.form_value );
+
+								if( objUploadedFile.support &&
+										objUploadedFile.support['square-thumb-128'] ) {
+									strFilePreview = objUploadedFile.support['square-thumb-128'];
+								}
+
+								for( var intFileDetail in arrFileDetails ) {
+									var strFileDetail = arrFileDetails[intFileDetail],
+											strProperty = objUploadedFile[strFileDetail];
+
+									if( strFileDetail.indexOf( '/' ) !== -1 ) {
+										var arrDelve = strFileDetail.split( '/' ),
+												objToDelve = objUploadedFile[arrDelve[0]];
+
+										arrDelve.shift();
+
+										for( var intKeyPart in arrDelve ) {
+											objToDelve = objToDelve[arrDelve[intKeyPart]];
+										}
+
+										strProperty = objToDelve;
+									}
+
+									strFileDetails += '<li data-key="' + strFileDetail + '"><span>' + strFileDetail + ' :</span>' + strProperty + '</li>';
+								}
+
+								strListHTML += '<li><img src="' + strFilePreview + '">' + objUploadedFile.file.name + '<ul>' + strFileDetails + '</ul></li>';
+							}
+
+							thisUploader.domPseudo.value = arrUploadedFormValues.join( ',' );
+							thisUploader.domList.innerHTML = strListHTML;
+						};
 						thisUploader.upload = function( e, arrFiles ) {
 							try {
 								if( e ) {
@@ -231,7 +277,7 @@
 											strFileType = resFile.type,
 											strFileExtention = strFileName.substr( strFileName.lastIndexOf( '.' ) + 1 ).toLowerCase(),
 											intFileSize = parseInt( resFile.size ),
-											resFileReader = new FileReader( { blob: true } ),
+											resFileReader = new FileReader( {blob: true} ),
 											blAcceptedType = !thisUploader.acceptTypes.length && !thisUploader.acceptExtentions.length;
 
 									if( !blAcceptedType ) {
@@ -288,10 +334,12 @@
 
 																	if( thisUploader.queue.length ) {
 																		if( thisUploader.multiple ) {
-																			thisUploader.uploaded.push( jsonResponse.form_value );
+																			thisUploader.uploaded.push( jsonResponse );
 																		} else {
 																			thisUploader.uploaded = [jsonResponse.form_value];
 																		}
+
+																		thisUploader.updateUploadedList();
 
 																		thisUploader.settings.oncompletefile( jsonResponse, resFile );
 
@@ -313,14 +361,14 @@
 																		}
 
 																		if( thisUploader.multiple ) {
-																			thisUploader.uploaded.push( jsonResponse.form_value );
+																			thisUploader.uploaded.push( jsonResponse );
 																		} else {
-																			thisUploader.uploaded = [jsonResponse.form_value];
+																			thisUploader.uploaded = [jsonResponse];
 																		}
 
-																		thisUploader.settings.oncompletefile( jsonResponse, resFile );
+																		thisUploader.updateUploadedList();
 
-																		thisUploader.domPseudo.value = thisUploader.uploaded.join( ',' );
+																		thisUploader.settings.oncompletefile( jsonResponse, resFile );
 
 																		thisUploader.settings.oncompletequeue();
 																	}
@@ -359,64 +407,64 @@
 																}
 																break;
 														}
-													},
-															thisUploader.request.onprogress = function( e ) {
-																if( e.lengthComputable ) {
-																	if( thisUploader.domProgress ) {
-																		var intPercentage = Math.round( ( e.loaded / e.total ) * 100 );
-																		thisUploader.domProgress.value = intPercentage;
+													};
+													thisUploader.request.onprogress = function( e ) {
+														if( e.lengthComputable ) {
+															if( thisUploader.domProgress ) {
+																var intPercentage = Math.round( ( e.loaded / e.total ) * 100 );
+																thisUploader.domProgress.value = intPercentage;
 
-																		log( prettySize( e.loaded ) + '/' + prettySize( e.total ) + ' (' + intPercentage + '%)' );
-																	}
+																log( prettySize( e.loaded ) + '/' + prettySize( e.total ) + ' (' + intPercentage + '%)' );
+															}
 
-																	thisUploader.settings.onprogress( resFile, e.loaded, e.total );
+															thisUploader.settings.onprogress( resFile, e.loaded, e.total );
+														}
+													};
+													thisUploader.request.upload.onprogress = thisUploader.request.onprogress;
+													thisUploader.request.addEventListener( 'load',
+															function() {}, false
+													);
+													thisUploader.request.addEventListener( 'error',
+															function() {
+																if( thisUploader.queue.length ) {
+																	thisUploader.hideProgress();
+
+																	thisUploader.queue = [];
+																	thisUploader.queueCount = 0;
+																	thisUploader.queueSize = 0;
+																	thisUploader.queueUploadedCount = 0;
+																	thisUploader.queueUploadedSize = 0;
+
+																	thisUploader.settings.onerror( resFile );
+
+																	log( 'An error occurred', 'error' );
 																}
-															},
-															thisUploader.request.upload.onprogress = thisUploader.request.onprogress,
-															thisUploader.request.addEventListener( 'load',
-																	function() {}, false
-															),
-															thisUploader.request.addEventListener( 'error',
-																	function() {
-																		if( thisUploader.queue.length ) {
-																			thisUploader.hideProgress();
+															}, false
+													);
+													thisUploader.request.addEventListener( 'abort',
+															function() {
+																if( thisUploader.queue.length ) {
+																	thisUploader.hideProgress();
 
-																			thisUploader.queue = [];
-																			thisUploader.queueCount = 0;
-																			thisUploader.queueSize = 0;
-																			thisUploader.queueUploadedCount = 0;
-																			thisUploader.queueUploadedSize = 0;
+																	thisUploader.queue = [];
+																	thisUploader.queueCount = 0;
+																	thisUploader.queueSize = 0;
+																	thisUploader.queueUploadedCount = 0;
+																	thisUploader.queueUploadedSize = 0;
 
-																			thisUploader.settings.onerror( resFile );
+																	thisUploader.settings.onabort( resFile );
 
-																			log( 'An error occurred', 'error' );
-																		}
-																	}, false
-															),
-															thisUploader.request.addEventListener( 'abort',
-																	function() {
-																		if( thisUploader.queue.length ) {
-																			thisUploader.hideProgress();
-
-																			thisUploader.queue = [];
-																			thisUploader.queueCount = 0;
-																			thisUploader.queueSize = 0;
-																			thisUploader.queueUploadedCount = 0;
-																			thisUploader.queueUploadedSize = 0;
-
-																			thisUploader.settings.onabort( resFile );
-
-																			log( 'Upload aborted', 'warning' );
-																		}
-																	}, false
-															),
-															thisUploader.request.open( 'PUT', thisUploader.uri, true ),
-															thisUploader.request.setRequestHeader( 'Accept', '"text/plain; charset=iso-8859-1", "Content-Type": "text/plain; charset=iso-8859-1"' ),
-															thisUploader.request.setRequestHeader( 'Twist-File', strFileName ),
-															thisUploader.request.setRequestHeader( 'Twist-Length', intFileSize ),
-															thisUploader.request.setRequestHeader( 'Twist-UID', thisUploader.uid ),
-															thisUploader.request.send( resFileReader.result );
-												}, false
+																	log( 'Upload aborted', 'warning' );
+																}
+															}, false
+													);
+													thisUploader.request.open( 'PUT', thisUploader.uri, true );
+													thisUploader.request.setRequestHeader( 'Accept', '"text/plain; charset=iso-8859-1", "Content-Type": "text/plain; charset=iso-8859-1"' );
+													thisUploader.request.setRequestHeader( 'Twist-File', strFileName );
+													thisUploader.request.setRequestHeader( 'Twist-Length', intFileSize );
+													thisUploader.request.setRequestHeader( 'Twist-UID', thisUploader.uid );
+													thisUploader.request.send( resFileReader.result );
+												}
 										);
 
 										resFileReader.readAsArrayBuffer( resFile );
@@ -442,131 +490,131 @@
 							} catch( err ) {
 								thisUploader.hideProgress();
 
+								thisUploader.settings.onerror( thisUploader.queue[0] );
+								thisUploader.settings.onabort( thisUploader.queue[0] );
+
 								thisUploader.queue = [];
 								thisUploader.queueCount = 0;
 								thisUploader.queueSize = 0;
 								thisUploader.queueUploadedCount = 0;
 								thisUploader.queueUploadedSize = 0;
 
-								thisUploader.settings.onerror( resFile );
-								thisUploader.settings.onabort( resFile );
-
 								log( err, 'error' );
 							}
-						},
-						thisUploader.uploaded = [];
-				thisUploader.uri = '/' + strUri.replace( /^\//, '' ).replace( /\/$/, '' );
-
-				for( var strSetting in objSettings ) {
-					thisUploader.settings[strSetting] = objSettings[strSetting];
-				}
-
-				if( thisUploader.multiple ) {
-					thisUploader.settings.clearoncomplete = true;
-				}
-
-				if( thisUploader.domPseudo &&
-						thisUploader.domPseudo.value &&
-						thisUploader.domPseudo.value !== '' ) {
-					thisUploader.uploaded = thisUploader.domPseudo.value.split( ',' ) || [];
-				}
-
-				debug = ( thisUploader.settings.debug === true );
-
-				if( thisUploader.domCountWrapper &&
-						!thisUploader.settings.counter ) {
-					thisUploader.domCountWrapper.style.display = 'none';
-				}
-
-				if( thisUploader.domCancelUpload &&
-						!thisUploader.settings.abortable ) {
-					thisUploader.domCancelUpload.style.display = 'none';
-				}
-
-				if( thisUploader.domClearUpload ) {
-					thisUploader.domClearUpload.style.display = 'none';
-				}
-
-				thisUploader.hideProgress();
-
-				if( thisUploader.settings.dragdrop !== null ) {
-					var domDrop = document.getElementById( thisUploader.settings.dragdrop );
-
-					if( domDrop ) {
-						domDrop.ondrop = function( e ) {
-							e.preventDefault();
-							thisUploader.upload( e, e.target.files || e.dataTransfer.files );
-
-							removeClass( domDrop, 'hover' ),
-							removeClass( domDrop, 'droppable' );
-						},
-						domDrop.ondragstart = function() {
-							addClass( domDrop, 'droppable' );
-							return false;
-						},
-						domDrop.ondragover = function() {
-							addClass( domDrop, 'hover' );
-							return false;
-						},
-						domDrop.ondragleave = function() {
-							removeClass( domDrop, 'hover' );
-							return false;
-						},
-						domDrop.ondragend = function() {
-							removeClass( domDrop, 'hover' ),
-							removeClass( domDrop, 'droppable' );
-							return false;
 						};
-					}
-				}
+						thisUploader.uploaded = [];
+						thisUploader.uri = '/' + strUri.replace( /^\//, '' ).replace( /\/$/, '' );
 
-				var strAccept = thisUploader.domInput ? thisUploader.domInput.getAttribute( 'accept' ) : '';
-				if( strAccept ) {
-					var arrAcceptValues = strAccept.replace( / /g, '' ).split( ',' );
+						for( var strSetting in objSettings ) {
+							thisUploader.settings[strSetting] = objSettings[strSetting];
+						}
 
-					if( arrAcceptValues.length ) {
-						for( var intAccept in arrAcceptValues ) {
-							if( arrAcceptValues[intAccept].substr( 0, 1 ) === '.' ) {
-								thisUploader.acceptExtentions.push( arrAcceptValues[intAccept].substr( 1 ).toLowerCase() );
-							} else {
-								thisUploader.acceptTypes.push( arrAcceptValues[intAccept].replace( /\//g, '\\/' ).replace( /\*/g, '.*' ) );
+						if( thisUploader.multiple ) {
+							thisUploader.settings.clearoncomplete = true;
+						}
+
+						if( thisUploader.domPseudo &&
+								thisUploader.domPseudo.value &&
+								thisUploader.domPseudo.value !== '' ) {
+							thisUploader.uploaded = thisUploader.domPseudo.value.split( ',' ) || [];
+						}
+
+						debug = ( thisUploader.settings.debug === true );
+						//TODO - Remove after testing
+						debug = true;
+
+						if( thisUploader.domCountWrapper && !thisUploader.settings.counter ) {
+							thisUploader.domCountWrapper.style.display = 'none';
+						}
+
+						if( thisUploader.domCancelUpload && !thisUploader.settings.abortable ) {
+							thisUploader.domCancelUpload.style.display = 'none';
+						}
+
+						if( thisUploader.domClearUpload ) {
+							thisUploader.domClearUpload.style.display = 'none';
+						}
+
+						thisUploader.hideProgress();
+
+						if( thisUploader.settings.dragdrop !== null ) {
+							var domDrop = document.getElementById( thisUploader.settings.dragdrop );
+
+							if( domDrop ) {
+								domDrop.ondrop = function( e ) {
+									e.preventDefault();
+									thisUploader.upload( e, e.target.files || e.dataTransfer.files );
+
+									removeClass( domDrop, 'hover' );
+									removeClass( domDrop, 'droppable' );
+								};
+								domDrop.ondragstart = function() {
+									addClass( domDrop, 'droppable' );
+									return false;
+								};
+								domDrop.ondragover = function() {
+									addClass( domDrop, 'hover' );
+									return false;
+								};
+								domDrop.ondragleave = function() {
+									removeClass( domDrop, 'hover' );
+									return false;
+								};
+								domDrop.ondragend = function() {
+									removeClass( domDrop, 'hover' );
+									removeClass( domDrop, 'droppable' );
+									return false;
+								};
 							}
-
-							thisUploader.acceptRaw.push( arrAcceptValues[intAccept] );
-						}
-					}
-				}
-
-				if( thisUploader.domPseudo &&
-						thisUploader.domInput ) {
-					thisUploader.domPseudo.name = thisUploader.domInput.name.replace( '[]', '' );
-					thisUploader.domInput.removeAttribute( 'name' );
-				}
-
-				if( uploadSupported ) {
-					try {
-						if( thisUploader.domInput ) {
-							thisUploader.domInput.addEventListener( 'change', thisUploader.upload );
-						//} else {
-							//throw 'No element exists with id="' + strInputID + '"';
 						}
 
-						return thisUploader;
-					} catch( err ) {
-						log( err, 'error' );
-					}
-				} else {
-					thisUploader.hideClear();
-					thisUploader.hideProgress();
-					log( 'Your browser does not support AJAX uploading', 'warn', true );
+						var strAccept = thisUploader.domInput ? thisUploader.domInput.getAttribute( 'accept' ) : '';
+						if( strAccept ) {
+							var arrAcceptValues = strAccept.replace( / /g, '' ).split( ',' );
 
-					return null;
+							if( arrAcceptValues.length ) {
+								for( var intAccept in arrAcceptValues ) {
+									if( arrAcceptValues[intAccept].substr( 0, 1 ) === '.' ) {
+										thisUploader.acceptExtentions.push( arrAcceptValues[intAccept].substr( 1 ).toLowerCase() );
+									} else {
+										thisUploader.acceptTypes.push( arrAcceptValues[intAccept].replace( /\//g, '\\/' ).replace( /\*/g, '.*' ) );
+									}
+
+									thisUploader.acceptRaw.push( arrAcceptValues[intAccept] );
+								}
+							}
+						}
+
+						if( thisUploader.domPseudo &&
+								thisUploader.domInput ) {
+							thisUploader.domPseudo.name = thisUploader.domInput.name.replace( '[]', '' );
+							thisUploader.domInput.removeAttribute( 'name' );
+						}
+
+						if( uploadSupported ) {
+							try {
+								if( thisUploader.domInput ) {
+									thisUploader.domInput.addEventListener( 'change', thisUploader.upload );
+									//} else {
+									//throw 'No element exists with id="' + strInputID + '"';
+								}
+
+								return thisUploader;
+							} catch( err ) {
+								log( err, 'error' );
+							}
+						} else {
+							thisUploader.hideClear();
+							thisUploader.hideProgress();
+							log( 'Your browser does not support AJAX uploading', 'warn', true );
+
+							return null;
+						}
+					};
+
+					return function( strInputID, strUri, objSettings ) {
+						return new TwistUploader( strInputID, strUri, objSettings );
+					};
 				}
-			};
-
-			return function( strInputID, strUri, objSettings ) {
-				return new TwistUploader( strInputID, strUri, objSettings );
-			};
-		}
-	)
+		)
 );
