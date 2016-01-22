@@ -24,23 +24,23 @@
  */
 
 (
-		function( root, factory ) {
-			if( typeof define === 'function' &&
-					define.amd ) {
-				define(
-						'twistfileupload',
-						['postal'],
-						function( postal ) {
-							return ( root.twistfileupload = factory( postal ) );
-						}
-				);
-			} else if( typeof module === 'object' &&
-					module.exports ) {
-				module.exports = ( root.twistfileupload = factory( require( 'postal' ) ) );
-			} else {
-				root.twistfileupload = factory( root.postal );
-			}
-		}(
+		(function( root, factory ) {
+					if( typeof define === 'function' &&
+							define.amd ) {
+						define(
+								'twistfileupload',
+								['postal'],
+								function( postal ) {
+									return ( root.twistfileupload = factory( postal ) );
+								}
+						);
+					} else if( typeof module === 'object' &&
+							module.exports ) {
+						module.exports = ( root.twistfileupload = factory( require( 'postal' ) ) );
+					} else {
+						root.twistfileupload = factory( root.postal );
+					}
+				})(
 				this,
 				function( postal ) {
 					var TwistUploader = function( strInputID, strUri, objSettings ) {
@@ -102,15 +102,13 @@
 						thisUploader.acceptRaw = [];
 						thisUploader.acceptTypes = [];
 						thisUploader.addRemoveFileListener = function() {
-							console.info( 'addRemoveFileListener' );
-
 							for( var intUploadedFile in thisUploader.uploaded ) {
 								var domRemoveButton = document.getElementById( strInputID + '-remove-' + intUploadedFile ),
-										funRemoveFile = ( function( intUploadedFileIndex ) {
+										funRemoveFile = (function( intUploadedFileIndex ) {
 											return function() {
 												thisUploader.removeFileFromListFunction( intUploadedFileIndex );
 											};
-										} )( intUploadedFile );
+										})( intUploadedFile );
 
 								domRemoveButton.removeEventListener( 'click', funRemoveFile );
 								domRemoveButton.addEventListener( 'click', funRemoveFile );
@@ -128,15 +126,11 @@
 								thisUploader.domInput.type = 'file';
 							}
 
-							thisUploader.hideClear();
-
 							thisUploader.domPseudo.value = '';
-
 							thisUploader.settings.onclear();
 						};
 						thisUploader.domCancelUpload = document.getElementById( strInputID + '-cancel' );
 						thisUploader.domCancelUploadDisplay = null;
-						thisUploader.domClearUpload = document.getElementById( strInputID + '-clear' );
 						thisUploader.domCount = document.getElementById( strInputID + '-count' );
 						thisUploader.domCountWrapper = document.getElementById( strInputID + '-count-wrapper' );
 						thisUploader.domCountWrapperDisplay = null;
@@ -147,12 +141,6 @@
 						thisUploader.domProgress = document.getElementById( strInputID + '-progress' );
 						thisUploader.domProgressWrapper = document.getElementById( strInputID + '-progress-wrapper' );
 						thisUploader.domPseudo = document.getElementById( strInputID + '-pseudo' );
-						thisUploader.hideClear = function() {
-							if( thisUploader.domClearUpload ) {
-								thisUploader.domClearUpload.style.display = 'none';
-								thisUploader.domClearUpload.removeEventListener( 'click', thisUploader.clearInput );
-							}
-						};
 						thisUploader.hideProgress = function() {
 							if( thisUploader.domInput ) {
 								thisUploader.domInput.style.display = thisUploader.domInputDisplay;
@@ -173,14 +161,12 @@
 						thisUploader.queueUploadedCount = 0;
 						thisUploader.queueUploadedSize = 0;
 						thisUploader.removeFileFromListFunction = function( intFileIndex ) {
-							console.info( 'Removed file #' + intFileIndex );
 							thisUploader.uploaded.splice( intFileIndex, 1 );
 							thisUploader.updateUploadedList();
 						};
 						thisUploader.request = new XMLHttpRequest();
 						thisUploader.settings = {
 							abortable: true,
-							clearoncomplete: true,
 							counter: true,
 							debug: false,
 							dragdrop: null,
@@ -190,13 +176,9 @@
 							oncompletequeue: function() {},
 							onerror: function() {},
 							onprogress: function() {},
-							onstart: function() {}
-						};
-						thisUploader.showClear = function() {
-							if( thisUploader.domClearUpload ) {
-								thisUploader.domClearUpload.style.display = this.domInputDisplay;
-								thisUploader.domClearUpload.addEventListener( 'click', thisUploader.clearInput );
-							}
+							onstart: function() {},
+							previewsize: 128,
+							previewsquare: true
 						};
 						thisUploader.showProgress = function() {
 							thisUploader.domInput.style.display = 'none';
@@ -212,7 +194,6 @@
 						thisUploader.supported = false;
 						thisUploader.uid = strInputID;
 						thisUploader.updateUploadedList = function() {
-							console.info( 'updateUploadedList' );
 							var strListHTML = '',
 									arrUploadedFormValues = [];
 
@@ -226,9 +207,15 @@
 
 								arrUploadedFormValues.push( objUploadedFile.form_value );
 
+								var strPreview = 'thumb-' + thisUploader.settings.previewsize;
+
+								if( thisUploader.settings.previewsquare ) {
+									strPreview = 'square-' + strPreview;
+								}
+
 								if( objUploadedFile.support &&
-										objUploadedFile.support['square-thumb-128'] ) {
-									strFilePreview = objUploadedFile.support['square-thumb-128'];
+										objUploadedFile.support[strPreview] ) {
+									strFilePreview = objUploadedFile.support[strPreview];
 								}
 
 								for( var intFileDetail in arrFileDetails ) {
@@ -367,17 +354,13 @@
 																		thisUploader.hideProgress();
 
 																		log( 'Finsihed uploading ' + thisUploader.queueUploadedCount + ' files (' + prettySize( thisUploader.queueUploadedSize ) + ')', 'info' );
+
 																		thisUploader.queueCount = 0;
 																		thisUploader.queueSize = 0;
 																		thisUploader.queueUploadedCount = 0;
 																		thisUploader.queueUploadedSize = 0;
 
-																		if( thisUploader.settings.clearoncomplete ) {
-																			thisUploader.clearInput();
-																			thisUploader.hideClear();
-																		} else {
-																			thisUploader.showClear();
-																		}
+																		thisUploader.clearInput();
 
 																		if( thisUploader.multiple ) {
 																			thisUploader.uploaded.push( jsonResponse );
@@ -528,10 +511,6 @@
 							thisUploader.settings[strSetting] = objSettings[strSetting];
 						}
 
-						if( thisUploader.multiple ) {
-							thisUploader.settings.clearoncomplete = true;
-						}
-
 						if( thisUploader.domPseudo &&
 								thisUploader.domPseudo.value &&
 								thisUploader.domPseudo.value !== '' ) {
@@ -539,8 +518,6 @@
 						}
 
 						debug = ( thisUploader.settings.debug === true );
-						//TODO - Remove after testing
-						//debug = true;
 
 						if( thisUploader.domCountWrapper && !thisUploader.settings.counter ) {
 							thisUploader.domCountWrapper.style.display = 'none';
@@ -548,10 +525,6 @@
 
 						if( thisUploader.domCancelUpload && !thisUploader.settings.abortable ) {
 							thisUploader.domCancelUpload.style.display = 'none';
-						}
-
-						if( thisUploader.domClearUpload ) {
-							thisUploader.domClearUpload.style.display = 'none';
 						}
 
 						thisUploader.hideProgress();
@@ -604,27 +577,20 @@
 							}
 						}
 
-						if( thisUploader.domPseudo &&
-								thisUploader.domInput ) {
-							thisUploader.domPseudo.name = thisUploader.domInput.name.replace( '[]', '' );
-							thisUploader.domInput.removeAttribute( 'name' );
-						}
-
 						if( uploadSupported ) {
-							try {
-								if( thisUploader.domInput ) {
-									thisUploader.domInput.addEventListener( 'change', thisUploader.upload );
-									//} else {
-									//throw 'No element exists with id="' + strInputID + '"';
+							if( thisUploader.domInput ) {
+								if( thisUploader.domPseudo ) {
+									thisUploader.domPseudo.name = thisUploader.domInput.name.replace( '[]', '' );
+									thisUploader.domInput.removeAttribute( 'name' );
 								}
 
-								return thisUploader;
-							} catch( err ) {
-								log( err, 'error' );
+								thisUploader.domInput.addEventListener( 'change', thisUploader.upload );
+							} else {
+								throw 'No element exists with id="' + strInputID + '"';
 							}
 						} else {
-							thisUploader.hideClear();
 							thisUploader.hideProgress();
+
 							log( 'Your browser does not support AJAX uploading', 'warn', true );
 
 							return null;
