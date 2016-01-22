@@ -12,7 +12,7 @@
 		public function load(){
 
 			//Allow the manager to still be accessible even in maintenance mode
-			$this->bypassMaintenanceMode( $this->baseURI().'%s' );
+			$this->bypassMaintenanceMode( '/%' );
 
 			$this->baseView('manager/_base.tpl');
 			$this->controller('/%','Twist\Core\Controllers\Manager');
