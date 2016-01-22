@@ -106,7 +106,8 @@
 										function( arrElement, intIndex ) {
 											arrFormElements.push( {name: arrElement.name, value: arrElement.value} );
 										}
-									),
+									);
+
 									jqoForm.find( 'input[type="submit"][name][value], input[type="reset"][name][value], input[type="button"][name][value], button[name][value]' ).each(
 											function() {
 												var jqoElement = $( this );
@@ -127,28 +128,24 @@
 
 												do {
 													var blKeyFree = true;
-													$.each( arrFormElements,
-														function( intIndex, arrFormElement ) {
-															if( contains( strNameSoFar + '[' + intKey + ']', arrFormElement.name ) ) {
-																intKey++;
-																blKeyFree = false;
-															}
+													for( var intFormElement in arrFormElements ) {
+														if( contains( strNameSoFar + '[' + intKey + ']', arrFormElements[intFormElement].name ) ) {
+															intKey++;
+															blKeyFree = false;
 														}
-													);
+													}
 
 													if( blKeyFree ) {
 														var blKeyReplaced = false;
 
-														$.each( arrFormElements,
-															function( intIndex, arrFormElement ) {
-																if( !blKeyReplaced &&
-																		arrFormElement.name === strNameSoFar + '[]' &&
-																		arrFormElement.value === mxdValue ) {
-																	arrFormElements[intIndex].name = strNameSoFar + '[' + intKey + ']';
-																	blKeyReplaced = true;
-																}
+														for( var intFormElement2 in arrFormElements ) {
+															if( !blKeyReplaced &&
+																	arrFormElements[intFormElement2].name === strNameSoFar + '[]' &&
+																	arrFormElements[intFormElement2].value === mxdValue ) {
+																arrFormElements[intFormElement2].name = strNameSoFar + '[' + intKey + ']';
+																blKeyReplaced = true;
 															}
-														);
+														}
 
 														blKeyExists = false;
 													}
@@ -279,106 +276,105 @@
 									);
 
 									var strUID = ( new Date() ).getTime(),
-											strFinalURL = strAJAXPostLocation + '/' + strFunction.replace( /^\//, '' ),
-											xhrThis = $.ajax(
-													{
-														type: strMethod.toUpperCase(),
-														url: strFinalURL,
-														data: objData,
-														dataType: 'json',
-														timeout: intTimeout,
-														global: true,
-														cache: blCache,
-														complete: function( jqXHR, strStatusText ) {
-															thisTwistAJAX.count--;
+											strFinalURL = strAJAXPostLocation + '/' + strFunction.replace( /^\//, '' );
 
-															if( thisTwistAJAX.count === 0 ) {
-																$( '#twist-ajax-loader' ).stop().fadeTo( 200, 0,
-																		function() {
-																			$( this ).hide();
-																		}
-																);
-															} else {
-																$( '#twist-ajax-loader-count' ).text( thisTwistAJAX.count > 1 ? thisTwistAJAX.count : '' );
-															}
-														},
-														success: function( objResponse, strStatusText, jqXHR ) {
-															var strContentLength = prettySize( jqXHR.getResponseHeader( 'Content-Length' ) );
-															$( '#twist-ajax-loader-size' ).text( 'Downloading ' + strContentLength + '...' );
-															if( objResponse &&
-																	typeof objResponse === 'object' &&
-																	hasOwnProperty( objResponse, 'status' ) &&
-																	objResponse.status === true ) {
-																funCallbackSuccessEnd( objResponse );
-															} else {
-																funCallbackFailureEnd( objResponse );
-															}
-														},
-														error: function( jqXHR, strStatusText, strError ) {
-															switch( strStatusText ) {
-																case 'abort':
-																	funCallbackFailureEnd();
-																	$( '#twist-ajax-loader-size' ).text( 'Aborted' );
-																	log( 'The AJAX request was aborted' );
-																	break;
+									return $.ajax(
+										{
+												type: strMethod.toUpperCase(),
+												url: strFinalURL,
+												data: objData,
+												dataType: 'json',
+												timeout: intTimeout,
+												global: true,
+												cache: blCache,
+												complete: function( jqXHR, strStatusText ) {
+													thisTwistAJAX.count--;
 
-																case 'timeout':
-																	funCallbackFailureEnd();
-																	$( '#twist-ajax-loader-size' ).text( 'Timeout' );
-																	log( 'The AJAX request timed out' );
-																	break;
+													if( thisTwistAJAX.count === 0 ) {
+														$( '#twist-ajax-loader' ).stop().fadeTo( 200, 0,
+																function() {
+																	$( this ).hide();
+																}
+														);
+													} else {
+														$( '#twist-ajax-loader-count' ).text( thisTwistAJAX.count > 1 ? thisTwistAJAX.count : '' );
+													}
+												},
+												success: function( objResponse, strStatusText, jqXHR ) {
+													var strContentLength = prettySize( jqXHR.getResponseHeader( 'Content-Length' ) );
+													$( '#twist-ajax-loader-size' ).text( 'Downloading ' + strContentLength + '...' );
+													if( objResponse &&
+															typeof objResponse === 'object' &&
+															hasOwnProperty( objResponse, 'status' ) &&
+															objResponse.status === true ) {
+														funCallbackSuccessEnd( objResponse );
+													} else {
+														funCallbackFailureEnd( objResponse );
+													}
+												},
+												error: function( jqXHR, strStatusText, strError ) {
+													switch( strStatusText ) {
+														case 'abort':
+															funCallbackFailureEnd();
+															$( '#twist-ajax-loader-size' ).text( 'Aborted' );
+															log( 'The AJAX request was aborted' );
+															break;
 
-																case 'parsererror':
-																	var rexJSON = /{"status":(true|false),"message":"[^"]*","data":({.*}|\[\])(,"[^"]+":(true|false|("[^"]*")|({.*}|\[\])))*(,"debug":({.*}|\[\])(,"[^"]+":(true|false|("[^"]*")|({.*}|\[\])))*)?}/,
-																			strContentLength = prettySize( jqXHR.getResponseHeader( 'Content-Length' ) ),
-																			strSeperator = '===============================================';
-																	log( strSeperator + '\nPARSER ERROR RECOVERY\n' + strSeperator + '\nDate:             ' + jqXHR.getResponseHeader( 'Date' ) + '\nLocation:         ' + strFinalURL + '\nTimeout:          ' + ( intTimeout / 1000 ) + 's\nResponse length:  ' + strContentLength + ( ( typeof JSON !== 'undefined' ) ? '\nPost data:        ' + JSON.stringify( objData ) : '{}' ) + '\n' + strSeperator );
+														case 'timeout':
+															funCallbackFailureEnd();
+															$( '#twist-ajax-loader-size' ).text( 'Timeout' );
+															log( 'The AJAX request timed out' );
+															break;
 
-																	if( rexJSON.test( jqXHR.responseText ) ) {
-																		var strResponse = jqXHR.responseText.match( rexJSON )[0];
-																		if( $.parseJSON( strResponse ) !== null ) {
-																			var objResponse = $.parseJSON( strResponse );
-																			if( typeof objResponse === 'object' &&
-																					'status' in objResponse &&
-																					objResponse.status === true ) {
-																				funCallbackSuccessEnd( objResponse );
-																			} else {
-																				funCallbackFailureEnd( objResponse );
-																			}
-																		} else {
-																			funCallbackFailureEnd();
-																			try {
-																				thisTwistAJAX.onfail( strError );
-																			} catch( err ) {
-																				log( err );
-																			}
-																		}
+														case 'parsererror':
+															var rexJSON = /{"status":(true|false),"message":"[^"]*","data":({.*}|\[\])(,"[^"]+":(true|false|("[^"]*")|({.*}|\[\])))*(,"debug":({.*}|\[\])(,"[^"]+":(true|false|("[^"]*")|({.*}|\[\])))*)?}/,
+																	strContentLength = prettySize( jqXHR.getResponseHeader( 'Content-Length' ) ),
+																	strSeperator = '===============================================';
+															log( strSeperator + '\nPARSER ERROR RECOVERY\n' + strSeperator + '\nDate:             ' + jqXHR.getResponseHeader( 'Date' ) + '\nLocation:         ' + strFinalURL + '\nTimeout:          ' + ( intTimeout / 1000 ) + 's\nResponse length:  ' + strContentLength + ( ( typeof JSON !== 'undefined' ) ? '\nPost data:        ' + JSON.stringify( objData ) : '{}' ) + '\n' + strSeperator );
+
+															if( rexJSON.test( jqXHR.responseText ) ) {
+																var strResponse = jqXHR.responseText.match( rexJSON )[0];
+																if( $.parseJSON( strResponse ) !== null ) {
+																	var objResponse = $.parseJSON( strResponse );
+																	if( typeof objResponse === 'object' &&
+																			'status' in objResponse &&
+																			objResponse.status === true ) {
+																		funCallbackSuccessEnd( objResponse );
 																	} else {
-																		funCallbackFailureEnd();
-																		try {
-																			thisTwistAJAX.onfail( strError );
-																		} catch( err ) {
-																			log( err );
-																		}
+																		funCallbackFailureEnd( objResponse );
 																	}
-																	break;
-
-																//case 'error':
-																default:
+																} else {
 																	funCallbackFailureEnd();
-																	$( '#twist-ajax-loader-size' ).text( 'Error' );
 																	try {
 																		thisTwistAJAX.onfail( strError );
 																	} catch( err ) {
 																		log( err );
 																	}
-																	break;
+																}
+															} else {
+																funCallbackFailureEnd();
+																try {
+																	thisTwistAJAX.onfail( strError );
+																} catch( err ) {
+																	log( err );
+																}
 															}
-														}
-													}
-											);
+															break;
 
-									return xhrThis;
+														//case 'error':
+														default:
+															funCallbackFailureEnd();
+															$( '#twist-ajax-loader-size' ).text( 'Error' );
+															try {
+																thisTwistAJAX.onfail( strError );
+															} catch( err ) {
+																log( err );
+															}
+															break;
+													}
+												}
+											}
+									);
 								};
 
 						if( typeof strAJAXPostLocation !== 'string' ||
@@ -454,59 +450,71 @@
 							}
 						);
 
-						this.count = 0,
-								this.defaultArray = objDefaultData,
-								this.delete = function( strFunction, b, c, d, e ) {
-									send( strFunction, 'DELETE', blCache, b, c, d, e );
-									return thisTwistAJAX;
-								},
-								this.disableCache = function() {
-									blCache = false;
-									return thisTwistAJAX;
-								},
-								this.disableLoader = function() {
-									blShowLoader = false;
-									return thisTwistAJAX;
-								},
-								this.enableCache = function() {
-									blCache = true;
-									return thisTwistAJAX;
-								},
-								this.enableLoader = function() {
-									blShowLoader = true;
-									return thisTwistAJAX;
-								},
-								this.get = function( strFunction, b, c, d, e ) {
-									send( strFunction, 'GET', blCache, b, c, d, e );
-									return thisTwistAJAX;
-								},
-								this.loaderSize = function( strSize ) {
-									if( $( '#twist-ajax-loader' ).length ) {
-										$( '#twist-ajax-loader' ).attr( 'class', '' ).addClass( strSize );
-									}
+						this.count = 0;
 
-									strLoaderSize = strSize;
+						this.defaultArray = objDefaultData;
 
-									return thisTwistAJAX;
-								},
-								this.onfail = function( strMessage ) {
-									var strErrorMessage = ( typeof strMessage === 'string' && strMessage !== '' ) ? strMessage : 'An unexpected AJAX response was given';
-									log( strErrorMessage );
+						this.delete = function( strFunction, b, c, d, e ) {
+							send( strFunction, 'DELETE', blCache, b, c, d, e );
+							return thisTwistAJAX;
+						};
 
-									return thisTwistAJAX;
-								},
-								this.patch = function( strFunction, b, c, d, e ) {
-									send( strFunction, 'PATCH', blCache, b, c, d, e );
-									return thisTwistAJAX;
-								},
-								this.post = function( strFunction, b, c, d, e ) {
-									send( strFunction, 'POST', blCache, b, c, d, e );
-									return thisTwistAJAX;
-								},
-								this.put = function( strFunction, b, c, d, e ) {
-									send( strFunction, 'PUT', blCache, b, c, d, e );
-									return thisTwistAJAX;
-								};
+						this.disableCache = function() {
+							blCache = false;
+							return thisTwistAJAX;
+						};
+
+						this.disableLoader = function() {
+							blShowLoader = false;
+							return thisTwistAJAX;
+						};
+
+						this.enableCache = function() {
+							blCache = true;
+							return thisTwistAJAX;
+						};
+
+						this.enableLoader = function() {
+							blShowLoader = true;
+							return thisTwistAJAX;
+						};
+
+						this.get = function( strFunction, b, c, d, e ) {
+							send( strFunction, 'GET', blCache, b, c, d, e );
+							return thisTwistAJAX;
+						};
+
+						this.loaderSize = function( strSize ) {
+							if( $( '#twist-ajax-loader' ).length ) {
+								$( '#twist-ajax-loader' ).attr( 'class', '' ).addClass( strSize );
+							}
+
+							strLoaderSize = strSize;
+
+							return thisTwistAJAX;
+						};
+
+						this.onfail = function( strMessage ) {
+							var strErrorMessage = ( typeof strMessage === 'string' && strMessage !== '' ) ? strMessage : 'An unexpected AJAX response was given';
+							log( strErrorMessage );
+
+							return thisTwistAJAX;
+						};
+
+						this.patch = function( strFunction, b, c, d, e ) {
+							send( strFunction, 'PATCH', blCache, b, c, d, e );
+							return thisTwistAJAX;
+						};
+
+						this.post = function( strFunction, b, c, d, e ) {
+							send( strFunction, 'POST', blCache, b, c, d, e );
+							return thisTwistAJAX;
+						};
+
+						this.put = function( strFunction, b, c, d, e ) {
+							send( strFunction, 'PUT', blCache, b, c, d, e );
+							return thisTwistAJAX;
+						};
 
 						$( document ).ready(
 							function() {
