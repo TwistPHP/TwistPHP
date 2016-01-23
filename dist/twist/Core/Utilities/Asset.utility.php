@@ -590,6 +590,13 @@
 				$arrParameters['value'] = $arrParameters['asset-id'];
 			}
 
+			if(array_key_exists('group',$arrParameters) && !array_key_exists('uri',$arrParameters)){
+				$arrAssetGroup = $this->getGroup($arrParameters['group']);
+				$arrParameters['uri'] = str_replace('%','asset/'.$arrAssetGroup['slug'],(defined('UPLOAD_ROUTE_URI')) ? UPLOAD_ROUTE_URI : '/upload/%');
+			}elseif(!array_key_exists('uri',$arrParameters)){
+				$arrParameters['uri'] = str_replace('%','asset',(defined('UPLOAD_ROUTE_URI')) ? UPLOAD_ROUTE_URI : '/upload/%');
+			}
+
 			switch($strReference){
 
 				case'upload':

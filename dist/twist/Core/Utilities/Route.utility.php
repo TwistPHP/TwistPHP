@@ -1214,7 +1214,7 @@ class Route extends Base{
 		if(count($arrURIs)){
 			foreach($arrURIs as $strEachURI => $blWildCard){
 
-				$strUriExpression = sprintf("#^(%s[\/]?)%s#", str_replace('/','\/',rtrim($strEachURI, '/')), $blWildCard ? '' : '$');
+				$strUriExpression = sprintf("#^(%s[\/]?)%s#%s", str_replace('/','\/',rtrim($strEachURI, '/')), $blWildCard ? '' : '$',(\Twist::framework()->setting('ROUTE_CASE_SENSITIVE')) ? '' : 'i');
 				if(rtrim($strCurrentURI,'/') == rtrim($strEachURI,'/')  || ($blWildCard && preg_match($strUriExpression, $strCurrentURI, $arrMatches))){
 					$blMatchFound = true;
 					break;
@@ -1248,7 +1248,9 @@ class Route extends Base{
 				die();
 			}else{
 
-				if(\Twist::framework()->setting('MAINTENANCE_MODE')){
+				//Maintenance mode is automatically bypassed by root level users
+				if(\Twist::framework()->setting('MAINTENANCE_MODE') && (is_null(\Twist::User()->currentLevel()) || \Twist::User()->currentLevel() > 0)){
+
 					//Check to see if the current route is allowed to bypass
 					if($this->findURI($this->arrBypassMaintenanceMode,$arrRoute['uri']) === false){
 						\Twist::respond(503,'The site is currently undergoing maintenance, please check back shortly!');
