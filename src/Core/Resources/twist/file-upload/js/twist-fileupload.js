@@ -170,6 +170,8 @@
 							counter: true,
 							debug: false,
 							dragdrop: null,
+							dropableclass: 'twistupload-dropable',
+							hoverclass: 'twistupload-hover',
 							onabort: function() {},
 							onclear: function() {},
 							oncompletefile: function() {},
@@ -474,6 +476,8 @@
 										thisUploader.queue.shift();
 										thisUploader.domInput.value = '';
 
+										//TODO - Custom onInvalidFile event
+
 										log( strFileName + ' (' + strFileType + ') is not in the list of allowed types', 'warn' );
 
 										if( thisUploader.acceptTypes.length ) {
@@ -537,24 +541,24 @@
 									e.preventDefault();
 									thisUploader.upload( e, e.target.files || e.dataTransfer.files );
 
-									removeClass( domDrop, 'hover' );
-									removeClass( domDrop, 'droppable' );
+									removeClass( domDrop, thisUploader.settings.hoverclass );
+									removeClass( domDrop, thisUploader.settings.dropableclass );
 								};
 								domDrop.ondragstart = function() {
-									addClass( domDrop, 'droppable' );
+									addClass( domDrop, thisUploader.settings.dropableclass );
 									return false;
 								};
 								domDrop.ondragover = function() {
-									addClass( domDrop, 'hover' );
+									addClass( domDrop, thisUploader.settings.hoverclass );
 									return false;
 								};
 								domDrop.ondragleave = function() {
-									removeClass( domDrop, 'hover' );
+									removeClass( domDrop, thisUploader.settings.hoverclass );
 									return false;
 								};
 								domDrop.ondragend = function() {
-									removeClass( domDrop, 'hover' );
-									removeClass( domDrop, 'droppable' );
+									removeClass( domDrop, thisUploader.settings.hoverclass );
+									removeClass( domDrop, thisUploader.settings.dropableclass );
 									return false;
 								};
 							}

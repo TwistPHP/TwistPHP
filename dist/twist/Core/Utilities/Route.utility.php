@@ -1344,10 +1344,12 @@ class Route extends Base{
 
 						//Output the Debug window to the screen when in debug mode
 						if($this->blDebugMode){
-							if(strstr($strPageOut, '<body>')){
-								$strPageOut = str_replace('<body>', '<body>' . \Twist::framework()->debug()->window($arrRoute), $strPageOut);
-							}elseif(strstr($strPageOut, '</body>')){
-								$strPageOut = str_replace('</body>', \Twist::framework()->debug()->window($arrRoute) . '</body>', $strPageOut);
+							if(strstr($strPageOut, '</head>')){
+								$strPageOut = str_replace('</head>', \Twist::framework()->debug()->window($arrRoute) . '</head>', $strPageOut);
+							}elseif(strstr($strPageOut, '</body>')) {
+								$strPageOut = str_replace( '</body>', \Twist::framework()->debug()->window( $arrRoute ) . '</body>', $strPageOut );
+							}elseif(strstr($strPageOut, '<body')){
+									$strPageOut = preg_replace("/(<body[^>]*>)/imu", '$1' . \Twist::framework()->debug()->window($arrRoute), $strPageOut);
 							}else{
 								$strPageOut .= \Twist::framework()->debug()->window($arrRoute);
 							}
