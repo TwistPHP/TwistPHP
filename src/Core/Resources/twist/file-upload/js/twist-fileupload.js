@@ -25,22 +25,22 @@
 
 (
 		(function( root, factory ) {
-					if( typeof define === 'function' &&
-							define.amd ) {
-						define(
-								'twistfileupload',
-								['postal'],
-								function( postal ) {
-									return ( root.twistfileupload = factory( postal ) );
-								}
-						);
-					} else if( typeof module === 'object' &&
-							module.exports ) {
-						module.exports = ( root.twistfileupload = factory( require( 'postal' ) ) );
-					} else {
-						root.twistfileupload = factory( root.postal );
-					}
-				})(
+			if( typeof define === 'function' &&
+					define.amd ) {
+				define(
+						'twistfileupload',
+						['postal'],
+						function( postal ) {
+							return ( root.twistfileupload = factory( postal ) );
+						}
+				);
+			} else if( typeof module === 'object' &&
+					module.exports ) {
+				module.exports = ( root.twistfileupload = factory( require( 'postal' ) ) );
+			} else {
+				root.twistfileupload = factory( root.postal );
+			}
+		})(
 				this,
 				function( postal ) {
 					var TwistUploader = function( strInputID, strUri, objSettings ) {
@@ -172,11 +172,13 @@
 							dragdrop: null,
 							dropableclass: 'twistupload-dropable',
 							hoverclass: 'twistupload-hover',
+							invalidtypemessage: 'This file type is not permitted',
 							onabort: function() {},
 							onclear: function() {},
 							oncompletefile: function() {},
 							oncompletequeue: function() {},
 							onerror: function() {},
+							oninvalidtype: function() {},
 							onprogress: function() {},
 							onstart: function() {},
 							previewsize: 128,
@@ -473,10 +475,10 @@
 
 										resFileReader.readAsArrayBuffer( resFile );
 									} else {
-										thisUploader.queue.shift();
+										var objInvalidFile = thisUploader.queue.shift();
 										thisUploader.domInput.value = '';
 
-										//TODO - Custom onInvalidFile event
+										thisUploader.settings.oninvalidtype( objInvalidFile, thisUploader.acceptTypes, thisUploader.acceptExtentions );
 
 										log( strFileName + ' (' + strFileType + ') is not in the list of allowed types', 'warn' );
 
@@ -485,10 +487,10 @@
 										}
 
 										if( thisUploader.acceptExtentions.length ) {
-											log( 'Allowed file extenstions: ' + thisUploader.acceptExtentions.join( ', ' ) );
+											log( 'Allowed file extensions: ' + thisUploader.acceptExtentions.join( ', ' ) );
 										}
 
-										alert( 'This file type is not permitted' );
+										alert( thisUploader.settings.invalidtypemessage );
 
 										thisUploader.clearInput();
 									}
