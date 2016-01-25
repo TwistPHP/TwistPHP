@@ -653,7 +653,7 @@ $z-index: 1337;
 				position: absolute;
 				top: 0;
 				right: 0;
-				left: 200px;
+				left: 0;
 
 				background-color: $twistphp-green;
 
@@ -661,16 +661,14 @@ $z-index: 1337;
 			}
 
 			ul {
-				margin-top: 10px;
-				padding-left: 200px;
+				padding-top: 4px;
+
+				counter-reset: eventorder;
 			}
 
 				li {
-					width: 195px;
-					height: 10px;
-					margin-left: -200px;
-					padding-right: 5px;
-					padding-bottom: 10px;
+					width: 0;
+					height: 20px;
 
 					display: block;
 
@@ -680,19 +678,51 @@ $z-index: 1337;
 
 					text-align: right;
 					line-height: 20px;
+					white-space: nowrap;
+
+					counter-increment: eventorder;
+
+					&::before {
+						padding-right: 6px;
+						padding-left: 6px;
+
+						position: absolute;
+						right: 100%;
+						bottom: 0;
+
+						border-bottom: 1px $twistphp-black solid;
+
+						content: counter(eventorder,upper-alpha);
+					}
 
 					&::after {
 						height: 1000px;
 
 						position: absolute;
 						right: 0;
-						bottom: 10px;
+						bottom: 0;
 
-						border-right: 1px #000 solid;
+						border-right: 1px $twistphp-black solid;
 
 						content: "";
 					}
 				}
+		}
+
+		#twist-debug-timeline-table {
+			tbody {
+				counter-reset: eventorder;
+
+				tr {
+					counter-increment: eventorder;
+
+					th {
+						&::before {
+							content: counter(eventorder,upper-alpha);
+						}
+					}
+				}
+			}
 		}
 
 	#twist-debug-memory {}

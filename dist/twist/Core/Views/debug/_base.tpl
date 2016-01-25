@@ -28,7 +28,19 @@
 						{data:timeline}
 					</ul>
 				</div>
-				<p>Execution Time: {data:execution_time}</p>
+				<!--<p>Execution Time: {data:execution_time}</p>-->
+                <table id="twist-debug-timeline-table">
+                    <thead>
+                        <tr>
+                            <th>Event</th>
+                            <th>Time</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {data:timeline_table}
+                    </tbody>
+                </table>
 			</div>
 			<div class="twist-debug-column-50"></div>
 			<div class="twist-debug-column-50"></div>

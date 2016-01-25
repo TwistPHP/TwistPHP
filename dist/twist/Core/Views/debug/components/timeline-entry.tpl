@@ -1,1 +1,1 @@
-<li style="left: {data:total_percentage}%;" title="Time Taken: {data:time} ({data:percentage}%)">{data:title}</li>
+<li style="margin-left: {data:time_started_pc}%;" data-timestarted="{data:time_started}" title="{data:title} - {data:time}"></li>

@@ -187,38 +187,48 @@ final class Debug{
 			$arrTags['server'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $strKey,'value' => $strValue));
 		}
 
+		$arrTags['timeline'] = $arrTags['timeline_table'] = '';
+
 		$intTotalTime = $arrTimer['end']-$arrTimer['start'];
 		$intTotalPercentage = $intUsedTime = 0;
+		$intEvent = 0;
+		$intCumulativeTime = 0;
+
+		//\Twist::dump( $arrTimer );
 
 		foreach($arrTimer['log'] as $strKey => $arrInfo){
 
-			$intCurrentTimeUsage = $arrInfo['time']-$intUsedTime;
-
-			$intPercentage = ($intCurrentTimeUsage/$intTotalTime)*100;
-			$intTotalPercentage += $intPercentage;
+			$fltTimeStarted = $arrInfo['time'];
+			$fltTimeStartedSeconds = $fltTimeStarted * 1000;
+			$fltTimeStartedPC = ( $fltTimeStarted / $intTotalTime ) * 100;
 
 			$arrTimelineTags = array(
-				'total_percentage' => round($intTotalPercentage,2),
-				'percentage' => round($intPercentage,2),
-				'time' => ($intCurrentTimeUsage < 1) ? round($intCurrentTimeUsage*1000).'ms' : round($intCurrentTimeUsage,3).'s',
+				'time_started' => $fltTimeStarted,
+				'time_started_pc' => $fltTimeStartedPC,
+				'time' => ($fltTimeStarted < 1) ? round($fltTimeStarted*1000).'ms' : round($fltTimeStarted).'s',
 				'title' => $arrInfo['title']
 			);
 
 			$arrTags['timeline'] .= $this->resTemplate->build('components/timeline-entry.tpl',$arrTimelineTags);
+			$arrTags['timeline_table'] .= $this->resTemplate->build('components/timeline-table-entry.tpl',$arrTimelineTags);
 
 			$arrTimelineTags['title'] = \Twist::File()->bytesToSize($arrInfo['memory']).' - '.$arrInfo['title'];
 			$arrTags['memory_chart'] .= $this->resTemplate->build('components/timeline-entry.tpl',$arrTimelineTags);
-			$intUsedTime += $intCurrentTimeUsage;
+			//$intUsedTime += $intCurrentTimeUsage;
+			$intEvent++;
+
+			$intCumulativeTime += $fltTimeStarted;
 		}
 
 		$arrTimelineTags = array(
-			'total_percentage' => 100,
-			'percentage' => round(100-$intTotalPercentage,2),
-			'time' => ($intTotalTime < 1) ? round($intTotalTime*1000).'ms' : round($intTotalTime,3).'s',
+			'time_started' => $intTotalTime,
+			'time_started_pc' => 100,
+			'time' => ($intTotalTime < 1) ? round($intTotalTime*1000,3).'ms' : round($intTotalTime,7).'s',
 			'title' => 'Page Loaded'
 		);
 
 		$arrTags['timeline'] .= $this->resTemplate->build('components/timeline-entry.tpl',$arrTimelineTags);
+		$arrTags['timeline_table'] .= $this->resTemplate->build('components/timeline-table-entry.tpl',$arrTimelineTags);
 
 		$arrTimelineTags['title'] = \Twist::File()->bytesToSize($arrTimer['memory']['end']).' - Page Loaded';
 		$arrTags['memory_chart'] .= $this->resTemplate->build('components/timeline-entry.tpl',$arrTimelineTags);
