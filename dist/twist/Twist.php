@@ -169,7 +169,7 @@
 			}
 
 			if(!is_null(self::framework()->setting('PHP_MAX_EXECUTION'))){
-				ini_set('max_executions_time',self::framework()->setting('PHP_MAX_EXECUTION'));
+				ini_set('max_execution_time',self::framework()->setting('PHP_MAX_EXECUTION'));
 			}
 		}
 
