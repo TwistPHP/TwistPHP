@@ -18,9 +18,9 @@
  * @license    https://www.gnu.org/licenses/gpl.html LGPL License
  * @link       https://twistphp.com
  *
+ * --------------
  * TwistPHP Debug
  * --------------
- * @version 0.9.0
  */
 
 (

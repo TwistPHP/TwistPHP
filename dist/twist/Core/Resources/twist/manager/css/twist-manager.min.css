@@ -18,9 +18,9 @@
  * @license    https://www.gnu.org/licenses/gpl.html LGPL License
  * @link       https://twistphp.com
  *
- * Twist Manager
  * --------------
- * @version 3.0.0
+ * TwistPHP Manager
+ * --------------
  */html::after{width:475px;height:500px;display:block;position:fixed;right:-50px;bottom:-50px;background:url("../images/background.png") left no-repeat;content:"";z-index:-1}body{margin:35px}.grid-container{padding:20px 0 50px;background:#FFF;border:1px #CCC solid;border-radius:3px}h1{margin:10px 20px;text-align:center}h1 img{height:43px;margin-right:0.5em;display:inline-block;vertical-align:bottom}ul.tabs{margin-bottom:30px;padding-right:10px;padding-left:10px;background-color:inherit}ul.tabs li a i{margin-left:0.5em;display:inline-block;vertical-align:middle}h2,h3{margin-top:0.5em}.button{margin-left:10px}table .button,table input,table select{margin-top:0 !important;float:none !important;font-size:1em !important}#twist-manager-repolist ul li{display:inline-block;width:44%;padding:2%;height:130px;margin-bottom:1%;margin-right:1%;border:1px solid #CCC;font-size:0.8em}#twist-manager-repolist ul li .package-logo{vertical-align:top;text-align:left;display:inline-block;width:30%}#twist-manager-repolist ul li .package-logo img{display:inline-block;width:90%}#twist-manager-repolist ul li .package-details{vertical-align:top;display:inline-block;width:60%}#progress-percentage-wrapper{margin:10px 10px 0}#progress-percentage{width:0;height:3px;background:#0E0;-webkit-transition:width 400ms ease, opacity 750ms ease;-moz-transition:width 400ms ease, opacity 750ms ease;-ms-transition:width 400ms ease, opacity 750ms ease;-o-transition:width 400ms ease, opacity 750ms ease;transition:width 400ms ease, opacity 750ms ease}#progress{height:450px;margin:0 10px;padding:20px 20px 0;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;-ms-box-sizing:border-box;-o-box-sizing:border-box;box-sizing:border-box;overflow:hidden;color:#FFF;font-size:1.3em;font-family:Monaco, "Courier New", Courier, monospace, mono;background:#000;border-bottom:20px #000 solid;border-radius:0 0 3px 3px}#complete-actions{display:none;text-align:right}#complete-actions .button{margin:10px 10px 0 0}#init-update{width:0;height:0;margin:0;padding:0;border:none}
 
 /*# sourceMappingURL=twist-manager.min.css.map */

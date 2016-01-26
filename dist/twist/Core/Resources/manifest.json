@@ -13,6 +13,13 @@
 			"js": []
 		}
 	},
+	"firebug-lite": {
+		"1.4.0": {
+			"default": true,
+			"css": [],
+			"js": ["firebug-lite.js"]
+		}
+	},
 	"font-awesome": {
 		"4.5.0": {
 			"default": true,
@@ -63,13 +70,6 @@
 			"js": ["rummage.min.js"]
 		}
 	},
-	"shadow-js": {
-		"1.16.0": {
-			"default": true,
-			"css": [],
-			"js": ["shadow-js.min.js"]
-		}
-	},
 	"twist/ajax": {
 		"all": {
 			"default": true,
@@ -85,6 +85,13 @@
 			"default": false,
 			"css": [],
 			"js": ["js/twist-ajax.min.js"]
+		}
+	},
+	"twist/css-reset": {
+		"standard": {
+			"default": true,
+			"css": ["css/twist-cssreset.min.css"],
+			"js": []
 		}
 	},
 	"twist/debug": {
@@ -109,6 +116,11 @@
 			"default": true,
 			"css": [],
 			"js": ["js/twist-fileupload.min.js"]
+		},
+		"development": {
+			"default": false,
+			"css": [],
+			"js": ["js/twist-fileupload.js"]
 		}
 	},
 	"twist/manager": {

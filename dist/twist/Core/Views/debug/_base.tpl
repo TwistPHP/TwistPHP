@@ -34,6 +34,7 @@
                         <tr>
                             <th>Event</th>
                             <th>Time</th>
+                            <th>Timecode</th>
                             <th>Description</th>
                         </tr>
                     </thead>

@@ -18,9 +18,9 @@
  * @license    https://www.gnu.org/licenses/gpl.html LGPL License
  * @link       https://twistphp.com
  *
- * Twist Debug
  * --------------
- * @version 3.0.0
+ * TwistPHP Debug
+ * --------------
  */
 
 // ===================================================== IMPORTS =====================================================
@@ -661,36 +661,46 @@ $z-index: 1337;
 			}
 
 			ul {
-				padding-top: 4px;
+				margin-top: 1px;
 
 				counter-reset: eventorder;
 			}
 
 				li {
-					width: 0;
+					width: 20px;
 					height: 20px;
+					margin-top: 3px;
 
 					display: block;
 
 					position: relative;
+					left: -20px;
 
 					overflow: visible;
 
 					text-align: right;
-					line-height: 20px;
+					line-height: 18px;
 					white-space: nowrap;
+
+					//cursor: pointer;
 
 					counter-increment: eventorder;
 
 					&::before {
-						padding-right: 6px;
-						padding-left: 6px;
+						width: 12px;
+						padding-right: 3px;
+						padding-left: 3px;
 
 						position: absolute;
-						right: 100%;
+						right: 0;
 						bottom: 0;
 
-						border-bottom: 1px $twistphp-black solid;
+						text-align: center;
+
+						background-color: #FFF;
+
+						border: 1px $twistphp-black solid;
+						border-radius: 3px 0 0 3px;
 
 						content: counter(eventorder,upper-alpha);
 					}
@@ -700,12 +710,20 @@ $z-index: 1337;
 
 						position: absolute;
 						right: 0;
-						bottom: 0;
+						bottom: 10px;
 
 						border-right: 1px $twistphp-black solid;
 
 						content: "";
 					}
+
+					/*&:hover {
+						&::before {
+							color: #FFF;
+
+							background-color: $twistphp-green;
+						}
+					}*/
 				}
 		}
 

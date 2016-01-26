@@ -1234,7 +1234,7 @@ class Route extends Base{
 
 		//Register the resource server if and when required
 		$this->resourceServer();
-		\Twist::recordEvent('Routes Prepared');
+		\Twist::recordEvent('Routes prepared');
 
 		$arrRoute = $this->current();
 

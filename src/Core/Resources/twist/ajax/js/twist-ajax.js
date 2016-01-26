@@ -18,9 +18,9 @@
  * @license    https://www.gnu.org/licenses/gpl.html LGPL License
  * @link       https://twistphp.com
  *
- * Twist AJAX
  * --------------
- * @version 3.0.0
+ * TwistPHP AJAX
+ * --------------
  */
 
 (
