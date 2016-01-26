@@ -213,7 +213,7 @@ class Validator{
 
 					//If blank is allowed do not try and validate the data
 					if(trim($mxdTestValue) == '' && array_key_exists('blank',$arrEachCheck) && $arrEachCheck['blank'] == 1){
-						$mxdTestResult = true;
+						$mxdTestResult = $mxdTestValue;
 					}else{
 						//Call the test function and get the result
 						switch($arrEachCheck['type']){
