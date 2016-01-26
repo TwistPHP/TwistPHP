@@ -199,6 +199,7 @@ $z-index: 1337;
 
 			&:first-child {
 				border-right: none;
+
 				a {
 					padding-right: (($bar-height - $bar-block-height) / 2);
 					padding-left: (($bar-height - $bar-block-height) / 2);
@@ -240,6 +241,10 @@ $z-index: 1337;
 
 					color: inherit;
 					text-align: left;
+
+					~ i {
+						margin-left: 15px;
+					}
 				}
 			}
 
@@ -351,7 +356,7 @@ $z-index: 1337;
 		bottom: 0;
 		left: 0;
 
-		h6 {
+		> h6 {
 			height: 25px;
 			padding: 10px 65px 10px 20px;
 
@@ -367,9 +372,47 @@ $z-index: 1337;
 		z-index: 1;
 	}
 
-	th,
-	td {
-		padding: 0.5em 0.75em;
+	table {
+		width: 100%;
+
+		background-color: #FFF;
+
+		border-collapse: collapse;
+
+		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+
+		tbody {
+			counter-reset: eventorder;
+
+			tr {
+				counter-increment: eventorder;
+
+				th {
+					&::before {
+						content: counter(eventorder,upper-alpha);
+					}
+				}
+
+				+ tr {
+					td {
+						border-top: 1px $border solid;
+					}
+				}
+			}
+		}
+
+		th {
+			color: #FFF;
+			font-weight: bold;
+			text-align: center;
+
+			background-color: $twistphp-dark-grey;
+		}
+
+		th,
+		td {
+			padding: 0.5em 0.75em;
+		}
 	}
 
 	dt {
@@ -446,6 +489,7 @@ $z-index: 1337;
 
 		border: 1px $border solid;
 		border-left-width: 0;
+		border-radius: 0 3px 3px 0;
 
 		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 
@@ -455,7 +499,7 @@ $z-index: 1337;
 			border-top-width: 0;
 
 			> :first-child {
-				margin-bottom: 10px;
+				clear: both;
 			}
 
 			&::before {
@@ -533,7 +577,7 @@ $z-index: 1337;
 		}
 
 		div.twist-debug-more-details {
-			padding: 20px 20px 40px;
+			padding: 20px 40px;
 
 			display: none;
 
@@ -545,6 +589,34 @@ $z-index: 1337;
 
 			pre {
 				padding: 0;
+			}
+
+			dl {
+				overflow: hidden;
+
+				dt,
+				dd {
+					margin: 0;
+					padding-top: 0.5em;
+
+					display: block;
+
+					float: left;
+				}
+
+				dt {
+					width: 25%;
+
+					font-weight: bold;
+				}
+
+				dd {
+					width: 75%;
+
+					+ dd {
+						margin-left: 25%;
+					}
+				}
 			}
 
 			&::before,
@@ -580,7 +652,7 @@ $z-index: 1337;
 
 		p,
 		pre {
-			padding: 20px;
+			padding: 5px 20px 20px;
 
 			font-size: 14px;
 
@@ -641,7 +713,10 @@ $z-index: 1337;
 	#twist-debug-timeline {}
 
 		#twist-debug-timeline-chart {
-			padding-top: 50px;
+			margin-top: 20px;
+			padding: 0 10px 55px 11px;
+			margin-right: -10px;
+			margin-left: -10px;
 
 			position: relative;
 
@@ -651,56 +726,59 @@ $z-index: 1337;
 				height: 50px;
 
 				position: absolute;
-				top: 0;
-				right: 0;
-				left: 0;
+				right: 10px;
+				bottom: 0;
+				left: 10px;
 
 				background-color: $twistphp-green;
+
+				//border-radius: 3px;
+
+				box-shadow: inset 0 3px 10px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.1);
 
 				content: "";
 			}
 
 			ul {
-				margin-top: 1px;
-
 				counter-reset: eventorder;
 			}
 
 				li {
-					width: 20px;
-					height: 20px;
-					margin-top: 3px;
+					width: 19px;
+					height: 19px;
+					margin-bottom: 3px;
 
 					display: block;
 
 					position: relative;
-					left: -20px;
+					left: -10px;
 
 					overflow: visible;
 
 					text-align: right;
-					line-height: 18px;
+					line-height: 19px;
 					white-space: nowrap;
-
-					//cursor: pointer;
 
 					counter-increment: eventorder;
 
 					&::before {
-						width: 12px;
+						width: 13px;
 						padding-right: 3px;
 						padding-left: 3px;
 
-						position: absolute;
-						right: 0;
-						bottom: 0;
+						display: block;
+
+						position: relative;
 
 						text-align: center;
 
 						background-color: #FFF;
 
-						border: 1px $twistphp-black solid;
-						border-radius: 3px 0 0 3px;
+						border-radius: 3px;
+
+						box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+
+						z-index: 2;
 
 						content: counter(eventorder,upper-alpha);
 					}
@@ -709,10 +787,12 @@ $z-index: 1337;
 						height: 1000px;
 
 						position: absolute;
-						right: 0;
-						bottom: 10px;
+						right: 9px;
+						top: 10px;
 
 						border-right: 1px $twistphp-black solid;
+
+						z-index: 1;
 
 						content: "";
 					}
@@ -727,23 +807,39 @@ $z-index: 1337;
 				}
 		}
 
-		#twist-debug-timeline-table {
-			tbody {
-				counter-reset: eventorder;
+		#twist-debug-timeline-table {}
 
-				tr {
-					counter-increment: eventorder;
+		#twist-debug-timeline-memory {
+			dl {
+				overflow: hidden;
 
-					th {
-						&::before {
-							content: counter(eventorder,upper-alpha);
-						}
-					}
+				background-color: #FFF;
+
+				border-radius: 3px;
+
+				box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+
+				dt,
+				dd {
+					margin: 0;
+					padding: 0.5em 0.75em;
+
+					display: block;
+
+					text-align: center;
 				}
+
+				dt {
+
+					color: #FFF;
+					font-weight: bold;
+
+					background-color: $twistphp-dark-grey;
+				}
+
+				dd {}
 			}
 		}
-
-	#twist-debug-memory {}
 
 	#twist-debug-database {}
 
@@ -762,10 +858,12 @@ $z-index: 1337;
 		white-space: pre-wrap;
 
 		code {
+			font-family: inherit;
+			color: $twistphp-light-grey;
 			font-size: 1em;
 
 			em {
-				font-style: normal;
+				//font-style: normal;
 			}
 
 			span.highlight {
