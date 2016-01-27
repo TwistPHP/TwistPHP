@@ -228,6 +228,20 @@ $z-index: 1337;
 				-webkit-transition: background ease 400ms;
 				transition: background ease 400ms;
 
+					i {
+						width: 1.3em;
+						margin-right: 5px;
+
+						display: inline-block;
+
+						color: inherit;
+						text-align: left;
+
+						~ i {
+							margin-left: 15px;
+						}
+					}
+
 				&:hover {
 					background-color: $bar-background-hover;
 
@@ -238,20 +252,16 @@ $z-index: 1337;
 				&.current {
 					background-color: $bar-background-hover;
 				}
+			}
 
-				i {
-					width: 1.3em;
-					margin-right: 5px;
-
-					display: inline-block;
-
-					color: inherit;
-					text-align: left;
-
-					~ i {
-						margin-left: 15px;
-					}
+			[data-count] {
+				&::after {
+					content: attr(data-count);
 				}
+			}
+
+			[data-count="0"] {
+				display: none;
 			}
 
 			.fa-stack-2x {
@@ -621,6 +631,8 @@ $z-index: 1337;
 				dt {
 					width: 25%;
 
+					clear: both;
+
 					font-weight: bold;
 				}
 
@@ -629,6 +641,8 @@ $z-index: 1337;
 
 					+ dd {
 						margin-left: 25%;
+
+						clear: both;
 					}
 				}
 			}

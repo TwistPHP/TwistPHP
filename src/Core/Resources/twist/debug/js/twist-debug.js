@@ -159,17 +159,22 @@
 								}
 								return intLength;
 							},
-							logToTwist = function( strColour, mxdValue, strURL, intLineNumber, intColumn, objError ) {
+							logToTwist = function( jqsAppendTo, strColour, mxdValue, objDetails, strURL, intLineNumber, intColumn ) {
 								if( mxdValue ) {
 									var strLogHTML = '<p>' + ( mxdValue || '' ) + '</p>',
 											strTitle = '',
-											strType = typeof mxdValue || 'unknown',
-											intLength = mxdValue.length || 0;
+											strDetailsHTML = '';
 
 									if( typeof mxdValue === 'object' ) {
 										strLogHTML = '<pre class="no-pre-line">' + JSON.stringify( mxdValue, undefined, 2 ) + '</pre>';
-										intLength = objectLength( mxdValue );
-										log( mxdValue );
+									}
+
+									if( typeof objDetails === 'object' ) {
+										for( var strDetail in objDetails ) {
+											var strKey = strDetail.charAt( 0 ).toUpperCase() + strDetail.slice( 1 ),
+													strValue = ( typeof objDetails[strDetail] === 'object' ) ? '<pre class="no-pre-line">' + JSON.stringify( objDetails[strDetail], undefined, 2 ) + '</pre>' : objDetails[strDetail];
+											strDetailsHTML += '<dt>' + strKey + '</dt><dd>' + strValue + '</dd>';
+										}
 									}
 
 									if( strURL !== undefined ) {
@@ -190,13 +195,13 @@
 										strTitle = 'JavaScript';
 									}
 
-									var jqoLogBox = $( '<div class="twist-debug-box-' + strColour + ' twist-debug-message" data-title="' + strTitle + '"/>' ).html( strLogHTML ),
-											jqoLogContainer = $( '<div class="twist-debug-column-100"/>' ).html( jqoLogBox ),
-											jqoLogDetails = '<div class="twist-debug-more-details"><dl><dt>Type</dt><dd>' + strType + '</dd><dt>Length</dt><dd>' + intLength + '</dd></dl></div><a href="#twist-debug-more-details" class="twist-debug-more-details">⋯</a>';
+									var jqoLogBox = $( '<div class="twist-debug-box-' + strColour + ' twist-debug-message" data-title="' + strTitle + '"/>' ).html( strLogHTML );
 
-									jqoLogBox.append( jqoLogDetails );
+									if( strDetailsHTML !== '' ) {
+										jqoLogBox.append( '<div class="twist-debug-more-details"><dl>' + strDetailsHTML + '</dl></div><a href="#twist-debug-more-details" class="twist-debug-more-details">&ctdot;</a>' );
+									}
 
-									$( '#twist-debug-messages' ).find( '.twist-debug-column-wrapper' ).append( jqoLogContainer );
+									$( jqsAppendTo ).append( jqoLogBox );
 
 									return true;
 								} else {
@@ -204,27 +209,42 @@
 								}
 							};
 
-					logError = function( mxdValue, strURL, intLineNumber, intColumn, objError ) {
-						if( logToTwist( 'red', mxdValue, strURL, intLineNumber, intColumn, objError ) ) {
+					logError = function( mxdValue, strURL, intLineNumber, intColumn ) {
+						var objDetails = {
+							type: typeof mxdValue,
+							length: ( typeof mxdValue === 'object' ) ? objectLength( mxdValue ) : mxdValue.length
+						};
+
+						if( logToTwist( '#twist-debug-messages-list', 'red', mxdValue, objDetails, strURL, intLineNumber, intColumn ) ) {
 							var jqoErrorCount = $( '#twist-debug-errors' );
 
-							jqoErrorCount.html( jqoErrorCount.find( 'i' )[0].outerHTML + ( parseInt( jqoErrorCount.text() ) + 1 ) ).removeClass( 'twist-debug-hidden' );
+							jqoErrorCount.attr( 'data-count', parseInt( jqoErrorCount.attr( 'data-count' ) ) + 1 );
 						}
 					};
 
-					logWarning = function( mxdValue, strURL, intLineNumber, intColumn, objError ) {
-						if( logToTwist( 'yellow', mxdValue, strURL, intLineNumber, intColumn, objError ) ) {
+					logWarning = function( mxdValue, strURL, intLineNumber, intColumn ) {
+						var objDetails = {
+							type: typeof mxdValue,
+							length: ( typeof mxdValue === 'object' ) ? objectLength( mxdValue ) : mxdValue.length
+						};
+
+						if( logToTwist( '#twist-debug-messages-list', 'yellow', mxdValue, objDetails, strURL, intLineNumber, intColumn ) ) {
 							var jqoErrorCount = $( '#twist-debug-warnings' );
 
-							jqoErrorCount.html( jqoErrorCount.find( 'i' )[0].outerHTML + ( parseInt( jqoErrorCount.text() ) + 1 ) ).removeClass( 'twist-debug-hidden' );
+							jqoErrorCount.attr( 'data-count', parseInt( jqoErrorCount.attr( 'data-count' ) ) + 1 );
 						}
 					};
 
-					logDebug = function( mxdValue, strURL, intLineNumber, intColumn, objError ) {
-						if( logToTwist( 'blue', mxdValue, strURL, intLineNumber, intColumn, objError ) ) {
+					logDebug = function( mxdValue, strURL, intLineNumber, intColumn ) {
+						var objDetails = {
+							type: typeof mxdValue,
+							length: ( typeof mxdValue === 'object' ) ? objectLength( mxdValue ) : mxdValue.length
+						};
+
+						if( logToTwist( '#twist-debug-messages-list', 'blue', mxdValue, objDetails, strURL, intLineNumber, intColumn ) ) {
 							var jqoErrorCount = $( '#twist-debug-dumps' );
 
-							jqoErrorCount.html( jqoErrorCount.find( 'i' )[0].outerHTML + ( parseInt( jqoErrorCount.text() ) + 1 ) ).removeClass( 'twist-debug-hidden' );
+							jqoErrorCount.attr( 'data-count', parseInt( jqoErrorCount.attr( 'data-count' ) ) + 1 );
 						}
 					};
 
@@ -284,6 +304,22 @@
 					this.warn = logWarning;
 					this.error = logError;
 
+					this.logAJAX = function( blSuccess, objResponse, objRequest ) {
+						var objRequestToLog = {
+							type: objRequest.type,
+							url: objRequest.url,
+							timeout: objRequest.timeout,
+							cache: objRequest.cache,
+							data: objRequest.data
+						};
+
+						if( logToTwist( '#twist-debug-ajax-list', blSuccess ? 'green' : 'red', objResponse, objRequestToLog, objRequest.type + ' ' + objRequest.url ) ) {
+							var jqoErrorCount = $( '#twist-debug-ajax-count' );
+
+							jqoErrorCount.attr( 'data-count', parseInt( jqoErrorCount.attr( 'data-count' ) ) + 1 );
+						}
+					};
+
 					$( '#twist-debug' ).addClass( 'ready' );
 
 					info( 'TwistPHP Debug is now loaded with jQuery v.' + $.fn.jquery );
@@ -309,7 +345,7 @@
 				}
 			);
 		} else {
-			info( 'jQuery v.' + $.fn.jquery + ' exists' );
+			//info( 'jQuery v.' + $.fn.jquery + ' already exists' );
 			window.twistdebug = new TwistDebug( false );
 		}
 	}
