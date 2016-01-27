@@ -128,6 +128,8 @@ $z-index: 1337;
 	height: $bar-height;
 	padding: 0 #{$bar-logo-width + 15} 0 0;
 
+	display: none;
+
 	position: fixed;
 	right: 0;
 	bottom: 0;
@@ -155,6 +157,10 @@ $z-index: 1337;
 		background: linear-gradient(90deg, rgba($twistphp-dark-grey, 0) 0%, rgba($twistphp-dark-grey, 1) 100%);
 
 		content: "";
+	}
+
+	&.ready {
+		display: block;
 	}
 }
 
@@ -504,8 +510,9 @@ $z-index: 1337;
 			}
 
 			&::before {
+				margin-top: -5px;
 				margin-right: -1px;
-				padding: 0 10px;
+				padding: 0 6px;
 
 				display: block;
 
@@ -515,7 +522,7 @@ $z-index: 1337;
 				color: $subtle-text;
 				font-size: 12px;
 				text-align: right;
-				font-style: italic;
+				//font-style: italic;
 
 				//background-color: $bar-border;
 
@@ -524,6 +531,12 @@ $z-index: 1337;
 
 			&::after {
 				top: 0;
+			}
+		}
+
+		&[data-title=""] {
+			&::before {
+				display: none;
 			}
 		}
 
@@ -598,7 +611,7 @@ $z-index: 1337;
 				dt,
 				dd {
 					margin: 0;
-					padding-top: 0.5em;
+					padding: 0.25em 0;
 
 					display: block;
 
@@ -653,7 +666,7 @@ $z-index: 1337;
 
 		p,
 		pre {
-			padding: 5px 20px 20px;
+			padding: 10px 20px 20px;
 
 			font-size: 14px;
 
@@ -678,6 +691,10 @@ $z-index: 1337;
 			line-height: 1.25;
 
 			white-space: pre-line;
+
+			&.no-pre-line {
+				white-space: pre;
+			}
 		}
 	}
 

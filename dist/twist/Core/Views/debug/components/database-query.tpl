@@ -12,13 +12,13 @@
 			<dt>Affected rows</dt>
 			<dd>{data:affected_rows}</dd>
 			<dt>Insert ID</dt>
-			<dd>{data:insert_id==0?'<em>none</em>':data:insert_id}</dd>
+			<dd>{data:insert_id==0?'<em>[none]</em>':data:insert_id}</dd>
 			<dt>Function called</dt>
 			<dd>{data:trace/0/function}()</dd>
 			<dd>{data:trace/0/file}</dd>
 			<dd>Line {data:trace/0/line}</dd>
             <dt>Error</dt>
-            <dd>{data:error==''?'<em>none</em>':data:error}</dd>
+            <dd>{data:error==''?'<em>[none]</em>':data:error}</dd>
 		</dl>
 	</div>
 </div>

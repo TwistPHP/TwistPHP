@@ -24,12 +24,11 @@
  */
 
 (
-	function( window, document ) {
+	function( window, document, undefined ) {
 		var arrThingsToLog = { errors: [], warnings: [], logs: [] },
-				logErrorToDebugConsole = function( strTitle, strErrorMessage, strURL, intLineNumber, intColumn, objError ) {
+				logError = function( mxdValue, strURL, intLineNumber, intColumn, objError ) {
 					var objToStack = {
-						title: strTitle,
-						message: strErrorMessage,
+						message: mxdValue,
 						url: strURL,
 						line: intLineNumber,
 						column: intColumn,
@@ -38,10 +37,9 @@
 
 					arrThingsToLog.errors.push( objToStack );
 				},
-				logWarningToDebugConsole = function( strTitle, strErrorMessage, strURL, intLineNumber, intColumn, objError ) {
+				logWarning = function( mxdValue, strURL, intLineNumber, intColumn, objError ) {
 					var objToStack = {
-						title: strTitle,
-						message: strErrorMessage,
+						message: mxdValue,
 						url: strURL,
 						line: intLineNumber,
 						column: intColumn,
@@ -50,10 +48,9 @@
 
 					arrThingsToLog.warnings.push( objToStack );
 				},
-				logToDebugConsole = function( strTitle, strErrorMessage, strURL, intLineNumber, intColumn, objError ) {
+				logDebug = function( mxdValue, strURL, intLineNumber, intColumn, objError ) {
 					var objToStack = {
-						title: strTitle,
-						message: strErrorMessage,
+						message: mxdValue,
 						url: strURL,
 						line: intLineNumber,
 						column: intColumn,
@@ -62,7 +59,7 @@
 
 					arrThingsToLog.logs.push( objToStack );
 				},
-				/*log = function() {
+				log = function() {
 					if( window.console &&
 							window.console.log &&
 							arguments.length ) {
@@ -106,15 +103,19 @@
 							}
 						}
 					}
-				},*/
+				},
 				funOriginalWindowError = window.onerror || function() {},
 				blUseOriginalError = false;
 
 		window.onerror = function( strErrorMessage, strURL, intLineNumber, intColumn, objError ) {
-					logErrorToDebugConsole( 'JS Error', strErrorMessage, strURL, intLineNumber, intColumn, objError );
+			logError( '<strong>JS Error:</strong> ' + strErrorMessage, strURL, intLineNumber, intColumn, objError );
 
-					return true;
-				};
+			if( blUseOriginalError ) {
+				//funOriginalWindowError.call( this );
+			}
+	
+			return true;
+		};
 
 		var blOtherJSLibrary = false,
 				getScript = function( strURL, funSuccess ) {
@@ -124,7 +125,8 @@
 
 					funSuccess = ( typeof funSuccess === 'function' ) ? funSuccess : function() {};
 
-					domScript.src = strURL,
+					domScript.src = strURL;
+					
 					domScript.onload = domScript.onreadystatechange = function() {
 						if( !blDone &&
 								( !this.readyState ||
@@ -148,53 +150,97 @@
 					var $ = ( blNoConfilct === true ) ? window.jQuery.noConflict( true ) : window.jQuery,
 							jqoTwistDebugBlocks = $( '#twist-debug-blocks' ),
 							jqoTwistDebugDetails = $( '#twist-debug-details' ),
-							logDebug = function( strColour, strTitle, strErrorMessage, strURL, intLineNumber, intColumn, objError ) {
-								var jqoLog = $( '<p/>' ).html( '<strong>' + strTitle + ':</strong> ' + strErrorMessage );
+							objectLength = function( objIn ) {
+								var intLength = 0;
+								for( var mxdKey in objIn ) {
+									if( objIn.hasOwnProperty( mxdKey ) ) {
+										intLength++;
+									}
+								}
+								return intLength;
+							},
+							logToTwist = function( strColour, mxdValue, strURL, intLineNumber, intColumn, objError ) {
+								if( mxdValue ) {
+									var strLogHTML = '<p>' + ( mxdValue || '' ) + '</p>',
+											strTitle = '',
+											strType = typeof mxdValue || 'unknown',
+											intLength = mxdValue.length || 0;
 
-								$( '#twist-debug-messages' ).find( '.twist-debug-column-wrapper' ).append( jqoLog );
+									if( typeof mxdValue === 'object' ) {
+										strLogHTML = '<pre class="no-pre-line">' + JSON.stringify( mxdValue, undefined, 2 ) + '</pre>';
+										intLength = objectLength( mxdValue );
+										log( mxdValue );
+									}
 
-								jqoLog.wrap( '<div class="twist-debug-column-100"/>' ).wrap( '<div class="twist-debug-box-' + strColour + ' twist-debug-message" data-title="' + strURL + ', line ' + intLineNumber + '"/>' );
+									if( strURL !== undefined ) {
+										if( strURL !== '' ) {
+											if( intLineNumber !== undefined &&
+													intLineNumber !== '' ) {
+												if( intColumn !== undefined &&
+														intColumn !== '' ) {
+													strTitle = strURL + ', line ' + intLineNumber + ', column ' + intColumn;
+												} else {
+													strTitle = strURL + ', line ' + intLineNumber;
+												}
+											} else {
+												strTitle = strURL;
+											}
+										}
+									} else {
+										strTitle = 'JavaScript';
+									}
+
+									var jqoLogBox = $( '<div class="twist-debug-box-' + strColour + ' twist-debug-message" data-title="' + strTitle + '"/>' ).html( strLogHTML ),
+											jqoLogContainer = $( '<div class="twist-debug-column-100"/>' ).html( jqoLogBox ),
+											jqoLogDetails = '<div class="twist-debug-more-details"><dl><dt>Type</dt><dd>' + strType + '</dd><dt>Length</dt><dd>' + intLength + '</dd></dl></div><a href="#twist-debug-more-details" class="twist-debug-more-details">⋯</a>';
+
+									jqoLogBox.append( jqoLogDetails );
+
+									$( '#twist-debug-messages' ).find( '.twist-debug-column-wrapper' ).append( jqoLogContainer );
+
+									return true;
+								} else {
+									return false;
+								}
 							};
 
-					info( 'jQuery v.' + $.fn.jquery + ' is ready' );
+					logError = function( mxdValue, strURL, intLineNumber, intColumn, objError ) {
+						if( logToTwist( 'red', mxdValue, strURL, intLineNumber, intColumn, objError ) ) {
+							var jqoErrorCount = $( '#twist-debug-errors' );
 
-					logErrorToDebugConsole = function( strTitle, strErrorMessage, strURL, intLineNumber, intColumn, objError ) {
-						logDebug( 'red', strTitle, strErrorMessage, strURL, intLineNumber, intColumn, objError );
-
-						var jqoErrorCount = $( '#twist-debug-errors' );
-
-						jqoErrorCount.html( jqoErrorCount.find( 'i' )[0].outerHTML + ( parseInt( jqoErrorCount.text() ) + 1 ) ).removeClass( 'twist-debug-hidden' );
+							jqoErrorCount.html( jqoErrorCount.find( 'i' )[0].outerHTML + ( parseInt( jqoErrorCount.text() ) + 1 ) ).removeClass( 'twist-debug-hidden' );
+						}
 					};
 
-					logWarningToDebugConsole = function( strTitle, strErrorMessage, strURL, intLineNumber, intColumn, objError ) {
-						logDebug( 'yellow', strTitle, strErrorMessage, strURL, intLineNumber, intColumn, objError );
+					logWarning = function( mxdValue, strURL, intLineNumber, intColumn, objError ) {
+						if( logToTwist( 'yellow', mxdValue, strURL, intLineNumber, intColumn, objError ) ) {
+							var jqoErrorCount = $( '#twist-debug-warnings' );
 
-						var jqoErrorCount = $( '#twist-debug-warnings' );
-
-						jqoErrorCount.html( jqoErrorCount.find( 'i' )[0].outerHTML + ( parseInt( jqoErrorCount.text() ) + 1 ) ).removeClass( 'twist-debug-hidden' );
+							jqoErrorCount.html( jqoErrorCount.find( 'i' )[0].outerHTML + ( parseInt( jqoErrorCount.text() ) + 1 ) ).removeClass( 'twist-debug-hidden' );
+						}
 					};
 
-					logToDebugConsole = function( strTitle, strErrorMessage, strURL, intLineNumber, intColumn, objError ) {
-						logDebug( 'blue', strTitle, strErrorMessage, strURL, intLineNumber, intColumn, objError );
+					logDebug = function( mxdValue, strURL, intLineNumber, intColumn, objError ) {
+						if( logToTwist( 'blue', mxdValue, strURL, intLineNumber, intColumn, objError ) ) {
+							var jqoErrorCount = $( '#twist-debug-dumps' );
 
-						var jqoErrorCount = $( '#twist-debug-dumps' );
-
-						jqoErrorCount.html( jqoErrorCount.find( 'i' )[0].outerHTML + ( parseInt( jqoErrorCount.text() ) + 1 ) ).removeClass( 'twist-debug-hidden' );
+							jqoErrorCount.html( jqoErrorCount.find( 'i' )[0].outerHTML + ( parseInt( jqoErrorCount.text() ) + 1 ) ).removeClass( 'twist-debug-hidden' );
+						}
 					};
 
-					for( var intStackedLog in arrThingsToLog.errors ) {
-						var objLog = arrThingsToLog[intStackedLog];
-						logErrorToDebugConsole( objLog.title, objLog.message, objLog.url, objLog.line, objLog.column, objLog.error );
+					for( var intStackedLogError in arrThingsToLog.errors ) {
+						var objErrorLog = arrThingsToLog[intStackedLogError];
+						logError( objErrorLog.title, objErrorLog.message, objErrorLog.url, objErrorLog.line, objErrorLog.column, objErrorLog.error );
 					}
 
-					for( var intStackedLog in arrThingsToLog.warnings ) {
-						var objLog = arrThingsToLog[intStackedLog];
-						logWarningToDebugConsole( objLog.title, objLog.message, objLog.url, objLog.line, objLog.column, objLog.error );
+					for( var intStackedLogWarning in arrThingsToLog.warnings ) {
+						var objWarningLog = arrThingsToLog[intStackedLogWarning];
+						logWarning( objWarningLog.title, objWarningLog.message, objWarningLog.url, objWarningLog.line, objWarningLog.column, objWarningLog.error );
 					}
 
-					for( var intStackedLog in arrThingsToLog.logs ) {
-						var objLog = arrThingsToLog[intStackedLog];
-						logToDebugConsole( objLog.title, objLog.message, objLog.url, objLog.line, objLog.column, objLog.error );
+					for( var intStackedLogDebug in arrThingsToLog.logs ) {
+						var objDebugLog = arrThingsToLog[intStackedLogDebug];
+						logDebug( objDebugLog.title, objDebugLog.message, objDebugLog.url, objDebugLog.line, objDebugLog.column, objDebugLog.error );
 					}
 
 					$( '.twist-debug-box, [class^="twist-debug-box-"], [class*=" twist-debug-box-"]' ).has( '.twist-debug-more-details' ).each(
@@ -203,27 +249,27 @@
 
 							jqoMoreDetails.after( '<a href="#twist-debug-more-details" class="twist-debug-more-details">&ctdot;</a>' );
 						}
-					),
+					);
 					jqoTwistDebugBlocks.on( 'click', 'a',
 						function( e ) {
 							e.preventDefault();
 							var jqoThisBlock = $( this );
 							if( jqoThisBlock.hasClass( 'current' ) ) {
-								jqoTwistDebugDetails.removeClass( 'show' ),
+								jqoTwistDebugDetails.removeClass( 'show' );
 								jqoThisBlock.removeClass( 'current' );
 							} else {
 								var jqsTarget = jqoThisBlock.attr( 'href' );
 
-								jqoTwistDebugDetails.addClass( 'show' ).children( 'div' ).hide().filter( jqsTarget ).show(),
-								jqoTwistDebugBlocks.find( 'a.current' ).removeClass( 'current' ),
+								jqoTwistDebugDetails.addClass( 'show' ).children( 'div' ).hide().filter( jqsTarget ).show();
+								jqoTwistDebugBlocks.find( 'a.current' ).removeClass( 'current' );
 								jqoThisBlock.addClass( 'current' );
 							}
 						}
-					),
+					);
 					jqoTwistDebugDetails.on( 'click', 'a[href="#close-twist-debug-details"]',
 						function( e ) {
 							e.preventDefault();
-							jqoTwistDebugBlocks.find( 'a.current' ).removeClass( 'current' ),
+							jqoTwistDebugBlocks.find( 'a.current' ).removeClass( 'current' );
 							jqoTwistDebugDetails.removeClass( 'show' );
 						}
 					).on( 'click', 'a[href="#twist-debug-more-details"]',
@@ -234,8 +280,14 @@
 						}
 					);
 
-					this.log = logErrorToDebugConsole;
-					
+					this.log = logDebug;
+					this.warn = logWarning;
+					this.error = logError;
+
+					$( '#twist-debug' ).addClass( 'ready' );
+
+					info( 'TwistPHP Debug is now loaded with jQuery v.' + $.fn.jquery );
+
 					return this;
 				};
 

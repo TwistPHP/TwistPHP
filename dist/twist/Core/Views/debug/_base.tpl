@@ -82,6 +82,7 @@
 		<h6>Route</h6>
 		<div class="twist-debug-column-wrapper">
 			<div class="twist-debug-column-100">
+                <h6>Registered Routes</h6>
 				<table>
 					<thead>
                         <tr>

@@ -74,7 +74,6 @@ final class Debug{
 			'warning_count' => 0,
 			'notice_count' => 0,
 			'other_count' => 0,
-			'errors' => '',
 			'database_queries' => '',
 			'database_query_count' => 0,
 			'views' => '',
