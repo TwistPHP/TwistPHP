@@ -171,7 +171,7 @@
 
 									if( typeof objDetails === 'object' ) {
 										for( var strDetail in objDetails ) {
-											var strKey = strDetail.charAt( 0 ).toUpperCase() + strDetail.slice( 1 ),
+											var strKey = strDetail.charAt( 0 ).toUpperCase() + strDetail.slice( 1 ).replace( '_', ' ' ),
 													strValue = ( typeof objDetails[strDetail] === 'object' ) ? '<pre class="no-pre-line">' + JSON.stringify( objDetails[strDetail], undefined, 2 ) + '</pre>' : objDetails[strDetail];
 											strDetailsHTML += '<dt>' + strKey + '</dt><dd>' + strValue + '</dd>';
 										}
@@ -307,10 +307,10 @@
 					this.logAJAX = function( blSuccess, objResponse, objRequest ) {
 						var objRequestToLog = {
 							type: objRequest.type,
-							url: objRequest.url,
+							URL: objRequest.url,
 							timeout: objRequest.timeout,
 							cache: objRequest.cache,
-							data: objRequest.data
+							request_data: objRequest.data
 						};
 
 						if( logToTwist( '#twist-debug-ajax-list', blSuccess ? 'green' : 'red', objResponse, objRequestToLog, objRequest.type + ' ' + objRequest.url ) ) {
