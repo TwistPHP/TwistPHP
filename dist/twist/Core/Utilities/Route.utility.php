@@ -246,6 +246,17 @@ class Route extends Base{
 	}
 
 	/**
+	 * Get an array of restricted routes and the restriction overrides (these are found in the unrestricted sub array)
+	 * @return array An array with tow sub arrays 'restrcited' and 'unrestricted'
+	 */
+	public function getRestrictions(){
+		return array(
+			'restricted' => $this->arrRestrict,
+			'unrestricted' => $this->arrUnrestricted
+		);
+	}
+
+	/**
 	 * Set the page title for the page (can be called during the processing of the page)
 	 */
 	public function pageTitle($strPageTitle){
