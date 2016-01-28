@@ -201,8 +201,6 @@ $z-index: 1337;
 
 			font-size: 12px;
 
-			border-right: 1px $bar-border solid;
-
 			&:first-child {
 				border-right: none;
 
@@ -224,6 +222,8 @@ $z-index: 1337;
 				color: blackorwhite($twistphp-dark-grey);
 				line-height: $bar-height;
 				text-decoration: none;
+
+				border-right: 1px $bar-border solid;
 
 				-webkit-transition: background ease 400ms;
 				transition: background ease 400ms;
@@ -323,46 +323,6 @@ $z-index: 1337;
 		top: 0;
 	}
 
-	> a {
-		width: 25px;
-		height: 25px;
-
-		position: absolute;
-		top: 10px;
-		right: 10px;
-
-		z-index: 2;
-
-		&::before,
-		&::after {
-			height: 1px;
-
-			position: absolute;
-			top: 12px;
-			right: 0;
-			left: 0;
-
-			background-color: $border;
-
-			content: "";
-		}
-
-		&::before {
-			transform: rotate(45deg);
-		}
-
-		&::after {
-			transform: rotate(135deg);
-		}
-
-		&:hover {
-			&::before,
-			&::after {
-				background-color: #FFF;
-			}
-		}
-	}
-
 	> div {
 		display: none;
 
@@ -371,6 +331,14 @@ $z-index: 1337;
 		right: 0;
 		bottom: 0;
 		left: 0;
+
+		z-index: 1;
+
+		h6 {
+			padding: 0 0 10px;
+
+			font-size: 16px;
+		}
 
 		> h6 {
 			height: 25px;
@@ -385,59 +353,78 @@ $z-index: 1337;
 			z-index: 2;
 		}
 
-		z-index: 1;
-	}
+		table {
+			width: 100%;
 
-	table {
-		width: 100%;
-		margin-bottom: 20px;
+			background-color: #FFF;
 
-		background-color: #FFF;
+			border-collapse: collapse;
 
-		border-collapse: collapse;
+			tbody {
+				tr {
+					th {
+						width: 1px;
+					}
 
-		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+					+ tr {
+						td {
+							border-top: 1px $border solid;
+						}
+					}
 
-		tbody {
-			counter-reset: eventorder;
-
-			tr {
-				counter-increment: eventorder;
-
-				th {
-					&::before {
-						content: counter(eventorder,upper-alpha);
+					&.highlight {
+						td {
+							background-color: $highlight;
+						}
 					}
 				}
+			}
 
-				+ tr {
-					td {
-						border-top: 1px $border solid;
+			th {
+				color: #FFF;
+				font-weight: bold;
+				text-align: center;
+
+				background-color: $twistphp-dark-grey;
+			}
+
+			th,
+			td {
+				padding: 0.5em 0.75em;
+			}
+
+			&.index-me {
+				tbody {
+					counter-reset: eventorder;
+
+					tr {
+						counter-increment: eventorder;
+
+						th {
+							&::before {
+								content: counter(eventorder,upper-alpha);
+							}
+						}
 					}
 				}
 			}
 		}
 
-		th {
-			color: #FFF;
-			font-weight: bold;
-			text-align: center;
+		.table-wrapper {
+			margin-bottom: 20px;
 
-			background-color: $twistphp-dark-grey;
+			overflow: auto;
+
+			box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 		}
 
-		th,
-		td {
-			padding: 0.5em 0.75em;
-		}
-	}
+		dt {
+			margin-top: 0.5em;
+			padding-top: 0.5em;
 
-	dt {
-		margin-top: 0.5em;
-		padding-top: 0.5em;
-
-		&:first-child {
-			margin-top: 0;
+			&:first-child {
+				margin-top: 0;
+			}
 		}
 	}
 
@@ -601,7 +588,7 @@ $z-index: 1337;
 		}
 
 		div.twist-debug-more-details {
-			padding: 20px 40px;
+			padding: 20px 30px;
 
 			display: none;
 
@@ -616,7 +603,18 @@ $z-index: 1337;
 			}
 
 			dl {
-				overflow: hidden;
+				overflow: auto;
+
+				&:after {
+					width: 100%;
+					height: 0;
+
+					display: block;
+
+					clear: both;
+
+					content: "";
+				}
 
 				dt,
 				dd {
@@ -682,7 +680,7 @@ $z-index: 1337;
 		pre {
 			padding: 10px 20px 20px;
 
-			font-size: 14px;
+			font-size: 13px;
 
 			+ p,
 			+ pre {
@@ -695,6 +693,7 @@ $z-index: 1337;
 		pre {
 			width: 100%;
 
+			display: block;
 			-webkit-box-sizing: border-box;
 			-moz-box-sizing: border-box;
 			box-sizing: border-box;
@@ -703,14 +702,76 @@ $z-index: 1337;
 
 			font-family: "Courier New", Courier, monospace, mono;
 			line-height: 1.25;
+			font-weight: 400;
+			white-space: pre;
 
-			white-space: pre-line;
+			code {
+				font-family: inherit;
+				color: $twistphp-light-grey;
+				font-size: 1em;
 
-			&.no-pre-line {
-				white-space: pre;
+				em {
+					//font-style: normal;
+				}
+
+				span.highlight {
+					font-style: normal;
+
+					background-color: $highlight;
+
+					box-shadow: 0 0 0 1px $highlight;
+				}
+			}
+
+			&.pre-line {
+				white-space: pre-line;
 			}
 		}
 	}
+
+		#close-twist-debug-details {
+			width: 25px;
+			height: 25px;
+
+			position: absolute;
+			top: 10px;
+			right: 10px;
+
+			background: none;
+
+			border: none;
+
+			z-index: 2;
+
+			&::before,
+			&::after {
+				height: 1px;
+
+				position: absolute;
+				top: 12px;
+				right: 0;
+				left: 0;
+
+				background-color: $border;
+
+				content: "";
+			}
+
+			&::before {
+				transform: rotate(45deg);
+			}
+
+			&::after {
+				transform: rotate(135deg);
+			}
+
+			&:hover {
+				&::before,
+				&::after {
+					background-color: #FFF;
+				}
+			}
+		}
 
 	.twist-debug-box-red {
 		//&[data-title]::before,
@@ -762,8 +823,6 @@ $z-index: 1337;
 				left: 10px;
 
 				background-color: $twistphp-green;
-
-				//border-radius: 3px;
 
 				box-shadow: inset 0 3px 10px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.1);
 
@@ -827,14 +886,6 @@ $z-index: 1337;
 
 						content: "";
 					}
-
-					/*&:hover {
-						&::before {
-							color: #FFF;
-
-							background-color: $twistphp-green;
-						}
-					}*/
 				}
 		}
 
@@ -875,111 +926,4 @@ $z-index: 1337;
 	#twist-debug-database {}
 
 	#twist-debug-route {}
-
-	/* ===================================================== TEMP ===================================================== */
-	pre {
-		//margin-bottom: 1em;
-
-		display: block;
-
-		font-family: "Courier New", Courier, monospace, mono;
-		font-size: 1.33em;
-		line-height: 1.25;
-		font-weight: 400;
-		white-space: pre-wrap;
-
-		code {
-			font-family: inherit;
-			color: $twistphp-light-grey;
-			font-size: 1em;
-
-			em {
-				//font-style: normal;
-			}
-
-			span.highlight {
-				font-style: normal;
-
-				background-color: $highlight;
-
-				box-shadow: 0 0 0 1px $highlight;
-			}
-		}
-	}
-
-	/*code,
-	pre.code {
-		position: relative;
-
-		overflow: auto;
-
-		color: $twistphp-black;
-		white-space: pre;
-
-		border: 1px $border solid;
-	}
-
-	pre.code {
-		padding: 1em;
-
-		background-color: #FFF;
-
-		border: 1px $border solid;
-		border-left-width: 0;
-
-		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-
-		&[title] {
-			padding-top: 3em;
-
-			&::before {
-				padding: 0.25em 0.75em;
-
-				position: absolute;
-				top: 0;
-				right: 0;
-				left: 0;
-
-				//color: blackorwhite(table-colour(header));
-				//@include base-font-face;
-				font-weight: 700;
-				line-height: 1.5;
-				white-space: nowrap;
-
-				//background-color: table-colour(header);
-
-				content: attr(title);
-			}
-		}
-
-		&[lang] {
-			&::after {
-				height: 1.5em;
-				padding: 0 0.5em;
-
-				position: absolute;
-				top: 0.25em;
-				right: 0.25em;
-
-				//color: if(lightness(table-colour(header)) > 50, base-font(colour), #FFF);
-				//@include base-font-face;
-				line-height: 1.5;
-				text-transform: uppercase;
-
-				//background-color: table-colour(header);
-
-				//border-radius: $border-radius;
-
-				content: attr(lang);
-			}
-
-			&[title]::after {
-				padding: 0;
-
-				right: 0.75em;
-
-				background-color: transparent;
-			}
-		}
-	}*/
 }

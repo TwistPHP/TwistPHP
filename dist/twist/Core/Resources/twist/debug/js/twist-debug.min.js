@@ -25,40 +25,7 @@
 
 (
 	function( window, document, undefined ) {
-		var arrThingsToLog = { errors: [], warnings: [], logs: [] },
-				logError = function( mxdValue, strURL, intLineNumber, intColumn, objError ) {
-					var objToStack = {
-						message: mxdValue,
-						url: strURL,
-						line: intLineNumber,
-						column: intColumn,
-						error: objError
-					};
-
-					arrThingsToLog.errors.push( objToStack );
-				},
-				logWarning = function( mxdValue, strURL, intLineNumber, intColumn, objError ) {
-					var objToStack = {
-						message: mxdValue,
-						url: strURL,
-						line: intLineNumber,
-						column: intColumn,
-						error: objError
-					};
-
-					arrThingsToLog.warnings.push( objToStack );
-				},
-				logDebug = function( mxdValue, strURL, intLineNumber, intColumn, objError ) {
-					var objToStack = {
-						message: mxdValue,
-						url: strURL,
-						line: intLineNumber,
-						column: intColumn,
-						error: objError
-					};
-
-					arrThingsToLog.logs.push( objToStack );
-				},
+		var arrThingsToLog = [],
 				log = function() {
 					if( window.console &&
 							window.console.log &&
@@ -108,7 +75,15 @@
 				blUseOriginalError = false;
 
 		window.onerror = function( strErrorMessage, strURL, intLineNumber, intColumn, objError ) {
-			logError( '<strong>JS Error:</strong> ' + strErrorMessage, strURL, intLineNumber, intColumn, objError );
+			var objToStack = {
+				message: '<strong>JS Error:</strong> ' + strErrorMessage,
+				url: strURL,
+				line: intLineNumber,
+				column: intColumn,
+				error: objError
+			};
+
+			arrThingsToLog.push( objToStack );
 
 			if( blUseOriginalError ) {
 				//funOriginalWindowError.call( this );
@@ -166,13 +141,13 @@
 											strDetailsHTML = '';
 
 									if( typeof mxdValue === 'object' ) {
-										strLogHTML = '<pre class="no-pre-line">' + JSON.stringify( mxdValue, undefined, 2 ) + '</pre>';
+										strLogHTML = '<pre>' + JSON.stringify( mxdValue, undefined, 2 ) + '</pre>';
 									}
 
 									if( typeof objDetails === 'object' ) {
 										for( var strDetail in objDetails ) {
 											var strKey = strDetail.charAt( 0 ).toUpperCase() + strDetail.slice( 1 ).replace( '_', ' ' ),
-													strValue = ( typeof objDetails[strDetail] === 'object' ) ? '<pre class="no-pre-line">' + JSON.stringify( objDetails[strDetail], undefined, 2 ) + '</pre>' : objDetails[strDetail];
+													strValue = ( typeof objDetails[strDetail] === 'object' ) ? '<pre>' + JSON.stringify( objDetails[strDetail], undefined, 2 ) + '</pre>' : objDetails[strDetail];
 											strDetailsHTML += '<dt>' + strKey + '</dt><dd>' + strValue + '</dd>';
 										}
 									}
@@ -192,7 +167,7 @@
 											}
 										}
 									} else {
-										strTitle = 'JavaScript';
+										strTitle = 'JavaScript [' + ( new Date() ).getTime() + ']';
 									}
 
 									var jqoLogBox = $( '<div class="twist-debug-box-' + strColour + ' twist-debug-message" data-title="' + strTitle + '"/>' ).html( strLogHTML );
@@ -209,7 +184,7 @@
 								}
 							};
 
-					logError = function( mxdValue, strURL, intLineNumber, intColumn ) {
+					this.error = function( mxdValue, strURL, intLineNumber, intColumn ) {
 						var objDetails = {
 							type: typeof mxdValue,
 							length: ( typeof mxdValue === 'object' ) ? objectLength( mxdValue ) : mxdValue.length
@@ -222,7 +197,7 @@
 						}
 					};
 
-					logWarning = function( mxdValue, strURL, intLineNumber, intColumn ) {
+					this.warn = function( mxdValue, strURL, intLineNumber, intColumn ) {
 						var objDetails = {
 							type: typeof mxdValue,
 							length: ( typeof mxdValue === 'object' ) ? objectLength( mxdValue ) : mxdValue.length
@@ -235,7 +210,7 @@
 						}
 					};
 
-					logDebug = function( mxdValue, strURL, intLineNumber, intColumn ) {
+					this.log = function( mxdValue, strURL, intLineNumber, intColumn ) {
 						var objDetails = {
 							type: typeof mxdValue,
 							length: ( typeof mxdValue === 'object' ) ? objectLength( mxdValue ) : mxdValue.length
@@ -248,19 +223,33 @@
 						}
 					};
 
-					for( var intStackedLogError in arrThingsToLog.errors ) {
+					this.logAJAX = function( blSuccess, objResponse, objRequest ) {
+						var objRequestToLog = {
+							type: objRequest.type,
+							URL: objRequest.url,
+							timeout: objRequest.timeout,
+							cache: objRequest.cache,
+							request_data: objRequest.data
+						};
+
+						if( logToTwist( '#twist-debug-ajax-list', blSuccess ? 'green' : 'red', objResponse, objRequestToLog, objRequest.type + ' ' + objRequest.url ) ) {
+							var jqoErrorCount = $( '#twist-debug-ajax-count' );
+
+							jqoErrorCount.attr( 'data-count', parseInt( jqoErrorCount.attr( 'data-count' ) ) + 1 );
+						}
+					};
+
+					this.logFileUpload = function( strPreviewURI, objDetails, strOriginalFilename ) {
+						if( logToTwist( '#twist-debug-fileupload-list', 'green', '[IMAGE]', {width:'200px'}, 'uploaded-image.png' ) ) {
+							var jqoErrorCount = $( '#twist-debug-fileupload-count' );
+
+							jqoErrorCount.attr( 'data-count', parseInt( jqoErrorCount.attr( 'data-count' ) ) + 1 );
+						}
+					};
+
+					for( var intStackedLogError in arrThingsToLog ) {
 						var objErrorLog = arrThingsToLog[intStackedLogError];
 						logError( objErrorLog.title, objErrorLog.message, objErrorLog.url, objErrorLog.line, objErrorLog.column, objErrorLog.error );
-					}
-
-					for( var intStackedLogWarning in arrThingsToLog.warnings ) {
-						var objWarningLog = arrThingsToLog[intStackedLogWarning];
-						logWarning( objWarningLog.title, objWarningLog.message, objWarningLog.url, objWarningLog.line, objWarningLog.column, objWarningLog.error );
-					}
-
-					for( var intStackedLogDebug in arrThingsToLog.logs ) {
-						var objDebugLog = arrThingsToLog[intStackedLogDebug];
-						logDebug( objDebugLog.title, objDebugLog.message, objDebugLog.url, objDebugLog.line, objDebugLog.column, objDebugLog.error );
 					}
 
 					$( '.twist-debug-box, [class^="twist-debug-box-"], [class*=" twist-debug-box-"]' ).has( '.twist-debug-more-details' ).each(
@@ -286,39 +275,21 @@
 							}
 						}
 					);
-					jqoTwistDebugDetails.on( 'click', 'a[href="#close-twist-debug-details"]',
+					$( '#close-twist-debug-details' ).on( 'click',
 						function( e ) {
 							e.preventDefault();
 							jqoTwistDebugBlocks.find( 'a.current' ).removeClass( 'current' );
 							jqoTwistDebugDetails.removeClass( 'show' );
 						}
-					).on( 'click', 'a[href="#twist-debug-more-details"]',
+					);
+					jqoTwistDebugDetails.on( 'click', 'a[href="#twist-debug-more-details"]',
 						function( e ) {
 							e.preventDefault();
 
 							$( this ).prev( '.twist-debug-more-details' ).slideToggle();
 						}
 					);
-
-					this.log = logDebug;
-					this.warn = logWarning;
-					this.error = logError;
-
-					this.logAJAX = function( blSuccess, objResponse, objRequest ) {
-						var objRequestToLog = {
-							type: objRequest.type,
-							URL: objRequest.url,
-							timeout: objRequest.timeout,
-							cache: objRequest.cache,
-							request_data: objRequest.data
-						};
-
-						if( logToTwist( '#twist-debug-ajax-list', blSuccess ? 'green' : 'red', objResponse, objRequestToLog, objRequest.type + ' ' + objRequest.url ) ) {
-							var jqoErrorCount = $( '#twist-debug-ajax-count' );
-
-							jqoErrorCount.attr( 'data-count', parseInt( jqoErrorCount.attr( 'data-count' ) ) + 1 );
-						}
-					};
+					$( '#twist-debug-details' ).find( 'table' ).wrap( '<div class="table-wrapper"/>' );
 
 					$( '#twist-debug' ).addClass( 'ready' );
 

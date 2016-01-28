@@ -1,5 +1,5 @@
 <div class="twist-debug-box-{data:response=='success'?'green':''}{data:response=='empty'?'yellow':''}{data:response=='fail'?'red':''} twist-debug-query" data-title="{data:type}">
-	<pre>{data:query}</pre>
+	<pre class="pre-line">{data:query}</pre>
 	<div class="twist-debug-more-details">
 		<dl>
             <dt>Query type</dt>

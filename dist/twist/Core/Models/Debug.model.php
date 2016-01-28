@@ -136,7 +136,8 @@ final class Debug{
 
 		$arrTags['current_route'] = '';
 		foreach($arrCurrentRoute as $strKey => $strValue){
-			$arrTags['current_route'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $strKey,'value' => is_array($strValue) ? sprintf('<pre>%s</pre>',print_r($strValue,true)) : htmlentities($strValue)));
+			$intLength = is_array($strValue) ? count($strValue) : (is_string($strValue) ? strlen($strValue) : null);
+			$arrTags['current_route'] .= $this->resTemplate->build('components/table-row.tpl',array('key' => $strKey,'value' => is_array($strValue) ? sprintf('<pre>%s</pre>',print_r($strValue,true)) : htmlentities($strValue),'type' => gettype($strValue),'length' => $intLength));
 		}
 
 
@@ -212,12 +213,14 @@ final class Debug{
 
 		$arrTags['get'] = '';
 		foreach($_GET as $strKey => $strValue){
-			$arrTags['get'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $strKey,'value' => $strValue));
+			$intLength = is_array($strValue) ? count($strValue) : (is_string($strValue) ? strlen($strValue) : null);
+			$arrTags['get'] .= $this->resTemplate->build('components/table-row.tpl',array('key' => $strKey,'value' => $strValue,'type' => gettype($strValue),'length' => $intLength));
 		}
 
 		$arrTags['post'] = '';
 		foreach($_POST as $strKey => $strValue){
-			$arrTags['post'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $strKey,'value' => $strValue));
+			$intLength = is_array($strValue) ? count($strValue) : (is_string($strValue) ? strlen($strValue) : null);
+			$arrTags['post'] .= $this->resTemplate->build('components/table-row.tpl',array('key' => $strKey,'value' => $strValue,'type' => gettype($strValue),'length' => $intLength));
 		}
 
 		$arrTags['twist_session'] = '';
@@ -225,26 +228,31 @@ final class Debug{
 		foreach($_SESSION as $strKey => $strValue){
 			if($strKey == 'twist-session'){
 				foreach($strValue as $mxdKey => $mxdValue){
-					$arrTags['twist_session'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $mxdKey,'value' => $mxdValue));
+					$intLength = is_array($strValue) ? count($strValue) : (is_string($strValue) ? strlen($strValue) : null);
+					$arrTags['twist_session'] .= $this->resTemplate->build('components/table-row.tpl',array('key' => $mxdKey,'value' => $mxdValue,'type' => gettype($strValue),'length' => $intLength));
 				}
 			}else{
-				$arrTags['php_session'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $strKey,'value' => $strValue));
+				$intLength = is_array($strValue) ? count($strValue) : (is_string($strValue) ? strlen($strValue) : null);
+				$arrTags['php_session'] .= $this->resTemplate->build('components/table-row.tpl',array('key' => $strKey,'value' => $strValue,'type' => gettype($strValue),'length' => $intLength));
 			}
 		}
 
 		$arrTags['cookie'] = '';
 		foreach($_COOKIE as $strKey => $strValue){
-			$arrTags['cookie'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $strKey,'value' => $strValue));
+			$intLength = is_array($strValue) ? count($strValue) : (is_string($strValue) ? strlen($strValue) : null);
+			$arrTags['cookie'] .= $this->resTemplate->build('components/table-row.tpl',array('key' => $strKey,'value' => $strValue,'type' => gettype($strValue),'length' => $intLength));
 		}
 
 		$arrTags['request_headers'] = '';
 		foreach(Error::apacheRequestHeaders() as $strKey => $strValue){
-			$arrTags['request_headers'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $strKey,'value' => $strValue));
+			$intLength = is_array($strValue) ? count($strValue) : (is_string($strValue) ? strlen($strValue) : null);
+			$arrTags['request_headers'] .= $this->resTemplate->build('components/table-row.tpl',array('key' => $strKey,'value' => $strValue,'type' => gettype($strValue),'length' => $intLength));
 		}
 
 		$arrTags['server'] = '';
 		foreach(Error::serverInformation() as $strKey => $strValue){
-			$arrTags['server'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $strKey,'value' => $strValue));
+			$intLength = is_array($strValue) ? count($strValue) : (is_string($strValue) ? strlen($strValue) : null);
+			$arrTags['server'] .= $this->resTemplate->build('components/table-row.tpl',array('key' => $strKey,'value' => $strValue,'type' => gettype($strValue),'length' => $intLength));
 		}
 
 		$arrTags['timeline'] = $arrTags['timeline_table'] = '';
