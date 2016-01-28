@@ -1354,7 +1354,7 @@ class Route extends Base{
 						}
 
 						//Output the Debug window to the screen when in debug mode (Do not output when its an ajax request)
-						if($this->blDebugMode && $arrRoute['type'] != 'ajax'){
+						if($this->blDebugMode && !(TWIST_AJAX_REQUEST || $arrRoute['type'] == 'ajax')){
 							if(strstr($strPageOut, '</body>')) {
 								$strPageOut = str_replace( '</body>', \Twist::framework()->debug()->window( $arrRoute ) . '</body>', $strPageOut );
 							}else{
