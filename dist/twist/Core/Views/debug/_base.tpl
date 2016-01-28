@@ -103,7 +103,7 @@
                             <th>URI</th>
                             <th>Method</th>
                             <th>Type</th>
-                            <th>Call</th>
+                            <th>Handler/Response</th>
                             <th>Restriction</th>
                         </tr>
 					</thead>

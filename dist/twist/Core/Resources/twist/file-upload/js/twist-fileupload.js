@@ -207,8 +207,6 @@
 										strFileDetails = '',
 										arrFileDetails = ['file/name', 'file/size', 'file_type'];
 
-								log( objUploadedFile );
-
 								arrUploadedFormValues.push( objUploadedFile.form_value );
 
 								var strPreview = 'thumb-' + thisUploader.settings.previewsize;
@@ -351,8 +349,11 @@
 
 																		thisUploader.updateUploadedList();
 
-																		thisUploader.settings.oncompletefile( jsonResponse, resFile );
+																		if( window.twistdebug ) {
+																			window.twistdebug.logFileUpload( resFile,jsonResponse );
+																		}
 
+																		thisUploader.settings.oncompletefile( jsonResponse, resFile );
 																		thisUploader.upload();
 																	} else {
 																		thisUploader.hideProgress();
@@ -374,8 +375,11 @@
 
 																		thisUploader.updateUploadedList();
 
-																		thisUploader.settings.oncompletefile( jsonResponse, resFile );
+																		if( window.twistdebug ) {
+																			window.twistdebug.logFileUpload( resFile,jsonResponse );
+																		}
 
+																		thisUploader.settings.oncompletefile( jsonResponse, resFile );
 																		thisUploader.settings.oncompletequeue();
 																	}
 																}

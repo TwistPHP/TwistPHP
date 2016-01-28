@@ -136,7 +136,7 @@ final class Debug{
 
 		$arrTags['current_route'] = '';
 		foreach($arrCurrentRoute as $strKey => $strValue){
-			$intLength = is_array($strValue) ? count($strValue) : (is_string($strValue) ? strlen($strValue) : null);
+			$intLength = is_array($strValue) ? count($strValue) : (is_string($strValue) ? strlen($strValue) : '-');
 			$arrTags['current_route'] .= $this->resTemplate->build('components/table-row.tpl',array('key' => $strKey,'value' => is_array($strValue) ? sprintf('<pre>%s</pre>',print_r($strValue,true)) : htmlentities($strValue),'type' => gettype($strValue),'length' => $intLength));
 		}
 

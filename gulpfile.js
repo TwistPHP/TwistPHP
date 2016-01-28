@@ -16,7 +16,7 @@ gulp.task( 'ajax-js',
 				.pipe( jshint() )
 				.pipe( jshint.reporter( 'default' ) )
 				.pipe( concat( 'twist-ajax.min.js' ) )
-				//.pipe( uglify() )
+				.pipe( uglify() )
 				.pipe( gulp.dest( strTwistDestination + 'ajax/js' ) );
 	}
 );
@@ -52,7 +52,7 @@ gulp.task( 'debug-js',
 				.pipe( jshint() )
 				.pipe( jshint.reporter( 'default' ) )
 				.pipe( concat( 'twist-debug.min.js' ) )
-				//.pipe( uglify() )
+				.pipe( uglify() )
 				.pipe( gulp.dest( strTwistDestination + 'debug/js' ) );
 	}
 );

@@ -383,7 +383,6 @@ $z-index: 1337;
 			th {
 				color: #FFF;
 				font-weight: bold;
-				text-align: center;
 
 				background-color: $twistphp-dark-grey;
 			}
@@ -391,6 +390,8 @@ $z-index: 1337;
 			th,
 			td {
 				padding: 0.5em 0.75em;
+
+				text-align: left;
 			}
 
 			&.index-me {
@@ -727,6 +728,20 @@ $z-index: 1337;
 				white-space: pre-line;
 			}
 		}
+
+		.twist-debug-fileupload-preview {
+			width: 128px;
+
+			display: inline-block;
+
+			position: absolute;
+			top: 0;
+			left: -142px;
+
+			img {
+				width: 100%;
+			}
+		}
 	}
 
 		#close-twist-debug-details {
@@ -924,6 +939,16 @@ $z-index: 1337;
 		}
 
 	#twist-debug-database {}
+
+	#twist-debug-ajax {}
+
+	#twist-debug-fileupload {
+		.twist-debug-box,
+		[class^="twist-debug-box-"],
+		[class*=" twist-debug-box-"] {
+			margin-left: 142px;
+		}
+	}
 
 	#twist-debug-route {}
 }
