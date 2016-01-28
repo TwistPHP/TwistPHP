@@ -65,18 +65,23 @@
 										oldIE = function() {
 											return navigator.userAgent.indexOf( 'MSIE ' );
 										},
-										log = function() {
+										error = function() {
 											if( debugMode ) {
-												sudoLog( arguments );
+												sudoError( arguments );
 											}
 										},
-										sudoLog = function() {
+										sudoError = function() {
 											var arrArguements = arguments;
-											if( window.console &&
+											if( window.twistdebug &&
+													arrArguements.length > 0 ) {
+												for( var intArguementA in arrArguements ) {
+													window.twistdebug.error( arrArguements[intArguementA] );
+												}
+											} else if( window.console &&
 													window.console.log &&
 													arrArguements.length > 0 ) {
-												for( var intArguement in arrArguements ) {
-													window.console.log( arrArguements[intArguement] );
+												for( var intArguementB in arrArguements ) {
+													window.console.log( arrArguements[intArguementB] );
 												}
 											}
 										},
@@ -296,22 +301,26 @@
 																case 'abort':
 																	funCallbackFailureEnd( {}, objAJAXRequest );
 																	$( '#twist-ajax-loader-size' ).text( 'Aborted' );
-																	log( 'The AJAX request was aborted' );
+																	error( 'The AJAX request was aborted' );
 																	break;
 
 																case 'timeout':
 																	funCallbackFailureEnd( {}, objAJAXRequest );
 																	$( '#twist-ajax-loader-size' ).text( 'Timeout' );
-																	log( 'The AJAX request timed out' );
+																	error( 'The AJAX request timed out' );
 																	break;
 
 																case 'parsererror':
 																	var rexJSON = /{"status":(true|false),"message":"[^"]*","data":({.*}|\[\])(,"[^"]+":(true|false|("[^"]*")|({.*}|\[\])))*(,"debug":({.*}|\[\])(,"[^"]+":(true|false|("[^"]*")|({.*}|\[\])))*)?}/,
 																			strContentLength = prettySize( jqXHR.getResponseHeader( 'Content-Length' ) ),
 																			strSeperator = '===============================================';
-																	sudoLog( strSeperator + '\nPARSER ERROR RECOVERY\n' + strSeperator + '\nDate:             ' + jqXHR.getResponseHeader( 'Date' ) + '\nLocation:         ' + strFinalURL + '\nTimeout:          ' + ( intTimeout / 1000 ) + 's\nResponse length:  ' + strContentLength + ( ( typeof JSON !== 'undefined' ) ? '\nPost data:        ' + JSON.stringify( objData ) : '{}' ) + '\n' + strSeperator );
 
 																	if( rexJSON.test( jqXHR.responseText ) ) {
+																		if( window.twistdebug ) {
+																			sudoError( strSeperator + '<br>PARSER ERROR RECOVERY<br>' + strSeperator + '<br>Date:             ' + jqXHR.getResponseHeader( 'Date' ) + '<br>Location:         ' + strFinalURL + '<br>Timeout:          ' + ( intTimeout / 1000 ) + 's<br>Response length:  ' + strContentLength + ( ( typeof JSON !== 'undefined' ) ? '<br>Post data:        ' + JSON.stringify( objData ) : '{}' ) + '<br>' + strSeperator );
+																		} else {
+																			sudoError( strSeperator + '\nPARSER ERROR RECOVERY\n' + strSeperator + '\nDate:             ' + jqXHR.getResponseHeader( 'Date' ) + '\nLocation:         ' + strFinalURL + '\nTimeout:          ' + ( intTimeout / 1000 ) + 's\nResponse length:  ' + strContentLength + ( ( typeof JSON !== 'undefined' ) ? '\nPost data:        ' + JSON.stringify( objData ) : '{}' ) + '\n' + strSeperator );
+																		}
 																		var strResponse = jqXHR.responseText.match( rexJSON )[0];
 																		if( $.parseJSON( strResponse ) !== null ) {
 																			var objResponse = $.parseJSON( strResponse );
@@ -327,15 +336,16 @@
 																			try {
 																				thisTwistAJAX.onfail( strError );
 																			} catch( err ) {
-																				log( err );
+																				error( err );
 																			}
 																		}
 																	} else {
+																		sudoError( 'Parse error' );
 																		funCallbackFailureEnd( {}, objAJAXRequest );
 																		try {
 																			thisTwistAJAX.onfail( strError );
 																		} catch( err ) {
-																			log( err );
+																			error( err );
 																		}
 																	}
 																	break;
@@ -347,7 +357,7 @@
 																	try {
 																		thisTwistAJAX.onfail( strError );
 																	} catch( err ) {
-																		log( err );
+																		error( err );
 																	}
 																	break;
 															}
@@ -361,7 +371,7 @@
 																window.twistdebug.logAJAX( true, objResponse, objRequest );
 															}
 														} catch( err ) {
-															log( err );
+															error( err );
 														}
 													},
 													funCallbackFailureEnd = function( objResponse, objRequest ) {
@@ -372,7 +382,7 @@
 																window.twistdebug.logAJAX( false, objResponse, objRequest );
 															}
 														} catch( err ) {
-															log( err );
+															error( err );
 														}
 													};
 
@@ -515,7 +525,7 @@
 
 								this.onfail = function( strMessage ) {
 									var strErrorMessage = ( typeof strMessage === 'string' && strMessage !== '' ) ? strMessage : 'An unexpected AJAX response was given';
-									log( strErrorMessage );
+									error( strErrorMessage );
 
 									return thisTwistAJAX;
 								};
@@ -559,7 +569,7 @@
 							window.twistdebug.error( err );
 						} else if( window.console &&
 								window.console.log ) {
-							console.log( err );
+							console.error( err );
 						}
 					}
 				}
