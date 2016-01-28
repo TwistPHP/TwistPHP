@@ -89,8 +89,7 @@
 				if($intLineNo >= $intStartLine && $intLineNo <= $intEndLine){
 
 					$strFocusLine = ($intLineNo == $intFocusLineNo) ? ' class="highlight"' : '';
-					$intLineNo = str_pad($intLineNo,$intLineNoPadLength,' ',STR_PAD_RIGHT);
-					$strOut .= sprintf($strLineContainer,$strFocusLine,$intLineNo,$strFocusLine,self::convertStyles($strEachLine));
+					$strOut .= sprintf($strLineContainer,$strFocusLine,str_pad($intLineNo,$intLineNoPadLength,' ',STR_PAD_RIGHT),$strFocusLine,self::convertStyles($strEachLine));
 				}
 			}
 
