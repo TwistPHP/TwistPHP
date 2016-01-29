@@ -211,38 +211,43 @@ class Validator{
 					$this->testResult($strKey,false,sprintf("%s cannot be blank",$this->keyToText($strKey)),'blank');
 				}elseif(array_key_exists('type',$arrEachCheck) && in_array($arrEachCheck['type'],$this->arrTypes)){
 
-					//Call the test function and get the result
-					switch($arrEachCheck['type']){
-						case'integer':
-							$mxdTestResult = \Twist::Validate()->$arrEachCheck['type']($mxdTestValue,$arrEachCheck['min_range'],$arrEachCheck['max_range']);
-							break;
-						case'ip':
-							$mxdTestResult = \Twist::Validate()->$arrEachCheck['type']($mxdTestValue,$arrEachCheck['ipv6']);
-							break;
-						case'regx':
-							$mxdTestResult = \Twist::Validate()->$arrEachCheck['type']($mxdTestValue,$arrEachCheck['expression']);
-							break;
-						case'compare':
+					//If blank is allowed do not try and validate the data
+					if(trim($mxdTestValue) == '' && array_key_exists('blank',$arrEachCheck) && $arrEachCheck['blank'] == 1){
+						$mxdTestResult = $mxdTestValue;
+					}else{
+						//Call the test function and get the result
+						switch($arrEachCheck['type']){
+							case'integer':
+								$mxdTestResult = \Twist::Validate()->$arrEachCheck['type']($mxdTestValue,$arrEachCheck['min_range'],$arrEachCheck['max_range']);
+								break;
+							case'ip':
+								$mxdTestResult = \Twist::Validate()->$arrEachCheck['type']($mxdTestValue,$arrEachCheck['ipv6']);
+								break;
+							case'regx':
+								$mxdTestResult = \Twist::Validate()->$arrEachCheck['type']($mxdTestValue,$arrEachCheck['expression']);
+								break;
+							case'compare':
 
-							$mxdTestValue2 = null;
+								$mxdTestValue2 = null;
 
-							//Detect value two for the comparison
-							if(array_key_exists($arrEachCheck['key2'],$arrData)){
-								$mxdTestValue2 = $arrData[$arrEachCheck['key2']];
-							}elseif(strstr($arrEachCheck['key2'],'/')){
-								$mxdTestValue2 = \Twist::framework() -> tools() -> arrayParse($arrEachCheck['key2'],$arrData);
-							}
+								//Detect value two for the comparison
+								if(array_key_exists($arrEachCheck['key2'],$arrData)){
+									$mxdTestValue2 = $arrData[$arrEachCheck['key2']];
+								}elseif(strstr($arrEachCheck['key2'],'/')){
+									$mxdTestValue2 = \Twist::framework() -> tools() -> arrayParse($arrEachCheck['key2'],$arrData);
+								}
 
-							//Trim the spaces from either side of the input before testing
-							if(array_key_exists('trim',$arrEachCheck) && $arrEachCheck['trim'] == 1){
-								$mxdTestValue2 = trim($mxdTestValue2);
-							}
+								//Trim the spaces from either side of the input before testing
+								if(array_key_exists('trim',$arrEachCheck) && $arrEachCheck['trim'] == 1){
+									$mxdTestValue2 = trim($mxdTestValue2);
+								}
 
-							$mxdTestResult = \Twist::Validate()->$arrEachCheck['type']($mxdTestValue,$mxdTestValue2);
-							break;
-						default:
-							$mxdTestResult = \Twist::Validate()->$arrEachCheck['type']($mxdTestValue);
-							break;
+								$mxdTestResult = \Twist::Validate()->$arrEachCheck['type']($mxdTestValue,$mxdTestValue2);
+								break;
+							default:
+								$mxdTestResult = \Twist::Validate()->$arrEachCheck['type']($mxdTestValue);
+								break;
+						}
 					}
 
 					//On successful match put in a sanitised version of the original data

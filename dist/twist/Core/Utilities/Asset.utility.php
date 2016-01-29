@@ -577,7 +577,7 @@
 		 * {asset:inline,type}
 		 *
 		 * @extends Template
-		 * @param $strReference Template tag passed in from a template
+		 * @param $strReference View tag passed in from a tpl file
 		 * @return string Formatted HTML/Markup to be output by the View utility
 		 */
 		public function viewExtension($strReference,$arrParameters = array()){
@@ -587,6 +587,14 @@
 
 			if(array_key_exists('asset-id',$arrParameters)){
 				$arrAsset = $this->get($arrParameters['asset-id']);
+				$arrParameters['value'] = $arrParameters['asset-id'];
+			}
+
+			if(array_key_exists('group',$arrParameters) && !array_key_exists('uri',$arrParameters)){
+				$arrAssetGroup = $this->getGroup($arrParameters['group']);
+				$arrParameters['uri'] = str_replace('%','asset/'.$arrAssetGroup['slug'],(defined('UPLOAD_ROUTE_URI')) ? UPLOAD_ROUTE_URI : '/upload/%');
+			}elseif(!array_key_exists('uri',$arrParameters)){
+				$arrParameters['uri'] = str_replace('%','asset',(defined('UPLOAD_ROUTE_URI')) ? UPLOAD_ROUTE_URI : '/upload/%');
 			}
 
 			switch($strReference){

@@ -933,18 +933,19 @@ class File extends Base{
 		$strOut = $strAccept = '';
 
 		$arrDefaultParams = array(
-			'uri' => (substr($strReference,0,5) == 'asset') ? '/upload/asset' : '/upload/file',
+			'uri' => str_replace('%','file',(defined('UPLOAD_ROUTE_URI')) ? UPLOAD_ROUTE_URI : '/upload/%'),
 			'name' => 'file',
 			'id' => uniqid(),
 			'multiple' => 0,
-			'accept' => ''
+			'accept' => '',
+			'value' => ''
 		);
 
 		$arrParameters = \Twist::framework()->tools()->arrayMergeRecursive($arrDefaultParams,$arrParameters);
 
 		//Now update the URI if only relative is passed in
-		if(substr($arrDefaultParams['uri'],0,1) == '/'){
-			$arrDefaultParams['uri'] = sprintf('/upload/%s',$arrDefaultParams['uri']);
+		if(substr($arrParameters['uri'],0,1) != '/'){
+			$arrParameters['uri'] = str_replace('%',$arrParameters['uri'],(defined('UPLOAD_ROUTE_URI')) ? UPLOAD_ROUTE_URI : '/upload/%');
 		}
 
 		//Get the mime types of the
@@ -981,7 +982,8 @@ class File extends Base{
 					'uri' => $arrParameters['uri'],
 					'include-js' => (is_null(\Twist::Cache()->read('asset-js-include'))) ? 1 : 0,
 					'multiple' => ($arrParameters['multiple'] == 1 || $arrParameters['multiple'] === 'true') ? 1 : 0,
-					'accept' => $strAccept
+					'accept' => $strAccept,
+					'value' => $arrParameters['value']
 				);
 
 				//Store a temp session for js output
@@ -999,7 +1001,8 @@ class File extends Base{
 					'uri' => $arrParameters['uri'],
 					'include-js' => (is_null(\Twist::Cache()->read('asset-js-include'))) ? 1 : 0,
 					'multiple' => ($arrParameters['multiple'] == 1 || $arrParameters['multiple'] === 'true') ? 1 : 0,
-					'accept' => $strAccept
+					'accept' => $strAccept,
+					'value' => $arrParameters['value']
 				);
 
 				//Store a temp session for js output

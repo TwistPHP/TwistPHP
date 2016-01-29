@@ -42,10 +42,15 @@ class BaseUser extends Base{
 
         $this->resUser = \Twist::User();
 
+	    //Make the URIs nice to read in the browser
         $this -> _replaceURI( 'change-password', 'changepassword' );
+        $this -> _replaceURI( 'POSTchange-password', 'POSTchangepassword' );
         $this -> _replaceURI( 'forgotten-password', 'forgottenpassword' );
+        $this -> _replaceURI( 'POSTforgotten-password', 'POSTforgottenpassword' );
         $this -> _replaceURI( 'verify-account', 'verifyaccount' );
+        $this -> _replaceURI( 'POSTverify-account', 'POSTverifyaccount' );
         $this -> _replaceURI( 'device-manager', 'devicemanager' );
+        $this -> _replaceURI( 'POSTdevice-manager', 'POSTdevicemanager' );
     }
 
 	/**
@@ -68,6 +73,7 @@ class BaseUser extends Base{
 
 	    \Twist::Cookie()->set('twistphp-cookie-test','login-cookie-test',time()+3600);
 
+	    $this->_meta()->title(sprintf('Login on %s',\Twist::framework()->setting('SITE_NAME')));
         return $this->resUser->viewExtension('login_form');
     }
 
@@ -131,6 +137,7 @@ class BaseUser extends Base{
 	 * @return string
 	 */
 	public function cookies(){
+		$this->_meta()->title(sprintf('Cookies are required when using %s',\Twist::framework()->setting('SITE_NAME')));
 		return  $this->_view(sprintf('%suser/enable-cookies.tpl',TWIST_FRAMEWORK_VIEWS));
 	}
 
@@ -141,6 +148,7 @@ class BaseUser extends Base{
 	 * @return string
 	 */
     public function forgottenpassword(){
+	    $this->_meta()->title(sprintf('Forgotten your %s password?',\Twist::framework()->setting('SITE_NAME')));
         return $this->resUser->viewExtension('forgotten_password_form');
     }
 
@@ -176,6 +184,7 @@ class BaseUser extends Base{
 	 * @return string
 	 */
     public function changepassword(){
+	    $this->_meta()->title(sprintf('Change your %s account password',\Twist::framework()->setting('SITE_NAME')));
         return $this->resUser->viewExtension('change_password_form');
     }
 
@@ -238,6 +247,7 @@ class BaseUser extends Base{
 	 * @return string
 	 */
     public function verifyaccount(){
+	    $this->_meta()->title(sprintf('Verify your %s account',\Twist::framework()->setting('SITE_NAME')));
         return $this->resUser->viewExtension('account_verification');
     }
 
@@ -310,6 +320,7 @@ class BaseUser extends Base{
 		    'notifications' => Auth::SessionHandler()->notifications($arrUserData['user_id'])
 	    );
 
+	    $this->_meta()->title(sprintf('Manage your logged in devices on %s',\Twist::framework()->setting('SITE_NAME')));
         return $this->_view(sprintf('%suser/devices.tpl',TWIST_FRAMEWORK_VIEWS), $arrTags);
         //return $this->resUser->viewExtension('devices_form');
     }
@@ -333,6 +344,7 @@ class BaseUser extends Base{
 	 * @return string
 	 */
     public function register(){
+	    $this->_meta()->title(sprintf('Register for a %s account',\Twist::framework()->setting('SITE_NAME')));
         return $this->resUser->viewExtension('registration_form');
     }
 

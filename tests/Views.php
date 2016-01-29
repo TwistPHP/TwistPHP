@@ -72,7 +72,7 @@ class Views extends \PHPUnit_Framework_TestCase{
 
 		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,js=true,inline=true}");
 		$this->assertContains('<script', $strTagOutput);
-		$this->assertContains('twistajax=', $strTagOutput);
+		$this->assertContains('.twistajax', $strTagOutput);
 
 		\Twist::framework()->setting('RESOURCE_INCLUDE_ONCE',true);
 	}
