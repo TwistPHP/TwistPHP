@@ -109,6 +109,54 @@
 											intDP = ( typeof intDP !== 'number' ) ? 0 : intDP;
 											return intDP === 0 ? parseInt( Math.round( intNumber * Math.pow( 10, intDP ) ) / Math.pow( 10, intDP ) ) : parseFloat( Math.round( intNumber * Math.pow( 10, intDP ) ) / Math.pow( 10, intDP ) );
 										},
+										returnNameObject = function( strFullName, strNameSoFar, strName, mxdValue ) {
+											var objOut = {},
+													arrNameMatches = strName.match( /^(\[([^\[]*)\])((\[[^\[]*\])*)$/i );
+
+											if( arrNameMatches ) {
+												var strThisKey = arrNameMatches[2];
+
+												if( isBlank( strThisKey ) ) {
+													var intKey = 1,
+															blKeyExists = true;
+
+													do {
+														var blKeyFree = true;
+														for( var intFormElement in arrFormElements ) {
+															if( contains( strNameSoFar + '[' + intKey + ']', arrFormElements[intFormElement].name ) ) {
+																intKey++;
+																blKeyFree = false;
+															}
+														}
+
+														if( blKeyFree ) {
+															var blKeyReplaced = false;
+
+															for( var intFormElement2 in arrFormElements ) {
+																if( !blKeyReplaced &&
+																		arrFormElements[intFormElement2].name === strNameSoFar + '[]' &&
+																		arrFormElements[intFormElement2].value === mxdValue ) {
+																	arrFormElements[intFormElement2].name = strNameSoFar + '[' + intKey + ']';
+																	blKeyReplaced = true;
+																}
+															}
+
+															blKeyExists = false;
+														}
+													} while( blKeyExists );
+
+													strThisKey = intKey;
+												}
+
+												if( arrNameMatches[3] ) {
+													objOut[strThisKey] = returnNameObject( strFullName, strNameSoFar + '[' + strThisKey + ']', arrNameMatches[3], mxdValue );
+												} else {
+													objOut[strThisKey] = mxdValue;
+												}
+											}
+
+											return objOut;
+										},
 										serializeJSON = function( jqoForm ) {
 											var objJSON = {},
 													arrFormElements = [];
@@ -125,55 +173,6 @@
 														arrFormElements.push( {name: jqoElement.attr( 'name' ), value: jqoElement.val()} );
 													}
 											);
-
-											var returnNameObject = function( strFullName, strNameSoFar, strName, mxdValue ) {
-												var objOut = {},
-														arrNameMatches = strName.match( /^(\[([^\[]*)\])((\[[^\[]*\])*)$/i );
-
-												if( arrNameMatches ) {
-													var strThisKey = arrNameMatches[2];
-
-													if( isBlank( strThisKey ) ) {
-														var intKey = 1,
-																blKeyExists = true;
-
-														do {
-															var blKeyFree = true;
-															for( var intFormElement in arrFormElements ) {
-																if( contains( strNameSoFar + '[' + intKey + ']', arrFormElements[intFormElement].name ) ) {
-																	intKey++;
-																	blKeyFree = false;
-																}
-															}
-
-															if( blKeyFree ) {
-																var blKeyReplaced = false;
-
-																for( var intFormElement2 in arrFormElements ) {
-																	if( !blKeyReplaced &&
-																			arrFormElements[intFormElement2].name === strNameSoFar + '[]' &&
-																			arrFormElements[intFormElement2].value === mxdValue ) {
-																		arrFormElements[intFormElement2].name = strNameSoFar + '[' + intKey + ']';
-																		blKeyReplaced = true;
-																	}
-																}
-
-																blKeyExists = false;
-															}
-														} while( blKeyExists );
-
-														strThisKey = intKey;
-													}
-
-													if( arrNameMatches[3] ) {
-														objOut[strThisKey] = returnNameObject( strFullName, strNameSoFar + '[' + strThisKey + ']', arrNameMatches[3], mxdValue );
-													} else {
-														objOut[strThisKey] = mxdValue;
-													}
-												}
-
-												return objOut;
-											};
 
 											$.each( arrFormElements,
 													function( intIndex, arrFormElement ) {
@@ -261,6 +260,12 @@
 													funCallbackFailure = c;
 												}
 											}
+
+											$.each( thisTwistAJAX.defaultArray,
+													function( strIndex, mxdValue ) {
+														objData.data[strIndex] = mxdValue;
+													}
+											);
 
 											var strFinalURL = strAJAXPostLocation + '/' + strFunction.replace( /^\//, '' ),
 													objAJAXRequest = {
@@ -385,14 +390,6 @@
 															error( err );
 														}
 													};
-
-											$.each( thisTwistAJAX.defaultArray,
-													function( strIndex, mxdValue ) {
-														objData[strIndex] = mxdValue;
-													}
-											);
-
-											objAJAXRequest.data = objData;
 
 											return $.ajax( objAJAXRequest );
 										};
@@ -531,7 +528,9 @@
 								};
 
 								this.patch = function( strFunction, b, c, d, e ) {
-									send( strFunction, 'PATCH', blCache, b, c, d, e );
+									if( strFunction ) {
+										send( strFunction, 'PATCH', blCache, b, c, d, e );
+									}
 									return thisTwistAJAX;
 								};
 
