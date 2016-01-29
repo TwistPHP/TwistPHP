@@ -74,7 +74,6 @@ final class Debug{
 			'warning_count' => 0,
 			'notice_count' => 0,
 			'other_count' => 0,
-			'errors' => '',
 			'database_queries' => '',
 			'database_query_count' => 0,
 			'views' => '',
@@ -105,6 +104,7 @@ final class Debug{
 
 				$arrParts = explode(' ', trim($arrEachItem['query']));
 				$arrEachItem['type'] = strtoupper($arrParts[0]);
+				$arrEachItem['time_formatted'] = round($arrEachItem['time'],8).'s';
 				unset($arrParts);
 
 				if ($arrEachItem['affected_rows'] < 0 || $arrEachItem['affected_rows'] === false) {
@@ -136,28 +136,91 @@ final class Debug{
 
 		$arrTags['current_route'] = '';
 		foreach($arrCurrentRoute as $strKey => $strValue){
-			$arrTags['current_route'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $strKey,'value' => is_array($strValue) ? sprintf('<pre>%s</pre>',print_r($strValue,true)) : htmlentities($strValue)));
+			$intLength = is_array($strValue) ? count($strValue) : (is_string($strValue) ? strlen($strValue) : '-');
+			$arrTags['current_route'] .= $this->resTemplate->build('components/table-row.tpl',array('key' => $strKey,'value' => is_array($strValue) ? sprintf('<pre>%s</pre>',print_r($strValue,true)) : htmlentities($strValue),'type' => gettype($strValue),'length' => $intLength));
 		}
 
 
 		$arrTags['routes'] = '';
 
+		$arrRestrictions = \Twist::Route()->getRestrictions();
+
 		foreach(\Twist::Route()->getAll() as $strType => $arrItems){
 			foreach($arrItems as $arrEachRoute){
 				$arrEachRoute['highlight'] = ($arrEachRoute['registered_uri'] === $arrCurrentRoute['registered_uri']) ? 'highlight' : '';
 				$arrEachRoute['item'] = (is_array($arrEachRoute['item'])) ? implode('->',$arrEachRoute['item']) : $arrEachRoute['item'];
+
+
+				/**
+				 * This might need to be done in a different way (maybe make a public function in routes)
+				 */
+				$blRestrict = false;
+				$arrFoundMatched = array();
+
+				foreach($arrRestrictions['restricted'] as $strRestrictURI => $arrRestrictedInfo){
+
+					$strRestrictExpression = sprintf("#^(%s[\/]?)%s#", str_replace('/','\/',rtrim($strRestrictURI, '/')), $arrRestrictedInfo['wildcard'] ? '' : '$');
+
+					//Check for an exact match
+					if(rtrim($strRestrictURI,'/') == rtrim($arrEachRoute['uri'],'/')){
+
+						$arrMatch = $arrRestrictedInfo;
+						$blRestrict = true;
+						break;
+
+					}elseif(preg_match($strRestrictExpression, $arrEachRoute['uri'], $arrMatches)){
+						$arrFoundMatched[] = $arrRestrictedInfo;
+					}
+				}
+
+				//No exact mach found and there is an array to be processed
+				if($blRestrict == false && count($arrFoundMatched)){
+
+					if(count($arrFoundMatched) == 1){
+						$blRestrict = true;
+						$arrMatch = $arrFoundMatched[0];
+					}else{
+
+						//Process Multi-Matches, find the highest level from the found matches, user must match or exceed this level (0 is God)
+						$intHighestLevel = 0;
+						foreach($arrFoundMatched as $arrEachMatch){
+							if($arrEachMatch['level'] == 0 || $arrEachMatch['level'] > $intHighestLevel){
+								$intHighestLevel = $arrEachMatch['level'];
+								$arrMatch = $arrEachMatch;
+								$blRestrict = true;
+
+								if($intHighestLevel == 0){
+									break;
+								}
+							}
+						}
+					}
+				}
+				/**
+				 * Above might need to be done in a different way (maybe make a public function in routes)
+				 */
+
+
+				$arrEachRoute['restricted'] = '';
+				//If a match is found
+				if($blRestrict){
+					$arrEachRoute['restricted'] = 'Restricted ['.$intHighestLevel.']';
+				}
+
 				$arrTags['routes'] .=  $this->resTemplate->build('components/each-route.tpl',$arrEachRoute);
 			}
 		}
 
 		$arrTags['get'] = '';
 		foreach($_GET as $strKey => $strValue){
-			$arrTags['get'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $strKey,'value' => $strValue));
+			$intLength = is_array($strValue) ? count($strValue) : (is_string($strValue) ? strlen($strValue) : null);
+			$arrTags['get'] .= $this->resTemplate->build('components/table-row.tpl',array('key' => $strKey,'value' => $strValue,'type' => gettype($strValue),'length' => $intLength));
 		}
 
 		$arrTags['post'] = '';
 		foreach($_POST as $strKey => $strValue){
-			$arrTags['post'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $strKey,'value' => $strValue));
+			$intLength = is_array($strValue) ? count($strValue) : (is_string($strValue) ? strlen($strValue) : null);
+			$arrTags['post'] .= $this->resTemplate->build('components/table-row.tpl',array('key' => $strKey,'value' => $strValue,'type' => gettype($strValue),'length' => $intLength));
 		}
 
 		$arrTags['twist_session'] = '';
@@ -165,66 +228,66 @@ final class Debug{
 		foreach($_SESSION as $strKey => $strValue){
 			if($strKey == 'twist-session'){
 				foreach($strValue as $mxdKey => $mxdValue){
-					$arrTags['twist_session'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $mxdKey,'value' => $mxdValue));
+					$intLength = is_array($strValue) ? count($strValue) : (is_string($strValue) ? strlen($strValue) : null);
+					$arrTags['twist_session'] .= $this->resTemplate->build('components/table-row.tpl',array('key' => $mxdKey,'value' => $mxdValue,'type' => gettype($strValue),'length' => $intLength));
 				}
 			}else{
-				$arrTags['php_session'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $strKey,'value' => $strValue));
+				$intLength = is_array($strValue) ? count($strValue) : (is_string($strValue) ? strlen($strValue) : null);
+				$arrTags['php_session'] .= $this->resTemplate->build('components/table-row.tpl',array('key' => $strKey,'value' => $strValue,'type' => gettype($strValue),'length' => $intLength));
 			}
 		}
 
 		$arrTags['cookie'] = '';
 		foreach($_COOKIE as $strKey => $strValue){
-			$arrTags['cookie'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $strKey,'value' => $strValue));
+			$intLength = is_array($strValue) ? count($strValue) : (is_string($strValue) ? strlen($strValue) : null);
+			$arrTags['cookie'] .= $this->resTemplate->build('components/table-row.tpl',array('key' => $strKey,'value' => $strValue,'type' => gettype($strValue),'length' => $intLength));
 		}
 
 		$arrTags['request_headers'] = '';
 		foreach(Error::apacheRequestHeaders() as $strKey => $strValue){
-			$arrTags['request_headers'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $strKey,'value' => $strValue));
+			$intLength = is_array($strValue) ? count($strValue) : (is_string($strValue) ? strlen($strValue) : null);
+			$arrTags['request_headers'] .= $this->resTemplate->build('components/table-row.tpl',array('key' => $strKey,'value' => $strValue,'type' => gettype($strValue),'length' => $intLength));
 		}
 
 		$arrTags['server'] = '';
 		foreach(Error::serverInformation() as $strKey => $strValue){
-			$arrTags['server'] .= $this->resTemplate->build('components/dt-item.tpl',array('key' => $strKey,'value' => $strValue));
+			$intLength = is_array($strValue) ? count($strValue) : (is_string($strValue) ? strlen($strValue) : null);
+			$arrTags['server'] .= $this->resTemplate->build('components/table-row.tpl',array('key' => $strKey,'value' => $strValue,'type' => gettype($strValue),'length' => $intLength));
 		}
 
-		$intTotalTime = $arrTimer['end']-$arrTimer['start'];
-		$intTotalPercentage = $intUsedTime = 0;
+		$arrTags['timeline'] = $arrTags['timeline_table'] = '';
+
+		//\Twist::dump( $arrTimer );
 
 		foreach($arrTimer['log'] as $strKey => $arrInfo){
 
-			$intCurrentTimeUsage = $arrInfo['time']-$intUsedTime;
-
-			$intPercentage = ($intCurrentTimeUsage/$intTotalTime)*100;
-			$intTotalPercentage += $intPercentage;
-
 			$arrTimelineTags = array(
-				'total_percentage' => round($intTotalPercentage,2),
-				'percentage' => round($intPercentage,2),
-				'time' => ($intCurrentTimeUsage < 1) ? round($intCurrentTimeUsage*1000).'ms' : round($intCurrentTimeUsage,3).'s',
-				'title' => $arrInfo['title']
+				'time' => $arrInfo['time'],
+				'time_pc' => ($arrInfo['time']/$arrTimer['total']) * 100,
+				'time_formatted' => round($arrInfo['time']*1000,2).'ms',
+				'title' => $arrInfo['title'],
+				'memory_usage' => $arrInfo['memory'],
+				'memory_usage_formatted' => \Twist::File()->bytesToSize($arrInfo['memory'])
 			);
 
 			$arrTags['timeline'] .= $this->resTemplate->build('components/timeline-entry.tpl',$arrTimelineTags);
-
-			$arrTimelineTags['title'] = \Twist::File()->bytesToSize($arrInfo['memory']).' - '.$arrInfo['title'];
-			$arrTags['memory_chart'] .= $this->resTemplate->build('components/timeline-entry.tpl',$arrTimelineTags);
-			$intUsedTime += $intCurrentTimeUsage;
+			$arrTags['timeline_table'] .= $this->resTemplate->build('components/timeline-table-entry.tpl',$arrTimelineTags);
 		}
 
 		$arrTimelineTags = array(
-			'total_percentage' => 100,
-			'percentage' => round(100-$intTotalPercentage,2),
-			'time' => ($intTotalTime < 1) ? round($intTotalTime*1000).'ms' : round($intTotalTime,3).'s',
-			'title' => 'Page Loaded'
+			'time' => $arrTimer['total'],
+			'time_pc' => 100,
+			'time_formatted' => ($arrTimer['total'] < 1) ? round($arrTimer['total']*1000,2).'ms' : round($arrTimer['total'],5).'s',
+			'title' => 'Page loaded',
+			'memory_usage' => $arrTimer['memory']['end'],
+			'memory_usage_formatted' => \Twist::File()->bytesToSize($arrTimer['memory']['end'])
 		);
 
 		$arrTags['timeline'] .= $this->resTemplate->build('components/timeline-entry.tpl',$arrTimelineTags);
+		$arrTags['timeline_table'] .= $this->resTemplate->build('components/timeline-table-entry.tpl',$arrTimelineTags);
 
-		$arrTimelineTags['title'] = \Twist::File()->bytesToSize($arrTimer['memory']['end']).' - Page Loaded';
-		$arrTags['memory_chart'] .= $this->resTemplate->build('components/timeline-entry.tpl',$arrTimelineTags);
-
-		$arrTags['execution_time'] = round($intTotalTime,4);
-		$arrTags['execution_time_formatted'] = ($intTotalTime < 1) ? round($intTotalTime*1000).'ms' : round($intTotalTime,3).'s';
+		$arrTags['execution_time'] = $arrTimelineTags['time'];
+		$arrTags['execution_time_formatted'] = ($arrTimer['total'] < 1) ? round($arrTimer['total']*1000).'ms' : round($arrTimer['total'],3).'s';
 
 		return $this->resTemplate->build('_base.tpl',$arrTags);
 	}

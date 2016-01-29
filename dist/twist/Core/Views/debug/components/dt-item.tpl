@@ -1,1 +1,0 @@
-<dt>{data:key}</dt><dd>{data:value}</dd>

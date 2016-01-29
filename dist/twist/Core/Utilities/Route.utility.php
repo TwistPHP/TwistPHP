@@ -246,6 +246,17 @@ class Route extends Base{
 	}
 
 	/**
+	 * Get an array of restricted routes and the restriction overrides (these are found in the unrestricted sub array)
+	 * @return array An array with tow sub arrays 'restrcited' and 'unrestricted'
+	 */
+	public function getRestrictions(){
+		return array(
+			'restricted' => $this->arrRestrict,
+			'unrestricted' => $this->arrUnrestricted
+		);
+	}
+
+	/**
 	 * Set the page title for the page (can be called during the processing of the page)
 	 */
 	public function pageTitle($strPageTitle){
@@ -1214,7 +1225,7 @@ class Route extends Base{
 		if(count($arrURIs)){
 			foreach($arrURIs as $strEachURI => $blWildCard){
 
-				$strUriExpression = sprintf("#^(%s[\/]?)%s#", str_replace('/','\/',rtrim($strEachURI, '/')), $blWildCard ? '' : '$');
+				$strUriExpression = sprintf("#^(%s[\/]?)%s#%s", str_replace('/','\/',rtrim($strEachURI, '/')), $blWildCard ? '' : '$',(\Twist::framework()->setting('ROUTE_CASE_SENSITIVE')) ? '' : 'i');
 				if(rtrim($strCurrentURI,'/') == rtrim($strEachURI,'/')  || ($blWildCard && preg_match($strUriExpression, $strCurrentURI, $arrMatches))){
 					$blMatchFound = true;
 					break;
@@ -1234,7 +1245,7 @@ class Route extends Base{
 
 		//Register the resource server if and when required
 		$this->resourceServer();
-		\Twist::recordEvent('Routes Prepared');
+		\Twist::recordEvent('Routes prepared');
 
 		$arrRoute = $this->current();
 
@@ -1248,7 +1259,9 @@ class Route extends Base{
 				die();
 			}else{
 
-				if(\Twist::framework()->setting('MAINTENANCE_MODE')){
+				//Maintenance mode is automatically bypassed by root level users
+				if(\Twist::framework()->setting('MAINTENANCE_MODE') && (is_null(\Twist::User()->currentLevel()) || \Twist::User()->currentLevel() > 0)){
+
 					//Check to see if the current route is allowed to bypass
 					if($this->findURI($this->arrBypassMaintenanceMode,$arrRoute['uri']) === false){
 						\Twist::respond(503,'The site is currently undergoing maintenance, please check back shortly!');
@@ -1340,10 +1353,10 @@ class Route extends Base{
 							\Twist::recordEvent('Route cache stored');
 						}
 
-						//Output the Debug window to the screen when in debug mode
-						if($this->blDebugMode){
-							if(strstr($strPageOut, '</body>')){
-								$strPageOut = str_replace('</body>', \Twist::framework()->debug()->window($arrRoute) . '</body>', $strPageOut);
+						//Output the Debug window to the screen when in debug mode (Do not output when its an ajax request)
+						if($this->blDebugMode && !(TWIST_AJAX_REQUEST || $arrRoute['type'] == 'ajax')){
+							if(strstr($strPageOut, '</body>')) {
+								$strPageOut = str_replace( '</body>', \Twist::framework()->debug()->window( $arrRoute ) . '</body>', $strPageOut );
 							}else{
 								$strPageOut .= \Twist::framework()->debug()->window($arrRoute);
 							}

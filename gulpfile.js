@@ -33,6 +33,18 @@ gulp.task( 'ajax-css',
 	}
 );
 
+gulp.task( 'css-reset',
+	function() {
+		return gulp.src( strTwistSource + 'css-reset/scss/twist-cssreset.scss' )
+				.pipe( using() )
+				.pipe( sourcemaps.init() )
+				.pipe( sass( { errLogToConsole: true, outputStyle: 'compressed' } ) )
+				.pipe( rename( 'twist-cssreset.min.css' ) )
+				.pipe( sourcemaps.write( './' ) )
+				.pipe( gulp.dest( strTwistDestination + 'css-reset/css' ) );
+	}
+);
+
 gulp.task( 'debug-js',
 	function() {
 		return gulp.src( strTwistSource + 'debug/js/twist-debug.js' )
@@ -57,37 +69,15 @@ gulp.task( 'debug-css',
 	}
 );
 
-gulp.task( 'error-monitor-js',
-	function() {
-		return gulp.src( strTwistSource + 'error-monitor/js/twist-errormonitor.js' )
-				.pipe( using() )
-				.pipe( jshint() )
-				.pipe( jshint.reporter( 'default' ) )
-				.pipe( concat( 'twist-errormonitor.min.js' ) )
-				.pipe( uglify() )
-				.pipe( gulp.dest( strTwistDestination + 'error-monitor/js' ) );
-	}
-);
-
-gulp.task( 'error-monitor-css',
-	function() {
-		return gulp.src( strTwistSource + 'error-monitor/scss/twist-errormonitor.scss' )
-				.pipe( using() )
-				.pipe( sourcemaps.init() )
-				.pipe( sass( { errLogToConsole: true, outputStyle: 'compressed' } ) )
-				.pipe( rename( 'twist-errormonitor.min.css' ) )
-				.pipe( sourcemaps.write( './' ) )
-				.pipe( gulp.dest( strTwistDestination + 'error-monitor/css' ) );
-	}
-);
-
 gulp.task( 'file-upload-js',
 	function() {
 		return gulp.src( strTwistSource + 'file-upload/js/twist-fileupload.js' )
 				.pipe( using() )
 				.pipe( jshint() )
 				.pipe( jshint.reporter( 'default' ) )
-				.pipe( concat( 'twist-fileupload.min.js' ) )
+				.pipe( concat( 'twist-fileupload.js' ) )
+				.pipe( gulp.dest( strTwistDestination + 'file-upload/js' ) )
+				.pipe( rename( 'twist-fileupload.min.js' ) )
 				.pipe( uglify() )
 				.pipe( gulp.dest( strTwistDestination + 'file-upload/js' ) );
 	}
@@ -155,9 +145,46 @@ gulp.task( 'setup-css',
 
 gulp.task( 'ajax', ['ajax-js', 'ajax-css'] );
 gulp.task( 'debug', ['debug-js', 'debug-css'] );
-gulp.task( 'error-monitor', ['error-monitor-js', 'error-monitor-css'] );
 gulp.task( 'file-upload', ['file-upload-js', 'file-upload-css'] );
 gulp.task( 'manager', ['manager-js', 'manager-css'] );
 gulp.task( 'setup', ['setup-js', 'setup-css'] );
 
-gulp.task( 'default', ['ajax', 'debug', 'error-monitor', 'file-upload', 'manager', 'setup'] );
+gulp.task( 'watch-ajax',
+	function() {
+		return gulp.watch( strTwistSource + 'ajax/**/*', ['ajax'] );
+	}
+);
+
+gulp.task( 'watch-debug',
+	function() {
+		return gulp.watch( strTwistSource + 'debug/**/*', ['debug'] );
+	}
+);
+
+gulp.task( 'watch-css-reset',
+	function() {
+		return gulp.watch( strTwistSource + 'css-reset/**/*', ['css-reset'] );
+	}
+);
+
+gulp.task( 'watch-file-upload',
+	function() {
+		return gulp.watch( strTwistSource + 'file-upload/**/*', ['file-upload'] );
+	}
+);
+
+gulp.task( 'watch-manager',
+	function() {
+		return gulp.watch( strTwistSource + 'manager/**/*', ['manager'] );
+	}
+);
+
+gulp.task( 'watch-setup',
+	function() {
+		return gulp.watch( strTwistSource + 'setup/**/*', ['setup'] );
+	}
+);
+
+gulp.task( 'watch', ['default', 'watch-ajax', 'watch-css-reset', 'watch-debug', 'watch-file-upload', 'watch-manager', 'watch-setup'] );
+
+gulp.task( 'default', ['ajax', 'css-reset', 'debug', 'file-upload', 'manager', 'setup'] );

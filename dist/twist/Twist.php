@@ -49,19 +49,41 @@
 		}
 
 		/**
-		 * Return the version number of the framework, optionally you can return a single part of the version number (major, minor, build)
-		 * @param null|string $strVersionPart Pass in major,minor or build. Null for full output
-		 * @return string
+		 * Return the version number of the framework, optionally you can return a shorter version number by specifying the level of detail you want (major, minor, patch, pre-release).
+		 * TwistPHP adheres to the Semantic Versioning 2.0.0 standards (http://semver.org/)
+		 * @param null|string $strVersionPart Pass in major, minor, patch or pre-release. Null for the full output
+		 * @return string Version number of the framework
 		 */
 		public static function version($strVersionPart = null){
 
 			$arrVersion = array(
 				'major' => 3,
 				'minor' => 0,
-				'build' => 1
+				'patch' => 1,
+				'pre-release' => ''//pre-release can be set to 'dev'
 			);
 
-			return (is_null($strVersionPart)) ? implode('.',$arrVersion) : $arrVersion[$strVersionPart];
+			switch($strVersionPart){
+				case'major':
+					$strVersion = $arrVersion['major'];
+					break;
+				case'minor':
+					$strVersion = sprintf('%d.%d',$arrVersion['major'],$arrVersion['minor']);
+					break;
+				case'patch':
+					$strVersion = sprintf('%d.%d.%d',$arrVersion['major'],$arrVersion['minor'],$arrVersion['patch']);
+					break;
+				default:
+
+					if($arrVersion['pre-release'] == ''){
+						$strVersion = sprintf('%d.%d.%d',$arrVersion['major'],$arrVersion['minor'],$arrVersion['patch']);
+					}else{
+						$strVersion = sprintf('%d.%d.%d-%s',$arrVersion['major'],$arrVersion['minor'],$arrVersion['patch'],$arrVersion['pre-release']);
+					}
+					break;
+			}
+
+			return $strVersion;
 		}
 
 		/**
@@ -169,7 +191,7 @@
 			}
 
 			if(!is_null(self::framework()->setting('PHP_MAX_EXECUTION'))){
-				ini_set('max_executions_time',self::framework()->setting('PHP_MAX_EXECUTION'));
+				ini_set('max_execution_time',self::framework()->setting('PHP_MAX_EXECUTION'));
 			}
 		}
 

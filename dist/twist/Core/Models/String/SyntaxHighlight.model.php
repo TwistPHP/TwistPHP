@@ -81,6 +81,7 @@
 					break;
 			}
 
+			$intLineNoPadLength = strlen($intEndLine);
 			foreach($arrCodeLines as $strEachLine){
 				$intLineNo++;
 
@@ -88,7 +89,7 @@
 				if($intLineNo >= $intStartLine && $intLineNo <= $intEndLine){
 
 					$strFocusLine = ($intLineNo == $intFocusLineNo) ? ' class="highlight"' : '';
-					$strOut .= sprintf($strLineContainer,$strFocusLine,$intLineNo,$strFocusLine,self::convertStyles($strEachLine));
+					$strOut .= sprintf($strLineContainer,$strFocusLine,str_pad($intLineNo,$intLineNoPadLength,' ',STR_PAD_RIGHT),$strFocusLine,self::convertStyles($strEachLine));
 				}
 			}
 

@@ -38,9 +38,10 @@ Alternatively you can get a single row as an array rather than an object, to do 
      
      /*
       * --------------------------------
-      * Passing in the third parameter
-      * of true will return an array as
-      * the result rather than an object
+      * Passing a value of 'true' to the
+      * third parameter returns an array
+      * with the results, rather than an
+      * object
       * --------------------------------
       */
      $area = Twist::Database() -> records( 'areas' ) -> get( 'PL4 7EX', 'postcode', true );

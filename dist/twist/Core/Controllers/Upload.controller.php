@@ -79,7 +79,20 @@ class Upload extends Base{
 		//Now if the file upload was successful process the asset (if required)
 		if($arrOut['status']){
 
-			$intAssetID = \Twist::Asset()->add($arrOut['file']['path'],1);
+			$arrDynamicRoute = $this->_route('dynamic');
+
+			//Get the asset group to be used for the upload
+			$intAssetGroup = \Twist::framework()->setting('ASSET_DEFAULT_GROUP');
+
+			if(count($arrDynamicRoute)){
+				if(count($arrDynamicRoute) > 1 && $arrDynamicRoute[0] == 'asset'){
+					$intAssetGroup = \Twist::Asset()->getGroupBySlug($arrDynamicRoute[1]);
+				}elseif($arrDynamicRoute[0] !== 'asset'){
+					$intAssetGroup = \Twist::Asset()->getGroupBySlug($arrDynamicRoute[0]);
+				}
+			}
+
+			$intAssetID = \Twist::Asset()->add($arrOut['file']['path'],$intAssetGroup);
 			$arrAsset = \Twist::Asset()->get($intAssetID);
 
 			//Get info about the file type
