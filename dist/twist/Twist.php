@@ -75,7 +75,7 @@
 					break;
 				default:
 
-					if($arrVersion['build'] == ''){
+					if($arrVersion['pre-release'] == ''){
 						$strVersion = sprintf('%d.%d.%d',$arrVersion['major'],$arrVersion['minor'],$arrVersion['patch']);
 					}else{
 						$strVersion = sprintf('%d.%d.%d-%s',$arrVersion['major'],$arrVersion['minor'],$arrVersion['patch'],$arrVersion['pre-release']);
