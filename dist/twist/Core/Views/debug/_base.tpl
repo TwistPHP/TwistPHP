@@ -87,7 +87,7 @@
         </div>
     </div>
     <div id="twist-debug-fileupload">
-        <h6>TwistPHP AJAX</h6>
+        <h6>TwistPHP File Uploads</h6>
         <div class="twist-debug-column-wrapper">
             <div id="twist-debug-fileupload-list" class="twist-debug-column-100"></div>
         </div>
