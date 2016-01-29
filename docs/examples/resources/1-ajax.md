@@ -4,7 +4,7 @@ AJAX requests can be made really easily - we have even included a JavaScript cla
 
 ## An AJAX controller
 
-In TwistPHP, an AJAX controller works in much the same way as a normal controller.
+In TwistPHP, an AJAX controller works in much the same way as a normal controller but with a few more methods specifically for responding to AJAX requests.
 
 ```php
 <?php
@@ -161,7 +161,9 @@ The parameters of the object (with the exception of the first) are all optional 
 | 5     | MasterTimeout         | The default timeout (in milliseconds) of all requests                | integer  | `10000`           |
 | 6     | LoaderSize            | The class to add to the loader element                               | string   | `'medium'`        |
 
-Once you have an instance, you can start making AJAX calls using the returned object. The parameters for the `get()`, `post()`, `put()`, `patch()` and `delete()` methods of the AJAX instance are:
+### Make requests
+
+Once you have an instance, you can start making AJAX calls using the returned object. Any of the parameters for the `get()`, `post()`, `put()`, `patch()` and `delete()` methods of the AJAX instance can be omitted, just as the main object method, as long as they are passed in the correct order.
 
 | Param | Name    | Description                       | Type     | Default                                        |
 | ----- | ------- | --------------------------------- | -------- | ---------------------------------------------- |
