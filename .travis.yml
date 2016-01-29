@@ -6,8 +6,8 @@ php:
   - 5.5
   - 5.6
   - 7.0
-  #- hhvm
-  #- nightly
+  - hhvm
+  - nightly
 
 services:
   - mysql
@@ -32,7 +32,6 @@ before_script:
    - ls -lah ./tests
    - sed -i 's/Twist::ServeRoutes(false);/echo "TwistPHP Framework Loaded!\n\n";/g' ./tests/index.php
 
-#script: phpunit --bootstrap ./tests/index.php \App\Models\ViewTest --verbose
 script:
    - phpunit ./tests/Database.php
    - phpunit ./tests/Settings.php
@@ -45,5 +44,4 @@ script:
 
 notifications:
   on_success: never
-  #on_failure: always
-  on_failure: never
+  on_failure: always
