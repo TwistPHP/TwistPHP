@@ -18,21 +18,20 @@
  * @license    https://www.gnu.org/licenses/gpl.html LGPL License
  * @link       https://twistphp.com
  *
- * Twist Debug
  * --------------
- * @version 3.0.0
+ * TwistPHP Debug
+ * --------------
  */
 
-@charset "UTF-8";
+// ===================================================== IMPORTS =====================================================
+@import "../../_common";
 
 // ===================================================== VARIABLES =====================================================
 $bar-height: 30px;
 $bar-block-height: 30px;
 $bar-logo-width: 32px;
 $bar-fade-width: 10px;
-$text: #212121;
 $highlight: #FFF59D;
-$bar-background: #424242; //#455A64
 $bar-background-hover: #616161;
 $bar-border: #757575;
 $subtle-text: #BDBDBD;
@@ -47,7 +46,7 @@ $z-index: 1337;
 
 // ===================================================== MIXINS =====================================================
 @function blackorwhite($colour) {
-	@return if(lightness($colour) > 50, $text, #FFF);
+	@return if(lightness($colour) > 50, $twistphp-black, #FFF);
 }
 
 /* ===================================================== ANIMATION KEYFRAMES ===================================================== */
@@ -129,6 +128,8 @@ $z-index: 1337;
 	height: $bar-height;
 	padding: 0 #{$bar-logo-width + 15} 0 0;
 
+	display: none;
+
 	position: fixed;
 	right: 0;
 	bottom: 0;
@@ -136,7 +137,7 @@ $z-index: 1337;
 
 	overflow: visible;
 
-	background-color: $bar-background;
+	background-color: $twistphp-dark-grey;
 
 	z-index: $z-index + 1;
 
@@ -148,14 +149,18 @@ $z-index: 1337;
 		right: #{$bar-logo-width + 15};
 		bottom: 0;
 
-		background: $bar-background;
-		background: -moz-linear-gradient(0deg, rgba($bar-background, 0) 0%, rgba($bar-background, 1) 100%);
-		background: -webkit-linear-gradient(0deg, rgba($bar-background, 0) 0%, rgba($bar-background, 1) 100%);
-		background: -o-linear-gradient(0deg, rgba($bar-background, 0) 0%, rgba($bar-background, 1) 100%);
-		background: -ms-linear-gradient(0deg, rgba($bar-background, 0) 0%, rgba($bar-background, 1) 100%);
-		background: linear-gradient(90deg, rgba($bar-background, 0) 0%, rgba($bar-background, 1) 100%);
+		background: $twistphp-dark-grey;
+		background: -moz-linear-gradient(0deg, rgba($twistphp-dark-grey, 0) 0%, rgba($twistphp-dark-grey, 1) 100%);
+		background: -webkit-linear-gradient(0deg, rgba($twistphp-dark-grey, 0) 0%, rgba($twistphp-dark-grey, 1) 100%);
+		background: -o-linear-gradient(0deg, rgba($twistphp-dark-grey, 0) 0%, rgba($twistphp-dark-grey, 1) 100%);
+		background: -ms-linear-gradient(0deg, rgba($twistphp-dark-grey, 0) 0%, rgba($twistphp-dark-grey, 1) 100%);
+		background: linear-gradient(90deg, rgba($twistphp-dark-grey, 0) 0%, rgba($twistphp-dark-grey, 1) 100%);
 
 		content: "";
+	}
+
+	&.ready {
+		display: block;
 	}
 }
 
@@ -196,37 +201,9 @@ $z-index: 1337;
 
 			font-size: 12px;
 
-			border-right: 1px $bar-border solid;
-
-			/*&::before {
-				width: 1px;
-				height: $bar-height;
-
-				display: block;
-
-				float: right;
-
-				background: $bar-border;
-				background: -moz-linear-gradient(left, $bar-border 0%, $bar-background 100%);
-				background: -webkit-gradient(linear, left top, right top, color-stop(0%, $bar-border), color-stop(100%, $bar-background));
-				background: -webkit-linear-gradient(left, $bar-border 0%, $bar-background 100%);
-				background: -o-linear-gradient(left, $bar-border 0%, $bar-background 100%);
-				background: -ms-linear-gradient(left, $bar-border 0%, $bar-background 100%);
-				background: linear-gradient(to right, $bar-border 0%, $bar-background 100%);
-				filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$bar-border', endColorstr='$bar-background',GradientType=1);
-				//background: -moz-linear-gradient(left, $bar-border 50%, $bar-background 50%);
-				//background: -webkit-gradient(linear, left top, right top, color-stop(50%, $bar-border), color-stop(50%, $bar-background));
-				//background: -webkit-linear-gradient(left, $bar-border 50%, $bar-background 50%);
-				//background: -o-linear-gradient(left, $bar-border 50%, $bar-background 50%);
-				//background: -ms-linear-gradient(left, $bar-border 50%, $bar-background 50%);
-				//background: linear-gradient(to right, $bar-border 50%, $bar-background 50%);
-				//filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$bar-border', endColorstr='$bar-background', GradientType=1);
-
-				content: "";
-			}*/
-
 			&:first-child {
 				border-right: none;
+
 				a {
 					padding-right: (($bar-height - $bar-block-height) / 2);
 					padding-left: (($bar-height - $bar-block-height) / 2);
@@ -242,12 +219,28 @@ $z-index: 1337;
 
 				display: block;
 
-				color: blackorwhite($bar-background);
+				color: blackorwhite($twistphp-dark-grey);
 				line-height: $bar-height;
 				text-decoration: none;
 
+				border-right: 1px $bar-border solid;
+
 				-webkit-transition: background ease 400ms;
 				transition: background ease 400ms;
+
+					i {
+						width: 1.3em;
+						margin-right: 5px;
+
+						display: inline-block;
+
+						color: inherit;
+						text-align: left;
+
+						~ i {
+							margin-left: 15px;
+						}
+					}
 
 				&:hover {
 					background-color: $bar-background-hover;
@@ -259,20 +252,20 @@ $z-index: 1337;
 				&.current {
 					background-color: $bar-background-hover;
 				}
+			}
 
-				i {
-					width: 1.3em;
-					margin-right: 5px;
-
-					display: inline-block;
-
-					color: inherit;
-					text-align: left;
+			[data-count] {
+				&::after {
+					content: attr(data-count);
 				}
 			}
 
+			[data-count="0"] {
+				display: none;
+			}
+
 			.fa-stack-2x {
-				text-shadow: 0 0 3px $bar-background;
+				text-shadow: 0 0 3px $twistphp-dark-grey;
 			}
 		}
 	}
@@ -330,46 +323,6 @@ $z-index: 1337;
 		top: 0;
 	}
 
-	> a {
-		width: 25px;
-		height: 25px;
-
-		position: absolute;
-		top: 10px;
-		right: 10px;
-
-		z-index: 2;
-
-		&::before,
-		&::after {
-			height: 1px;
-
-			position: absolute;
-			top: 12px;
-			right: 0;
-			left: 0;
-
-			background-color: $border;
-
-			content: "";
-		}
-
-		&::before {
-			transform: rotate(45deg);
-		}
-
-		&::after {
-			transform: rotate(135deg);
-		}
-
-		&:hover {
-			&::before,
-			&::after {
-				background-color: #FFF;
-			}
-		}
-	}
-
 	> div {
 		display: none;
 
@@ -379,7 +332,15 @@ $z-index: 1337;
 		bottom: 0;
 		left: 0;
 
+		z-index: 1;
+
 		h6 {
+			padding: 0 0 10px;
+
+			font-size: 16px;
+		}
+
+		> h6 {
 			height: 25px;
 			padding: 10px 65px 10px 20px;
 
@@ -387,25 +348,84 @@ $z-index: 1337;
 			font-size: 20px;
 			line-height: 25px;
 
-			background-color: $bar-background;
+			background-color: $twistphp-dark-grey;
 
 			z-index: 2;
 		}
 
-		z-index: 1;
-	}
+		table {
+			width: 100%;
 
-	th,
-	td {
-		padding: 0.5em 0.75em;
-	}
+			background-color: #FFF;
 
-	dt {
-		margin-top: 0.5em;
-		padding-top: 0.5em;
+			border-collapse: collapse;
 
-		&:first-child {
-			margin-top: 0;
+			tbody {
+				tr {
+					th {
+						width: 1px;
+					}
+
+					+ tr {
+						td {
+							border-top: 1px $border solid;
+						}
+					}
+
+					&.highlight {
+						td {
+							background-color: $highlight;
+						}
+					}
+				}
+			}
+
+			th {
+				color: #FFF;
+				font-weight: bold;
+
+				background-color: $twistphp-dark-grey;
+			}
+
+			th,
+			td {
+				padding: 0.5em 0.75em;
+
+				text-align: left;
+			}
+
+			&.index-me {
+				tbody {
+					counter-reset: eventorder;
+
+					tr {
+						counter-increment: eventorder;
+
+						th {
+							&::before {
+								content: counter(eventorder,upper-alpha);
+							}
+						}
+					}
+				}
+			}
+		}
+
+		.table-wrapper {
+			margin-bottom: 20px;
+
+			overflow: auto;
+
+			box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+		}
+
+		dt {
+			margin-top: 0.5em;
+			padding-top: 0.5em;
+
+			&:first-child {
+				margin-top: 0;
+			}
 		}
 	}
 
@@ -468,22 +488,29 @@ $z-index: 1337;
 
 		overflow: visible;
 
-		color: $text;
+		color: $twistphp-black;
 
 		background-color: #FFF;
 
 		border: 1px $border solid;
 		border-left-width: 0;
+		border-radius: 0 3px 3px 0;
 
 		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 
 		&[data-title] {
+			padding-top: 10px;
+
 			border-top-width: 0;
 
+			> :first-child {
+				clear: both;
+			}
+
 			&::before {
+				margin-top: -5px;
 				margin-right: -1px;
-				//padding: 10px;
-				padding: 10px 10px 0;
+				padding: 0 6px;
 
 				display: block;
 
@@ -491,9 +518,9 @@ $z-index: 1337;
 
 				//color: #FFF;
 				color: $subtle-text;
-				font-size: 14px;
+				font-size: 12px;
 				text-align: right;
-				font-style: italic;
+				//font-style: italic;
 
 				//background-color: $bar-border;
 
@@ -502,6 +529,12 @@ $z-index: 1337;
 
 			&::after {
 				top: 0;
+			}
+		}
+
+		&[data-title=""] {
+			&::before {
+				display: none;
 			}
 		}
 
@@ -544,7 +577,7 @@ $z-index: 1337;
 			}*/
 
 			&:hover {
-				color: $text;
+				color: $twistphp-black;
 			}
 		}
 
@@ -556,7 +589,7 @@ $z-index: 1337;
 		}
 
 		div.twist-debug-more-details {
-			padding: 20px 20px 40px;
+			padding: 20px 30px;
 
 			display: none;
 
@@ -565,6 +598,53 @@ $z-index: 1337;
 			overflow: hidden;
 
 			//background-color: $background;
+
+			pre {
+				padding: 0;
+			}
+
+			dl {
+				overflow: auto;
+
+				&:after {
+					width: 100%;
+					height: 0;
+
+					display: block;
+
+					clear: both;
+
+					content: "";
+				}
+
+				dt,
+				dd {
+					margin: 0;
+					padding: 0.25em 0;
+
+					display: block;
+
+					float: left;
+				}
+
+				dt {
+					width: 25%;
+
+					clear: both;
+
+					font-weight: bold;
+				}
+
+				dd {
+					width: 75%;
+
+					+ dd {
+						margin-left: 25%;
+
+						clear: both;
+					}
+				}
+			}
 
 			&::before,
 			&::after {
@@ -599,9 +679,9 @@ $z-index: 1337;
 
 		p,
 		pre {
-			padding: 20px;
+			padding: 10px 20px 20px;
 
-			font-size: 14px;
+			font-size: 13px;
 
 			+ p,
 			+ pre {
@@ -614,6 +694,7 @@ $z-index: 1337;
 		pre {
 			width: 100%;
 
+			display: block;
 			-webkit-box-sizing: border-box;
 			-moz-box-sizing: border-box;
 			box-sizing: border-box;
@@ -622,10 +703,90 @@ $z-index: 1337;
 
 			font-family: "Courier New", Courier, monospace, mono;
 			line-height: 1.25;
+			font-weight: 400;
+			white-space: pre;
 
-			white-space: pre-line;
+			code {
+				font-family: inherit;
+				color: $twistphp-light-grey;
+				font-size: 1em;
+
+				em {
+					//font-style: normal;
+				}
+
+				span.highlight {
+					font-style: normal;
+
+					background-color: $highlight;
+
+					box-shadow: 0 0 0 1px $highlight;
+				}
+			}
+
+			&.pre-line {
+				white-space: pre-line;
+			}
+		}
+
+		.twist-debug-fileupload-preview {
+			width: 128px;
+
+			display: inline-block;
+
+			position: absolute;
+			top: 0;
+			left: -142px;
+
+			img {
+				width: 100%;
+			}
 		}
 	}
+
+		#close-twist-debug-details {
+			width: 25px;
+			height: 25px;
+
+			position: absolute;
+			top: 10px;
+			right: 10px;
+
+			background: none;
+
+			border: none;
+
+			z-index: 2;
+
+			&::before,
+			&::after {
+				height: 1px;
+
+				position: absolute;
+				top: 12px;
+				right: 0;
+				left: 0;
+
+				background-color: $border;
+
+				content: "";
+			}
+
+			&::before {
+				transform: rotate(45deg);
+			}
+
+			&::after {
+				transform: rotate(135deg);
+			}
+
+			&:hover {
+				&::before,
+				&::after {
+					background-color: #FFF;
+				}
+			}
+		}
 
 	.twist-debug-box-red {
 		//&[data-title]::before,
@@ -660,7 +821,9 @@ $z-index: 1337;
 	#twist-debug-timeline {}
 
 		#twist-debug-timeline-chart {
-			padding-top: 50px;
+			padding: 0 10px 55px 11px;
+			margin-right: -10px;
+			margin-left: -10px;
 
 			position: relative;
 
@@ -670,158 +833,122 @@ $z-index: 1337;
 				height: 50px;
 
 				position: absolute;
-				top: 0;
-				right: 0;
-				left: 200px;
+				right: 10px;
+				bottom: 0;
+				left: 10px;
 
-				background-color: #F09;
+				background-color: $twistphp-green;
+
+				box-shadow: inset 0 3px 10px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.1);
 
 				content: "";
 			}
 
 			ul {
-				margin-top: 10px;
-				padding-left: 200px;
+				counter-reset: eventorder;
 			}
 
 				li {
-					width: 195px;
-					height: 10px;
-					margin-left: -200px;
-					padding-right: 5px;
-					padding-bottom: 10px;
+					width: 19px;
+					height: 19px;
+					margin-bottom: 3px;
 
 					display: block;
 
 					position: relative;
+					left: -10px;
 
 					overflow: visible;
 
 					text-align: right;
-					line-height: 20px;
+					line-height: 19px;
+					white-space: nowrap;
+
+					counter-increment: eventorder;
+
+					&::before {
+						width: 13px;
+						padding-right: 3px;
+						padding-left: 3px;
+
+						display: block;
+
+						position: relative;
+
+						text-align: center;
+
+						background-color: #FFF;
+
+						border-radius: 3px;
+
+						box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+
+						z-index: 2;
+
+						content: counter(eventorder,upper-alpha);
+					}
 
 					&::after {
 						height: 1000px;
 
 						position: absolute;
-						right: 0;
-						bottom: 10px;
+						right: 9px;
+						top: 10px;
 
-						border-right: 1px #000 solid;
+						border-right: 1px $twistphp-black solid;
+
+						z-index: 1;
 
 						content: "";
 					}
 				}
 		}
 
-	#twist-debug-memory {}
+		#twist-debug-timeline-table {}
+
+		#twist-debug-timeline-memory {
+			dl {
+				overflow: hidden;
+
+				background-color: #FFF;
+
+				border-radius: 3px;
+
+				box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+
+				dt,
+				dd {
+					margin: 0;
+					padding: 0.5em 0.75em;
+
+					display: block;
+
+					text-align: center;
+				}
+
+				dt {
+
+					color: #FFF;
+					font-weight: bold;
+
+					background-color: $twistphp-dark-grey;
+				}
+
+				dd {}
+			}
+		}
 
 	#twist-debug-database {}
 
+	#twist-debug-ajax {}
+
+	#twist-debug-fileupload {
+		.twist-debug-box,
+		[class^="twist-debug-box-"],
+		[class*=" twist-debug-box-"] {
+			margin-left: 142px;
+		}
+	}
+
 	#twist-debug-route {}
-
-	/* ===================================================== TEMP ===================================================== */
-	pre,
-	code {
-		margin-bottom: 1em;
-
-		display: block;
-
-		font-family: "Courier New", Courier, monospace, mono;
-		line-height: 1.25;
-		font-weight: 400;
-		white-space: pre-wrap;
-	}
-
-	pre {
-		font-size: 1.33em;
-	}
-
-	code {
-		font-size: 1em;
-	}
-
-	code,
-	pre.code {
-		position: relative;
-
-		overflow: auto;
-
-		color: $text;
-		white-space: pre;
-
-		border: 1px $border solid;
-	}
-
-	pre.code {
-		padding: 1em;
-
-		background-color: #FFF;
-
-		border: 1px $border solid;
-		border-left-width: 0;
-
-		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-
-		em {
-			font-style: normal;
-
-			background-color: $highlight;
-
-			box-shadow: 0 0 0 1px $highlight;
-		}
-
-		&[title] {
-			padding-top: 3em;
-
-			&::before {
-				padding: 0.25em 0.75em;
-
-				position: absolute;
-				top: 0;
-				right: 0;
-				left: 0;
-
-				//color: blackorwhite(table-colour(header));
-				//@include base-font-face;
-				font-weight: 700;
-				line-height: 1.5;
-				white-space: nowrap;
-
-				//background-color: table-colour(header);
-
-				content: attr(title);
-			}
-		}
-
-		&[lang] {
-			&::after {
-				height: 1.5em;
-				padding: 0 0.5em;
-
-				position: absolute;
-				top: 0.25em;
-				right: 0.25em;
-
-				//color: if(lightness(table-colour(header)) > 50, base-font(colour), #FFF);
-				//@include base-font-face;
-				line-height: 1.5;
-				text-transform: uppercase;
-
-				//background-color: table-colour(header);
-
-				//border-radius: $border-radius;
-
-				content: attr(lang);
-			}
-
-			&[title]::after {
-				padding: 0;
-
-				right: 0.75em;
-
-				background-color: transparent;
-			}
-		}
-	}
 }

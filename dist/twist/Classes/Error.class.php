@@ -86,11 +86,16 @@
         }
 
 		/**
-		 * Handle a PHP Exception and output the twist exception page. The exception page will be more detailed when the framework is set in development mode (see the TwistPHP setting DEVELOPMENT_MODE).
-		 * @param \Exception $resException
+		 * Handle a PHP Exceptions and PHP7 Throwable Fatal Errors and output the twist exception page. The exception page will be more detailed when the framework is set in development mode (see the TwistPHP setting DEVELOPMENT_MODE).
+		 * @param \Exception|\Throwable $resException
 		 * @param array $arrError
 		 */
-		public static function handleException(\Exception $resException,$arrError = array()){
+		public static function handleException($resException,$arrError = array()){
+
+			//Capture PHP7 throwable errors and turn then into a regular PHP Exception
+			if(!$resException instanceof \Exception) {
+				$resException = new Throwable($resException);
+			}
 
             $strExceptionTemplate = sprintf("%s/system/exception-user.tpl",TWIST_FRAMEWORK_VIEWS);
 
