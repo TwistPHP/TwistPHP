@@ -93,15 +93,15 @@ You can apply your restrictions after you are done registering your routes in yo
     /*
      * --------------------------------
      * Now we are going to restrict the
-     * access for anyone requesting one
-     * of our admin pages - the default
+     * access for anyone requesting our
+     * admin area and an added redirect
+     * if they attempt access - default
      * level for admin users is 30, but
      * this can quite easily be changed
-     * in the project settings database
-     * table
+     * in the settings database table
      * --------------------------------
      */
-    Twist::Route() -> restrictAdmin( '/admin/%' );
+    Twist::Route() -> restrictAdmin( '/admin/%', '/admin/login' );
     
     /*
      * --------------------------------
