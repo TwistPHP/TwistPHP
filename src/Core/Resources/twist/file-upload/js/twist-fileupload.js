@@ -74,7 +74,7 @@
 											intLimit = 0;
 
 									while( arrLimits[intLimit] &&
-									intBytes > Math.pow( 1024, intLimit + 1 ) ) {
+											intBytes > Math.pow( 1024, intLimit + 1 ) ) {
 										intLimit++;
 									}
 
@@ -220,8 +220,8 @@
 									strFilePreview = objUploadedFile.support[strPreview];
 								}
 
-								for( var intFileDetail in arrFileDetails ) {
-									var strFileDetail = arrFileDetails[intFileDetail],
+								for( var strFileDetailIndex in arrFileDetails ) {
+									var strFileDetail = arrFileDetails[strFileDetailIndex],
 											strProperty = objUploadedFile[strFileDetail];
 
 									if( strFileDetail.indexOf( '/' ) !== -1 ) {
@@ -238,6 +238,10 @@
 									}
 
 									strFileDetails += '<li data-key="' + strFileDetail + '"><span>' + strFileDetail.replace( /[\/_]/g, ' ' ) + ' :</span>' + strProperty + '</li>';
+
+									if( strFileDetailIndex === 'file/size' ) {
+										strFileDetails += '<li data-key="' + strFileDetail + '_pretty"><span>' + strFileDetail.replace( /[\/_]/g, ' ' ) + ' :</span>' + prettySize( parseInt( strProperty ) ) + '</li>';
+									}
 								}
 
 								strListHTML += '<li class="twistupload-file-list-item"><img src="' + strFilePreview + '"><ul class="twistupload-file-info">' + strFileDetails + '</ul><button id="' + strInputID + '-remove-' + intUploadedFile + '" data-file="' + intUploadedFile + '">Remove</button></li>';
