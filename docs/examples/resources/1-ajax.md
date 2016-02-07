@@ -10,44 +10,44 @@ In TwistPHP, an AJAX controller works in much the same way as a normal controlle
 <?php
 
     /*
-     * --------------------------------
+     * ================================
      * So far we've got the same as one
      * of our normal controllers...
-     * --------------------------------
+     * ================================
      */
     namespace App\Controllers;
     
     /*
-     * --------------------------------
+     * ================================
      * ...but this time we will want to
      * use the BaseAJAX controller
-     * --------------------------------
+     * ================================
      */
     use Twist\Core\Controllers\BaseAJAX;
     
     /*
-     * --------------------------------
+     * ================================
      * Our class name is again the same
      * as the filename but this time it
      * extends BaseAJAX
-     * --------------------------------
+     * ================================
      */
     class AJAX123 extends BaseAJAX {
     
         /*
-         * --------------------------------
+         * ================================
          * Just as with normal controllers,
          * URIs can be changed by using the
          * helpfule inherited _replaceURI()
          * and _aliasURI() methods
-         * --------------------------------
+         * ================================
          */
         public function __construct() {
             $this -> _aliasURI( 'knock-knock', 'knockknock' );
         }
         
         /*
-         * --------------------------------
+         * ================================
          * Respond to a URI with the status
          * and data that you need which can
          * also be prefixed with one of the
@@ -55,33 +55,33 @@ In TwistPHP, an AJAX controller works in much the same way as a normal controlle
          * called either GETknockknock() or
          * POSTknockknock() which will then
          * only respond to those types
-         * --------------------------------
+         * ================================
          */
         public function knockknock() {
             /*
-             * --------------------------------
+             * ================================
              * By default, the AJAX response is
              * "successful" but we can return a
              * "failed" response along with the
              * data
-             * --------------------------------
+             * ================================
              */
 			//$this -> _ajaxFail();
 			
             /*
-             * --------------------------------
+             * ================================
              * The message field can be used to
              * describe the returned data or as
              * a "title" field in the JS
-             * --------------------------------
+             * ================================
              */
 	        $this -> _ajaxMessage( 'Who\'s there?' );
 	        
             /*
-             * --------------------------------
+             * ================================
              * This is constructing the data to
              * be returned to the user
-             * --------------------------------
+             * ================================
              */
 	        $objResponse = array(
 	            'whosthere' => 'Doctor',
@@ -90,18 +90,18 @@ In TwistPHP, an AJAX controller works in much the same way as a normal controlle
 	        );
 	       
             /*
-             * --------------------------------
+             * ================================
              * Respond to the request with some
              * data
-             * --------------------------------
+             * ================================
              */
 			return $this -> _ajaxRespond( $objResponse );
         }
         
         /*
-         * --------------------------------
+         * ================================
          * This will be used later...
-         * --------------------------------
+         * ================================
          */
         public function POSTcontact() {
             $email = new \Twist::Email() -> create();
@@ -125,11 +125,11 @@ Register the route to the controller in the normal manner, but using the `ajax()
     require_once( 'twist/framework.php' );
 
     /*
-     * --------------------------------
+     * ================================
      * Here we will register the URI of
      * /ajax to forward all requests on
      * to our new AJAX123 controller
-     * --------------------------------
+     * ================================
      */
     Twist::Route() -> ajax( '/my-first-ajax/%', 'AJAX123' );
     
@@ -146,11 +146,11 @@ First, you can include the AJAX JavaScript class with a simple view tag:
 
 ```js
 /*
- * --------------------------------
+ * ================================
  * ...then create a new instance of
  * the AJAX object that is directed
  * at your registered controller
- * --------------------------------
+ * ================================
  */
 var myAJAX = new twistajax( '/my-first-ajax' );
 ```
@@ -180,10 +180,10 @@ Once you have an instance, you can start making AJAX calls using the returned ob
 
 ```js
 /*
- * --------------------------------
+ * ================================
  * Do a GET request and console log
  * out some of the returned data
- * --------------------------------
+ * ================================
  */
 myAJAX.get(
     'knock-knock',
@@ -202,11 +202,11 @@ Now we can use that contact method we wrote into our controller to handle data.
 
 ```js
 /*
- * --------------------------------
+ * ================================
  * POST some data to the registered
  * contact method and call feedback
  * methods on success and failure
- * --------------------------------
+ * ================================
  */
 myAJAX.post(
     'contact',
@@ -228,10 +228,10 @@ Optionally, if the `<input>` and/or `<textarea>` elements are given the correct 
 
 ```js
 /*
- * --------------------------------
+ * ================================
  * POST the entire form to /contact
  * using a jQuery object
- * --------------------------------
+ * ================================
  */
 myAJAX.post(
     'contact',
@@ -239,10 +239,10 @@ myAJAX.post(
 );
 
 /*
- * --------------------------------
+ * ================================
  * ...or an element selected by the
  * selector $( '#myForm' )
- * --------------------------------
+ * ================================
  */
 myAJAX.post(
     'contact',

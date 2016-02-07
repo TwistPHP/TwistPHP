@@ -8,44 +8,44 @@ Create a new file called `Basics.controller.php` in your `app/Controllers` direc
 <?php
 
     /*
-     * --------------------------------
+     * ================================
      * The PSR namespace for your app's
      * controllers
-     * --------------------------------
+     * ================================
      */
     namespace App\Controllers;
     
     /*
-     * --------------------------------
+     * ================================
      * The TwistPHP base controller
-     * --------------------------------
+     * ================================
      */
     use Twist\Core\Controllers\Base;
     
     /*
-     * --------------------------------
+     * ================================
      * This new controller class should
      * be named exactly the same as the
      * filename and extend the TwistPHP
      * base controller
-     * --------------------------------
+     * ================================
      */
     class Basics extends Base {
     
         /*
-         * --------------------------------
+         * ================================
          * If your controller needs to have
          * anything initialised this can be
          * done here
-         * --------------------------------
+         * ================================
          */
         public function __construct() {}
     
         /*
-         * --------------------------------
+         * ================================
          * Add any other methods in here to
          * return data for that URI
-         * --------------------------------
+         * ================================
          */
         
     }
@@ -57,27 +57,27 @@ Register your controller by adding the following lines to your main `index.php` 
 <?php
 
     /*
-     * --------------------------------
+     * ================================
      * Require the TwistPHP framework
-     * --------------------------------
+     * ================================
      */
     require_once( 'twist/framework.php' );
     
     /*
-     * --------------------------------
+     * ================================
      * Register the 'Basics' controller
      * for all requests that start with
      * the URI '/' (which should be the
      * base for the site)
-     * --------------------------------
+     * ================================
      */
     Twist::Route() -> controller( '/%', 'Basics' );
     
     /*
-     * --------------------------------
+     * ================================
      * Respond to all requests with the
      * relevant registered routes
-     * --------------------------------
+     * ================================
      */
 	Twist::Route() -> serve();
 ```
@@ -115,19 +115,19 @@ You can overwrite the method and provide whatever response you need. To return a
 
     public function _fallback() {
         /*
-         * --------------------------------
+         * ================================
          * A standard response to a missing
          * request is a 404 page
-         * --------------------------------
+         * ================================
          */
         //return $this -> _404();
         
         /*
-         * --------------------------------
+         * ================================
          * You can respond with any RFC7231
          * code, maybe even one that claims
          * you are a teapot
-         * --------------------------------
+         * ================================
          */
         return $this -> _response( 418 );
     }
@@ -141,10 +141,10 @@ To add custom responses to your controller, simply add a method with the name or
 <?php
 
     /*
-     * --------------------------------
+     * ================================
      * Remember that controller methods
      * are case sensitive
-     * --------------------------------
+     * ================================
      */
     public function whendoesthenarwhalbacon() {
         return 'Midnight';

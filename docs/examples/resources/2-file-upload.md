@@ -52,13 +52,13 @@ You also need to register the upload route in your index file:
 <?php
 
     /*
-     * --------------------------------
+     * ================================
      * The standard path for uploads is
      * set to /upload, but you are free
      * to change this URI by passing in
      * a customised one into the second
      * parameter of the method
-     * --------------------------------
+     * ================================
      */
     Twist::Route() -> upload();
     //Twist::Route() -> upload( '/yum-yum-files' ); // ...if you really want
@@ -126,13 +126,13 @@ Of course, if you are looking to do bespoke things with the upload tool, you'll 
 
 ```js
 /*
- * --------------------------------
+ * ================================
  * The initialisation of a new file
  * uploader, the first parameter is
  * the ID, the second is the URI to
  * post files to and the third is a
  * settings object
- * --------------------------------
+ * ================================
  */
 twistfileupload( 'twistupload-myuploader', '/upload/file', { debug: true } );
 ```
