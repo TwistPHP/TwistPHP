@@ -10,37 +10,37 @@ The basic file uploader can be generated as easily as using a view tag:
 
 ```html
 <!--
---------------------------------
+================================
 If you are not using jQuery then
 you will need to include it
---------------------------------
+================================
 -->
 {resource:jquery}
 
 <!--
---------------------------------
+================================
 Output the most simple AJAX file
 upload that places files in your
 /uploads directory
---------------------------------
+================================
 -->
 {file:upload}
 
 <!--
---------------------------------
+================================
 ...and the simplest asset upload
 tool that adds the uploaded file
 to your assets table and creates
 any supporting thumbnails
---------------------------------
+================================
 -->
 {asset:upload}
 
 <!--
---------------------------------
+================================
 Change the name attribute of the
 input element for posting
---------------------------------
+================================
 -->
 {file:upload,name=myuploadedfile}
 {asset:upload,name=myuploadedasset}
@@ -70,19 +70,19 @@ By default, the uploader accepts any and all file types. You can change this by 
 
 ```html
 <!--
---------------------------------
+================================
 Restrict the input field to only
 allow files with mime types that
 starts with 'image/' or 'video/'
---------------------------------
+================================
 -->
 {file:upload,accept=image/*,video/*}
 
 <!--
---------------------------------
+================================
 Accept files whose extension can
 be found within this CSV list
---------------------------------
+================================
 -->
 {file:upload,accept=.doc,.docx,.xlsx,.xls,.ppt,.pptx}
 ```
@@ -93,15 +93,15 @@ The standard `{file:upload}` and `{asset:upload}` tags output several different 
 
 ```html
 <!--
---------------------------------
+================================
 Fileupload JS class that handles
 all the requests
---------------------------------
+================================
 -->
 {resource:twist/ajax}
 
 <!--
---------------------------------
+================================
 Output all the HTML required for
 the uploader, when we do it this
 way we need to specify an ID for
@@ -109,15 +109,15 @@ the uploader JS to reference and
 if multiple files are to be done
 in a queue the optional multiple
 attribute
---------------------------------
+================================
 -->
 {file:upload-html,id=myuploader,multiple=1}
 
 <!--
---------------------------------
+================================
 Initialise the upload JavaScript
 with the uploader ID used above
---------------------------------
+================================
 -->
 {file:upload-init,id=myuploader}
 ```
@@ -169,87 +169,87 @@ When used in a modern browser, the code output contains various HTML elements fo
 ```html
 <div class="twistupload-wrapper">
     <!--
-    --------------------------------
+    ================================
     File input field that allows you
     to click and select a file, this
     is the element that is left when
     on older browsers, but will have
     a name parameter - during upload
     requests, this is hidden
-    --------------------------------
+    ================================
     -->
     <input class="twistupload" type="file">
     
     <!--
-    --------------------------------
+    ================================
     Hidden input containing the true
     returned value (asset id or file
     upload path) which the form will
     post
-    --------------------------------
+    ================================
     -->
     <input type="hidden" value="">
     
     <!--
-    --------------------------------
+    ================================
     Wrapper for elements that output
     data about the uploads progress,
     only visible when uploads are in
     process
-    --------------------------------
+    ================================
     -->
     <div class="twistupload-progress-wrapper">
         <!--
-        --------------------------------
+        ================================
         Progress bar showing the current
         upload progress
-        --------------------------------
+        ================================
         -->
         <progress class="twistupload-progress" value="0" max="100"></progress>
         
         <!--
-        --------------------------------
+        ================================
         Count displaying number of files
         uploaded and number in the queue
-        --------------------------------
+        ================================
         -->
         <span class="twistupload-count-wrapper"><span>0</span>/<span>0</span></span>
         
         <!--
-        --------------------------------
+        ================================
         Cancel button to abort the files
         remaining in the file queue, and
         also halt the current file
-        --------------------------------
+        ================================
         -->
         <button class="twistupload-cancel">Cancel</button>
     </div>
     
     <!--
-    --------------------------------
+    ================================
     List of completed uploaded files
     with information about the files
     as well as the ability to remove
     them from the input value posted
-    --------------------------------
+    ================================
     -->
     <ul class="twistupload-file-list">
         <li class="twistupload-file-list-item">
         
             <!--
-            --------------------------------
+            ================================
             Preview of the uploaded file - a
             non-image file will give an icon
             for that filetype while an image
             will show a small square preview
-            --------------------------------
+            ================================
             -->
             <img class="twistupload-file-list-item-preview">
             
             <!--
-            --------------------------------
+            ================================
             Details of the uploaded file
-            --------------------------------
+            ================================
             -->
             <ul class="twistupload-file-info">
                 <li data-key="file/name"><span>File name:</span>myfile.jpg</li>
@@ -259,11 +259,11 @@ When used in a modern browser, the code output contains various HTML elements fo
             </ul>
             
             <!--
-            --------------------------------
+            ================================
             Remove button to delete the file
             from the array of uploaded files
             ready for posting in the form
-            --------------------------------
+            ================================
             -->
             <button class="twistupload-file-list-remove">Remove</button>
         </li>
