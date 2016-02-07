@@ -144,9 +144,14 @@ First, you can include the AJAX JavaScript class with a simple view tag:
 {resource:twist/ajax}
 ```
 
-Then create an instance of the AJAX class assigned to your registered controller URI.
-
 ```js
+/*
+ * --------------------------------
+ * ...then create a new instance of
+ * the AJAX object that is directed
+ * at your registered controller
+ * --------------------------------
+ */
 var myAJAX = new twistajax( '/my-first-ajax' );
 ```
 
@@ -174,6 +179,12 @@ Once you have an instance, you can start making AJAX calls using the returned ob
 | 5     | Failure | Function to call on failure       | function | `function() {}`                                |
 
 ```js
+/*
+ * --------------------------------
+ * Do a GET request and console log
+ * out some of the returned data
+ * --------------------------------
+ */
 myAJAX.get(
     'knock-knock',
     function() {
@@ -190,6 +201,13 @@ myAJAX.get(
 Now we can use that contact method we wrote into our controller to handle data.
 
 ```js
+/*
+ * --------------------------------
+ * POST some data to the registered
+ * contact method and call feedback
+ * methods on success and failure
+ * --------------------------------
+ */
 myAJAX.post(
     'contact',
     {
@@ -209,13 +227,23 @@ myAJAX.post(
 Optionally, if the `<input>` and/or `<textarea>` elements are given the correct names and are used within a `<form>`, you can simply pass in either the form as a jQuery object or just a jQuery selector.
 
 ```js
+/*
+ * --------------------------------
+ * POST the entire form to /contact
+ * using a jQuery object
+ * --------------------------------
+ */
 myAJAX.post(
     'contact',
     $( 'form' )
 );
 
-// or even...
-
+/*
+ * --------------------------------
+ * ...or an element selected by the
+ * selector $( '#myForm' )
+ * --------------------------------
+ */
 myAJAX.post(
     'contact',
     '#myForm'

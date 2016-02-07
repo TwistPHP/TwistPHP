@@ -127,7 +127,6 @@
 							}
 
 							thisUploader.domPseudo.value = '';
-							thisUploader.settings.onclear();
 						};
 						thisUploader.domCancelUpload = document.getElementById( strInputID + '-cancel' );
 						thisUploader.domCancelUploadDisplay = null;
@@ -174,7 +173,6 @@
 							hoverclass: 'twistupload-hover',
 							invalidtypemessage: 'This file type is not permitted',
 							onabort: function() {},
-							onclear: function() {},
 							oncompletefile: function() {},
 							oncompletequeue: function() {},
 							onerror: function() {},
@@ -244,7 +242,7 @@
 									}
 								}
 
-								strListHTML += '<li class="twistupload-file-list-item"><img src="' + strFilePreview + '"><ul class="twistupload-file-info">' + strFileDetails + '</ul><button id="' + strInputID + '-remove-' + intUploadedFile + '" data-file="' + intUploadedFile + '">Remove</button></li>';
+								strListHTML += '<li class="twistupload-file-list-item"><img src="' + strFilePreview + '" class="twistupload-file-list-item-preview"><ul class="twistupload-file-info">' + strFileDetails + '</ul><button id="' + strInputID + '-remove-' + intUploadedFile + '" class="twistupload-file-list-remove" data-file="' + intUploadedFile + '">Remove</button></li>';
 							}
 
 							thisUploader.domPseudo.value = arrUploadedFormValues.join( ',' );
@@ -498,7 +496,9 @@
 											log( 'Allowed file extensions: ' + thisUploader.acceptExtentions.join( ', ' ) );
 										}
 
-										alert( thisUploader.settings.invalidtypemessage );
+										if( thisUploader.settings.invalidtypemessage !== '' ) {
+											alert( thisUploader.settings.invalidtypemessage );
+										}
 
 										thisUploader.clearInput();
 									}
