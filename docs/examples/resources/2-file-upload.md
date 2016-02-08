@@ -143,24 +143,24 @@ If your registered URI for uploads is `/upload`, file uploads by standard as pos
 
 You can pass in any of these settings into your `twistfileupload()` call:
 
-| Setting            | Description                                                                                                                    | Type       | Default value                       |
-| ------------------ | ------------------------------------------------------------------------------------------ | ---------- | ----------------------------------- |
-| abortable          | Defines whether or not you can abort an upload                                                                                 | `boolean`  | `true`                              |
-| counter            | Show a counter when uploading multiple files                                                                                   | `boolean`  | `true`                              |
-| debug              | Debug all the uploads                                                                                                          | `boolean`  | `false`                             |
-| dragdrop           | A jQuery selector to enable a droppable area for the file uploads                                                              | `string`   | `null`                              |
-| dropableclass      | Class to add to the droppable area if drag and drop is supported                                                               | `string`   | `'twistupload-dropable'`            |
-| hoverclass         | Class to add to the droppable area when an item is dragged over it                                                             | `string`   | `'twistupload-hover'`               |
-| invalidtypemessage | Alert to display if an invalid file type is uploaded                                                                           | `string`   | `'This file type is not permitted'` |
-| onabort            | Method to be called when the upload is aborted (parameter: file)                                                               | `function` | `function() {}`                     |
-| oncompletefile     | Method to be called after each file in a queue is uploaded (parameters: response, file)                                        | `function` | `function() {}`                     |
-| oncompletequeue    | Method to be called after every file in a queue is uploaded                                                                    | `function` | `function() {}`                     |
-| onerror            | Method to be called upon an upload error (parameter: file)                                                                     | `function` | `function() {}`                     |
-| oninvalidtype      | Method to be called upon upload of an invalid type (parameters: file, acceptedtypes, acceptedextensions)                       | `function` | `function() {}`                     |
-| onprogress         | Method to be called during the upload of each file (parameters: file, uploaded, totalsize)                                     | `function` | `function() {}`                     |
-| onstart            | Method to be called before the file upload queue starts (parameter: file)                                                      | `function` | `function() {}`                     |
-| previewsize        | The preview size image to be used (sizes available are set in the TwistPHP settings table)                                     | `integer`  | `128`                               |
-| previewsquare      | Use a square preview image                                                                                                     | `boolean`  | `true`                              |
+| Setting            | Description                                                                                                                    | Type     | Default value                       |
+| ------------------ | ------------------------------------------------------------------------------------------ | -------- | ----------------------------------- |
+| abortable          | Defines whether or not you can abort an upload                                                                                 | boolean  | `true`                              |
+| counter            | Show a counter when uploading multiple files                                                                                   | boolean  | `true`                              |
+| debug              | Debug all the uploads                                                                                                          | boolean  | `false`                             |
+| dragdrop           | A jQuery selector to enable a droppable area for the file uploads                                                              | string   | `null`                              |
+| dropableclass      | Class to add to the droppable area if drag and drop is supported                                                               | string   | `'twistupload-dropable'`            |
+| hoverclass         | Class to add to the droppable area when an item is dragged over it                                                             | string   | `'twistupload-hover'`               |
+| invalidtypemessage | Alert to display if an invalid file type is uploaded                                                                           | string   | `'This file type is not permitted'` |
+| onabort            | Method to be called when the upload is aborted (parameter: file)                                                               | function | `function() {}`                     |
+| oncompletefile     | Method to be called after each file in a queue is uploaded (parameters: response, file)                                        | function | `function() {}`                     |
+| oncompletequeue    | Method to be called after every file in a queue is uploaded                                                                    | function | `function() {}`                     |
+| onerror            | Method to be called upon an upload error (parameter: file)                                                                     | function | `function() {}`                     |
+| oninvalidtype      | Method to be called upon upload of an invalid type (parameters: file, acceptedtypes, acceptedextensions)                       | function | `function() {}`                     |
+| onprogress         | Method to be called during the upload of each file (parameters: file, uploaded, totalsize)                                     | function | `function() {}`                     |
+| onstart            | Method to be called before the file upload queue starts (parameter: file)                                                      | function | `function() {}`                     |
+| previewsize        | The preview size image to be used (sizes available are set in the TwistPHP settings table)                                     | integer  | `128`                               |
+| previewsquare      | Use a square preview image                                                                                                     | boolean  | `true`                              |
 
 ### HTML structure
 
