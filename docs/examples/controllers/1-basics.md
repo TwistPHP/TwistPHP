@@ -1,8 +1,10 @@
 # Controller basics
 
+A controllers will allow you to respond to requested URIs with different responses. They are all suffixed with `.controller.php` and are stored in your app's `Controllers` directory. The name of the class in the controller must be the same as the start of the filename.
+
 ## Create a controller
 
-Create a new file called `Basics.controller.php` in your `app/Controllers` directory:
+Create a new file called `Basics.controller.php` in your `/app/Controllers` directory:
 
 ```php
 <?php
