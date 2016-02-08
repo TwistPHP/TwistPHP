@@ -86,9 +86,9 @@ class Manager extends BaseUser{
 		$arrTags['version'] = \Twist::version();
 
 		if(count($arrLatestVersion) && array_key_exists('stable',$arrLatestVersion)){
-			$arrTags['version_status'] = (\Twist::version() == $arrLatestVersion['stable']['version']) ? '<span class="success">Twist is Up-to-date</span>' : '<span class="warning">A new version of TwistPHP is available, <a href="https://twistphp.com/">download from twist.com</a>!</span>';
+			$arrTags['version_status'] = (\Twist::version() == $arrLatestVersion['stable']['version']) ? '<span class="tag green">Twist is Up-to-date</span>' : '<span class="tag yellow">A new version of TwistPHP is available [<a href="https://github.com/TwistPHP/TwistPHP/releases" target="_blank">download it now</a>]</span>';
 		}else{
-			$arrTags['version_status'] = '<span class="error">Failed to retrieve version information, try again later!</span>';
+			$arrTags['version_status'] = '<span class="tag red">Failed to retrieve version information, try again later!</span>';
 		}
 
 		$objCodeScanner = new \Twist\Core\Models\Security\CodeScanner();
