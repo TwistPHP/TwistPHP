@@ -201,6 +201,12 @@
 				self::handleError($arrTags['type_code'],$arrTags['message'],$arrTags['file'],$arrTags['line']);
 			}
 
+			//Output the correct
+			$strHttpProtocol = ("HTTP/1.1" === $_SERVER["SERVER_PROTOCOL"]) ? 'HTTP/1.1' : 'HTTP/1.0';
+
+			//Output a 500 Error response for an exception page (this page should not have a 200 status code)
+			header(sprintf('%s %d Internal Server Error',$strHttpProtocol,500),true,500);
+
             if(TWIST_AJAX_REQUEST){
 
                 header( 'Cache-Control: no-cache, must-revalidate' );
