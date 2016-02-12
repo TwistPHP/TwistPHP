@@ -30,7 +30,11 @@
 
 		protected $strDatabase = null;
 		protected $strTable = null;
+
 		protected $arrStructure = array();
+		protected $arrStructureChanges = array();
+		protected $blNewTable = true;
+
 		protected $mxdAutoIncrement = null;
 		protected $intAutoIncrementStart = 1;
 		protected $mxdPrimaryKey = null;
@@ -52,6 +56,7 @@
 			$this->strTable = $strTable;
 
 			if(count($arrStructure)){
+				$this->blNewTable = false;
 				$this->arrStructure = $arrStructure['columns'];
 
 				if(!is_null($arrStructure['auto_increment'])){
@@ -105,14 +110,21 @@
 		 * @param $strCollation
 		 */
 		public function collation($strCollation){
+
 			$this->strCollation = $strCollation;
+
+			$strNewCharset = '';
+
+			//Lookup and set charset based on collation
+			$this->charset($strNewCharset);
+			$this->arrStructureChanges['collation'] = true;
 		}
 
 		/**
 		 * Set the character set for the database table
 		 * @param $strCharset
 		 */
-		public function charset($strCharset){
+		protected function charset($strCharset){
 			$this->strCharset = $strCharset;
 		}
 
@@ -122,6 +134,7 @@
 		 */
 		public function engine($strEngine){
 			$this->strEngine = $strEngine;
+			$this->arrStructureChanges['engine'] = true;
 		}
 
 		/**
@@ -130,6 +143,7 @@
 		 */
 		public function comment($strComment){
 			$this->mxdTableComment = $strComment;
+			$this->arrStructureChanges['comment'] = true;
 		}
 
 		/**
@@ -146,6 +160,9 @@
 				$this->primaryKey($strField);
 				$this->mxdAutoIncrement = $strField;
 				$this->intAutoIncrementStart = $intStartNumber;
+
+				$this->arrStructureChanges['auto_increment'] = true;
+
 			}else{
 				//Field must have already been added and can only be an integer
 				throw new \Exception(sprintf("Field '%s' must have already been added to the table and can only be an integer",$strField));
@@ -161,6 +178,8 @@
 
 			if(is_null($this->mxdAutoIncrement)){
 				$this->mxdPrimaryKey = $strField;
+
+				$this->arrStructureChanges['primary_key'] = true;
 			}else{
 				//error cannot set primary key, when using auto increment
 				throw new \Exception("Error, cannot set a primary key when using auto increment");
@@ -175,6 +194,9 @@
 		 */
 		public function addUniqueKey($strName,$mxdFields){
 			$this->arrUniqueKey[$strName] = $mxdFields;
+
+			//Add a unique field key to the table
+			$this->arrStructureChanges['add_unique'][$strName] = $mxdFields;
 		}
 
 		/**
@@ -184,6 +206,9 @@
 		 */
 		public function addIndex($strName,$mxdFields){
 			$this->arrIndexs[$strName] = $mxdFields;
+
+			//Add an field index key to the table
+			$this->arrStructureChanges['add_index'][$strName] = $mxdFields;
 		}
 
 		/**
@@ -212,6 +237,9 @@
 						'comment' => null,
 						'order' => count($this->arrStructure)+1
 					);
+
+					//Add a new field to the database, we will generate this ALTER SQL upon commit to ensure correct positioning
+					$this->arrStructureChanges['add_field'][] = $strColumnName;
 				}else{
 					//Field is not an allowed type
 					throw new \Exception(sprintf("Field type '%s' is not currently supported in this system",$strDataType));
@@ -240,14 +268,32 @@
 		}
 
 		/**
-		 * Final call, this will create the table in the database, once created this resource will become unusable
+		 * Final call, this will create/alter the tables structure in the database.
 		 * @return bool
 		 */
 		public function commit(){
 
-			$strSQL = $this->sql();
-			$blOut = \Twist::Database()->query($strSQL)->status();
-			$this->__destruct();
+			$blOut = false;
+
+			if($this->blNewTable){
+
+				$strSQL = $this->sql();
+				$blOut = \Twist::Database()->query($strSQL)->status();
+
+				//Reset the new table key so that you can now alter the table
+				$this->blNewTable = false;
+
+			}elseif(count($this->arrStructureChanges)){
+
+				foreach($this->arrStructureChanges as $strKeyChange => $mxdValue){
+					//Generate and run each alter query to make all the necessary changes
+					$blAlterStatus = \Twist::Database()->query($this->generateAlterQuery($strKeyChange,$mxdValue))->status();
+				}
+
+				//Reset the changes array so that you can continue using the db object
+				$this->arrStructureChanges = array();
+				$blOut = true;
+			}
 
 			return $blOut;
 		}
@@ -427,5 +473,110 @@
 			}
 
 			return $strOut;
+		}
+
+		protected function generateAlterQuery($strType,$mxdData){
+
+			$strAlterSQL = '';
+			$strTableName = \Twist::Database()->escape($this->strTable);
+
+			switch($strType){
+
+				case'collation':
+					$strAlterSQL = sprintf("ALTER TABLE `%s` DEFAULT CHARACTER SET %s COLLATE %s;",
+						$strTableName,
+						\Twist::Database()->escape($this->strCharset),
+						\Twist::Database()->escape($this->strCollation)
+					);
+					break;
+
+				case'engine':
+					$strAlterSQL = sprintf("ALTER TABLE `%s` ENGINE = %s;",
+						$strTableName,
+						\Twist::Database()->escape($this->strEngine)
+					);
+					break;
+
+				case'comment':
+					$strAlterSQL = sprintf("ALTER TABLE `%s` COMMENT = '%s';",
+						$strTableName,
+						\Twist::Database()->escape($this->mxdTableComment)
+					);
+					break;
+
+				case'auto_increment':
+					$strAlterSQL = sprintf("ALTER TABLE `%s` auto_increment = %d;",
+						$strTableName,
+						\Twist::Database()->escape($this->intAutoIncrementStart)
+					);
+					break;
+
+				case'primary_key':
+
+					//ALTER TABLE `%s` change id id int(11);
+					//ALTER TABLE `%s` DROP PRIMARY KEY;
+					//ALTER TABLE `%s` ADD PRIMARY KEY (uuid);
+
+
+					//ALTER TABLE `%s` DROP PRIMARY KEY;
+					//ALTER TABLE `%s` ADD PRIMARY KEY(`id`);
+
+					$strAlterSQL = sprintf("",
+						$strTableName,
+						\Twist::Database()->escape($this->intAutoIncrementStart)
+					);
+					break;
+
+				case'add_index':
+					$strAlterSQL = sprintf("ALTER TABLE `%s` auto_increment = %d;",
+						$strTableName,
+						\Twist::Database()->escape($this->intAutoIncrementStart)
+					);
+					break;
+
+				case'add_unique':
+					$strAlterSQL = sprintf("ALTER TABLE `%s` auto_increment = %d;",
+						$strTableName,
+						\Twist::Database()->escape($this->intAutoIncrementStart)
+					);
+					break;
+
+				case'remove_index':
+					$strAlterSQL = sprintf("ALTER TABLE `%s` auto_increment = %d;",
+						$strTableName,
+						\Twist::Database()->escape($this->intAutoIncrementStart)
+					);
+					break;
+
+				case'remove_unique':
+					$strAlterSQL = sprintf("ALTER TABLE `%s` auto_increment = %d;",
+						$strTableName,
+						\Twist::Database()->escape($this->intAutoIncrementStart)
+					);
+					break;
+
+				case'add_field':
+					$strAlterSQL = sprintf("ALTER TABLE `%s` auto_increment = %d;",
+						$strTableName,
+						\Twist::Database()->escape($this->intAutoIncrementStart)
+					);
+					break;
+
+				case'alter_field':
+					$strAlterSQL = sprintf("ALTER TABLE `%s` auto_increment = %d;",
+						$strTableName,
+						\Twist::Database()->escape($this->intAutoIncrementStart)
+					);
+					break;
+
+				case'remove_field':
+					$strAlterSQL = sprintf("ALTER TABLE `%s` auto_increment = %d;",
+						$strTableName,
+						\Twist::Database()->escape($this->intAutoIncrementStart)
+					);
+					break;
+			}
+
+			return $strAlterSQL;
 		}
 	}
