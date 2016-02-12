@@ -133,6 +133,7 @@
 		 * @param $strEngine
 		 */
 		public function engine($strEngine){
+
 			$this->strEngine = $strEngine;
 			$this->arrStructureChanges['engine'] = true;
 		}
@@ -142,6 +143,7 @@
 		 * @param $strComment
 		 */
 		public function comment($strComment){
+
 			$this->mxdTableComment = $strComment;
 			$this->arrStructureChanges['comment'] = true;
 		}
@@ -193,9 +195,8 @@
 		 * @return string
 		 */
 		public function addUniqueKey($strName,$mxdFields){
-			$this->arrUniqueKey[$strName] = $mxdFields;
 
-			//Add a unique field key to the table
+			$this->arrUniqueKey[$strName] = $mxdFields;
 			$this->arrStructureChanges['add_unique'][$strName] = $mxdFields;
 		}
 
@@ -205,10 +206,33 @@
 		 * @param $mxdFields
 		 */
 		public function addIndex($strName,$mxdFields){
-			$this->arrIndexs[$strName] = $mxdFields;
 
-			//Add an field index key to the table
+			$this->arrIndexs[$strName] = $mxdFields;
 			$this->arrStructureChanges['add_index'][$strName] = $mxdFields;
+		}
+
+		/**
+		 * Remove a unique key from the table structure
+		 * @param $strName
+		 */
+		public function removeUniqueKey($strName){
+
+			if(array_key_exists($strName,$this->arrUniqueKey)){
+				unset($this->arrUniqueKey[$strName]);
+				$this->arrStructureChanges['remove_unique'][$strName] = true;
+			}
+		}
+
+		/**
+		 * Remove a Index from the table structure
+		 * @param $strName
+		 */
+		public function removeIndex($strName){
+
+			if(array_key_exists($strName,$this->arrIndexs)){
+				unset($this->arrIndexs[$strName]);
+				$this->arrStructureChanges['remove_index'][$strName] = true;
+			}
 		}
 
 		/**
@@ -528,6 +552,9 @@
 					break;
 
 				case'add_index':
+
+					//Loop through $mxdData -- check the alter is correct
+
 					$strAlterSQL = sprintf("ALTER TABLE `%s` auto_increment = %d;",
 						$strTableName,
 						\Twist::Database()->escape($this->intAutoIncrementStart)
@@ -535,6 +562,9 @@
 					break;
 
 				case'add_unique':
+
+					//Loop through $mxdData -- check the alter is correct
+
 					$strAlterSQL = sprintf("ALTER TABLE `%s` auto_increment = %d;",
 						$strTableName,
 						\Twist::Database()->escape($this->intAutoIncrementStart)
@@ -542,14 +572,20 @@
 					break;
 
 				case'remove_index':
-					$strAlterSQL = sprintf("ALTER TABLE `%s` auto_increment = %d;",
+
+					//Loop through $mxdData -- check the alter is correct
+
+					$strAlterSQL = sprintf("ALTER TABLE `%s` DROP INDEX `%s`",
 						$strTableName,
 						\Twist::Database()->escape($this->intAutoIncrementStart)
 					);
 					break;
 
 				case'remove_unique':
-					$strAlterSQL = sprintf("ALTER TABLE `%s` auto_increment = %d;",
+
+					//Loop through $mxdData -- check the alter is correct
+
+					$strAlterSQL = sprintf("ALTER TABLE `%s` DROP UNIQUE `%s`",
 						$strTableName,
 						\Twist::Database()->escape($this->intAutoIncrementStart)
 					);
