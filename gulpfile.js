@@ -16,7 +16,7 @@ gulp.task( 'ajax-js',
 				.pipe( jshint() )
 				.pipe( jshint.reporter( 'default' ) )
 				.pipe( concat( 'twistajax.min.js' ) )
-				.pipe( uglify() )
+				.pipe( uglify( { preserveComments: 'license' } ) )
 				.pipe( gulp.dest( strTwistDestination + 'ajax/js' ) );
 	}
 );
@@ -52,7 +52,7 @@ gulp.task( 'debug-js',
 				.pipe( jshint() )
 				.pipe( jshint.reporter( 'default' ) )
 				.pipe( concat( 'twistdebug.min.js' ) )
-				.pipe( uglify() )
+				.pipe( uglify( { preserveComments: 'license' } ) )
 				.pipe( gulp.dest( strTwistDestination + 'debug/js' ) );
 	}
 );
@@ -78,7 +78,7 @@ gulp.task( 'fileupload-js',
 				.pipe( concat( 'twistfileupload.js' ) )
 				.pipe( gulp.dest( strTwistDestination + 'fileupload/js' ) )
 				.pipe( rename( 'twistfileupload.min.js' ) )
-				.pipe( uglify() )
+				.pipe( uglify( { preserveComments: 'license' } ) )
 				.pipe( gulp.dest( strTwistDestination + 'fileupload/js' ) );
 	}
 );
@@ -102,7 +102,7 @@ gulp.task( 'manager-js',
 				.pipe( jshint() )
 				.pipe( jshint.reporter( 'default' ) )
 				.pipe( concat( 'twistmanager.min.js' ) )
-				.pipe( uglify() )
+				.pipe( uglify( { preserveComments: 'license' } ) )
 				.pipe( gulp.dest( strTwistDestination + 'manager/js' ) );
 	}
 );
@@ -126,7 +126,7 @@ gulp.task( 'setup-js',
 				.pipe( jshint() )
 				.pipe( jshint.reporter( 'default' ) )
 				.pipe( concat( 'twistsetup.min.js' ) )
-				.pipe( uglify() )
+				.pipe( uglify( { preserveComments: 'license' } ) )
 				.pipe( gulp.dest( strTwistDestination + 'setup/js' ) );
 	}
 );
