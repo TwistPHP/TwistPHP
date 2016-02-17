@@ -106,18 +106,33 @@
 		}
 
 		/**
-		 * Set the Collation for the database table
+		 * Set the Collation for the database table, calling this method will also set the charset of the Table accordingly
 		 * @param $strCollation
 		 */
 		public function collation($strCollation){
 
-			$this->strCollation = $strCollation;
+			$strCharset = null;
+			$strCollation = strtolower($strCollation);
 
-			$strNewCharset = '';
+			$jsonCharsetCollations = file_get_contents(sprintf('%sCore/Data/database/charset-collations.json',TWIST_FRAMEWORK));
 
-			//Lookup and set charset based on collation
-			$this->charset($strNewCharset);
-			$this->arrStructureChanges['collation'] = true;
+			foreach(json_decode($jsonCharsetCollations,true) as $strCharsetKey => $arrCharSet){
+				if(array_key_exists($strCollation,$arrCharSet['collations'])){
+					$strCharset = $strCharsetKey;
+					break;
+				}
+			}
+
+			if(!is_null($strCharset)){
+
+				$this->strCollation = $strCollation;
+
+				//Lookup and set charset based on collation
+				$this->charset($strCharset);
+				$this->arrStructureChanges['collation'] = true;
+			}else{
+				//Throw invalid collation error
+			}
 		}
 
 		/**
@@ -310,8 +325,11 @@
 			}elseif(count($this->arrStructureChanges)){
 
 				foreach($this->arrStructureChanges as $strKeyChange => $mxdValue){
+
+					echo $this->generateAlterQuery($strKeyChange,$mxdValue)."<br>";
+
 					//Generate and run each alter query to make all the necessary changes
-					$blAlterStatus = \Twist::Database()->query($this->generateAlterQuery($strKeyChange,$mxdValue))->status();
+					//$blAlterStatus = \Twist::Database()->query($this->generateAlterQuery($strKeyChange,$mxdValue))->status();
 				}
 
 				//Reset the changes array so that you can continue using the db object
@@ -502,36 +520,36 @@
 		protected function generateAlterQuery($strType,$mxdData){
 
 			$strAlterSQL = '';
-			$strTableName = \Twist::Database()->escape($this->strTable);
+			$strTableName = \Twist::Database()->escapeString($this->strTable);
 
 			switch($strType){
 
 				case'collation':
 					$strAlterSQL = sprintf("ALTER TABLE `%s` DEFAULT CHARACTER SET %s COLLATE %s;",
 						$strTableName,
-						\Twist::Database()->escape($this->strCharset),
-						\Twist::Database()->escape($this->strCollation)
+						\Twist::Database()->escapeString($this->strCharset),
+						\Twist::Database()->escapeString($this->strCollation)
 					);
 					break;
 
 				case'engine':
 					$strAlterSQL = sprintf("ALTER TABLE `%s` ENGINE = %s;",
 						$strTableName,
-						\Twist::Database()->escape($this->strEngine)
+						\Twist::Database()->escapeString($this->strEngine)
 					);
 					break;
 
 				case'comment':
 					$strAlterSQL = sprintf("ALTER TABLE `%s` COMMENT = '%s';",
 						$strTableName,
-						\Twist::Database()->escape($this->mxdTableComment)
+						\Twist::Database()->escapeString($this->mxdTableComment)
 					);
 					break;
 
 				case'auto_increment':
 					$strAlterSQL = sprintf("ALTER TABLE `%s` auto_increment = %d;",
 						$strTableName,
-						\Twist::Database()->escape($this->intAutoIncrementStart)
+						\Twist::Database()->escapeString($this->intAutoIncrementStart)
 					);
 					break;
 
@@ -547,7 +565,7 @@
 
 					$strAlterSQL = sprintf("",
 						$strTableName,
-						\Twist::Database()->escape($this->intAutoIncrementStart)
+						\Twist::Database()->escapeString($this->intAutoIncrementStart)
 					);
 					break;
 
@@ -557,7 +575,7 @@
 
 					$strAlterSQL = sprintf("ALTER TABLE `%s` auto_increment = %d;",
 						$strTableName,
-						\Twist::Database()->escape($this->intAutoIncrementStart)
+						\Twist::Database()->escapeString($this->intAutoIncrementStart)
 					);
 					break;
 
@@ -567,7 +585,7 @@
 
 					$strAlterSQL = sprintf("ALTER TABLE `%s` auto_increment = %d;",
 						$strTableName,
-						\Twist::Database()->escape($this->intAutoIncrementStart)
+						\Twist::Database()->escapeString($this->intAutoIncrementStart)
 					);
 					break;
 
@@ -577,7 +595,7 @@
 
 					$strAlterSQL = sprintf("ALTER TABLE `%s` DROP INDEX `%s`",
 						$strTableName,
-						\Twist::Database()->escape($this->intAutoIncrementStart)
+						\Twist::Database()->escapeString($this->intAutoIncrementStart)
 					);
 					break;
 
@@ -587,28 +605,28 @@
 
 					$strAlterSQL = sprintf("ALTER TABLE `%s` DROP UNIQUE `%s`",
 						$strTableName,
-						\Twist::Database()->escape($this->intAutoIncrementStart)
+						\Twist::Database()->escapeString($this->intAutoIncrementStart)
 					);
 					break;
 
 				case'add_field':
 					$strAlterSQL = sprintf("ALTER TABLE `%s` auto_increment = %d;",
 						$strTableName,
-						\Twist::Database()->escape($this->intAutoIncrementStart)
+						\Twist::Database()->escapeString($this->intAutoIncrementStart)
 					);
 					break;
 
 				case'alter_field':
 					$strAlterSQL = sprintf("ALTER TABLE `%s` auto_increment = %d;",
 						$strTableName,
-						\Twist::Database()->escape($this->intAutoIncrementStart)
+						\Twist::Database()->escapeString($this->intAutoIncrementStart)
 					);
 					break;
 
 				case'remove_field':
 					$strAlterSQL = sprintf("ALTER TABLE `%s` auto_increment = %d;",
 						$strTableName,
-						\Twist::Database()->escape($this->intAutoIncrementStart)
+						\Twist::Database()->escapeString($this->intAutoIncrementStart)
 					);
 					break;
 			}
