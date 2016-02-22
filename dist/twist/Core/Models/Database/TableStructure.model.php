@@ -60,7 +60,10 @@
 				$this->arrStructure = $arrStructure['columns'];
 
 				if(!is_null($arrStructure['auto_increment'])){
-					$this->autoIncrement($arrStructure['auto_increment'],$arrStructure['auto_increment_start']);
+
+					$this->mxdAutoIncrement = $arrStructure['auto_increment'];
+					$this->intAutoIncrementStart = $arrStructure['auto_increment_start'];
+					$this->mxdPrimaryKey = $arrStructure['primary_key'];
 				}
 
 				//Set all the other key information for this table
@@ -111,6 +114,27 @@
 		 */
 		public function collation($strCollation){
 
+			$strCharset = $this->getCollationCharset($strCollation);
+
+			if(!is_null($strCharset)){
+
+				$this->strCollation = $strCollation;
+
+				//Lookup and set charset based on collation
+				$this->charset($strCharset);
+				$this->arrStructureChanges['collation'] = true;
+			}else{
+				//Throw invalid collation error
+			}
+		}
+
+		/**
+		 * Get the Charset for a particular collation
+		 * @param $strCollation
+		 * @return int|null|string
+		 */
+		protected function getCollationCharset($strCollation){
+
 			$strCharset = null;
 			$strCollation = strtolower($strCollation);
 
@@ -123,16 +147,7 @@
 				}
 			}
 
-			if(!is_null($strCharset)){
-
-				$this->strCollation = $strCollation;
-
-				//Lookup and set charset based on collation
-				$this->charset($strCharset);
-				$this->arrStructureChanges['collation'] = true;
-			}else{
-				//Throw invalid collation error
-			}
+			return $strCharset;
 		}
 
 		/**
@@ -207,23 +222,25 @@
 		 * Set a unique key, you can have multiple unique keys per table. To create a unique key from more than 1 field pass the second parameter as an array of fields
 		 * @param $strName
 		 * @param $mxdFields
+		 * @param $strComment
 		 * @return string
 		 */
-		public function addUniqueKey($strName,$mxdFields){
+		public function addUniqueKey($strName,$mxdFields,$strComment = null){
 
-			$this->arrUniqueKey[$strName] = $mxdFields;
-			$this->arrStructureChanges['add_unique'][$strName] = $mxdFields;
+			$this->arrUniqueKey[$strName] = array('comment' => $strComment,'fields' => $mxdFields);
+			$this->arrStructureChanges['add_unique'][$strName] = array('comment' => $strComment,'fields' => $mxdFields);
 		}
 
 		/**
 		 * Set a Index, you can have multiple indexes per table. To create a index from more than 1 field pass the second parameter as an array of fields
 		 * @param $strName
 		 * @param $mxdFields
+		 * @param $strComment
 		 */
-		public function addIndex($strName,$mxdFields){
+		public function addIndex($strName,$mxdFields,$strComment = null){
 
-			$this->arrIndexs[$strName] = $mxdFields;
-			$this->arrStructureChanges['add_index'][$strName] = $mxdFields;
+			$this->arrIndexs[$strName] = array('comment' => $strComment,'fields' => $mxdFields);
+			$this->arrStructureChanges['add_index'][$strName] = array('comment' => $strComment,'fields' => $mxdFields);
 		}
 
 		/**
@@ -257,9 +274,10 @@
 		 * @param null $mxdCharLength
 		 * @param null $strDefaultValue
 		 * @param bool $blNullable
+		 * @param null|string $strCollation
 		 * @throws \Exception
 		 */
-		public function addField($strColumnName,$strDataType,$mxdCharLength=null,$strDefaultValue = null,$blNullable = false){
+		public function addField($strColumnName,$strDataType,$mxdCharLength=null,$strDefaultValue = null,$blNullable = false,$strCollation = null){
 
 			$arrAllowedTypes = array('int', 'char', 'varchar', 'text', 'enum', 'date', 'datetime');
 
@@ -273,6 +291,8 @@
 						'character_length' => (in_array(strtolower($strDataType),array('text','date','datetime'))) ? null : $mxdCharLength,
 						'nullable' => $blNullable,
 						'default_value' => $strDefaultValue,
+						'collation' => $strCollation,
+						'charset' => (is_null($strCollation)) ? null : $this->getCollationCharset($strCollation),
 						'comment' => null,
 						'order' => count($this->arrStructure)+1
 					);
@@ -394,20 +414,13 @@
 			$strOut = '';
 
 			if(count($this->arrUniqueKey) > 0){
-				foreach($this->arrUniqueKey as $strName => $mxdFields){
+				foreach($this->arrUniqueKey as $strName => $mxdData){
 
-					$arrFields = array();
-
-					if(is_array($mxdFields)){
-
-						foreach($mxdFields as $strFiled){
-							$arrFields[] = sprintf("`%s`",$strFiled);
-						}
-
-						$strOut .= sprintf("\tUNIQUE KEY `%s` ( %s ),\n",$strName,implode(',',$arrFields));
-					}else{
-						$strOut .= sprintf("\tUNIQUE KEY `%s` ( %s ),\n",$strName,$mxdFields);
-					}
+					$strOut .= sprintf("\tUNIQUE KEY `%s` ( `%s` )%s,\n",
+						$strName,
+						(is_array($mxdData['fields'])) ? implode('`,`',$mxdData['fields']) : $mxdData['fields'],
+						(!is_null($mxdData['comment']) && $mxdData['comment'] != '') ? sprintf(" COMMENT '%s'",$mxdData['comment']) : ''
+					);
 				}
 			}
 
@@ -423,20 +436,13 @@
 			$strOut = '';
 
 			if(count($this->arrIndexs) > 0){
-				foreach($this->arrIndexs as $strName => $mxdFields){
+				foreach($this->arrIndexs as $strName => $mxdData){
 
-					$arrFields = array();
-
-					if(is_array($mxdFields)){
-
-						foreach($mxdFields as $strFiled){
-							$arrFields[] = sprintf("`%s`",$strFiled);
-						}
-
-						$strOut .= sprintf("\tKEY `%s` ( %s ),\n",$strName,implode(',',$arrFields));
-					}else{
-						$strOut .= sprintf("\tKEY `%s` ( %s ),\n",$strName,$mxdFields);
-					}
+					$strOut .= sprintf("\tKEY `%s` ( `%s` )%s,\n",
+						$strName,
+						(is_array($mxdData['fields'])) ? implode('`,`',$mxdData['fields']) : $mxdData['fields'],
+						(!is_null($mxdData['comment']) && $mxdData['comment'] != '') ? sprintf(" COMMENT '%s'",$mxdData['comment']) : ''
+					);
 				}
 			}
 
@@ -563,6 +569,7 @@
 					//ALTER TABLE `%s` DROP PRIMARY KEY;
 					//ALTER TABLE `%s` ADD PRIMARY KEY(`id`);
 
+					//ALTER TABLE `asset_content` ADD PRIMARY KEY (`id`)
 					$strAlterSQL = sprintf("",
 						$strTableName,
 						\Twist::Database()->escapeString($this->intAutoIncrementStart)
@@ -571,42 +578,69 @@
 
 				case'add_index':
 
-					//Loop through $mxdData -- check the alter is correct
+					$strAlterSQL = '';
 
-					$strAlterSQL = sprintf("ALTER TABLE `%s` auto_increment = %d;",
-						$strTableName,
-						\Twist::Database()->escapeString($this->intAutoIncrementStart)
-					);
+					//Loop through $mxdData
+					foreach($mxdData as $strName => $mxdKeyData){
+
+						$strAlterSQL .= sprintf("ALTER TABLE `%s` ADD KEY `%s` ( `%s` )%s;",
+							$strTableName,
+							$strName,
+							(is_array($mxdKeyData['fields'])) ? implode('`,`',$mxdKeyData['fields']) : $mxdKeyData['fields'],
+							(!is_null($mxdKeyData['comment']) && $mxdKeyData['comment'] != '') ? sprintf(" COMMENT '%s'",$mxdKeyData['comment']) : ''
+						);
+					}
+
 					break;
 
 				case'add_unique':
 
-					//Loop through $mxdData -- check the alter is correct
+					$strAlterSQL = '';
 
-					$strAlterSQL = sprintf("ALTER TABLE `%s` auto_increment = %d;",
-						$strTableName,
-						\Twist::Database()->escapeString($this->intAutoIncrementStart)
-					);
+					//Loop through $mxdData
+					foreach($mxdData as $strName => $mxdKeyData){
+
+						//Could add comments later  COMMENT 'my commnet'
+						$strAlterSQL .= sprintf("ALTER TABLE `%s` ADD UNIQUE KEY `%s` ( `%s` )%s;",
+							$strTableName,
+							$strName,
+							(is_array($mxdKeyData['fields'])) ? implode('`,`',$mxdKeyData['fields']) : $mxdKeyData['fields'],
+							(!is_null($mxdKeyData['comment']) && $mxdKeyData['comment'] != '') ? sprintf(" COMMENT '%s'",$mxdKeyData['comment']) : ''
+						);
+					}
+
 					break;
 
 				case'remove_index':
 
-					//Loop through $mxdData -- check the alter is correct
+					$strAlterSQL = '';
 
-					$strAlterSQL = sprintf("ALTER TABLE `%s` DROP INDEX `%s`",
-						$strTableName,
-						\Twist::Database()->escapeString($this->intAutoIncrementStart)
-					);
+					//Loop through $mxdData
+					foreach($mxdData as $strName => $mxdFields){
+
+						//Could add comments later  COMMENT 'my comment'
+						$strAlterSQL .= sprintf("ALTER TABLE `%s` DROP INDEX `%s`;",
+							$strTableName,
+							$strName
+						);
+					}
+
 					break;
 
 				case'remove_unique':
 
-					//Loop through $mxdData -- check the alter is correct
+					$strAlterSQL = '';
 
-					$strAlterSQL = sprintf("ALTER TABLE `%s` DROP UNIQUE `%s`",
-						$strTableName,
-						\Twist::Database()->escapeString($this->intAutoIncrementStart)
-					);
+					//Loop through $mxdData
+					foreach($mxdData as $strName => $mxdFields){
+
+						//Could add comments later  COMMENT 'my comment'
+						$strAlterSQL .= sprintf("ALTER TABLE `%s` DROP UNIQUE `%s`;",
+							$strTableName,
+							$strName
+						);
+					}
+
 					break;
 
 				case'add_field':
