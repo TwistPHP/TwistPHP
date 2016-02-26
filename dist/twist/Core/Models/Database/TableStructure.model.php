@@ -344,16 +344,16 @@
 		 * Set and process the column data on behalf of the public functions "addColumn" and "alterColumn"
 		 * @param string $strColumnName
 		 * @param string $strDataType
-		 * @param null|int|array $mxdCharLength Char length of field, set an array for enum values
+		 * @param null|int|array $mxdCharLengthValue Length or Value of field, set an array for enum values
 		 * @param null|string $strDefaultValue
 		 * @param bool $blNullable
 		 * @param null|string $strComment Comment to be stored against the field
 		 * @param null|string $strCollation Set the collation if different from that of the table
 		 * @throws \Exception
 		 */
-		protected function setColumnData($strColumnName,$strDataType,$mxdCharLength=null,$strDefaultValue = null,$blNullable = false,$strComment = null,$strCollation = null){
+		protected function setColumnData($strColumnName,$strDataType,$mxdCharLengthValue=null,$strDefaultValue = null,$blNullable = false,$strComment = null,$strCollation = null){
 
-			$arrAllowedTypes = array('int', 'char', 'varchar', 'text', 'enum', 'set', 'date', 'datetime');
+			$arrAllowedTypes = array('int', 'float', 'char', 'varchar', 'text', 'enum', 'set', 'date', 'datetime');
 
 			if(in_array(strtolower($strDataType),$arrAllowedTypes)){
 
@@ -366,7 +366,7 @@
 				$this->arrStructure[$strColumnName] = array(
 					'column_name' => $strColumnName,
 					'data_type' => $strDataType,
-					'character_length' => (in_array(strtolower($strDataType),array('text','date','datetime'))) ? null : $mxdCharLength,
+					'character_length_value' => (in_array(strtolower($strDataType),array('text','date','datetime'))) ? null : $mxdCharLengthValue,
 					'nullable' => $blNullable,
 					'default_value' => $strDefaultValue,
 					'collation' => $strCollation,
@@ -574,7 +574,7 @@
 					$strColumnSQL = sprintf("`%s` %s(%d) COLLATE %s%s%s%s",
 						$arrColumn['column_name'],
 						$arrColumn['data_type'],
-						$arrColumn['character_length'],
+						$arrColumn['character_length_value'],
 						$this->strCollation,
 						($arrColumn['nullable'] == true) ? '' : ' NOT NULL',
 						(is_null($arrColumn['default_value'])) ? '' : sprintf(" DEFAULT '%s'",$arrColumn['default_value']),
@@ -615,7 +615,7 @@
 					$strColumnSQL = sprintf("`%s` %s('%s') COLLATE %s%s%s%s",
 						$arrColumn['column_name'],
 						$arrColumn['data_type'],
-						implode("','",$arrColumn['character_length']),
+						implode("','",$arrColumn['character_length_value']),
 						$this->strCollation,
 						($arrColumn['nullable'] == true) ? '' : ' NOT NULL',
 						(is_null($arrColumn['default_value'])) ? '' : sprintf(" DEFAULT '%s'",$arrColumn['default_value']),
@@ -629,7 +629,7 @@
 					$strColumnSQL = sprintf("`%s` %s(%s)%s%s%s%s",
 						$arrColumn['column_name'],
 						$arrColumn['data_type'],
-						$arrColumn['character_length'],
+						$arrColumn['character_length_value'],
 						($arrColumn['nullable'] == true) ? '' : ' NOT NULL',
 						(is_null($arrColumn['default_value'])) ? '' : sprintf(" DEFAULT '%s'",$arrColumn['default_value']),
 						(!is_null($this->mxdAutoIncrement) && $this->mxdAutoIncrement == $arrColumn['column_name']) ?  ' AUTO_INCREMENT' : '',
@@ -657,10 +657,10 @@
 						break;
 					case'enum':
 					case'set':
-						$strColumnType = sprintf("%s('%s')",$arrColumn['data_type'],implode("','",$arrColumn['character_length']));
+						$strColumnType = sprintf("%s('%s')",$arrColumn['data_type'],implode("','",$arrColumn['character_length_value']));
 						break;
 					default:
-						$strColumnType = sprintf('%s(%d)',$arrColumn['data_type'],$arrColumn['character_length']);
+						$strColumnType = sprintf('%s(%s)',$arrColumn['data_type'],$arrColumn['character_length_value']);
 						break;
 				}
 			}

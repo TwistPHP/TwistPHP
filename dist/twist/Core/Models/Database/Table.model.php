@@ -107,7 +107,7 @@
 
 				$resResult = \Twist::Database()->query("SELECT `COLUMN_NAME` AS `column_name`,
 										`DATA_TYPE` AS `data_type`,
-										`CHARACTER_MAXIMUM_LENGTH` AS `character_length`,
+										`CHARACTER_MAXIMUM_LENGTH` AS `character_length_value`,
 										`IS_NULLABLE` AS `nullable`,
 										`COLUMN_DEFAULT` AS `default_value`,
 										`COLUMN_KEY` AS `key`,
@@ -186,10 +186,13 @@
 						//Place the enum values in the char length field
 						if($arrEachItem['data_type'] == 'enum' || $arrEachItem['data_type'] == 'set'){
 							preg_match_all("#\'([^\']*)\'#",$arrEachItem['column_type'],$arrMatches);
-							$arrEachItem['character_length'] = (count($arrMatches) == 2) ? $arrMatches[1] : array();
+							$arrEachItem['character_length_value'] = (count($arrMatches) == 2) ? $arrMatches[1] : array();
 						}elseif($arrEachItem['data_type'] == 'int'){
 							preg_match("#int\(([0-9]+)\)#",$arrEachItem['column_type'],$arrMatches);
-							$arrEachItem['character_length'] = (count($arrMatches)) ? $arrMatches[1] : 11;
+							$arrEachItem['character_length_value'] = (count($arrMatches)) ? $arrMatches[1] : 11;
+						}elseif($arrEachItem['data_type'] == 'float'){
+							preg_match("#float\(([0-9]+\,[0-9]+)\)#",$arrEachItem['column_type'],$arrMatches);
+							$arrEachItem['character_length_value'] = (count($arrMatches)) ? $arrMatches[1] : '6,2';
 						}
 
 						//Set the data back into the structure array
