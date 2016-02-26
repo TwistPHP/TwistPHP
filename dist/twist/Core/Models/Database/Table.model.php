@@ -165,11 +165,11 @@
 								$strKeyType = ($arrKeys['non_unique'] == '0') ? 'unique_keys' : 'indexes';
 
 								if(!array_key_exists($arrKeys['index_name'],$arrStructure[$strKeyType])){
-									$arrStructure[$strKeyType][$arrKeys['index_name']] = array('comment' => '', 'keys' => array());
+									$arrStructure[$strKeyType][$arrKeys['index_name']] = array('comment' => '', 'columns' => array());
 								}
 
 								$arrStructure[$strKeyType][$arrKeys['index_name']]['comment'] = $arrKeys['comment'];
-								$arrStructure[$strKeyType][$arrKeys['index_name']]['fields'][$arrKeys['order']] = $arrKeys['column_name'];
+								$arrStructure[$strKeyType][$arrKeys['index_name']]['columns'][$arrKeys['order']] = $arrKeys['column_name'];
 							}
 						}
 					}

@@ -227,8 +227,8 @@
 		 */
 		public function addUniqueKey($strName,$mxdFields,$strComment = null){
 
-			$this->arrUniqueKey[$strName] = array('comment' => $strComment,'fields' => $mxdFields);
-			$this->arrStructureChanges['add_unique'][$strName] = array('comment' => $strComment,'fields' => $mxdFields);
+			$this->arrUniqueKey[$strName] = array('comment' => $strComment,'columns' => $mxdFields);
+			$this->arrStructureChanges['add_unique'][$strName] = array('comment' => $strComment,'columns' => $mxdFields);
 		}
 
 		/**
@@ -239,8 +239,8 @@
 		 */
 		public function addIndex($strName,$mxdFields,$strComment = null){
 
-			$this->arrIndexs[$strName] = array('comment' => $strComment,'fields' => $mxdFields);
-			$this->arrStructureChanges['add_index'][$strName] = array('comment' => $strComment,'fields' => $mxdFields);
+			$this->arrIndexs[$strName] = array('comment' => $strComment,'columns' => $mxdFields);
+			$this->arrStructureChanges['add_index'][$strName] = array('comment' => $strComment,'columns' => $mxdFields);
 		}
 
 		/**
@@ -310,6 +310,12 @@
 			}
 		}
 
+		/**
+		 * Rename a column in the table, provide both the original and new column name. Indexes will be updated accordingly.
+		 * @param $strColumnName
+		 * @param $strNewColumnName
+		 * @throws \Exception
+		 */
 		public function renameColumn($strColumnName,$strNewColumnName){
 
 			if(!array_key_exists($strNewColumnName,$this->arrStructure)){
@@ -332,17 +338,17 @@
 		}
 
 		/**
-		 * Set the order of any given field by its name, this will adjust all other field accordingly
-		 * @param string $strColumnName Name of field to ne reordered
+		 * Set the order of any given column by its name, this will adjust all other column accordingly
+		 * @param string $strColumnName Name of column to ne reordered
 		 * @param int $intOrder New order position within the table
 		 */
-		public function setFieldOrder($strColumnName,$intOrder){
+		public function setColumnOrder($strColumnName,$intOrder){
 
-			foreach($this->arrStructure as $strKey => $arrEachField){
+			foreach($this->arrStructure as $strKey => $arrEachColumn){
 
-				if($arrEachField['column_name'] == $strColumnName){
+				if($arrEachColumn['column_name'] == $strColumnName){
 					$this->arrStructure[$strKey]['order'] = $intOrder;
-				}elseif($arrEachField['order'] >= $intOrder && $arrEachField['column_name'] != $strColumnName){
+				}elseif($arrEachColumn['order'] >= $intOrder && $arrEachColumn['column_name'] != $strColumnName){
 					$this->arrStructure[$strKey]['order']++;
 				}
 			}
@@ -394,13 +400,13 @@
 
 			$strKeyList = ($strKeyList != '') ? substr($strKeyList,0,-2)."\n" : '';
 
-			$strFieldList = $this->generateFieldList();
-			$strFieldList = ($strKeyList == '') ? substr($strFieldList,0,-2)."\n" : $strFieldList;
+			$strColumnList = $this->generateColumnList();
+			$strColumnList = ($strKeyList == '') ? substr($strColumnList,0,-2)."\n" : $strColumnList;
 
 			$strSQL = sprintf("CREATE TABLE IF NOT EXISTS `%s`.`%s` (\n%s%s) ENGINE=%s DEFAULT CHARSET=%s COLLATE=%s%s%s;",
 				$this->strDatabase,
 				$this->strTable,
-				$strFieldList,
+				$strColumnList,
 				$strKeyList,
 				$this->strEngine,
 				$this->strCharset,
@@ -440,7 +446,7 @@
 
 					$strOut .= sprintf("\tUNIQUE KEY `%s` ( `%s` )%s,\n",
 						$strName,
-						(is_array($mxdData['fields'])) ? implode('`,`',$mxdData['fields']) : $mxdData['fields'],
+						(is_array($mxdData['columns'])) ? implode('`,`',$mxdData['columns']) : $mxdData['columns'],
 						(!is_null($mxdData['comment']) && $mxdData['comment'] != '') ? sprintf(" COMMENT '%s'",$mxdData['comment']) : ''
 					);
 				}
@@ -462,7 +468,7 @@
 
 					$strOut .= sprintf("\tKEY `%s` ( `%s` )%s,\n",
 						$strName,
-						(is_array($mxdData['fields'])) ? implode('`,`',$mxdData['fields']) : $mxdData['fields'],
+						(is_array($mxdData['columns'])) ? implode('`,`',$mxdData['columns']) : $mxdData['columns'],
 						(!is_null($mxdData['comment']) && $mxdData['comment'] != '') ? sprintf(" COMMENT '%s'",$mxdData['comment']) : ''
 					);
 				}
@@ -472,14 +478,14 @@
 		}
 
 		/**
-		 * Generate a field list to be added to the create query
+		 * Generate a column list to be added to the create query
 		 * @return string
 		 */
-		protected function generateFieldList(){
+		protected function generateColumnList(){
 
 			$strOut = '';
 
-			//Sort the fields by order
+			//Sort the columns by order
 			$arrStructure = \Twist::framework()->tools()->arrayReindex($this->arrStructure,'order');
 			ksort($arrStructure);
 
