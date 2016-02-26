@@ -185,8 +185,11 @@
 
 						//Place the enum values in the char length field
 						if($arrEachItem['data_type'] == 'enum' || $arrEachItem['data_type'] == 'set'){
-							preg_match_all("~\'([^\']*)\'~",$arrEachItem['column_type'],$arrEachItem['character_length']);
-							$arrEachItem['character_length'] = (count($arrEachItem['character_length']) == 2) ? $arrEachItem['character_length'][1] : array();
+							preg_match_all("#\'([^\']*)\'#",$arrEachItem['column_type'],$arrMatches);
+							$arrEachItem['character_length'] = (count($arrMatches) == 2) ? $arrMatches[1] : array();
+						}elseif($arrEachItem['data_type'] == 'int'){
+							preg_match("#int\(([0-9]+)\)#",$arrEachItem['column_type'],$arrMatches);
+							$arrEachItem['character_length'] = (count($arrMatches)) ? $arrMatches[1] : 11;
 						}
 
 						//Set the data back into the structure array
