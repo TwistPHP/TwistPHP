@@ -38,7 +38,7 @@
 		protected $mxdAutoIncrement = null;
 		protected $intAutoIncrementStart = 1;
 		protected $mxdPrimaryKey = null;
-		protected $arrUniqueKey = array();
+		protected $arrUniqueKeys = array();
 		protected $arrIndexs = array();
 		protected $mxdTableComment = null;
 		protected $strCollation = 'utf8_unicode_ci';
@@ -67,7 +67,7 @@
 				}
 
 				//Set all the other key information for this table
-				$this->arrUniqueKey = $arrStructure['unique_keys'];
+				$this->arrUniqueKeys = $arrStructure['unique_keys'];
 				$this->arrIndexs = $arrStructure['indexes'];
 				$this->mxdTableComment = $arrStructure['table_comment'];
 				$this->strCollation = $arrStructure['collation'];
@@ -86,7 +86,7 @@
 			$this->mxdAutoIncrement = null;
 			$this->intAutoIncrementStart = null;
 			$this->mxdPrimaryKey = null;
-			$this->arrUniqueKey = null;
+			$this->arrUniqueKeys = null;
 			$this->arrIndexs = null;
 			$this->mxdTableComment = null;
 			$this->strCollation = null;
@@ -125,6 +125,7 @@
 				$this->arrStructureChanges['collation'] = true;
 			}else{
 				//Throw invalid collation error
+				throw new \Exception(sprintf("Invalid collation '%s' has been selected",$strCollation));
 			}
 		}
 
@@ -196,8 +197,8 @@
 				$this->arrStructureChanges['auto_increment'] = true;
 
 			}else{
-				//Field must have already been added and can only be an integer
-				throw new \Exception(sprintf("Field '%s' must have already been added to the table and can only be an integer",$strField));
+				//Column must have already been added and can only be an integer
+				throw new \Exception(sprintf("Column '%s' must have already been added to the table and can only be an integer",$strField));
 			}
 		}
 
@@ -227,7 +228,7 @@
 		 */
 		public function addUniqueKey($strName,$mxdFields,$strComment = null){
 
-			$this->arrUniqueKey[$strName] = array('comment' => $strComment,'columns' => $mxdFields);
+			$this->arrUniqueKeys[$strName] = array('comment' => $strComment,'columns' => $mxdFields);
 			$this->arrStructureChanges['add_unique'][$strName] = array('comment' => $strComment,'columns' => $mxdFields);
 		}
 
@@ -249,8 +250,8 @@
 		 */
 		public function dropUniqueKey($strName){
 
-			if(array_key_exists($strName,$this->arrUniqueKey)){
-				unset($this->arrUniqueKey[$strName]);
+			if(array_key_exists($strName,$this->arrUniqueKeys)){
+				unset($this->arrUniqueKeys[$strName]);
 				$this->arrStructureChanges['drop_unique'][$strName] = true;
 			}
 		}
@@ -524,8 +525,8 @@
 
 			$strOut = '';
 
-			if(count($this->arrUniqueKey) > 0){
-				foreach($this->arrUniqueKey as $strName => $mxdData){
+			if(count($this->arrUniqueKeys) > 0){
+				foreach($this->arrUniqueKeys as $strName => $mxdData){
 
 					$strOut .= sprintf("\tUNIQUE KEY `%s` ( `%s` )%s,\n",
 						$strName,
