@@ -268,9 +268,33 @@
 		}
 
 		/**
+		 * Get all the data/information that makes up the column within the table structure
+		 * @param string $strColumnName
+		 * @return array Column data as an array
+		 * @throws \Exception
+		 */
+		public function column($strColumnName){
+
+			if(array_key_exists($strColumnName,$this->arrStructure)){
+				return $this->arrStructure[$strColumnName];
+			}else{
+				throw new \Exception(sprintf("Column '%s' dose not exist in this table structure",$strColumnName));
+			}
+		}
+
+		/**
+		 * Detect if a column exists in the table structure and return a boolean result. TRUE if the table exists.
+		 * @param string $strColumnName Name of the column to be tested
+		 * @return bool True returned if table exists
+		 */
+		public function isColumn($strColumnName){
+			return (array_key_exists($strColumnName,$this->arrStructure));
+		}
+
+		/**
 		 * Add a column into the table, the columns will be added into the table in the order they have been entered
-		 * @param $strColumnName
-		 * @param $strDataType
+		 * @param string $strColumnName
+		 * @param string $strDataType
 		 * @param null|int|array $mxdCharLength Char length of field, set an array for enum values
 		 * @param null|string $strDefaultValue
 		 * @param bool $blNullable
@@ -295,8 +319,8 @@
 
 		/**
 		 * Alter an existing column in the table
-		 * @param $strColumnName
-		 * @param $strDataType
+		 * @param string $strColumnName
+		 * @param string $strDataType
 		 * @param null|int|array $mxdCharLength Char length of field, set an array for enum values
 		 * @param null|string $strDefaultValue
 		 * @param bool $blNullable
@@ -318,8 +342,8 @@
 
 		/**
 		 * Set and process the column data on behalf of the public functions "addColumn" and "alterColumn"
-		 * @param $strColumnName
-		 * @param $strDataType
+		 * @param string $strColumnName
+		 * @param string $strDataType
 		 * @param null|int|array $mxdCharLength Char length of field, set an array for enum values
 		 * @param null|string $strDefaultValue
 		 * @param bool $blNullable
@@ -359,8 +383,8 @@
 
 		/**
 		 * Rename a column in the table, provide both the original and new column name. Indexes will be updated accordingly.
-		 * @param $strColumnName
-		 * @param $strNewColumnName
+		 * @param string $strColumnName Current column name
+		 * @param string $strNewColumnName New column name
 		 * @throws \Exception
 		 */
 		public function renameColumn($strColumnName,$strNewColumnName){
@@ -378,6 +402,10 @@
 			}
 		}
 
+		/**
+		 * Drop a column from the table structure by its column name.
+		 * @param string $strColumnName Column to be dropped
+		 */
 		public function dropColumn($strColumnName){
 
 			unset($this->arrStructure[$strColumnName]);
