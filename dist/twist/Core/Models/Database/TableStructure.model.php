@@ -353,7 +353,7 @@
 		 */
 		protected function setColumnData($strColumnName,$strDataType,$mxdCharLengthValue=null,$strDefaultValue = null,$blNullable = false,$strComment = null,$strCollation = null){
 
-			$arrAllowedTypes = array('int', 'float', 'char', 'varchar', 'text', 'enum', 'set', 'date', 'datetime');
+			$arrAllowedTypes = array('int', 'float', 'char', 'varchar', 'text', 'blob', 'enum', 'set', 'date', 'datetime');
 
 			if(in_array(strtolower($strDataType),$arrAllowedTypes)){
 
@@ -571,10 +571,11 @@
 
 				case'char':
 
-					$strColumnSQL = sprintf("`%s` %s(%d) COLLATE %s%s%s%s",
+					$strColumnSQL = sprintf("`%s` %s(%d) CHARACTER SET %s COLLATE %s%s%s%s",
 						$arrColumn['column_name'],
 						$arrColumn['data_type'],
 						$arrColumn['character_length_value'],
+						$this->getCollationCharset($this->strCollation),
 						$this->strCollation,
 						($arrColumn['nullable'] == true) ? '' : ' NOT NULL',
 						(is_null($arrColumn['default_value'])) ? '' : sprintf(" DEFAULT '%s'",$arrColumn['default_value']),
@@ -584,13 +585,14 @@
 					break;
 
 				case'text':
+				case'blob':
 
-					$strColumnSQL = sprintf("`%s` %s COLLATE %s%s%s%s",
+					$strColumnSQL = sprintf("`%s` %s CHARACTER SET %s COLLATE %s%s%s",
 						$arrColumn['column_name'],
 						$arrColumn['data_type'],
+						$this->getCollationCharset($this->strCollation),
 						$this->strCollation,
 						($arrColumn['nullable'] == true) ? '' : ' NOT NULL',
-						(is_null($arrColumn['default_value'])) ? '' : sprintf(" DEFAULT '%s'",$arrColumn['default_value']),
 						(!is_null($arrColumn['comment']) && $arrColumn['comment'] != '') ? sprintf(" COMMENT '%s'",\Twist::Database()->escapeString($arrColumn['comment'])) : ''
 					);
 
@@ -612,10 +614,11 @@
 				case'enum':
 				case'set':
 
-					$strColumnSQL = sprintf("`%s` %s('%s') COLLATE %s%s%s%s",
+					$strColumnSQL = sprintf("`%s` %s('%s') CHARACTER SET %s COLLATE %s%s%s%s",
 						$arrColumn['column_name'],
 						$arrColumn['data_type'],
 						implode("','",$arrColumn['character_length_value']),
+						$this->getCollationCharset($this->strCollation),
 						$this->strCollation,
 						($arrColumn['nullable'] == true) ? '' : ' NOT NULL',
 						(is_null($arrColumn['default_value'])) ? '' : sprintf(" DEFAULT '%s'",$arrColumn['default_value']),
@@ -651,6 +654,7 @@
 
 				switch($arrColumn['data_type']){
 					case 'text':
+					case 'blob':
 					case 'date':
 					case 'datetime':
 						$strColumnType = $arrColumn['data_type'];
