@@ -122,7 +122,7 @@
 
 				//Lookup and set charset based on collation
 				$this->charset($strCharset);
-				$this->arrStructureChanges['collation'] = true;
+				$this->arrStructureChanges[] = array('alter' => 'collation','data' => array());
 			}else{
 				//Throw invalid collation error
 				throw new \Exception(sprintf("Invalid collation '%s' has been selected",$strCollation));
@@ -166,7 +166,7 @@
 		public function engine($strEngine){
 
 			$this->strEngine = $strEngine;
-			$this->arrStructureChanges['engine'] = true;
+			$this->arrStructureChanges[] = array('alter' => 'engine','data' => array());
 		}
 
 		/**
@@ -176,7 +176,7 @@
 		public function comment($strComment){
 
 			$this->mxdTableComment = $strComment;
-			$this->arrStructureChanges['comment'] = true;
+			$this->arrStructureChanges[] = array('alter' => 'comment','data' => array());
 		}
 
 		/**
@@ -194,7 +194,7 @@
 				$this->mxdAutoIncrement = $strField;
 				$this->intAutoIncrementStart = $intStartNumber;
 
-				$this->arrStructureChanges['auto_increment'] = true;
+				$this->arrStructureChanges[] = array('alter' => 'auto_increment','data' => array());
 
 			}else{
 				//Column must have already been added and can only be an integer
@@ -212,7 +212,7 @@
 			if(is_null($this->mxdAutoIncrement)){
 				$this->mxdPrimaryKey = $strField;
 
-				$this->arrStructureChanges['primary_key'] = true;
+				$this->arrStructureChanges[] = array('alter' => 'primary_key','data' => array());
 			}else{
 				//error cannot set primary key, when using auto increment
 				throw new \Exception("Error, cannot set a primary key when using auto increment");
@@ -222,26 +222,36 @@
 		/**
 		 * Set a unique key, you can have multiple unique keys per table. To create a unique key from more than 1 field pass the second parameter as an array of fields
 		 * @param $strName
-		 * @param $mxdFields
+		 * @param $mxdColumns
 		 * @param $strComment
 		 * @return string
 		 */
-		public function addUniqueKey($strName,$mxdFields,$strComment = null){
+		public function addUniqueKey($strName,$mxdColumns,$strComment = null){
 
-			$this->arrUniqueKeys[$strName] = array('comment' => $strComment,'columns' => $mxdFields);
-			$this->arrStructureChanges['add_unique'][$strName] = array('comment' => $strComment,'columns' => $mxdFields);
+			$this->arrUniqueKeys[$strName] = array('comment' => $strComment,'columns' => $mxdColumns);
+
+			$this->arrStructureChanges[] = array('alter' => 'add_unique','data' => array(
+				'name' => $strName,
+				'comment' => $strComment,
+				'columns' => $mxdColumns
+			));
 		}
 
 		/**
 		 * Set a Index, you can have multiple indexes per table. To create a index from more than 1 field pass the second parameter as an array of fields
 		 * @param $strName
-		 * @param $mxdFields
+		 * @param $mxdColumns
 		 * @param $strComment
 		 */
-		public function addIndex($strName,$mxdFields,$strComment = null){
+		public function addIndex($strName,$mxdColumns,$strComment = null){
 
-			$this->arrIndexs[$strName] = array('comment' => $strComment,'columns' => $mxdFields);
-			$this->arrStructureChanges['add_index'][$strName] = array('comment' => $strComment,'columns' => $mxdFields);
+			$this->arrIndexs[$strName] = array('comment' => $strComment,'columns' => $mxdColumns);
+
+			$this->arrStructureChanges[] = array('alter' => 'add_index','data' => array(
+				'name' => $strName,
+				'comment' => $strComment,
+				'columns' => $mxdColumns
+			));
 		}
 
 		/**
@@ -252,7 +262,10 @@
 
 			if(array_key_exists($strName,$this->arrUniqueKeys)){
 				unset($this->arrUniqueKeys[$strName]);
-				$this->arrStructureChanges['drop_unique'][$strName] = true;
+
+				$this->arrStructureChanges[] = array('alter' => 'drop_unique','data' => array(
+					'name' => $strName,
+				));
 			}
 		}
 
@@ -264,7 +277,10 @@
 
 			if(array_key_exists($strName,$this->arrIndexs)){
 				unset($this->arrIndexs[$strName]);
-				$this->arrStructureChanges['drop_index'][$strName] = true;
+
+				$this->arrStructureChanges[] = array('alter' => 'drop_index','data' => array(
+					'name' => $strName,
+				));
 			}
 		}
 
@@ -310,7 +326,9 @@
 				$this->setColumnData($strColumnName,$strDataType,$mxdCharLength,$strDefaultValue,$blNullable,$strComment,$strCollation);
 
 				//Add a new column to the database, we will generate this ALTER SQL upon commit to ensure correct positioning
-				$this->arrStructureChanges['add_column'][] = $strColumnName;
+				$this->arrStructureChanges[] = array('alter' => 'add_column','data' => array(
+					'name' => $strColumnName,
+				));
 
 			}else{
 				//Field already created
@@ -335,7 +353,9 @@
 
 				$this->setColumnData($strColumnName,$strDataType,$mxdCharLength,$strDefaultValue,$blNullable,$strComment,$strCollation);
 
-				$this->arrStructureChanges['alter_column'][] = $strColumnName;
+				$this->arrStructureChanges[] = array('alter' => 'alter_column','data' => array(
+					'name' => $strColumnName,
+				));
 			}else{
 				throw new \Exception(sprintf("Column '%s' doesn't exist in this table",$strColumnName));
 			}
@@ -397,7 +417,10 @@
 
 				unset($this->arrStructure[$strColumnName]);
 
-				$this->arrStructureChanges['rename_column'][$strColumnName] = $strNewColumnName;
+				$this->arrStructureChanges[] = array('alter' => 'rename_column','data' => array(
+					'name' => $strColumnName,
+					'new_name' => $strNewColumnName,
+				));
 			}else{
 				throw new \Exception(sprintf("Column '%s' already exists",$strNewColumnName));
 			}
@@ -410,7 +433,10 @@
 		public function dropColumn($strColumnName){
 
 			unset($this->arrStructure[$strColumnName]);
-			$this->arrStructureChanges['drop_column'][] = $strColumnName;
+
+			$this->arrStructureChanges[] = array('alter' => 'drop_column','data' => array(
+				'name' => $strColumnName,
+			));
 		}
 
 		/**
@@ -448,13 +474,10 @@
 
 			}elseif(count($this->arrStructureChanges)){
 
-				foreach($this->arrStructureChanges as $strKeyChange => $mxdValue){
+				echo $this->sqlAlter();
 
-					echo $this->generateAlterQuery($strKeyChange,$mxdValue)."<br>";
-
-					//Generate and run each alter query to make all the necessary changes
-					//$blAlterStatus = \Twist::Database()->query($this->generateAlterQuery($strKeyChange,$mxdValue))->status();
-				}
+				//Generate and run each alter query to make all the necessary changes
+				//$blAlterStatus = \Twist::Database()->query($this->generateAlterQuery($strKeyChange,$mxdValue))->status();
 
 				//Reset the changes array so that you can continue using the db object
 				$this->arrStructureChanges = array();
@@ -498,6 +521,27 @@
 				(!is_null($this->mxdTableComment)) ? sprintf(" COMMENT='%s'",\Twist::Database()->escapeString($this->mxdTableComment)) : '',
 				(!is_null($this->mxdAutoIncrement)) ? sprintf(' AUTO_INCREMENT=%d',$this->intAutoIncrementStart) : ''
 			);
+
+			return $strSQL;
+		}
+
+		public function sqlAlter($blIndividualQueries = false){
+
+			$strSQL = '';
+			$arrAlterQueryParts = array();
+			$strTableName = \Twist::Database()->escapeString($this->strTable);
+
+			foreach($this->arrStructureChanges as $arrChange){
+				$arrAlterQueryParts[] = $this->generateAlterQuery($arrChange);
+			}
+
+			if($blIndividualQueries){
+				foreach($arrAlterQueryParts as $strEachQueryPart){
+					$strSQL .= sprintf("ALTER TABLE `%s` %s;\n",$strTableName,$strEachQueryPart);
+				}
+			}else{
+				$strSQL = sprintf("ALTER TABLE `%s`\n\t%s;",$strTableName,implode(",\n\t",$arrAlterQueryParts));
+			}
 
 			return $strSQL;
 		}
@@ -673,38 +717,33 @@
 			return $strColumnType;
 		}
 
-		protected function generateAlterQuery($strType,$mxdData){
+		protected function generateAlterQuery($arrChange){
 
 			$strAlterSQL = '';
-			$strTableName = \Twist::Database()->escapeString($this->strTable);
 
-			switch($strType){
+			switch($arrChange['alter']){
 
 				case'collation':
-					$strAlterSQL = sprintf("ALTER TABLE `%s` DEFAULT CHARACTER SET %s COLLATE %s;",
-						$strTableName,
+					$strAlterSQL = sprintf("DEFAULT CHARACTER SET %s COLLATE %s",
 						\Twist::Database()->escapeString($this->strCharset),
 						\Twist::Database()->escapeString($this->strCollation)
 					);
 					break;
 
 				case'engine':
-					$strAlterSQL = sprintf("ALTER TABLE `%s` ENGINE = %s;",
-						$strTableName,
+					$strAlterSQL = sprintf("ENGINE = %s",
 						\Twist::Database()->escapeString($this->strEngine)
 					);
 					break;
 
 				case'comment':
-					$strAlterSQL = sprintf("ALTER TABLE `%s` COMMENT = '%s';",
-						$strTableName,
+					$strAlterSQL = sprintf("COMMENT = '%s'",
 						\Twist::Database()->escapeString($this->mxdTableComment)
 					);
 					break;
 
 				case'auto_increment':
-					$strAlterSQL = sprintf("ALTER TABLE `%s` auto_increment = %d;",
-						$strTableName,
+					$strAlterSQL = sprintf("auto_increment = %d",
 						\Twist::Database()->escapeString($this->intAutoIncrementStart)
 					);
 					break;
@@ -720,76 +759,47 @@
 					//ALTER TABLE `%s` ADD PRIMARY KEY(`id`);
 
 					//ALTER TABLE `asset_content` ADD PRIMARY KEY (`id`)
-					$strAlterSQL = sprintf("todo -- primary key",
-						$strTableName,
+					$strAlterSQL = sprintf(" ---- todo, primary key",
 						\Twist::Database()->escapeString($this->intAutoIncrementStart)
 					);
 					break;
 
 				case'add_index':
 
-					$strAlterSQL = '';
-
-					//Loop through $mxdData
-					foreach($mxdData as $strName => $mxdKeyData){
-
-						$strAlterSQL .= sprintf("ALTER TABLE `%s` ADD KEY `%s` ( `%s` )%s;",
-							$strTableName,
-							$strName,
-							(is_array($mxdKeyData['columns'])) ? implode('`,`',$mxdKeyData['columns']) : $mxdKeyData['columns'],
-							(!is_null($mxdKeyData['comment']) && $mxdKeyData['comment'] != '') ? sprintf(" COMMENT '%s'",$mxdKeyData['comment']) : ''
-						);
-					}
+					$strAlterSQL = sprintf("ADD KEY `%s` ( `%s` )%s",
+						$arrChange['data']['name'],
+						(is_array($arrChange['data']['columns'])) ? implode('`,`',$arrChange['data']['columns']) : $arrChange['data']['columns'],
+						(!is_null($arrChange['data']['comment']) && $arrChange['data']['comment'] != '') ? sprintf(" COMMENT '%s'",$arrChange['data']['comment']) : ''
+					);
 
 					break;
 
 				case'add_unique':
 
-					$strAlterSQL = '';
-
-					//Loop through $mxdData
-					foreach($mxdData as $strName => $mxdKeyData){
-
-						//Could add comments later  COMMENT 'my commnet'
-						$strAlterSQL .= sprintf("ALTER TABLE `%s` ADD UNIQUE KEY `%s` ( `%s` )%s;",
-							$strTableName,
-							$strName,
-							(is_array($mxdKeyData['columns'])) ? implode('`,`',$mxdKeyData['columns']) : $mxdKeyData['columns'],
-							(!is_null($mxdKeyData['comment']) && $mxdKeyData['comment'] != '') ? sprintf(" COMMENT '%s'",$mxdKeyData['comment']) : ''
-						);
-					}
+					//Could add comments later  COMMENT 'my commnet'
+					$strAlterSQL = sprintf("ADD UNIQUE KEY `%s` ( `%s` )%s",
+						$arrChange['data']['name'],
+						(is_array($arrChange['data']['columns'])) ? implode('`,`',$arrChange['data']['columns']) : $arrChange['data']['columns'],
+						(!is_null($arrChange['data']['comment']) && $arrChange['data']['comment'] != '') ? sprintf(" COMMENT '%s'",$arrChange['data']['comment']) : ''
+					);
 
 					break;
 
 				case'drop_index':
 
-					$strAlterSQL = '';
-
-					//Loop through $mxdData
-					foreach($mxdData as $strName => $mxdFields){
-
-						//Could add comments later  COMMENT 'my comment'
-						$strAlterSQL .= sprintf("ALTER TABLE `%s` DROP INDEX `%s`;",
-							$strTableName,
-							$strName
-						);
-					}
+					//Could add comments later  COMMENT 'my comment'
+					$strAlterSQL = sprintf("DROP INDEX `%s`",
+						$arrChange['data']['name']
+					);
 
 					break;
 
 				case'drop_unique':
 
-					$strAlterSQL = '';
-
-					//Loop through $mxdData
-					foreach($mxdData as $strName => $mxdFields){
-
-						//Could add comments later  COMMENT 'my comment'
-						$strAlterSQL .= sprintf("ALTER TABLE `%s` DROP UNIQUE `%s`;",
-							$strTableName,
-							$strName
-						);
-					}
+					//Could add comments later  COMMENT 'my comment'
+					$strAlterSQL = sprintf("DROP UNIQUE `%s`",
+						$arrChange['data']['name']
+					);
 
 					break;
 
@@ -797,65 +807,36 @@
 
 					//AFTER name;
 					//FIRST;
-
-					$strAlterSQL = '';
-
-					//Loop through $mxdData
-					foreach($mxdData as $intKey => $strColumnName){
-
-						$strAlterSQL .= sprintf("ALTER TABLE `%s` ADD %s",
-							$strTableName,
-							$this->generateColumnSQL($this->arrStructure[$strColumnName])
-						);
-					}
+					$strAlterSQL = sprintf("ADD %s",
+						$this->generateColumnSQL($this->arrStructure[$arrChange['data']['name']])
+					);
 
 					break;
 
 				case'alter_column':
 
-					$strAlterSQL = '';
-
-					//Loop through $mxdData
-					foreach($mxdData as $intKey => $strColumnName){
-
-						$strAlterSQL .= sprintf("ALTER TABLE `%s` CHANGE `%s` %s",
-							$strTableName,
-							$strColumnName,
-							$this->generateColumnSQL($this->arrStructure[$strColumnName])
-						);
-					}
+					$strAlterSQL = sprintf("CHANGE `%s` %s",
+						$arrChange['data']['name'],
+						$this->generateColumnSQL($this->arrStructure[$arrChange['data']['name']])
+					);
 
 					break;
 
 				case'drop_column':
 
-					$strAlterSQL = '';
-
-					//Loop through $mxdData
-					foreach($mxdData as $intKey => $strColumnName){
-
-						$strAlterSQL .= sprintf("ALTER TABLE `%s` DROP `%s`;",
-							$strTableName,
-							\Twist::Database()->escapeString($strColumnName)
-						);
-					}
+					$strAlterSQL = sprintf("DROP `%s`",
+						\Twist::Database()->escapeString($arrChange['data']['name'])
+					);
 
 					break;
 
 				case'rename_column':
 
-					$strAlterSQL = '';
-
-					//Loop through $mxdData
-					foreach($mxdData as $strColumnName => $strNewColumnName){
-
-						$strAlterSQL .= sprintf("ALTER TABLE `%s` CHANGE `%s` `%s` %s;",
-							$strTableName,
-							\Twist::Database()->escapeString($strColumnName),
-							\Twist::Database()->escapeString($strNewColumnName),
-							$this->getColumnType($strNewColumnName)
-						);
-					}
+					$strAlterSQL = sprintf("CHANGE `%s` `%s` %s",
+						\Twist::Database()->escapeString($arrChange['data']['name']),
+						\Twist::Database()->escapeString($arrChange['data']['new_name']),
+						$this->getColumnType($arrChange['data']['name'])
+					);
 
 					break;
 			}
