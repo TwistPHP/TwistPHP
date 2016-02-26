@@ -412,6 +412,8 @@
 
 			if(!array_key_exists($strNewColumnName,$this->arrStructure)){
 
+				//@todo Update keys if needed
+
 				$this->arrStructure[$strNewColumnName] = $this->arrStructure[$strColumnName];
 				$this->arrStructure[$strNewColumnName]['column_name'] = $strNewColumnName;
 
@@ -431,6 +433,22 @@
 		 * @param string $strColumnName Column to be dropped
 		 */
 		public function dropColumn($strColumnName){
+
+			//If the column is part of an Index then drop the index
+			foreach($this->arrIndexs as $strName => $arrData){
+				if(in_array($strColumnName,$arrData['columns'])){
+					$this->dropIndex($strName);
+				}
+			}
+
+			//If the column is part of a unique key then drop the key
+			foreach($this->arrUniqueKeys as $strName => $arrData){
+				if(in_array($strColumnName,$arrData['columns'])){
+					$this->dropUniqueKey($strName);
+				}
+			}
+
+			//@todo Check if we are dropping the primary key..
 
 			unset($this->arrStructure[$strColumnName]);
 
@@ -750,18 +768,21 @@
 
 				case'primary_key':
 
+					//@todo If primary key is currently auto-increment
+						//Rebuild field without auto-increment
+						//Drop primary key
+						//Add new primary key
+					//Else
+						//Drop primary key
+						//Add new primary key
+
+
+					//Still to work out (if new primary key is auto-increment redo row)
+
+
 					//ALTER TABLE `%s` change id id int(11);
 					//ALTER TABLE `%s` DROP PRIMARY KEY;
 					//ALTER TABLE `%s` ADD PRIMARY KEY (uuid);
-
-
-					//ALTER TABLE `%s` DROP PRIMARY KEY;
-					//ALTER TABLE `%s` ADD PRIMARY KEY(`id`);
-
-					//ALTER TABLE `asset_content` ADD PRIMARY KEY (`id`)
-					$strAlterSQL = sprintf(" ---- todo, primary key",
-						\Twist::Database()->escapeString($this->intAutoIncrementStart)
-					);
 					break;
 
 				case'add_index':
