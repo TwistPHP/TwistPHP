@@ -244,42 +244,43 @@
 		}
 
 		/**
-		 * Remove a unique key from the table structure
+		 * Drop a unique key from the table structure
 		 * @param $strName
 		 */
-		public function removeUniqueKey($strName){
+		public function dropUniqueKey($strName){
 
 			if(array_key_exists($strName,$this->arrUniqueKey)){
 				unset($this->arrUniqueKey[$strName]);
-				$this->arrStructureChanges['remove_unique'][$strName] = true;
+				$this->arrStructureChanges['drop_unique'][$strName] = true;
 			}
 		}
 
 		/**
-		 * Remove a Index from the table structure
+		 * Drop a Index from the table structure
 		 * @param $strName
 		 */
-		public function removeIndex($strName){
+		public function dropIndex($strName){
 
 			if(array_key_exists($strName,$this->arrIndexs)){
 				unset($this->arrIndexs[$strName]);
-				$this->arrStructureChanges['remove_index'][$strName] = true;
+				$this->arrStructureChanges['drop_index'][$strName] = true;
 			}
 		}
 
 		/**
-		 * Add a field into the table, the fields will be added into the table in the order they have been entered
+		 * Add a column into the table, the columns will be added into the table in the order they have been entered
 		 * @param $strColumnName
 		 * @param $strDataType
-		 * @param null $mxdCharLength
-		 * @param null $strDefaultValue
+		 * @param null|int|array $mxdCharLength Char length of field, set an array for enum values
+		 * @param null|string $strDefaultValue
 		 * @param bool $blNullable
-		 * @param null|string $strCollation
+		 * @param null|string $strComment Comment to be stored against the field
+		 * @param null|string $strCollation Set the collation if different from that of the table
 		 * @throws \Exception
 		 */
-		public function addField($strColumnName,$strDataType,$mxdCharLength=null,$strDefaultValue = null,$blNullable = false,$strCollation = null){
+		public function addColumn($strColumnName,$strDataType,$mxdCharLength=null,$strDefaultValue = null,$blNullable = false,$strComment = null,$strCollation = null){
 
-			$arrAllowedTypes = array('int', 'char', 'varchar', 'text', 'enum', 'date', 'datetime');
+			$arrAllowedTypes = array('int', 'char', 'varchar', 'text', 'enum', 'set', 'date', 'datetime');
 
 			if(!array_key_exists($strColumnName,$this->arrStructure)){
 
@@ -293,20 +294,41 @@
 						'default_value' => $strDefaultValue,
 						'collation' => $strCollation,
 						'charset' => (is_null($strCollation)) ? null : $this->getCollationCharset($strCollation),
-						'comment' => null,
+						'comment' => $strComment,
 						'order' => count($this->arrStructure)+1
 					);
 
-					//Add a new field to the database, we will generate this ALTER SQL upon commit to ensure correct positioning
-					$this->arrStructureChanges['add_field'][] = $strColumnName;
+					//Add a new column to the database, we will generate this ALTER SQL upon commit to ensure correct positioning
+					$this->arrStructureChanges['add_column'][] = $strColumnName;
 				}else{
 					//Field is not an allowed type
-					throw new \Exception(sprintf("Field type '%s' is not currently supported in this system",$strDataType));
+					throw new \Exception(sprintf("Column type '%s' is not currently supported in this system",$strDataType));
 				}
 			}else{
 				//Field already created
-				throw new \Exception(sprintf("Field '%s' has already been added to the tables structure",$strColumnName));
+				throw new \Exception(sprintf("Column '%s' has already been added to the tables structure",$strColumnName));
 			}
+		}
+
+		public function renameColumn($strColumnName,$strNewColumnName){
+
+			if(!array_key_exists($strNewColumnName,$this->arrStructure)){
+
+				$this->arrStructure[$strNewColumnName] = $this->arrStructure[$strColumnName];
+				$this->arrStructure[$strNewColumnName]['column_name'] = $strNewColumnName;
+
+				unset($this->arrStructure[$strColumnName]);
+
+				$this->arrStructureChanges['rename_column'][$strColumnName] = $strNewColumnName;
+			}else{
+				throw new \Exception(sprintf("Column '%s' already exists",$strNewColumnName));
+			}
+		}
+
+		public function dropColumn($strColumnName){
+
+			unset($this->arrStructure[$strColumnName]);
+			$this->arrStructureChanges['drop_column'][] = $strColumnName;
 		}
 
 		/**
@@ -504,6 +526,21 @@
 
 						break;
 
+					case'enum':
+					case'set':
+
+						$strOut .= sprintf("\t`%s` %s('%s') COLLATE %s%s%s,\n",
+							$strEachColumn['column_name'],
+							$strEachColumn['data_type'],
+							implode("','",$strEachColumn['character_length']),
+							$this->strCollation,
+							($strEachColumn['nullable'] == true) ? '' : ' NOT NULL',
+							(is_null($strEachColumn['default_value'])) ? '' : sprintf(" DEFAULT '%s'",$strEachColumn['default_value'])
+
+						);
+
+						break;
+
 					default:
 
 						$strOut .= sprintf("\t`%s` %s(%s)%s%s%s,\n",
@@ -521,6 +558,32 @@
 			}
 
 			return $strOut;
+		}
+
+		protected function getColumnType($strColumnName){
+
+			$strColumnType = null;
+
+			if(array_key_exists($strColumnName,$this->arrStructure)){
+				$arrColumn = $this->arrStructure[$strColumnName];
+
+				switch($arrColumn['data_type']){
+					case 'text':
+					case 'date':
+					case 'datetime':
+						$strColumnType = $arrColumn['data_type'];
+						break;
+					case'enum':
+					case'set':
+						$strColumnType = sprintf("%s('%s')",$arrColumn['data_type'],implode("','",$arrColumn['character_length']));
+						break;
+					default:
+						$strColumnType = sprintf('%s(%d)',$arrColumn['data_type'],$arrColumn['character_length']);
+						break;
+				}
+			}
+
+			return $strColumnType;
 		}
 
 		protected function generateAlterQuery($strType,$mxdData){
@@ -611,7 +674,7 @@
 
 					break;
 
-				case'remove_index':
+				case'drop_index':
 
 					$strAlterSQL = '';
 
@@ -627,7 +690,7 @@
 
 					break;
 
-				case'remove_unique':
+				case'drop_unique':
 
 					$strAlterSQL = '';
 
@@ -643,25 +706,53 @@
 
 					break;
 
-				case'add_field':
+				case'add_column':
 					$strAlterSQL = sprintf("ALTER TABLE `%s` auto_increment = %d;",
 						$strTableName,
 						\Twist::Database()->escapeString($this->intAutoIncrementStart)
 					);
 					break;
 
-				case'alter_field':
+				case'alter_column':
+
+					//ALTER TABLE `asset_content` CHANGE `slug` `slugd` CHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'Unique content tag name that is used in all sites / templates';
+
 					$strAlterSQL = sprintf("ALTER TABLE `%s` auto_increment = %d;",
 						$strTableName,
 						\Twist::Database()->escapeString($this->intAutoIncrementStart)
 					);
 					break;
 
-				case'remove_field':
-					$strAlterSQL = sprintf("ALTER TABLE `%s` auto_increment = %d;",
-						$strTableName,
-						\Twist::Database()->escapeString($this->intAutoIncrementStart)
-					);
+				case'drop_column':
+
+					$strAlterSQL = '';
+
+					//Loop through $mxdData
+					foreach($mxdData as $intKey => $strColumnName){
+
+						$strAlterSQL .= sprintf("ALTER TABLE `%s` DROP `%s`;",
+							$strTableName,
+							\Twist::Database()->escapeString($strColumnName)
+						);
+					}
+
+					break;
+
+				case'rename_column':
+
+					$strAlterSQL = '';
+
+					//Loop through $mxdData
+					foreach($mxdData as $strColumnName => $strNewColumnName){
+
+						$strAlterSQL .= sprintf("ALTER TABLE `%s` CHANGE `%s` `%s` %s;",
+							$strTableName,
+							\Twist::Database()->escapeString($strColumnName),
+							\Twist::Database()->escapeString($strNewColumnName),
+							$this->getColumnType($strNewColumnName)
+						);
+					}
+
 					break;
 			}
 

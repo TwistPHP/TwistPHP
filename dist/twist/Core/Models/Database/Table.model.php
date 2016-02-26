@@ -111,6 +111,7 @@
 										`IS_NULLABLE` AS `nullable`,
 										`COLUMN_DEFAULT` AS `default_value`,
 										`COLUMN_KEY` AS `key`,
+										`COLUMN_TYPE` AS `column_type`,
 										`EXTRA` AS `extra`,
 										`COLUMN_COMMENT` AS `comment`,
 										`CHARACTER_SET_NAME` AS `charset`,
@@ -180,6 +181,12 @@
 						if($arrEachItem['extra'] == 'auto_increment'){
 							$arrEachItem['auto_increment'] = true;
 							$arrStructure['auto_increment'] = $arrEachItem['column_name'];
+						}
+
+						//Place the enum values in the char length field
+						if($arrEachItem['data_type'] == 'enum' || $arrEachItem['data_type'] == 'set'){
+							preg_match_all("~\'([^\']*)\'~",$arrEachItem['column_type'],$arrEachItem['character_length']);
+							$arrEachItem['character_length'] = (count($arrEachItem['character_length']) == 2) ? $arrEachItem['character_length'][1] : array();
 						}
 
 						//Set the data back into the structure array
