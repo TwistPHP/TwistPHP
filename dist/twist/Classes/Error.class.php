@@ -289,15 +289,26 @@
 		 * Output a 404 page to the user
 		 */
 		public static function handle404(){
-			self::errorPage(404);
+			self::response(404);
 		}
 
 		/**
-		 * Output a response code and a custom message if required to the user, this function handles all HTTP response codes.
-		 * @param $intErrorCode
-		 * @param null $strCustomDescription
+		 * Output HTTP error response code, This function has been deprecated in favour of the response() method
+		 * @param int $intErrorCode
+		 * @param null|string $strCustomDescription
+		 * @alias response
+		 * @deprecated
 		 */
 		public static function errorPage($intErrorCode,$strCustomDescription = null){
+			self::response($intErrorCode,$strCustomDescription);
+		}
+
+		/**
+		 * Output HTTP error response code and a custom message if required to the user, this function handles all HTTP response codes.
+		 * @param int $intErrorCode
+		 * @param null|string $strCustomDescription
+		 */
+		public static function response($intErrorCode,$strCustomDescription = null){
 
 			$strReturn = 'Unknown';
 			$strDescription = '';
