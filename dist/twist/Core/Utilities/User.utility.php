@@ -188,7 +188,7 @@ class User extends Base{
             //Just in case, remove the logout comment otherwise the redirect could log you out again
             $strUrl = str_replace(array("?logout=1","?logout"),"",$strUrl);
 
-            if($strUrl != $_SERVER['request_uri']
+            if($strUrl != $_SERVER['REQUEST_URI']
                 && !in_array(substr($strUrl, -3), array('.js'))
                 && !in_array(substr($strUrl, -4), array('.css','.jpg','.png','.gif','.ico'))){
                 $this->goToPage($strUrl);
