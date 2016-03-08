@@ -28,17 +28,17 @@
 		function( root, factory ) {
 			if( typeof define === 'function' &&
 					define.amd ) {
-				define( 'twistfileupload', factory );
+				define( 'twistfileupload', [], factory );
 			} else if( typeof module === 'object' &&
 					module.exports ) {
-				module.exports = factory( require( 'twistfileupload' ) );
+				module.exports = factory();
 			} else {
-				root.returnExports = factory( root.twistfileupload );
+				root.twistfileupload = factory();
 			}
 		}
 	)(
 		this,
-		function( twistfileupload ) {
+		function() {
 			var TwistUploader = function( strInputID, strUri, objSettings ) {
 				var debug = true,
 						log = function( mxdData, strType, blOverride ) {
@@ -98,16 +98,18 @@
 				thisUploader.acceptRaw = [];
 				thisUploader.acceptTypes = [];
 				thisUploader.addRemoveFileListener = function() {
-					for( var intUploadedFile in thisUploader.uploaded ) {
-						var domRemoveButton = document.getElementById( strInputID + '-remove-' + intUploadedFile ),
-								funRemoveFile = (function( intUploadedFileIndex ) {
-									return function() {
-										thisUploader.removeFileFromListFunction( intUploadedFileIndex );
-									};
-								})( intUploadedFile );
+					var funRemoveFile = function( intUploadedFileIndex ) {
+								return function() {
+									console.log( 'Remove' );
+									thisUploader.removeFileFromListFunction( intUploadedFileIndex );
+								};
+							};
 
-						domRemoveButton.removeEventListener( 'click', funRemoveFile );
-						domRemoveButton.addEventListener( 'click', funRemoveFile );
+					for( var intUploadedFile in thisUploader.uploaded ) {
+						var domRemoveButton = document.getElementById( strInputID + '-remove-' + intUploadedFile );
+
+						domRemoveButton.removeEventListener( 'click', ( funRemoveFile )( intUploadedFile ) );
+						domRemoveButton.addEventListener( 'click', ( funRemoveFile )( intUploadedFile ) );
 					}
 				};
 				thisUploader.created = ( new Date() ).getTime();
