@@ -33,6 +33,14 @@ gulp.task( 'ajax-css',
 	}
 );
 
+gulp.task( 'ajax-test',
+	function() {
+		return gulp.src( strTwistSource + 'ajax/js/twistajax.js' )
+				.pipe( jshint() )
+				.pipe( jshint.reporter( 'default' ) );
+	}
+);
+
 gulp.task( 'cssreset',
 	function() {
 		return gulp.src( strTwistSource + 'cssreset/scss/twistcssreset.scss' )
@@ -69,6 +77,14 @@ gulp.task( 'debug-css',
 	}
 );
 
+gulp.task( 'debug-test',
+		function() {
+			return gulp.src( strTwistSource + 'debug/js/twistdebug.js' )
+					.pipe( jshint() )
+					.pipe( jshint.reporter( 'default' ) );
+		}
+);
+
 gulp.task( 'fileupload-js',
 	function() {
 		return gulp.src( strTwistSource + 'fileupload/js/twistfileupload.js' )
@@ -92,6 +108,14 @@ gulp.task( 'fileupload-css',
 				.pipe( rename( 'twistfileupload.min.css' ) )
 				.pipe( sourcemaps.write( './' ) )
 				.pipe( gulp.dest( strTwistDestination + 'fileupload/css' ) );
+	}
+);
+
+gulp.task( 'fileupload-test',
+	function() {
+		return gulp.src( strTwistSource + 'fileupload/js/twistfileupload.js' )
+				.pipe( jshint() )
+				.pipe( jshint.reporter( 'default' ) );
 	}
 );
 
@@ -119,6 +143,14 @@ gulp.task( 'manager-css',
 	}
 );
 
+gulp.task( 'manager-test',
+	function() {
+		return gulp.src( strTwistSource + 'manager/js/twistmanager.js' )
+				.pipe( jshint() )
+				.pipe( jshint.reporter( 'default' ) );
+	}
+);
+
 gulp.task( 'setup-js',
 	function() {
 		return gulp.src( strTwistSource + 'setup/js/twistsetup.js' )
@@ -140,6 +172,14 @@ gulp.task( 'setup-css',
 				.pipe( rename( 'twistsetup.min.css' ) )
 				.pipe( sourcemaps.write( './' ) )
 				.pipe( gulp.dest( strTwistDestination + 'setup/css' ) );
+	}
+);
+
+gulp.task( 'setup-test',
+	function() {
+		return gulp.src( strTwistSource + 'setup/js/twistsetup.js' )
+				.pipe( jshint() )
+				.pipe( jshint.reporter( 'default' ) );
 	}
 );
 
@@ -184,6 +224,8 @@ gulp.task( 'watch-setup',
 		return gulp.watch( strTwistSource + 'setup/**/*', ['setup'] );
 	}
 );
+
+gulp.task( 'test', ['ajax-test', 'debug-test', 'fileupload-test', 'manager-test', 'setup-test'] );
 
 gulp.task( 'watch', ['default', 'watch-ajax', 'watch-cssreset', 'watch-debug', 'watch-fileupload', 'watch-manager', 'watch-setup'] );
 
