@@ -208,6 +208,13 @@
 		}
 
 		/**
+		 * Remove the database table structure cache file, this is used when alterning a table or can be caled manualy if required
+		 */
+		public function clearStructureCache(){
+			\Twist::Cache('twist/utility/database')->remove(sprintf('dbStructure-%s+%s',$this->strDatabase,$this->strTable));
+		}
+
+		/**
 		 * Copy an excising table structure into a new object, the new table will not exists until you commit the returned object.
 		 * @param string $strNewTable
 		 * @param null $strNewDatabase

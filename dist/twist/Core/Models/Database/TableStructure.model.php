@@ -497,6 +497,9 @@
 
 				//Reset the changes array so that you can continue using the db object
 				$this->arrStructureChanges = array();
+
+				//Clear the database strcuture cache file ready for the next time it is requested
+				\Twist::Database()->table($this->strTable,$this->strDatabase)->clearStructureCache();
 			}
 
 			return $blOut;
