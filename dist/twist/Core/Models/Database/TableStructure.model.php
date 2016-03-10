@@ -491,7 +491,7 @@
 				$this->blNewTable = false;
 
 			}elseif(count($this->arrStructureChanges)){
-				
+
 				//Generate and run each alter query to make all the necessary changes
 				$blOut = \Twist::Database()->query($this->sqlAlter())->status();
 

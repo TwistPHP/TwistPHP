@@ -131,6 +131,7 @@ class Database extends \PHPUnit_Framework_TestCase{
 		//Check for the new field in the result set
 		$arrResult = \Twist::Database()->records('test_table')->get(1,'id',true);
 		$this->assertTrue(array_key_exists('slug',$arrResult));
+		$this->assertTrue(array_key_exists('description',$arrResult));
 
 		//Add data to the table and fill the new fields
 		$resNewRecord = \Twist::Database()->records('test_table')->create();
