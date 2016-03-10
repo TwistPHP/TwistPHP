@@ -107,9 +107,11 @@
 
 				$resResult = \Twist::Database()->query("SELECT `COLUMN_NAME` AS `column_name`,
 										`DATA_TYPE` AS `data_type`,
-										`CHARACTER_MAXIMUM_LENGTH` AS `character_length`,
+										`CHARACTER_MAXIMUM_LENGTH` AS `character_length_value`,
 										`IS_NULLABLE` AS `nullable`,
 										`COLUMN_DEFAULT` AS `default_value`,
+										`COLUMN_KEY` AS `key`,
+										`COLUMN_TYPE` AS `column_type`,
 										`EXTRA` AS `extra`,
 										`COLUMN_COMMENT` AS `comment`,
 										`CHARACTER_SET_NAME` AS `charset`,
@@ -129,6 +131,7 @@
 						'columns' => array(),
 						'auto_increment' => null,
 						'auto_increment_start' => 1,
+						'primary_key' => null,
 						'unique_keys' => array(),
 						'indexes' => array(),
 						'table_comment' => null,
@@ -137,12 +140,62 @@
 						'engine' => 'MyISAM',
 					);
 
+					$resKeyResults = \Twist::Database()->query("SELECT `INDEX_NAME` AS `index_name`,
+										`NON_UNIQUE` AS `non_unique`,
+										`SEQ_IN_INDEX` AS `order`,
+										`COLUMN_NAME` AS `column_name`,
+										`INDEX_COMMENT` AS `comment`
+									FROM `information_schema`.`statistics`
+									WHERE `table_schema` NOT IN ('information_schema','mysql','performance_schema')
+									AND `TABLE_NAME` = '%s'
+									AND `TABLE_SCHEMA` = '%s'",
+						$strTable,
+						$strDatabaseName
+					);
+
+					if($resKeyResults->status() && $resKeyResults->numberRows()) {
+						$arrKeyData = $resKeyResults->rows();
+
+						foreach($arrKeyData as $arrKeys){
+
+							if($arrKeys['index_name'] == 'PRIMARY'){
+								$arrStructure['primary_key'] = $arrKeys['column_name'];
+							}else{
+
+								$strKeyType = ($arrKeys['non_unique'] == '0') ? 'unique_keys' : 'indexes';
+
+								if(!array_key_exists($arrKeys['index_name'],$arrStructure[$strKeyType])){
+									$arrStructure[$strKeyType][$arrKeys['index_name']] = array('comment' => '', 'columns' => array());
+								}
+
+								$arrStructure[$strKeyType][$arrKeys['index_name']]['comment'] = $arrKeys['comment'];
+								$arrStructure[$strKeyType][$arrKeys['index_name']]['columns'][$arrKeys['order']] = $arrKeys['column_name'];
+							}
+						}
+					}
+
 					foreach($arrStructureData as $arrEachItem){
-						$arrEachItem['auto_increment'] = ($arrEachItem['extra'] == 'auto_increment');
+
 						$arrEachItem['nullable'] = ($arrEachItem['nullable'] == 'YES');
 
+						if($arrEachItem['extra'] == 'auto_increment'){
+							$arrEachItem['auto_increment'] = true;
+							$arrStructure['auto_increment'] = $arrEachItem['column_name'];
+						}
+
+						//Place the enum values in the char length field
+						if($arrEachItem['data_type'] == 'enum' || $arrEachItem['data_type'] == 'set'){
+							preg_match_all("#\'([^\']*)\'#",$arrEachItem['column_type'],$arrMatches);
+							$arrEachItem['character_length_value'] = (count($arrMatches) == 2) ? $arrMatches[1] : array();
+						}elseif($arrEachItem['data_type'] == 'int'){
+							preg_match("#int\(([0-9]+)\)#",$arrEachItem['column_type'],$arrMatches);
+							$arrEachItem['character_length_value'] = (count($arrMatches)) ? $arrMatches[1] : 11;
+						}elseif($arrEachItem['data_type'] == 'float'){
+							preg_match("#float\(([0-9]+\,[0-9]+)\)#",$arrEachItem['column_type'],$arrMatches);
+							$arrEachItem['character_length_value'] = (count($arrMatches)) ? $arrMatches[1] : '6,2';
+						}
+
 						//Set the data back into the structure array
-						$arrStructure['auto_increment'] = ($arrEachItem['auto_increment']) ? $arrEachItem['column_name'] : null;
 						$arrStructure['columns'][$arrEachItem['column_name']] = $arrEachItem;
 					}
 

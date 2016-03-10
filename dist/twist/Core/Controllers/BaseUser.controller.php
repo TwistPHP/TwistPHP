@@ -387,28 +387,41 @@ class BaseUser extends Base{
 
                 if($intUserID > 0){
 
-                    //AUTO_LOGIN
-                    if(\Twist::framework()->setting('USER_REGISTER_PASSWORD') && !\Twist::framework()->setting('USER_EMAIL_VERIFICATION') && \Twist::framework()->setting('USER_AUTO_AUTHENTICATE')){
+	                if(\Twist::framework()->setting('USER_REGISTER_PASSWORD')){
 
-                        //@todo redirect - test or work out best way of doing this
-                        //$this->resUser->afterLoginRedirect(); --- set the value that this function uses, authenticate will do the redirect
+		                if(\Twist::framework()->setting('USER_EMAIL_VERIFICATION')){
+			                //Tell the user that they must first verify their account
+			                \Twist::Session()->data('site-login_message','Thank you for your registration, please verify your account using the code we have emailed to you');
+		                }elseif(\Twist::framework()->setting('USER_AUTO_AUTHENTICATE')){
+			                //Authenticate the user (log them in)
+			                $this->resUser->authenticate($_POST['email'],$_POST['password']);
+		                }else{
+			                \Twist::Session()->data('site-login_message','Thank you for your registration, please login to access your account');
+		                }
 
-                        //Authenticate the user (log them in)
-                        $this->resUser->authenticate($_POST['email'],$_POST['password']);
+	                }else{
 
-                        //@todo redirect - test or work out best way of doing this
-                        $this->resUser->afterLoginRedirect();
-                    }else{
-                        \Twist::Session()->data('site-register_message','Thank you for your registration, your password has been emailed to you');
-                        unset( $_POST['email'] );
-                        unset( $_POST['firstname'] );
-                        unset( $_POST['lastname'] );
-                        unset( $_POST['register'] );
-                    }
+		                unset( $_POST['email'] );
+		                unset( $_POST['firstname'] );
+		                unset( $_POST['lastname'] );
+		                unset( $_POST['register'] );
+
+		                if(\Twist::framework()->setting('USER_EMAIL_VERIFICATION')){
+			                \Twist::Session()->data('site-login_message','Thank you for your registration, your password and verification code has been emailed to you');
+		                }else{
+			                \Twist::Session()->data('site-login_message','Thank you for your registration, your password has been emailed to you');
+		                }
+	                }
+
+	                //Go to Login Page
+	                \Twist::redirect('./login');
+
                 }else{
                     \Twist::Session()->data('site-register_error_message','Failed to register user');
                 }
             }
         }
+
+	    return $this->register();
     }
 }
