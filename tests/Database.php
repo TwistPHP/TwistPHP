@@ -150,7 +150,7 @@ class Database extends \PHPUnit_Framework_TestCase{
 
 		//Check that the data is still in the table and the slug field has gone
 		$arrResult = \Twist::Database()->records('test_table')->get(2,'id',true);
-		$this->assertEquals('test',$arrResult['name']);
+		$this->assertEquals('test2',$arrResult['name']);
 		$this->assertFalse(array_key_exists('slug',$arrResult));
 
 		$this->assertTrue(\Twist::Database()->table('test_table')->truncate());
