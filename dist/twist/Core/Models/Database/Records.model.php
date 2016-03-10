@@ -66,7 +66,7 @@
 		 * @param null|string|array $mxdValue Value(s) to filter by
 		 * @param null|string $strField Field to be filtered
 		 * @param bool $blReturnArray Output the raw record array rather an an object (Default: returns an object)
-		 * @return null|\Twist\Core\Models\Database\Record Returns an editable object of the database record
+		 * @return null|array|\Twist\Core\Models\Database\Record Returns an editable object of the database record or array if $blReturnArray is true
 		 */
 		public function get($mxdValue,$strField = 'id',$blReturnArray = false){
 

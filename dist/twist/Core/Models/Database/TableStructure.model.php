@@ -491,15 +491,12 @@
 				$this->blNewTable = false;
 
 			}elseif(count($this->arrStructureChanges)){
-
-				echo $this->sqlAlter();
-
+				
 				//Generate and run each alter query to make all the necessary changes
-				//$blAlterStatus = \Twist::Database()->query($this->generateAlterQuery($strKeyChange,$mxdValue))->status();
+				$blOut = \Twist::Database()->query($this->sqlAlter())->status();
 
 				//Reset the changes array so that you can continue using the db object
 				$this->arrStructureChanges = array();
-				$blOut = true;
 			}
 
 			return $blOut;
