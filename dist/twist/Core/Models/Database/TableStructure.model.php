@@ -497,7 +497,7 @@
 				$blOut = $resResult->status();
 
 				if(!$blOut){
-					throw new \Exception($resResult->sql());
+					throw new \Exception('Alter Error: '.$resResult->sql());
 				}
 
 				//Reset the changes array so that you can continue using the db object
@@ -823,7 +823,7 @@
 				case'drop_unique':
 
 					//Could add comments later  COMMENT 'my comment'
-					$strAlterSQL = sprintf("DROP UNIQUE `%s`",
+					$strAlterSQL = sprintf("DROP INDEX `%s`",
 						$arrChange['data']['name']
 					);
 
