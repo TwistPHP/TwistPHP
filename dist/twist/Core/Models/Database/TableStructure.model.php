@@ -497,7 +497,7 @@
 				$blOut = $resResult->status();
 
 				if(!$blOut){
-					throw new \Exception('Alter Error: '.$resResult->sql());
+					throw new \Exception('Alter Error: ['.$resResult->errorNo().'] '.$resResult->error());
 				}
 
 				//Reset the changes array so that you can continue using the db object

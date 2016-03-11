@@ -258,13 +258,22 @@ class Database extends Base{
 			$this->resLibrary->freeResult($this->resResult);
 		}
 
+		$strErrorMessage = $intErrorNo = null;
+
+		if(!$blQueryStatus){
+			$strErrorMessage = $this->resLibrary->errorString();
+			$intErrorNo = $this->resLibrary->errorNumber();
+		}
+
 		return new \Twist\Core\Models\Database\Result(
 			$blQueryStatus,
 			$strQuery,
 			$intNumberRows,
 			$intAffectedRows,
 			$intInsertID,
-			$arrResults
+			$arrResults,
+			$strErrorMessage,
+			$intErrorNo
 		);
 	}
 

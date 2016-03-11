@@ -430,7 +430,7 @@ class BaseUser extends Base{
 						\Twist::redirect('./login');
 
 					}else{
-						\Twist::Session()->data('site-register_error_message','Failed to register user');
+						\Twist::Session()->data('site-register_error_message','Registration failed, you might already be registered');
 					}
 				}
 			}else{
