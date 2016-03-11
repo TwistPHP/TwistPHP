@@ -429,8 +429,6 @@
 
 			if(!array_key_exists($strNewColumnName,$this->arrStructure)){
 
-				//@todo Update keys if needed
-
 				$this->arrStructure[$strNewColumnName] = $this->arrStructure[$strColumnName];
 				$this->arrStructure[$strNewColumnName]['column_name'] = $strNewColumnName;
 
@@ -465,7 +463,10 @@
 				}
 			}
 
-			//@todo Check if we are dropping the primary key..
+			//Check if we are dropping the primary key, remove is nessasery
+			if($this->mxdPrimaryKey == $strColumnName){
+				$this->dropPrimaryKey();
+			}
 
 			unset($this->arrStructure[$strColumnName]);
 
