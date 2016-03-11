@@ -190,7 +190,7 @@
 			if(array_key_exists($strField,$this->arrStructure) && $this->arrStructure[$strField]['data_type'] == 'int'){
 				$this->mxdAutoIncrement = null;
 
-				$this->primaryKey($strField);
+				$this->primaryKey($strField,true);
 				$this->mxdAutoIncrement = $strField;
 				$this->intAutoIncrementStart = $intStartNumber;
 
@@ -207,15 +207,32 @@
 		 * @param $strField
 		 * @throws \Exception
 		 */
-		public function primaryKey($strField){
+		public function primaryKey($strField,$blAutoIncrement = false){
 
 			if(is_null($this->mxdAutoIncrement)){
 				$this->mxdPrimaryKey = $strField;
 
-				$this->arrStructureChanges[] = array('alter' => 'primary_key','data' => array());
+				$this->arrStructureChanges[] = array('alter' => 'primary_key','data' => array('name' => $strField,'auto_increment' => $blAutoIncrement));
 			}else{
 				//error cannot set primary key, when using auto increment
 				throw new \Exception("Error, cannot set a primary key when using auto increment");
+			}
+		}
+
+		/**
+		 * Drop the primary key from the table if one has been setup
+		 */
+		public function dropPrimaryKey(){
+
+			if(!is_null($this->mxdPrimaryKey)){
+
+				$this->arrStructureChanges[] = array('alter' => 'drop_primary_key','data' => array(
+					'auto_increment' => $this->mxdAutoIncrement
+				));
+
+				$this->mxdPrimaryKey = null;
+				$this->mxdAutoIncrement = null;
+				$this->intAutoIncrementStart = 0;
 			}
 		}
 
@@ -766,28 +783,47 @@
 					break;
 
 				case'auto_increment':
-					$strAlterSQL = sprintf("auto_increment = %d",
+					$strAlterSQL = sprintf("AUTO_INCREMENT = %d",
 						\Twist::Database()->escapeString($this->intAutoIncrementStart)
 					);
 					break;
 
 				case'primary_key':
 
-					//@todo If primary key is currently auto-increment
-						//Rebuild field without auto-increment
-						//Drop primary key
-						//Add new primary key
-					//Else
-						//Drop primary key
-						//Add new primary key
+					$strAlterSQL = '';
 
+					//If primary key is currently auto-increment rebuild field without auto-increment
+					if(!is_null($this->mxdAutoIncrement)){
+						$strAlterSQL .= sprintf("MODIFY `%s` INT NOT NULL, ",
+							$this->mxdAutoIncrement
+						);
+					}
 
-					//Still to work out (if new primary key is auto-increment redo row)
+					if($arrChange['data']['auto_increment']){
+						$strAlterSQL .= sprintf("DROP PRIMARY KEY, MODIFY `%s` INT NOT NULL PRIMARY KEY AUTO_INCREMENT",
+							$arrChange['data']['name']
+						);
+					}else{
+						$strAlterSQL .= sprintf("DROP PRIMARY KEY, ADD PRIMARY KEY(`%s`)",
+							$arrChange['data']['name']
+						);
+					}
 
+					break;
 
-					//ALTER TABLE `%s` change id id int(11);
-					//ALTER TABLE `%s` DROP PRIMARY KEY;
-					//ALTER TABLE `%s` ADD PRIMARY KEY (uuid);
+				case'drop_primary_key':
+
+					$strAlterSQL = '';
+
+					//If primary key is currently auto-increment rebuild field without auto-increment
+					if(!is_null($arrChange['data']['auto_increment'])){
+						$strAlterSQL .= sprintf("MODIFY `%s` INT NOT NULL, ",
+							$arrChange['data']['auto_increment']
+						);
+					}
+
+					$strAlterSQL .= "DROP PRIMARY KEY";
+
 					break;
 
 				case'add_index':
