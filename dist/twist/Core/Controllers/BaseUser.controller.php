@@ -351,77 +351,101 @@ class BaseUser extends Base{
 	/**
 	 * Process the users registration request and then redirect onto the relevant page.
 	 */
-    public function POSTregister(){
+	public function POSTregister(){
 
-        //Process the register user request
-        if(array_key_exists('register',$_POST) && $_POST['register'] != ''){
+		//Process the register user request
+		if(array_key_exists('register',$_POST) && $_POST['register'] != ''){
 
-            $resUser = $this->resUser->create();
-            $resUser->email($_POST['email']);
-            $resUser->firstname($_POST['firstname']);
-            $resUser->surname($_POST['lastname']);
-            $resUser->level(10);
+			$resValidator = \Twist::Validate()->createTest();
+			$resValidator->checkString('firstname');
+			$resValidator->checkString('lastname');
+			$resValidator->checkEmail('email');
 
-            $blContinue = true;
+			if(\Twist::framework()->setting('USER_REGISTER_PASSWORD')){
+				$resValidator->checkComparison('password', 'confirm_password');
+			}
 
-            if(\Twist::framework()->setting('USER_REGISTER_PASSWORD')){
+			$arrResult = $resValidator->test($_POST);
 
-                if($_POST['password'] === $_POST['confirm_password']){
-                    $arrResponse = $resUser->password($_POST['password']);
+			if($resValidator->success()){
 
-                    if(!$arrResponse['status']){
-                        \Twist::Session()->data('site-register_error_message',$arrResponse['message']);
-                        $blContinue = false;
-                    }
-                }else{
-                    \Twist::Session()->data('site-register_error_message','Your password and confirm password do not match');
-                    $blContinue = false;
-                }
-            }else{
-                $resUser->resetPassword();
-            }
+				$resUser = $this->resUser->create();
+				$resUser->email($_POST['email']);
+				$resUser->firstname($_POST['firstname']);
+				$resUser->surname($_POST['lastname']);
+				$resUser->level(10);
 
-            //If the password configuration has passed all checks then continue
-            if($blContinue){
-                $intUserID = $resUser->commit();
+				$blContinue = true;
 
-                if($intUserID > 0){
+				if(\Twist::framework()->setting('USER_REGISTER_PASSWORD')){
 
-	                if(\Twist::framework()->setting('USER_REGISTER_PASSWORD')){
+					if($_POST['password'] === $_POST['confirm_password']){
+						$arrResponse = $resUser->password($_POST['password']);
 
-		                if(\Twist::framework()->setting('USER_EMAIL_VERIFICATION')){
-			                //Tell the user that they must first verify their account
-			                \Twist::Session()->data('site-login_message','Thank you for your registration, please verify your account using the code we have emailed to you');
-		                }elseif(\Twist::framework()->setting('USER_AUTO_AUTHENTICATE')){
-			                //Authenticate the user (log them in)
-			                $this->resUser->authenticate($_POST['email'],$_POST['password']);
-		                }else{
-			                \Twist::Session()->data('site-login_message','Thank you for your registration, please login to access your account');
-		                }
+						if(!$arrResponse['status']){
+							\Twist::Session()->data('site-register_error_message',$arrResponse['message']);
+							$blContinue = false;
+						}
+					}else{
+						\Twist::Session()->data('site-register_error_message','Your password and confirm password do not match');
+						$blContinue = false;
+					}
+				}else{
+					$resUser->resetPassword();
+				}
 
-	                }else{
+				//If the password configuration has passed all checks then continue
+				if($blContinue){
+					$intUserID = $resUser->commit();
 
-		                unset( $_POST['email'] );
-		                unset( $_POST['firstname'] );
-		                unset( $_POST['lastname'] );
-		                unset( $_POST['register'] );
+					if($intUserID > 0){
 
-		                if(\Twist::framework()->setting('USER_EMAIL_VERIFICATION')){
-			                \Twist::Session()->data('site-login_message','Thank you for your registration, your password and verification code has been emailed to you');
-		                }else{
-			                \Twist::Session()->data('site-login_message','Thank you for your registration, your password has been emailed to you');
-		                }
-	                }
+						if(\Twist::framework()->setting('USER_REGISTER_PASSWORD')){
 
-	                //Go to Login Page
-	                \Twist::redirect('./login');
+							if(\Twist::framework()->setting('USER_EMAIL_VERIFICATION')){
+								//Tell the user that they must first verify their account
+								\Twist::Session()->data('site-login_message','Thank you for your registration, please verify your account using the code we have emailed to you');
+							}elseif(\Twist::framework()->setting('USER_AUTO_AUTHENTICATE')){
+								//Authenticate the user (log them in)
+								$this->resUser->authenticate($_POST['email'],$_POST['password']);
+							}else{
+								\Twist::Session()->data('site-login_message','Thank you for your registration, please login to access your account');
+							}
 
-                }else{
-                    \Twist::Session()->data('site-register_error_message','Failed to register user');
-                }
-            }
-        }
+						}else{
 
-	    return $this->register();
-    }
+							unset( $_POST['email'] );
+							unset( $_POST['firstname'] );
+							unset( $_POST['lastname'] );
+							unset( $_POST['register'] );
+
+							if(\Twist::framework()->setting('USER_EMAIL_VERIFICATION')){
+								\Twist::Session()->data('site-login_message','Thank you for your registration, your password and verification code has been emailed to you');
+							}else{
+								\Twist::Session()->data('site-login_message','Thank you for your registration, your password has been emailed to you');
+							}
+						}
+
+						//Go to Login Page
+						\Twist::redirect('./login');
+
+					}else{
+						\Twist::Session()->data('site-register_error_message','Failed to register user');
+					}
+				}
+			}else{
+
+				$strErrorMessage = '';
+				foreach($arrResult['results'] as $arrEachResult){
+					if(!$arrEachResult['status']){
+						$strErrorMessage .= $arrEachResult['message']."<br>";
+					}
+				}
+
+				\Twist::Session()->data('site-register_error_message',$strErrorMessage);
+			}
+		}
+
+		return $this->register();
+	}
 }

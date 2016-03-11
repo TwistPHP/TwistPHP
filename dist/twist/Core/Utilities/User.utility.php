@@ -491,7 +491,8 @@ class User extends Base{
             case'login_form':
 
                 if($this->loggedIn()){
-                    \Twist::redirect(($strLoginPage == $_SERVER['REQUEST_URI']) ? './' : $strLoginPage);
+                    //\Twist::redirect(($strLoginPage == $_SERVER['REQUEST_URI']) ? './' : $strLoginPage);
+                    \Twist::redirect('./');
                 }else{
 
                     $arrTags = array(

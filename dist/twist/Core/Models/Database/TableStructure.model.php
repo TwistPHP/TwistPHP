@@ -493,7 +493,12 @@
 			}elseif(count($this->arrStructureChanges)){
 
 				//Generate and run each alter query to make all the necessary changes
-				$blOut = \Twist::Database()->query($this->sqlAlter())->status();
+				$resResult = \Twist::Database()->query($this->sqlAlter());
+				$blOut = $resResult->status();
+
+				if(!$blOut){
+					throw new \Exception($resResult->sql());
+				}
 
 				//Reset the changes array so that you can continue using the db object
 				$this->arrStructureChanges = array();
