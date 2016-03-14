@@ -1,6 +1,6 @@
 # [TwistPHP](https://twistphp.com/) ![TwistPHP logo](http://static.twistphp.com/logo/square/32.png)
 
-[![Master build status](https://img.shields.io/travis/TwistPHP/TwistPHP/master.svg?label=master%20build)](https://travis-ci.org/TwistPHP/TwistPHP) [![Development build status](https://img.shields.io/travis/TwistPHP/TwistPHP/development.svg?label=development%20build)](https://travis-ci.org/TwistPHP/TwistPHP) [![Join the chat at https://gitter.im/TwistPHP/TwistPHP](https://img.shields.io/gitter/room/TwistPHP/TwistPHP.svg)](https://gitter.im/TwistPHP/TwistPHP) ![Licence](https://img.shields.io/badge/Licence-GPLv3-brightgreen.svg)
+[![Master build status](https://img.shields.io/travis/TwistPHP/TwistPHP/master.svg?label=master%20build)](https://travis-ci.org/TwistPHP/TwistPHP) [![Development build status](https://img.shields.io/travis/TwistPHP/TwistPHP/development.svg?label=development%20build)](https://travis-ci.org/TwistPHP/TwistPHP) [![Coveralls](https://img.shields.io/coveralls/TwistPHP/TwistPHP.svg)](https://coveralls.io/github/TwistPHP/TwistPHP) [![Join the chat at https://gitter.im/TwistPHP/TwistPHP](https://img.shields.io/gitter/room/TwistPHP/TwistPHP.svg)](https://gitter.im/TwistPHP/TwistPHP) ![Licence](https://img.shields.io/badge/Licence-GPLv3-brightgreen.svg)
 
 ## A fresh, new open source PHP MVC micro framework
 
