@@ -1,7 +1,7 @@
 {
     "name": "twistphp/twistphp",
     "type": "project",
-    "description": "TwistPHP is an open source PHP MVC framework built from the ground up.",
+    "description": "TwistPHP is an open source PHP MVC framework built from the ground up",
     "keywords": ["framework","twistphp","MVC","PHP","micro"],
     "homepage": "https://twistphp.com",
     "license": "LGPL",
