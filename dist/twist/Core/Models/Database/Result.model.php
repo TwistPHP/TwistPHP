@@ -36,13 +36,18 @@
 		protected $intAffectedRows = 0;
 		protected $intInsertID = 0;
 
-		public function __construct($blStatus,$strSQL,$intNumRows,$intAffRows,$intInsID,$arrResults){
+		protected $strErrorMessage = null;
+		protected $intErrorNumber = null;
+
+		public function __construct($blStatus,$strSQL,$intNumRows,$intAffRows,$intInsID,$arrResults,$strErrorMessage = null,$intErrorNumber = null){
 			$this->strQuery = $strSQL;
 			$this->blStatus = $blStatus;
 			$this->arrResults = $arrResults;
 			$this->intNumberRows = $intNumRows;
 			$this->intAffectedRows = $intAffRows;
 			$this->intInsertID = $intInsID;
+			$this->strErrorMessage = $strErrorMessage;
+			$this->intErrorNumber = $intErrorNumber;
 		}
 
 		/**
@@ -106,11 +111,19 @@
 			return $this->arrResults;
 		}
 
+		/**
+		 * The mysql error number if an error had occurred during the process of this query
+		 * @return null|integer
+		 */
 		public function errorNo(){
-
+			return $this->intErrorNumber;
 		}
 
-		public function errorMessage(){
-
+		/**
+		 * The mysql error message if an error had occurred during the process of this query
+		 * @return null|string
+		 */
+		public function error(){
+			return $this->strErrorMessage;
 		}
 	}
