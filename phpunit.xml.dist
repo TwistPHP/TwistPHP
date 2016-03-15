@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         syntaxCheck="false"
+         bootstrap="./tests/index.php">
+    <php>
+        <ini name="error_reporting" value="E_ALL" />
+    </php>
+
+    <testsuites>
+        <testsuite name="PHP Coveralls component test suite">
+            <directory>./tests/</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>./dist/twist</directory>
+            <exclude>
+                <file>./dist/twist/framework.php</file>
+                <directory>./dist/twist/Config</directory>
+                <file>./dist/twist/Core/boot.php</file>
+                <directory>./docs</directory>
+                <directory>./src</directory>
+                <directory>./tests</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+
+    <logging>
+        <log type="coverage-clover" target="build/logs/clover.xml"/>
+        <log type="junit" target="build/logs/junit.xml" logIncompleteSkipped="false"/>
+    </logging>
+</phpunit>
