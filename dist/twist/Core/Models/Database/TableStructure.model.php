@@ -30,11 +30,15 @@
 
 		protected $strDatabase = null;
 		protected $strTable = null;
+
 		protected $arrStructure = array();
+		protected $arrStructureChanges = array();
+		protected $blNewTable = true;
+
 		protected $mxdAutoIncrement = null;
 		protected $intAutoIncrementStart = 1;
 		protected $mxdPrimaryKey = null;
-		protected $arrUniqueKey = array();
+		protected $arrUniqueKeys = array();
 		protected $arrIndexs = array();
 		protected $mxdTableComment = null;
 		protected $strCollation = 'utf8_unicode_ci';
@@ -52,14 +56,18 @@
 			$this->strTable = $strTable;
 
 			if(count($arrStructure)){
+				$this->blNewTable = false;
 				$this->arrStructure = $arrStructure['columns'];
 
 				if(!is_null($arrStructure['auto_increment'])){
-					$this->autoIncrement($arrStructure['auto_increment'],$arrStructure['auto_increment_start']);
+
+					$this->mxdAutoIncrement = $arrStructure['auto_increment'];
+					$this->intAutoIncrementStart = $arrStructure['auto_increment_start'];
+					$this->mxdPrimaryKey = $arrStructure['primary_key'];
 				}
 
 				//Set all the other key information for this table
-				$this->arrUniqueKey = $arrStructure['unique_keys'];
+				$this->arrUniqueKeys = $arrStructure['unique_keys'];
 				$this->arrIndexs = $arrStructure['indexes'];
 				$this->mxdTableComment = $arrStructure['table_comment'];
 				$this->strCollation = $arrStructure['collation'];
@@ -78,7 +86,7 @@
 			$this->mxdAutoIncrement = null;
 			$this->intAutoIncrementStart = null;
 			$this->mxdPrimaryKey = null;
-			$this->arrUniqueKey = null;
+			$this->arrUniqueKeys = null;
 			$this->arrIndexs = null;
 			$this->mxdTableComment = null;
 			$this->strCollation = null;
@@ -101,18 +109,53 @@
 		}
 
 		/**
-		 * Set the Collation for the database table
+		 * Set the Collation for the database table, calling this method will also set the charset of the Table accordingly
 		 * @param $strCollation
 		 */
 		public function collation($strCollation){
-			$this->strCollation = $strCollation;
+
+			$strCharset = $this->getCollationCharset($strCollation);
+
+			if(!is_null($strCharset)){
+
+				$this->strCollation = $strCollation;
+
+				//Lookup and set charset based on collation
+				$this->charset($strCharset);
+				$this->arrStructureChanges[] = array('alter' => 'collation','data' => array());
+			}else{
+				//Throw invalid collation error
+				throw new \Exception(sprintf("Invalid collation '%s' has been selected",$strCollation));
+			}
+		}
+
+		/**
+		 * Get the Charset for a particular collation
+		 * @param $strCollation
+		 * @return int|null|string
+		 */
+		protected function getCollationCharset($strCollation){
+
+			$strCharset = null;
+			$strCollation = strtolower($strCollation);
+
+			$jsonCharsetCollations = file_get_contents(sprintf('%sCore/Data/database/charset-collations.json',TWIST_FRAMEWORK));
+
+			foreach(json_decode($jsonCharsetCollations,true) as $strCharsetKey => $arrCharSet){
+				if(array_key_exists($strCollation,$arrCharSet['collations'])){
+					$strCharset = $strCharsetKey;
+					break;
+				}
+			}
+
+			return $strCharset;
 		}
 
 		/**
 		 * Set the character set for the database table
 		 * @param $strCharset
 		 */
-		public function charset($strCharset){
+		protected function charset($strCharset){
 			$this->strCharset = $strCharset;
 		}
 
@@ -121,7 +164,9 @@
 		 * @param $strEngine
 		 */
 		public function engine($strEngine){
+
 			$this->strEngine = $strEngine;
+			$this->arrStructureChanges[] = array('alter' => 'engine','data' => array());
 		}
 
 		/**
@@ -129,7 +174,9 @@
 		 * @param $strComment
 		 */
 		public function comment($strComment){
+
 			$this->mxdTableComment = $strComment;
+			$this->arrStructureChanges[] = array('alter' => 'comment','data' => array());
 		}
 
 		/**
@@ -143,12 +190,15 @@
 			if(array_key_exists($strField,$this->arrStructure) && $this->arrStructure[$strField]['data_type'] == 'int'){
 				$this->mxdAutoIncrement = null;
 
-				$this->primaryKey($strField);
+				$this->primaryKey($strField,true);
 				$this->mxdAutoIncrement = $strField;
 				$this->intAutoIncrementStart = $intStartNumber;
+
+				$this->arrStructureChanges[] = array('alter' => 'auto_increment','data' => array());
+
 			}else{
-				//Field must have already been added and can only be an integer
-				throw new \Exception(sprintf("Field '%s' must have already been added to the table and can only be an integer",$strField));
+				//Column must have already been added and can only be an integer
+				throw new \Exception(sprintf("Column '%s' must have already been added to the table and can only be an integer",$strField));
 			}
 		}
 
@@ -157,10 +207,12 @@
 		 * @param $strField
 		 * @throws \Exception
 		 */
-		public function primaryKey($strField){
+		public function primaryKey($strField,$blAutoIncrement = false){
 
 			if(is_null($this->mxdAutoIncrement)){
 				$this->mxdPrimaryKey = $strField;
+
+				$this->arrStructureChanges[] = array('alter' => 'primary_key','data' => array('name' => $strField,'auto_increment' => $blAutoIncrement));
 			}else{
 				//error cannot set primary key, when using auto increment
 				throw new \Exception("Error, cannot set a primary key when using auto increment");
@@ -168,86 +220,310 @@
 		}
 
 		/**
+		 * Drop the primary key from the table if one has been setup
+		 */
+		public function dropPrimaryKey(){
+
+			if(!is_null($this->mxdPrimaryKey)){
+
+				$this->arrStructureChanges[] = array('alter' => 'drop_primary_key','data' => array(
+					'auto_increment' => $this->mxdAutoIncrement
+				));
+
+				$this->mxdPrimaryKey = null;
+				$this->mxdAutoIncrement = null;
+				$this->intAutoIncrementStart = 0;
+			}
+		}
+
+		/**
 		 * Set a unique key, you can have multiple unique keys per table. To create a unique key from more than 1 field pass the second parameter as an array of fields
 		 * @param $strName
-		 * @param $mxdFields
+		 * @param $mxdColumns
+		 * @param $strComment
 		 * @return string
 		 */
-		public function addUniqueKey($strName,$mxdFields){
-			$this->arrUniqueKey[$strName] = $mxdFields;
+		public function addUniqueKey($strName,$mxdColumns,$strComment = null){
+
+			$this->arrUniqueKeys[$strName] = array('comment' => $strComment,'columns' => $mxdColumns);
+
+			$this->arrStructureChanges[] = array('alter' => 'add_unique','data' => array(
+				'name' => $strName,
+				'comment' => $strComment,
+				'columns' => $mxdColumns
+			));
 		}
 
 		/**
 		 * Set a Index, you can have multiple indexes per table. To create a index from more than 1 field pass the second parameter as an array of fields
 		 * @param $strName
-		 * @param $mxdFields
+		 * @param $mxdColumns
+		 * @param $strComment
 		 */
-		public function addIndex($strName,$mxdFields){
-			$this->arrIndexs[$strName] = $mxdFields;
+		public function addIndex($strName,$mxdColumns,$strComment = null){
+
+			$this->arrIndexs[$strName] = array('comment' => $strComment,'columns' => $mxdColumns);
+
+			$this->arrStructureChanges[] = array('alter' => 'add_index','data' => array(
+				'name' => $strName,
+				'comment' => $strComment,
+				'columns' => $mxdColumns
+			));
 		}
 
 		/**
-		 * Add a field into the table, the fields will be added into the table in the order they have been entered
-		 * @param $strColumnName
-		 * @param $strDataType
-		 * @param null $mxdCharLength
-		 * @param null $strDefaultValue
-		 * @param bool $blNullable
-		 * @throws \Exception
+		 * Drop a unique key from the table structure
+		 * @param $strName
 		 */
-		public function addField($strColumnName,$strDataType,$mxdCharLength=null,$strDefaultValue = null,$blNullable = false){
+		public function dropUniqueKey($strName){
 
-			$arrAllowedTypes = array('int', 'char', 'varchar', 'text', 'enum', 'date', 'datetime');
+			if(array_key_exists($strName,$this->arrUniqueKeys)){
+				unset($this->arrUniqueKeys[$strName]);
 
-			if(!array_key_exists($strColumnName,$this->arrStructure)){
-
-				if(in_array(strtolower($strDataType),$arrAllowedTypes)){
-
-					$this->arrStructure[$strColumnName] = array(
-						'column_name' => $strColumnName,
-						'data_type' => $strDataType,
-						'character_length' => (in_array(strtolower($strDataType),array('text','date','datetime'))) ? null : $mxdCharLength,
-						'nullable' => $blNullable,
-						'default_value' => $strDefaultValue,
-						'comment' => null,
-						'order' => count($this->arrStructure)+1
-					);
-				}else{
-					//Field is not an allowed type
-					throw new \Exception(sprintf("Field type '%s' is not currently supported in this system",$strDataType));
-				}
-			}else{
-				//Field already created
-				throw new \Exception(sprintf("Field '%s' has already been added to the tables structure",$strColumnName));
+				$this->arrStructureChanges[] = array('alter' => 'drop_unique','data' => array(
+					'name' => $strName,
+				));
 			}
 		}
 
 		/**
-		 * Set the order of any given field by its name, this will adjust all other field accordingly
-		 * @param string $strColumnName Name of field to ne reordered
+		 * Drop a Index from the table structure
+		 * @param $strName
+		 */
+		public function dropIndex($strName){
+
+			if(array_key_exists($strName,$this->arrIndexs)){
+				unset($this->arrIndexs[$strName]);
+
+				$this->arrStructureChanges[] = array('alter' => 'drop_index','data' => array(
+					'name' => $strName,
+				));
+			}
+		}
+
+		/**
+		 * Get all the data/information that makes up the column within the table structure
+		 * @param string $strColumnName
+		 * @return array Column data as an array
+		 * @throws \Exception
+		 */
+		public function column($strColumnName){
+
+			if(array_key_exists($strColumnName,$this->arrStructure)){
+				return $this->arrStructure[$strColumnName];
+			}else{
+				throw new \Exception(sprintf("Column '%s' dose not exist in this table structure",$strColumnName));
+			}
+		}
+
+		/**
+		 * Detect if a column exists in the table structure and return a boolean result. TRUE if the table exists.
+		 * @param string $strColumnName Name of the column to be tested
+		 * @return bool True returned if table exists
+		 */
+		public function isColumn($strColumnName){
+			return (array_key_exists($strColumnName,$this->arrStructure));
+		}
+
+		/**
+		 * Add a column into the table, the columns will be added into the table in the order they have been entered
+		 * @param string $strColumnName
+		 * @param string $strDataType
+		 * @param null|int|array $mxdCharLength Char length of field, set an array for enum values
+		 * @param null|string $strDefaultValue
+		 * @param bool $blNullable
+		 * @param null|string $strComment Comment to be stored against the field
+		 * @param null|string $strCollation Set the collation if different from that of the table
+		 * @throws \Exception
+		 */
+		public function addColumn($strColumnName,$strDataType,$mxdCharLength=null,$strDefaultValue = null,$blNullable = false,$strComment = null,$strCollation = null){
+
+			if(!array_key_exists($strColumnName,$this->arrStructure)){
+
+				$this->setColumnData($strColumnName,$strDataType,$mxdCharLength,$strDefaultValue,$blNullable,$strComment,$strCollation);
+
+				//Add a new column to the database, we will generate this ALTER SQL upon commit to ensure correct positioning
+				$this->arrStructureChanges[] = array('alter' => 'add_column','data' => array(
+					'name' => $strColumnName,
+				));
+
+			}else{
+				//Field already created
+				throw new \Exception(sprintf("Column '%s' has already been added to the tables structure",$strColumnName));
+			}
+		}
+
+		/**
+		 * Alter an existing column in the table
+		 * @param string $strColumnName
+		 * @param string $strDataType
+		 * @param null|int|array $mxdCharLength Char length of field, set an array for enum values
+		 * @param null|string $strDefaultValue
+		 * @param bool $blNullable
+		 * @param null|string $strComment Comment to be stored against the field
+		 * @param null|string $strCollation Set the collation if different from that of the table
+		 * @throws \Exception
+		 */
+		public function alterColumn($strColumnName,$strDataType,$mxdCharLength=null,$strDefaultValue = null,$blNullable = false,$strComment = null,$strCollation = null){
+
+			if(array_key_exists($strColumnName,$this->arrStructure)){
+
+				$this->setColumnData($strColumnName,$strDataType,$mxdCharLength,$strDefaultValue,$blNullable,$strComment,$strCollation);
+
+				$this->arrStructureChanges[] = array('alter' => 'alter_column','data' => array(
+					'name' => $strColumnName,
+				));
+			}else{
+				throw new \Exception(sprintf("Column '%s' doesn't exist in this table",$strColumnName));
+			}
+		}
+
+		/**
+		 * Set and process the column data on behalf of the public functions "addColumn" and "alterColumn"
+		 * @param string $strColumnName
+		 * @param string $strDataType
+		 * @param null|int|array $mxdCharLengthValue Length or Value of field, set an array for enum values
+		 * @param null|string $strDefaultValue
+		 * @param bool $blNullable
+		 * @param null|string $strComment Comment to be stored against the field
+		 * @param null|string $strCollation Set the collation if different from that of the table
+		 * @throws \Exception
+		 */
+		protected function setColumnData($strColumnName,$strDataType,$mxdCharLengthValue=null,$strDefaultValue = null,$blNullable = false,$strComment = null,$strCollation = null){
+
+			$arrAllowedTypes = array('int', 'float', 'char', 'varchar', 'text', 'blob', 'enum', 'set', 'date', 'datetime');
+
+			if(in_array(strtolower($strDataType),$arrAllowedTypes)){
+
+				if(array_key_exists($strColumnName,$this->arrStructure)){
+					$intOrder = $this->arrStructure[$strColumnName]['order'];
+				}else{
+					$intOrder = count($this->arrStructure)+1;
+				}
+
+				$this->arrStructure[$strColumnName] = array(
+					'column_name' => $strColumnName,
+					'data_type' => $strDataType,
+					'character_length_value' => (in_array(strtolower($strDataType),array('text','date','datetime'))) ? null : $mxdCharLengthValue,
+					'nullable' => $blNullable,
+					'default_value' => $strDefaultValue,
+					'collation' => $strCollation,
+					'charset' => (is_null($strCollation)) ? null : $this->getCollationCharset($strCollation),
+					'comment' => $strComment,
+					'order' => $intOrder
+				);
+
+			}else{
+				//Field is not an allowed type
+				throw new \Exception(sprintf("Column type '%s' is not currently supported in this system",$strDataType));
+			}
+		}
+
+		/**
+		 * Rename a column in the table, provide both the original and new column name. Indexes will be updated accordingly.
+		 * @param string $strColumnName Current column name
+		 * @param string $strNewColumnName New column name
+		 * @throws \Exception
+		 */
+		public function renameColumn($strColumnName,$strNewColumnName){
+
+			if(!array_key_exists($strNewColumnName,$this->arrStructure)){
+
+				$this->arrStructure[$strNewColumnName] = $this->arrStructure[$strColumnName];
+				$this->arrStructure[$strNewColumnName]['column_name'] = $strNewColumnName;
+
+				unset($this->arrStructure[$strColumnName]);
+
+				$this->arrStructureChanges[] = array('alter' => 'rename_column','data' => array(
+					'name' => $strColumnName,
+					'new_name' => $strNewColumnName,
+				));
+			}else{
+				throw new \Exception(sprintf("Column '%s' already exists",$strNewColumnName));
+			}
+		}
+
+		/**
+		 * Drop a column from the table structure by its column name.
+		 * @param string $strColumnName Column to be dropped
+		 */
+		public function dropColumn($strColumnName){
+
+			//If the column is part of an Index then drop the index
+			foreach($this->arrIndexs as $strName => $arrData){
+				if(in_array($strColumnName,$arrData['columns'])){
+					$this->dropIndex($strName);
+				}
+			}
+
+			//If the column is part of a unique key then drop the key
+			foreach($this->arrUniqueKeys as $strName => $arrData){
+				if(in_array($strColumnName,$arrData['columns'])){
+					$this->dropUniqueKey($strName);
+				}
+			}
+
+			//Check if we are dropping the primary key, remove is nessasery
+			if($this->mxdPrimaryKey == $strColumnName){
+				$this->dropPrimaryKey();
+			}
+
+			unset($this->arrStructure[$strColumnName]);
+
+			$this->arrStructureChanges[] = array('alter' => 'drop_column','data' => array(
+				'name' => $strColumnName,
+			));
+		}
+
+		/**
+		 * Set the order of any given column by its name, this will adjust all other column accordingly
+		 * @param string $strColumnName Name of column to ne reordered
 		 * @param int $intOrder New order position within the table
 		 */
-		public function setFieldOrder($strColumnName,$intOrder){
+		public function setColumnOrder($strColumnName,$intOrder){
 
-			foreach($this->arrStructure as $strKey => $arrEachField){
+			foreach($this->arrStructure as $strKey => $arrEachColumn){
 
-				if($arrEachField['column_name'] == $strColumnName){
+				if($arrEachColumn['column_name'] == $strColumnName){
 					$this->arrStructure[$strKey]['order'] = $intOrder;
-				}elseif($arrEachField['order'] >= $intOrder && $arrEachField['column_name'] != $strColumnName){
+				}elseif($arrEachColumn['order'] >= $intOrder && $arrEachColumn['column_name'] != $strColumnName){
 					$this->arrStructure[$strKey]['order']++;
 				}
 			}
 		}
 
 		/**
-		 * Final call, this will create the table in the database, once created this resource will become unusable
+		 * Final call, this will create/alter the tables structure in the database.
 		 * @return bool
 		 */
 		public function commit(){
 
-			$strSQL = $this->sql();
-			$blOut = \Twist::Database()->query($strSQL)->status();
-			$this->__destruct();
+			$blOut = false;
+
+			if($this->blNewTable){
+
+				$strSQL = $this->sql();
+				$blOut = \Twist::Database()->query($strSQL)->status();
+
+				//Reset the new table key so that you can now alter the table
+				$this->blNewTable = false;
+
+			}elseif(count($this->arrStructureChanges)){
+
+				//Generate and run each alter query to make all the necessary changes
+				$resResult = \Twist::Database()->query($this->sqlAlter());
+				$blOut = $resResult->status();
+
+				if(!$blOut){
+					throw new \Exception('Alter Error: ['.$resResult->errorNo().'] '.$resResult->error());
+				}
+
+				//Reset the changes array so that you can continue using the db object
+				$this->arrStructureChanges = array();
+
+				//Clear the database strcuture cache file ready for the next time it is requested
+				\Twist::Database()->table($this->strTable,$this->strDatabase)->clearStructureCache();
+			}
 
 			return $blOut;
 		}
@@ -264,20 +540,49 @@
 
 			$strKeyList = ($strKeyList != '') ? substr($strKeyList,0,-2)."\n" : '';
 
-			$strFieldList = $this->generateFieldList();
-			$strFieldList = ($strKeyList == '') ? substr($strFieldList,0,-2)."\n" : $strFieldList;
+			//Sort the columns by order
+			$arrStructure = \Twist::framework()->tools()->arrayReindex($this->arrStructure,'order');
+			ksort($arrStructure);
+
+			$strColumnList = '';
+			foreach($arrStructure as $arrEachColumn){
+				$strColumnList .= "\t".$this->generateColumnSQL($arrEachColumn).",\n";
+			}
+
+			$strColumnList = ($strKeyList == '') ? substr($strColumnList,0,-2)."\n" : $strColumnList;
 
 			$strSQL = sprintf("CREATE TABLE IF NOT EXISTS `%s`.`%s` (\n%s%s) ENGINE=%s DEFAULT CHARSET=%s COLLATE=%s%s%s;",
 				$this->strDatabase,
 				$this->strTable,
-				$strFieldList,
+				$strColumnList,
 				$strKeyList,
 				$this->strEngine,
 				$this->strCharset,
 				$this->strCollation,
-				(!is_null($this->mxdTableComment)) ? sprintf(" COMMENT='%s'",$this->mxdTableComment) : '',
+				(!is_null($this->mxdTableComment)) ? sprintf(" COMMENT='%s'",\Twist::Database()->escapeString($this->mxdTableComment)) : '',
 				(!is_null($this->mxdAutoIncrement)) ? sprintf(' AUTO_INCREMENT=%d',$this->intAutoIncrementStart) : ''
 			);
+
+			return $strSQL;
+		}
+
+		public function sqlAlter($blIndividualQueries = false){
+
+			$strSQL = '';
+			$arrAlterQueryParts = array();
+			$strTableName = \Twist::Database()->escapeString($this->strTable);
+
+			foreach($this->arrStructureChanges as $arrChange){
+				$arrAlterQueryParts[] = $this->generateAlterQuery($arrChange);
+			}
+
+			if($blIndividualQueries){
+				foreach($arrAlterQueryParts as $strEachQueryPart){
+					$strSQL .= sprintf("ALTER TABLE `%s` %s;\n",$strTableName,$strEachQueryPart);
+				}
+			}else{
+				$strSQL = sprintf("ALTER TABLE `%s`\n\t%s;",$strTableName,implode(",\n\t",$arrAlterQueryParts));
+			}
 
 			return $strSQL;
 		}
@@ -305,21 +610,14 @@
 
 			$strOut = '';
 
-			if(count($this->arrUniqueKey) > 0){
-				foreach($this->arrUniqueKey as $strName => $mxdFields){
+			if(count($this->arrUniqueKeys) > 0){
+				foreach($this->arrUniqueKeys as $strName => $mxdData){
 
-					$arrFields = array();
-
-					if(is_array($mxdFields)){
-
-						foreach($mxdFields as $strFiled){
-							$arrFields[] = sprintf("`%s`",$strFiled);
-						}
-
-						$strOut .= sprintf("\tUNIQUE KEY `%s` ( %s ),\n",$strName,implode(',',$arrFields));
-					}else{
-						$strOut .= sprintf("\tUNIQUE KEY `%s` ( %s ),\n",$strName,$mxdFields);
-					}
+					$strOut .= sprintf("\tUNIQUE KEY `%s` ( `%s` )%s,\n",
+						$strName,
+						(is_array($mxdData['columns'])) ? implode('`,`',$mxdData['columns']) : $mxdData['columns'],
+						(!is_null($mxdData['comment']) && $mxdData['comment'] != '') ? sprintf(" COMMENT '%s'",\Twist::Database()->escapeString($mxdData['comment'])) : ''
+					);
 				}
 			}
 
@@ -335,20 +633,13 @@
 			$strOut = '';
 
 			if(count($this->arrIndexs) > 0){
-				foreach($this->arrIndexs as $strName => $mxdFields){
+				foreach($this->arrIndexs as $strName => $mxdData){
 
-					$arrFields = array();
-
-					if(is_array($mxdFields)){
-
-						foreach($mxdFields as $strFiled){
-							$arrFields[] = sprintf("`%s`",$strFiled);
-						}
-
-						$strOut .= sprintf("\tKEY `%s` ( %s ),\n",$strName,implode(',',$arrFields));
-					}else{
-						$strOut .= sprintf("\tKEY `%s` ( %s ),\n",$strName,$mxdFields);
-					}
+					$strOut .= sprintf("\tKEY `%s` ( `%s` )%s,\n",
+						$strName,
+						(is_array($mxdData['columns'])) ? implode('`,`',$mxdData['columns']) : $mxdData['columns'],
+						(!is_null($mxdData['comment']) && $mxdData['comment'] != '') ? sprintf(" COMMENT '%s'",\Twist::Database()->escapeString($mxdData['comment'])) : ''
+					);
 				}
 			}
 
@@ -356,76 +647,263 @@
 		}
 
 		/**
-		 * Generate a field list to be added to the create query
-		 * @return string
+		 * Generate a partial column SQL that can be used in CREATE and ALTER queries
+		 * @param $arrColumn Array of column data
+		 * @return string Partial Column SQL
 		 */
-		protected function generateFieldList(){
+		protected function generateColumnSQL($arrColumn){
 
-			$strOut = '';
+			switch($arrColumn['data_type']){
 
-			//Sort the fields by order
-			$arrStructure = \Twist::framework()->tools()->arrayReindex($this->arrStructure,'order');
-			ksort($arrStructure);
+				case'char':
 
-			foreach($arrStructure as $strEachColumn){
+					$strColumnSQL = sprintf("`%s` %s(%d) CHARACTER SET %s COLLATE %s%s%s%s",
+						$arrColumn['column_name'],
+						$arrColumn['data_type'],
+						$arrColumn['character_length_value'],
+						$this->getCollationCharset($this->strCollation),
+						$this->strCollation,
+						($arrColumn['nullable'] == true) ? '' : ' NOT NULL',
+						(is_null($arrColumn['default_value'])) ? '' : sprintf(" DEFAULT '%s'",$arrColumn['default_value']),
+						(!is_null($arrColumn['comment']) && $arrColumn['comment'] != '') ? sprintf(" COMMENT '%s'",\Twist::Database()->escapeString($arrColumn['comment'])) : ''
+					);
 
-				switch($strEachColumn['data_type']){
+					break;
 
-					case'char':
+				case'text':
+				case'blob':
 
-						$strOut .= sprintf("\t`%s` %s(%d) COLLATE %s%s%s,\n",
-							$strEachColumn['column_name'],
-							$strEachColumn['data_type'],
-							$strEachColumn['character_length'],
-							$this->strCollation,
-							($strEachColumn['nullable'] == true) ? '' : ' NOT NULL',
-							(is_null($strEachColumn['default_value'])) ? '' : sprintf(" DEFAULT '%s'",$strEachColumn['default_value'])
+					$strColumnSQL = sprintf("`%s` %s CHARACTER SET %s COLLATE %s%s%s",
+						$arrColumn['column_name'],
+						$arrColumn['data_type'],
+						$this->getCollationCharset($this->strCollation),
+						$this->strCollation,
+						($arrColumn['nullable'] == true) ? '' : ' NOT NULL',
+						(!is_null($arrColumn['comment']) && $arrColumn['comment'] != '') ? sprintf(" COMMENT '%s'",\Twist::Database()->escapeString($arrColumn['comment'])) : ''
+					);
 
-						);
+					break;
 
+				case'date':
+				case'datetime':
+
+					$strColumnSQL = sprintf("`%s` %s%s%s%s",
+						$arrColumn['column_name'],
+						$arrColumn['data_type'],
+						($arrColumn['nullable'] == true) ? '' : ' NOT NULL',
+						(is_null($arrColumn['default_value'])) ? '' : sprintf(" DEFAULT '%s'",$arrColumn['default_value']),
+						(!is_null($arrColumn['comment']) && $arrColumn['comment'] != '') ? sprintf(" COMMENT '%s'",\Twist::Database()->escapeString($arrColumn['comment'])) : ''
+					);
+
+					break;
+
+				case'enum':
+				case'set':
+
+					$strColumnSQL = sprintf("`%s` %s('%s') CHARACTER SET %s COLLATE %s%s%s%s",
+						$arrColumn['column_name'],
+						$arrColumn['data_type'],
+						implode("','",$arrColumn['character_length_value']),
+						$this->getCollationCharset($this->strCollation),
+						$this->strCollation,
+						($arrColumn['nullable'] == true) ? '' : ' NOT NULL',
+						(is_null($arrColumn['default_value'])) ? '' : sprintf(" DEFAULT '%s'",$arrColumn['default_value']),
+						(!is_null($arrColumn['comment']) && $arrColumn['comment'] != '') ? sprintf(" COMMENT '%s'",\Twist::Database()->escapeString($arrColumn['comment'])) : ''
+					);
+
+					break;
+
+				default:
+
+					$strColumnSQL = sprintf("`%s` %s(%s)%s%s%s%s",
+						$arrColumn['column_name'],
+						$arrColumn['data_type'],
+						$arrColumn['character_length_value'],
+						($arrColumn['nullable'] == true) ? '' : ' NOT NULL',
+						(is_null($arrColumn['default_value'])) ? '' : sprintf(" DEFAULT '%s'",$arrColumn['default_value']),
+						(!is_null($this->mxdAutoIncrement) && $this->mxdAutoIncrement == $arrColumn['column_name']) ?  ' AUTO_INCREMENT' : '',
+						(!is_null($arrColumn['comment']) && $arrColumn['comment'] != '') ? sprintf(" COMMENT '%s'",\Twist::Database()->escapeString($arrColumn['comment'])) : ''
+					);
+
+					break;
+			}
+
+			return $strColumnSQL;
+		}
+
+		protected function getColumnType($strColumnName){
+
+			$strColumnType = null;
+
+			if(array_key_exists($strColumnName,$this->arrStructure)){
+				$arrColumn = $this->arrStructure[$strColumnName];
+
+				switch($arrColumn['data_type']){
+					case 'text':
+					case 'blob':
+					case 'date':
+					case 'datetime':
+						$strColumnType = $arrColumn['data_type'];
 						break;
-
-					case'text':
-
-						$strOut .= sprintf("\t`%s` %s COLLATE %s%s%s,\n",
-							$strEachColumn['column_name'],
-							$strEachColumn['data_type'],
-							$this->strCollation,
-							($strEachColumn['nullable'] == true) ? '' : ' NOT NULL',
-							(is_null($strEachColumn['default_value'])) ? '' : sprintf(" DEFAULT '%s'",$strEachColumn['default_value'])
-
-						);
-
+					case'enum':
+					case'set':
+						$strColumnType = sprintf("%s('%s')",$arrColumn['data_type'],implode("','",$arrColumn['character_length_value']));
 						break;
-
-					case'date':
-					case'datetime':
-
-						$strOut .= sprintf("\t`%s` %s%s%s,\n",
-							$strEachColumn['column_name'],
-							$strEachColumn['data_type'],
-							($strEachColumn['nullable'] == true) ? '' : ' NOT NULL',
-							(is_null($strEachColumn['default_value'])) ? '' : sprintf(" DEFAULT '%s'",$strEachColumn['default_value'])
-						);
-
-						break;
-
 					default:
-
-						$strOut .= sprintf("\t`%s` %s(%s)%s%s%s,\n",
-							$strEachColumn['column_name'],
-							$strEachColumn['data_type'],
-							$strEachColumn['character_length'],
-							($strEachColumn['nullable'] == true) ? '' : ' NOT NULL',
-							(is_null($strEachColumn['default_value'])) ? '' : sprintf(" DEFAULT '%s'",$strEachColumn['default_value']),
-							(!is_null($this->mxdAutoIncrement) && $this->mxdAutoIncrement == $strEachColumn['column_name']) ?  ' AUTO_INCREMENT' : ''
-
-						);
-
+						$strColumnType = sprintf('%s(%s)',$arrColumn['data_type'],$arrColumn['character_length_value']);
 						break;
 				}
 			}
 
-			return $strOut;
+			return $strColumnType;
+		}
+
+		protected function generateAlterQuery($arrChange){
+
+			$strAlterSQL = '';
+
+			switch($arrChange['alter']){
+
+				case'collation':
+					$strAlterSQL = sprintf("DEFAULT CHARACTER SET %s COLLATE %s",
+						\Twist::Database()->escapeString($this->strCharset),
+						\Twist::Database()->escapeString($this->strCollation)
+					);
+					break;
+
+				case'engine':
+					$strAlterSQL = sprintf("ENGINE = %s",
+						\Twist::Database()->escapeString($this->strEngine)
+					);
+					break;
+
+				case'comment':
+					$strAlterSQL = sprintf("COMMENT = '%s'",
+						\Twist::Database()->escapeString($this->mxdTableComment)
+					);
+					break;
+
+				case'auto_increment':
+					$strAlterSQL = sprintf("AUTO_INCREMENT = %d",
+						\Twist::Database()->escapeString($this->intAutoIncrementStart)
+					);
+					break;
+
+				case'primary_key':
+
+					$strAlterSQL = '';
+
+					//If primary key is currently auto-increment rebuild field without auto-increment
+					if(!is_null($this->mxdAutoIncrement)){
+						$strAlterSQL .= sprintf("MODIFY `%s` INT NOT NULL, ",
+							$this->mxdAutoIncrement
+						);
+					}
+
+					if($arrChange['data']['auto_increment']){
+						$strAlterSQL .= sprintf("DROP PRIMARY KEY, MODIFY `%s` INT NOT NULL PRIMARY KEY AUTO_INCREMENT",
+							$arrChange['data']['name']
+						);
+					}else{
+						$strAlterSQL .= sprintf("DROP PRIMARY KEY, ADD PRIMARY KEY(`%s`)",
+							$arrChange['data']['name']
+						);
+					}
+
+					break;
+
+				case'drop_primary_key':
+
+					$strAlterSQL = '';
+
+					//If primary key is currently auto-increment rebuild field without auto-increment
+					if(!is_null($arrChange['data']['auto_increment'])){
+						$strAlterSQL .= sprintf("MODIFY `%s` INT NOT NULL, ",
+							$arrChange['data']['auto_increment']
+						);
+					}
+
+					$strAlterSQL .= "DROP PRIMARY KEY";
+
+					break;
+
+				case'add_index':
+
+					$strAlterSQL = sprintf("ADD KEY `%s` ( `%s` )%s",
+						$arrChange['data']['name'],
+						(is_array($arrChange['data']['columns'])) ? implode('`,`',$arrChange['data']['columns']) : $arrChange['data']['columns'],
+						(!is_null($arrChange['data']['comment']) && $arrChange['data']['comment'] != '') ? sprintf(" COMMENT '%s'",$arrChange['data']['comment']) : ''
+					);
+
+					break;
+
+				case'add_unique':
+
+					//Could add comments later  COMMENT 'my commnet'
+					$strAlterSQL = sprintf("ADD UNIQUE KEY `%s` ( `%s` )%s",
+						$arrChange['data']['name'],
+						(is_array($arrChange['data']['columns'])) ? implode('`,`',$arrChange['data']['columns']) : $arrChange['data']['columns'],
+						(!is_null($arrChange['data']['comment']) && $arrChange['data']['comment'] != '') ? sprintf(" COMMENT '%s'",$arrChange['data']['comment']) : ''
+					);
+
+					break;
+
+				case'drop_index':
+
+					//Could add comments later  COMMENT 'my comment'
+					$strAlterSQL = sprintf("DROP INDEX `%s`",
+						$arrChange['data']['name']
+					);
+
+					break;
+
+				case'drop_unique':
+
+					//Could add comments later  COMMENT 'my comment'
+					$strAlterSQL = sprintf("DROP INDEX `%s`",
+						$arrChange['data']['name']
+					);
+
+					break;
+
+				case'add_column':
+
+					//AFTER name;
+					//FIRST;
+					$strAlterSQL = sprintf("ADD %s",
+						$this->generateColumnSQL($this->arrStructure[$arrChange['data']['name']])
+					);
+
+					break;
+
+				case'alter_column':
+
+					$strAlterSQL = sprintf("CHANGE `%s` %s",
+						$arrChange['data']['name'],
+						$this->generateColumnSQL($this->arrStructure[$arrChange['data']['name']])
+					);
+
+					break;
+
+				case'drop_column':
+
+					$strAlterSQL = sprintf("DROP `%s`",
+						\Twist::Database()->escapeString($arrChange['data']['name'])
+					);
+
+					break;
+
+				case'rename_column':
+
+					$strAlterSQL = sprintf("CHANGE `%s` `%s` %s",
+						\Twist::Database()->escapeString($arrChange['data']['name']),
+						\Twist::Database()->escapeString($arrChange['data']['new_name']),
+						$this->getColumnType($arrChange['data']['name'])
+					);
+
+					break;
+			}
+
+			return $strAlterSQL;
 		}
 	}

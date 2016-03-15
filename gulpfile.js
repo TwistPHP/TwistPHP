@@ -16,7 +16,7 @@ gulp.task( 'ajax-js',
 				.pipe( jshint() )
 				.pipe( jshint.reporter( 'default' ) )
 				.pipe( concat( 'twistajax.min.js' ) )
-				.pipe( uglify() )
+				.pipe( uglify( { preserveComments: 'license' } ) )
 				.pipe( gulp.dest( strTwistDestination + 'ajax/js' ) );
 	}
 );
@@ -30,6 +30,14 @@ gulp.task( 'ajax-css',
 				.pipe( rename( 'twistajax.min.css' ) )
 				.pipe( sourcemaps.write( './' ) )
 				.pipe( gulp.dest( strTwistDestination + 'ajax/css' ) );
+	}
+);
+
+gulp.task( 'ajax-test',
+	function() {
+		return gulp.src( strTwistSource + 'ajax/js/twistajax.js' )
+				.pipe( jshint() )
+				.pipe( jshint.reporter( 'default' ) );
 	}
 );
 
@@ -52,7 +60,7 @@ gulp.task( 'debug-js',
 				.pipe( jshint() )
 				.pipe( jshint.reporter( 'default' ) )
 				.pipe( concat( 'twistdebug.min.js' ) )
-				.pipe( uglify() )
+				.pipe( uglify( { preserveComments: 'license' } ) )
 				.pipe( gulp.dest( strTwistDestination + 'debug/js' ) );
 	}
 );
@@ -69,6 +77,14 @@ gulp.task( 'debug-css',
 	}
 );
 
+gulp.task( 'debug-test',
+		function() {
+			return gulp.src( strTwistSource + 'debug/js/twistdebug.js' )
+					.pipe( jshint() )
+					.pipe( jshint.reporter( 'default' ) );
+		}
+);
+
 gulp.task( 'fileupload-js',
 	function() {
 		return gulp.src( strTwistSource + 'fileupload/js/twistfileupload.js' )
@@ -78,7 +94,7 @@ gulp.task( 'fileupload-js',
 				.pipe( concat( 'twistfileupload.js' ) )
 				.pipe( gulp.dest( strTwistDestination + 'fileupload/js' ) )
 				.pipe( rename( 'twistfileupload.min.js' ) )
-				.pipe( uglify() )
+				.pipe( uglify( { preserveComments: 'license' } ) )
 				.pipe( gulp.dest( strTwistDestination + 'fileupload/js' ) );
 	}
 );
@@ -95,6 +111,14 @@ gulp.task( 'fileupload-css',
 	}
 );
 
+gulp.task( 'fileupload-test',
+	function() {
+		return gulp.src( strTwistSource + 'fileupload/js/twistfileupload.js' )
+				.pipe( jshint() )
+				.pipe( jshint.reporter( 'default' ) );
+	}
+);
+
 gulp.task( 'manager-js',
 	function() {
 		return gulp.src( strTwistSource + 'manager/js/twistmanager.js' )
@@ -102,7 +126,7 @@ gulp.task( 'manager-js',
 				.pipe( jshint() )
 				.pipe( jshint.reporter( 'default' ) )
 				.pipe( concat( 'twistmanager.min.js' ) )
-				.pipe( uglify() )
+				.pipe( uglify( { preserveComments: 'license' } ) )
 				.pipe( gulp.dest( strTwistDestination + 'manager/js' ) );
 	}
 );
@@ -119,6 +143,14 @@ gulp.task( 'manager-css',
 	}
 );
 
+gulp.task( 'manager-test',
+	function() {
+		return gulp.src( strTwistSource + 'manager/js/twistmanager.js' )
+				.pipe( jshint() )
+				.pipe( jshint.reporter( 'default' ) );
+	}
+);
+
 gulp.task( 'setup-js',
 	function() {
 		return gulp.src( strTwistSource + 'setup/js/twistsetup.js' )
@@ -126,7 +158,7 @@ gulp.task( 'setup-js',
 				.pipe( jshint() )
 				.pipe( jshint.reporter( 'default' ) )
 				.pipe( concat( 'twistsetup.min.js' ) )
-				.pipe( uglify() )
+				.pipe( uglify( { preserveComments: 'license' } ) )
 				.pipe( gulp.dest( strTwistDestination + 'setup/js' ) );
 	}
 );
@@ -140,6 +172,14 @@ gulp.task( 'setup-css',
 				.pipe( rename( 'twistsetup.min.css' ) )
 				.pipe( sourcemaps.write( './' ) )
 				.pipe( gulp.dest( strTwistDestination + 'setup/css' ) );
+	}
+);
+
+gulp.task( 'setup-test',
+	function() {
+		return gulp.src( strTwistSource + 'setup/js/twistsetup.js' )
+				.pipe( jshint() )
+				.pipe( jshint.reporter( 'default' ) );
 	}
 );
 
@@ -184,6 +224,8 @@ gulp.task( 'watch-setup',
 		return gulp.watch( strTwistSource + 'setup/**/*', ['setup'] );
 	}
 );
+
+gulp.task( 'test', ['ajax-test', 'debug-test', 'fileupload-test', 'manager-test', 'setup-test'] );
 
 gulp.task( 'watch', ['default', 'watch-ajax', 'watch-cssreset', 'watch-debug', 'watch-fileupload', 'watch-manager', 'watch-setup'] );
 

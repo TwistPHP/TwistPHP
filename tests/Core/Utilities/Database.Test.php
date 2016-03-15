@@ -1,7 +1,5 @@
 <?php
 
-require_once sprintf('%s/index.php',dirname(__FILE__));
-
 class Database extends \PHPUnit_Framework_TestCase{
 
 	public function testQuery(){
@@ -102,11 +100,11 @@ class Database extends \PHPUnit_Framework_TestCase{
 		$this->assertEquals($intResult,count($arrResult));
 	}
 
-	public function testCreateTable(){
+	public function testCreateAlterTable(){
 
 		$resNewTable = \Twist::Database()->table('test_table')->create();
-		$resNewTable->addField('id','int',11);
-		$resNewTable->addField('name','char',30);
+		$resNewTable->addColumn('id','int',11);
+		$resNewTable->addColumn('name','char',30);
 		$resNewTable->autoIncrement('id');
 		$this->assertTrue($resNewTable->commit());
 
@@ -120,6 +118,38 @@ class Database extends \PHPUnit_Framework_TestCase{
 
 		$arrResult = \Twist::Database()->records('test_table')->get(1,'id',true);
 		$this->assertEquals('test',$arrResult['name']);
+
+		//Alter the table
+		$resExistingTable = \Twist::Database()->table('test_table')->get();
+		$resExistingTable->addColumn('slug','char',20);
+		$resExistingTable->addColumn('description','text',null,null,false,'My Description Test');
+		$resExistingTable->addUniqueKey('slug','slug');
+		$resExistingTable->commit();
+
+		//Check for the new field in the result set
+		$arrResult = \Twist::Database()->records('test_table')->get(1,'id',true);
+		$this->assertTrue(array_key_exists('slug',$arrResult));
+		$this->assertTrue(array_key_exists('description',$arrResult));
+
+		//Add data to the table and fill the new fields
+		$resNewRecord = \Twist::Database()->records('test_table')->create();
+		$resNewRecord->set('name','test2');
+		$resNewRecord->set('description','this is the second');
+		$resNewRecord->set('slug','test2');
+		$this->assertEquals(2,$resNewRecord->commit());
+
+		//Check the new count
+		$this->assertEquals(2,\Twist::Database()->records('test_table')->count());
+
+		//Drop the slug field
+		$resExistingTable = \Twist::Database()->table('test_table')->get();
+		$resExistingTable->dropColumn('slug');
+		$resExistingTable->commit();
+
+		//Check that the data is still in the table and the slug field has gone
+		$arrResult = \Twist::Database()->records('test_table')->get(2,'id',true);
+		$this->assertEquals('test2',$arrResult['name']);
+		$this->assertFalse(array_key_exists('slug',$arrResult));
 
 		$this->assertTrue(\Twist::Database()->table('test_table')->truncate());
 

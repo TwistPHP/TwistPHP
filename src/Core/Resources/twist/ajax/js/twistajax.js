@@ -28,17 +28,22 @@
 		function( root, factory ) {
 			if( typeof define === 'function' &&
 					define.amd ) {
-				define( 'twistajax', ['jquery'], factory );
+				define( 'twistajax',
+					['jquery'],
+					function( jQuery ) {
+						return ( root.twistajax = factory( jQuery ) );
+					}
+				);
 			} else if( typeof module === 'object' &&
 					module.exports ) {
-				module.exports = factory( require( 'twistajax' ) );
+				module.exports = factory( require( 'jQuery' ) );
 			} else {
-				root.returnExports = factory( root.jQuery, root.twistajax );
+				root.twistajax = factory( root.jQuery );
 			}
 		}
 	)(
 		this,
-		function( jQuery, twistajax ) {
+		function( jQuery ) {
 			try {
 				if( jQuery ) {
 					var TwistAJAX = function( strAJAXPostLocation, b, c, d, e, f ) {

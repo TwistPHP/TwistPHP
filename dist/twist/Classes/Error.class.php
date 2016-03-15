@@ -201,6 +201,12 @@
 				self::handleError($arrTags['type_code'],$arrTags['message'],$arrTags['file'],$arrTags['line']);
 			}
 
+			//Output the correct
+			$strHttpProtocol = ("HTTP/1.1" === $_SERVER["SERVER_PROTOCOL"]) ? 'HTTP/1.1' : 'HTTP/1.0';
+
+			//Output a 500 Error response for an exception page (this page should not have a 200 status code)
+			header(sprintf('%s %d Internal Server Error',$strHttpProtocol,500),true,500);
+
             if(TWIST_AJAX_REQUEST){
 
                 header( 'Cache-Control: no-cache, must-revalidate' );
@@ -283,15 +289,26 @@
 		 * Output a 404 page to the user
 		 */
 		public static function handle404(){
-			self::errorPage(404);
+			self::response(404);
 		}
 
 		/**
-		 * Output a response code and a custom message if required to the user, this function handles all HTTP response codes.
-		 * @param $intErrorCode
-		 * @param null $strCustomDescription
+		 * Output HTTP error response code, This function has been deprecated in favour of the response() method
+		 * @param int $intErrorCode
+		 * @param null|string $strCustomDescription
+		 * @alias response
+		 * @deprecated
 		 */
 		public static function errorPage($intErrorCode,$strCustomDescription = null){
+			self::response($intErrorCode,$strCustomDescription);
+		}
+
+		/**
+		 * Output HTTP error response code and a custom message if required to the user, this function handles all HTTP response codes.
+		 * @param int $intErrorCode
+		 * @param null|string $strCustomDescription
+		 */
+		public static function response($intErrorCode,$strCustomDescription = null){
 
 			$strReturn = 'Unknown';
 			$strDescription = '';

@@ -1,0 +1,1409 @@
+{
+	"armscii8": {
+		"name": "ARMSCII-8 Armenian",
+		"collations": {
+			"armscii8_bin": {
+				"name": "Armenian, Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": false
+			},
+			"armscii8_general_ci": {
+				"name": "Armenian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			}
+		}
+	},
+	"ascii": {
+		"name": "US ASCII",
+		"collations": {
+			"ascii_bin": {
+				"name": "West European (multilingual), Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": true
+			},
+			"ascii_general_ci": {
+				"name": "West European (multilingual), case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": true
+			}
+		}
+	},
+	"big5": {
+		"name": "Big5 Traditional Chinese",
+		"collations": {
+			"big5_bin": {
+				"name": "Traditional Chinese, Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": false
+			},
+			"big5_chinese_ci": {
+				"name": "Traditional Chinese, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			}
+		}
+	},
+	"binary": {
+		"name": "Binary pseudo charset",
+		"collations": {
+			"binary": {
+				"name": "Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": false
+			}
+		}
+	},
+	"cp1250": {
+		"name": "Windows Central European",
+		"collations": {
+			"cp1250_bin": {
+				"name": "Central European (multilingual), Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": true
+			},
+			"cp1250_croatian_ci": {
+				"name": "Croatian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"cp1250_czech_cs": {
+				"name": "Czech, case-sensitive",
+				"binary": false,
+				"case-insensitive": false,
+				"multilingual": false
+			},
+			"cp1250_general_ci": {
+				"name": "Central European (multilingual), case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": true
+			},
+			"cp1250_polish_ci": {
+				"name": "Polish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			}
+		}
+	},
+	"cp1251": {
+		"name": "Windows Cyrillic",
+		"collations": {
+			"cp1251_bin": {
+				"name": "Cyrillic (multilingual), Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": true
+			},
+			"cp1251_bulgarian_ci": {
+				"name": "Bulgarian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"cp1251_general_ci": {
+				"name": "Cyrillic (multilingual), case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": true
+			},
+			"cp1251_general_cs": {
+				"name": "Cyrillic (multilingual), case-sensitive",
+				"binary": false,
+				"case-insensitive": false,
+				"multilingual": true
+			},
+			"cp1251_ukrainian_ci": {
+				"name": "Ukrainian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			}
+		}
+	},
+	"cp1256": {
+		"name": "Windows Arabic",
+		"collations": {
+			"cp1256_bin": {
+				"name": "Arabic, Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": false
+			},
+			"cp1256_general_ci": {
+				"name": "Arabic, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			}
+		}
+	},
+	"cp1257": {
+		"name": "Windows Baltic",
+		"collations": {
+			"cp1257_bin": {
+				"name": "Baltic (multilingual), Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": true
+			},
+			"cp1257_general_ci": {
+				"name": "Baltic (multilingual), case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": true
+			},
+			"cp1257_lithuanian_ci": {
+				"name": "Lithuanian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			}
+		}
+	},
+	"cp850": {
+		"name": "DOS West European",
+		"collations": {
+			"cp850_bin": {
+				"name": "West European (multilingual), Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": true
+			},
+			"cp850_general_ci": {
+				"name": "West European (multilingual), case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": true
+			}
+		}
+	},
+	"cp852": {
+		"name": "DOS Central European",
+		"collations": {
+			"cp852_bin": {
+				"name": "Central European (multilingual), Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": true
+			},
+			"cp852_general_ci": {
+				"name": "Central European (multilingual), case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": true
+			}
+		}
+	},
+	"cp866": {
+		"name": "DOS Russian",
+		"collations": {
+			"cp866_bin": {
+				"name": "Russian, Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": false
+			},
+			"cp866_general_ci": {
+				"name": "Russian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			}
+		}
+	},
+	"cp932": {
+		"name": "SJIS for Windows Japanese",
+		"collations": {
+			"cp932_bin": {
+				"name": "Japanese, Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": false
+			},
+			"cp932_japanese_ci": {
+				"name": "Japanese, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			}
+		}
+	},
+	"dec8": {
+		"name": "DEC West European",
+		"collations": {
+			"dec8_bin": {
+				"name": "West European (multilingual), Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": true
+			},
+			"dec8_swedish_ci": {
+				"name": "Swedish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			}
+		}
+	},
+	"eucjpms": {
+		"name": "UJIS for Windows Japanese",
+		"collations": {
+			"eucjpms_bin": {
+				"name": "Japanese, Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": false
+			},
+			"eucjpms_japanese_ci": {
+				"name": "Japanese, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			}
+		}
+	},
+	"euckr": {
+		"name": "EUC-KR Korean",
+		"collations": {
+			"euckr_bin": {
+				"name": "Korean, Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": false
+			},
+			"euckr_korean_ci": {
+				"name": "Korean, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			}
+		}
+	},
+	"gb2312": {
+		"name": "GB2312 Simplified Chinese",
+		"collations": {
+			"gb2312_bin": {
+				"name": "Simplified Chinese, Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": false
+			},
+			"gb2312_chinese_ci": {
+				"name": "Simplified Chinese, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			}
+		}
+	},
+	"gbk": {
+		"name": "GBK Simplified Chinese",
+		"collations": {
+			"gbk_bin": {
+				"name": "Simplified Chinese, Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": false
+			},
+			"gbk_chinese_ci": {
+				"name": "Simplified Chinese, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			}
+		}
+	},
+	"geostd8": {
+		"name": "GEOSTD8 Georgian",
+		"collations": {
+			"geostd8_bin": {
+				"name": "Georgian, Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": false
+			},
+			"geostd8_general_ci": {
+				"name": "Georgian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			}
+		}
+	},
+	"greek": {
+		"name": "ISO 8859-7 Greek",
+		"collations": {
+			"greek_bin": {
+				"name": "Greek, Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": false
+			},
+			"greek_general_ci": {
+				"name": "Greek, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			}
+		}
+	},
+	"hebrew": {
+		"name": "ISO 8859-8 Hebrew",
+		"collations": {
+			"hebrew_bin": {
+				"name": "Hebrew, Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": false
+			},
+			"hebrew_general_ci": {
+				"name": "Hebrew, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			}
+		}
+	},
+	"hp8": {
+		"name": "HP West European",
+		"collations": {
+			"hp8_bin": {
+				"name": "West European (multilingual), Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": true
+			},
+			"hp8_english_ci": {
+				"name": "English, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			}
+		}
+	},
+	"keybcs2": {
+		"name": "DOS Kamenicky Czech-Slovak",
+		"collations": {
+			"keybcs2_bin": {
+				"name": "Czech-Slovak, Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": false
+			},
+			"keybcs2_general_ci": {
+				"name": "Czech-Slovak, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			}
+		}
+	},
+	"koi8r": {
+		"name": "KOI8-R Relcom Russian",
+		"collations": {
+			"koi8r_bin": {
+				"name": "Russian, Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": false
+			},
+			"koi8r_general_ci": {
+				"name": "Russian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			}
+		}
+	},
+	"koi8u": {
+		"name": "KOI8-U Ukrainian",
+		"collations": {
+			"koi8u_bin": {
+				"name": "Ukrainian, Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": false
+			},
+			"koi8u_general_ci": {
+				"name": "Ukrainian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			}
+		}
+	},
+	"latin1": {
+		"name": "cp1252 West European",
+		"collations": {
+			"latin1_bin": {
+				"name": "West European (multilingual), Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": true
+			},
+			"latin1_danish_ci": {
+				"name": "Danish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"latin1_general_ci": {
+				"name": "West European (multilingual), case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": true
+			},
+			"latin1_general_cs": {
+				"name": "West European (multilingual), case-sensitive",
+				"binary": false,
+				"case-insensitive": false,
+				"multilingual": true
+			},
+			"latin1_german1_ci": {
+				"name": "German (dictionary), case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"latin1_german2_ci": {
+				"name": "German (phone book), case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"latin1_spanish_ci": {
+				"name": "Spanish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"latin1_swedish_ci": {
+				"name": "Swedish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			}
+		}
+	},
+	"latin2": {
+		"name": "ISO 8859-2 Central European",
+		"collations": {
+			"latin2_bin": {
+				"name": "Central European (multilingual), Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": true
+			},
+			"latin2_croatian_ci": {
+				"name": "Croatian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"latin2_czech_cs": {
+				"name": "Czech, case-sensitive",
+				"binary": false,
+				"case-insensitive": false,
+				"multilingual": false
+			},
+			"latin2_general_ci": {
+				"name": "Central European (multilingual), case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": true
+			},
+			"latin2_hungarian_ci": {
+				"name": "Hungarian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			}
+		}
+	},
+	"latin5": {
+		"name": "ISO 8859-9 Turkish",
+		"collations": {
+			"latin5_bin": {
+				"name": "Turkish, Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": false
+			},
+			"latin5_turkish_ci": {
+				"name": "Turkish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			}
+		}
+	},
+	"latin7": {
+		"name": "ISO 8859-13 Baltic",
+		"collations": {
+			"latin7_bin": {
+				"name": "Baltic (multilingual), Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": true
+			},
+			"latin7_estonian_cs": {
+				"name": "Estonian, case-sensitive",
+				"binary": false,
+				"case-insensitive": false,
+				"multilingual": false
+			},
+			"latin7_general_ci": {
+				"name": "Baltic (multilingual), case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": true
+			},
+			"latin7_general_cs": {
+				"name": "Baltic (multilingual), case-sensitive",
+				"binary": false,
+				"case-insensitive": false,
+				"multilingual": true
+			}
+		}
+	},
+	"macce": {
+		"name": "Mac Central European",
+		"collations": {
+			"macce_bin": {
+				"name": "Central European (multilingual), Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": true
+			},
+			"macce_general_ci": {
+				"name": "Central European (multilingual), case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": true
+			}
+		}
+	},
+	"macroman": {
+		"name": "Mac West European",
+		"collations": {
+			"macroman_bin": {
+				"name": "West European (multilingual), Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": true
+			},
+			"macroman_general_ci": {
+				"name": "West European (multilingual), case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": true
+			}
+		}
+	},
+	"sjis": {
+		"name": "Shift-JIS Japanese",
+		"collations": {
+			"sjis_bin": {
+				"name": "Japanese, Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": false
+			},
+			"sjis_japanese_ci": {
+				"name": "Japanese, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			}
+		}
+	},
+	"swe7": {
+		"name": "7bit Swedish",
+		"collations": {
+			"swe7_bin": {
+				"name": "Swedish, Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": false
+			},
+			"swe7_swedish_ci": {
+				"name": "Swedish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			}
+		}
+	},
+	"tis620": {
+		"name": "TIS620 Thai",
+		"collations": {
+			"tis620_bin": {
+				"name": "Thai, Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": false
+			},
+			"tis620_thai_ci": {
+				"name": "Thai, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			}
+		}
+	},
+	"ucs2": {
+		"name": "UCS-2 Unicode",
+		"collations": {
+			"ucs2_bin": {
+				"name": "Unicode (multilingual), Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": true
+			},
+			"ucs2_croatian_ci": {
+				"name": "Croatian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"ucs2_czech_ci": {
+				"name": "Czech, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"ucs2_danish_ci": {
+				"name": "Danish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"ucs2_esperanto_ci": {
+				"name": "Esperanto, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"ucs2_estonian_ci": {
+				"name": "Estonian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"ucs2_general_ci": {
+				"name": "Unicode (multilingual), case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": true
+			},
+			"ucs2_general_mysql500_ci": {
+				"name": "Unicode (multilingual)",
+				"binary": false,
+				"case-insensitive": false,
+				"multilingual": true
+			},
+			"ucs2_hungarian_ci": {
+				"name": "Hungarian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"ucs2_icelandic_ci": {
+				"name": "Icelandic, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"ucs2_latvian_ci": {
+				"name": "Latvian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"ucs2_lithuanian_ci": {
+				"name": "Lithuanian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"ucs2_persian_ci": {
+				"name": "Persian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"ucs2_polish_ci": {
+				"name": "Polish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"ucs2_roman_ci": {
+				"name": "West European, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"ucs2_romanian_ci": {
+				"name": "Romanian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"ucs2_sinhala_ci": {
+				"name": "unknown, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"ucs2_slovak_ci": {
+				"name": "Slovak, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"ucs2_slovenian_ci": {
+				"name": "Slovenian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"ucs2_spanish2_ci": {
+				"name": "Traditional Spanish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"ucs2_spanish_ci": {
+				"name": "Spanish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"ucs2_swedish_ci": {
+				"name": "Swedish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"ucs2_turkish_ci": {
+				"name": "Turkish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"ucs2_unicode_ci": {
+				"name": "Unicode (multilingual), case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": true
+			}
+		}
+	},
+	"ujis": {
+		"name": "EUC-JP Japanese",
+		"collations": {
+			"ujis_bin": {
+				"name": "Japanese, Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": false
+			},
+			"ujis_japanese_ci": {
+				"name": "Japanese, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			}
+		}
+	},
+	"utf16": {
+		"name": "UTF-16 Unicode",
+		"collations": {
+			"utf16_bin": {
+				"name": "unknown, Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": false
+			},
+			"utf16_croatian_ci": {
+				"name": "Croatian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf16_czech_ci": {
+				"name": "Czech, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf16_danish_ci": {
+				"name": "Danish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf16_esperanto_ci": {
+				"name": "Esperanto, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf16_estonian_ci": {
+				"name": "Estonian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf16_general_ci": {
+				"name": "unknown, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf16_hungarian_ci": {
+				"name": "Hungarian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf16_icelandic_ci": {
+				"name": "Icelandic, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf16_latvian_ci": {
+				"name": "Latvian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf16_lithuanian_ci": {
+				"name": "Lithuanian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf16_persian_ci": {
+				"name": "Persian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf16_polish_ci": {
+				"name": "Polish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf16_roman_ci": {
+				"name": "West European, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf16_romanian_ci": {
+				"name": "Romanian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf16_sinhala_ci": {
+				"name": "unknown, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf16_slovak_ci": {
+				"name": "Slovak, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf16_slovenian_ci": {
+				"name": "Slovenian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf16_spanish2_ci": {
+				"name": "Traditional Spanish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf16_spanish_ci": {
+				"name": "Spanish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf16_swedish_ci": {
+				"name": "Swedish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf16_turkish_ci": {
+				"name": "Turkish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf16_unicode_ci": {
+				"name": "Unicode (multilingual), case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": true
+			}
+		}
+	},
+	"utf32": {
+		"name": "UTF-32 Unicode",
+		"collations": {
+			"utf32_bin": {
+				"name": "unknown, Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": false
+			},
+			"utf32_croatian_ci": {
+				"name": "Croatian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf32_czech_ci": {
+				"name": "Czech, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf32_danish_ci": {
+				"name": "Danish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf32_esperanto_ci": {
+				"name": "Esperanto, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf32_estonian_ci": {
+				"name": "Estonian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf32_general_ci": {
+				"name": "unknown, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf32_hungarian_ci": {
+				"name": "Hungarian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf32_icelandic_ci": {
+				"name": "Icelandic, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf32_latvian_ci": {
+				"name": "Latvian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf32_lithuanian_ci": {
+				"name": "Lithuanian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf32_persian_ci": {
+				"name": "Persian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf32_polish_ci": {
+				"name": "Polish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf32_roman_ci": {
+				"name": "West European, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf32_romanian_ci": {
+				"name": "Romanian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf32_sinhala_ci": {
+				"name": "unknown, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf32_slovak_ci": {
+				"name": "Slovak, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf32_slovenian_ci": {
+				"name": "Slovenian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf32_spanish2_ci": {
+				"name": "Traditional Spanish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf32_spanish_ci": {
+				"name": "Spanish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf32_swedish_ci": {
+				"name": "Swedish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf32_turkish_ci": {
+				"name": "Turkish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf32_unicode_ci": {
+				"name": "Unicode (multilingual), case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": true
+			}
+		}
+	},
+	"utf8": {
+		"name": "UTF-8 Unicode",
+		"collations": {
+			"utf8_bin": {
+				"name": "Unicode (multilingual), Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": true
+			},
+			"utf8_croatian_ci": {
+				"name": "Croatian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8_czech_ci": {
+				"name": "Czech, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8_danish_ci": {
+				"name": "Danish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8_esperanto_ci": {
+				"name": "Esperanto, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8_estonian_ci": {
+				"name": "Estonian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8_general_ci": {
+				"name": "Unicode (multilingual), case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": true
+			},
+			"utf8_general_mysql500_ci": {
+				"name": "Unicode (multilingual)",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": true
+			},
+			"utf8_hungarian_ci": {
+				"name": "Hungarian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8_icelandic_ci": {
+				"name": "Icelandic, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8_latvian_ci": {
+				"name": "Latvian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8_lithuanian_ci": {
+				"name": "Lithuanian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8_persian_ci": {
+				"name": "Persian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8_polish_ci": {
+				"name": "Polish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8_roman_ci": {
+				"name": "West European, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8_romanian_ci": {
+				"name": "Romanian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8_sinhala_ci": {
+				"name": "unknown, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8_slovak_ci": {
+				"name": "Slovak, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8_slovenian_ci": {
+				"name": "Slovenian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8_spanish2_ci": {
+				"name": "Traditional Spanish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8_spanish_ci": {
+				"name": "Spanish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8_swedish_ci": {
+				"name": "Swedish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8_turkish_ci": {
+				"name": "Turkish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8_unicode_ci": {
+				"name": "Unicode (multilingual), case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": true
+			}
+		}
+	},
+	"utf8mb4": {
+		"name": "UTF-8 Unicode",
+		"collations": {
+			"utf8mb4_bin": {
+				"name": "Unicode (multilingual), Binary",
+				"binary": true,
+				"case-insensitive": false,
+				"multilingual": true
+			},
+			"utf8mb4_croatian_ci": {
+				"name": "Croatian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8mb4_czech_ci": {
+				"name": "Czech, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8mb4_danish_ci": {
+				"name": "Danish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8mb4_esperanto_ci": {
+				"name": "Esperanto, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8mb4_estonian_ci": {
+				"name": "Estonian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8mb4_general_ci": {
+				"name": "Unicode (multilingual), case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": true
+			},
+			"utf8mb4_hungarian_ci": {
+				"name": "Hungarian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8mb4_icelandic_ci": {
+				"name": "Icelandic, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8mb4_latvian_ci": {
+				"name": "Latvian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8mb4_lithuanian_ci": {
+				"name": "Lithuanian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8mb4_persian_ci": {
+				"name": "Persian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8mb4_polish_ci": {
+				"name": "Polish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8mb4_roman_ci": {
+				"name": "West European, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8mb4_romanian_ci": {
+				"name": "Romanian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8mb4_sinhala_ci": {
+				"name": "unknown, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8mb4_slovak_ci": {
+				"name": "Slovak, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8mb4_slovenian_ci": {
+				"name": "Slovenian, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8mb4_spanish2_ci": {
+				"name": "Traditional Spanish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8mb4_spanish_ci": {
+				"name": "Spanish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8mb4_swedish_ci": {
+				"name": "Swedish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8mb4_turkish_ci": {
+				"name": "Turkish, case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": false
+			},
+			"utf8mb4_unicode_ci": {
+				"name": "Unicode (multilingual), case-insensitive",
+				"binary": false,
+				"case-insensitive": true,
+				"multilingual": true
+			}
+		}
+	}
+}
