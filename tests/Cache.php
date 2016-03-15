@@ -1,7 +1,5 @@
 <?php
 
-require_once sprintf('%s/index.php',dirname(__FILE__));
-
 class Cache extends \PHPUnit_Framework_TestCase{
 
 	public function testReadWrite(){
