@@ -2,21 +2,13 @@ language: php
 
 php:
   - 5.3
-    env PHPUNIT=ON
   - 5.4
-    env PHPUNIT=ON
   - 5.5
-    env PHPUNIT=ON
   - 5.6
-    env COVERALLS=ON PHPUNIT=ON
-  - 5.6
-    env GULP=ON
+    env COVERALLS=ON GULP=ON
   - 7.0
-    env PHPUNIT=ON
   - hhvm
-    env PHPUNIT=ON
   - nightly
-    env PHPUNIT=ON
 
 services:
   - mysql
@@ -30,20 +22,22 @@ mysql:
   encoding: utf8
 
 before_install:
-   - if [ "$PHPUNIT" = 'ON' ]; then mysql -e "CREATE DATABASE IF NOT EXISTS travis_ci_twist_test;"; fi;
+   - mysql -V
+   - mysql -e "CREATE DATABASE IF NOT EXISTS travis_ci_twist_test;"
+   - mysql -e "SHOW DATABASES"
    - if [ "$GULP" = 'ON' ]; then npm install; fi;
 
 install:
   - if [ "$COVERALLS" = 'ON' ]; then composer require satooshi/php-coveralls '~1.0'; fi;
-  - if [ "$PHPUNIT" = 'ON' ]; then php ./tests/install.php; fi;
+  - php ./tests/install.php
 
 before_script:
    - mkdir -p ./build/logs
-   - if [ "$PHPUNIT" = 'ON' ]; then mysql -e "USE travis_ci_twist_test; SHOW TABLES;"; fi;
-   - if [ "$PHPUNIT" = 'ON' ]; then sed -i 's/Twist::ServeRoutes(false);/echo "TwistPHP Framework Loaded!\n\n";/g' ./tests/index.php; fi;
+   - mysql -e "USE travis_ci_twist_test; SHOW TABLES;"
+   - sed -i 's/Twist::ServeRoutes(false);/echo "TwistPHP Framework Loaded!\n\n";/g' ./tests/index.php
 
 script:
-   - if [ "$PHPUNIT" = 'ON' ]; then phpunit; fi;
+   - phpunit
    - if [ "$GULP" = 'ON' ]; then gulp test; fi;
 
 notifications:
