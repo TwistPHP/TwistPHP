@@ -4,8 +4,9 @@ php:
   - 5.3
   - 5.4
   - 5.5
+    env GULP=ON
   - 5.6
-    env COVERALLS=ON GULP=ON
+    env COVERALLS=ON
   - 7.0
   - hhvm
   - nightly
