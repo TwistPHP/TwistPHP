@@ -71,7 +71,7 @@ class Routes extends \PHPUnit_Framework_TestCase{
 
 	public function test404Page(){
 		$strPageData = $this->simulateRequest('/random/page/uri');
-		$this -> assertTrue(strstr($strPageData,'404 Not Found'));
+		$this -> assertTrue((strstr($strPageData,'404 Not Found') !== false));
 	}
 
 	public function testCaseInsensitiveRouting(){
@@ -99,9 +99,9 @@ class Routes extends \PHPUnit_Framework_TestCase{
 		$this -> assertEquals('42',$this->simulateRequest('/TEST/case/page'));
 
 		$strPageData1 = $this->simulateRequest('/test/case/page');
-		$this -> assertTrue(strstr($strPageData1,'404 Not Found'));
+		$this -> assertTrue((strstr($strPageData1,'404 Not Found') !== false));
 
 		$strPageData2 = $this->simulateRequest('/TEST/CASE/PAGE');
-		$this -> assertTrue(strstr($strPageData2,'404 Not Found'));
+		$this -> assertTrue((strstr($strPageData2,'404 Not Found') !== false));
 	}
 }
