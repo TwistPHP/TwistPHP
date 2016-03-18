@@ -47,7 +47,7 @@ class Routes extends \PHPUnit_Framework_TestCase{
 
 	public function testPostRequest(){
 
-		file_put_contents(TWIST_APP_VIEWS.'test-post.tpl','{POST:param}');
+		file_put_contents(TWIST_APP_VIEWS.'test-post.tpl','{post:param}');
 
 		\Twist::Route()->postView('/test-method','test-post.tpl');
 		$this -> assertEquals('42',$this->simulateRequest('/test-method','POST',array('param' => 42)));
