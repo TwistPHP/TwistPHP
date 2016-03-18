@@ -54,30 +54,10 @@ class Routes extends \PHPUnit_Framework_TestCase{
 	}
 
 	public function testPutRequest(){
-
-		//$strResult = \Twist::Curl()->put('http://127.0.0.1/test-controller/httpput','Here-Is-Some-Data');
-		//$arrRequestInfo = \Twist::Curl()->getRequestInformation();
-
-		//Check the output - we are looking for 'Here-Is-Some-Data'
-		//$this -> assertEquals('Here-Is-Some-Data',$strResult);
-
-		//Check for a 200 response
-		//$this -> assertEquals('200',$arrRequestInfo['http_code']);
-
 		$this -> assertEquals('pass','pass');
 	}
 
 	public function testDeleteRequest(){
-
-		//$strResult = \Twist::Curl()->delete('http://127.0.0.1/test-controller/httpdelete',array('id' => '42'));
-		//$arrRequestInfo = \Twist::Curl()->getRequestInformation();
-
-		//Check the output - we are looking for '42'
-		//$this -> assertEquals('42',$strResult);
-
-		//Check for a 200 response
-		//$this -> assertEquals('200',$arrRequestInfo['http_code']);
-
 		$this -> assertEquals('pass','pass');
 	}
 
@@ -90,13 +70,6 @@ class Routes extends \PHPUnit_Framework_TestCase{
 	}
 
 	public function test404Page(){
-
-		//\Twist::Curl()->get('http://127.0.0.1/this-url-is-invalid');
-		//$arrRequestInfo = \Twist::Curl()->getRequestInformation();
-
-		//Check for a 404 response
-		//$this -> assertEquals('404',$arrRequestInfo['http_code']);
-
 		$this -> assertEquals('pass','pass');
 	}
 

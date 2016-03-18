@@ -296,19 +296,21 @@
 		 * Output HTTP error response code, This function has been deprecated in favour of the response() method
 		 * @param int $intErrorCode
 		 * @param null|string $strCustomDescription
+		 * @param boolean $blExitOnComplete Set false will output error and continue (Used for testing)
 		 * @alias response
 		 * @deprecated
 		 */
-		public static function errorPage($intErrorCode,$strCustomDescription = null){
-			self::response($intErrorCode,$strCustomDescription);
+		public static function errorPage($intErrorCode,$strCustomDescription = null,$blExitOnComplete = true){
+			self::response($intErrorCode,$strCustomDescription,$blExitOnComplete);
 		}
 
 		/**
 		 * Output HTTP error response code and a custom message if required to the user, this function handles all HTTP response codes.
 		 * @param int $intErrorCode
 		 * @param null|string $strCustomDescription
+		 * @param boolean $blExitOnComplete Set false will output page and continue (Used for testing)
 		 */
-		public static function response($intErrorCode,$strCustomDescription = null){
+		public static function response($intErrorCode,$strCustomDescription = null,$blExitOnComplete = true){
 
 			$strReturn = 'Unknown';
 			$strDescription = '';
@@ -633,7 +635,11 @@
 				'domain' => \Twist::framework() -> setting('SITE_HOST')
 			);
 
-            die(\Twist::View('Exception')->build(sprintf("%s/system/error-page.tpl",TWIST_FRAMEWORK_VIEWS),$arrTags));
+			if($blExitOnComplete){
+				die(\Twist::View('Exception')->build(sprintf("%s/system/error-page.tpl",TWIST_FRAMEWORK_VIEWS),$arrTags));
+			}else{
+				echo \Twist::View('Exception')->build(sprintf("%s/system/error-page.tpl",TWIST_FRAMEWORK_VIEWS),$arrTags);
+			}
 		}
 
 		/**
