@@ -4,6 +4,8 @@ class Routes extends \PHPUnit_Framework_TestCase{
 
 	public function testViewRequest(){
 
+		file_put_contents(TWIST_APP_VIEWS.'test.tpl','test');
+
 		//Capture and test the resulting output
 		$_SERVER['REQUEST_URI'] = '/test';
 		$_SERVER['REQUEST_METHOD'] = 'GET';
