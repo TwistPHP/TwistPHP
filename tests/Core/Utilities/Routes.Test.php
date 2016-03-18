@@ -94,14 +94,14 @@ class Routes extends \PHPUnit_Framework_TestCase{
 		//Ensure that case sensitive routing is enabled
 		\Twist::framework()->setting('ROUTE_CASE_SENSITIVE',true);
 
-		\Twist::Route()->get('/TEST-case-page',function(){ return '42'; });
+		\Twist::Route()->get('/TEST/case/page',function(){ return '42'; });
 
-		$this -> assertEquals('42',$this->simulateRequest('/TEST-case-page'));
+		$this -> assertEquals('42',$this->simulateRequest('/TEST/case/page'));
 
-		$strPageData1 = $this->simulateRequest('/test-case-page');
+		$strPageData1 = $this->simulateRequest('/test/case/page');
 		$this -> assertTrue(strstr($strPageData1,'404 Not Found'));
 
-		$strPageData2 = $this->simulateRequest('/TEST-CASE-PAGE');
+		$strPageData2 = $this->simulateRequest('/TEST/CASE/PAGE');
 		$this -> assertTrue(strstr($strPageData2,'404 Not Found'));
 	}
 }
