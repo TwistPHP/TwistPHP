@@ -17,8 +17,7 @@ class Device extends \PHPUnit_Framework_TestCase{
 	}
 
 	public function testGetDevice(){
-		$arrDevice = Twist::Device()->getDevice();
-		$this->assertEquals('Desktop',$arrDevice['type']);
+		$this->assertEquals('Desktop',Twist::Device()->getDevice());
 	}
 
 	public function testGetBrowser(){
