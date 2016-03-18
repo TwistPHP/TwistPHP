@@ -4,8 +4,10 @@ class Routes extends \PHPUnit_Framework_TestCase{
 
 	public function testViewRequest(){
 
-		$strResult = \Twist::Curl()->get('http://127.0.0.1/test');
-		$arrRequestInfo = \Twist::Curl()->getRequestInformation();
+		\Twist::Route()->view('/test','test.tpl');
+
+		//$strResult = \Twist::Curl()->get('http://127.0.0.1/test');
+		//$arrRequestInfo = \Twist::Curl()->getRequestInformation();
 
 		//Check the output - we are looking for 'test'
 		//$this -> assertEquals('test',$strResult);
@@ -18,8 +20,10 @@ class Routes extends \PHPUnit_Framework_TestCase{
 
 	public function testFunctionRequest(){
 
-		$strResult = \Twist::Curl()->get('http://127.0.0.1/test-function');
-		$arrRequestInfo = \Twist::Curl()->getRequestInformation();
+		\Twist::Route()->get('/test',function(){ return 'test'; });
+
+		//$strResult = \Twist::Curl()->get('http://127.0.0.1/test-function');
+		//$arrRequestInfo = \Twist::Curl()->getRequestInformation();
 
 		//Check the output - we are looking for 'test'
 		//$this -> assertEquals('test',$strResult);
