@@ -2,10 +2,14 @@
 
 class Routes extends \PHPUnit_Framework_TestCase{
 
-	private function simulateRequest($strURI,$strRequestMethod = 'GET',$arrPostData = array()){
+	private function simulateRequest($strURI,$strRequestMethod = 'GET',$arrParameterData = array()){
 
-		//Set the post data
-		$_POST = $arrPostData;
+		//Set the parameter data
+		if($strRequestMethod == 'GET'){
+			$_GET = $arrParameterData;
+		}elseif($strRequestMethod == 'POST'){
+			$_POST = $arrParameterData;
+		}
 
 		//Capture and test the resulting output
 		$_SERVER['REQUEST_URI'] = $strURI;
@@ -38,7 +42,7 @@ class Routes extends \PHPUnit_Framework_TestCase{
 		file_put_contents(TWIST_APP_VIEWS.'test-get.tpl','{GET:param}');
 
 		\Twist::Route()->getView('/test-method','test-get.tpl');
-		$this -> assertEquals('42',$this->simulateRequest('/test-method?param=42'));
+		$this -> assertEquals('42',$this->simulateRequest('/test-method?param=42','GET',array('param' => 42)));
 	}
 
 	public function testPostRequest(){
