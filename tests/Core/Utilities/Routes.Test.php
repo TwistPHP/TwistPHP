@@ -6,6 +6,7 @@ class Routes extends \PHPUnit_Framework_TestCase{
 
 		//Capture and test the resulting output
 		$_SERVER['REQUEST_URI'] = '/test';
+		$_SERVER['REQUEST_METHOD'] = 'GET';
 
 		\Twist::Route()->view('/test','test.tpl');
 		\Twist::ServeRoutes(false);
@@ -17,6 +18,7 @@ class Routes extends \PHPUnit_Framework_TestCase{
 
 		//Capture and test the resulting output
 		$_SERVER['REQUEST_URI'] = '/test-function';
+		$_SERVER['REQUEST_METHOD'] = 'GET';
 
 		\Twist::Route()->get('/test-function',function(){ return 'test'; });
 		\Twist::ServeRoutes(false);
