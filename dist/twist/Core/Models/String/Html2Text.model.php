@@ -1,24 +1,34 @@
 <?php
 
-/*
- * Copyright (c) 2005-2007 Jon Abernathy <jon@chuggnutt.com>
+/**
+ * TwistPHP - An open source PHP MVC framework built from the ground up.
+ * Copyright (C) 2016  Shadow Technologies Ltd.
  *
- * This script is free software; you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * The GNU General Public License can be found at
- * http://www.gnu.org/copyleft/gpl.html.
- *
- * This script is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * Original Author: https://github.com/mtibben/html2text
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * All modifications have been carried out to fit in to the TwistPHP framework
+ * @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
+ * @license    https://www.gnu.org/licenses/gpl.html GPL License
+ * @link       https://twistphp.com
+ *
+ *
+ *
+ * Origin and licence of this script before being modified and included in TwistPHP
+ * --------------------------------------------------------------------------------
+ *
+ * Original Copyright (c) 2005-2007 Jon Abernathy <jon@chuggnutt.com>
+ * Original Author: https://github.com/mtibben/html2text
+ * Original Licence: GNU General Public License version 2
  */
 
 namespace Twist\Core\Models\String;

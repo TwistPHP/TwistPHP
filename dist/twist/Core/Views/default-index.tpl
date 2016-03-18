@@ -4,6 +4,7 @@
 	 * TwistPHP - Default index.php
 	 * --------------------------------------------------------------------------------
 	 * Author:          Shadow Technologies Ltd.
+     * Licence:      	https://www.gnu.org/licenses/gpl.html GPL License
 	 * Documentation:   https://twistphp.com/docs
 	 * ================================================================================
 	 */
