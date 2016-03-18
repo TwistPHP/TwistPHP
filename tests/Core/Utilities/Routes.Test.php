@@ -100,55 +100,28 @@ class Routes extends \PHPUnit_Framework_TestCase{
 		$this -> assertEquals('pass','pass');
 	}
 
-	public function testCaseSensitiveRouting(){
-
-		//Ensure that case sensitive routing is enabled
-		\Twist::framework()->setting('ROUTE_CASE_SENSITIVE',true);
-
-		//$strResult = \Twist::Curl()->get('http://127.0.0.1/test-controller/test');
-		//$arrRequestInfo = \Twist::Curl()->getRequestInformation();
-
-		//Check the output - we are looking for 'test'
-		//$this -> assertEquals('test',$strResult);
-
-		//Check for a 200 response
-		//$this -> assertEquals('200',$arrRequestInfo['http_code']);
-
-		//\Twist::Curl()->get('http://127.0.0.1/Test-Controller/Test');
-		//$arrRequestInfo = \Twist::Curl()->getRequestInformation();
-
-		//Check for a 404 response
-		//$this -> assertEquals('400',$arrRequestInfo['http_code']);
-
-		$this -> assertEquals('pass','pass');
-	}
-
 	public function testCaseInsensitiveRouting(){
 
 		//Ensure that case sensitive routing is disabled
 		\Twist::framework()->setting('ROUTE_CASE_SENSITIVE',false);
 
-		//$strResult = \Twist::Curl()->get('http://127.0.0.1/test-controller/test');
-		//$arrRequestInfo = \Twist::Curl()->getRequestInformation();
+		\Twist::Route()->get('/test-Case-PAge',function(){ return '42'; });
 
-		//Check the output - we are looking for 'test'
-		//$this -> assertEquals('test',$strResult);
-
-		//Check for a 200 response
-		//$this -> assertEquals('200',$arrRequestInfo['http_code']);
-
-		//$strResult = \Twist::Curl()->get('http://127.0.0.1/Test-Controller/Test');
-		//$arrRequestInfo = \Twist::Curl()->getRequestInformation();
-
-		//Check the output - we are looking for 'test'
-		//$this -> assertEquals('test',$strResult);
-
-		//Check for a 200 response
-		//$this -> assertEquals('200',$arrRequestInfo['http_code']);
+		$this -> assertEquals('42',$this->simulateRequest('/test-Case-PAge'));
+		$this -> assertEquals('42',$this->simulateRequest('/test-case-page'));
+		$this -> assertEquals('42',$this->simulateRequest('/TEST-CASE-PAGE'));
 
 		//Reset case sensitive routing to default
 		\Twist::framework()->setting('ROUTE_CASE_SENSITIVE',true);
+	}
 
-		$this -> assertEquals('pass','pass');
+	public function testCaseSensitiveRouting(){
+
+		//Ensure that case sensitive routing is enabled
+		\Twist::framework()->setting('ROUTE_CASE_SENSITIVE',true);
+
+		$this -> assertEquals('42',$this->simulateRequest('/test-Case-PAge'));
+		$this -> assertEquals('42',$this->simulateRequest('/test-case-page'));
+		$this -> assertEquals('42',$this->simulateRequest('/TEST-CASE-PAGE'));
 	}
 }
