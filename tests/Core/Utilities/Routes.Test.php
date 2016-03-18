@@ -12,8 +12,8 @@ class Routes extends \PHPUnit_Framework_TestCase{
 		$_SERVER['REQUEST_METHOD'] = $strRequestMethod;
 
 		ob_start();
-		\Twist::ServeRoutes(false);
-		$strPageContent = ob_get_contents();
+			\Twist::ServeRoutes(false);
+			$strPageContent = ob_get_contents();
 		ob_end_clean();
 
 		return $strPageContent;
@@ -35,7 +35,7 @@ class Routes extends \PHPUnit_Framework_TestCase{
 
 	public function testGetRequest(){
 
-		file_put_contents(TWIST_APP_VIEWS.'test-get.tpl','{get:param}');
+		file_put_contents(TWIST_APP_VIEWS.'test-get.tpl','{GET:param}');
 
 		\Twist::Route()->getView('/test-method','test-get.tpl');
 		$this -> assertEquals('42',$this->simulateRequest('/test-method?param=42'));
@@ -43,7 +43,7 @@ class Routes extends \PHPUnit_Framework_TestCase{
 
 	public function testPostRequest(){
 
-		file_put_contents(TWIST_APP_VIEWS.'test-post.tpl','{post:param}');
+		file_put_contents(TWIST_APP_VIEWS.'test-post.tpl','{POST:param}');
 
 		\Twist::Route()->postView('/test-method','test-post.tpl');
 		$this -> assertEquals('42',$this->simulateRequest('/test-method','POST',array('param' => 42)));
