@@ -2,63 +2,51 @@
 
 class Routes extends \PHPUnit_Framework_TestCase{
 
+	private function simulateRequest($strURI,$strRequestMethod = 'GET',$arrPostData = array()){
+
+		//Set the post data
+		$_POST = $arrPostData;
+
+		//Capture and test the resulting output
+		$_SERVER['REQUEST_URI'] = $strURI;
+		$_SERVER['REQUEST_METHOD'] = $strRequestMethod;
+
+		ob_start();
+		\Twist::ServeRoutes(false);
+		$strPageContent = ob_get_contents();
+		ob_end_clean();
+
+		return $strPageContent;
+	}
+
 	public function testViewRequest(){
 
 		file_put_contents(TWIST_APP_VIEWS.'test.tpl','test');
 
-		//Capture and test the resulting output
-		$_SERVER['REQUEST_URI'] = '/test';
-		$_SERVER['REQUEST_METHOD'] = 'GET';
 		\Twist::Route()->view('/test','test.tpl');
-
-		ob_start();
-			\Twist::ServeRoutes(false);
-			$strPageContent = ob_get_contents();
-		ob_end_clean();
-
-		echo $strPageContent;
-
-		$this -> assertEquals('pass','pass');
+		$this -> assertEquals('test',$this->simulateRequest('/test'));
 	}
 
 	public function testFunctionRequest(){
 
-		//Capture and test the resulting output
-		$_SERVER['REQUEST_URI'] = '/test-function';
-		$_SERVER['REQUEST_METHOD'] = 'GET';
-
 		\Twist::Route()->get('/test-function',function(){ return 'test'; });
-		\Twist::ServeRoutes(false);
-
-		$this -> assertEquals('pass','pass');
+		$this -> assertEquals('test',$this->simulateRequest('/test-function'));
 	}
 
 	public function testGetRequest(){
 
-		//$strResult = \Twist::Curl()->get('http://127.0.0.1/test-controller/test');
-		//$arrRequestInfo = \Twist::Curl()->getRequestInformation();
+		file_put_contents(TWIST_APP_VIEWS.'test-get.tpl','{get:param}');
 
-		//Check the output - we are looking for 'test'
-		//$this -> assertEquals('test',$strResult);
-
-		//Check for a 200 response
-		//$this -> assertEquals('200',$arrRequestInfo['http_code']);
-
-		$this -> assertEquals('pass','pass');
+		\Twist::Route()->getView('/test-method','test-get.tpl');
+		$this -> assertEquals('42',$this->simulateRequest('/test-method?param=42'));
 	}
 
 	public function testPostRequest(){
 
-		//$strResult = \Twist::Curl()->post('http://127.0.0.1/test-controller/httppost',array('q' => 'whats is the meaning of life?'));
-		//$arrRequestInfo = \Twist::Curl()->getRequestInformation();
+		file_put_contents(TWIST_APP_VIEWS.'test-post.tpl','{post:param}');
 
-		//Check the output - we are looking for '42'
-		//$this -> assertEquals('42',$strResult);
-
-		//Check for a 200 response
-		//$this -> assertEquals('200',$arrRequestInfo['http_code']);
-
-		$this -> assertEquals('pass','pass');
+		\Twist::Route()->postView('/test-method','test-post.tpl');
+		$this -> assertEquals('42',$this->simulateRequest('/test-method','POST',array('param' => 42)));
 	}
 
 	public function testPutRequest(){
