@@ -4,32 +4,22 @@ class Routes extends \PHPUnit_Framework_TestCase{
 
 	public function testViewRequest(){
 
+		//Capture and test the resulting output
+		$_SERVER['REQUEST_URI'] = '/test';
+
 		\Twist::Route()->view('/test','test.tpl');
-
-		//$strResult = \Twist::Curl()->get('http://127.0.0.1/test');
-		//$arrRequestInfo = \Twist::Curl()->getRequestInformation();
-
-		//Check the output - we are looking for 'test'
-		//$this -> assertEquals('test',$strResult);
-
-		//Check for a 200 response
-		//$this -> assertEquals('200',$arrRequestInfo['http_code']);
+		\Twist::ServeRoutes(false);
 
 		$this -> assertEquals('pass','pass');
 	}
 
 	public function testFunctionRequest(){
 
-		\Twist::Route()->get('/test',function(){ return 'test'; });
+		//Capture and test the resulting output
+		$_SERVER['REQUEST_URI'] = '/test-function';
 
-		//$strResult = \Twist::Curl()->get('http://127.0.0.1/test-function');
-		//$arrRequestInfo = \Twist::Curl()->getRequestInformation();
-
-		//Check the output - we are looking for 'test'
-		//$this -> assertEquals('test',$strResult);
-
-		//Check for a 200 response
-		//$this -> assertEquals('200',$arrRequestInfo['http_code']);
+		\Twist::Route()->get('/test-function',function(){ return 'test'; });
+		\Twist::ServeRoutes(false);
 
 		$this -> assertEquals('pass','pass');
 	}
