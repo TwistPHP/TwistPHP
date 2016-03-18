@@ -9,9 +9,14 @@ class Routes extends \PHPUnit_Framework_TestCase{
 		//Capture and test the resulting output
 		$_SERVER['REQUEST_URI'] = '/test';
 		$_SERVER['REQUEST_METHOD'] = 'GET';
-
 		\Twist::Route()->view('/test','test.tpl');
-		\Twist::ServeRoutes(false);
+
+		ob_start();
+			\Twist::ServeRoutes(false);
+			$strPageContent = ob_get_contents();
+		ob_end_clean();
+
+		echo $strPageContent;
 
 		$this -> assertEquals('pass','pass');
 	}
