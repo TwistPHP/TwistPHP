@@ -18,6 +18,8 @@ class CSV extends \PHPUnit_Framework_TestCase{
 
 		$arrData = \Twist::CSV()->import(TWIST_UPLOADS.'test.csv');
 
+		print_r($arrData);
+
 		$this->assertTrue(count($arrData) == 2 && $arrData[0]['id'] == 1 && $arrData[1]['name'] == 'Andi');
 	}
 
