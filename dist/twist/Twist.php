@@ -270,10 +270,12 @@
 
 		/**
 		 * Respond with a HTTP status page, pass in the status code that you require
-		 * @param $intResponseCode Code of the required response i.e. 404
+		 * @param int $intResponseCode Code of the required response i.e. 404
+		 * @param null|string $strCustomDescription
+		 * @param boolean $blExitOnComplete Set false will output error and continue (Used for testing)
 		 */
-		public static function respond($intResponseCode,$strCustomDescription = null){
-			Error::errorPage($intResponseCode,$strCustomDescription);
+		public static function respond($intResponseCode,$strCustomDescription = null,$blExitOnComplete = true){
+			Error::response($intResponseCode,$strCustomDescription,$blExitOnComplete);
 		}
 
 		/**

@@ -72,7 +72,7 @@
 		public function getDevice($strUserAgent = null){
 
 			$arrInfo = $this->get($strUserAgent);
-			return $arrInfo['device'];
+			return $arrInfo['type'];
 		}
 
 		/**

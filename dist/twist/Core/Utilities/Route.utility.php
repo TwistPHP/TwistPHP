@@ -1265,7 +1265,7 @@ class Route extends Base{
 
 					//Check to see if the current route is allowed to bypass
 					if($this->findURI($this->arrBypassMaintenanceMode,$arrRoute['uri']) === false){
-						\Twist::respond(503,'The site is currently undergoing maintenance, please check back shortly!');
+						\Twist::respond(503,'The site is currently undergoing maintenance, please check back shortly!',$blExitOnComplete);
 					}
 				}
 
@@ -1280,7 +1280,7 @@ class Route extends Base{
 					\Twist::User()->setAfterLoginRedirect();
 					\Twist::redirect(str_replace('//', '/', $arrRestriction['login_uri']));
 				}elseif($arrRestriction['allow_access'] == false){
-					\Twist::respond(403);
+					\Twist::respond(403,null,$blExitOnComplete);
 				}else{
 
 					$this->meta()->title(\Twist::framework()->setting('SITE_NAME'));
@@ -1312,7 +1312,7 @@ class Route extends Base{
 
 					//Run through all the serve types, this has been made into a separate function
 					//So that it can be extended by other systems
-					$arrTags = $this->serveTypes($arrRoute,$arrTags);
+					$arrTags = $this->serveTypes($arrRoute,$arrTags,$blExitOnComplete);
 
 					\Twist::recordEvent('Route processed');
 
@@ -1392,11 +1392,11 @@ class Route extends Base{
 			}
 
 		} elseif ($this->bl404) {
-			\Twist::respond(404);
+			\Twist::respond(404,null,$blExitOnComplete);
 		}
 	}
 
-	protected function serveTypes($arrRoute,$arrTags){
+	protected function serveTypes($arrRoute,$arrTags,$blExitOnComplete = true){
 
 		switch($arrRoute['type']){
 			case'view':
@@ -1417,10 +1417,10 @@ class Route extends Base{
 						$strMimeType = ($arrRoute['item']['force-download']) ? null : \Twist::File()->mimeType($strFilePath);
 						\Twist::File()->serve($strFilePath, basename($strFilePath), $strMimeType, null, $arrRoute['item']['speed'], false);
 					}else{
-						\Twist::respond(403,'Unsupported file extension, PHP files are disallowed through this method');
+						\Twist::respond(403,'Unsupported file extension, PHP files are disallowed through this method',$blExitOnComplete);
 					}
 				}else{
-					\Twist::respond(404);
+					\Twist::respond(404,null,$blExitOnComplete);
 				}
 
 				break;
@@ -1429,7 +1429,7 @@ class Route extends Base{
 				break;
 			case'ajax':
 				if(!TWIST_AJAX_REQUEST){
-					\Twist::respond(403,'Unsupported HTTP protocol used to request this URI');
+					\Twist::respond(403,'Unsupported HTTP protocol used to request this URI',$blExitOnComplete);
 				}else{
 					try{
 						$arrTags['response'] = $this->processController($arrRoute);
