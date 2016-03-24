@@ -1031,7 +1031,9 @@ class Route extends Base{
 						'login_required' => false,
 						'allow_access' => true,
 						'login_uri' => $strFullLoginURI,
-						'status' => 'Ignored, unrestricted page'
+						'status' => 'Ignored, unrestricted page',
+						'restricted_uri' => false,
+						'restricted_level' => null
 					);
 
 				}else{
@@ -1051,6 +1053,9 @@ class Route extends Base{
 						$arrMatch['allow_access'] = false;
 						$arrMatch['status'] = 'User must be logged in to access restricted page';
 					}
+
+					$arrMatch['restricted_uri'] = true;
+					$arrMatch['restricted_level'] = $arrMatch['level'];
 				}
 
 				$arrMatch['login_uri'] = $strFullLoginURI;
@@ -1059,7 +1064,9 @@ class Route extends Base{
 					'login_required' => false,
 					'allow_access' => true,
 					'login_uri' => $strFullLoginURI,
-					'status' => 'No restriction found'
+					'status' => 'No restriction found',
+					'restricted_uri' => false,
+					'restricted_level' => null
 				);
 			}
 		}else{
@@ -1067,7 +1074,9 @@ class Route extends Base{
 				'login_required' => false,
 				'allow_access' => true,
 				'login_uri' => $strFullLoginURI,
-				'status' => 'No restriction found'
+				'status' => 'No restriction found',
+				'restricted_uri' => false,
+				'restricted_level' => null
 			);
 		}
 
