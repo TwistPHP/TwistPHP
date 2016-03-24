@@ -1109,7 +1109,7 @@ class Route extends Base{
 	protected function resourceServer(){
 
 		if(TWIST_ABOVE_DOCUMENT_ROOT){
-			$this->folder('/twist/Core/Resources%',sprintf('%s/Core/Resources',TWIST_FRAMEWORK));
+			$this->folder('/twist/Core/Resources%',sprintf('%s/Core/Resources',rtrim(TWIST_FRAMEWORK,'/')));
 		}
 	}
 
