@@ -141,72 +141,16 @@ final class Debug{
 			$arrTags['current_route'] .= $this->resTemplate->build('components/table-row.tpl',array('key' => $strKey,'value' => is_array($strValue) ? sprintf('<pre>%s</pre>',print_r($strValue,true)) : htmlentities($strValue),'type' => gettype($strValue),'length' => $intLength));
 		}
 
-
 		$arrTags['routes'] = '';
-
-		$arrRestrictions = \Twist::Route()->getRestrictions();
 
 		foreach(\Twist::Route()->getAll() as $strType => $arrItems){
 			foreach($arrItems as $arrEachRoute){
+
 				$arrEachRoute['highlight'] = ($arrEachRoute['registered_uri'] === $arrCurrentRoute['registered_uri']) ? 'highlight' : '';
 				$arrEachRoute['item'] = (is_array($arrEachRoute['item'])) ? implode('->',$arrEachRoute['item']) : $arrEachRoute['item'];
 
-
-				/**
-				 * This might need to be done in a different way (maybe make a public function in routes)
-				 */
-				$blRestrict = false;
-				$arrFoundMatched = array();
-
-				foreach($arrRestrictions['restricted'] as $strRestrictURI => $arrRestrictedInfo){
-
-					$strRestrictExpression = sprintf("#^(%s[\/]?)%s#", str_replace('/','\/',rtrim($strRestrictURI, '/')), $arrRestrictedInfo['wildcard'] ? '' : '$');
-
-					//Check for an exact match
-					if(rtrim($strRestrictURI,'/') == rtrim($arrEachRoute['uri'],'/')){
-
-						$arrMatch = $arrRestrictedInfo;
-						$blRestrict = true;
-						break;
-
-					}elseif(preg_match($strRestrictExpression, $arrEachRoute['uri'], $arrMatches)){
-						$arrFoundMatched[] = $arrRestrictedInfo;
-					}
-				}
-
-				//No exact mach found and there is an array to be processed
-				if($blRestrict == false && count($arrFoundMatched)){
-
-					if(count($arrFoundMatched) == 1){
-						$blRestrict = true;
-						$arrMatch = $arrFoundMatched[0];
-					}else{
-
-						//Process Multi-Matches, find the highest level from the found matches, user must match or exceed this level (0 is God)
-						$intHighestLevel = 0;
-						foreach($arrFoundMatched as $arrEachMatch){
-							if($arrEachMatch['level'] == 0 || $arrEachMatch['level'] > $intHighestLevel){
-								$intHighestLevel = $arrEachMatch['level'];
-								$arrMatch = $arrEachMatch;
-								$blRestrict = true;
-
-								if($intHighestLevel == 0){
-									break;
-								}
-							}
-						}
-					}
-				}
-				/**
-				 * Above might need to be done in a different way (maybe make a public function in routes)
-				 */
-
-
-				$arrEachRoute['restricted'] = '';
-				//If a match is found
-				if($blRestrict){
-					$arrEachRoute['restricted'] = 'Restricted ['.$intHighestLevel.']';
-				}
+				$arrRestriction = \Twist::Route()->currentRestriction(($arrEachRoute['registered_uri'] == '') ? '/' : $arrEachRoute['registered_uri']);
+				$arrEachRoute['restricted'] = ($arrRestriction['restricted_uri']) ? 'Restricted ['.$arrRestriction['restricted_level'].']' : '';
 
 				$arrTags['routes'] .=  $this->resTemplate->build('components/each-route.tpl',$arrEachRoute);
 			}
