@@ -11,141 +11,181 @@ var gulp = require( 'gulp' ),
 
 gulp.task( 'ajax-js',
 	function() {
-		return gulp.src( strTwistSource + 'ajax/js/twist-ajax.js' )
+		return gulp.src( strTwistSource + 'ajax/js/twistajax.js' )
 				.pipe( using() )
 				.pipe( jshint() )
 				.pipe( jshint.reporter( 'default' ) )
-				.pipe( concat( 'twist-ajax.min.js' ) )
-				.pipe( uglify() )
+				.pipe( concat( 'twistajax.min.js' ) )
+				.pipe( uglify( { preserveComments: 'license' } ) )
 				.pipe( gulp.dest( strTwistDestination + 'ajax/js' ) );
 	}
 );
 
 gulp.task( 'ajax-css',
 	function() {
-		return gulp.src( strTwistSource + 'ajax/scss/twist-ajax.scss' )
+		return gulp.src( strTwistSource + 'ajax/scss/twistajax.scss' )
 				.pipe( using() )
 				.pipe( sourcemaps.init() )
 				.pipe( sass( { errLogToConsole: true, outputStyle: 'compressed' } ) )
-				.pipe( rename( 'twist-ajax.min.css' ) )
+				.pipe( rename( 'twistajax.min.css' ) )
 				.pipe( sourcemaps.write( './' ) )
 				.pipe( gulp.dest( strTwistDestination + 'ajax/css' ) );
 	}
 );
 
-gulp.task( 'css-reset',
+gulp.task( 'ajax-test',
 	function() {
-		return gulp.src( strTwistSource + 'css-reset/scss/twist-cssreset.scss' )
+		return gulp.src( strTwistSource + 'ajax/js/twistajax.js' )
+				.pipe( jshint() )
+				.pipe( jshint.reporter( 'default' ) );
+	}
+);
+
+gulp.task( 'cssreset',
+	function() {
+		return gulp.src( strTwistSource + 'cssreset/scss/twistcssreset.scss' )
 				.pipe( using() )
 				.pipe( sourcemaps.init() )
 				.pipe( sass( { errLogToConsole: true, outputStyle: 'compressed' } ) )
-				.pipe( rename( 'twist-cssreset.min.css' ) )
+				.pipe( rename( 'twistcssreset.min.css' ) )
 				.pipe( sourcemaps.write( './' ) )
-				.pipe( gulp.dest( strTwistDestination + 'css-reset/css' ) );
+				.pipe( gulp.dest( strTwistDestination + 'cssreset/css' ) );
 	}
 );
 
 gulp.task( 'debug-js',
 	function() {
-		return gulp.src( strTwistSource + 'debug/js/twist-debug.js' )
+		return gulp.src( strTwistSource + 'debug/js/twistdebug.js' )
 				.pipe( using() )
 				.pipe( jshint() )
 				.pipe( jshint.reporter( 'default' ) )
-				.pipe( concat( 'twist-debug.min.js' ) )
-				.pipe( uglify() )
+				.pipe( concat( 'twistdebug.min.js' ) )
+				.pipe( uglify( { preserveComments: 'license' } ) )
 				.pipe( gulp.dest( strTwistDestination + 'debug/js' ) );
 	}
 );
 
 gulp.task( 'debug-css',
 	function() {
-		return gulp.src( strTwistSource + 'debug/scss/twist-debug.scss' )
+		return gulp.src( strTwistSource + 'debug/scss/twistdebug.scss' )
 				.pipe( using() )
 				.pipe( sourcemaps.init() )
 				.pipe( sass( { errLogToConsole: true, outputStyle: 'compressed' } ) )
-				.pipe( rename( 'twist-debug.min.css' ) )
+				.pipe( rename( 'twistdebug.min.css' ) )
 				.pipe( sourcemaps.write( './' ) )
 				.pipe( gulp.dest( strTwistDestination + 'debug/css' ) );
 	}
 );
 
-gulp.task( 'file-upload-js',
+gulp.task( 'debug-test',
+		function() {
+			return gulp.src( strTwistSource + 'debug/js/twistdebug.js' )
+					.pipe( jshint() )
+					.pipe( jshint.reporter( 'default' ) );
+		}
+);
+
+gulp.task( 'fileupload-js',
 	function() {
-		return gulp.src( strTwistSource + 'file-upload/js/twist-fileupload.js' )
+		return gulp.src( strTwistSource + 'fileupload/js/twistfileupload.js' )
 				.pipe( using() )
 				.pipe( jshint() )
 				.pipe( jshint.reporter( 'default' ) )
-				.pipe( concat( 'twist-fileupload.js' ) )
-				.pipe( gulp.dest( strTwistDestination + 'file-upload/js' ) )
-				.pipe( rename( 'twist-fileupload.min.js' ) )
-				.pipe( uglify() )
-				.pipe( gulp.dest( strTwistDestination + 'file-upload/js' ) );
+				.pipe( concat( 'twistfileupload.js' ) )
+				.pipe( gulp.dest( strTwistDestination + 'fileupload/js' ) )
+				.pipe( rename( 'twistfileupload.min.js' ) )
+				.pipe( uglify( { preserveComments: 'license' } ) )
+				.pipe( gulp.dest( strTwistDestination + 'fileupload/js' ) );
 	}
 );
 
-gulp.task( 'file-upload-css',
+gulp.task( 'fileupload-css',
 	function() {
-		return gulp.src( strTwistSource + 'file-upload/scss/twist-fileupload.scss' )
+		return gulp.src( strTwistSource + 'fileupload/scss/twistfileupload.scss' )
 				.pipe( using() )
 				.pipe( sourcemaps.init() )
 				.pipe( sass( { errLogToConsole: true, outputStyle: 'compressed' } ) )
-				.pipe( rename( 'twist-fileupload.min.css' ) )
+				.pipe( rename( 'twistfileupload.min.css' ) )
 				.pipe( sourcemaps.write( './' ) )
-				.pipe( gulp.dest( strTwistDestination + 'file-upload/css' ) );
+				.pipe( gulp.dest( strTwistDestination + 'fileupload/css' ) );
+	}
+);
+
+gulp.task( 'fileupload-test',
+	function() {
+		return gulp.src( strTwistSource + 'fileupload/js/twistfileupload.js' )
+				.pipe( jshint() )
+				.pipe( jshint.reporter( 'default' ) );
 	}
 );
 
 gulp.task( 'manager-js',
 	function() {
-		return gulp.src( strTwistSource + 'manager/js/twist-manager.js' )
+		return gulp.src( strTwistSource + 'manager/js/twistmanager.js' )
 				.pipe( using() )
 				.pipe( jshint() )
 				.pipe( jshint.reporter( 'default' ) )
-				.pipe( concat( 'twist-manager.min.js' ) )
-				.pipe( uglify() )
+				.pipe( concat( 'twistmanager.min.js' ) )
+				.pipe( uglify( { preserveComments: 'license' } ) )
 				.pipe( gulp.dest( strTwistDestination + 'manager/js' ) );
 	}
 );
 
 gulp.task( 'manager-css',
 	function() {
-		return gulp.src( strTwistSource + 'manager/scss/twist-manager.scss' )
+		return gulp.src( strTwistSource + 'manager/scss/twistmanager.scss' )
 				.pipe( using() )
 				.pipe( sourcemaps.init() )
 				.pipe( sass( { errLogToConsole: true, outputStyle: 'compressed' } ) )
-				.pipe( rename( 'twist-manager.min.css' ) )
+				.pipe( rename( 'twistmanager.min.css' ) )
 				.pipe( sourcemaps.write( './' ) )
 				.pipe( gulp.dest( strTwistDestination + 'manager/css' ) );
 	}
 );
 
+gulp.task( 'manager-test',
+	function() {
+		return gulp.src( strTwistSource + 'manager/js/twistmanager.js' )
+				.pipe( jshint() )
+				.pipe( jshint.reporter( 'default' ) );
+	}
+);
+
 gulp.task( 'setup-js',
 	function() {
-		return gulp.src( strTwistSource + 'setup/js/twist-setup.js' )
+		return gulp.src( strTwistSource + 'setup/js/twistsetup.js' )
 				.pipe( using() )
 				.pipe( jshint() )
 				.pipe( jshint.reporter( 'default' ) )
-				.pipe( concat( 'twist-setup.min.js' ) )
-				.pipe( uglify() )
+				.pipe( concat( 'twistsetup.min.js' ) )
+				.pipe( uglify( { preserveComments: 'license' } ) )
 				.pipe( gulp.dest( strTwistDestination + 'setup/js' ) );
 	}
 );
 
 gulp.task( 'setup-css',
 	function() {
-		return gulp.src( strTwistSource + 'setup/scss/twist-setup.scss' )
+		return gulp.src( strTwistSource + 'setup/scss/twistsetup.scss' )
 				.pipe( using() )
 				.pipe( sourcemaps.init() )
 				.pipe( sass( { errLogToConsole: true, outputStyle: 'compressed' } ) )
-				.pipe( rename( 'twist-setup.min.css' ) )
+				.pipe( rename( 'twistsetup.min.css' ) )
 				.pipe( sourcemaps.write( './' ) )
 				.pipe( gulp.dest( strTwistDestination + 'setup/css' ) );
 	}
 );
 
+gulp.task( 'setup-test',
+	function() {
+		return gulp.src( strTwistSource + 'setup/js/twistsetup.js' )
+				.pipe( jshint() )
+				.pipe( jshint.reporter( 'default' ) );
+	}
+);
+
 gulp.task( 'ajax', ['ajax-js', 'ajax-css'] );
 gulp.task( 'debug', ['debug-js', 'debug-css'] );
-gulp.task( 'file-upload', ['file-upload-js', 'file-upload-css'] );
+gulp.task( 'fileupload', ['fileupload-js', 'fileupload-css'] );
 gulp.task( 'manager', ['manager-js', 'manager-css'] );
 gulp.task( 'setup', ['setup-js', 'setup-css'] );
 
@@ -161,15 +201,15 @@ gulp.task( 'watch-debug',
 	}
 );
 
-gulp.task( 'watch-css-reset',
+gulp.task( 'watch-cssreset',
 	function() {
-		return gulp.watch( strTwistSource + 'css-reset/**/*', ['css-reset'] );
+		return gulp.watch( strTwistSource + 'cssreset/**/*', ['cssreset'] );
 	}
 );
 
-gulp.task( 'watch-file-upload',
+gulp.task( 'watch-fileupload',
 	function() {
-		return gulp.watch( strTwistSource + 'file-upload/**/*', ['file-upload'] );
+		return gulp.watch( strTwistSource + 'fileupload/**/*', ['fileupload'] );
 	}
 );
 
@@ -185,6 +225,8 @@ gulp.task( 'watch-setup',
 	}
 );
 
-gulp.task( 'watch', ['default', 'watch-ajax', 'watch-css-reset', 'watch-debug', 'watch-file-upload', 'watch-manager', 'watch-setup'] );
+gulp.task( 'test', ['ajax-test', 'debug-test', 'fileupload-test', 'manager-test', 'setup-test'] );
 
-gulp.task( 'default', ['ajax', 'css-reset', 'debug', 'file-upload', 'manager', 'setup'] );
+gulp.task( 'watch', ['default', 'watch-ajax', 'watch-cssreset', 'watch-debug', 'watch-fileupload', 'watch-manager', 'watch-setup'] );
+
+gulp.task( 'default', ['ajax', 'cssreset', 'debug', 'fileupload', 'manager', 'setup'] );

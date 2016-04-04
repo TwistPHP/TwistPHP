@@ -1,24 +1,25 @@
 <?php
+
 	/**
-	 * This file is part of TwistPHP.
+	 * TwistPHP - An open source PHP MVC framework built from the ground up.
+	 * Copyright (C) 2016  Shadow Technologies Ltd.
 	 *
-	 * TwistPHP is free software: you can redistribute it and/or modify
+	 * This program is free software: you can redistribute it and/or modify
 	 * it under the terms of the GNU General Public License as published by
 	 * the Free Software Foundation, either version 3 of the License, or
 	 * (at your option) any later version.
 	 *
-	 * TwistPHP is distributed in the hope that it will be useful,
+	 * This program is distributed in the hope that it will be useful,
 	 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 	 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	 * GNU General Public License for more details.
 	 *
 	 * You should have received a copy of the GNU General Public License
-	 * along with TwistPHP.  If not, see <http://www.gnu.org/licenses/>.
+	 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	 *
 	 * @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
-	 * @license    https://www.gnu.org/licenses/gpl.html LGPL License
+	 * @license    https://www.gnu.org/licenses/gpl.html GPL License
 	 * @link       https://twistphp.com
-	 *
 	 */
 
 	use Twist\Classes\Instance;
@@ -59,8 +60,8 @@
 			$arrVersion = array(
 				'major' => 3,
 				'minor' => 0,
-				'patch' => 1,
-				'pre-release' => 'dev'//pre-release can be set to 'dev'
+				'patch' => 4,
+				'pre-release' => ''//pre-release can be set to 'dev'
 			);
 
 			switch($strVersionPart){
@@ -269,10 +270,12 @@
 
 		/**
 		 * Respond with a HTTP status page, pass in the status code that you require
-		 * @param $intResponseCode Code of the required response i.e. 404
+		 * @param int $intResponseCode Code of the required response i.e. 404
+		 * @param null|string $strCustomDescription
+		 * @param boolean $blExitOnComplete Set false will output error and continue (Used for testing)
 		 */
-		public static function respond($intResponseCode,$strCustomDescription = null){
-			Error::errorPage($intResponseCode,$strCustomDescription);
+		public static function respond($intResponseCode,$strCustomDescription = null,$blExitOnComplete = true){
+			Error::response($intResponseCode,$strCustomDescription,$blExitOnComplete);
 		}
 
 		/**

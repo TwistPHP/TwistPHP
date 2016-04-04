@@ -1,24 +1,25 @@
 <?php
+
 /**
- * This file is part of TwistPHP.
+ * TwistPHP - An open source PHP MVC framework built from the ground up.
+ * Copyright (C) 2016  Shadow Technologies Ltd.
  *
- * TwistPHP is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * TwistPHP is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with TwistPHP.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
- * @license    https://www.gnu.org/licenses/gpl.html LGPL License
+ * @license    https://www.gnu.org/licenses/gpl.html GPL License
  * @link       https://twistphp.com
- *
  */
 
 namespace Twist\Core\Controllers;
@@ -351,64 +352,101 @@ class BaseUser extends Base{
 	/**
 	 * Process the users registration request and then redirect onto the relevant page.
 	 */
-    public function POSTregister(){
+	public function POSTregister(){
 
-        //Process the register user request
-        if(array_key_exists('register',$_POST) && $_POST['register'] != ''){
+		//Process the register user request
+		if(array_key_exists('register',$_POST) && $_POST['register'] != ''){
 
-            $resUser = $this->resUser->create();
-            $resUser->email($_POST['email']);
-            $resUser->firstname($_POST['firstname']);
-            $resUser->surname($_POST['lastname']);
-            $resUser->level(10);
+			$resValidator = \Twist::Validate()->createTest();
+			$resValidator->checkString('firstname');
+			$resValidator->checkString('lastname');
+			$resValidator->checkEmail('email');
 
-            $blContinue = true;
+			if(\Twist::framework()->setting('USER_REGISTER_PASSWORD')){
+				$resValidator->checkComparison('password', 'confirm_password');
+			}
 
-            if(\Twist::framework()->setting('USER_REGISTER_PASSWORD')){
+			$arrResult = $resValidator->test($_POST);
 
-                if($_POST['password'] === $_POST['confirm_password']){
-                    $arrResponse = $resUser->password($_POST['password']);
+			if($resValidator->success()){
 
-                    if(!$arrResponse['status']){
-                        \Twist::Session()->data('site-register_error_message',$arrResponse['message']);
-                        $blContinue = false;
-                    }
-                }else{
-                    \Twist::Session()->data('site-register_error_message','Your password and confirm password do not match');
-                    $blContinue = false;
-                }
-            }else{
-                $resUser->resetPassword();
-            }
+				$resUser = $this->resUser->create();
+				$resUser->email($_POST['email']);
+				$resUser->firstname($_POST['firstname']);
+				$resUser->surname($_POST['lastname']);
+				$resUser->level(10);
 
-            //If the password configuration has passed all checks then continue
-            if($blContinue){
-                $intUserID = $resUser->commit();
+				$blContinue = true;
 
-                if($intUserID > 0){
+				if(\Twist::framework()->setting('USER_REGISTER_PASSWORD')){
 
-                    //AUTO_LOGIN
-                    if(\Twist::framework()->setting('USER_REGISTER_PASSWORD') && !\Twist::framework()->setting('USER_EMAIL_VERIFICATION') && \Twist::framework()->setting('USER_AUTO_AUTHENTICATE')){
+					if($_POST['password'] === $_POST['confirm_password']){
+						$arrResponse = $resUser->password($_POST['password']);
 
-                        //@todo redirect - test or work out best way of doing this
-                        //$this->resUser->afterLoginRedirect(); --- set the value that this function uses, authenticate will do the redirect
+						if(!$arrResponse['status']){
+							\Twist::Session()->data('site-register_error_message',$arrResponse['message']);
+							$blContinue = false;
+						}
+					}else{
+						\Twist::Session()->data('site-register_error_message','Your password and confirm password do not match');
+						$blContinue = false;
+					}
+				}else{
+					$resUser->resetPassword();
+				}
 
-                        //Authenticate the user (log them in)
-                        $this->resUser->authenticate($_POST['email'],$_POST['password']);
+				//If the password configuration has passed all checks then continue
+				if($blContinue){
+					$intUserID = $resUser->commit();
 
-                        //@todo redirect - test or work out best way of doing this
-                        $this->resUser->afterLoginRedirect();
-                    }else{
-                        \Twist::Session()->data('site-register_message','Thank you for your registration, your password has been emailed to you');
-                        unset( $_POST['email'] );
-                        unset( $_POST['firstname'] );
-                        unset( $_POST['lastname'] );
-                        unset( $_POST['register'] );
-                    }
-                }else{
-                    \Twist::Session()->data('site-register_error_message','Failed to register user');
-                }
-            }
-        }
-    }
+					if($intUserID > 0){
+
+						if(\Twist::framework()->setting('USER_REGISTER_PASSWORD')){
+
+							if(\Twist::framework()->setting('USER_EMAIL_VERIFICATION')){
+								//Tell the user that they must first verify their account
+								\Twist::Session()->data('site-login_message','Thank you for your registration, please verify your account using the code we have emailed to you');
+							}elseif(\Twist::framework()->setting('USER_AUTO_AUTHENTICATE')){
+								//Authenticate the user (log them in)
+								$this->resUser->authenticate($_POST['email'],$_POST['password']);
+							}else{
+								\Twist::Session()->data('site-login_message','Thank you for your registration, please login to access your account');
+							}
+
+						}else{
+
+							unset( $_POST['email'] );
+							unset( $_POST['firstname'] );
+							unset( $_POST['lastname'] );
+							unset( $_POST['register'] );
+
+							if(\Twist::framework()->setting('USER_EMAIL_VERIFICATION')){
+								\Twist::Session()->data('site-login_message','Thank you for your registration, your password and verification code has been emailed to you');
+							}else{
+								\Twist::Session()->data('site-login_message','Thank you for your registration, your password has been emailed to you');
+							}
+						}
+
+						//Go to Login Page
+						\Twist::redirect('./login');
+
+					}else{
+						\Twist::Session()->data('site-register_error_message','Registration failed, you might already be registered');
+					}
+				}
+			}else{
+
+				$strErrorMessage = '';
+				foreach($arrResult['results'] as $arrEachResult){
+					if(!$arrEachResult['status']){
+						$strErrorMessage .= $arrEachResult['message']."<br>";
+					}
+				}
+
+				\Twist::Session()->data('site-register_error_message',$strErrorMessage);
+			}
+		}
+
+		return $this->register();
+	}
 }
