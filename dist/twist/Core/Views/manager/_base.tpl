@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-gb" dir="ltr">
 	<head>
 		<title>TwistPHP Manager</title>
 		<!--================================ META ================================-->
@@ -26,8 +26,8 @@
 	<body>
 	<div class="grid-container">
 		<h1 class="grid-100 tablet-grid-100 mobile-grid-100 no-vertical-margin"><img src="{resource:core-uri}twist/logos/logo.png">TwistPHP</h1>
-        <ul class="tabs">{view:./components/global/menu.php}</ul>
-		<div class="grid-80 prefix-10 tablet-grid-90 tablet-prefix-5 mobile-grid-90 mobile-prefix-5 grid-parent">
+        <ul id="menu" class="tabs grid-20 prefix-5 tablet-grid-25 mobile-grid-100">{view:./components/global/menu.php}</ul>
+		<div class="grid-70 prefix-5 tablet-grid-65 tablet-prefix-5 mobile-grid-90 mobile-prefix-5 grid-parent">
 			{route:response}
 		</div>
 	</div>
