@@ -87,9 +87,9 @@ class Manager extends BaseUser{
 		$arrTags['version'] = \Twist::version();
 
 		if(count($arrLatestVersion) && array_key_exists('stable',$arrLatestVersion)){
-			$arrTags['version_status'] = (\Twist::version() == $arrLatestVersion['stable']['version']) ? '<span class="success">Twist is Up-to-date</span>' : '<span class="warning">A new version of TwistPHP is available, <a href="https://twistphp.com/">download from twist.com</a>!</span>';
+			$arrTags['version_status'] = (\Twist::version() == $arrLatestVersion['stable']['version']) ? '<span class="tag green">Twist is Up-to-date</span>' : 'A new version of TwistPHP is available [<a href="https://github.com/TwistPHP/TwistPHP/releases" target="_blank">download it now</a>]';
 		}else{
-			$arrTags['version_status'] = '<span class="error">Failed to retrieve version information, try again later!</span>';
+			$arrTags['version_status'] = '<span class="tag red">Failed to retrieve version information, try again later!</span>';
 		}
 
 		$objCodeScanner = new \Twist\Core\Models\Security\CodeScanner();
@@ -105,7 +105,7 @@ class Manager extends BaseUser{
 
 		$strUsersTable = sprintf('%susers',TWIST_DATABASE_TABLE_PREFIX);
 
-		$arrTags['user-accounts'] = sprintf('<strong>%d</strong> Superadmin,<br><strong>%d</strong> Admin,<br><strong>%d</strong> Advanced,<br><strong>%d</strong> Member',
+		$arrTags['user-accounts'] = sprintf('<strong>%d</strong> Superadmin<br><strong>%d</strong> Admin<br><strong>%d</strong> Advanced<br><strong>%d</strong> Member',
 			\Twist::Database()->records($strUsersTable)->count(\Twist::framework()->setting('USER_LEVEL_SUPERADMIN'),'level'),
 			\Twist::Database()->records($strUsersTable)->count(\Twist::framework()->setting('USER_LEVEL_ADMIN'),'level'),
 			\Twist::Database()->records($strUsersTable)->count(\Twist::framework()->setting('USER_LEVEL_ADVANCED'),'level'),
