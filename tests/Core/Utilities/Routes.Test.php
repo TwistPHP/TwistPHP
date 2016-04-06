@@ -2,87 +2,62 @@
 
 class Routes extends \PHPUnit_Framework_TestCase{
 
+	private function simulateRequest($strURI,$strRequestMethod = 'GET',$arrParameterData = array()){
+
+		//Set the parameter data
+		if($strRequestMethod == 'GET'){
+			$_GET = $arrParameterData;
+		}elseif($strRequestMethod == 'POST'){
+			$_POST = $arrParameterData;
+		}
+
+		//Capture and test the resulting output
+		$_SERVER['REQUEST_URI'] = $strURI;
+		$_SERVER['REQUEST_METHOD'] = $strRequestMethod;
+
+		ob_start();
+			\Twist::ServeRoutes(false);
+			$strPageContent = ob_get_contents();
+		ob_end_clean();
+
+		return $strPageContent;
+	}
+
 	public function testViewRequest(){
 
-		$strResult = \Twist::Curl()->get('http://127.0.0.1/test');
-		$arrRequestInfo = \Twist::Curl()->getRequestInformation();
+		file_put_contents(TWIST_APP_VIEWS.'test.tpl','test');
 
-		//Check the output - we are looking for 'test'
-		//$this -> assertEquals('test',$strResult);
-
-		//Check for a 200 response
-		//$this -> assertEquals('200',$arrRequestInfo['http_code']);
-
-		$this -> assertEquals('pass','pass');
+		\Twist::Route()->view('/test','test.tpl');
+		$this -> assertEquals('test',$this->simulateRequest('/test'));
 	}
 
 	public function testFunctionRequest(){
 
-		$strResult = \Twist::Curl()->get('http://127.0.0.1/test-function');
-		$arrRequestInfo = \Twist::Curl()->getRequestInformation();
-
-		//Check the output - we are looking for 'test'
-		//$this -> assertEquals('test',$strResult);
-
-		//Check for a 200 response
-		//$this -> assertEquals('200',$arrRequestInfo['http_code']);
-
-		$this -> assertEquals('pass','pass');
+		\Twist::Route()->get('/test-function',function(){ return 'test'; });
+		$this -> assertEquals('test',$this->simulateRequest('/test-function'));
 	}
 
 	public function testGetRequest(){
 
-		$strResult = \Twist::Curl()->get('http://127.0.0.1/test-controller/test');
-		$arrRequestInfo = \Twist::Curl()->getRequestInformation();
+		file_put_contents(TWIST_APP_VIEWS.'test-get.tpl','{get:param}');
 
-		//Check the output - we are looking for 'test'
-		//$this -> assertEquals('test',$strResult);
-
-		//Check for a 200 response
-		//$this -> assertEquals('200',$arrRequestInfo['http_code']);
-
-		$this -> assertEquals('pass','pass');
+		\Twist::Route()->getView('/test-method','test-get.tpl');
+		$this -> assertEquals('42',$this->simulateRequest('/test-method?param=42','GET',array('param' => 42)));
 	}
 
 	public function testPostRequest(){
 
-		$strResult = \Twist::Curl()->post('http://127.0.0.1/test-controller/httppost',array('q' => 'whats is the meaning of life?'));
-		$arrRequestInfo = \Twist::Curl()->getRequestInformation();
+		file_put_contents(TWIST_APP_VIEWS.'test-post.tpl','{post:param}');
 
-		//Check the output - we are looking for '42'
-		//$this -> assertEquals('42',$strResult);
-
-		//Check for a 200 response
-		//$this -> assertEquals('200',$arrRequestInfo['http_code']);
-
-		$this -> assertEquals('pass','pass');
+		\Twist::Route()->postView('/test-method','test-post.tpl');
+		$this -> assertEquals('42',$this->simulateRequest('/test-method','POST',array('param' => 42)));
 	}
 
 	public function testPutRequest(){
-
-		$strResult = \Twist::Curl()->put('http://127.0.0.1/test-controller/httpput','Here-Is-Some-Data');
-		$arrRequestInfo = \Twist::Curl()->getRequestInformation();
-
-		//Check the output - we are looking for 'Here-Is-Some-Data'
-		//$this -> assertEquals('Here-Is-Some-Data',$strResult);
-
-		//Check for a 200 response
-		//$this -> assertEquals('200',$arrRequestInfo['http_code']);
-
 		$this -> assertEquals('pass','pass');
 	}
 
 	public function testDeleteRequest(){
-
-		$strResult = \Twist::Curl()->delete('http://127.0.0.1/test-controller/httpdelete',array('id' => '42'));
-		$arrRequestInfo = \Twist::Curl()->getRequestInformation();
-
-		//Check the output - we are looking for '42'
-		//$this -> assertEquals('42',$strResult);
-
-		//Check for a 200 response
-		//$this -> assertEquals('200',$arrRequestInfo['http_code']);
-
 		$this -> assertEquals('pass','pass');
 	}
 
@@ -95,37 +70,8 @@ class Routes extends \PHPUnit_Framework_TestCase{
 	}
 
 	public function test404Page(){
-
-		\Twist::Curl()->get('http://127.0.0.1/this-url-is-invalid');
-		$arrRequestInfo = \Twist::Curl()->getRequestInformation();
-
-		//Check for a 404 response
-		//$this -> assertEquals('404',$arrRequestInfo['http_code']);
-
-		$this -> assertEquals('pass','pass');
-	}
-
-	public function testCaseSensitiveRouting(){
-
-		//Ensure that case sensitive routing is enabled
-		\Twist::framework()->setting('ROUTE_CASE_SENSITIVE',true);
-
-		$strResult = \Twist::Curl()->get('http://127.0.0.1/test-controller/test');
-		$arrRequestInfo = \Twist::Curl()->getRequestInformation();
-
-		//Check the output - we are looking for 'test'
-		//$this -> assertEquals('test',$strResult);
-
-		//Check for a 200 response
-		//$this -> assertEquals('200',$arrRequestInfo['http_code']);
-
-		\Twist::Curl()->get('http://127.0.0.1/Test-Controller/Test');
-		$arrRequestInfo = \Twist::Curl()->getRequestInformation();
-
-		//Check for a 404 response
-		//$this -> assertEquals('400',$arrRequestInfo['http_code']);
-
-		$this -> assertEquals('pass','pass');
+		$strPageData = $this->simulateRequest('/random/page/uri');
+		$this -> assertTrue((strstr($strPageData,'404 Not Found') !== false));
 	}
 
 	public function testCaseInsensitiveRouting(){
@@ -133,27 +79,29 @@ class Routes extends \PHPUnit_Framework_TestCase{
 		//Ensure that case sensitive routing is disabled
 		\Twist::framework()->setting('ROUTE_CASE_SENSITIVE',false);
 
-		$strResult = \Twist::Curl()->get('http://127.0.0.1/test-controller/test');
-		$arrRequestInfo = \Twist::Curl()->getRequestInformation();
+		\Twist::Route()->get('/test-Case-PAge',function(){ return '42'; });
 
-		//Check the output - we are looking for 'test'
-		//$this -> assertEquals('test',$strResult);
-
-		//Check for a 200 response
-		//$this -> assertEquals('200',$arrRequestInfo['http_code']);
-
-		$strResult = \Twist::Curl()->get('http://127.0.0.1/Test-Controller/Test');
-		$arrRequestInfo = \Twist::Curl()->getRequestInformation();
-
-		//Check the output - we are looking for 'test'
-		//$this -> assertEquals('test',$strResult);
-
-		//Check for a 200 response
-		//$this -> assertEquals('200',$arrRequestInfo['http_code']);
+		$this -> assertEquals('42',$this->simulateRequest('/test-Case-PAge'));
+		$this -> assertEquals('42',$this->simulateRequest('/test-case-page'));
+		$this -> assertEquals('42',$this->simulateRequest('/TEST-CASE-PAGE'));
 
 		//Reset case sensitive routing to default
 		\Twist::framework()->setting('ROUTE_CASE_SENSITIVE',true);
+	}
 
-		$this -> assertEquals('pass','pass');
+	public function testCaseSensitiveRouting(){
+
+		//Ensure that case sensitive routing is enabled
+		\Twist::framework()->setting('ROUTE_CASE_SENSITIVE',true);
+
+		\Twist::Route()->get('/TEST/case/page',function(){ return '42'; });
+
+		$this -> assertEquals('42',$this->simulateRequest('/TEST/case/page'));
+
+		$strPageData1 = $this->simulateRequest('/test/case/page');
+		$this -> assertTrue((strstr($strPageData1,'404 Not Found') !== false));
+
+		$strPageData2 = $this->simulateRequest('/TEST/CASE/PAGE');
+		$this -> assertTrue((strstr($strPageData2,'404 Not Found') !== false));
 	}
 }

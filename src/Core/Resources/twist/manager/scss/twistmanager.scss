@@ -1,21 +1,22 @@
 /*!
- * This file is part of TwistPHP.
+ * TwistPHP - An open source PHP MVC framework built from the ground up.
+ * Copyright (C) 2016  Shadow Technologies Ltd.
  *
- * TwistPHP is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * TwistPHP is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with TwistPHP.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
- * @license    https://www.gnu.org/licenses/gpl.html LGPL License
+ * @license    https://www.gnu.org/licenses/gpl.html GPL License
  * @link       https://twistphp.com
  *
  * --------------
@@ -23,39 +24,47 @@
  * --------------
  */
 
-html::after {
-	width: 475px;
-	height: 500px;
+html{
+	min-width: 320px;
 
-	display: block;
+	&::after {
+		width: 475px;
+		height: 500px;
 
-	position: fixed;
-	right: -50px;
-	bottom: -50px;
+		display: block;
 
-	background: url("../images/background.png") left no-repeat;
+		position: fixed;
+		right: -50px;
+		bottom: -50px;
 
-	content: "";
+		background: url("../images/background.png") left no-repeat;
 
-	z-index: -1;
+		content: "";
+
+		z-index: -1;
+	}
 }
 
 body {
-	margin: 35px;
+	margin: 30px;
 }
 
 .grid-container {
-	padding: 20px 0 50px;
+	padding: 0 0 50px;
 
-	/*background: rgba(255, 255, 255, 0.85);*/
-	background: #FFF;
+	background: rgba(255, 255, 255, 0.85);
+	//background: #FFF;
 
-	border: 1px #CCC solid;
-	border-radius: 3px;
+	//border: 1px #CCC solid;
+	//border-radius: 3px;
+
+	box-shadow: 0 0.5em 1.25em rgba(0, 0, 0, 0.25);
 }
 
 h1 {
-	margin: 10px 20px;
+	margin: 10px 0;
+	padding-right: 30px !important;
+	padding-left: 30px !important;
 
 	text-align: center;
 }
@@ -69,68 +78,142 @@ h1 {
 		vertical-align: bottom;
 	}
 
-ul.tabs {
-	margin-bottom: 30px;
-	padding-right: 10px;
-	padding-left: 10px;
+#menu {
+	margin: 0;
+	padding: 0;
 
-	background-color: inherit;
-}
+	overflow: visible;
 
-	ul.tabs li a i {
-		margin-left: 0.5em;
+	background-color: transparent;
 
-		display: inline-block;
+	//border: 1px #CCC solid;
+	//border-left-width: 0;
+	border-radius: 0 3px 3px 0;
 
-		vertical-align: middle;
+	//box-shadow: 0 0.5em 1.25em rgba(0, 0, 0, 0.35);
+
+	&::before,
+	&::after {
+		display: none;
 	}
+
+	li {
+		margin: 0;
+
+		display: block;
+
+		overflow: hidden;
+
+		border: none;
+		border-radius: 0;
+
+		a {
+			padding: 15px 20px 15px 15px;
+
+			display: block;
+
+			line-height: 1;
+			text-decoration: none;
+
+			i {
+				margin-left: 1em;
+
+				display: inline-block;
+
+				float: right;
+			}
+		}
+
+		&::after {
+			height: 7px;
+
+			position: absolute;
+			top: -7px;
+			right: 10px;
+			left: -10px;
+
+			border-radius: 100%;
+
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+
+			content: "";
+		}
+
+		&.current {
+			&::after {
+				//top: 0;
+			}
+
+			a {
+				padding-left: 20px;
+
+				color: #0D47A1;
+
+				&:hover {
+					color: #1976D2;
+				}
+
+				&:active {
+					color: #E64A19;
+				}
+			}
+		}
+	}
+}
 
 h2,
 h3 {
 	margin-top: 0.5em;
 }
 
+dl {
+	margin-bottom: 0;
+}
+
 .button {
 	margin-left: 10px;
 }
 
-table .button,
-table input,
-table select {
-	margin-top: 0 !important;
+table {
+	.button,
+	input,
+	select {
+		margin-top: 0 !important;
 
-	float: none !important;
+		float: none !important;
 
-	font-size: 1em !important;
+		font-size: 1em !important;
+	}
 }
 
-#twist-manager-repolist ul li{
-	display: inline-block;
-	width:44%;
-	padding:2%;
-	height:130px;
-	margin-bottom:1%;
-	margin-right:1%;
-	border:1px solid #CCC;
-	font-size: 0.8em;
-}
-
-#twist-manager-repolist ul li .package-logo{
-	vertical-align: top;
-	text-align: left;
-	display: inline-block;
-	width:30%;
-}
-
-#twist-manager-repolist ul li .package-logo img{
-	display: inline-block;
-	width:90%;
-}
-
-#twist-manager-repolist ul li .package-details{
-	vertical-align: top;
-	display: inline-block;
-	width:60%;
+#twist-manager-repolist {
+	ul {
+		li {
+			display: inline-block;
+			width:44%;
+			padding:2%;
+			height:130px;
+			margin-bottom:1%;
+			margin-right:1%;
+			border:1px solid #CCC;
+			font-size: 0.8em;
+			.package-logo{
+				vertical-align: top;
+				text-align: left;
+				display: inline-block;
+				width:30%;
+				img{
+					display: inline-block;
+					width:90%;
+				}
+			}
+			.package-details{
+				vertical-align: top;
+				display: inline-block;
+				width:60%;
+			}
+		}
+	}
 }
 
 #progress-percentage-wrapper {
@@ -177,11 +260,11 @@ table select {
 	display: none;
 
 	text-align: right;
-}
 
-	#complete-actions .button {
+	.button {
 		margin: 10px 10px 0 0;
 	}
+}
 
 #init-update {
 	width: 0;
