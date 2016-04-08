@@ -77,7 +77,7 @@ class Validate extends Base{
 	 * @return mixed The returned data will either be the validated domain or false
 	 */
 	public function domain($strDomain){
-		return $this->regx($strDomain,"/^(locahost|([a-z\d]([a-z\d\-\_]+[a-z\d])*\.)*([a-z\d]([a-z\d\-\_]+[a-z\d])*)(\.[a-z]+)+)$/i");
+		return $this->regx($strDomain,"/^(localhost|([a-z\d]([a-z\d\-\_]*[a-z\d]+|)[\.]?)+(\.[a-z]+)+)$/i");
 	}
 
 	/**
