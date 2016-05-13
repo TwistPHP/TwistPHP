@@ -164,8 +164,8 @@ class Route extends Base{
 	public function packageURI($strPackage = null){
 
 		if(!is_null($strPackage)){
-            $strPath = sprintf('%s/%s',rtrim(TWIST_PACKAGES,'/'),ltrim($strPackage,'/'));
-            $this->strPackageURI = '/'.ltrim(rtrim(str_replace(TWIST_DOCUMENT_ROOT,"",$strPath),'/'),'/');
+			$strPath = sprintf('%s/%s',rtrim(TWIST_PACKAGES,'/'),ltrim($strPackage,'/'));
+			$this->strPackageURI = '/'.ltrim(rtrim(str_replace(TWIST_DOCUMENT_ROOT,"",$strPath),'/'),'/');
 		}
 
 		return $this->strPackageURI;
@@ -280,6 +280,7 @@ class Route extends Base{
 
 		if(!array_key_exists($strURI,$this->arrRestrict)){
 			$this->arrRestrict[$strURI] = array(
+				'uri' => $strURI,
 				'wildcard' => $blWildCard,
 				'login_uri' => '/'.ltrim(rtrim($strLoginURI,'/'),'/').'/',
 				'level' => null,
@@ -1003,9 +1004,28 @@ class Route extends Base{
 					$arrMatch = $arrFoundMatched[0];
 				}else{
 
+					$arrFoundMatchedProcessed = array();
+					$intHighCount = 0;
+
+					//Pre-process the restricted results to get the best match
+					//Currently this is found by using the URI's will the most parts (These will be more accurate)
+					foreach($arrFoundMatched as $intKey => $arrEachMatch){
+
+						$strProcessedURI = str_replace(array('/%','%'),'',$arrEachMatch['uri']);
+						$intCount = count(explode('/',$strProcessedURI));
+
+						if($intCount > $intHighCount) {
+							$intHighCount = $intCount;
+							$arrFoundMatchedProcessed = array();
+							$arrFoundMatchedProcessed[] = $arrEachMatch;
+						}elseif($intCount == $intHighCount){
+							$arrFoundMatchedProcessed[] = $arrEachMatch;
+						}
+					}
+
 					//Process Multi-Matches, find the highest level from the found matches, user must match or exceed this level (0 is God)
 					$intHighestLevel = 0;
-					foreach($arrFoundMatched as $arrEachMatch){
+					foreach($arrFoundMatchedProcessed as $arrEachMatch){
 						if($arrEachMatch['level'] == 0 || $arrEachMatch['level'] > $intHighestLevel){
 							$intHighestLevel = $arrEachMatch['level'];
 							$arrMatch = $arrEachMatch;
@@ -1260,7 +1280,7 @@ class Route extends Base{
 		$arrRoute = $this->current();
 
 		if(count($arrRoute)){
-						
+
 			$arrRoute['request_method'] = strtoupper($_SERVER['REQUEST_METHOD']);
 
 			//First of all check for a package interface and do that
