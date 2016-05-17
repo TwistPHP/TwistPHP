@@ -331,7 +331,7 @@
 		 * Get a Route URI var from the route vars, passing in null will return the whole array of route vars.
 		 *
 		 * @param null $strVarKey
-		 * @return array|null
+		 * @return string|array|null
 		 */
         protected function _var($strVarKey = null){
 
