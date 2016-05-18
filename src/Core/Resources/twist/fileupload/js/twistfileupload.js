@@ -18,10 +18,6 @@
  * @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
  * @license    https://www.gnu.org/licenses/gpl.html GPL License
  * @link       https://twistphp.com
- * 
- * --------------
- * TwistPHP File Upload
- * --------------
  */
 
 (
@@ -40,6 +36,35 @@
 	)(
 		this,
 		function() {
+			/**
+			 * The file uploader for TwistPHP
+			 * @param {string} strInputID The ID of the input element
+			 * @param {string} strUri The URI to post files to
+			 * @param {Object} objSettings Settings
+			 * @param {boolean} [objSettings.abortable=true] If true, allow the uploads to be aborted
+			 * @param {boolean} [objSettings.counter=true] If true, show a counter for the files
+			 * @param {boolean} [objSettings.debug=false] If true, show console output
+			 * @param {string} [objSettings.dragdrop=null] The ID of the element which can act as a drop area
+			 * @param {string} [objSettings.dropableclass='twistupload-dropable'] The class to add to the drop area when items can be dropped on it
+			 * @param {string} [objSettings.hoverclass='twistupload-hover'] The class to add to the drop area when items are dragged over it
+			 * @param {string} [objSettings.invalidtypemessage='This file type is not permitted'] The error message to show when an invalid file type is selected
+			 * @param {function} [objSettings.onabort=function() {}] A function to execute when the upload is aborted
+			 * @param {function} [objSettings.onclear=function() {}] A function to execute when the queue is cleared
+			 * @param {function} [objSettings.oncompletefile=function() {}] A function to execute when a file is finished uploading
+			 * @param {function} [objSettings.oncompletequeue=function() {}] A function to execute when the queue is finished uploading
+			 * @param {function} [objSettings.onerror=function() {}] A function to execute when an error occurs
+			 * @param {function} [objSettings.oninvalidtype=function() {}] A function to execute when an invalid type is selected
+			 * @param {function} [objSettings.onprogress=function() {}] A function to execute as the queue is uploading
+			 * @param {function} [objSettings.onstart=function() {}] A function to execute when the upload starts
+			 * @param {number} [objSettings.previewsize=128] The size of the thumbnail to display
+			 * @param {boolean} [objSettings.previewsquare=true] If true, use square thumbnails
+			 * @returns {boolean|null}
+			 * @alias twistfileupload
+			 * @constructor
+			 * @author Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
+			 * @version 1.0.0
+			 * @license GPL-3.0
+			 */
 			var TwistUploader = function( strInputID, strUri, objSettings ) {
 				var debug = true,
 						log = function( mxdData, strType, blOverride ) {
@@ -95,10 +120,28 @@
 
 				var thisUploader = this;
 
-				thisUploader.acceptExtentions = [];
-				thisUploader.acceptRaw = [];
-				thisUploader.acceptTypes = [];
-				thisUploader.addRemoveFileListener = function() {
+				/**
+				 * An array of allowed file extensions
+				 * @type {string[]}
+				 */
+				this.acceptExtentions = [];
+
+				/**
+				 * An array of all the raw allowed types and extensions
+				 * @type {string[]}
+				 */
+				this.acceptRaw = [];
+
+				/**
+				 * An array of allowed file types
+				 * @type {string[]}
+				 */
+				this.acceptTypes = [];
+
+				/**
+				 * Add a listener to the remove file button
+				 */
+				this.addRemoveFileListener = function() {
 					var funRemoveFile = function( intUploadedFileIndex ) {
 								return function() {
 									console.log( 'Remove' );
@@ -113,11 +156,25 @@
 						domRemoveButton.addEventListener( 'click', ( funRemoveFile )( intUploadedFile ) );
 					}
 				};
-				thisUploader.created = ( new Date() ).getTime();
-				thisUploader.cancelUpload = function() {
+
+				/**
+				 * The time that the class was initiated
+				 * @type {number}
+				 * @deprecated
+				 */
+				this.created = ( new Date() ).getTime();
+
+				/**
+				 * Cancel the current upload
+				 */
+				this.cancelUpload = function() {
 					thisUploader.request.abort();
 				};
-				thisUploader.clearInput = function() {
+
+				/**
+				 * Clear the file input
+				 */
+				this.clearInput = function() {
 					thisUploader.domInput.value = '';
 
 					if( thisUploader.domInput.value ) {
@@ -128,19 +185,83 @@
 					thisUploader.domPseudo.value = '';
 					thisUploader.settings.onclear();
 				};
-				thisUploader.domCancelUpload = document.getElementById( strInputID + '-cancel' );
-				thisUploader.domCancelUploadDisplay = null;
-				thisUploader.domCount = document.getElementById( strInputID + '-count' );
-				thisUploader.domCountWrapper = document.getElementById( strInputID + '-count-wrapper' );
-				thisUploader.domCountWrapperDisplay = null;
-				thisUploader.domCountTotal = document.getElementById( strInputID + '-total' );
-				thisUploader.domInput = document.getElementById( strInputID );
-				thisUploader.domInputDisplay = null;
-				thisUploader.domList = document.getElementById( strInputID + '-list' );
-				thisUploader.domProgress = document.getElementById( strInputID + '-progress' );
-				thisUploader.domProgressWrapper = document.getElementById( strInputID + '-progress-wrapper' );
-				thisUploader.domPseudo = document.getElementById( strInputID + '-pseudo' );
-				thisUploader.hideProgress = function() {
+
+				/**
+				 * The cancel upload button
+				 * @type {Element}
+				 */
+				this.domCancelUpload = document.getElementById( strInputID + '-cancel' );
+
+				/**
+				 * The display property of the cancel upload button
+				 * @type {string|null}
+				 */
+				this.domCancelUploadDisplay = null;
+
+				/**
+				 * The upload count element
+				 * @type {Element}
+				 */
+				this.domCount = document.getElementById( strInputID + '-count' );
+
+				/**
+				 * The upload count wrapper element
+				 * @type {Element}
+				 */
+				this.domCountWrapper = document.getElementById( strInputID + '-count-wrapper' );
+
+				/**
+				 * The display property of the upload count element
+				 * @type {null}
+				 */
+				this.domCountWrapperDisplay = null;
+
+				/**
+				 * The total file count element
+				 * @type {Element}
+				 */
+				this.domCountTotal = document.getElementById( strInputID + '-total' );
+
+				/**
+				 * The file input element
+				 * @type {Element}
+				 */
+				this.domInput = document.getElementById( strInputID );
+
+				/**
+				 * The display property of the file input element
+				 * @type {null}
+				 */
+				this.domInputDisplay = null;
+
+				/**
+				 * The list of uploaded files element
+				 * @type {Element}
+				 */
+				this.domList = document.getElementById( strInputID + '-list' );
+
+				/**
+				 * The upload progress element
+				 * @type {Element}
+				 */
+				this.domProgress = document.getElementById( strInputID + '-progress' );
+
+				/**
+				 * The upload progress wrapper element
+				 * @type {Element}
+				 */
+				this.domProgressWrapper = document.getElementById( strInputID + '-progress-wrapper' );
+
+				/**
+				 * The pseudo element containing the CSV values that will be posted
+				 * @type {Element}
+				 */
+				this.domPseudo = document.getElementById( strInputID + '-pseudo' );
+
+				/**
+				 * Hide the upload progress bar
+				 */
+				this.hideProgress = function() {
 					if( thisUploader.domInput ) {
 						thisUploader.domInput.style.display = thisUploader.domInputDisplay;
 					}
@@ -153,18 +274,63 @@
 						thisUploader.domCancelUpload.removeEventListener( 'click', thisUploader.cancelUpload );
 					}
 				};
-				thisUploader.multiple = ( thisUploader.domInput && thisUploader.domInput.hasAttribute( 'multiple' ) );
-				thisUploader.queue = [];
-				thisUploader.queueCount = 0;
-				thisUploader.queueSize = 0;
-				thisUploader.queueUploadedCount = 0;
-				thisUploader.queueUploadedSize = 0;
-				thisUploader.removeFileFromListFunction = function( intFileIndex ) {
+
+				/**
+				 * True if the file input field has a 'multiple' attribute
+				 * @type {boolean}
+				 */
+				this.multiple = ( thisUploader.domInput && thisUploader.domInput.hasAttribute( 'multiple' ) ) || false;
+
+				/**
+				 * The queue of files still to be uploaded
+				 * @type {Array}
+				 */
+				this.queue = [];
+
+				/**
+				 * The number of files still in the queue
+				 * @type {number}
+				 */
+				this.queueCount = 0;
+
+				/**
+				 * The size (in bytes) of the files still in the queue
+				 * @type {number}
+				 */
+				this.queueSize = 0;
+
+				/**
+				 * The number of files uploaded
+				 * @type {number}
+				 */
+				this.queueUploadedCount = 0;
+
+				/**
+				 * The size (in bytes) of the files uploaded
+				 * @type {number}
+				 */
+				this.queueUploadedSize = 0;
+
+				/**
+				 * Remove an uploaded file from the list
+				 * @param intFileIndex
+				 */
+				this.removeFileFromListFunction = function( intFileIndex ) {
 					thisUploader.uploaded.splice( intFileIndex, 1 );
 					thisUploader.updateUploadedList();
 				};
-				thisUploader.request = new XMLHttpRequest();
-				thisUploader.settings = {
+
+				/**
+				 * The XML HTTP request object
+				 * @type {XMLHttpRequest}
+				 */
+				this.request = new XMLHttpRequest();
+
+				/**
+				 * The default settings object
+				 * @type {{abortable: boolean, counter: boolean, debug: boolean, dragdrop: null, dropableclass: string, hoverclass: string, invalidtypemessage: string, onabort: twistfileupload.settings.onabort, onclear: twistfileupload.settings.onclear, oncompletefile: twistfileupload.settings.oncompletefile, oncompletequeue: twistfileupload.settings.oncompletequeue, onerror: twistfileupload.settings.onerror, oninvalidtype: twistfileupload.settings.oninvalidtype, onprogress: twistfileupload.settings.onprogress, onstart: twistfileupload.settings.onstart, previewsize: number, previewsquare: boolean}}
+				 */
+				this.settings = {
 					abortable: true,
 					counter: true,
 					debug: false,
@@ -183,7 +349,11 @@
 					previewsize: 128,
 					previewsquare: true
 				};
-				thisUploader.showProgress = function() {
+
+				/**
+				 * Show the progress upload bar
+				 */
+				this.showProgress = function() {
 					thisUploader.domInput.style.display = 'none';
 
 					if( thisUploader.domProgressWrapper ) {
@@ -194,9 +364,23 @@
 						thisUploader.domCancelUpload.addEventListener( 'click', thisUploader.cancelUpload );
 					}
 				};
-				thisUploader.supported = false;
-				thisUploader.uid = strInputID;
-				thisUploader.updateUploadedList = function() {
+
+				/**
+				 * @deprecated
+				 * @type {boolean}
+				 */
+				this.supported = false;
+
+				/**
+				 * The UID of the uploader
+				 * @type {string}
+				 */
+				this.uid = strInputID;
+
+				/**
+				 * Update the list of uploaded files
+				 */
+				this.updateUploadedList = function() {
 					var strListHTML = '',
 							arrUploadedFormValues = [];
 
@@ -247,7 +431,13 @@
 
 					thisUploader.addRemoveFileListener();
 				};
-				thisUploader.upload = function( e, arrFiles ) {
+
+				/**
+				 * Do the upload with the selected files
+				 * @param e The upload event
+				 * @param arrFiles The files selected
+				 */
+				this.upload = function( e, arrFiles ) {
 					try {
 						if( e ) {
 							var resFiles = ( !arrFiles ? ( e.target || e.srcElement ).files : arrFiles );
@@ -513,8 +703,18 @@
 						log( err, 'error' );
 					}
 				};
-				thisUploader.uploaded = [];
-				thisUploader.uri = '/' + strUri.replace( /^\//, '' ).replace( /\/$/, '' );
+
+				/**
+				 * An array of uploaded files
+				 * @type {Object[]}
+				 */
+				this.uploaded = [];
+
+				/**
+				 * The URI to upload files to
+				 * @type {string}
+				 */
+				this.uri = '/' + strUri.replace( /^\//, '' ).replace( /\/$/, '' );
 
 				for( var strSetting in objSettings ) {
 					thisUploader.settings[strSetting] = objSettings[strSetting];
@@ -604,6 +804,8 @@
 
 					return null;
 				}
+
+				return true;
 			};
 
 			return function( strInputID, strUri, objSettings ) {

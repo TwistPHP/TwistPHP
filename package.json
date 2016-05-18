@@ -28,6 +28,8 @@
     "jshint": "^2.9.1"
   },
   "devDependencies": {
-    "gulp-watch": "^4.3.5"
+    "gulp-jsdoc3": "^0.2.1",
+    "gulp-watch": "^4.3.5",
+    "jsdoc": "^3.4.0"
   }
 }

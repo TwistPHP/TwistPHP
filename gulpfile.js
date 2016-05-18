@@ -5,6 +5,7 @@ var gulp = require( 'gulp' ),
 		uglify = require( 'gulp-uglify' ),
 		rename = require( 'gulp-rename' ),
 		using = require( 'gulp-using' ),
+		jsdoc = require( 'gulp-jsdoc3' ),
 		sourcemaps = require( 'gulp-sourcemaps' ),
 		strTwistSource = './src/Core/Resources/twist/',
 		strTwistDestination = './dist/twist/Core/Resources/twist/';
@@ -183,6 +184,19 @@ gulp.task( 'setup-test',
 	}
 );
 
+gulp.task( 'docs',
+	function() {
+		return gulp.src( strTwistSource + '**/*.js' )
+				.pipe( jsdoc( { opts: { destination: './docs/resources/' } } ) );
+	}
+);
+
+gulp.task( 'watch-docs',
+	function() {
+		return gulp.watch( strTwistSource + '**/*.js', ['docs'] );
+	}
+);
+
 gulp.task( 'ajax', ['ajax-js', 'ajax-css'] );
 gulp.task( 'debug', ['debug-js', 'debug-css'] );
 gulp.task( 'fileupload', ['fileupload-js', 'fileupload-css'] );
@@ -227,6 +241,6 @@ gulp.task( 'watch-setup',
 
 gulp.task( 'test', ['ajax-test', 'debug-test', 'fileupload-test', 'manager-test', 'setup-test'] );
 
-gulp.task( 'watch', ['default', 'watch-ajax', 'watch-cssreset', 'watch-debug', 'watch-fileupload', 'watch-manager', 'watch-setup'] );
+gulp.task( 'watch', ['default', 'watch-ajax', 'watch-cssreset', 'watch-debug', 'watch-fileupload', 'watch-manager', 'watch-setup', 'watch-docs'] );
 
 gulp.task( 'default', ['ajax', 'cssreset', 'debug', 'fileupload', 'manager', 'setup'] );

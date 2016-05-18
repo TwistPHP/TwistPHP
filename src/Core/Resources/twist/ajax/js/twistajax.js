@@ -18,10 +18,6 @@
  * @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
  * @license    https://www.gnu.org/licenses/gpl.html GPL License
  * @link       https://twistphp.com
- * 
- * --------------
- * TwistPHP AJAX
- * --------------
  */
 
 (
@@ -47,6 +43,31 @@
 		function( jQuery ) {
 			try {
 				if( jQuery ) {
+					/**
+					 * Create a new instance of the TwistAJAX object
+					 * @param strAJAXPostLocation
+					 * @param {?(function|Object|number|string)} b B
+					 * @param {?function} b Master callback success function
+					 * @param {?Object} b Default data
+					 * @param {?number} b Default timeout
+					 * @param {?string} b Loader size
+					 * @param {?function} c Master callback failure function
+					 * @param {?Object} c Default data
+					 * @param {?number} c Default timeout
+					 * @param {?string} c Loader size
+					 * @param {?Object} d Default data
+					 * @param {?number} d Default timeout
+					 * @param {?string} d Loader size
+					 * @param {?number} e Default timeout
+					 * @param {?string} e Loader size
+					 * @param {?string} f Loader size
+					 * @returns {boolean}
+					 * @alias twistajax
+					 * @constructor
+					 * @author Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
+					 * @version 1.0.0
+					 * @license GPL-3.0
+					 */
 					var TwistAJAX = function( strAJAXPostLocation, b, c, d, e, f ) {
 						var thisTwistAJAX = this,
 								debugMode = false,
@@ -428,7 +449,7 @@
 								} else if( typeof d === 'string' ) {
 									strLoaderSize = d;
 								}
-							} else if( c === 'object' ) {
+							} else if( typeof c === 'object' ) {
 								objDefaultData = c;
 								if( typeof d === 'number' ) {
 									intMasterTimeout = d;
@@ -438,7 +459,7 @@
 								} else if( typeof d === 'string' ) {
 									strLoaderSize = d;
 								}
-							} else if( c === 'number' ) {
+							} else if( typeof c === 'number' ) {
 								intMasterTimeout = c;
 								if( typeof d === 'string' ) {
 									strLoaderSize = d;
@@ -466,21 +487,42 @@
 						}
 
 						$.ajaxSetup(
-								{
-									url: strAJAXPostLocation,
-									timeout: intMasterTimeout
-								}
+							{
+								url: strAJAXPostLocation,
+								timeout: intMasterTimeout
+							}
 						);
 
+						/**
+						 * Number of active AJAX requests
+						 * @type {number}
+						 */
 						this.count = 0;
 
+						/**
+						 *
+						 * @param blEnable
+						 */
 						this.debug = function( blEnable ) {
 							debugMode = ( blEnable !== false );
 							return thisTwistAJAX;
 						};
 
+						/**
+						 *
+						 * @type {{}}
+						 */
 						this.defaultArray = objDefaultData;
 
+						/**
+						 *
+						 * @param strFunction
+						 * @param b
+						 * @param c
+						 * @param d
+						 * @param e
+						 * @returns {TwistAJAX.twistajax}
+						 */
 						this.delete = function( strFunction, b, c, d, e ) {
 							if( strFunction ) {
 								send( strFunction, 'DELETE', blCache, b, c, d, e );
@@ -488,26 +530,51 @@
 							return thisTwistAJAX;
 						};
 
+						/**
+						 *
+						 * @returns {TwistAJAX.twistajax}
+						 */
 						this.disableCache = function() {
 							blCache = false;
 							return thisTwistAJAX;
 						};
 
+						/**
+						 *
+						 * @returns {TwistAJAX.twistajax}
+						 */
 						this.disableLoader = function() {
 							blShowLoader = false;
 							return thisTwistAJAX;
 						};
 
+						/**
+						 *
+						 * @returns {TwistAJAX.twistajax}
+						 */
 						this.enableCache = function() {
 							blCache = true;
 							return thisTwistAJAX;
 						};
 
+						/**
+						 *
+						 * @returns {TwistAJAX.twistajax}
+						 */
 						this.enableLoader = function() {
 							blShowLoader = true;
 							return thisTwistAJAX;
 						};
 
+						/**
+						 *
+						 * @param strFunction
+						 * @param b
+						 * @param c
+						 * @param d
+						 * @param e
+						 * @returns {TwistAJAX.twistajax}
+						 */
 						this.get = function( strFunction, b, c, d, e ) {
 							if( strFunction ) {
 								send( strFunction, 'GET', blCache, b, c, d, e );
@@ -515,6 +582,11 @@
 							return thisTwistAJAX;
 						};
 
+						/**
+						 *
+						 * @param strSize
+						 * @returns {TwistAJAX.twistajax}
+						 */
 						this.loaderSize = function( strSize ) {
 							if( $( '#twist-ajax-loader' ).length ) {
 								$( '#twist-ajax-loader' ).attr( 'class', '' ).addClass( strSize );
@@ -525,6 +597,11 @@
 							return thisTwistAJAX;
 						};
 
+						/**
+						 *
+						 * @param strMessage
+						 * @returns {TwistAJAX.twistajax}
+						 */
 						this.onfail = function( strMessage ) {
 							var strErrorMessage = ( typeof strMessage === 'string' && strMessage !== '' ) ? strMessage : 'An unexpected AJAX response was given';
 							error( strErrorMessage );
@@ -532,11 +609,29 @@
 							return thisTwistAJAX;
 						};
 
+						/**
+						 *
+						 * @param strFunction
+						 * @param b
+						 * @param c
+						 * @param d
+						 * @param e
+						 * @returns {TwistAJAX.twistajax}
+						 */
 						this.patch = function( strFunction, b, c, d, e ) {
 							send( strFunction, 'PATCH', blCache, b, c, d, e );
 							return thisTwistAJAX;
 						};
 
+						/**
+						 *
+						 * @param strFunction
+						 * @param b
+						 * @param c
+						 * @param d
+						 * @param e
+						 * @returns {TwistAJAX.twistajax}
+						 */
 						this.post = function( strFunction, b, c, d, e ) {
 							if( strFunction ) {
 								send( strFunction, 'POST', blCache, b, c, d, e );
@@ -544,6 +639,15 @@
 							return thisTwistAJAX;
 						};
 
+						/**
+						 *
+						 * @param strFunction
+						 * @param b
+						 * @param c
+						 * @param d
+						 * @param e
+						 * @returns {TwistAJAX.twistajax}
+						 */
 						this.put = function( strFunction, b, c, d, e ) {
 							if( strFunction ) {
 								send( strFunction, 'PUT', blCache, b, c, d, e );
