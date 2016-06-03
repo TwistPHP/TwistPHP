@@ -377,6 +377,7 @@ class User{
 			$strVerificationLink = sprintf('http://%s/%s?verify=%s',$strSiteHost,ltrim($strLoginURL,'/'),$strVerificationString);
 			$arrTags['verification_link'] = $strVerificationLink;
 			$arrTags['verification_code'] = $strVerificationCode;
+			$arrTags['verification_string'] = $strVerificationString;
 
 			$arrTags['verification'] = sprintf('<p><strong>Your account must be verified before you can login.</strong><br />To verify your account, <a href="%s">click here</a>.</p><p>If you have a problem with this link, please copy and paste the below link into your browser and proceed to login:<br /><a href="%s">%s</a></p>',
 				$strVerificationLink,
@@ -434,6 +435,7 @@ class User{
 			$arrTags['site_name'] = $strSiteName;
 			$arrTags['verification_link'] = $strVerificationLink;
 			$arrTags['verification_code'] = $strVerificationCode;
+			$arrTags['verification_string'] = $strVerificationString;
 
 			$strHTML = \Twist::View()->build(sprintf('%suser/account-verification-email.tpl',TWIST_FRAMEWORK_VIEWS),$arrTags);
 
