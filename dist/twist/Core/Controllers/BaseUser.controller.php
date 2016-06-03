@@ -272,6 +272,9 @@ class BaseUser extends Base{
                 $resUser = $this->resUser->get($arrUserData['id']);
                 $resUser->requireVerification();
                 $resUser->commit();
+
+	            \Twist::Session()->data('site-login_error_message',null);
+	            \Twist::Session()->data('site-login_message','A new verification code has been emailed to you');
             }
         }
 
