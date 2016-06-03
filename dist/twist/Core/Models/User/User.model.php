@@ -159,6 +159,7 @@ class User{
 		}
 
 		if($mxdOut){
+
 			$this->arrOriginalData = $this->resDatabaseRecord->values();
 
 			if($this->blNewAccount){
@@ -365,11 +366,17 @@ class User{
 
 		if(\Twist::framework()->setting('USER_EMAIL_VERIFICATION')){
 
-			$strVerificationCode = $this->requireVerification();
-			$strVerificationString = $this->base64url_encode(sprintf("%s|%s",$this->arrOriginalData['email'],$strVerificationCode));
+			if($this->resDatabaseRecord->get('verification_code') == ''){
+				$strVerificationCode = $this->requireVerification();
+				$this->resDatabaseRecord->commit();
+			}else{
+				$strVerificationCode = $this->resDatabaseRecord->get('verification_code');
+			}
 
+			$strVerificationString = $this->base64url_encode(sprintf("%s|%s",$this->arrOriginalData['email'],$strVerificationCode));
 			$strVerificationLink = sprintf('http://%s/%s?verify=%s',$strSiteHost,ltrim($strLoginURL,'/'),$strVerificationString);
 			$arrTags['verification_link'] = $strVerificationLink;
+			$arrTags['verification_code'] = $strVerificationCode;
 
 			$arrTags['verification'] = sprintf('<p><strong>Your account must be verified before you can login.</strong><br />To verify your account, <a href="%s">click here</a>.</p><p>If you have a problem with this link, please copy and paste the below link into your browser and proceed to login:<br /><a href="%s">%s</a></p>',
 				$strVerificationLink,
@@ -398,7 +405,13 @@ class User{
 			$strSiteName = \Twist::framework()->setting('SITE_NAME');
 			$strSiteHost = \Twist::framework()->setting('SITE_HOST');
 
-			$strVerificationCode = $this->requireVerification();
+			if($this->resDatabaseRecord->get('verification_code') == ''){
+				$strVerificationCode = $this->requireVerification();
+				$this->resDatabaseRecord->commit();
+			}else{
+				$strVerificationCode = $this->resDatabaseRecord->get('verification_code');
+			}
+
 			$strVerificationString = $this->base64url_encode(sprintf("%s|%s",$this->arrOriginalData['email'],$strVerificationCode));
 			$strVerificationLink = sprintf('http://%s/%s?verify=%s',$strSiteHost,ltrim($strLoginURL,'/'),$strVerificationString);
 
@@ -420,6 +433,7 @@ class User{
 			$arrTags['host'] = $strSiteHost;
 			$arrTags['site_name'] = $strSiteName;
 			$arrTags['verification_link'] = $strVerificationLink;
+			$arrTags['verification_code'] = $strVerificationCode;
 
 			$strHTML = \Twist::View()->build(sprintf('%suser/account-verification-email.tpl',TWIST_FRAMEWORK_VIEWS),$arrTags);
 
