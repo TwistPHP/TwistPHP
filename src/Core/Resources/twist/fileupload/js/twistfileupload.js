@@ -405,7 +405,7 @@
 
 						for( var intFileDetail in arrFileDetails ) {
 							var strFileDetail = arrFileDetails[intFileDetail],
-									strProperty = objUploadedFile[strFileDetail];
+									strProperty;
 
 							if( strFileDetail.indexOf( '/' ) !== -1 ) {
 								var arrDelve = strFileDetail.split( '/' ),
@@ -418,6 +418,8 @@
 								}
 
 								strProperty = objToDelve;
+							} else {
+								strProperty = objUploadedFile[strFileDetail] || null;
 							}
 
 							strFileDetails += '<li data-key="' + strFileDetail + '"><span>' + strFileDetail.replace( /[\/_]/g, ' ' ) + ' :</span>' + strProperty + '</li>';
