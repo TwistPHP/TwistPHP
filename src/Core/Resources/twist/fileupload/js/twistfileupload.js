@@ -413,11 +413,13 @@
 
 								arrDelve.shift();
 
-								for( var intKeyPart in arrDelve ) {
-									objToDelve = objToDelve[arrDelve[intKeyPart]];
-								}
+								if( objToDelve ) {
+									for( var intKeyPart in arrDelve ) {
+										objToDelve = objToDelve[arrDelve[intKeyPart]] || null;
+									}
 
-								strProperty = objToDelve;
+									strProperty = objToDelve || null;
+								}
 							} else {
 								strProperty = objUploadedFile[strFileDetail] || null;
 							}
