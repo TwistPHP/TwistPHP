@@ -409,7 +409,7 @@
 
 							if( strFileDetail.indexOf( '/' ) !== -1 ) {
 								var arrDelve = strFileDetail.split( '/' ),
-										objToDelve = objUploadedFile[arrDelve[0]];
+										objToDelve = objUploadedFile[arrDelve[0]] || null;
 
 								arrDelve.shift();
 
