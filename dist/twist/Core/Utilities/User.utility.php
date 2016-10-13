@@ -63,7 +63,7 @@ class User extends Base{
      * @return array|mixed
      */
     public function loggedInData($strKey = null){
-        return $this->current()->get($strKey);
+        return (is_object($this->current())) ? $this->current()->get($strKey) : null;
     }
 
     /**
