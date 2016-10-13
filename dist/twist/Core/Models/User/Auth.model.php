@@ -137,7 +137,7 @@ class Auth{
         //If the user is still not valid then check email and password
         if(!is_null($strEmail) && !is_null($strPassword)){
 
-	        $arrUserData = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->get($strEmail,'email',true);
+            $arrUserData = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->get($strEmail,'email',true);
 
             if(count($arrUserData)){
                 if($arrUserData['password'] == sha1($strPassword)){
@@ -161,6 +161,9 @@ class Auth{
                                 self::$arrCurrentSession['diagnosis'] = 'The account is running on a temporary password and needs to be reset';
                             }
                         }else{
+                            \Twist::Session()->data('user-email',$strEmail);
+                            self::$arrCurrentSession['user_data'] = array('email' => $strEmail);
+
                             self::$arrCurrentSession['issue'] = 'verify';
                             self::$arrCurrentSession['message'] = 'You have not verified your email address';
                             self::$arrCurrentSession['diagnosis'] = 'The account has not been verified';

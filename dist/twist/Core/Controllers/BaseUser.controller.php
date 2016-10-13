@@ -36,7 +36,7 @@ class BaseUser extends Base{
 	 * @var \Twist\Core\Utilities\User
 	 */
     protected $resUser = null;
-	
+
     protected $strEntryPageURI = null;
 
     public function _baseCalls(){
@@ -71,6 +71,11 @@ class BaseUser extends Base{
         if(array_key_exists('logout',$_GET)){
             $this->logout();
         }
+
+	    if(array_key_exists('verify',$_GET) && array_key_exists('verify',$_GET) && $_GET['verify'] != ''){
+		    $this->resUser->verifyEmail($_GET['verify']);
+		    \Twist::redirect('./login');
+	    }
 
 	    \Twist::Cookie()->set('twistphp-cookie-test','login-cookie-test',time()+3600);
 
@@ -267,11 +272,10 @@ class BaseUser extends Base{
                 $resUser = $this->resUser->get($arrUserData['id']);
                 $resUser->requireVerification();
                 $resUser->commit();
-            }
-        }
 
-        if(array_key_exists('verify',$_GET) && array_key_exists('verify',$_GET) && $_GET['verify'] != ''){
-            $this->resUser->verifyEmail($_GET['verify']);
+	            \Twist::Session()->data('site-login_error_message',null);
+	            \Twist::Session()->data('site-login_message','A new verification code has been emailed to you');
+            }
         }
 
 	    \Twist::redirect('./login');
