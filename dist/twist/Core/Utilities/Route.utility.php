@@ -1,24 +1,25 @@
 <?php
+
 /**
- * This file is part of TwistPHP.
+ * TwistPHP - An open source PHP MVC framework built from the ground up.
+ * Copyright (C) 2016  Shadow Technologies Ltd.
  *
- * TwistPHP is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * TwistPHP is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with TwistPHP.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
- * @license    https://www.gnu.org/licenses/gpl.html LGPL License
+ * @license    https://www.gnu.org/licenses/gpl.html GPL License
  * @link       https://twistphp.com
- *
  */
 
 namespace Twist\Core\Utilities;
@@ -163,8 +164,8 @@ class Route extends Base{
 	public function packageURI($strPackage = null){
 
 		if(!is_null($strPackage)){
-            $strPath = sprintf('%s/%s',rtrim(TWIST_PACKAGES,'/'),ltrim($strPackage,'/'));
-            $this->strPackageURI = '/'.ltrim(rtrim(str_replace(TWIST_DOCUMENT_ROOT,"",$strPath),'/'),'/');
+			$strPath = sprintf('%s/%s',rtrim(TWIST_PACKAGES,'/'),ltrim($strPackage,'/'));
+			$this->strPackageURI = '/'.ltrim(rtrim(str_replace(TWIST_DOCUMENT_ROOT,"",$strPath),'/'),'/');
 		}
 
 		return $this->strPackageURI;
@@ -279,6 +280,7 @@ class Route extends Base{
 
 		if(!array_key_exists($strURI,$this->arrRestrict)){
 			$this->arrRestrict[$strURI] = array(
+				'uri' => $strURI,
 				'wildcard' => $blWildCard,
 				'login_uri' => '/'.ltrim(rtrim($strLoginURI,'/'),'/').'/',
 				'level' => null,
@@ -1002,9 +1004,28 @@ class Route extends Base{
 					$arrMatch = $arrFoundMatched[0];
 				}else{
 
+					$arrFoundMatchedProcessed = array();
+					$intHighCount = 0;
+
+					//Pre-process the restricted results to get the best match
+					//Currently this is found by using the URI's will the most parts (These will be more accurate)
+					foreach($arrFoundMatched as $intKey => $arrEachMatch){
+
+						$strProcessedURI = str_replace(array('/%','%'),'',$arrEachMatch['uri']);
+						$intCount = count(explode('/',$strProcessedURI));
+
+						if($intCount > $intHighCount) {
+							$intHighCount = $intCount;
+							$arrFoundMatchedProcessed = array();
+							$arrFoundMatchedProcessed[] = $arrEachMatch;
+						}elseif($intCount == $intHighCount){
+							$arrFoundMatchedProcessed[] = $arrEachMatch;
+						}
+					}
+
 					//Process Multi-Matches, find the highest level from the found matches, user must match or exceed this level (0 is God)
 					$intHighestLevel = 0;
-					foreach($arrFoundMatched as $arrEachMatch){
+					foreach($arrFoundMatchedProcessed as $arrEachMatch){
 						if($arrEachMatch['level'] == 0 || $arrEachMatch['level'] > $intHighestLevel){
 							$intHighestLevel = $arrEachMatch['level'];
 							$arrMatch = $arrEachMatch;
@@ -1030,7 +1051,9 @@ class Route extends Base{
 						'login_required' => false,
 						'allow_access' => true,
 						'login_uri' => $strFullLoginURI,
-						'status' => 'Ignored, unrestricted page'
+						'status' => 'Ignored, unrestricted page',
+						'restricted_uri' => false,
+						'restricted_level' => null
 					);
 
 				}else{
@@ -1050,6 +1073,9 @@ class Route extends Base{
 						$arrMatch['allow_access'] = false;
 						$arrMatch['status'] = 'User must be logged in to access restricted page';
 					}
+
+					$arrMatch['restricted_uri'] = true;
+					$arrMatch['restricted_level'] = $arrMatch['level'];
 				}
 
 				$arrMatch['login_uri'] = $strFullLoginURI;
@@ -1058,7 +1084,9 @@ class Route extends Base{
 					'login_required' => false,
 					'allow_access' => true,
 					'login_uri' => $strFullLoginURI,
-					'status' => 'No restriction found'
+					'status' => 'No restriction found',
+					'restricted_uri' => false,
+					'restricted_level' => null
 				);
 			}
 		}else{
@@ -1066,7 +1094,9 @@ class Route extends Base{
 				'login_required' => false,
 				'allow_access' => true,
 				'login_uri' => $strFullLoginURI,
-				'status' => 'No restriction found'
+				'status' => 'No restriction found',
+				'restricted_uri' => false,
+				'restricted_level' => null
 			);
 		}
 
@@ -1108,7 +1138,7 @@ class Route extends Base{
 	protected function resourceServer(){
 
 		if(TWIST_ABOVE_DOCUMENT_ROOT){
-			$this->folder('/twist/Core/Resources%',sprintf('%s/Core/Resources',TWIST_FRAMEWORK));
+			$this->folder('/twist/Core/Resources%',sprintf('%s/Core/Resources',rtrim(TWIST_FRAMEWORK,'/')));
 		}
 	}
 
@@ -1250,7 +1280,7 @@ class Route extends Base{
 		$arrRoute = $this->current();
 
 		if(count($arrRoute)){
-						
+
 			$arrRoute['request_method'] = strtoupper($_SERVER['REQUEST_METHOD']);
 
 			//First of all check for a package interface and do that
@@ -1264,7 +1294,7 @@ class Route extends Base{
 
 					//Check to see if the current route is allowed to bypass
 					if($this->findURI($this->arrBypassMaintenanceMode,$arrRoute['uri']) === false){
-						\Twist::respond(503,'The site is currently undergoing maintenance, please check back shortly!');
+						\Twist::respond(503,'The site is currently undergoing maintenance, please check back shortly!',$blExitOnComplete);
 					}
 				}
 
@@ -1279,7 +1309,7 @@ class Route extends Base{
 					\Twist::User()->setAfterLoginRedirect();
 					\Twist::redirect(str_replace('//', '/', $arrRestriction['login_uri']));
 				}elseif($arrRestriction['allow_access'] == false){
-					\Twist::respond(403);
+					\Twist::respond(403,null,$blExitOnComplete);
 				}else{
 
 					$this->meta()->title(\Twist::framework()->setting('SITE_NAME'));
@@ -1311,7 +1341,7 @@ class Route extends Base{
 
 					//Run through all the serve types, this has been made into a separate function
 					//So that it can be extended by other systems
-					$arrTags = $this->serveTypes($arrRoute,$arrTags);
+					$arrTags = $this->serveTypes($arrRoute,$arrTags,$blExitOnComplete);
 
 					\Twist::recordEvent('Route processed');
 
@@ -1391,11 +1421,11 @@ class Route extends Base{
 			}
 
 		} elseif ($this->bl404) {
-			\Twist::respond(404);
+			\Twist::respond(404,null,$blExitOnComplete);
 		}
 	}
 
-	protected function serveTypes($arrRoute,$arrTags){
+	protected function serveTypes($arrRoute,$arrTags,$blExitOnComplete = true){
 
 		switch($arrRoute['type']){
 			case'view':
@@ -1416,10 +1446,10 @@ class Route extends Base{
 						$strMimeType = ($arrRoute['item']['force-download']) ? null : \Twist::File()->mimeType($strFilePath);
 						\Twist::File()->serve($strFilePath, basename($strFilePath), $strMimeType, null, $arrRoute['item']['speed'], false);
 					}else{
-						\Twist::respond(403,'Unsupported file extension, PHP files are disallowed through this method');
+						\Twist::respond(403,'Unsupported file extension, PHP files are disallowed through this method',$blExitOnComplete);
 					}
 				}else{
-					\Twist::respond(404);
+					\Twist::respond(404,null,$blExitOnComplete);
 				}
 
 				break;
@@ -1428,7 +1458,7 @@ class Route extends Base{
 				break;
 			case'ajax':
 				if(!TWIST_AJAX_REQUEST){
-					\Twist::respond(403,'Unsupported HTTP protocol used to request this URI');
+					\Twist::respond(403,'Unsupported HTTP protocol used to request this URI',$blExitOnComplete);
 				}else{
 					try{
 						$arrTags['response'] = $this->processController($arrRoute);

@@ -1,4 +1,4 @@
-<div class="grid-66 tablet-grid-66 mobile-grid-100">
+<div class="grid-66 tablet-grid-100 mobile-grid-100">
 	<h2 class="no-top-padding">Dashboard</h2>
 	<dl class="inline">
         <dt>TwistPHP Version</dt><dd>{data:version}</dd>
@@ -6,7 +6,7 @@
     </dl>
 	<div class="clear"></div>
 </div>
-<div class="grid-33 tablet-grid-33 mobile-grid-100">
+<div class="grid-33 tablet-grid-100 mobile-grid-100">
 	<h3>Status</h3>
 	<p class="{data:maintenance-mode=='Off'?'success':'error'}"><small class="float-right">[<a href="{route:registered_uri}/update-setting?setting=MAINTENANCE_MODE&setting_value={data:maintenance-mode=='Off'?'1':'0'}">Turn {data:maintenance-mode=='Off'?'On':'Off'}</a>]</small><strong>Maintenance Mode:</strong> {data:maintenance-mode}</p>
 	<p class="{data:data-caching=='Off'?'warning':'success'}"><small class="float-right">[<a href="{route:registered_uri}/update-setting?setting=CACHE_ENABLED&setting_value={data:data-caching=='Off'?'1':'0'}">Turn {data:data-caching=='Off'?'On':'Off'}</a>]</small><strong>Data Caching:</strong> {data:data-caching}</p>

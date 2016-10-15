@@ -1,24 +1,25 @@
 <?php
+
 /**
- * This file is part of TwistPHP.
+ * TwistPHP - An open source PHP MVC framework built from the ground up.
+ * Copyright (C) 2016  Shadow Technologies Ltd.
  *
- * TwistPHP is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * TwistPHP is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with TwistPHP.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
- * @license    https://www.gnu.org/licenses/gpl.html LGPL License
+ * @license    https://www.gnu.org/licenses/gpl.html GPL License
  * @link       https://twistphp.com
- *
  */
 
 namespace Twist\Core\Models\User;
@@ -136,7 +137,7 @@ class Auth{
         //If the user is still not valid then check email and password
         if(!is_null($strEmail) && !is_null($strPassword)){
 
-	        $arrUserData = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->get($strEmail,'email',true);
+            $arrUserData = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->get($strEmail,'email',true);
 
             if(count($arrUserData)){
                 if($arrUserData['password'] == sha1($strPassword)){
@@ -160,6 +161,9 @@ class Auth{
                                 self::$arrCurrentSession['diagnosis'] = 'The account is running on a temporary password and needs to be reset';
                             }
                         }else{
+                            \Twist::Session()->data('user-email',$strEmail);
+                            self::$arrCurrentSession['user_data'] = array('email' => $strEmail);
+
                             self::$arrCurrentSession['issue'] = 'verify';
                             self::$arrCurrentSession['message'] = 'You have not verified your email address';
                             self::$arrCurrentSession['diagnosis'] = 'The account has not been verified';

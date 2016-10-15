@@ -1,24 +1,25 @@
 <?php
+
 	/**
-	 * This file is part of TwistPHP.
+	 * TwistPHP - An open source PHP MVC framework built from the ground up.
+	 * Copyright (C) 2016  Shadow Technologies Ltd.
 	 *
-	 * TwistPHP is free software: you can redistribute it and/or modify
+	 * This program is free software: you can redistribute it and/or modify
 	 * it under the terms of the GNU General Public License as published by
 	 * the Free Software Foundation, either version 3 of the License, or
 	 * (at your option) any later version.
 	 *
-	 * TwistPHP is distributed in the hope that it will be useful,
+	 * This program is distributed in the hope that it will be useful,
 	 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 	 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	 * GNU General Public License for more details.
 	 *
 	 * You should have received a copy of the GNU General Public License
-	 * along with TwistPHP.  If not, see <http://www.gnu.org/licenses/>.
+	 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	 *
 	 * @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
-	 * @license    https://www.gnu.org/licenses/gpl.html LGPL License
+	 * @license    https://www.gnu.org/licenses/gpl.html GPL License
 	 * @link       https://twistphp.com
-	 *
 	 */
 
 	namespace Twist\Core\Models;
@@ -418,17 +419,21 @@
 
 		/**
 		 * Generate a random string, default length is set in the framework settings
-		 *
-		 * @param $intStringLength The default value is set in "RANDOM_STRING_LENGTH" setting
-		 * @param $mxdCharset
+		 * @param null $intStringLength Default value is set in "RANDOM_STRING_LENGTH" setting
+		 * @param null $mxdCharset
+		 * @param bool $blIgnoreSimilarChars True will not use the chars "015IJLSOijlos"
 		 * @return string
 		 */
-		public function randomString( $intStringLength = null, $mxdCharset = null ) {
+		public function randomString( $intStringLength = null, $mxdCharset = null, $blIgnoreSimilarChars = true ) {
 
 			$strOut = '';
 			$intStringLength = ( !is_null( $intStringLength ) && $intStringLength > 0 ) ? $intStringLength : \Twist::framework() -> setting( 'RANDOM_STRING_LENGTH' );
 
-			$strChars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz';
+			if($blIgnoreSimilarChars){
+				$strChars = '2346789ABCDEFGHKMNPQRTUVWXYZabcdefghkmnpqrtuvwxyz';
+			}else{
+				$strChars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghiklmnopqrstuvwxyz';
+			}
 
 			if( $mxdCharset === true ) {
 				$strChars .= '!@£$%^&*()_-=+[]{};:|<>?/';

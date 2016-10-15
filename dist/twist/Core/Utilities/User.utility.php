@@ -1,24 +1,25 @@
 <?php
+
 /**
- * This file is part of TwistPHP.
+ * TwistPHP - An open source PHP MVC framework built from the ground up.
+ * Copyright (C) 2016  Shadow Technologies Ltd.
  *
- * TwistPHP is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * TwistPHP is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with TwistPHP.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
- * @license    https://www.gnu.org/licenses/gpl.html LGPL License
+ * @license    https://www.gnu.org/licenses/gpl.html GPL License
  * @link       https://twistphp.com
- *
  */
 
 namespace Twist\Core\Utilities;
@@ -62,7 +63,7 @@ class User extends Base{
      * @return array|mixed
      */
     public function loggedInData($strKey = null){
-        return $this->current()->get($strKey);
+        return (is_object($this->current())) ? $this->current()->get($strKey) : null;
     }
 
     /**
@@ -188,7 +189,7 @@ class User extends Base{
             //Just in case, remove the logout comment otherwise the redirect could log you out again
             $strUrl = str_replace(array("?logout=1","?logout"),"",$strUrl);
 
-            if($strUrl != $_SERVER['request_uri']
+            if($strUrl != $_SERVER['REQUEST_URI']
                 && !in_array(substr($strUrl, -3), array('.js'))
                 && !in_array(substr($strUrl, -4), array('.css','.jpg','.png','.gif','.ico'))){
                 $this->goToPage($strUrl);
@@ -264,7 +265,7 @@ class User extends Base{
      * @return array
      */
     public function getByEmail($strEmail){
-	    return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->get($strEmail,'email',true);
+        return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->get($strEmail,'email',true);
     }
 
     /**
@@ -274,19 +275,19 @@ class User extends Base{
      */
     public function getDetailsByID($intUserID){
 
-	    $arrUserDetails = array();
+        $arrUserDetails = array();
 
-	    $resResult = \Twist::Database()->query("SELECT `ud`.`data`,`udf`.`slug` FROM `%suser_data` AS `ud` JOIN `%suser_data_fields` AS `udf` ON `ud`.`field_id` = `udf`.`id` WHERE `ud`.`user_id` = %d",
-		    TWIST_DATABASE_TABLE_PREFIX,
-		    TWIST_DATABASE_TABLE_PREFIX,
-		    $intUserID
-	    );
+        $resResult = \Twist::Database()->query("SELECT `ud`.`data`,`udf`.`slug` FROM `%suser_data` AS `ud` JOIN `%suser_data_fields` AS `udf` ON `ud`.`field_id` = `udf`.`id` WHERE `ud`.`user_id` = %d",
+            TWIST_DATABASE_TABLE_PREFIX,
+            TWIST_DATABASE_TABLE_PREFIX,
+            $intUserID
+        );
 
-	    if($resResult->status() && $resResult->numberRows()){
-		    foreach($resResult->rows() as $arrEachItem){
-			    $arrUserDetails[$arrEachItem['slug']] = $arrEachItem['data'];
-		    }
-	    }
+        if($resResult->status() && $resResult->numberRows()){
+            foreach($resResult->rows() as $arrEachItem){
+                $arrUserDetails[$arrEachItem['slug']] = $arrEachItem['data'];
+            }
+        }
 
         return $arrUserDetails;
     }
@@ -323,7 +324,7 @@ class User extends Base{
      * @return int
      */
     public function getLevels(){
-	    return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'user_levels')->find();
+        return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'user_levels')->find();
     }
 
     public function verifyEmail($strVerificationCode){
@@ -338,7 +339,7 @@ class User extends Base{
             //Check that the email address is semi valid and code is long enough
             if(strstr($arrParts[0],'@') && strstr($arrParts[0],'.') && strlen($arrParts[1]) == 16){
 
-	            $resResult = \Twist::Database()->query("UPDATE `%s`.`%susers`
+                $resResult = \Twist::Database()->query("UPDATE `%s`.`%susers`
 												SET `verified` = '1',
 													`verification_code` = ''
 												WHERE `email` = '%s'
@@ -353,6 +354,8 @@ class User extends Base{
                 if($resResult->status() && $resResult->affectedRows()){
                     $blOut = true;
                     \Twist::Session()->data('site-login_message','Your account has been verified');
+                }else{
+                    \Twist::Session()->data('site-login_error_message','Failed to verify your account, invalid verification code');
                 }
             }
         }
@@ -491,7 +494,8 @@ class User extends Base{
             case'login_form':
 
                 if($this->loggedIn()){
-                    \Twist::redirect(($strLoginPage == $_SERVER['REQUEST_URI']) ? './' : $strLoginPage);
+                    //\Twist::redirect(($strLoginPage == $_SERVER['REQUEST_URI']) ? './' : $strLoginPage);
+                    \Twist::redirect('./');
                 }else{
 
                     $arrTags = array(
@@ -524,7 +528,7 @@ class User extends Base{
                 );
                 \Twist::Session()->data('site-error_message',null);
 
-                if(\Twist::Session()->data('user-temp_password') == '0'){
+                if(\Twist::Session()->data('user-temp_password') == '0' || is_null(\Twist::Session()->data('user-temp_password'))){
                     $strData = $this->resView->build( $this->strViewLocation.'change-password.tpl', $arrTags );
                 }else{
                     $strData = $this->resView->build( $this->strViewLocation.'change-password-initial.tpl', $arrTags );
@@ -591,14 +595,14 @@ class User extends Base{
                 break;
 
             case'level_description':
-				$intUsersLevel = $this->loggedInData('level');
+                $intUsersLevel = $this->loggedInData('level');
 
-				if($intUsersLevel == 0){
-					$strData = 'Root';
-				}else{
-					$arrLevelData = $this->getLevel($intUsersLevel);
-					$strData = $arrLevelData['description'];
-				}
+                if($intUsersLevel == 0){
+                    $strData = 'Root';
+                }else{
+                    $arrLevelData = $this->getLevel($intUsersLevel);
+                    $strData = $arrLevelData['description'];
+                }
                 break;
 
             case'email':

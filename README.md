@@ -1,6 +1,6 @@
 # [TwistPHP](https://twistphp.com/) ![TwistPHP logo](http://static.twistphp.com/logo/square/32.png)
 
-[![Master build status](https://img.shields.io/travis/TwistPHP/TwistPHP/master.svg?label=master%20build)](https://travis-ci.org/TwistPHP/TwistPHP) [![Development build status](https://img.shields.io/travis/TwistPHP/TwistPHP/development.svg?label=development%20build)](https://travis-ci.org/TwistPHP/TwistPHP) [![Join the chat at https://gitter.im/TwistPHP/TwistPHP](https://img.shields.io/gitter/room/TwistPHP/TwistPHP.svg)](https://gitter.im/TwistPHP/TwistPHP) ![Licence](https://img.shields.io/badge/Licence-GPLv3-brightgreen.svg)
+[![GitHub release](https://img.shields.io/github/release/TwistPHP/TwistPHP.svg)](https://github.com/TwistPHP/TwistPHP/releases?label=latest) [![GitHub license](https://img.shields.io/github/license/TwistPHP/TwistPHP.svg)](http://www.gnu.org/licenses/gpl-3.0.en.html) [![Development build status](https://img.shields.io/travis/TwistPHP/TwistPHP/development.svg?label=development)](https://travis-ci.org/TwistPHP/TwistPHP) [![Coveralls](https://img.shields.io/coveralls/TwistPHP/TwistPHP.svg)](https://coveralls.io/github/TwistPHP/TwistPHP) [![Join the chat at https://gitter.im/TwistPHP/TwistPHP](https://img.shields.io/gitter/room/TwistPHP/TwistPHP.svg)](https://gitter.im/TwistPHP/TwistPHP)
 
 ## A fresh, new open source PHP MVC micro framework
 
@@ -34,3 +34,9 @@ The CSS and JS resources for TwistPHP are compiled using Gulp. After cloning the
 ### Branches
 
 For branching, please use the 'development' branch. All updates apart from hotfixes will get pushed from the [development branch](https://github.com/TwistPHP/TwistPHP/tree/development) to the master.
+
+## Licence
+
+As of v3.0.4, TwistPHP is licenced with [GNU GPLv3](http://www.gnu.org/licenses/gpl-3.0.en.html).
+
+Up to and including v3.0.3, the [GNU LGPLv3](http://www.gnu.org/licenses/lgpl-3.0.en.html) was used.

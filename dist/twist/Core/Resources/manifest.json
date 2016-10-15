@@ -64,7 +64,7 @@
 		}
 	},
 	"rummage": {
-		"2.9.0": {
+		"2.10.0": {
 			"default": true,
 			"css": [],
 			"js": ["rummage.min.js"]
@@ -73,67 +73,67 @@
 	"twist/ajax": {
 		"all": {
 			"default": true,
-			"css": ["css/twist-ajax.min.css"],
-			"js": ["js/twist-ajax.min.js"]
+			"css": ["css/twistajax.min.css"],
+			"js": ["js/twistajax.min.js"]
 		},
 		"css": {
 			"default": false,
-			"css": ["css/twist-ajax.min.css"],
+			"css": ["css/twistajax.min.css"],
 			"js": []
 		},
 		"js": {
 			"default": false,
 			"css": [],
-			"js": ["js/twist-ajax.min.js"]
+			"js": ["js/twistajax.min.js"]
 		}
 	},
-	"twist/css-reset": {
+	"twist/cssreset": {
 		"standard": {
 			"default": true,
-			"css": ["css/twist-cssreset.min.css"],
+			"css": ["css/twistcssreset.min.css"],
 			"js": []
 		}
 	},
 	"twist/debug": {
 		"standard": {
 			"default": true,
-			"css": ["css/twist-debug.min.css"],
-			"js": ["js/twist-debug.min.js"]
+			"css": ["css/twistdebug.min.css"],
+			"js": ["js/twistdebug.min.js"]
 		},
 		"css": {
 			"default": false,
-			"css": ["css/twist-debug.min.css"],
+			"css": ["css/twistdebug.min.css"],
 			"js": []
 		},
 		"js": {
 			"default": false,
 			"css": [],
-			"js": ["js/twist-debug.min.js"]
+			"js": ["js/twistdebug.min.js"]
 		}
 	},
-	"twist/file-upload": {
+	"twist/fileupload": {
 		"standard": {
 			"default": true,
 			"css": [],
-			"js": ["js/twist-fileupload.min.js"]
+			"js": ["js/twistfileupload.min.js"]
 		},
 		"development": {
 			"default": false,
 			"css": [],
-			"js": ["js/twist-fileupload.js"]
+			"js": ["js/twistfileupload.js"]
 		}
 	},
 	"twist/manager": {
 		"standard": {
 			"default": true,
-			"css": ["css/twist-manager.min.css"],
+			"css": ["css/twistmanager.min.css"],
 			"js": []
 		}
 	},
 	"twist/setup": {
 		"standard": {
 			"default": true,
-			"css": ["css/twist-setup.min.css"],
+			"css": ["css/twistsetup.min.css"],
 			"js": []
 		}
 	},

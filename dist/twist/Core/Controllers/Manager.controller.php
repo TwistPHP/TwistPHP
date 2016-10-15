@@ -1,24 +1,25 @@
 <?php
+
 /**
- * This file is part of TwistPHP.
+ * TwistPHP - An open source PHP MVC framework built from the ground up.
+ * Copyright (C) 2016  Shadow Technologies Ltd.
  *
- * TwistPHP is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * TwistPHP is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with TwistPHP.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
- * @license    https://www.gnu.org/licenses/gpl.html LGPL License
+ * @license    https://www.gnu.org/licenses/gpl.html GPL License
  * @link       https://twistphp.com
- *
  */
 
 namespace Twist\Core\Controllers;
@@ -86,9 +87,9 @@ class Manager extends BaseUser{
 		$arrTags['version'] = \Twist::version();
 
 		if(count($arrLatestVersion) && array_key_exists('stable',$arrLatestVersion)){
-			$arrTags['version_status'] = (\Twist::version() == $arrLatestVersion['stable']['version']) ? '<span class="success">Twist is Up-to-date</span>' : '<span class="warning">A new version of TwistPHP is available, <a href="https://twistphp.com/">download from twist.com</a>!</span>';
+			$arrTags['version_status'] = (\Twist::version() == $arrLatestVersion['stable']['version']) ? '<span class="tag green">Twist is Up-to-date</span>' : 'A new version of TwistPHP is available [<a href="https://github.com/TwistPHP/TwistPHP/releases" target="_blank">download it now</a>]';
 		}else{
-			$arrTags['version_status'] = '<span class="error">Failed to retrieve version information, try again later!</span>';
+			$arrTags['version_status'] = '<span class="tag red">Failed to retrieve version information, try again later!</span>';
 		}
 
 		$objCodeScanner = new \Twist\Core\Models\Security\CodeScanner();
@@ -104,7 +105,7 @@ class Manager extends BaseUser{
 
 		$strUsersTable = sprintf('%susers',TWIST_DATABASE_TABLE_PREFIX);
 
-		$arrTags['user-accounts'] = sprintf('<strong>%d</strong> Superadmin,<br><strong>%d</strong> Admin,<br><strong>%d</strong> Advanced,<br><strong>%d</strong> Member',
+		$arrTags['user-accounts'] = sprintf('<strong>%d</strong> Superadmin<br><strong>%d</strong> Admin<br><strong>%d</strong> Advanced<br><strong>%d</strong> Member',
 			\Twist::Database()->records($strUsersTable)->count(\Twist::framework()->setting('USER_LEVEL_SUPERADMIN'),'level'),
 			\Twist::Database()->records($strUsersTable)->count(\Twist::framework()->setting('USER_LEVEL_ADMIN'),'level'),
 			\Twist::Database()->records($strUsersTable)->count(\Twist::framework()->setting('USER_LEVEL_ADVANCED'),'level'),

@@ -1,24 +1,25 @@
 <?php
+
 	/**
-	 * This file is part of TwistPHP.
+	 * TwistPHP - An open source PHP MVC framework built from the ground up.
+	 * Copyright (C) 2016  Shadow Technologies Ltd.
 	 *
-	 * TwistPHP is free software: you can redistribute it and/or modify
+	 * This program is free software: you can redistribute it and/or modify
 	 * it under the terms of the GNU General Public License as published by
 	 * the Free Software Foundation, either version 3 of the License, or
 	 * (at your option) any later version.
 	 *
-	 * TwistPHP is distributed in the hope that it will be useful,
+	 * This program is distributed in the hope that it will be useful,
 	 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 	 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	 * GNU General Public License for more details.
 	 *
 	 * You should have received a copy of the GNU General Public License
-	 * along with TwistPHP.  If not, see <http://www.gnu.org/licenses/>.
+	 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	 *
 	 * @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
-	 * @license    https://www.gnu.org/licenses/gpl.html LGPL License
+	 * @license    https://www.gnu.org/licenses/gpl.html GPL License
 	 * @link       https://twistphp.com
-	 *
 	 */
 
 	namespace Twist\Core\Models\Database;
@@ -107,9 +108,11 @@
 
 				$resResult = \Twist::Database()->query("SELECT `COLUMN_NAME` AS `column_name`,
 										`DATA_TYPE` AS `data_type`,
-										`CHARACTER_MAXIMUM_LENGTH` AS `character_length`,
+										`CHARACTER_MAXIMUM_LENGTH` AS `character_length_value`,
 										`IS_NULLABLE` AS `nullable`,
 										`COLUMN_DEFAULT` AS `default_value`,
+										`COLUMN_KEY` AS `key`,
+										`COLUMN_TYPE` AS `column_type`,
 										`EXTRA` AS `extra`,
 										`COLUMN_COMMENT` AS `comment`,
 										`CHARACTER_SET_NAME` AS `charset`,
@@ -129,6 +132,7 @@
 						'columns' => array(),
 						'auto_increment' => null,
 						'auto_increment_start' => 1,
+						'primary_key' => null,
 						'unique_keys' => array(),
 						'indexes' => array(),
 						'table_comment' => null,
@@ -137,12 +141,62 @@
 						'engine' => 'MyISAM',
 					);
 
+					$resKeyResults = \Twist::Database()->query("SELECT `INDEX_NAME` AS `index_name`,
+										`NON_UNIQUE` AS `non_unique`,
+										`SEQ_IN_INDEX` AS `order`,
+										`COLUMN_NAME` AS `column_name`,
+										`INDEX_COMMENT` AS `comment`
+									FROM `information_schema`.`statistics`
+									WHERE `table_schema` NOT IN ('information_schema','mysql','performance_schema')
+									AND `TABLE_NAME` = '%s'
+									AND `TABLE_SCHEMA` = '%s'",
+						$strTable,
+						$strDatabaseName
+					);
+
+					if($resKeyResults->status() && $resKeyResults->numberRows()) {
+						$arrKeyData = $resKeyResults->rows();
+
+						foreach($arrKeyData as $arrKeys){
+
+							if($arrKeys['index_name'] == 'PRIMARY'){
+								$arrStructure['primary_key'] = $arrKeys['column_name'];
+							}else{
+
+								$strKeyType = ($arrKeys['non_unique'] == '0') ? 'unique_keys' : 'indexes';
+
+								if(!array_key_exists($arrKeys['index_name'],$arrStructure[$strKeyType])){
+									$arrStructure[$strKeyType][$arrKeys['index_name']] = array('comment' => '', 'columns' => array());
+								}
+
+								$arrStructure[$strKeyType][$arrKeys['index_name']]['comment'] = $arrKeys['comment'];
+								$arrStructure[$strKeyType][$arrKeys['index_name']]['columns'][$arrKeys['order']] = $arrKeys['column_name'];
+							}
+						}
+					}
+
 					foreach($arrStructureData as $arrEachItem){
-						$arrEachItem['auto_increment'] = ($arrEachItem['extra'] == 'auto_increment');
+
 						$arrEachItem['nullable'] = ($arrEachItem['nullable'] == 'YES');
 
+						if($arrEachItem['extra'] == 'auto_increment'){
+							$arrEachItem['auto_increment'] = true;
+							$arrStructure['auto_increment'] = $arrEachItem['column_name'];
+						}
+
+						//Place the enum values in the char length field
+						if($arrEachItem['data_type'] == 'enum' || $arrEachItem['data_type'] == 'set'){
+							preg_match_all("#\'([^\']*)\'#",$arrEachItem['column_type'],$arrMatches);
+							$arrEachItem['character_length_value'] = (count($arrMatches) == 2) ? $arrMatches[1] : array();
+						}elseif($arrEachItem['data_type'] == 'int'){
+							preg_match("#int\(([0-9]+)\)#",$arrEachItem['column_type'],$arrMatches);
+							$arrEachItem['character_length_value'] = (count($arrMatches)) ? $arrMatches[1] : 11;
+						}elseif($arrEachItem['data_type'] == 'float'){
+							preg_match("#float\(([0-9]+\,[0-9]+)\)#",$arrEachItem['column_type'],$arrMatches);
+							$arrEachItem['character_length_value'] = (count($arrMatches)) ? $arrMatches[1] : '6,2';
+						}
+
 						//Set the data back into the structure array
-						$arrStructure['auto_increment'] = ($arrEachItem['auto_increment']) ? $arrEachItem['column_name'] : null;
 						$arrStructure['columns'][$arrEachItem['column_name']] = $arrEachItem;
 					}
 
@@ -152,6 +206,13 @@
 			}
 
 			return $arrStructure;
+		}
+
+		/**
+		 * Remove the database table structure cache file, this is used when alterning a table or can be caled manualy if required
+		 */
+		public function clearStructureCache(){
+			\Twist::Cache('twist/utility/database')->remove(sprintf('dbStructure-%s+%s',$this->strDatabase,$this->strTable));
 		}
 
 		/**

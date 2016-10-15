@@ -1,24 +1,25 @@
 <?php
+
 /**
- * This file is part of TwistPHP.
+ * TwistPHP - An open source PHP MVC framework built from the ground up.
+ * Copyright (C) 2016  Shadow Technologies Ltd.
  *
- * TwistPHP is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * TwistPHP is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with TwistPHP.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
- * @license    https://www.gnu.org/licenses/gpl.html LGPL License
+ * @license    https://www.gnu.org/licenses/gpl.html GPL License
  * @link       https://twistphp.com
- *
  */
 
 namespace Twist\Core\Controllers;
@@ -79,17 +80,27 @@ class Upload extends Base{
 		//Now if the file upload was successful process the asset (if required)
 		if($arrOut['status']){
 
-			$arrDynamicRoute = $this->_route('dynamic');
-
 			//Get the asset group to be used for the upload
+			$arrAssetGroup = array();
 			$intAssetGroup = \Twist::framework()->setting('ASSET_DEFAULT_GROUP');
 
-			if(count($arrDynamicRoute)){
-				if(count($arrDynamicRoute) > 1 && $arrDynamicRoute[0] == 'asset'){
-					$intAssetGroup = \Twist::Asset()->getGroupBySlug($arrDynamicRoute[1]);
-				}elseif($arrDynamicRoute[0] !== 'asset'){
-					$intAssetGroup = \Twist::Asset()->getGroupBySlug($arrDynamicRoute[0]);
+			//Allow for a URI to be registered such as: Twist::Route()->upload('/account/upload/{function}/{asset_group}');
+			if($this->_var('asset_group') != null && $this->_var('asset_group') != ''){
+				$arrAssetGroup = \Twist::Asset()->getGroupBySlug($this->_var('asset_group'));
+			}else{
+				$arrDynamicRoute = $this->_route('dynamic');
+
+				if(count($arrDynamicRoute)){
+					if(count($arrDynamicRoute) > 1 && $arrDynamicRoute[0] == 'asset'){
+						$arrAssetGroup = \Twist::Asset()->getGroupBySlug($arrDynamicRoute[1]);
+					}elseif($arrDynamicRoute[0] !== 'asset'){
+						$arrAssetGroup = \Twist::Asset()->getGroupBySlug($arrDynamicRoute[0]);
+					}
 				}
+			}
+
+			if(count($arrAssetGroup)){
+				$intAssetGroup = $arrAssetGroup['id'];
 			}
 
 			$intAssetID = \Twist::Asset()->add($arrOut['file']['path'],$intAssetGroup);

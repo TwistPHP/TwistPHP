@@ -7,6 +7,7 @@
     # DO NOT REMOVE!
     # --------------------------------------------------------------------------------
     # Author:      	    Shadow Technologies Ltd.
+    # Licence:      	https://www.gnu.org/licenses/gpl.html GPL License
     # Documentation:    https://twistphp.com/docs
     # Note:             Do not edit information inside the '# TWISTPHP' tags
     # ================================================================================

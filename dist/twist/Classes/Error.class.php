@@ -1,24 +1,25 @@
 <?php
+
 	/**
-	 * This file is part of TwistPHP.
+	 * TwistPHP - An open source PHP MVC framework built from the ground up.
+	 * Copyright (C) 2016  Shadow Technologies Ltd.
 	 *
-	 * TwistPHP is free software: you can redistribute it and/or modify
+	 * This program is free software: you can redistribute it and/or modify
 	 * it under the terms of the GNU General Public License as published by
 	 * the Free Software Foundation, either version 3 of the License, or
 	 * (at your option) any later version.
 	 *
-	 * TwistPHP is distributed in the hope that it will be useful,
+	 * This program is distributed in the hope that it will be useful,
 	 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 	 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	 * GNU General Public License for more details.
 	 *
 	 * You should have received a copy of the GNU General Public License
-	 * along with TwistPHP.  If not, see <http://www.gnu.org/licenses/>.
+	 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	 *
 	 * @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
-	 * @license    https://www.gnu.org/licenses/gpl.html LGPL License
+	 * @license    https://www.gnu.org/licenses/gpl.html GPL License
 	 * @link       https://twistphp.com
-	 *
 	 */
 
 	namespace Twist\Classes;
@@ -201,6 +202,12 @@
 				self::handleError($arrTags['type_code'],$arrTags['message'],$arrTags['file'],$arrTags['line']);
 			}
 
+			//Output the correct
+			$strHttpProtocol = ("HTTP/1.1" === $_SERVER["SERVER_PROTOCOL"]) ? 'HTTP/1.1' : 'HTTP/1.0';
+
+			//Output a 500 Error response for an exception page (this page should not have a 200 status code)
+			header(sprintf('%s %d Internal Server Error',$strHttpProtocol,500),true,500);
+
             if(TWIST_AJAX_REQUEST){
 
                 header( 'Cache-Control: no-cache, must-revalidate' );
@@ -283,15 +290,28 @@
 		 * Output a 404 page to the user
 		 */
 		public static function handle404(){
-			self::errorPage(404);
+			self::response(404);
 		}
 
 		/**
-		 * Output a response code and a custom message if required to the user, this function handles all HTTP response codes.
-		 * @param $intErrorCode
-		 * @param null $strCustomDescription
+		 * Output HTTP error response code, This function has been deprecated in favour of the response() method
+		 * @param int $intErrorCode
+		 * @param null|string $strCustomDescription
+		 * @param boolean $blExitOnComplete Set false will output error and continue (Used for testing)
+		 * @alias response
+		 * @deprecated
 		 */
-		public static function errorPage($intErrorCode,$strCustomDescription = null){
+		public static function errorPage($intErrorCode,$strCustomDescription = null,$blExitOnComplete = true){
+			self::response($intErrorCode,$strCustomDescription,$blExitOnComplete);
+		}
+
+		/**
+		 * Output HTTP error response code and a custom message if required to the user, this function handles all HTTP response codes.
+		 * @param int $intErrorCode
+		 * @param null|string $strCustomDescription
+		 * @param boolean $blExitOnComplete Set false will output page and continue (Used for testing)
+		 */
+		public static function response($intErrorCode,$strCustomDescription = null,$blExitOnComplete = true){
 
 			$strReturn = 'Unknown';
 			$strDescription = '';
@@ -616,7 +636,11 @@
 				'domain' => \Twist::framework() -> setting('SITE_HOST')
 			);
 
-            die(\Twist::View('Exception')->build(sprintf("%s/system/error-page.tpl",TWIST_FRAMEWORK_VIEWS),$arrTags));
+			if($blExitOnComplete){
+				die(\Twist::View('Exception')->build(sprintf("%s/system/error-page.tpl",TWIST_FRAMEWORK_VIEWS),$arrTags));
+			}else{
+				echo \Twist::View('Exception')->build(sprintf("%s/system/error-page.tpl",TWIST_FRAMEWORK_VIEWS),$arrTags);
+			}
 		}
 
 		/**

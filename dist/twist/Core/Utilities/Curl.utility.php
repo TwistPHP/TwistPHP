@@ -1,24 +1,25 @@
 <?php
+
 	/**
-	 * This file is part of TwistPHP.
+	 * TwistPHP - An open source PHP MVC framework built from the ground up.
+	 * Copyright (C) 2016  Shadow Technologies Ltd.
 	 *
-	 * TwistPHP is free software: you can redistribute it and/or modify
+	 * This program is free software: you can redistribute it and/or modify
 	 * it under the terms of the GNU General Public License as published by
 	 * the Free Software Foundation, either version 3 of the License, or
 	 * (at your option) any later version.
 	 *
-	 * TwistPHP is distributed in the hope that it will be useful,
+	 * This program is distributed in the hope that it will be useful,
 	 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 	 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	 * GNU General Public License for more details.
 	 *
 	 * You should have received a copy of the GNU General Public License
-	 * along with TwistPHP.  If not, see <http://www.gnu.org/licenses/>.
+	 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	 *
 	 * @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
-	 * @license    https://www.gnu.org/licenses/gpl.html LGPL License
+	 * @license    https://www.gnu.org/licenses/gpl.html GPL License
 	 * @link       https://twistphp.com
-	 *
 	 */
 
 	namespace Twist\Core\Utilities;
@@ -240,7 +241,7 @@
 		 * @return mixed Returns the results of the request, will be an array if 'decodeResponseJSON' is enabled
 		 */
 		protected function makeRequest($strURL,$arrRequestData = array(),$strType = 'get',$arrHeaders=array(),$strRawData = ''){
-			
+
 			$strData = null;
 
 			//Set the all the parameters
@@ -321,11 +322,13 @@
 
 			//Set the other data
 			curl_setopt($resCurl, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($resCurl, CURLOPT_VERBOSE, 1);
+			curl_setopt($resCurl, CURLOPT_HEADER, 1);
 			curl_setopt($resCurl, CURLOPT_TIMEOUT, $this->intTimeout);
 			curl_setopt($resCurl, CURLOPT_FAILONERROR, true);
 			curl_setopt($resCurl, CURLOPT_REFERER, sprintf('%s://%s/',
-				\Twist::framework()->setting('SITE_PROTOCOL'),
-				\Twist::framework()->setting('HTTP_HOST'))
+					\Twist::framework()->setting('SITE_PROTOCOL'),
+					\Twist::framework()->setting('HTTP_HOST'))
 			);
 
 			//Set the custom headers
@@ -346,6 +349,9 @@
 			//execute post
 			$mxdResponse = curl_exec($resCurl);
 			$this->arrRequestInfo = curl_getinfo($resCurl);
+
+			$this->arrRequestInfo['headers'] = $this->httpParseHeaders(substr($mxdResponse, 0, $this->arrRequestInfo['header_size']));
+			$mxdResponse = substr($mxdResponse, $this->arrRequestInfo['header_size']);
 
 			if(curl_errno($resCurl)){
 				$this->arrRequestError = array(
@@ -382,5 +388,47 @@
 		 */
 		public function getRequestError(){
 			return $this->arrRequestError;
+		}
+
+		/**
+		 * Parse the response headers and output them as an array of key value pairs
+		 * @param string $strRawHeaders Raw response headers to be parsed
+		 * @return array Key Value pare of all response headers
+		 */
+		protected function httpParseHeaders($mxdRawHeaders){
+
+			$arrHeaders = array();
+			$mxdKey = '';
+
+			foreach(explode("\n", $mxdRawHeaders) as $mxdRawHeaderLine){
+
+				$arrHeaderParts = explode(':', $mxdRawHeaderLine, 2);
+
+				if(isset($arrHeaderParts[1])){
+
+					if(!isset($arrHeaders[$arrHeaderParts[0]])){
+						$arrHeaders[$arrHeaderParts[0]] = trim($arrHeaderParts[1]);
+
+					}elseif(is_array($arrHeaders[$arrHeaderParts[0]])){
+						$arrHeaders[$arrHeaderParts[0]] = array_merge($arrHeaders[$arrHeaderParts[0]], array(trim($arrHeaderParts[1])));
+
+					}else{
+						$arrHeaders[$arrHeaderParts[0]] = array_merge(array($arrHeaders[$arrHeaderParts[0]]), array(trim($arrHeaderParts[1])));
+					}
+
+					$mxdKey = $arrHeaderParts[0];
+
+				}else{
+
+					if(substr($arrHeaderParts[0], 0, 1) == "\t"){
+						$arrHeaders[$mxdKey] .= "\r\n\t" . trim($arrHeaderParts[0]);
+
+					}elseif(!$mxdKey){
+						$arrHeaders[0] = trim($arrHeaderParts[0]);
+					}
+				}
+			}
+
+			return $arrHeaders;
 		}
 	}
