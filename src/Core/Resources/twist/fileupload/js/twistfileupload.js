@@ -405,19 +405,23 @@
 
 						for( var intFileDetail in arrFileDetails ) {
 							var strFileDetail = arrFileDetails[intFileDetail],
-									strProperty = objUploadedFile[strFileDetail];
+									strProperty;
 
 							if( strFileDetail.indexOf( '/' ) !== -1 ) {
 								var arrDelve = strFileDetail.split( '/' ),
-										objToDelve = objUploadedFile[arrDelve[0]];
+										objToDelve = objUploadedFile[arrDelve[0]] || null;
 
 								arrDelve.shift();
 
-								for( var intKeyPart in arrDelve ) {
-									objToDelve = objToDelve[arrDelve[intKeyPart]];
-								}
+								if( objToDelve ) {
+									for( var intKeyPart in arrDelve ) {
+										objToDelve = objToDelve[arrDelve[intKeyPart]] || null;
+									}
 
-								strProperty = objToDelve;
+									strProperty = objToDelve || null;
+								}
+							} else {
+								strProperty = objUploadedFile[strFileDetail] || null;
 							}
 
 							strFileDetails += '<li data-key="' + strFileDetail + '"><span>' + strFileDetail.replace( /[\/_]/g, ' ' ) + ' :</span>' + strProperty + '</li>';
