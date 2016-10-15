@@ -27,6 +27,10 @@ Code examples can also be found [in the examples area](https://twistphp.com/exam
 
 Please use the [GitHub's issue tracker](https://github.com/TwistPHP/TwistPHP/issues) to report any problems.
 
+### Modifications
+
+The CSS and JS resources for TwistPHP are compiled using Gulp. After cloning the repository, you can install the necessary packages with `npm install` and then compile using `gulp`. The source files can be found in the `/src/Core/Resources/twist` directory.
+
 ### Branches
 
 For branching, please use the 'development' branch. All updates apart from hotfixes will get pushed from the [development branch](https://github.com/TwistPHP/TwistPHP/tree/development) to the master.

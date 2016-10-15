@@ -10,11 +10,11 @@ To run a SQL statement, simply pass the query into the `query()` method to get b
 <?php
 
     /*
-     * --------------------------------
+     * ================================
      * This very nice query returns you
      * an object with all the requested
      * data wrapped in some methods
-     * --------------------------------
+     * ================================
      */
     $query = Twist::Database() -> query( "SELECT `subscribers`.`email`
                                             FROM `subscribers`
@@ -30,13 +30,13 @@ When using the `query()` method, you can pass in additional parameters, similar 
 <?php
     
     /*
-     * --------------------------------
+     * ================================
      * Who knows what could be in these
      * variables - let's make sure they
      * are escaped (also, make sure you
      * don't construct queries with GET
      * values like this!)
-     * --------------------------------
+     * ================================
      */
     $query = Twist::Database() -> query( "SELECT `subscribers`.`email`
                                             FROM `subscribers`
@@ -72,12 +72,12 @@ Now we can check to see that the query ran successfully and that we have some re
 <?php
 
     /*
-     * --------------------------------
+     * ================================
      * If the query was successful, and
      * there were rows returned then go
      * through each row, before using a
      * seemingly random 42nd row result
-     * --------------------------------
+     * ================================
      */
     if( $query -> status() ) {
         if( $query -> numberRows() ) {
@@ -103,10 +103,10 @@ If you are manually building your SQL query and need to escape any data before a
 <?php
 
     /*
-     * --------------------------------
+     * ================================
      * Escape the string allowing it to
      * safely be used in a query
-     * --------------------------------
+     * ================================
      */
     $escaped = \Twist::Database() -> escapeString( "Robert'); DROP TABLE Students;--" ); // Little Bobby Tables
     
