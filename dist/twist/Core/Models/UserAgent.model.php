@@ -128,12 +128,10 @@
 			self::loadData();
 
 			if(array_key_exists($strDeviceKey,self::$arrDevices)){
-				$strOut = self::$arrDevices[$strDeviceKey]['device'];
+				return self::$arrDevices[$strDeviceKey]['device'];
 			}else{
-				$strOut = self::$arrUnknown['device'];
+				return self::$arrUnknown['device'];
 			}
-
-			return $strOut;
 		}
 
 		/**
