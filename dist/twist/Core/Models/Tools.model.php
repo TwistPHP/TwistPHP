@@ -60,8 +60,8 @@
 		/**
 		 * Return a value in an array using multi dimensional key to parse the structure of the array
 		 *
-		 * @param        $strKey       Location of the value in the array
-		 * @param        $arrData      Array to parse
+		 * @param string $strKey Location of the value in the array
+		 * @param array $arrData Array to parse
 		 * @param string $strSplitChar Structure separator
 		 * @return null $mxdOut
 		 */

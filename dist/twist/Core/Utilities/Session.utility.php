@@ -158,15 +158,11 @@
 		 */
 		public function viewExtension($strReference){
 
-			$strData = '';
-
 			if(strstr($strReference,'/')){
 				$mxdTempData = \Twist::framework()->tools()->arrayParse($strReference,$_SESSION['twist-session']);
-				$strData = (is_array($mxdTempData)) ? print_r($mxdTempData,true) : $mxdTempData;
+				return (is_array($mxdTempData)) ? print_r($mxdTempData,true) : $mxdTempData;
 			}elseif(array_key_exists($strReference,$_SESSION['twist-session'])){
-				$strData = (is_array($_SESSION['twist-session'][$strReference])) ? print_r($_SESSION['twist-session'][$strReference],true) : $_SESSION['twist-session'][$strReference];
+				return (is_array($_SESSION['twist-session'][$strReference])) ? print_r($_SESSION['twist-session'][$strReference],true) : $_SESSION['twist-session'][$strReference];
 			}
-
-			return $strData;
 		}
 	}
