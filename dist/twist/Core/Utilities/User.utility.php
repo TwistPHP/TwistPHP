@@ -63,7 +63,7 @@ class User extends Base{
      * @return array|mixed
      */
     public function loggedInData($strKey = null){
-        return $this->current()->get($strKey);
+        return (is_object($this->current())) ? $this->current()->get($strKey) : null;
     }
 
     /**
@@ -265,7 +265,7 @@ class User extends Base{
      * @return array
      */
     public function getByEmail($strEmail){
-	    return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->get($strEmail,'email',true);
+        return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->get($strEmail,'email',true);
     }
 
     /**
@@ -275,19 +275,19 @@ class User extends Base{
      */
     public function getDetailsByID($intUserID){
 
-	    $arrUserDetails = array();
+        $arrUserDetails = array();
 
-	    $resResult = \Twist::Database()->query("SELECT `ud`.`data`,`udf`.`slug` FROM `%suser_data` AS `ud` JOIN `%suser_data_fields` AS `udf` ON `ud`.`field_id` = `udf`.`id` WHERE `ud`.`user_id` = %d",
-		    TWIST_DATABASE_TABLE_PREFIX,
-		    TWIST_DATABASE_TABLE_PREFIX,
-		    $intUserID
-	    );
+        $resResult = \Twist::Database()->query("SELECT `ud`.`data`,`udf`.`slug` FROM `%suser_data` AS `ud` JOIN `%suser_data_fields` AS `udf` ON `ud`.`field_id` = `udf`.`id` WHERE `ud`.`user_id` = %d",
+            TWIST_DATABASE_TABLE_PREFIX,
+            TWIST_DATABASE_TABLE_PREFIX,
+            $intUserID
+        );
 
-	    if($resResult->status() && $resResult->numberRows()){
-		    foreach($resResult->rows() as $arrEachItem){
-			    $arrUserDetails[$arrEachItem['slug']] = $arrEachItem['data'];
-		    }
-	    }
+        if($resResult->status() && $resResult->numberRows()){
+            foreach($resResult->rows() as $arrEachItem){
+                $arrUserDetails[$arrEachItem['slug']] = $arrEachItem['data'];
+            }
+        }
 
         return $arrUserDetails;
     }
@@ -324,7 +324,7 @@ class User extends Base{
      * @return int
      */
     public function getLevels(){
-	    return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'user_levels')->find();
+        return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'user_levels')->find();
     }
 
     public function verifyEmail($strVerificationCode){
@@ -339,7 +339,7 @@ class User extends Base{
             //Check that the email address is semi valid and code is long enough
             if(strstr($arrParts[0],'@') && strstr($arrParts[0],'.') && strlen($arrParts[1]) == 16){
 
-	            $resResult = \Twist::Database()->query("UPDATE `%s`.`%susers`
+                $resResult = \Twist::Database()->query("UPDATE `%s`.`%susers`
 												SET `verified` = '1',
 													`verification_code` = ''
 												WHERE `email` = '%s'
@@ -354,6 +354,8 @@ class User extends Base{
                 if($resResult->status() && $resResult->affectedRows()){
                     $blOut = true;
                     \Twist::Session()->data('site-login_message','Your account has been verified');
+                }else{
+                    \Twist::Session()->data('site-login_error_message','Failed to verify your account, invalid verification code');
                 }
             }
         }
@@ -526,7 +528,7 @@ class User extends Base{
                 );
                 \Twist::Session()->data('site-error_message',null);
 
-                if(\Twist::Session()->data('user-temp_password') == '0'){
+                if(\Twist::Session()->data('user-temp_password') == '0' || is_null(\Twist::Session()->data('user-temp_password'))){
                     $strData = $this->resView->build( $this->strViewLocation.'change-password.tpl', $arrTags );
                 }else{
                     $strData = $this->resView->build( $this->strViewLocation.'change-password-initial.tpl', $arrTags );
@@ -593,14 +595,14 @@ class User extends Base{
                 break;
 
             case'level_description':
-				$intUsersLevel = $this->loggedInData('level');
+                $intUsersLevel = $this->loggedInData('level');
 
-				if($intUsersLevel == 0){
-					$strData = 'Root';
-				}else{
-					$arrLevelData = $this->getLevel($intUsersLevel);
-					$strData = $arrLevelData['description'];
-				}
+                if($intUsersLevel == 0){
+                    $strData = 'Root';
+                }else{
+                    $arrLevelData = $this->getLevel($intUsersLevel);
+                    $strData = $arrLevelData['description'];
+                }
                 break;
 
             case'email':

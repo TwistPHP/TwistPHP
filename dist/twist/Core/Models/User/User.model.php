@@ -54,23 +54,38 @@ class User{
 		//Get the array of user fields
 		$this->arrUserDataFields = \Twist::framework()->tools()->arrayReindex(\Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'user_data_fields')->find(),'slug');
 
-		$resResult = \Twist::Database()->query("SELECT `ud`.`data`,`udf`.`slug` FROM `%suser_data` AS `ud` JOIN `%suser_data_fields` AS `udf` ON `ud`.`field_id` = `udf`.`id` WHERE `ud`.`user_id` = %d",
-			TWIST_DATABASE_TABLE_PREFIX,
-			TWIST_DATABASE_TABLE_PREFIX,
-			$intUserID
-		);
+		//Check the user id before trying to collect userdata
+		if(!is_null($intUserID) && $intUserID > 0) {
 
-		if($resResult->status() && $resResult->numberRows()){
-			foreach($resResult->rows() as $arrEachItem){
-				$this->arrUserData[$arrEachItem['slug']] = $this->arrOriginalUserData[$arrEachItem['slug']] = $arrEachItem['data'];
+			$resResult = \Twist::Database()->query("SELECT `ud`.`data`,`udf`.`slug` FROM `%suser_data` AS `ud` JOIN `%suser_data_fields` AS `udf` ON `ud`.`field_id` = `udf`.`id` WHERE `ud`.`user_id` = %d",
+				TWIST_DATABASE_TABLE_PREFIX,
+				TWIST_DATABASE_TABLE_PREFIX,
+				$intUserID
+			);
+
+			if ($resResult->status() && $resResult->numberRows()) {
+				foreach ($resResult->rows() as $arrEachItem) {
+					$this->arrUserData[$arrEachItem['slug']] = $this->arrOriginalUserData[$arrEachItem['slug']] = $arrEachItem['data'];
+				}
 			}
 		}
 	}
 
+	/**
+	 * Get one or all of the values from the users main account record
+	 * @param null $strField Pass in a field name for the associated value, null returns an array
+	 * @return array|null Associated user value or and array of all values
+	 */
 	public function get($strField = null){
 		return (is_null($strField)) ? $this->resDatabaseRecord->values() : $this->resDatabaseRecord->get($strField);
 	}
 
+	/**
+	 * Get one or all of the values from the users data records, by passing in a value you can also set the value
+	 * @param null $strField Pass in a field name for the associated value, null returns an array
+	 * @param null $mxdValue Value to be set against the field that has been passed in
+	 * @return array|mixed|null
+	 */
 	public function data($strField = null,$mxdValue = null){
 		if(is_null($mxdValue)){
 			return $this -> getData($strField);
@@ -96,6 +111,11 @@ class User{
 		$this->nullData($strField);
 	}
 
+	/**
+	 * Commit all changes and updates made to the users account and data, these changes will be processed and stored to the database. Emails may be sent out suh as welcome or password update emails if enabled.
+	 * @return bool|int
+	 * @throws \Exception
+	 */
 	public function commit(){
 
 		$blSendVerification = ($this->resDatabaseRecord->get('email') != $this->arrOriginalData['email'] || $this->resDatabaseRecord->get('verification_code') != $this->arrOriginalData['verification_code']);
@@ -159,6 +179,7 @@ class User{
 		}
 
 		if($mxdOut){
+
 			$this->arrOriginalData = $this->resDatabaseRecord->values();
 
 			if($this->blNewAccount){
@@ -185,26 +206,58 @@ class User{
 		return $mxdOut;
 	}
 
+	/**
+	 * Get/Returns the ID of the user account
+	 * @return null User ID i.e 6
+	 */
 	public function id(){
 		return $this->resDatabaseRecord->get('id');
 	}
 
+	/**
+	 * Get/Returns the users full name (Firstname Surname) from the users account
+	 * @return string full name (Firstname Surname)
+	 */
 	public function name(){
 		return trim(sprintf("%s %s",$this->firstname(),$this->surname()));
 	}
 
+	/**
+	 * Get/Returns the users firstname from the users account, passing in a value will set the users firstname
+	 * @param null|string $strValue Value to be set, leave null to return only
+	 * @return bool|null Firstname i.e Joe
+	 * @throws \Exception
+	 */
 	public function firstname($strValue = null){
 		return (is_null($strValue)) ? $this->resDatabaseRecord->get('firstname') : $this->resDatabaseRecord->set('firstname',$strValue);
 	}
 
+	/**
+	 * Get/Returns the users surname from the users account, passing in a value will set the users surname
+	 * @param null|string $strValue Value to be set, leave null to return only
+	 * @return bool|null Surname i.e Bloggs
+	 * @throws \Exception
+	 */
 	public function surname($strValue = null){
 		return (is_null($strValue)) ? $this->resDatabaseRecord->get('surname') : $this->resDatabaseRecord->set('surname',$strValue);
 	}
 
+	/**
+	 * Get/Returns the users email address from the users account, passing in a value will set the users email address
+	 * @param null $strValue Value to be set, leave null to return only
+	 * @return bool|null Email i.e joe.bloggs@twistphp.com
+	 * @throws \Exception
+	 */
 	public function email($strValue = null){
 		return (is_null($strValue)) ? $this->resDatabaseRecord->get('email') : $this->resDatabaseRecord->set('email',$strValue);
 	}
 
+	/**
+	 * Get/Returns the users level ID from the users account, passing in a value will set the users level
+	 * @param null $intLevel Value to be set, leave null to return only
+	 * @return bool|null Users Level ID i.e 10
+	 * @throws \Exception
+	 */
 	public function level($intLevel = null){
 		return (is_null($intLevel)) ? $this->resDatabaseRecord->get('level') : $this->resDatabaseRecord->set('level',$intLevel);
 	}
@@ -365,11 +418,18 @@ class User{
 
 		if(\Twist::framework()->setting('USER_EMAIL_VERIFICATION')){
 
-			$strVerificationCode = $this->requireVerification();
-			$strVerificationString = $this->base64url_encode(sprintf("%s|%s",$this->arrOriginalData['email'],$strVerificationCode));
+			if($this->resDatabaseRecord->get('verification_code') == ''){
+				$strVerificationCode = $this->requireVerification();
+				$this->resDatabaseRecord->commit();
+			}else{
+				$strVerificationCode = $this->resDatabaseRecord->get('verification_code');
+			}
 
+			$strVerificationString = $this->base64url_encode(sprintf("%s|%s",$this->arrOriginalData['email'],$strVerificationCode));
 			$strVerificationLink = sprintf('http://%s/%s?verify=%s',$strSiteHost,ltrim($strLoginURL,'/'),$strVerificationString);
 			$arrTags['verification_link'] = $strVerificationLink;
+			$arrTags['verification_code'] = $strVerificationCode;
+			$arrTags['verification_string'] = $strVerificationString;
 
 			$arrTags['verification'] = sprintf('<p><strong>Your account must be verified before you can login.</strong><br />To verify your account, <a href="%s">click here</a>.</p><p>If you have a problem with this link, please copy and paste the below link into your browser and proceed to login:<br /><a href="%s">%s</a></p>',
 				$strVerificationLink,
@@ -398,7 +458,13 @@ class User{
 			$strSiteName = \Twist::framework()->setting('SITE_NAME');
 			$strSiteHost = \Twist::framework()->setting('SITE_HOST');
 
-			$strVerificationCode = $this->requireVerification();
+			if($this->resDatabaseRecord->get('verification_code') == ''){
+				$strVerificationCode = $this->requireVerification();
+				$this->resDatabaseRecord->commit();
+			}else{
+				$strVerificationCode = $this->resDatabaseRecord->get('verification_code');
+			}
+
 			$strVerificationString = $this->base64url_encode(sprintf("%s|%s",$this->arrOriginalData['email'],$strVerificationCode));
 			$strVerificationLink = sprintf('http://%s/%s?verify=%s',$strSiteHost,ltrim($strLoginURL,'/'),$strVerificationString);
 
@@ -420,6 +486,8 @@ class User{
 			$arrTags['host'] = $strSiteHost;
 			$arrTags['site_name'] = $strSiteName;
 			$arrTags['verification_link'] = $strVerificationLink;
+			$arrTags['verification_code'] = $strVerificationCode;
+			$arrTags['verification_string'] = $strVerificationString;
 
 			$strHTML = \Twist::View()->build(sprintf('%suser/account-verification-email.tpl',TWIST_FRAMEWORK_VIEWS),$arrTags);
 

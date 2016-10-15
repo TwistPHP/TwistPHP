@@ -10,11 +10,11 @@ Use the `create()` method in the database class to create an object for insertio
 <?php
     
     /*
-     * --------------------------------
+     * ================================
      * Create an object of a row in the
      * books table that will house this
      * data
-     * --------------------------------
+     * ================================
      */
     $book = Twist::Database() -> records( 'books' ) -> create();
 ```
@@ -27,11 +27,11 @@ Using the new object, you can set the properties (fields) of the new database ro
 <?php
 
     /*
-     * --------------------------------
+     * ================================
      * This is an unbelievable book and
      * we really strongly recommend you
      * read it
-     * --------------------------------
+     * ================================
      */
     $book -> set( 'title', 'The Hitchhiker\'s Guide to the Galaxy' ); // DON'T PANIC
     $book -> set( 'author', 'Douglas Adams' );
@@ -47,13 +47,13 @@ Once you are ready to commit the new row to the database, simply use the `commit
 <?php
 
     /*
-     * --------------------------------
+     * ================================
      * Commit the row to the table - if
      * successful, then you will either
      * get returned true or the current
      * value of the autoincrement field
      * else you get false returned
-     * --------------------------------
+     * ================================
      */
     $intBookID = $book -> commit();
     

@@ -42,17 +42,17 @@ You will most likely need a controller that handles the main pages of your proje
     require_once( 'twist/framework.php' );
 
     /*
-     * --------------------------------
+     * ================================
      * Register the following routes to
      * allow all requests to be handled
      * by the MySite controller
-     * --------------------------------
+     * ================================
      * URI    | METHOD
      * /      | _index
      * /alpha | alpha
      * /beta  | beta
      * /gamma | gamma
-     * --------------------------------
+     * ================================
      */
     Twist::Route() -> controller( '/%', 'MySite' );
 ```
@@ -65,17 +65,17 @@ To specify controllers for different areas of the site just update the URI to ma
     require_once( 'twist/framework.php' );
 
     /*
-     * --------------------------------
+     * ================================
      * Any request URI that begins with
      * shop will match this rule and be
      * sent on to the MySite controller
-     * --------------------------------
+     * ================================
      * URI         | METHOD
      * /shop       | _index
      * /shop/alpha | alpha
      * /shop/beta  | beta
      * /shop/gamma | gamma
-     * --------------------------------
+     * ================================
      */
     Twist::Route() -> controller( '/shop/%', 'MySite' );
 ```
@@ -88,10 +88,10 @@ To serve your app's registered routes, simply add the following line to the end 
 <?php
 
     /*
-     * --------------------------------
+     * ================================
      * Serve anything that has been set
      * up in the routing
-     * --------------------------------
+     * ================================
      */
     Twist::Route() -> serve();
 ```

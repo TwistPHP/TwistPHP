@@ -30,35 +30,35 @@ Your user controller should look something like this:
 <?php
 
     /*
-     * --------------------------------
+     * ================================
      * Same namespace as before - it is
      * all just your controllers is the
      * app namespace
-     * --------------------------------
+     * ================================
      */
     namespace App\Controllers;
     
     /*
-     * --------------------------------
+     * ================================
      * Use the BaseUser controller that
      * comes with TwistPHP
-     * --------------------------------
+     * ================================
      */
     use \Twist\Core\Controllers\BaseUser;
     
     /*
-     * --------------------------------
+     * ================================
      * Extend the BaseUser class so you
      * can inherit all the user goodies
-     * --------------------------------
+     * ================================
      */
     class AdminArea extends BaseUser {
     
         /*
-         * --------------------------------
+         * ================================
          * For any custom methods it's just
          * business as usual
-         * --------------------------------
+         * ================================
          */
         public function _index() {
             return '<h1>Welcome to the restricted area</h1>';
@@ -82,36 +82,36 @@ You can apply your restrictions after you are done registering your routes in yo
     require_once( 'twist/framework.php' );
     
     /*
-     * --------------------------------
+     * ================================
      * Let's register the new AdminArea
      * controller for any requests that
      * start with /admin
-     * --------------------------------
+     * ================================
      */
     Twist::Route() -> controller( '/admin/%', 'AdminArea' );
 
     /*
-     * --------------------------------
+     * ================================
      * Now we are going to restrict the
-     * access for anyone requesting one
-     * of our admin pages - the default
+     * access for anyone requesting our
+     * admin area and an added redirect
+     * if they attempt access - default
      * level for admin users is 30, but
      * this can quite easily be changed
-     * in the project settings database
-     * table
-     * --------------------------------
+     * in the settings database table
+     * ================================
      */
-    Twist::Route() -> restrictAdmin( '/admin/%' );
+    Twist::Route() -> restrictAdmin( '/admin/%', '/admin/login' );
     
     /*
-     * --------------------------------
+     * ================================
      * These are all the standard level
      * restrictions that are available,
      * although developers with a level
      * 0 account are able to access all
      * restricted areas after they have
      * logged in
-     * --------------------------------
+     * ================================
      */
     //Twist::Route() -> restrict( '/admin/%' ); // Must be a valid user
     //Twist::Route() -> restrictMembers( '/admin/%' ); // Must be a valid user, at least level 10
@@ -121,9 +121,9 @@ You can apply your restrictions after you are done registering your routes in yo
     //Twist::Route() -> restrictRoot( '/admin/%' ); // Only valid root users (level 0) can access
     
     /*
-     * --------------------------------
+     * ================================
      * When we are ready, go go go!
-     * --------------------------------
+     * ================================
      */
     Twist::Route() -> serve();
 ```
@@ -136,11 +136,11 @@ If needed, you can unrestrict a page, sub page or a whole area of your project t
 <?php
 
     /*
-     * --------------------------------
+     * ================================
      * Here we want the help page to be
      * access by everyone, not just the
      * users who are logged in
-     * --------------------------------
+     * ================================
      */
     Twist::Route() -> unrestrict( '/admin/help' );
 ```

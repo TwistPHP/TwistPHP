@@ -419,17 +419,21 @@
 
 		/**
 		 * Generate a random string, default length is set in the framework settings
-		 *
-		 * @param $intStringLength The default value is set in "RANDOM_STRING_LENGTH" setting
-		 * @param $mxdCharset
+		 * @param null $intStringLength Default value is set in "RANDOM_STRING_LENGTH" setting
+		 * @param null $mxdCharset
+		 * @param bool $blIgnoreSimilarChars True will not use the chars "015IJLSOijlos"
 		 * @return string
 		 */
-		public function randomString( $intStringLength = null, $mxdCharset = null ) {
+		public function randomString( $intStringLength = null, $mxdCharset = null, $blIgnoreSimilarChars = true ) {
 
 			$strOut = '';
 			$intStringLength = ( !is_null( $intStringLength ) && $intStringLength > 0 ) ? $intStringLength : \Twist::framework() -> setting( 'RANDOM_STRING_LENGTH' );
 
-			$strChars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz';
+			if($blIgnoreSimilarChars){
+				$strChars = '2346789ABCDEFGHKMNPQRTUVWXYZabcdefghkmnpqrtuvwxyz';
+			}else{
+				$strChars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghiklmnopqrstuvwxyz';
+			}
 
 			if( $mxdCharset === true ) {
 				$strChars .= '!@£$%^&*()_-=+[]{};:|<>?/';

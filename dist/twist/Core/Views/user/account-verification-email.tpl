@@ -13,10 +13,8 @@
             </tr>
             <tr>
                 <td>
-                    <p>You must verify the email address registered to your <strong>{data:site_name}</strong> account before you can login.</p>
+                    <p>You must verify the email address before you can login to your <strong>{data:site_name}</strong> account.</p>
                     <p>To verify your account, please <a href="{data:verification_link}">click here</a>.</p>
-                    <p>If you have a problem with this link, you can copy the below link into your browser and proceed to login.
-                        <br /><a href="{data:verification_link}">{data:verification_link}</a></p>
                 </td>
             </tr>
             <tr>

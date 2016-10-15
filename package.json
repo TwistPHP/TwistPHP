@@ -17,15 +17,17 @@
   },
   "homepage": "https://twistphp.com",
   "dependencies": {
-    "gulp": "^3.9.0",
+    "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0",
-    "gulp-jshint": "^2.0.0",
+    "gulp-jshint": "^2.0.1",
     "gulp-rename": "^1.2.2",
-    "gulp-sass": "^2.1.1",
-    "gulp-sourcemaps": "^1.6.0",
-    "gulp-uglify": "^1.5.1",
-    "gulp-using": "^0.1.0",
-    "jshint": "^2.9.1"
+    "gulp-sass": "^2.3.2",
+    "gulp-sourcemaps": "^1.8.1",
+    "gulp-uglify": "^1.5.4",
+    "gulp-using": "^0.1.1",
+    "gulp-watch": "^4.3.10",
+    "jsdoc": "^3.4.2",
+    "jshint": "^2.9.3"
   },
   "devDependencies": {
     "gulp-jsdoc3": "^0.2.1",

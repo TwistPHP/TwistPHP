@@ -12,21 +12,21 @@ Respond directly to requests with a view file. Less dynamic than a controller, b
     require_once( 'twist/framework.php' );
 
     /*
-     * --------------------------------
+     * ================================
      * This method simply registers the
      * feedback.tpl view to be returned
      * when a GET request for /feedback
      * is made
-     * --------------------------------
+     * ================================
      */
     Twist::Route() -> view( '/feedback', 'feedback.tpl' );
     
     /*
-     * --------------------------------
+     * ================================
      * Use the thankyou.tpl view when a
      * POST request is received for the
      * URI /feedback
-     * --------------------------------
+     * ================================
      */
     Twist::Route() -> postView( '/feedback', 'thankyou.tpl' );
 
@@ -43,11 +43,11 @@ A really basic way to respond to requests is just define a function directly rou
     require_once( 'twist/framework.php' );
 
     /*
-     * --------------------------------
+     * ================================
      * Respond to a GET request for the
      * URI /testing with an appropriate
      * response
-     * --------------------------------
+     * ================================
      */
     Twist::Route() -> get( '/testing',
         function() {
@@ -56,10 +56,10 @@ A really basic way to respond to requests is just define a function directly rou
     );
     
     /*
-     * --------------------------------
+     * ================================
      * This function is used to respond
      * to POST requests to /testing
-     * --------------------------------
+     * ================================
      */
     Twist::Route() -> post( '/testing',
        function() {

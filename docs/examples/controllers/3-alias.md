@@ -17,23 +17,23 @@ To make an alias of a method, allowing it to be accessed by another URI, you can
     
         public function __construct() {
             /*
-             * --------------------------------
+             * ================================
              * In the construct method when the
              * class is initialised, we can set
              * an alias for a request so either
              * the method name or the alias can
              * be used
-             * --------------------------------
+             * ================================
              */
             $this -> _aliasURI( 'search-your-feelings-you-know-it-to-be-true', 'searchyourfeelingsyouknowittobetrue' );
         }
     
         /*
-         * --------------------------------
+         * ================================
          * This URI would look a tad insane
          * and a bit confusing for our poor
          * user to decypher
-         * --------------------------------
+         * ================================
          */
         public function searchyourfeelingsyouknowittobetrue() {
             return 'Noooooooooooooooooooooooo!';
