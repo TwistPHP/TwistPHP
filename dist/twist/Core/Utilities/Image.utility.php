@@ -48,7 +48,7 @@
 		 * Load an existing image, and Image object will be produced allowing complete control over the image.
 		 * Once all changes have been made you can then export the image as a file or serve to the screen.
 		 *
-		 * @param $mxdImage
+		 * @param mixed $mxdImage
 		 * @return \Twist\Core\Models\Image\Image Returns an object of the loaded Image
 		 */
 		public function load($mxdImage){
@@ -59,9 +59,9 @@
 		 * Create a new image from scratch, and Image object will be produced allowing complete control over the image.
 		 * Once all changes have been made you can then export the image as a file or serve to the screen.
 		 *
-		 * @param $intWidth
-		 * @param $intHeight
-		 * @param $strFillColour
+		 * @param integer $intWidth
+		 * @param integer $intHeight
+		 * @param string $strFillColour
 		 * @return \Twist\Core\Models\Image\Image Returns an object of the new Image
 		 */
 		public function create($intWidth,$intHeight,$strFillColour){

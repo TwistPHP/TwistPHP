@@ -39,7 +39,7 @@
 
 		/**
 		 * Load the raw XML data into the system and expand into an array
-		 * @param $strData
+		 * @param string $strData
 		 */
 		public function loadRawData($strData){
 
@@ -51,7 +51,7 @@
 
 		/**
 		 * Load the raw XML from a file or feed and expand into an array
-		 * @param $strLocalFilePath
+		 * @param string $strLocalFilePath
 		 */
 		public function loadFile($strLocalFilePath){
 
@@ -96,7 +96,7 @@
 
 		/**
 		 * Expand the linear (raw) array into a usable multi-level array
-		 * @param $intCurrentKey
+		 * @param integer $intCurrentKey
 		 * @return array
 		 */
 		protected function expandRawArray($intCurrentKey = -1){
@@ -104,6 +104,7 @@
 			$arrXmlData = array();
 			$intCloseLevel = null;
 			$blEndLoop = false;
+			$intKey = null;
 
 			foreach($this->arrRawData as $intKey => $arrEachElement){
 
@@ -216,8 +217,8 @@
 
 		/**
 		 * Turn an array of data into XML
-		 * @param $arrItems
-		 * @param $strTab
+		 * @param array $arrItems
+		 * @param string $strTab
 		 * @return string
 		 */
 		public function covertArray($arrItems,$strTab = ""){
@@ -264,9 +265,12 @@
 
 		/**** NEW CLASS SETTINGS - In preparation for V2 ****/
 
+		/**
+		 * @param string $strXML
+		 * @return array|bool|mixed
+		 */
 		public function xmlToArray($strXML){
 
-			$arrOut = array();
 			libxml_use_internal_errors(true);
 
 			$strXML = $this->fixUTF8($strXML);
@@ -281,14 +285,12 @@
 					echo "\t", $error->message;
 				}
 
-				$arrOut = false;
+				return false;
 
 			}else{
 				$strJSON = json_encode($objXML);
-				$arrOut = json_decode($strJSON, true);
+				return json_decode($strJSON, true);
 			}
-
-			return $arrOut;
 		}
 
 
@@ -321,6 +323,8 @@
 
 		/**
 		 * Process the Attributes where they exist
+		 * @param array $arrData
+		 * @return string
 		 */
 		protected function processAttributes(&$arrData){
 
@@ -338,6 +342,8 @@
 
 		/**
 		 * Process the Comment attribute where they exist
+		 * @param array $arrData
+		 * @return string
 		 */
 		protected function processComment(&$arrData){
 
@@ -354,6 +360,10 @@
 
 		/**
 		 * Recursively go through the array and process each item
+		 * @param array $arrData
+		 * @param string $strTab
+		 * @param string $strPreviousKey
+		 * @return string
 		 */
 		protected function processEachItem($arrData,$strTab="\t",$strPreviousKey=""){
 
@@ -362,7 +372,7 @@
 			foreach($arrData as $strKey => $mxdData){
 
 				$strParameters = $this->processAttributes($mxdData);
-				$strComment = $this->processComment($mxdData);
+				$strComment = $this->processComment($mxdData); //TODO: Remove?
 
 				//Detect for empty rows
 				if(!is_array($mxdData) && $mxdData == ""){

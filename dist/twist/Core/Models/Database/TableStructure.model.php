@@ -48,8 +48,9 @@
 
 		/**
 		 * Construct the class with all the required data to make usable
-		 * @param $strDatabase
-		 * @param $strTable
+		 * @param string $strDatabase
+		 * @param string $strTable
+		 * @param array $arrStructure
 		 */
 		public function __construct($strDatabase,$strTable,$arrStructure = array()){
 
@@ -111,7 +112,8 @@
 
 		/**
 		 * Set the Collation for the database table, calling this method will also set the charset of the Table accordingly
-		 * @param $strCollation
+		 * @param string $strCollation
+		 * @throws \Exception
 		 */
 		public function collation($strCollation){
 
@@ -132,7 +134,7 @@
 
 		/**
 		 * Get the Charset for a particular collation
-		 * @param $strCollation
+		 * @param string $strCollation
 		 * @return int|null|string
 		 */
 		protected function getCollationCharset($strCollation){
@@ -154,7 +156,7 @@
 
 		/**
 		 * Set the character set for the database table
-		 * @param $strCharset
+		 * @param string $strCharset
 		 */
 		protected function charset($strCharset){
 			$this->strCharset = $strCharset;
@@ -162,7 +164,7 @@
 
 		/**
 		 * Set the database engine to use for this table
-		 * @param $strEngine
+		 * @param string $strEngine
 		 */
 		public function engine($strEngine){
 
@@ -172,7 +174,7 @@
 
 		/**
 		 * Set the main Database comment
-		 * @param $strComment
+		 * @param string $strComment
 		 */
 		public function comment($strComment){
 
@@ -182,7 +184,7 @@
 
 		/**
 		 * Set a field to be autoincrement
-		 * @param $strField
+		 * @param string $strField
 		 * @param int $intStartNumber
 		 * @throws \Exception
 		 */
@@ -205,7 +207,8 @@
 
 		/**
 		 * Set a field to be a primary key
-		 * @param $strField
+		 * @param string $strField
+		 * @param bool $blAutoIncrement
 		 * @throws \Exception
 		 */
 		public function primaryKey($strField,$blAutoIncrement = false){
@@ -239,10 +242,9 @@
 
 		/**
 		 * Set a unique key, you can have multiple unique keys per table. To create a unique key from more than 1 field pass the second parameter as an array of fields
-		 * @param $strName
-		 * @param $mxdColumns
-		 * @param $strComment
-		 * @return string
+		 * @param string $strName
+		 * @param mixed $mxdColumns
+		 * @param string $strComment
 		 */
 		public function addUniqueKey($strName,$mxdColumns,$strComment = null){
 
@@ -257,9 +259,9 @@
 
 		/**
 		 * Set a Index, you can have multiple indexes per table. To create a index from more than 1 field pass the second parameter as an array of fields
-		 * @param $strName
-		 * @param $mxdColumns
-		 * @param $strComment
+		 * @param string $strName
+		 * @param mixed $mxdColumns
+		 * @param string $strComment
 		 */
 		public function addIndex($strName,$mxdColumns,$strComment = null){
 
@@ -274,7 +276,7 @@
 
 		/**
 		 * Drop a unique key from the table structure
-		 * @param $strName
+		 * @param string $strName
 		 */
 		public function dropUniqueKey($strName){
 
@@ -289,7 +291,7 @@
 
 		/**
 		 * Drop a Index from the table structure
-		 * @param $strName
+		 * @param string $strName
 		 */
 		public function dropIndex($strName){
 
@@ -496,6 +498,7 @@
 		/**
 		 * Final call, this will create/alter the tables structure in the database.
 		 * @return bool
+		 * @throws \Exception
 		 */
 		public function commit(){
 
@@ -649,7 +652,7 @@
 
 		/**
 		 * Generate a partial column SQL that can be used in CREATE and ALTER queries
-		 * @param $arrColumn Array of column data
+		 * @param array $arrColumn Array of column data
 		 * @return string Partial Column SQL
 		 */
 		protected function generateColumnSQL($arrColumn){

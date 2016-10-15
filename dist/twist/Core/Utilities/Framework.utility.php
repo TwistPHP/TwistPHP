@@ -88,7 +88,7 @@
 
 		/**
 		 * Get or set a single setting by its key, pass in a value (2nd parameter to set/store the value against the key).
-		 * @param $strKey
+		 * @param string $strKey
 		 * @param null $strValue
 		 * @return bool|null
 		 */

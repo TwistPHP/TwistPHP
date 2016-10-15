@@ -32,10 +32,10 @@
 		/**
 		 * Create a CSV file on the server, pass in a multi-dimensional array of data containing keys and values, the keys will be used as the field names and the values will be each for in the CSV. By default the Delimiter, Enclosure and Escape are already set.
 		 *
-		 * @param $strLocalFile Full path to the local CSV file to be stored
-		 * @param $arrData      Multi-dimensional array of data to be converted into a CSV
-		 * @param $strDelimiter Delimiter to be used in creation of CSV data
-		 * @param $strEnclosure Enclosure to be used in creation of CSV data
+		 * @param string $strLocalFile Full path to the local CSV file to be stored
+		 * @param array $arrData      Multi-dimensional array of data to be converted into a CSV
+		 * @param string $strDelimiter Delimiter to be used in creation of CSV data
+		 * @param string $strEnclosure Enclosure to be used in creation of CSV data
 		 *
 		 * @return mixed Returns the CSV data as a string
 		 */
@@ -52,10 +52,10 @@
 		/**
 		 * Create a CSV file and serve to the user, pass in a multi-dimensional array of data containing keys and values, the keys will be used as the field names and the values will be each for in the CSV. By default the Delimiter, Enclosure and Escape are already set.
 		 *
-		 * @param $strFileName  Name of the file to be served as a downloadable file
-		 * @param $arrData      Multi-dimensional array of data to be converted into a CSV
-		 * @param $strDelimiter Delimiter to be used in creation of CSV data
-		 * @param $strEnclosure Enclosure to be used in creation of CSV data
+		 * @param string $strFileName  Name of the file to be served as a downloadable file
+		 * @param array $arrData      Multi-dimensional array of data to be converted into a CSV
+		 * @param string $strDelimiter Delimiter to be used in creation of CSV data
+		 * @param string $strEnclosure Enclosure to be used in creation of CSV data
 		 */
 		public function serve( $strFileName, $arrData, $strDelimiter = ',', $strEnclosure = '"' ) {
 
@@ -72,9 +72,9 @@
 		/**
 		 * Generate the CSV data from a multi-dimensional array of data, ability to use a custom delimiter and enclosure.
 		 *
-		 * @param $arrData      Multi-dimensional array of data to be converted into a CSV
-		 * @param $strDelimiter Delimiter to be used in creation of CSV data
-		 * @param $strEnclosure Enclosure to be used in creation of CSV data
+		 * @param array $arrData      Multi-dimensional array of data to be converted into a CSV
+		 * @param string $strDelimiter Delimiter to be used in creation of CSV data
+		 * @param string $strEnclosure Enclosure to be used in creation of CSV data
 		 *
 		 * @return mixed Returns the CSV data as a string
 		 */
@@ -98,18 +98,18 @@
 		/**
 		 * Pass in the local file path to a CSV file, the CSV file will be parsed and turned into an array. By default the Delimiter, Enclosure and Escape are already set.
 		 *
-		 * @param $strLocalFile         Full path to the local CSV file that will be imported
-		 * @param $strLineDelimiter     Expected delimiter for each line used in the CSV
-		 * @param $intFieldDelimiter    Expected delimiter for each field used in the CSV
-		 * @param $strEnclosure         Expected enclosure to be used in creation of CSV data
-		 * @param $strEscape            String used to escape the CSV data (Only used if mbstring is enabled in PHP)
-		 * @param $blUseFirstRowAsKeys  If TRUE, the first row of data is returned as the indexes for the array data
-		 * @param $strEncoding          Output encoding (defaults to UTF-8)
-		 * @param $strLocale            Expected inout locale (default of en_GB.UTF-8 ensures multibyte strings are safe)
+		 * @param string $strLocalFile         Full path to the local CSV file that will be imported
+		 * @param string $strLineDelimiter     Expected delimiter for each line used in the CSV
+		 * @param string $strFieldDelimiter    Expected delimiter for each field used in the CSV
+		 * @param string $strEnclosure         Expected enclosure to be used in creation of CSV data
+		 * @param string $strEscape            String used to escape the CSV data (Only used if mbstring is enabled in PHP)
+		 * @param bool $blUseFirstRowAsKeys    If TRUE, the first row of data is returned as the indexes for the array data
+		 * @param string $strEncoding          Output encoding (defaults to UTF-8)
+		 * @param string $strLocale            Expected inout locale (default of en_GB.UTF-8 ensures multibyte strings are safe)
 		 *
 		 * @return array Returns Multi-dimensional array of the CSV data
 		 */
-		public function import( $strLocalFile, $strLineDelimiter = "\n", $intFieldDelimiter = ',', $strEnclosure = '"', $strEscape = '\\', $blUseFirstRowAsKeys = false, $strEncoding = 'UTF-8', $strLocale = 'en_GB.UTF-8' ) {
+		public function import( $strLocalFile, $strLineDelimiter = "\n", $strFieldDelimiter = ',', $strEnclosure = '"', $strEscape = '\\', $blUseFirstRowAsKeys = false, $strEncoding = 'UTF-8', $strLocale = 'en_GB.UTF-8' ) {
 
 			$arrOut = $arrHeaders = array();
 
@@ -132,7 +132,7 @@
 					$strRow = mb_convert_encoding($strRow, $strEncoding, mb_detect_encoding($strRow));
 				}
 
-				$arrRow = str_getcsv( $strRow, $intFieldDelimiter, $strEnclosure, $strEscape );
+				$arrRow = str_getcsv( $strRow, $strFieldDelimiter, $strEnclosure, $strEscape );
 
 				if( $blUseFirstRowAsKeys ) {
 					if( $intRow === 0 ) {

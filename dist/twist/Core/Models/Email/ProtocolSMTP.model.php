@@ -42,8 +42,8 @@ class ProtocolSMTP{
 
 	/**
 	 * Open a new FTP connection
-	 * @param $strHost
-	 * @param $intPort
+	 * @param string $strHost
+	 * @param integer $intPort
 	 * @throws RuntimeException
 	 */
 	public function connect($strHost,$intPort = 25){

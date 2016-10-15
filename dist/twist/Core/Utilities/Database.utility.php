@@ -61,11 +61,11 @@ class Database extends Base{
 
 	/**
 	 * Make the main connection to the database, automatically called if a custom connection is not required
-	 * @param $strHost
-	 * @param $strUsername
-	 * @param $strPassword
-	 * @param $strDatabaseName
-	 * @param $strProtocol
+	 * @param string $strHost
+	 * @param string $strUsername
+	 * @param string $strPassword
+	 * @param string $strDatabaseName
+	 * @param string $strProtocol
 	 * @throws \Exception
 	 */
 	public function connect($strHost = null,$strUsername = null,$strPassword = null,$strDatabaseName = null,$strProtocol = null){
@@ -125,7 +125,7 @@ class Database extends Base{
 			}
 
 			if(is_object($this->resLibrary) && !$this->resLibrary->connected()){
-				$strErrorMessage = $this->resLibrary->connectionError();
+				$strErrorMessage = $this->resLibrary->connectionError(); //TODO: Remove?
 				$this->resLibrary = null;
 				throw new \Exception('Failed to connect to the database server');
 			}
@@ -158,7 +158,7 @@ class Database extends Base{
 
 	/**
 	 * Check for default settings for the database
-	 * @param $blThrowException
+	 * @param bool $blThrowException
 	 * @return bool
 	 * @throws \Exception
 	 */

@@ -57,7 +57,7 @@ class View extends Base{
 
 	/**
 	 * Set the View directory to default or provide a new directory
-	 * @param $dirCustomViews Path to a custom View directory
+	 * @param string $dirCustomViews Path to a custom View directory
 	 */
 	public function setDirectory($dirCustomViews = null){
 	    $this->dirViews = (is_null($dirCustomViews)) ? TWIST_APP_VIEWS : $dirCustomViews;
@@ -66,7 +66,7 @@ class View extends Base{
 
 	/**
 	 * Get the current View directory/path that is in use by the View utility
-	 * @return directory Returns the current View path
+	 * @return string Returns the current View path
 	 */
 	public function getDirectory(){
 		return $this->dirViews;
@@ -74,7 +74,7 @@ class View extends Base{
 
 	/**
 	 * Function called by readCache, writeCache, removeCache
-	 * @param $strViewPath
+	 * @param string $strViewPath
 	 * @return string
 	 */
 	protected function getCacheKey($strViewPath){
@@ -100,7 +100,7 @@ class View extends Base{
 
 	/**
 	 * Read the view cache file for the relevant cache key
-	 * @param $strViewPath
+	 * @param string $strViewPath
 	 * @return null
 	 */
 	protected function readCache($strViewPath){
@@ -118,8 +118,8 @@ class View extends Base{
 
 	/**
 	 * Write the cache file back for the correct cache key
-	 * @param $strViewPath
-	 * @param $arrData
+	 * @param string $strViewPath
+	 * @param array $arrData
 	 */
 	protected function writeCache($strViewPath,$arrData){
 
@@ -133,7 +133,7 @@ class View extends Base{
 
 	/**
 	 * Remove an item from the cache file for the correct cache key
-	 * @param $strViewPath
+	 * @param string $strViewPath
 	 */
 	protected function removeCache($strViewPath){
 
@@ -150,8 +150,8 @@ class View extends Base{
 	/**
 	 * Build the View with the array of tags supplied
 	 *
-	 * @param $dirView
-	 * @param $arrViewTags
+	 * @param string $dirView
+	 * @param array $arrViewTags
 	 * @param bool $blRemoveUnusedTags Remove all un-used tags from the tpl after processing
 	 * @param bool $blProcessTags Outputs that raw contents of the TPL file when set to false (dose not work for PHP views)
 	 * @return string
@@ -222,10 +222,11 @@ class View extends Base{
 	/**
 	 * Replace tags in raw View data with the array of tags supplied
 	 *
-	 * @param $strRawViewData
-	 * @param $arrViewTags
-	 * @param $blRemoveUnusedTags
+	 * @param string $strRawViewData
+	 * @param array $arrViewTags
+	 * @param bool $blRemoveUnusedTags
 	 * @return string
+	 * @throws \Exception
 	 */
 	public function replace($strRawViewData,$arrViewTags = null,$blRemoveUnusedTags = false) {
 
@@ -283,10 +284,9 @@ class View extends Base{
 	 * Additional parameters are exploded of the end of the Element var, these parameters are comma separated.
 	 * To retrieve the parameters use $this->getParameters(); in your element.
 	 *
-	 * @param $dirElement
-	 * @param $arrData
+	 * @param string $dirView
+	 * @param array $arrData
 	 * @return string
-	 * @throws \Exception
 	 */
 	protected function processElement($dirView,$arrData = null){
 
@@ -303,9 +303,9 @@ class View extends Base{
 	/**
 	 * Get all the tags of a given View and return them as an array
 	 *
-	 * @param $strView
-	 * @param $blIsFile
-	 * @param $blDiscover
+	 * @param string $mxdView
+	 * @param bool $blIsFile
+	 * @param bool $blDiscover
 	 * @return array
 	 */
 	public function getTags($mxdView,$blIsFile = true,$blDiscover = false){
@@ -356,7 +356,7 @@ class View extends Base{
 	/**
 	 * Removes all tags that remain in the View after use
 	 *
-	 * @param $strViewData
+	 * @param string $strViewData
 	 * @return string
 	 */
 	public function removeUnusedTags($strViewData){
@@ -432,8 +432,9 @@ class View extends Base{
 	/**
 	 * Get the raw View data form the View file
 	 *
-	 * @param $strViewFullPath
+	 * @param string $strViewFullPath
 	 * @return string
+	 * @throws \Exception
 	 */
 	protected function get($strView){
 
@@ -458,8 +459,8 @@ class View extends Base{
 
 	/**
 	 * Locate the line number that a particular tag falls on
-	 * @param $dirViewFile
-	 * @param $strTag
+	 * @param string $dirViewFile
+	 * @param string $strTag
 	 * @return int|null|string
 	 * @throws \Exception
 	 */
@@ -480,35 +481,32 @@ class View extends Base{
 	/**
 	 * Decide weather the View data tags are valid or not
 	 *
-	 * @param $arrViewTags
+	 * @param array $arrViewTags
 	 * @return boolean
+	 * @throws \Exception
 	 */
 	protected function validDataTags($arrViewTags){
 
-	    $blOut = false;
-
 	    //Check to see if the tags are set to null
 	    if(is_null($arrViewTags)){
-	        $blOut = true;
+	        return true;
 	    }else{
 
 	        //If the tags contain an array then they can be used
 	        if(is_array($arrViewTags)){
-	            $blOut = true;
+	            return true;
 	        }else{
 	            throw new \Exception('View tags are an invalid format, must be and array or null.',11103);
 	        }
 	    }
-
-	    return $blOut;
 	}
 
 	/**
 	 * Process each individual tag from the View one by one
 	 *
-	 * @param $strRawView
-	 * @param $strTag
-	 * @param $arrData
+	 * @param string $strRawView
+	 * @param string $strTag
+	 * @param array $arrData
 	 * @return mixed
 	 */
 	protected function processTag($strRawView,$strTag,$arrData = array()){
@@ -542,6 +540,8 @@ class View extends Base{
 	                //This functionality could be made much more efficient in a future release
 	                $arrValue1Parts = (strstr($arrConditions[2][$intKey],':')) ? explode(':',$arrConditions[2][$intKey]) : null;
 	                $arrValue2Parts = (strstr($arrConditions[4][$intKey],':')) ? explode(':',$arrConditions[4][$intKey]) : null;
+
+		            $strTempReplace1 = $strTempReplace2 = '';
 
 	                //Build the data to correctly decode each tag in condition 1
 	                if(!is_null($arrValue1Parts)){
@@ -658,7 +658,7 @@ class View extends Base{
 	/**
 	 * Detect and correct the type of the inputs contents
 	 *
-	 * @param $mxdValue
+	 * @param mixed $mxdValue
 	 * @return bool|int|mixed|null|string
 	 */
 	protected function detectType($mxdValue){
@@ -696,9 +696,9 @@ class View extends Base{
 	/**
 	 * Run the logical comparison between to sets of data
 	 *
-	 * @param $mxdValue1
-	 * @param $strCondition
-	 * @param $mxdValue2
+	 * @param mixed $mxdValue1
+	 * @param string $strCondition
+	 * @param mixed $mxdValue2
 	 * @return bool
 	 */
 	protected function condition($mxdValue1,$strCondition,$mxdValue2){
@@ -798,11 +798,12 @@ class View extends Base{
 	/**
 	 * Run the tag processing on each tag that was found in the View and process them accordingly (Snipit module is required to process multi-dimensional tag arrays)
 	 *
-	 * @param $strRawView
-	 * @param $strTag
-	 * @param $strType
-	 * @param $strReference
-	 * @param $arrData
+	 * @param string $strRawView
+	 * @param string $strTag
+	 * @param string $strType
+	 * @param string $strReference
+	 * @param array $arrData
+	 * @param bool $blReturnArray
 	 * @return mixed
 	 */
 	public function runTags($strRawView,$strTag,$strType,$strReference,$arrData = array(),$blReturnArray = false){
@@ -936,7 +937,7 @@ class View extends Base{
 
 			case'model':
 
-				//@todo Currently a little bit hacky but will add support for all models and params shortly
+				//TODO: Currently a little bit hacky but will add support for all models and params shortly
 				//Currently only supports a model that has been initiated through routes.
 				if(Instance::isObject('twist_route_model')){
 					$resModel = Instance::retrieveObject('twist_route_model');
@@ -1022,9 +1023,9 @@ class View extends Base{
 	/**
 	 * Find an item within an array of data, return the round status and the return value.
 	 *
-	 * @param $strKey Key that can contain / to move though an arrays structure
-	 * @param $arrData Array of data to be searched
-	 * @param $blReturnArray Option to define if an array or string must be retured
+	 * @param string $strKey Key that can contain / to move though an arrays structure
+	 * @param array $arrData Array of data to be searched
+	 * @param bool $blReturnArray Option to define if an array or string must be retured
 	 * @return array The results of the search with status
 	 */
 	protected function processArrayItem($strKey,$arrData,$blReturnArray=false){
@@ -1056,11 +1057,12 @@ class View extends Base{
 	/**
 	 * Replace the tag in the View data with the provided content
 	 *
-	 * @param $strRawView
-	 * @param $strTag
-	 * @param $strData
-	 * @param $strFunction
-	 * @param $mxdRawData
+	 * @param string $strRawView
+	 * @param string $strTag
+	 * @param string $strData
+	 * @param string $strFunction
+	 * @param mixed $mxdRawData
+	 * @param array $arrParameters
 	 * @return mixed
 	 */
 	protected function replaceTag($strRawView,$strTag,$strData,$strFunction = null,$mxdRawData = array(),$arrParameters = array()){

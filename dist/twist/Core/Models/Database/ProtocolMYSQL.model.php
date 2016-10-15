@@ -38,7 +38,7 @@
 			return (!is_null($this->resLink) && is_object($this->resLink));
 		}
 
-		public function connect($strServer,$strUsername,$strPassword,$strDatabase){
+		public function connect($strServer,$strUsername,$strPassword,$strDatabase){ //TODO: $strDatabase not used
 			$this->resLink = @mysql_connect($strServer,$strUsername,$strPassword);
 			return $this->validConnectionObject();
 		}
@@ -79,7 +79,7 @@
 			return ($this->validConnectionObject()) ? mysql_insert_id($this->resLink) : 0;
 		}
 
-		public function affectedRows($resResult){
+		public function affectedRows($resResult){ //TODO $resResult not used
 			return ($this->validConnectionObject()) ? mysql_affected_rows($this->resLink) : 0;
 		}
 

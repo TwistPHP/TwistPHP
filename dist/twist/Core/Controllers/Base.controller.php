@@ -46,7 +46,7 @@
          * A function that is called by Routes both to ensure that the controller has been extended and so that we can pass in resources and information required by the controller.
          *
          * @param \Twist\Core\Utilities\Route $resRoute
-         * @param $arrRouteData
+         * @param array $arrRouteData
          * @return bool
          */
 		final public function _extended($resRoute,$arrRouteData){
@@ -102,6 +102,7 @@
         /**
          * Over-ride the base view for the current page only.
          *
+         * @param null $mxdBaseView
          * @return null|string
          */
 		public function _baseView($mxdBaseView = null){
@@ -181,7 +182,7 @@
 		/**
 		 * Function to call any controller response with the correct method prefix if any has been setup. If the response function is not found a 404 page will be output.
 		 *
-		 * @param $strCallFunctionName Name of the function to be called
+		 * @param string $strCallFunctionName Name of the function to be called
 		 * @return bool
 		 */
         final protected function _callFunction($strCallFunctionName){
@@ -224,7 +225,7 @@
 			$arrOut = array();
 
 			if(count($_FILES) && array_key_exists($strFileKey,$_FILES)){
-				$resUpload = new \Twist\Core\Controllers\Upload();
+				$resUpload = new Upload();
 
 				if(is_array($_FILES[$strFileKey]['name'])){
 					foreach($_FILES[$strFileKey]['name'] as $intKey => $mxdValue){
@@ -265,7 +266,7 @@
 		 * @return bool
 		 */
 		final public function _response($intError,$strCustomDescription = null){
-			Error::errorPage($intError,$strCustomDescription);
+			Error::response($intError,$strCustomDescription);
 			return false;
 		}
 
@@ -344,7 +345,7 @@
 
 		/**
 		 * Process a view template file and return the output.
-		 * @param $dirView
+		 * @param string $dirView
 		 * @param null $arrViewTags
 		 * @param bool $blRemoveUnusedTags
 		 * @return string
@@ -355,6 +356,10 @@
 
 		/**
 		 * @alias _view
+		 * @param string $dirView
+		 * @param null $arrViewTags
+		 * @param bool $blRemoveUnusedTags
+		 * @return string
 		 */
         protected function _render($dirView,$arrViewTags = null,$blRemoveUnusedTags = false){
 			return $this->_view($dirView,$arrViewTags,$blRemoveUnusedTags);

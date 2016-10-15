@@ -31,7 +31,7 @@
 		
 		/**
 		 * Install/Configure the framework, this is required before the framework will function
-		 * @param $arrConfiguration
+		 * @param array $arrConfiguration
 		 * @return string
 		 */
 		public static function framework($arrConfiguration){
@@ -174,7 +174,7 @@
 
 		/**
 		 * Install a package, this is required before a package can be run by the framework
-		 * @param $dirPackageJSON
+		 * @param string $dirPackageJSON
 		 * @return bool|int|null
 		 */
 		public static function package($dirPackageJSON){
@@ -213,7 +213,7 @@
 
 		/**
 		 * Remove a package, un-registers it from the framework
-		 * @param $strPackageSlug
+		 * @param string $strPackageSlug
 		 * @return null
 		 */
 		public static function removePackage($strPackageSlug){
@@ -223,7 +223,7 @@
 
 		/**
 		 * Install any DB and tables required by the framework
-		 * @param $dirInstallSQL
+		 * @param string $dirInstallSQL
 		 */
 		public static function importSQL($dirInstallSQL){
 
@@ -258,7 +258,7 @@
 
 		/**
 		 * Install any framework settings that are required by the core.
-		 * @param $dirSettingsJSON
+		 * @param string $dirSettingsJSON
 		 * @throws \Exception
 		 */
 		public static function importSettings($dirSettingsJSON){
@@ -289,11 +289,11 @@
 
 		/**
 		 * Remove settings from the framework, these settings can be package or code settings
-		 * @param $strSlug
-		 * @param $strType
+		 * @param string $strSlug
+		 * @param string $strType
 		 * @param null $strKey to remove a single settings only pass its key
 		 */
-		public static function removeSettings($strSlug,$strType,$strKey = null){
+		public static function removeSettings($strSlug,$strType,$strKey = null){ //TODO: $strKey not used
 			\Twist::framework()->settings()->uninstall($strSlug,$strType);
 		}
 	}

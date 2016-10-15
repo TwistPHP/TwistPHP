@@ -131,7 +131,7 @@ class Upload extends Base{
 	protected function storeFile($strFileKey = null,$intIndex = null){
 
 		if(is_array($_FILES) && count($_FILES)){
-			$arrOut = \Twist::File()->upload($strFileKey,null,$intIndex);
+			$arrOut = \Twist::File()->upload($strFileKey,null,$intIndex); //TODO: Is $intIndex used?
 		}else{
 			$arrOut = \Twist::File()->uploadPUT();
 		}

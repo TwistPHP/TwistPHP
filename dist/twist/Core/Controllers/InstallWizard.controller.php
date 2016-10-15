@@ -314,7 +314,6 @@ class InstallWizard extends Base{
 	/**
 	 * Pre-install some packages and setup some systems like the manager
 	 * Currently skips this step in initial release of V3
-	 * @return string
 	 */
 	public function package(){
 
@@ -354,7 +353,7 @@ class InstallWizard extends Base{
 		}
 
 		if($arrSession['user']['status']){
-			//@todo Skip the interfaces step for the time being, it will become packages when ready
+			//TODO: Skip the interfaces step for the time being, it will become packages when ready
 			header('Location: finish');
 		}else{
 			header('Location: user');

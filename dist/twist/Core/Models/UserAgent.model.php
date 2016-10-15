@@ -120,7 +120,7 @@
 
 		/**
 		 * Get device type by device key, these are the keys found in the devices.json file
-		 * @param $strDeviceKey
+		 * @param string $strDeviceKey
 		 * @return string
 		 */
 		public static function getDeviceType($strDeviceKey){
@@ -138,7 +138,7 @@
 
 		/**
 		 * Get OS details from a device key, these are the keys found in the devices.json file
-		 * @param $strDeviceKey
+		 * @param string $strDeviceKey
 		 * @return array
 		 */
 		public static function getOS($strDeviceKey){
@@ -160,7 +160,7 @@
 
 		/**
 		 * Get Browser details from a browser key, these are the keys found in the browsers.json file
-		 * @param $strBrowserKey
+		 * @param string $strBrowserKey
 		 * @return array
 		 */
 		public static function getBrowser($strBrowserKey){

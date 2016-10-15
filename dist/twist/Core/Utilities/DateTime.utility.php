@@ -73,9 +73,9 @@
 		 * @related time
 		 * @reference http://php.net/manual/en/function.date.php
 		 *
-		 * @param $strFormat Format the datetime (using PHP date format notation)
-		 * @param $intTimestamp Provide a custom timestamp to process the date
-		 * @return date Returns the date as a string
+		 * @param string $strFormat Format the datetime (using PHP date format notation)
+		 * @param integer $intTimestamp Provide a custom timestamp to process the date
+		 * @return string Returns the date as a string
 		 */
 		public function date($strFormat = 'Y-m-d H:i:s',$intTimestamp = null){
 
@@ -91,7 +91,7 @@
 		 *
 		 * @related inPast
 		 *
-		 * @param $intTimestamp Timestamp for comparison
+		 * @param integer $intTimestamp Timestamp for comparison
 		 * @return boolean Returns true if future timestamp
 		 */
 		public function inFuture($intTimestamp){
@@ -104,7 +104,7 @@
 		 *
 		 * @related inFuture
 		 *
-		 * @param $intTimestamp Timestamp for comparison
+		 * @param integer $intTimestamp Timestamp for comparison
 		 * @return boolean Returns true if past timestamp
 		 */
 		public function inPast($intTimestamp){
@@ -117,12 +117,10 @@
 		 *
 		 * @related prettyTime
 		 *
-		 * @param $intTimestamp Timestamp for conversion
+		 * @param integer $intTimestamp Timestamp for conversion
 		 * @return string Returns a formatted human readable time
 		 */
 		public function prettyAge($intTimestamp){
-
-			$strOut = '';
 
 			//Convert date stings into seconds if required
 			if(!is_int($intTimestamp)){
@@ -167,8 +165,8 @@
 		 *
 		 * @related prettyAge
 		 *
-		 * @param $intSeconds Time in seconds for conversion
-		 * @param $blShortLabels Use short labels (y, mo, w) rather than full labels (year, month, week)
+		 * @param integer $intSeconds Time in seconds for conversion
+		 * @param bool $blShortLabels Use short labels (y, mo, w) rather than full labels (year, month, week)
 		 * @return string
 		 */
 		public function prettyTime($intSeconds,$blShortLabels = false){
@@ -219,18 +217,22 @@
 
 		/**
 		 * @alias prettyAge
+		 * @param $intTimestamp
+		 * @return string
 		 */
 		public function getAge($intTimestamp){ return $this->prettyAge($intTimestamp); }
 
 		/**
 		 * @alias prettyTime
+		 * @param $intTimestamp
+		 * @return string
 		 */
 		public function getTimePeriod($intTimestamp){ return $this->prettyTime($intTimestamp); }
 
 		/**
 		 * Get the age of a person in years from their date of birth
 		 *
-		 * @param $dateDOB Date of birth as a date string
+		 * @param string $dateDOB Date of birth as a date string
 		 * @return integer Returns age in years
 		 */
 		public function getPersonAge($dateDOB){
@@ -256,9 +258,9 @@
 		/**
 		 * Get an array of every X day between two given dates
 		 *
-		 * @param $dateStart Start date of the range
-		 * @param $dateEnd End date of the range
-		 * @param $intWeekdayNumber
+		 * @param string $dateStart Start date of the range
+		 * @param string $dateEnd End date of the range
+		 * @param integer $intWeekdayNumber
 		 * @return array Returns and array of dates
 		 */
 		public function getDayBetweenDates($dateStart, $dateEnd, $intWeekdayNumber){

@@ -337,7 +337,7 @@ class User extends Base{
     }
 
 	/**
-	 * @param $strVerificationCode
+	 * @param string $strVerificationCode
 	 * @return bool
 	 */
     public function verifyEmail($strVerificationCode){

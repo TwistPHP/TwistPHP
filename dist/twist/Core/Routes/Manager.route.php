@@ -27,7 +27,7 @@
 	/**
 	 * Manager route file that registers all the routes and restrictions required to allow the Manager to be run.
 	 * The manager route can be easily added to your site by calling the Twist::Route()->manager() alias function.
-	 * @package Twist\Core\Routes
+	 * @package string|Twist\Core\Routes
 	 */
 	class Manager extends Base{
 

@@ -37,7 +37,7 @@
 
 		/**
 		 * Create an archive resource using the PclZip Third party package ready to accept files and folders
-		 * @param $strZipArchive
+		 * @param string $strZipArchive
 		 * @return mixed
 		 */
 		public function create($strZipArchive){
@@ -46,7 +46,7 @@
 
 		/**
 		 * Load in an existing archive using the PclZip Third party package and store it as a resource ready to be manipulated/extracted.
-		 * @param $strZipArchive
+		 * @param string $strZipArchive
 		 * @return boolean
 		 */
 		public function load($strZipArchive){
@@ -55,8 +55,8 @@
 
 		/**
 		 * Add a file to the archive resource using the PclZip Third party package.
-		 * @param $strLocalFile
-		 * @param $strZipPath
+		 * @param string $strLocalFile
+		 * @param string $strZipPath
 		 */
 		public function addFile($strLocalFile,$strZipPath){
 
@@ -68,7 +68,7 @@
 
 		/**
 		 * Extract the files from the archive resource using the PclZip Third party package.
-		 * @param $strExtractPath
+		 * @param string $strExtractPath
 		 */
 		public function extract($strExtractPath){
 			return ($this->resZip->extract(PCLZIP_OPT_PATH, $strExtractPath) == 0) ? false : true;
@@ -76,7 +76,7 @@
 
 		/**
 		 * Add an empty folder to the archive resource using the PclZip Third party package.
-		 * @param $strDirectoryPath
+		 * @param string $strDirectoryPath
 		 */
 		public function addEmptyDir($strDirectoryPath){
 			$this->resZip->addEmptyDir($strDirectoryPath);
@@ -84,7 +84,7 @@
 
 		/**
 		 * Set a comment in the archive comment field using the PclZip Third party package, the comment can be seen when extracting the archive on commandline or using certain GUI tools.
-		 * @param $strComment
+		 * @param string $strComment
 		 */
 		public function setArchiveComment($strComment){
 			$this->resZip->setArchiveComment($strComment);
@@ -92,7 +92,7 @@
 
 		/**
 		 * Delete a file or folder form the archive by its path using the PclZip Third party package.
-		 * @param $strDirectoryPath
+		 * @param string $strDirectoryPath
 		 */
 		public function deleteName($strDirectoryPath){
 			$this->resZip->deleteName($strDirectoryPath);

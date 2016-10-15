@@ -125,8 +125,8 @@ class Image{
 
 	/**
 	 * Save the image as a file, the format will be determined by the file extension. Leaving the file name as null will use the original filename.
-	 * @param $strFilename If omitted the original file will be overwritten
-	 * @param $intQuality Output image quality in percents 0-100
+	 * @param string $strFilename If omitted the original file will be overwritten
+	 * @param integer $intQuality Output image quality in percents 0-100
 	 * @return $this
 	 * @throws \Exception
 	 */
@@ -161,10 +161,10 @@ class Image{
 
 	/**
 	 * Outputs the image to the screen without saving
-	 * @param $strFormat If omitted or null - format of original file will be used, may be gif|jpg|png
-	 * @param $intQuality Output image quality in percents 0-100
-	 * @param $intCache set the life of the image so that the browser can cache it, defaults to 3600 seconds, set to null for no caching
-	 * @param $blGZip Output the image compressed with gzip, this will only happen if set to true and the browser accepts gzip encoding
+	 * @param string $strFormat If omitted or null - format of original file will be used, may be gif|jpg|png
+	 * @param integer $intQuality Output image quality in percents 0-100
+	 * @param integer $intCache set the life of the image so that the browser can cache it, defaults to 3600 seconds, set to null for no caching
+	 * @param bool $blGZip Output the image compressed with gzip, this will only happen if set to true and the browser accepts gzip encoding
 	 * @throws \Exception
 	 */
 	public function output($strFormat=null,$intQuality=null,$intCache=3600,$blGZip=true){
@@ -193,8 +193,8 @@ class Image{
 
 	/**
 	 * Outputs the image as a Base64 encoded string
-	 * @param $strFormat If omitted or null - format of original file will be used, may be gif|jpg|png
-	 * @param $intQuality Output image quality in percents 0-100
+	 * @param string $strFormat If omitted or null - format of original file will be used, may be gif|jpg|png
+	 * @param integer $intQuality Output image quality in percents 0-100
 	 * @return string
 	 */
 	public function outputBase64($strFormat=null,$intQuality=null){
@@ -205,8 +205,8 @@ class Image{
 
 	/**
 	 * Get the raw data of an image that can be output as a file, served to the screen or transformed into a base64 string
-	 * @param $strFormat
-	 * @param $intQuality
+	 * @param string$strFormat
+	 * @param integer $intQuality
 	 * @return array
 	 * @throws \Exception
 	 */
@@ -246,8 +246,8 @@ class Image{
 
 	/**
 	 * Get the aspect ratio of an image from its width and height
-	 * @param $intWidth
-	 * @param $intHeight
+	 * @param integer $intWidth
+	 * @param integer $intHeight
 	 * @return float
 	 */
 	protected function aspectRatio($intWidth,$intHeight){
@@ -275,7 +275,7 @@ class Image{
 	/**
 	 * Converts a hex color value to its RGB equivalent, you can pass in a Hex color string, array(red, green, blue) or array(red, green, blue, alpha).
 	 * Red,Green,Blue must be integers between 0-255 and Alpha must be an integer between 0-127
-	 * @param $mxdColour
+	 * @param mixed $mxdColour
 	 * @return array|bool
 	 */
 	protected function normalizeColor($mxdColour){
@@ -321,9 +321,9 @@ class Image{
 
 	/**
 	 * Ensures $intInteger is always within $intMinValue and $intMaxValue range. If $intInteger is lower than $intMinValue, $intMinValue is returned. If $intInteger is higher than $intMaxValue, $intMaxValue is returned.
-	 * @param $intInteger
-	 * @param $intMinValue
-	 * @param $intMaxValue
+	 * @param integer $intInteger
+	 * @param integer $intMinValue
+	 * @param integer $intMaxValue
 	 * @return mixed
 	 */
 	protected function keepWithinRange($intInteger,$intMinValue,$intMaxValue){
@@ -347,10 +347,10 @@ class Image{
 
 	/**
 	 * Draw a line on the image, you have the option of setting the width of the line. The line can be drawn at any angle
-	 * @param $intStartX
-	 * @param $intStartY
-	 * @param $intEndX
-	 * @param $intEndY
+	 * @param integer $intStartX
+	 * @param integer $intStartY
+	 * @param integer $intEndX
+	 * @param integer $intEndY
 	 * @param string $strFillColour
 	 * @param int $intWidth
 	 * @return bool
@@ -388,10 +388,10 @@ class Image{
 
 	/**
 	 * Draw a rectangle on the image
-	 * @param $intStartX
-	 * @param $intStartY
-	 * @param $intEndX
-	 * @param $intEndY
+	 * @param integer $intStartX
+	 * @param integer $intStartY
+	 * @param integer $intEndX
+	 * @param integer $intEndY
 	 * @param string $strFillColour
 	 * @return bool
 	 */
@@ -405,7 +405,7 @@ class Image{
 
 	/**
 	 * Draw a polygon on the image
-	 * @param $arrPoints
+	 * @param array $arrPoints
 	 * @param string $strFillColour
 	 * @param null $intPointsCount
 	 */
@@ -421,9 +421,9 @@ class Image{
 
 	/**
 	 * Add a string to the image as a watermark or caption
-	 * @param $intStartX
-	 * @param $intStartY
-	 * @param $strString
+	 * @param integer $intStartX
+	 * @param integer $intStartY
+	 * @param string $strString
 	 * @param string $strFillColour
 	 */
 	public function string($intStartX,$intStartY,$strString,$strFillColour='#000000'){
@@ -477,13 +477,13 @@ class Image{
 		imagesavealpha($resTempImage, true);
 		imagecopy($resTempImage, $this->resImage, 0, 0, 0, 0, $this->intWidth, $this->intHeight);
 
-		//@todo need to look into as this will wipe all original data
+		//TODO: Need to look into as this will wipe all original data
 
 		// Create transparent layer
 		$this->create($this->intWidth, $this->intHeight, array(0, 0, 0, 127));
 
 		// Merge with specified opacity
-		$this->imagecopymerge_alpha($this->resImage, $resTempImage, 0, 0, 0, 0, $this->intWidth, $this->intHeight, $this->keepWithinRange($intOpacity, 0, 1) * 100);
+		$this->imagecopymerge_alpha($this->resImage, $resTempImage, 0, 0, 0, 0, $this->intWidth, $this->intHeight, $this->keepWithinRange($intOpacity, 0, 1) * 100); //TODO: Where is imagecopymerge_alpha?
 		imagedestroy($resTempImage);
 
 		return $this;
@@ -521,10 +521,11 @@ class Image{
 
 	/**
 	 * Crop the image with the following left, top, right, bottom coordinates
-	 * @param int $intX1 Left
-	 * @param int $intY1 Top
-	 * @param int $intX2 Right
-	 * @param int $intY2 Bottom
+	 * @param integer $intX1 Left
+	 * @param integer $intY1 Top
+	 * @param integer $intX2 Right
+	 * @param integer $intY2 Bottom
+	 * @return $this
 	 */
 	public function crop($intX1, $intY1, $intX2, $intY2){
 
@@ -552,6 +553,7 @@ class Image{
 	/**
 	 * Proportionally resize to a specified width (scales up and down the image as required)
 	 * @param int $intWidth
+	 * @return Image
 	 */
 	public function resizeWidth($intWidth){
 		$intHeight = $intWidth * $this->aspectRatio($this->intWidth,$this->intHeight);
@@ -561,6 +563,7 @@ class Image{
 	/**
 	 * Proportionally resize the image to a specified height (scales up and down the image as required)
 	 * @param int $intHeight
+	 * @return Image
 	 */
 	public function resizeHeight($intHeight){
 		$intWidth = $intHeight / $this->aspectRatio($this->intWidth,$this->intHeight);
@@ -595,6 +598,7 @@ class Image{
 	 * Resize the image to specified dimensions provided in the width and height parameters
 	 * @param int $intWidth
 	 * @param int $intHeight
+	 * @return $this
 	 */
 	public function resize($intWidth, $intHeight){
 
@@ -630,7 +634,7 @@ class Image{
 
 	/**
 	 * Get the image to as close to the provided dimensions as possible, and then crops the remaining overflow (from the center) to get the image to be the size specified. Useful for generating thumbnails.
-	 * @param $intWidth
+	 * @param integer $intWidth
 	 * @param null $intHeight (If omitted, assumed to be equal to $intWidth)
 	 * @return mixed
 	 */
@@ -658,8 +662,9 @@ class Image{
 
 	/**
 	 * Keeping the same aspect ratio as the original, contain the image within the width and height provided, any white space will be filled with the fill colour
-	 * @param $intMaxWidth
-	 * @param $intMaxHeight
+	 * @param integer $intContainerWidth
+	 * @param integer $intContainerHeight
+	 * @param string $strFillColour
 	 * @return $this
 	 */
 	public function resizeContain($intContainerWidth, $intContainerHeight,$strFillColour = '#000000'){
@@ -741,6 +746,7 @@ class Image{
 	 * Apply a Blur effect to the image, select the type of blur that is required and set the number of passes to make, defaults to 1
 	 * @param string $strType selective|gaussian
 	 * @param int $intTotalPasses
+	 * @return $this
 	 */
 	public function filterBlur($strType = 'selective', $intTotalPasses = 1) {
 		for($intPass = 0; $intPass < $intTotalPasses; $intPass++){
@@ -752,6 +758,7 @@ class Image{
 	/**
 	 * Apply a Brightness effect to the image, a level can be passed in for the required level of brightness between -255 and 255. Defaults to 0
 	 * @param int $intLevel
+	 * @return $this
 	 */
 	public function filterBrightness($intLevel = 0){
 		imagefilter($this->resImage, IMG_FILTER_BRIGHTNESS, $this->keepWithinRange($intLevel, -255, 255));
@@ -760,8 +767,9 @@ class Image{
 
 	/**
 	 * Apply a Colorize effect to the image, the image will be colorized according the the HEX colour value and opacity 0.0 - 1.0 value
-	 * @param $strColour
+	 * @param string $strColour
 	 * @param int $fltOpacity
+	 * @return $this
 	 */
 	public function filterColorize($strColour, $fltOpacity = 0) {
 		$arrRGBA = $this->normalizeColor($strColour);
@@ -773,6 +781,7 @@ class Image{
 	/**
 	 * Apply a Contrast effect to the image, a level can be passed in for the required level of contrast between -100 and 100. Defaults to 0
 	 * @param int $intLevel
+	 * @return $this
 	 */
 	public function filterContrast($intLevel = 0){
 		imagefilter($this->resImage, IMG_FILTER_CONTRAST, $this->keepWithinRange($intLevel, -100, 100));
@@ -823,6 +832,7 @@ class Image{
 	/**
 	 * Apply a Pixalate effect to the image, pass in the pixel block size. The image will be made of of pixel blocks of the given size.
 	 * @param int $intBlockPixelSize
+	 * @return $this
 	 */
 	public function filterPixelate($intBlockPixelSize = 10){
 		imagefilter($this->resImage, IMG_FILTER_PIXELATE, $intBlockPixelSize, true);
@@ -849,6 +859,7 @@ class Image{
 	/**
 	 * Apply a Smooth effect to the image, a level can be passed in for the required level of smoothing between -10 and 10. Defaults to 0
 	 * @param int $intLevel
+	 * @return $this
 	 */
 	public function smooth($intLevel = 0){
 		imagefilter($this->resImage, IMG_FILTER_SMOOTH, $this->keepWithinRange($intLevel, -10, 10));

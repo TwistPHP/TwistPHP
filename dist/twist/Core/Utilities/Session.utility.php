@@ -147,6 +147,7 @@
 
 		/**
 		 * @alias delete
+		 * @param string $strKey
 		 */
 		public function remove($strKey = null){
 			$this->delete($strKey);
@@ -154,7 +155,6 @@
 
 		/**
 		 * @param string $strReference
-		 * @return mixed|null|string
 		 */
 		public function viewExtension($strReference){
 

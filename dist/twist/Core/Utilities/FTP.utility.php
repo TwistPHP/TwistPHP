@@ -47,7 +47,7 @@
 
 		/**
 		 * Connect to the remote FTP server
-		 * @param $strHost
+		 * @param string $strHost
 		 * @param int $intPort
 		 * @param null|int $intConnectionTimeout
 		 */
@@ -68,8 +68,8 @@
 
 		/**
 		 * Login to the open FTP connection
-		 * @param $strUsername
-		 * @param $strPassword
+		 * @param string $strUsername
+		 * @param string $strPassword
 		 * @return bool
 		 */
 		public function login($strUsername,$strPassword){
@@ -102,7 +102,7 @@
 
 		/**
 		 * Detect if the connected FTP server supports this feature
-		 * @param $strFeature Name of feature to check
+		 * @param string $strFeature Name of feature to check
 		 * @return bool
 		 */
 		public function featureSupported($strFeature){
@@ -121,7 +121,7 @@
 		/**
 		 * Change the current working directory to a new location
 		 *
-		 * @param $strDirectory Path of new working directory
+		 * @param string $strDirectory Path of new working directory
 		 * @return bool Returns the status of change
 		 */
 		public function changeDirectory($strDirectory){
@@ -131,7 +131,7 @@
 		/**
 		 * Detect if the directory exists and is a directory
 		 *
-		 * @param $strDirectory Path of directory
+		 * @param string $strDirectory Path of directory
 		 * @return bool Returns the status of directory
 		 */
 		public function isDirectory($strDirectory){
@@ -141,7 +141,7 @@
 		/**
 		 * Make a new directory on the remote FTP server
 		 *
-		 * @param $strDirectory Path for the new directory
+		 * @param string $strDirectory Path for the new directory
 		 * @return bool Returns the status of directory creation
 		 */
 		public function makeDirectory($strDirectory,$blRecursive = false){
@@ -169,7 +169,7 @@
 		/**
 		 * Remove a directory on the remote FTP server
 		 *
-		 * @param $strDirectory Path of the directory to remove
+		 * @param string $strDirectory Path of the directory to remove
 		 * @return bool Returns the status of the removal
 		 */
 		public function removeDirectory($strDirectory,$blRecursive = false){
@@ -201,7 +201,7 @@
 		/**
 		 * List the provided directory and return as an array
 		 *
-		 * @param $strDirectory
+		 * @param string $strDirectory
 		 * @return array|bool
 		 */
 		public function listDirectory($strDirectory){
@@ -211,8 +211,8 @@
 		/**
 		 * Rename either a file or directory to a new name
 		 *
-		 * @param $strFilename
-		 * @param $strNewFilename
+		 * @param string $strFilename
+		 * @param string $strNewFilename
 		 * @return bool
 		 */
 		public function rename($strFilename, $strNewFilename){
@@ -222,8 +222,8 @@
 		/**
 		 * Upload a file to the remote FTP server
 		 *
-		 * @param $strLocalFilename
-		 * @param $strRemoteFilename
+		 * @param string $strLocalFilename
+		 * @param string $strRemoteFilename
 		 * @param string $strMode
 		 * @return bool
 		 */
@@ -234,8 +234,8 @@
 		/**
 		 * Download a file from the remote FTP server
 		 *
-		 * @param $strRemoteFilename
-		 * @param $strLocalFilename
+		 * @param string $strRemoteFilename
+		 * @param string $strLocalFilename
 		 * @param string $strMode
 		 * @return bool
 		 */
@@ -246,7 +246,7 @@
 		/**
 		 * Remove the file from the server
 		 *
-		 * @param $strFilename
+		 * @param string $strFilename
 		 * @return bool
 		 */
 		public function delete($strFilename){
@@ -256,8 +256,8 @@
 		/**
 		 * CHMOD the files permissions
 		 *
-		 * @param $strFilename
-		 * @param $intMode
+		 * @param string $strFilename
+		 * @param integer $intMode
 		 * @return bool
 		 */
 		public function chmod($strFilename,$intMode){
@@ -267,7 +267,7 @@
 		/**
 		 * Get the size of any given file on the remote FTP server
 		 *
-		 * @param $strFilename
+		 * @param string $strFilename
 		 * @return bool|int
 		 */
 		public function size($strFilename){
@@ -277,7 +277,7 @@
 		/**
 		 * Get the last modified time of any given file on the remote FTP server
 		 *
-		 * @param $strFilename
+		 * @param string $strFilename
 		 * @return bool|int
 		 */
 		public function modified($strFilename){

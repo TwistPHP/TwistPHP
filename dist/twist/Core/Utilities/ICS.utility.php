@@ -54,7 +54,7 @@
 		/**
 		 * Load in an existing ICS file in to be converted into an usable ICS Event/Calendar object
 		 *
-		 * @param $dirICSFile Path of the ICS file to be imported
+		 * @param string $dirICSFile Path of the ICS file to be imported
 		 * @return null|\Twist\Core\Models\ICS\Event|\Twist\Core\Models\ICS\Calendar Returns NULL or either the ICS Event or Calendar Object
 		 */
 		public function loadFile($dirICSFile){
@@ -72,7 +72,7 @@
 		/**
 		 * Turns the raw ICS data into an object and returns
 		 *
-		 * @param $strRawData
+		 * @param string $strRawData
 		 * @return null|\Twist\Core\Models\ICS\Event|\Twist\Core\Models\ICS\Calendar Returns NULL or either the ICS Event or Calendar Object
 		 */
 		protected function parseRawData($strRawData){
@@ -125,7 +125,7 @@
 						$mxdValue = implode($strExplodeChar,$arrRowParts);
 
 						//Set the data into the event or calendar
-						$resCurrentItem->setData($strKey,$mxdValue);
+						$resCurrentItem->setData($strKey,$mxdValue); //TODO: Isn't defined?
 						break;
 				}
 			}
