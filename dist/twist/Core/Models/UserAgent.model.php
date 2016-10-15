@@ -144,18 +144,18 @@
 		public static function getOS($strDeviceKey){
 
 			self::loadData();
-			$arrOut = array();
 
 			if(array_key_exists($strDeviceKey,self::$arrDevices)){
+				$arrOut = array();
 				$arrOut['key'] = $strDeviceKey;
 				$arrOut['title'] = self::$arrDevices[$strDeviceKey]['os'];
 				$arrOut['version'] = self::$arrDevices[$strDeviceKey]['version'];
 				$arrOut['fa-icon'] = self::$arrDevices[$strDeviceKey]['fa-icon'];
-			}else{
-				$arrOut = self::$arrUnknown['os'];
-			}
 
-			return $arrOut;
+				return $arrOut;
+			}else{
+				return self::$arrUnknown['os'];
+			}
 		}
 
 		/**
@@ -166,16 +166,16 @@
 		public static function getBrowser($strBrowserKey){
 
 			self::loadData();
-			$arrOut = array();
 
 			if(array_key_exists($strBrowserKey,self::$arrBrowsers)){
+				$arrOut = array();
 				$arrOut['key'] = $strBrowserKey;
 				$arrOut['title'] = self::$arrBrowsers[$strBrowserKey]['browser'];
 				$arrOut['fa-icon'] = self::$arrBrowsers[$strBrowserKey]['fa-icon'];
-			}else{
-				$arrOut = self::$arrUnknown['browser'];
-			}
 
-			return $arrOut;
+				return $arrOut;
+			}else{
+				return self::$arrUnknown['browser'];
+			}
 		}
 	}

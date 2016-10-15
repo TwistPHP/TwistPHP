@@ -95,8 +95,7 @@
 		 * @return boolean Returns true if future timestamp
 		 */
 		public function inFuture($intTimestamp){
-			$intSecondsDifference = $this->time() - $intTimestamp;
-			return $intSecondsDifference < 0;
+			return $this->time() - $intTimestamp < 0;
 		}
 
 		/**
@@ -108,8 +107,7 @@
 		 * @return boolean Returns true if past timestamp
 		 */
 		public function inPast($intTimestamp){
-			$intSecondsDifference = $this->time() - $intTimestamp;
-			return $intSecondsDifference > 0;
+			return $this->time() - $intTimestamp > 0;
 		}
 
 		/**
@@ -237,11 +235,16 @@
 		 */
 		public function getPersonAge($dateDOB){
 
+			//Get the timestamp of the DOB
 			$intDOB = strtotime($dateDOB);
 
+			//Get the year of the DOB
 			$intYearBorn = date('Y',$intDOB);
+			//Get the month of the DOB
 			$intMonthBorn = date('m',$intDOB);
+			//Get the day of the DOB
 			$intDayBorn = date('d',$intDOB);
+			//Get the number of years since the DOB
 			$intAgeYears = date('Y') - $intYearBorn;
 
 			if(date('m') < $intMonthBorn){
