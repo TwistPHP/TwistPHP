@@ -10,7 +10,7 @@ If you need to catch variables in your requests then you can just add the variab
     /*
      * --------------------------------
      * Any request URI that begins with
-     * shop will match this rule and be
+     * vars will match this rule and be
      * sent on to the MySite controller
      * --------------------------------
      * URI           | METHOD | myVar
