@@ -40,6 +40,7 @@ class Database extends Base{
 	protected $blNoDatabase = false;
 	protected $blDebugMode = false;
 	protected $strLastRunQuery = '';
+	public $strConnectionError = '';
 
 	/**
 	 * @var \Twist\Core\Models\Database\Records
@@ -125,7 +126,7 @@ class Database extends Base{
 			}
 
 			if(is_object($this->resLibrary) && !$this->resLibrary->connected()){
-				$strErrorMessage = $this->resLibrary->connectionError(); //TODO: Remove?
+				$this->strConnectionError = $this->resLibrary->connectionError();
 				$this->resLibrary = null;
 				throw new \Exception('Failed to connect to the database server');
 			}

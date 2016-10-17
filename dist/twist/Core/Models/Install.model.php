@@ -293,7 +293,7 @@
 		 * @param string $strType
 		 * @param null $strKey to remove a single settings only pass its key
 		 */
-		public static function removeSettings($strSlug,$strType,$strKey = null){ //TODO: $strKey not used
-			\Twist::framework()->settings()->uninstall($strSlug,$strType);
+		public static function removeSettings($strSlug,$strType,$strKey = null){
+			\Twist::framework()->settings()->uninstall($strSlug,$strType,$strKey);
 		}
 	}
