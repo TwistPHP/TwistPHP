@@ -47,7 +47,7 @@ class Database extends Base{
 	protected $resRecords = null;
 
 	/**
-	 * @var \Twist\Core\Models\Database\Tables
+	 * @var \Twist\Core\Models\Database\Table
 	 */
 	protected $resTables = null;
 
