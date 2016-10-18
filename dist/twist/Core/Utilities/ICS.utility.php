@@ -89,6 +89,7 @@
 				$resObject = $this->createEvent();
 			}
 
+			$resCurrentItem = null;
 			$arrLines = explode("\n",$strRawData);
 
 			foreach($arrLines as $strEachLine){
@@ -124,8 +125,11 @@
 						unset($arrRowParts[0]);
 						$mxdValue = implode($strExplodeChar,$arrRowParts);
 
-						//Set the data into the event or calendar
-						$resCurrentItem->setData($strKey,$mxdValue); //TODO: Isn't defined?
+						//$resCurrentItem should always be an object at this point as the BEGIN case would always be called first in a valid ICS file
+						if(is_resource($resCurrentItem) || is_object($resCurrentItem)){
+							//Set the data into the event or calendar
+							$resCurrentItem->setData($strKey,$mxdValue); //TODO: Rewrite this method to be more efficient
+						}
 						break;
 				}
 			}

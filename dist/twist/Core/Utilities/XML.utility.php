@@ -372,7 +372,7 @@
 			foreach($arrData as $strKey => $mxdData){
 
 				$strParameters = $this->processAttributes($mxdData);
-				$strComment = $this->processComment($mxdData); //TODO: Remove?
+				//$strComment = $this->processComment($mxdData);
 
 				//Detect for empty rows
 				if(!is_array($mxdData) && $mxdData == ""){
