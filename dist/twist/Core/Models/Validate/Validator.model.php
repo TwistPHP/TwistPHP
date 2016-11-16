@@ -177,7 +177,7 @@ class Validator{
 	 * type - Contains the type of problem encountered pass|blank|invalid|missing
 	 * message - The message contains a basic human readable description of the problem
 	 *
-	 * @param $arrData
+	 * @param array $arrData
 	 * @return array
 	 */
 	public function test(&$arrData){
@@ -263,7 +263,7 @@ class Validator{
 							if(array_key_exists($arrEachCheck['key2'],$arrData)){
 								$arrData[$arrEachCheck['key2']] = $mxdTestValue2;
 							}elseif(strstr($arrEachCheck['key2'],'/')){
-								//Todo the callback update
+								//TODO: The callback update
 							}
 						}
 
@@ -271,7 +271,7 @@ class Validator{
 						if(array_key_exists($strKey,$arrData)){
 							$arrData[$strKey] = $mxdTestResult;
 						}elseif(strstr($strKey,'/')){
-							//Todo the callback update
+							//TODO: The callback update
 						}
 
 						$this->testResult($strKey,true,sprintf("%s has passed all checks",$this->keyToText($strKey)));

@@ -108,7 +108,7 @@ class Create{
 	/**
 	 * Add the To address for the email, you can add as many To fields as you need.
 	 * Optionally you can put the persons full name in the second parameter if you know it.
-	 * @param $strEmailAddress
+	 * @param string $strEmailAddress
 	 * @param string $strName
 	 */
 	public function addTo($strEmailAddress,$strName = ''){
@@ -123,7 +123,7 @@ class Create{
 	/**
 	 * Add the Cc (Carbon Copy) address for the email, you can add as many Cc fields as you need.
 	 * Optionally you can put the persons full name in the second parameter if you know it.
-	 * @param $strEmailAddress
+	 * @param string $strEmailAddress
 	 * @param string $strName
 	 */
 	public function addCc($strEmailAddress,$strName = ''){
@@ -139,7 +139,7 @@ class Create{
 	 * Add the Bcc (Blind Carbon Copy) address for the email, you can add as many Bcc fields as you need.
 	 * Optionally you can put the persons full name in the second parameter if you know it. Note that Bcc will
 	 * send a copy of the email to the user but none of the addressed To and Cc users will be aware of this.
-	 * @param $strEmailAddress
+	 * @param string $strEmailAddress
 	 * @param string $strName
 	 */
 	public function addBcc($strEmailAddress,$strName = ''){
@@ -154,7 +154,7 @@ class Create{
 	/**
 	 * Set the From email address, this the is the address the email will be sent from.
 	 * Optionally you can set a name for the from address in the second parameter.
-	 * @param $strEmailAddress
+	 * @param string $strEmailAddress
 	 * @param string $strName
 	 */
 	public function setFrom($strEmailAddress,$strName = ''){
@@ -165,7 +165,7 @@ class Create{
 	/**
 	 * Setup a different reply to address so that when a receiver hits reply in their mail client
 	 * the email will be sent to the reply address rather than the from address.
-	 * @param $strEmailAddress
+	 * @param string $strEmailAddress
 	 */
 	public function setReplyTo($strEmailAddress){
 		$this->arrEmailData['reply_to'] = $strEmailAddress;
@@ -174,7 +174,7 @@ class Create{
 	/**
 	 * Set the subject of the email, this is the brief line of text that a receiver would read in
 	 * their client inbox when receiving a new email.
-	 * @param $strSubject
+	 * @param string $strSubject
 	 */
 	public function setSubject($strSubject){
 		$this->arrEmailData['subject'] = $strSubject;
@@ -183,7 +183,7 @@ class Create{
 	/**
 	 * Set the plain text body of the email, not required if you have set a HTML body the plain text can be auto
 	 * generated. This will happen if no plain text alternative has been entered.
-	 * @param $strBody
+	 * @param string $strBody
 	 */
 	public function setBodyPlain($strBody){
 		$this->arrEmailData['body_plain'] = $strBody;
@@ -192,7 +192,7 @@ class Create{
 	/**
 	 * Set the HTML body of the email, you can have a plain text only email if required. Full HTML and CSS support, bear in mind that
 	 * different mail clients will display HTML in different ways. Testing is key here.
-	 * @param $strBody
+	 * @param string $strBody
 	 */
 	public function setBodyHTML($strBody){
 		$this->arrEmailData['body_html'] = $strBody;
@@ -282,7 +282,7 @@ class Create{
 
 	/**
 	 * Add local (on server) files to be attached to the email ass attachments
-	 * @param $strLocalFile
+	 * @param string $strLocalFile
 	 */
 	public function addAttachment($strLocalFile){
 
@@ -335,6 +335,7 @@ class Create{
 	 * Send the email once all the data ans emails addresses have been added, this by default will user PHP mail unless otherwise specified.
 	 * @param bool $blClearCache
 	 * @return bool
+	 * @throws \Exception
 	 */
 	public function send($blClearCache = true){
 
@@ -458,7 +459,7 @@ class Create{
 
 	/**
 	 * Remove all the style tags, html tags and then decode any HTML entities
-	 * @param $strHtmlContent
+	 * @param string $strHtmlContent
 	 * @return mixed
 	 */
 	protected function stripTags($strHtmlContent){
@@ -476,7 +477,7 @@ class Create{
 
 	/**
 	 * Convert the header encoding, if no multibyte support on PHP installation ignore the encoding and output a warning
-	 * @param $strData
+	 * @param string $strData
 	 * @return string
 	 */
 	protected function convertEncodingHeader($strData){
@@ -492,7 +493,7 @@ class Create{
 
 	/**
 	 * Convert the body encoding, if no multibyte support on PHP installation ignore the encoding and output a warning
-	 * @param $strData
+	 * @param string $strData
 	 * @return string
 	 */
 	protected function convertEncodingBody($strData){
@@ -612,7 +613,7 @@ class Create{
 
 	/**
 	 * Set all the required attachment headers for each attachment.
-	 * @param $strBoundary
+	 * @param string $strBoundary
 	 * @return string
 	 */
 	protected function attachmentHeaders($strBoundary){

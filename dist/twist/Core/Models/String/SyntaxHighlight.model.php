@@ -28,7 +28,7 @@
 
 		/**
 		 * Get the contents of a file and highlight the code within the file, set a range above and below a focus point (Line No)
-		 * @param $dirFile
+		 * @param string $dirFile
 		 * @param string $strOutputType Choose from plain, em, table, dl (Plain puts line numbers in html comments)
 		 * @param null|int $intFocusLineNo Adding a focus line no. will activate $intFocusRange
 		 * @param int $intFocusRange Amount of lines to display above and below the focus line
@@ -40,7 +40,7 @@
 
 		/**
 		 * Hightlight some code that has been passed in, set a range above and below a focus point (Line No)
-		 * @param $strCode
+		 * @param string $strCode
 		 * @param string $strOutputType Choose from plain, em, table, dl (Plain puts line numbers in html comments)
 		 * @param null|int $intFocusLineNo Adding a focus line no. will activate $intFocusRange
 		 * @param int $intFocusRange Amount of lines to display above and below the focus line
@@ -52,7 +52,7 @@
 
 		/**
 		 * Process the code that has been passed in, highlight and output
-		 * @param $strCode
+		 * @param string $strCode
 		 * @param string $strOutputType Choose from plain, em, table, dl (Plain puts line numbers in html comments)
 		 * @param null|int $intFocusLineNo Adding a focus line no. will activate $intFocusRange
 		 * @param int $intFocusRange Amount of lines to display above and below the focus line
@@ -120,7 +120,7 @@
 
 		/**
 		 * Explode the highlighted code that has been returned, fix any unclosed/unopened tags
-		 * @param $strCode
+		 * @param string $strCode
 		 * @return array Each line of highlighted code as an array
 		 */
 		protected static function explodeLines($strCode){
@@ -178,11 +178,10 @@
 
 		/**
 		 * Apply new styles to the code rather than the default ones
-		 * @param $strFormattedCode
+		 * @param string $strFormattedCode
 		 * @return mixed
 		 */
-		protected static function convertStyles($strFormattedCode){
-			//@todo Write some code to detect the default styles and replace them with custom ones if required
+		protected static function convertStyles($strFormattedCode){ //TODO: Write some code to detect the default styles and replace them with custom ones if required
 			return $strFormattedCode;
 		}
 	}

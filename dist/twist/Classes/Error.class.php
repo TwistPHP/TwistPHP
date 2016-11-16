@@ -38,10 +38,10 @@
 
 		/**
 		 * Get an array of the Apache request headers.
-		 * @todo Needs to be re-written/optimised
+		 *
 		 * @return array
 		 */
-		public static function apacheRequestHeaders(){
+		public static function apacheRequestHeaders(){ //TODO: Needs to be re-written/optimised
 
             $arrOut = array();
             $regxHTTP = '/\AHTTP_/';
@@ -242,10 +242,10 @@
 
 		/**
 		 * PHP Error handler to capture all PHP errors so that they can be logged to a file or output into the debug window later.
-		 * @param $intErrorNo
-		 * @param $strError
-		 * @param $strErrorFile
-		 * @param $intErrorLine
+		 * @param integer $intErrorNo
+		 * @param string $strError
+		 * @param string $strErrorFile
+		 * @param integer $intErrorLine
 		 */
 		public static function handleError($intErrorNo, $strError, $strErrorFile, $intErrorLine){
 
@@ -727,7 +727,7 @@
 
 		/**
 		 * Detect the error type as a string based on an error number.
-		 * @param $intErrorNo
+		 * @param integer $intErrorNo
 		 * @return string
 		 */
 		public static function getType($intErrorNo){

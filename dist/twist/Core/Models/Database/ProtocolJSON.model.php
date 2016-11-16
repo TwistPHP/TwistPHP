@@ -88,7 +88,7 @@
 			);
 
 			$this->resDatabase['updated'] = date('Y-m-d H:i:s');
-			$this->writeChanges();
+			return $this->writeChanges();
 		}
 
 		public function deleteTable($strTable){
@@ -97,7 +97,7 @@
 			unset($this->resDatabase['tables'][$strTable]);
 
 			$this->resDatabase['updated'] = date('Y-m-d H:i:s');
-			$this->writeChanges();
+			return $this->writeChanges();
 		}
 
 		public function getTableInfo($strTable){
@@ -111,8 +111,8 @@
 
 		/**
 		 * Insert a record into a table
-		 * @param $strTable
-		 * @param $arrData
+		 * @param string $strTable
+		 * @param array $arrData
 		 * @return int
 		 */
 		public function insertRow($strTable,$arrData){
@@ -139,16 +139,18 @@
 				//Add the array to the table
 				$this->resDatabase['tables'][$strTable]['data'][] = $arrNewRow;
 				$this->resDatabase['tables'][$strTable]['updated'] = date('Y-m-d H:i:s');
-				$this->writeChanges();
+				return $this->writeChanges();
 			}
 
-			return $intInsertID;
+			return null;
 		}
 
 		/**
 		 * Select record(s) from a table
-		 * @param $strTable
+		 * @param string $strTable
 		 * @param array $arrWhere
+		 * @param array $arrOrder
+		 * @param array $arrLimit
 		 * @return array
 		 */
 		public function selectRow($strTable,$arrWhere = array(),$arrOrder = array(),$arrLimit = array()){
@@ -194,11 +196,12 @@
 
 		/**
 		 * Update a record in a table
-		 * @param $strTable
+		 * @param string $strTable
 		 * @param array $arrData
-		 * @param array $arrWhere]
+		 * @param array $arrWhere
+		 * @param array $arrLimit
 		 */
-		public function updateRow($strTable,$arrData = array(),$arrWhere = array(),$arrLimit = array()){
+		public function updateRow($strTable,$arrData = array(),$arrWhere = array(),$arrLimit = array()){ //TODO: $arrLimit isn't used
 
 			$arrTable = $this->getTableInfo($strTable);
 
@@ -220,12 +223,15 @@
 				$this->resDatabase['tables'][$strTable]['updated'] = date('Y-m-d H:i:s');
 				$this->writeChanges();
 			}
+
+			return true;
 		}
 
 		/**
 		 * Delete a record from a table
-		 * @param $strTable
+		 * @param string $strTable
 		 * @param array $arrWhere
+		 * @param array $arrLimit
 		 */
 		public function deleteRow($strTable,$arrWhere = array(),$arrLimit = array()){
 
@@ -240,13 +246,13 @@
 			}
 
 			$this->resDatabase['tables'][$strTable]['updated'] = date('Y-m-d H:i:s');
-			$this->writeChanges();
+			return $this->writeChanges();
 		}
 
 		/**
 		 * Test to see if the fields that are passed in are correct / valid
-		 * @param $strTable
-		 * @param $arrData
+		 * @param string $strTable
+		 * @param array $arrData
 		 * @return bool
 		 */
 		protected function testDataValidity($strTable,$arrData){
@@ -266,9 +272,9 @@
 
 		/**
 		 * Process each row to see if it matches the where requirements
-		 * @param $strTable
-		 * @param $arrDataRow
-		 * @param $arrWhere
+		 * @param string $strTable
+		 * @param array $arrDataRow
+		 * @param array $arrWhere
 		 * @return array|bool
 		 */
 		protected function processDataWhere($strTable,$arrDataRow,$arrWhere){
@@ -305,12 +311,12 @@
 			$strWriteDB = (is_null($strDatabase)) ? $this->strCurrentDatabase : $strDatabase;
 
 			$strDatabaseFile = sprintf("%s/%s.json",dirname(__FILE__),$strWriteDB);
-			file_put_contents($strDatabaseFile,json_encode($this->resDatabase));
+			return file_put_contents($strDatabaseFile,json_encode($this->resDatabase));
 		}
 
 		/**
 		 * Extract the table name form the query matches
-		 * @param $arrMatches
+		 * @param array $arrMatches
 		 * @return string
 		 */
 		protected function processQueryTable($arrMatches){
@@ -327,7 +333,7 @@
 
 		/**
 		 * Extract the options/Data form the query matches
-		 * @param $arrMatches
+		 * @param array $arrMatches
 		 * @return array
 		 */
 		protected function processQueryOptions($arrMatches){
@@ -358,7 +364,7 @@
 
 		/**
 		 * Extract the Where data form the query matches
-		 * @param $arrMatches
+		 * @param array $arrMatches
 		 * @return array
 		 */
 		protected function processQueryWhere($arrMatches){
@@ -425,6 +431,9 @@
 		 * PUBLIC FUNCTIONS
 		 */
 
+		/**
+		 * @param $resResult
+		 */
 		function numberRows($resResult){
 
 		}
@@ -487,6 +496,8 @@
 			$arrLimit = $this->processQueryLimit($arrMatches);
 
 			echo "<pre>Parts: ".print_r($arrMatches,true)."</pre><hr>";
+
+			$arrResult = array();
 
 			switch(strtoupper($arrMatches['type'])){
 

@@ -135,7 +135,7 @@ class Manager extends BaseUser{
 
 	/**
 	 * Run through all the cache files and build up a list of what has been cached
-	 * @param $strCacheFolder
+	 * @param string $strCacheFolder
 	 */
 	protected function parseCache($strCacheFolder){
 

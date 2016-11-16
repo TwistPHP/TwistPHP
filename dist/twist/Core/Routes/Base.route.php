@@ -38,7 +38,7 @@
 
 		/**
 		 * Called when the routes package launches a routes file. A routes file is usually a pre-defined set of route found withing an installable package.
-		 * @param $strPackageKey
+		 * @param string $strPackageKey
 		 */
 		public function __construct($strPackageKey){
 
@@ -60,7 +60,7 @@
 
 		/**
 		 * Function to detect if a package exists or has been installed
-		 * @param $strModule
+		 * @param string $strModule
 		 * @throws \Exception
 		 */
 		protected function packageRequired($strModule){

@@ -36,17 +36,21 @@
 		protected $strBody = null;
 		protected $blUseFromParameter = false;
 
-		public function setTimeout($intTimeout = 90){ return true; }
+		public function setTimeout($intTimeout = 90){ //TODO: $intTimeout not used
+			return true;
+		}
 
 		public function getLastMessage(){ return ''; }
 
-		public function connect($strHost,$intPort = 25){ return true; }
+		public function connect($strHost,$intPort = 25){ //TODO: $strHost and $intPort not used
+			return true;
+		}
 
 		public function connected(){ return $this->blConnected; }
 
 		public function disconnect(){}
 
-		public function login($strEmailAddress,$strPassword){
+		public function login($strEmailAddress,$strPassword){ //TODO: $strEmailAddress and $strPassword not used
 			return true;
 		}
 

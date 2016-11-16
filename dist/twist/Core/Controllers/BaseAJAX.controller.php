@@ -40,7 +40,7 @@ class BaseAJAX extends Base{
 	/**
 	 * Set the status for the Ajax response, true by default
 	 *
-	 * @param $blStatus
+	 * @param bool $blStatus
 	 */
 	public function _ajaxStatus($blStatus){
 		$this->blAjaxResponse = ($blStatus !== false);
@@ -62,7 +62,7 @@ class BaseAJAX extends Base{
 
 	/**
 	 * Set a message to be returned to the Ajax call, can be used for an error message
-	 * @param $strMessage
+	 * @param string $strMessage
 	 */
 	public function _ajaxMessage($strMessage=''){
 		$this->strAjaxResponseMessage = $strMessage;
@@ -71,6 +71,7 @@ class BaseAJAX extends Base{
 	/**
 	 * Encode the response of the AJAX output
 	 * @param array $mxdData
+	 * @param bool  $blDebug
 	 * @return string
 	 */
 	public function _ajaxRespond($mxdData=array(), $blDebug = false){

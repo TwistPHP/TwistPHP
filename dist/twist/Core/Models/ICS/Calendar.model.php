@@ -131,7 +131,7 @@
 			}
 
 			if(is_null($intUID)){
-				$resEvent = new ICSEvent();
+				$resEvent = new ICSEvent(); //TODO: Where?
 				$this->arrEvents[$resEvent->uid()] = $resEvent;
 			}else{
 				$resEvent = $this->arrEvents[$intUID];
@@ -188,6 +188,9 @@
 			$this->arrData[strtoupper(trim($strKey))] = $this->sanitizeRawData($mxdData);
 		}
 
+		/**
+		 * @param string $strFileName
+		 */
 		public function serve($strFileName = 'calendar'){
 
 			$strFileName = \Twist::File()->sanitizeName($strFileName);

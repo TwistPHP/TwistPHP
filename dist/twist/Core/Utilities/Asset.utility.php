@@ -63,7 +63,7 @@
 		/**
 		 * Get an asset by Asset ID, this will also expand the asset to include a sub array of its type and group information
 		 *
-		 * @param $intAssetID ID of the required asset
+		 * @param integer $intAssetID ID of the required asset
 		 * @return array Returns an array of the assets information
 		 */
 		public function get($intAssetID){
@@ -78,6 +78,8 @@
 		 * Get all the assets in the asset system, this will also expand the asset to include a sub array of its type and group information
 		 *
 		 * @related get
+		 * @param string $strOrderBy
+		 * @param string $strOrderDirection
 		 * @return array Returns a multi-dimensional array of all the assets in the system
 		 */
 		public function getAll($strOrderBy='added',$strOrderDirection='DESC'){
@@ -98,7 +100,7 @@
 		 * Get all assets that of a asset group by Asset Group ID, this will also expand the asset to include a sub array of its type and group information
 		 *
 		 * @related get
-		 * @param $intGroupID ID of the required asset group
+		 * @param integer $intGroupID ID of the required asset group
 		 * @param string $strOrderBy field to order the results by
 		 * @param string $strOrderDirection directional order of the results
 		 * @return array Returns a multi-dimensional array of the groups assets
@@ -121,7 +123,7 @@
 		 * Get all assets of a particular type by Asset Type ID, this will also expand the asset to include a sub array of its type and group information
 		 *
 		 * @related get
-		 * @param $intTypeID ID of the required asset type
+		 * @param integer $intTypeID ID of the required asset type
 		 * @param string $strOrderBy field to order the results by
 		 * @param string $strOrderDirection directional order of the results
 		 * @return array Returns a multi-dimensional array of assets
@@ -143,7 +145,7 @@
 		/**
 		 * Expand the assets default array of date to include extra data such as detailed type/group information
 		 *
-		 * @param $arrAsset Default asset array before expansion
+		 * @param array $arrAsset Default asset array before expansion
 		 * @return array Expanded asset array
 		 */
 		private function expand($arrAsset){
@@ -172,7 +174,7 @@
 		/**
 		 * Get all the supporting content for this asset, this includes thumbnails and alternative sizes/formats. If none are found the default icon set will be returned.
 		 *
-		 * @param $arrAsset Default asset array before expansion
+		 * @param array $arrAsset Default asset array before expansion
 		 * @return array Returns array of supporting content
 		 */
 		public function getSupportingContent($arrAsset){
@@ -195,7 +197,7 @@
 		 * Get all the default content icons the the assets type
 		 *
 		 * @related getSupportingContent
-		 * @param $arrAsset Default asset array before expansion
+		 * @param array $arrAsset Default asset array before expansion
 		 * @return array Returns array of default content icons
 		 */
 		public function getDefaultSupportingContent($arrAsset){
@@ -219,7 +221,7 @@
 		/**
 		 * Get an array of asset type information by its asset type ID
 		 *
-		 * @param $intTypeID ID of the required asset type
+		 * @param integer $intTypeID ID of the required asset type
 		 * @return array Returns an array of the asset type information
 		 */
 		public function getType($intTypeID){
@@ -230,7 +232,7 @@
 		 * Get an array of asset type information by its asset type slug
 		 *
 		 * @related getType
-		 * @param $strTypeSlug Slug of the required asset type
+		 * @param string $strTypeSlug Slug of the required asset type
 		 * @return array Returns an array of the asset type information
 		 */
 		public function getTypeBySlug($strTypeSlug){
@@ -240,7 +242,7 @@
 		/**
 		 * Get an array of asset group information by its asset group ID
 		 *
-		 * @param $intGroupID ID of the required asset group
+		 * @param integer $intGroupID ID of the required asset group
 		 * @return array Returns an array of the asset group information
 		 */
 		public function getGroup($intGroupID){
@@ -251,7 +253,7 @@
 		 * Get an array of asset group information by its asset group slug
 		 *
 		 * @related getGroup
-		 * @param $strGroupSlug Slug of the required asset type
+		 * @param string $strGroupSlug Slug of the required asset type
 		 * @return array Returns an array of the asset group information
 		 */
 		public function getGroupBySlug($strGroupSlug){
@@ -282,8 +284,8 @@
 		 * Add a new group to the asset groups table, the asset groups will allow you slit/categorise your assets into manageable groups.
 		 * @related getGroup
 		 *
-		 * @param $strDescription Description of the group
-		 * @param $srtSlug Slug of the group, used to reference the group
+		 * @param string $strDescription Description of the group
+		 * @param string $srtSlug Slug of the group, used to reference the group
 		 * @return int ID of the newly created group
 		 */
 		public function addGroup($strDescription,$srtSlug){
@@ -300,17 +302,17 @@
 		/**
 		 * Update a asset group, change the group description and slug without affecting the assets contained within the group.
 		 *
-		 * @param $intGroupID ID of the asset group to be updated
-		 * @param $strDescription Description of the group
-		 * @param $srtSlug Slug of the group, used to reference the group
+		 * @param integer $intGroupID ID of the asset group to be updated
+		 * @param string $strDescription Description of the group
+		 * @param string $strSlug Slug of the group, used to reference the group
 		 * @return bool Returns the status of the update
 		 */
-		public function editGroup($intGroupID,$strDescription,$srtSlug){
+		public function editGroup($intGroupID,$strDescription,$strSlug){
 
 			//Create the asset group record in the database
 			$resRecord = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'asset_groups')->get($intGroupID);
 			$resRecord->set('description',$strDescription);
-			$resRecord->set('slug',$srtSlug);
+			$resRecord->set('slug',$strSlug);
 			$resRecord->set('created',\Twist::DateTime()->date('Y-m-d H:i:s'));
 
 			return $resRecord->commit();
@@ -320,11 +322,11 @@
 		 * Add an asset to the system, the asset type will be detected automatically. The asset group must be passed in as a group ID.
 		 * In the first parameter you can either pass in a string i.e URL, Youtube Link, Co-ordinates or a full path to a file i.e /my/file/to/add/file.ext
 		 *
-		 * @param $mxdData
-		 * @param $intGroupID Initial group for the asset to be added
-		 * @param $strTitle Title of the asset
-		 * @param $strDescription Description for the asset
-		 * @param $blActive Default status of the asset once created in the system
+		 * @param mixed $mxdData
+		 * @param integer $intGroupID Initial group for the asset to be added
+		 * @param string $strTitle Title of the asset
+		 * @param string $strDescription Description for the asset
+		 * @param bool $blActive Default status of the asset once created in the system
 		 * @return int Returns the ID of the newly added asset
 		 */
 		public function add($mxdData,$intGroupID,$strTitle='',$strDescription='',$blActive=true){
@@ -462,11 +464,11 @@
 		 * Upload an asset to the system (utilises 'add' to store the asset once uploaded), the asset type will be detected automatically. An asset group must be provided.
 		 *
 		 * @related add
-		 * @param $strFileKey File upload key from the $_FILES array
-		 * @param $intGroupID Initial group for the asset to be added
-		 * @param $strTitle Title of the asset
-		 * @param $strDescription Description for the asset
-		 * @param $blActive Default status of the asset once created in the system
+		 * @param string $strFileKey File upload key from the $_FILES array
+		 * @param integer $intGroupID Initial group for the asset to be added
+		 * @param string $strTitle Title of the asset
+		 * @param string $strDescription Description for the asset
+		 * @param bool $blActive Default status of the asset once created in the system
 		 * @return int Returns the ID of the newly uploaded/added asset
 		 */
 		public function upload($strFileKey,$intGroupID,$strTitle='',$strDescription='',$blActive=true){
@@ -485,11 +487,11 @@
 		 * Import an asset into the system (utilises 'add' to store the asset once uploaded), the asset type will be detected automatically. An asset group must be provided.
 		 *
 		 * @related add
-		 * @param $mxdFile A filepath or URL to import
-		 * @param $intGroupID Initial group for the asset to be added
-		 * @param $strTitle Title of the asset
-		 * @param $strDescription Description for the asset
-		 * @param $blActive Default status of the asset once created in the system
+		 * @param string $mxdFile A filepath or URL to import
+		 * @param integer $intGroupID Initial group for the asset to be added
+		 * @param string $strTitle Title of the asset
+		 * @param string $strDescription Description for the asset
+		 * @param bool $blActive Default status of the asset once created in the system
 		 * @return int Returns the ID of the newly uploaded/added asset
 		 */
 
@@ -507,9 +509,9 @@
 		/**
 		 * Edit the title and description of an asset by its asset ID
 		 *
-		 * @param $intAssetID ID of the asset to be updated
-		 * @param $strTitle Title to be stored for the provided asset ID
-		 * @param $strDescription Description to be stored for the provided asset ID
+		 * @param integer $intAssetID ID of the asset to be updated
+		 * @param string $strTitle Title to be stored for the provided asset ID
+		 * @param string $strDescription Description to be stored for the provided asset ID
 		 * @return bool Returns that status of the update
 		 */
 		public function edit($intAssetID,$strTitle,$strDescription=''){
@@ -524,8 +526,8 @@
 		/**
 		 * Set the status of an asset between active/inactive by passing a boolean of either true or false in the second parameter.
 		 *
-		 * @param $intAssetID ID of the asset to be updated
-		 * @param $blActive Status in which to set the enabled field
+		 * @param integer $intAssetID ID of the asset to be updated
+		 * @param bool $blActive Status in which to set the enabled field
 		 * @return bool Returns that status of teh update
 		 */
 		public function active($intAssetID,$blActive=true){
@@ -539,7 +541,7 @@
 		/**
 		 * Delete an asset from the system, this will remove both the database record and the file (if there is one)
 		 *
-		 * @param $intAssetID ID of the asset to be deleted
+		 * @param integer $intAssetID ID of the asset to be deleted
 		 * @return bool Returns that status of the delete command
 		 */
 		public function delete($intAssetID){
@@ -578,8 +580,9 @@
 		 * {asset:inline,type}
 		 *
 		 * @extends Template
-		 * @param $strReference View tag passed in from a tpl file
-		 * @return string Formatted HTML/Markup to be output by the View utility
+		 * @param string $strReference View tag passed in from a tpl file
+		 * @param array $arrParameters
+		 * @return mixed|string Formatted HTML/Markup to be output by the View utility
 		 */
 		public function viewExtension($strReference,$arrParameters = array()){
 

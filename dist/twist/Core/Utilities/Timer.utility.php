@@ -45,7 +45,7 @@
 
 		/**
 		 * Start a new timer, pass in a unique key to reference the timer with
-		 * @param $intStartMicroTime Start time to use if not current time
+		 * @param integer $intStartMicroTime Start time to use if not current time
 		 */
 		public function start($intStartMicroTime = null){
 			$this->arrTimer = array(
@@ -65,7 +65,6 @@
 
 		/**
 		 * Stop the timer, this timer cannot that be used any further
-		 * @param $strReference
 		 * @return mixed
 		 */
 		public function stop(){
@@ -83,7 +82,6 @@
 
 		/**
 		 * Clear the timer results from the system
-		 * @param $strReference
 		 */
 		public function clear(){
 			$this->arrTimer = array();
@@ -91,7 +89,6 @@
 
 		/**
 		 * Get the full results from any given timer
-		 * @param $strReference
 		 * @return mixed
 		 */
 		public function results(){
@@ -100,7 +97,7 @@
 
 		/**
 		 * Get the timers' current length but do not stop the timer
-		 * @param $strLogTitle
+		 * @param string $strLogTitle
 		 * @return int
 		 */
 		public function log($strLogTitle){

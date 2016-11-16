@@ -42,7 +42,7 @@
 
 		/**
 		 * Set the database that is being used in the current request if it is different from TWIST_DATABASE_NAME.
-		 * @param string $strTable SQL database name
+		 * @param string $strDatabase SQL database name
 		 */
 		public function __setDatabase($strDatabase){
 			$this->strDatabase = $strDatabase;
@@ -72,7 +72,7 @@
 		public function get(){
 
 			if($this->exists()){
-				return new \Twist\Core\Models\Database\TableStructure($this->strDatabase,$this->strTable,$this->structure());
+				return new TableStructure($this->strDatabase,$this->strTable,$this->structure());
 			}
 
 			return null;
@@ -85,7 +85,7 @@
 		public function create(){
 
 			if(!$this->exists()){
-				return new \Twist\Core\Models\Database\TableStructure($this->strDatabase,$this->strTable);
+				return new TableStructure($this->strDatabase,$this->strTable);
 			}
 
 			return null;
@@ -219,7 +219,7 @@
 		 * Copy an excising table structure into a new object, the new table will not exists until you commit the returned object.
 		 * @param string $strNewTable
 		 * @param null $strNewDatabase
-		 * @return null|\Twist\Core\Models\Database\Table Returns and object of the database table
+		 * @return null|\Twist\Core\Models\Database\TableStructure Returns and object of the database table
 		 */
 		public function copy($strNewTable,$strNewDatabase = null){
 

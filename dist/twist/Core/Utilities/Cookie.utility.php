@@ -33,7 +33,7 @@
 		/**
 		 * Returns true if there is a cookie with this name.
 		 *
-		 * @param string $name
+		 * @param string $strName
 		 * @return bool
 		 */
 		public function exists($strName){
@@ -44,8 +44,7 @@
 		 * Get the value of the given cookie. If the cookie does not exist the value
 		 * of $default will be returned.
 		 *
-		 * @param string $name
-		 * @param string $default
+		 * @param string $strName
 		 * @return mixed
 		 */
 		public function get($strName){
@@ -55,11 +54,11 @@
 		/**
 		 * Set a cookie. Silently does nothing if headers have already been sent.
 		 *
-		 * @param string $name
-		 * @param string $value
-		 * @param mixed $expiry
-		 * @param string $path
-		 * @param string $domain
+		 * @param string $strName
+		 * @param mixed $mxdValue
+		 * @param int $intExpiry
+		 * @param string $strPath
+		 * @param bool $strDomain
 		 * @return bool
 		 */
 		public function set($strName, $mxdValue, $intExpiry = 0, $strPath = '/', $strDomain = false){
@@ -95,10 +94,10 @@
 		/**
 		 * Delete a cookie.
 		 *
-		 * @param string $name
-		 * @param string $path
-		 * @param string $domain
-		 * @param bool $remove_from_global Set to true to remove this cookie from this request.
+		 * @param string $strName
+		 * @param string $strPath
+		 * @param bool $strDomain
+		 * @param bool $blRemoveFromGlobal
 		 * @return bool
 		 */
 		public function delete($strName, $strPath = '/', $strDomain = false, $blRemoveFromGlobal = false){

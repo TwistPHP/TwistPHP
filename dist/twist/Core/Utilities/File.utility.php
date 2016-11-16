@@ -62,7 +62,7 @@ class File extends Base{
 	/**
 	 * Convert bytes to a human readable size for example 1536 would be converted to 1.5KB
 	 *
-	 * @param $intBytes Size in bytes
+	 * @param integer $intBytes Size in bytes
 	 * @return mixed Returns a human readable data size
 	 */
 	public function bytesToSize($intBytes){
@@ -107,8 +107,8 @@ class File extends Base{
 	/**
 	 * Sanitize a file name to make it more user friendly. Also helps to prevent errors and make a much cleaner file system.
 	 *
-	 * @param $strFilename Name to be sanitized
-	 * @param $blIsFilename Set to true will allow '~' and '.' in file names
+	 * @param string $strFilename Name to be sanitized
+	 * @param bool $blIsFilename Set to true will allow '~' and '.' in file names
 	 * @return string Returns the sanitized file name
 	 */
 	public function sanitizeName($strFilename, $blIsFilename = true){
@@ -129,7 +129,7 @@ class File extends Base{
 	/**
 	 * Get the file extension of any file, provide the file or its full path.
 	 *
-	 * @param $strFilePath File name/path
+	 * @param string $strFilePath File name/path
 	 * @return string Returns the file extension
 	 */
 	public function extension($strFilePath){
@@ -147,7 +147,7 @@ class File extends Base{
 	/**
 	 * Get the filename, trim off any path information that is not required.
 	 *
-	 * @param $strFile Full path to file including file name
+	 * @param string $strFile Full path to file including file name
 	 * @return string Returns the file name only
 	 */
 	public function name($strFile){
@@ -163,8 +163,8 @@ class File extends Base{
 	/**
 	 * Get the mime type of a file by its file extension.
 	 *
-	 * @param $dirFile Full path to file including file name
-	 * @param $blReturnDefaultOnly If multiple types available return as array
+	 * @param string $dirFile Full path to file including file name
+	 * @param bool $blReturnDefaultOnly If multiple types available return as array
 	 * @return string Returns the content type
 	 */
 	public function mimeType($dirFile,$blReturnDefaultOnly = true){
@@ -188,7 +188,7 @@ class File extends Base{
 
 	/**
 	 * Get file details by path or extension
-	 * @param $dirFile
+	 * @param string $dirFile
 	 * @return array
 	 */
 	public function mimeTypeInfo($dirFile){
@@ -221,9 +221,9 @@ class File extends Base{
 	/**
 	 * Find a file in a directory when there is multiple of the same file with many different version numbers.
 	 *
-	 * @param $strDirectory Path of directory to search
-	 * @param $strFilePrefix File prefix to help filter correct files
-	 * @param $strVersion Version of file to find
+	 * @param string $strDirectory Path of directory to search
+	 * @param string $strFilePrefix File prefix to help filter correct files
+	 * @param string $strVersion Version of file to find
 	 * @return string Returns file name of verion file
 	 */
 	public function findVersion($strDirectory,$strFilePrefix,$strVersion = null){
@@ -278,12 +278,12 @@ class File extends Base{
 	/**
 	 * Serve any local file to the user to be downloaded. Mime type, Max Cache Time and Restricted Download Speed in KB are all optional
 	 *
-	 * @param $strFile Full path of file to be served
-	 * @param $strServeAsName Serve the file as the name provided
-	 * @param $strMimeType Mime type to serve file as
-	 * @param $intMaxCacheTime Set to the max cache time in seconds
-	 * @param $intMaxTransferRate Set to the Max transfer rate in kb/s
-	 * @param $blDeleteFile Remove the file after serve, use this when serving a temp file
+	 * @param string $strFile Full path of file to be served
+	 * @param string $strServeAsName Serve the file as the name provided
+	 * @param string $strMimeType Mime type to serve file as
+	 * @param integer $intMaxCacheTime Set to the max cache time in seconds
+	 * @param integer $intMaxTransferRate Set to the Max transfer rate in kb/s
+	 * @param bool $blDeleteFile Remove the file after serve, use this when serving a temp file
 	 */
 	public function serve($strFile,$strServeAsName=null,$strMimeType=null,$intMaxCacheTime=null,$intMaxTransferRate=null,$blDeleteFile=false){
 
@@ -393,8 +393,8 @@ class File extends Base{
 	 * Handle uploaded files, call the function and pass in the html file input name. The file will then be uploaded to the system ready to be processed.
 	 * Optionally pass in a UID so that you can reference the temp file to further process the file, can be useful if uploading a file before the user has submitted the form.
 	 *
-	 * @param $strFileKey Key for the file in the $_FILES array
-	 * @param $strUID Unique ID used to reference the file after upload
+	 * @param string $strFileKey Key for the file in the $_FILES array
+	 * @param string $strUID Unique ID used to reference the file after upload
 	 * @return array Returns an array of information for the uploaded file
 	 */
 	public function upload($strFileKey,$strUID = null){
@@ -517,8 +517,8 @@ class File extends Base{
 
 	/**
 	 * Download/Copy a remote file over HTTP in chunks, outputting the chunks direclty to a local file handler. Download large files to the server without running out of system memory.
-	 * @param $strRemoteFile Full URL to the remote file
-	 * @param $strLocalFile Local path where the file is to be saved
+	 * @param string $strRemoteFile Full URL to the remote file
+	 * @param string $strLocalFile Local path where the file is to be saved
 	 * @return bool|int Total bytes downloaded, false upon failure
 	 */
 	public function download($strRemoteFile, $strLocalFile){
@@ -598,8 +598,8 @@ class File extends Base{
 	 * Basic alias function of PHP's hash_file, hash a file on the local server
 	 *
 	 * @reference http://php.net/manual/en/function.hash-file.php
-	 * @param $strFilePath Path to the file
-	 * @param $strHashAlgorithm Set the hash algorithm 'md5' or 'sha1'
+	 * @param string $strFilePath Path to the file
+	 * @param string $strHashAlgorithm Set the hash algorithm 'md5' or 'sha1'
 	 * @return string Returns a hash of the file
 	 */
 	public function hash($strFilePath, $strHashAlgorithm='md5'){
@@ -610,8 +610,8 @@ class File extends Base{
 	 * Get a unique Hash of a directory in MD5 or SHA1. If any single item within the directory or sub-directories changes the unique hash will change as well.
 	 *
 	 * @related hash
-	 * @param $dirPath Path of the directory
-	 * @param $strHashAlgorithm Set the hash algorithm 'md5' or 'sha1'
+	 * @param string $dirPath Path of the directory
+	 * @param string $strHashAlgorithm Set the hash algorithm 'md5' or 'sha1'
 	 * @return bool|string
 	 */
 	public function directoryHash($dirPath, $strHashAlgorithm='md5'){
@@ -642,8 +642,8 @@ class File extends Base{
 	/**
 	 * Get the full size in bytes of any directory by providing its full path. Optional parameter to format the return data in a human readable format.
 	 *
-	 * @param $dirPath Path of the directory
-	 * @param $blFormatOutput Set 'true' to format output
+	 * @param string $dirPath Path of the directory
+	 * @param bool $blFormatOutput Set 'true' to format output
 	 * @return mixed Returns the size in bytes or a human readable format
 	 */
 	public function directorySize($dirPath, $blFormatOutput=false){
@@ -671,7 +671,7 @@ class File extends Base{
 
 	/**
 	 * Check to see if a file exists, this also checks delayed files by default
-	 * @param $dirFilePath
+	 * @param string $dirFilePath
 	 * @param bool $blCheckDelayedFiles
 	 * @return bool
 	 */
@@ -736,6 +736,7 @@ class File extends Base{
 	 * @param mixed $mxdData Data to be stored in the file
 	 * @param null $strOptions pass in either null, prefix or suffix
 	 * @param bool $blDelayedWrite Store file in memory and write to disk after script has finished
+	 * @throws \Exception
 	 */
 	public function write($dirFilePath,$mxdData,$strOptions = null,$blDelayedWrite = false){
 
@@ -779,8 +780,8 @@ class File extends Base{
 	 * Basic alias function of PHP's unlink, removes a file or symlink from the local server
 	 *
 	 * @reference http://php.net/manual/en/function.unlink.php
-	 * @param $strFilePath Path of the file to be removed
-	 * @param $blIncludeDelayedFiles
+	 * @param string $dirFilePath Path of the file to be removed
+	 * @param bool $blIncludeDelayedFiles
 	 * @return bool Return the status of the removal
 	 */
 	public function remove($dirFilePath,$blIncludeDelayedFiles = true){
@@ -794,6 +795,9 @@ class File extends Base{
 
 	/**
 	 * @alias remove
+	 * @param string $strFilePath
+	 * @param bool $blIncludeDelayedFiles
+	 * @return bool
 	 */
 	public function delete($strFilePath,$blIncludeDelayedFiles = true){ return $this->remove($strFilePath,$blIncludeDelayedFiles); }
 
@@ -801,7 +805,7 @@ class File extends Base{
 	 * Recursively remove a directory and all its files and sub directories on the local server
 	 *
 	 * @related remove
-	 * @param $strDirectory Path of the directory to be removed
+	 * @param string $strDirectory Path of the directory to be removed
 	 */
 	public function recursiveRemove($strDirectory){
 
@@ -826,8 +830,8 @@ class File extends Base{
 	 * Basic alias function of PHP's rename, move/rename a file on the local server
 	 *
 	 * @reference http://php.net/manual/en/function.rename.php
-	 * @param $strSourcePath Path of file to be moved
-	 * @param $strDestinationPath Destination path and name for moved file
+	 * @param string $strSourcePath Path of file to be moved
+	 * @param string $strDestinationPath Destination path and name for moved file
 	 * @return bool Returns the status of the move
 	 */
 	public function move($strSourcePath, $strDestinationPath){
@@ -838,8 +842,8 @@ class File extends Base{
 	 * Basic alias function of PHP's copy, copy a file on the local server
 	 *
 	 * @reference http://php.net/manual/en/function.copy.php
-	 * @param $strSourcePath Path of file to be copied
-	 * @param $strDestinationPath Destination path and name for copied file
+	 * @param string $strSourcePath Path of file to be copied
+	 * @param string $strDestinationPath Destination path and name for copied file
 	 * @return bool Returns the status of the copied
 	 */
 	public function copy($strSourcePath,$strDestinationPath){
@@ -850,8 +854,8 @@ class File extends Base{
 	 * Recursively copy a directory and all its files and sub-directories to a new location on the local server
 	 *
 	 * @related copy
-	 * @param $strSource
-	 * @param $strDestination
+	 * @param string $strSourcePath
+	 * @param string $strDestinationPath
 	 */
 	public function recursiveCopy($strSourcePath,$strDestinationPath){
 
@@ -879,7 +883,7 @@ class File extends Base{
 	/**
 	 * Recursively create a directory on the local server
 	 *
-	 * @param $strDirectoryPath New directory path
+	 * @param string $strDirectoryPath New directory path
 	 * @return boolean Returns that status of the new directory
 	 */
 	public function recursiveCreate($strDirectoryPath){
@@ -926,7 +930,8 @@ class File extends Base{
 	 * multiple = 0
 	 * id = uniqid()
 	 *
-	 * @param $strReference
+	 * @param string $strReference
+	 * @param array $arrParameters
 	 * @return string
 	 */
 	public function viewExtension($strReference,$arrParameters = array()){

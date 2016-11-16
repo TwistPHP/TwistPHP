@@ -85,8 +85,9 @@ class Auth{
 
     /**
      * Log the user in and generate an active session (Stores session data into the browser)
-     * @param $strEmail
-     * @param $strPassword
+     * @param string $strEmail
+     * @param string $strPassword
+     * @param bool $blRememberMeCookie
      * @return array
      */
     public static function login($strEmail,$strPassword,$blRememberMeCookie = false){
@@ -128,8 +129,8 @@ class Auth{
 
     /**
      * Validate a users credentials without logging the user into the system
-     * @param $strEmail
-     * @param $strPassword
+     * @param string $strEmail
+     * @param string $strPassword
      * @return array
      */
     public static function validate($strEmail,$strPassword){
@@ -190,7 +191,7 @@ class Auth{
 
     /**
      * Log the user out of the system
-     * @return array
+     * @return bool
      */
     public static function logout(){
 

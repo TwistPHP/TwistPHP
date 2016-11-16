@@ -34,7 +34,7 @@ class SourceParser{
 
 	/**
 	 * Pass in the full raw source of an email and it will parse and return as a simple usable array of data.
-	 * @param $strEmailSource
+	 * @param string $strEmailSource
 	 * @return array
 	 */
 	public function processEmailSource($strEmailSource){
@@ -68,7 +68,7 @@ class SourceParser{
 
 	/**
 	 * Parse the decoded boundaries, turn them into a usable data
-	 * @param $arrBoundaries
+	 * @param array $arrBoundaries
 	 * @param bool $blReturnLog
 	 * @return array
 	 */
@@ -110,7 +110,7 @@ class SourceParser{
 
 	/**
 	 * Split the email source into a multi-dimensional array by boundary ID
-	 * @param $strData
+	 * @param string $strData
 	 * @param string $strBoundary
 	 * @return array
 	 */
@@ -182,7 +182,7 @@ class SourceParser{
 
 	/**
 	 * Decode QPrint helps with decoding emails from the system
-	 * @param $str
+	 * @param string $strData
 	 * @return string
 	 */
 	protected function decodeQuotedPrintable($strData){
@@ -192,14 +192,14 @@ class SourceParser{
 
 	/**
 	 * Strip out all unwanted headers from email raw source
-	 * @param $strEmailSource
+	 * @param string $strEmailSource
 	 * @return mixed
 	 */
 	protected function stripEmailHeaders($strEmailSource){
 
 		$arrParts = explode("\n\n",$strEmailSource);
 
-		$strHeaders = $arrParts[0];
+		$strHeaders = $arrParts[0]; //TODO: Remove?
 		$arrParts[0] = null;
 
 		$strEmailSource = implode("\n\n",$arrParts);

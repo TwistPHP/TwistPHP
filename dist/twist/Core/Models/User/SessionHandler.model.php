@@ -33,7 +33,7 @@ class SessionHandler{
 
 	/**
 	 * Set the device cookie life in seconds (Default: 31536000 == 1 year)
-	 * @param $intDeviceLife
+	 * @param integer $intDeviceLife
 	 */
 	public function setDeviceLife($intDeviceLife = 31536000){
 		$this->intDeviceLife = $intDeviceLife;
@@ -41,7 +41,7 @@ class SessionHandler{
 
 	/**
 	 * Set the device cookie life in seconds (Default: 604800 == 7 Days)
-	 * @param $intSessionLife
+	 * @param integer $intSessionLife
 	 */
 	public function setSessionLife($intSessionLife = 604800){
 		$this->intSessionLife = $intSessionLife;
@@ -156,7 +156,7 @@ class SessionHandler{
 	}
 
 	/**
-	 * @param $strDeviceID
+	 * @param string $strDeviceID
 	 * @return bool
 	 */
 	public function deleteDeviceID($strDeviceID){
@@ -164,7 +164,7 @@ class SessionHandler{
 	}
 
 	/**
-	 * @param $intUserID
+	 * @param integer $intUserID
 	 * @return array
 	 */
 	public function getDeviceList($intUserID){
@@ -172,7 +172,7 @@ class SessionHandler{
 	}
 
 	/**
-	 * @param $intUserID
+	 * @param integer $intUserID
 	 * @return array
 	 */
 	public function getCurrentDevice($intUserID){
@@ -201,9 +201,9 @@ class SessionHandler{
 
 	/**
 	 * Edit the name of a given device
-	 * @param $intUserID
-	 * @param $mxdDevice
-	 * @param $strDeviceName
+	 * @param integer $intUserID
+	 * @param mixed $mxdDevice
+	 * @param string $strDeviceName
 	 * @return bool
 	 */
 	public function editDevice($intUserID,$mxdDevice,$strDeviceName){
@@ -258,7 +258,7 @@ class SessionHandler{
 
 	/**
 	 * Get and set the device notifications status, if set a new device being used to login will send an email notification to the user.
-	 * @param $intUserID
+	 * @param integer $intUserID
 	 * @param null $blNotificationStatus
 	 * @return array|int|null|void
 	 */
@@ -288,7 +288,7 @@ class SessionHandler{
 
 	/**
 	 * Create a remember me cookie session
-	 * @param  $intUserID
+	 * @param integer $intUserID
 	 * @return string
 	 */
 	public function createCookie($intUserID){
@@ -297,7 +297,7 @@ class SessionHandler{
 
 	/**
 	 * Create a session key for use PHP session
-	 * @param  $intUserID
+	 * @param integer $intUserID
 	 * @return string
 	 */
 	public function createCode($intUserID){
@@ -306,6 +306,7 @@ class SessionHandler{
 
 	/**
 	 * Validate a remember me cookie session
+	 * @param bool $blUpdateKey
 	 * @return int
 	 */
 	public function validateCookie($blUpdateKey = true){
@@ -316,7 +317,8 @@ class SessionHandler{
 
 	/**
 	 * Validate a remember me session code
-	 * @param  $strSessionKey
+	 * @param string $strSessionKey
+	 * @param bool $blUpdateKey
 	 * @return int
 	 */
 	public function validateCode($strSessionKey,$blUpdateKey = true){
@@ -455,8 +457,8 @@ class SessionHandler{
 
 	/**
 	 * Delete all session data for this key
-	 * @param $strDevice
-	 * @param $strHash
+	 * @param string $strDevice
+	 * @param string $strHash
 	 * @return bool
 	 */
 	protected function wipeSession($strDevice,$strHash){

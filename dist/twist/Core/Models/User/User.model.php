@@ -287,7 +287,7 @@ class User{
 
 		\Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'user_data')->delete($this->resDatabaseRecord->get('id'),'user_id',null);
 
-		//@todo remove sessions and devices
+		//TODO: remove sessions and devices
 
 		return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->delete($this->resDatabaseRecord->get('id'),'id');
 	}
