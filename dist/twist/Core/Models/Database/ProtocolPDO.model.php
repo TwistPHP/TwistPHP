@@ -106,7 +106,7 @@
 		}
 
 		function fetchArray($resResult){//done
-			return $resResult->fetch(PDO::FETCH_ASSOC);
+			return $resResult->fetch(\PDO::FETCH_ASSOC);
 		}
 
 		function freeResult($resResult){//done
