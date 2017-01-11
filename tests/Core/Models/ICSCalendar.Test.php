@@ -5,7 +5,7 @@ class ICSCalendar extends \PHPUnit_Framework_TestCase{
 	public function testCreate(){
 
 		$resCalendar = \Twist::ICS()->createCalendar();
-		$this->assertTrue(strstr($resCalendar->getRaw(), 'BEGIN:VCALENDAR'));
+		$this->assertTrue(strstr($resCalendar->getRaw(), 'BEGIN:VCALENDAR') !== false);
 
 		$resCalendar->prodID('test-id');
 		$this->assertTrue(strstr($resCalendar->getRaw(), 'PRODID') && strstr($resCalendar->getRaw(), 'test-id'));
