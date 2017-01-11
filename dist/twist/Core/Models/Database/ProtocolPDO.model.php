@@ -60,7 +60,7 @@
 			try{
 				$this->resLink->query('SELECT 1');
 				return true;
-			}catch(PDOException $e){
+			}catch(\PDOException $e){
 				return false;
 			}
 		}
