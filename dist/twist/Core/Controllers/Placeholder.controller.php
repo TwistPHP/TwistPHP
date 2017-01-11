@@ -57,8 +57,8 @@ class Placeholder extends Base{
 		$intPadding = 10;
 		$intThickness = 5;
 
-		$intStartX = $intPadding;
-		$intStartY = $intPadding;
+		//$intStartX = $intPadding;
+		//$intStartY = $intPadding;
 		$intEndX = $intWidth - $intPadding;
 		$intEndY = $intHeight - $intPadding;
 

@@ -39,9 +39,9 @@ final class Debug{
 
 	/**
 	 * Log some debug data into the debug array, the debug data is shown on the debug window.
-	 * @param $strSystem
-	 * @param $strType
-	 * @param $mxdData
+	 * @param string $strSystem
+	 * @param string $strType
+	 * @param mixed $mxdData
 	 */
 	public function log($strSystem,$strType,$mxdData){
 
@@ -58,7 +58,7 @@ final class Debug{
 
 	/**
 	 * Process the debug window to be output into the page.
-	 * @param $arrCurrentRoute
+	 * @param array $arrCurrentRoute
 	 * @return string
 	 */
 	public function window($arrCurrentRoute){

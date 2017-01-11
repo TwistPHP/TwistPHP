@@ -61,7 +61,7 @@
 
 		/**
 		 * Removes the object from the instance holder and destroys the object.
-		 * @param $strObjectKey
+		 * @param string $strObjectKey
 		 */
 		public static function removeObject($strObjectKey){
 			unset(self::$arrFrameworkObjects[$strObjectKey]);

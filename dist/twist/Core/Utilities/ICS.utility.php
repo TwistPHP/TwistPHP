@@ -54,7 +54,7 @@
 		/**
 		 * Load in an existing ICS file in to be converted into an usable ICS Event/Calendar object
 		 *
-		 * @param $dirICSFile Path of the ICS file to be imported
+		 * @param string $dirICSFile Path of the ICS file to be imported
 		 * @return null|\Twist\Core\Models\ICS\Event|\Twist\Core\Models\ICS\Calendar Returns NULL or either the ICS Event or Calendar Object
 		 */
 		public function loadFile($dirICSFile){
@@ -72,7 +72,7 @@
 		/**
 		 * Turns the raw ICS data into an object and returns
 		 *
-		 * @param $strRawData
+		 * @param string $strRawData
 		 * @return null|\Twist\Core\Models\ICS\Event|\Twist\Core\Models\ICS\Calendar Returns NULL or either the ICS Event or Calendar Object
 		 */
 		protected function parseRawData($strRawData){
@@ -89,6 +89,7 @@
 				$resObject = $this->createEvent();
 			}
 
+			$resCurrentItem = null;
 			$arrLines = explode("\n",$strRawData);
 
 			foreach($arrLines as $strEachLine){
@@ -124,8 +125,11 @@
 						unset($arrRowParts[0]);
 						$mxdValue = implode($strExplodeChar,$arrRowParts);
 
-						//Set the data into the event or calendar
-						$resCurrentItem->setData($strKey,$mxdValue);
+						//$resCurrentItem should always be an object at this point as the BEGIN case would always be called first in a valid ICS file
+						if(is_resource($resCurrentItem) || is_object($resCurrentItem)){
+							//Set the data into the event or calendar
+							$resCurrentItem->setData($strKey,$mxdValue); //TODO: Rewrite this method to be more efficient
+						}
 						break;
 				}
 			}

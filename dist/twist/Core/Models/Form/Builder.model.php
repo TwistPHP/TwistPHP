@@ -76,13 +76,11 @@ class Builder{
 		$this->storeField($strTitle,$strName,$strType,$intMaxLength,$mxdValue,$arrAttributes,$mxdGroupID);
 	}
 
-	public function requiredFields(){
-		//@todo Speak to andi about if this should be a multi or single param
+	public function requiredFields(){ //TODO: Speak to Andi about if this should be a multi or single param
 		//return $this->updateField($strName,'required',1);
 	}
 
-	public function requiredGroups(){
-		//@todo Speak to andi about if this should be a multi or single param
+	public function requiredGroups(){ //TODO: Speak to Andi about if this should be a multi or single param
 		//return $this->updateGroup($strName,'required',1);
 	}
 
@@ -102,8 +100,7 @@ class Builder{
 		$this->arrDetails['cancel'] = array('name' => $strName,'redirect' => $strCancelRedirect);
 	}
 
-	public function saveSubmissions(){
-		//@todo Save in a database table
+	public function saveSubmissions(){ //TODO: Save in a database table
 	}
 
 	public function render(){
@@ -111,7 +108,7 @@ class Builder{
 		$this->processSubmissionData();
 
 		//https://gist.github.com/ahosgood/88d474c0b811ce469bc0
-		//@todo store cache of the form, build in option to put in custom tags to allow cache form to be populated with data and pre-selects where required
+		//TODO: Store cache of the form, build in option to put in custom tags to allow cache form to be populated with data and pre-selects where required
 
 		$resTemplate = \Twist::View('pkgForm');
 		$resTemplate->setDirectory(sprintf('%s/form/',TWIST_FRAMEWORK_VIEWS));
@@ -180,7 +177,7 @@ class Builder{
 			}
 		}
 
-		//@todo look at buttons as the submit should always be present
+		//TODO: Look at buttons as the submit should always be present
 		if(!is_null($this->arrDetails['submit'])){
 			$arrFormTags['fields'] .= $resTemplate->build('button.tpl',$this->arrDetails['submit']).self::EOL;
 		}

@@ -120,7 +120,7 @@
 
 		/**
 		 * Get device type by device key, these are the keys found in the devices.json file
-		 * @param $strDeviceKey
+		 * @param string $strDeviceKey
 		 * @return string
 		 */
 		public static function getDeviceType($strDeviceKey){
@@ -128,54 +128,52 @@
 			self::loadData();
 
 			if(array_key_exists($strDeviceKey,self::$arrDevices)){
-				$strOut = self::$arrDevices[$strDeviceKey]['device'];
+				return self::$arrDevices[$strDeviceKey]['device'];
 			}else{
-				$strOut = self::$arrUnknown['device'];
+				return self::$arrUnknown['device'];
 			}
-
-			return $strOut;
 		}
 
 		/**
 		 * Get OS details from a device key, these are the keys found in the devices.json file
-		 * @param $strDeviceKey
+		 * @param string $strDeviceKey
 		 * @return array
 		 */
 		public static function getOS($strDeviceKey){
 
 			self::loadData();
-			$arrOut = array();
 
 			if(array_key_exists($strDeviceKey,self::$arrDevices)){
+				$arrOut = array();
 				$arrOut['key'] = $strDeviceKey;
 				$arrOut['title'] = self::$arrDevices[$strDeviceKey]['os'];
 				$arrOut['version'] = self::$arrDevices[$strDeviceKey]['version'];
 				$arrOut['fa-icon'] = self::$arrDevices[$strDeviceKey]['fa-icon'];
-			}else{
-				$arrOut = self::$arrUnknown['os'];
-			}
 
-			return $arrOut;
+				return $arrOut;
+			}else{
+				return self::$arrUnknown['os'];
+			}
 		}
 
 		/**
 		 * Get Browser details from a browser key, these are the keys found in the browsers.json file
-		 * @param $strBrowserKey
+		 * @param string $strBrowserKey
 		 * @return array
 		 */
 		public static function getBrowser($strBrowserKey){
 
 			self::loadData();
-			$arrOut = array();
 
 			if(array_key_exists($strBrowserKey,self::$arrBrowsers)){
+				$arrOut = array();
 				$arrOut['key'] = $strBrowserKey;
 				$arrOut['title'] = self::$arrBrowsers[$strBrowserKey]['browser'];
 				$arrOut['fa-icon'] = self::$arrBrowsers[$strBrowserKey]['fa-icon'];
-			}else{
-				$arrOut = self::$arrUnknown['browser'];
-			}
 
-			return $arrOut;
+				return $arrOut;
+			}else{
+				return self::$arrUnknown['browser'];
+			}
 		}
 	}

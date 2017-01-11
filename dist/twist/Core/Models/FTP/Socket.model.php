@@ -37,9 +37,9 @@
 
 		/**
 		 * Open a new FTP connection
-		 * @param $strHost
-		 * @param $intPort
-		 * @throws RuntimeException
+		 * @param string $strHost
+		 * @param integer $intPort
+		 * @throws \Exception
 		 */
 		public function connect($strHost,$intPort){
 
@@ -72,8 +72,8 @@
 
 		/**
 		 * Login to the open FTP connection
-		 * @param $strUsername
-		 * @param $strPassword
+		 * @param string $strUsername
+		 * @param string $strPassword
 		 * @return bool
 		 */
 		public function login($strUsername,$strPassword){
@@ -129,7 +129,7 @@
 
 		/**
 		 * Make Directory
-		 * @param $strDirectory
+		 * @param string $strDirectory
 		 * @return bool
 		 */
 		public function mkd($strDirectory){
@@ -138,7 +138,7 @@
 
 		/**
 		 * Remove Directory
-		 * @param $strDirectory
+		 * @param string $strDirectory
 		 * @return bool
 		 */
 		public function rmd($strDirectory){
@@ -163,7 +163,7 @@
 
 		/**
 		 * Change working directory
-		 * @param $strDirectory
+		 * @param string $strDirectory
 		 * @return bool
 		 */
 		public function cwd($strDirectory){
@@ -172,8 +172,8 @@
 
 		/**
 		 * Rename a directory or file to a new name
-		 * @param $strFilename
-		 * @param $strNewFilename
+		 * @param string $strFilename
+		 * @param string $strNewFilename
 		 * @return bool
 		 */
 		public function rename($strFilename, $strNewFilename){
@@ -182,7 +182,7 @@
 
 		/**
 		 * Remove the file from the server
-		 * @param $strFilename
+		 * @param string $strFilename
 		 * @return bool
 		 */
 		public function delete($strFilename){
@@ -191,8 +191,8 @@
 
 		/**
 		 * CHMOD the files permissions
-		 * @param $strFilename
-		 * @param $intMode
+		 * @param string $strFilename
+		 * @param integer $intMode
 		 * @return bool
 		 */
 		public function chmod($strFilename, $intMode){
@@ -201,8 +201,8 @@
 
 		/**
 		 * Download a file from the remote FTP server
-		 * @param $strRemoteFilename
-		 * @param $strLocalFilename
+		 * @param string $strRemoteFilename
+		 * @param string $strLocalFilename
 		 * @param string $strMode
 		 * @return bool
 		 */
@@ -245,8 +245,8 @@
 
 		/**
 		 * Upload a file to the remote FTP server
-		 * @param $strLocalFilename
-		 * @param $strRemoteFilename
+		 * @param string $strLocalFilename
+		 * @param string $strRemoteFilename
 		 * @param string $strMode
 		 * @return bool
 		 */
@@ -279,7 +279,7 @@
 
 		/**
 		 * List the provided directory and return as an array
-		 * @param $strDirectory
+		 * @param string $strDirectory
 		 * @return array|bool
 		 */
 		public function nlist($strDirectory){
@@ -303,7 +303,7 @@
 
 		/**
 		 * Get the size of any given file on the remote FTP server
-		 * @param $strFilename
+		 * @param string $strFilename
 		 * @return bool|int
 		 */
 		public function size($strFilename){
@@ -322,7 +322,7 @@
 
 		/**
 		 * Get the last modified time of any given file on the remote FTP server
-		 * @param $strFilename
+		 * @param string $strFilename
 		 * @return bool|int
 		 */
 		public function getModifiedDateTime($strFilename){

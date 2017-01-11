@@ -112,7 +112,7 @@ class Route extends Base{
 
 	/**
 	 * Set a custom views directory to use for this routes instance, leaving blank will use the default views directory
-	 * @param $dirViewPath Path to the view directory
+	 * @param string $dirViewPath Path to the view directory
 	 */
 	public function setDirectory($dirViewPath = null){
 		$this->resView->setDirectory($dirViewPath);
@@ -120,7 +120,7 @@ class Route extends Base{
 
 	/**
 	 * Set a custom controller directory to use for this routes instance, leaving blank will use the default controllers directory
-	 * @param $dirControllerPath Path to the controller directory
+	 * @param string $dirControllerPath Path to the controller directory
 	 */
 	public function setControllerDirectory($dirControllerPath = null){
 		$this->strControllerDirectory = rtrim($dirControllerPath,'/');
@@ -128,7 +128,8 @@ class Route extends Base{
 
 	/**
 	 * Set a path to the base view that you wish to wrap the output of the route with
-	 * @param $dirViewFile Path to the base view file, relative to your view directory (a full path can be used if required)
+	 * @param string $dirViewFile Path to the base view file, relative to your view directory (a full path can be used if required)
+	 * @return null|string
 	 */
 	public function baseView($dirViewFile = null){
 
@@ -142,7 +143,8 @@ class Route extends Base{
 
 	/**
 	 * Set a base URI so that you can use routes in folders that are not your Doc Root
-	 * @param $strBaseURI
+	 * @param string $strBaseURI
+	 * @return null|string
 	 */
 	public function baseURI($strBaseURI = null){
 
@@ -159,13 +161,14 @@ class Route extends Base{
 
 	/**
 	 * Set/Get the package URI, used only when creating or working with an framework interface
-	 * @param $strInterface
+	 * @param string $strPackage
+	 * @return null|string
 	 */
 	public function packageURI($strPackage = null){
 
 		if(!is_null($strPackage)){
-            $strPath = sprintf('%s/%s',rtrim(TWIST_PACKAGES,'/'),ltrim($strPackage,'/'));
-            $this->strPackageURI = '/'.ltrim(rtrim(str_replace(TWIST_DOCUMENT_ROOT,"",$strPath),'/'),'/');
+			$strPath = sprintf('%s/%s',rtrim(TWIST_PACKAGES,'/'),ltrim($strPackage,'/'));
+			$this->strPackageURI = '/'.ltrim(rtrim(str_replace(TWIST_DOCUMENT_ROOT,"",$strPath),'/'),'/');
 		}
 
 		return $this->strPackageURI;
@@ -188,6 +191,7 @@ class Route extends Base{
 
 	/**
 	 * Enable debug mode, this will override the debug/development settings in Twist Settings
+	 * @param bool $blEnabled
 	 */
 	public function debugMode($blEnabled = true){
 		$this->blDebugMode = $blEnabled;
@@ -195,7 +199,7 @@ class Route extends Base{
 
 	/**
 	 * Allow the route to bypass maintenance mode when maintenance mode is enabled
-	 * @param $strURI URI of the route to allow
+	 * @param string $strURI URI of the route to allow
 	 */
 	public function bypassMaintenanceMode($strURI){
 
@@ -223,6 +227,7 @@ class Route extends Base{
 
 	/**
 	 * Get all the registered routes and return as an array
+	 * @return array
 	 */
 	public function getAll(){
 
@@ -259,6 +264,7 @@ class Route extends Base{
 
 	/**
 	 * Set the page title for the page (can be called during the processing of the page)
+	 * @param string $strPageTitle
 	 */
 	public function pageTitle($strPageTitle){
 		$this->strPageTitle = $strPageTitle;
@@ -280,6 +286,7 @@ class Route extends Base{
 
 		if(!array_key_exists($strURI,$this->arrRestrict)){
 			$this->arrRestrict[$strURI] = array(
+				'uri' => $strURI,
 				'wildcard' => $blWildCard,
 				'login_uri' => '/'.ltrim(rtrim($strLoginURI,'/'),'/').'/',
 				'level' => null,
@@ -294,9 +301,9 @@ class Route extends Base{
 	 * Restrict a page to logged in users only, place a '%' at the end of the URI will apply this restriction to all child pages as well as itself
 	 *
 	 * @note Restrict a URI without using '%' will only restrict the exact URI provided
-	 * @param $strURI
-	 * @param $strLoginURI
-	 * @param $intLevel By default it restricts page to the lowest possible level (1)
+	 * @param string $strURI
+	 * @param string $strLoginURI
+	 * @param integer $intLevel By default it restricts page to the lowest possible level (1)
 	 */
 	public function restrict($strURI,$strLoginURI,$intLevel = 1){
 
@@ -306,6 +313,7 @@ class Route extends Base{
 
 	/**
 	 * Add an exception to the restrictions applied
+	 * @param string $strURI
 	 */
 	public function unrestrict($strURI){
 
@@ -324,8 +332,8 @@ class Route extends Base{
 	/**
 	 * @related restrict
 	 *
-	 * @param $strURI
-	 * @param $strLoginURI
+	 * @param string $strURI
+	 * @param string $strLoginURI
 	 */
 	public function restrictMember($strURI,$strLoginURI){
 		$this->restrict($strURI,$strLoginURI,\Twist::framework()->setting('USER_LEVEL_MEMBER'));
@@ -334,8 +342,8 @@ class Route extends Base{
 	/**
 	 * @related restrict
 	 *
-	 * @param $strURI
-	 * @param $strLoginURI
+	 * @param string $strURI
+	 * @param string $strLoginURI
 	 */
 	public function restrictAdvanced($strURI,$strLoginURI){
 		$this->restrict($strURI,$strLoginURI,\Twist::framework()->setting('USER_LEVEL_ADVANCED'));
@@ -344,8 +352,8 @@ class Route extends Base{
 	/**
 	 * @related restrict
 	 *
-	 * @param $strURI
-	 * @param $strLoginURI
+	 * @param string $strURI
+	 * @param string $strLoginURI
 	 */
 	public function restrictAdmin($strURI,$strLoginURI){
 		$this->restrict($strURI,$strLoginURI,\Twist::framework()->setting('USER_LEVEL_ADMIN'));
@@ -354,8 +362,8 @@ class Route extends Base{
 	/**
 	 * @related restrict
 	 *
-	 * @param $strURI
-	 * @param $strLoginURI
+	 * @param string $strURI
+	 * @param string $strLoginURI
 	 */
 	public function restrictSuperAdmin($strURI,$strLoginURI){
 		$this->restrict($strURI,$strLoginURI,\Twist::framework()->setting('USER_LEVEL_SUPERADMIN'));
@@ -364,8 +372,8 @@ class Route extends Base{
 	/**
 	 * @related restrict
 	 *
-	 * @param $strURI
-	 * @param $strLoginURI
+	 * @param string $strURI
+	 * @param string $strLoginURI
 	 */
 	public function restrictRoot($strURI,$strLoginURI){
 		$this->restrict($strURI,$strLoginURI,0);
@@ -374,9 +382,9 @@ class Route extends Base{
 	/**
 	 * @related restrict
 	 *
-	 * @param $strURI
-	 * @param $strLoginURI
-	 * @param $strGroupSlug
+	 * @param string $strURI
+	 * @param string $strLoginURI
+	 * @param string $strGroupSlug
 	 */
 	public function restrictGroup($strURI,$strLoginURI,$strGroupSlug){
 
@@ -397,8 +405,8 @@ class Route extends Base{
 	/**
 	 * Serve a file form a particular route, you can change the name of the file upon download and restrict the download bandwidth (very helpful if you have limited bandwidth)
 	 *
-	 * @param $strURI
-	 * @param $dirFilePath Full path to the file that will be served
+	 * @param string $strURI
+	 * @param string $dirFilePath Full path to the file that will be served
 	 * @param null $strServeName Name of the file to be served
 	 * @param null $intLimitDownloadSpeed Download speed for the end user in KB
 	 */
@@ -410,8 +418,8 @@ class Route extends Base{
 	 * Serve all contents of a folder on a virtual route, the folder begin served dose not need to be publicly accessible,
 	 * also restriction can be applied to the virtual route if user login is required to access.
 	 *
-	 * @param $strURI
-	 * @param $dirFolderPath Full path to the folder to be served
+	 * @param string $strURI
+	 * @param string $dirFolderPath Full path to the folder to be served
 	 * @param bool $blForceDownload Force the file to be downloaded to be browser
 	 * @param null $intLimitDownloadSpeed Download speed for the end user in KB
 	 */
@@ -423,8 +431,8 @@ class Route extends Base{
 	 * Add a controller that will be called upon a any request (HTTP METHOD) to the given URI.
 	 * The URI can be made dynamic by adding a '%' symbol at the end.
 	 *
-	 * @param $strURI
-	 * @param $mxdController
+	 * @param string $strURI
+	 * @param mixed $mxdController
 	 * @param bool $mxdBaseView
 	 * @param bool $mxdCache
 	 * @param array $arrData
@@ -438,7 +446,7 @@ class Route extends Base{
 	 * Add a ajax server that will be called upon a any request (HTTP METHOD) to the given URI.
 	 * The URI can be made dynamic by adding a '%' symbol at the end.
 	 *
-	 * @param $strURI
+	 * @param string $strURI
 	 * @param null $mxdController
 	 */
 	public function ajax($strURI,$mxdController){
@@ -450,8 +458,8 @@ class Route extends Base{
 	 * Add a pre-defined package route (interface) (provided by installed packages) that will be called upon a any request (HTTP METHOD) to the given URI.
 	 * The URI can be made dynamic by adding a '%' symbol at the end.
 	 *
-	 * @param $strURI
-	 * @param $strPackage
+	 * @param string $strURI
+	 * @param string $strPackage
 	 * @param bool $mxdBaseView
 	 * @param bool $mxdCache
 	 * @param array $arrData
@@ -464,9 +472,9 @@ class Route extends Base{
 	 * Add a redirect that will be called upon a any request (HTTP METHOD) to the given URI.
 	 * The URI can be made dynamic by adding a '%' symbol at the end.
 	 *
-	 * @param $strURI
-	 * @param $strURL
-	 * @param $blPermanent
+	 * @param string $strURI
+	 * @param string $strURL
+	 * @param bool $blPermanent
 	 */
 	public function redirect($strURI,$strURL,$blPermanent = false){
 		$this->addRoute($strURI,($blPermanent) ? 'redirect-permanent' : 'redirect',$strURL);
@@ -476,8 +484,8 @@ class Route extends Base{
 	 * Add a view that will be called upon a any request (HTTP METHOD) to the given URI, using this call will not take precedence over a GET,POST,PUT or DELETE route.
 	 * The URI can be made dynamic by adding a '%' symbol at the end.
 	 *
-	 * @param $strURI
-	 * @param $dirView
+	 * @param string $strURI
+	 * @param string $dirView
 	 * @param bool $mxdBaseView
 	 * @param bool $mxdCache
 	 * @param array $arrData
@@ -491,8 +499,8 @@ class Route extends Base{
 	 *
 	 * @related view
 	 *
-	 * @param $strURI
-	 * @param $dirView
+	 * @param string $strURI
+	 * @param string $dirView
 	 * @param bool $mxdBaseView
 	 * @param bool $mxdCache
 	 * @param array $arrData
@@ -506,8 +514,8 @@ class Route extends Base{
 	 *
 	 * @related view
 	 *
-	 * @param $strURI
-	 * @param $dirView
+	 * @param string $strURI
+	 * @param string $dirView
 	 * @param bool $mxdBaseView
 	 * @param bool $mxdCache
 	 * @param array $arrData
@@ -521,8 +529,8 @@ class Route extends Base{
 	 *
 	 * @related view
 	 *
-	 * @param $strURI
-	 * @param $dirView
+	 * @param string $strURI
+	 * @param string $dirView
 	 * @param bool $mxdBaseView
 	 * @param bool $mxdCache
 	 * @param array $arrData
@@ -536,8 +544,8 @@ class Route extends Base{
 	 *
 	 * @related view
 	 *
-	 * @param $strURI
-	 * @param $dirView
+	 * @param string $strURI
+	 * @param string $dirView
 	 * @param bool $mxdBaseView
 	 * @param bool $mxdCache
 	 * @param array $arrData
@@ -548,7 +556,7 @@ class Route extends Base{
 
 	/**
 	 * Pass in a PHP function to be parsed by the route
-	 * @param $strURI
+	 * @param string $strURI
 	 * @param $resFunction
 	 * @param bool $mxdBaseView
 	 */
@@ -558,7 +566,7 @@ class Route extends Base{
 
 	/**
 	 * Pass in a PHP function to be parsed by the route upon a GET request
-	 * @param $strURI
+	 * @param string $strURI
 	 * @param $resFunction
 	 * @param bool $mxdBaseView
 	 */
@@ -568,7 +576,7 @@ class Route extends Base{
 
 	/**
 	 * Pass in a PHP function to be parsed by the route upon a POST request
-	 * @param $strURI
+	 * @param string $strURI
 	 * @param $resFunction
 	 * @param bool $mxdBaseView
 	 */
@@ -578,8 +586,8 @@ class Route extends Base{
 
 	/**
 	 * Pass in a PHP function to be parsed by the route upon a PUT request
-	 * @param $strURI
-	 * @param $resFunction
+	 * @param string $strURI
+	 * @param string $resFunction
 	 * @param bool $mxdBaseView
 	 */
 	public function put($strURI,$resFunction,$mxdBaseView = true){
@@ -588,8 +596,8 @@ class Route extends Base{
 
 	/**
 	 * Pass in a PHP function to be parsed by the route upon a DELETE request
-	 * @param $strURI
-	 * @param $resFunction
+	 * @param string $strURI
+	 * @param string $resFunction
 	 * @param bool $mxdBaseView
 	 */
 	public function delete($strURI,$resFunction,$mxdBaseView = true){
@@ -598,14 +606,17 @@ class Route extends Base{
 
 	/**
 	 * Add the route into the array of listeners, when the serve function if called the listeners array will be processed and a page will be served
-	 *
-	 * @param $strURI
-	 * @param $strType
-	 * @param $strItem
-	 * @param $arrData
-	 * @param bool $mxdCache
+
+*
+*@param string       $strURI
+	 * @param string $strType
+	 * @param string $strItem
+	 * @param bool   $blBaseView
+	 * @param bool   $blCache
+	 * @param array  $arrData
+	 * @param null   $strRequestMethod
 	 */
-	protected function addRoute($strURI,$strType,$strItem,$mxdBaseView=true,$mxdCache=false,$arrData=array(),$strRequestMethod = null){
+	protected function addRoute($strURI,$strType,$strItem,$blBaseView = true, $blCache=false,$arrData=array(),$strRequestMethod = null){
 
 		$blWildCard = false;
 		if(substr($strURI,-1) == '%' || $strType == 'package'){
@@ -657,11 +668,11 @@ class Route extends Base{
 			'item' => $strItem,
 			'data' => $arrData,
 			'model' => $strModel,
-			'base_view' => $mxdBaseView,
+			'base_view' => $blBaseView,
 			'wildcard' => $blWildCard,
-			'cache' => ($mxdCache === false) ? false : true,
+			'cache' => ( $blCache === false) ? false : true,
 			'cache_key' => null,
-			'cache_life' => ($mxdCache === true) ? $this->intCacheTime : ($mxdCache !== false) ? $mxdCache : 0
+			'cache_life' => ( $blCache === true) ? $this->intCacheTime : ( $blCache !== false) ? $blCache : 0
 		);
 
 		if(!\Twist::framework()->setting('ROUTE_CASE_SENSITIVE')){
@@ -712,7 +723,7 @@ class Route extends Base{
 
 	/**
 	 * Process the routes Array by reference and adding in the current set baseURI
-	 * @param $arrRoutesDataRef
+	 * @param array $arrRoutesDataRef
 	 */
 	protected function processRoutesArray(&$arrRoutesDataRef){
 
@@ -735,7 +746,7 @@ class Route extends Base{
 
 	/**
 	 * Load an existing page form the page cache, use the page key to find the cached page.
-	 * @param $strPageCacheKey
+	 * @param string $strPageCacheKey
 	 */
 	protected function loadPageCache($strPageCacheKey){
 
@@ -776,9 +787,9 @@ class Route extends Base{
 
 	/**
 	 * Store a page into the page cache, use a unique page key so that the page can be found again later when required.
-	 * @param $strPageCacheKey
-	 * @param $strPageData
-	 * @param $intCacheTime
+	 * @param string $strPageCacheKey
+	 * @param string $strPageData
+	 * @param integer $intCacheTime
 	 */
 	protected function storePageCache($strPageCacheKey,$strPageData,$intCacheTime = 3600){
 
@@ -827,6 +838,7 @@ class Route extends Base{
 	 * Detect the current active route from the users URI, uses the PHP variable $_SERVER['REQUEST_URI'] to achieve this.
 	 * Wild card detection is also carried out here if you are on a wild carded domain.
 	 *
+	 * @param string $strReturnKey
 	 * @return array Returns an array of data relating to the current route
 	 */
 	public function current($strReturnKey = null){
@@ -920,7 +932,7 @@ class Route extends Base{
 						$arrRouteParts = (!in_array(trim($strRouteDynamic,'/'),array('','/'))) ? explode('/',trim($strRouteDynamic,'/')) : array();
 
 						$strCurrentURI = $strCurrentURIKey = $strWildCard;
-						$blMatched = true;
+						$blMatched = true; //TODO: Remove?
 					}
 				}
 			}
@@ -1003,9 +1015,28 @@ class Route extends Base{
 					$arrMatch = $arrFoundMatched[0];
 				}else{
 
+					$arrFoundMatchedProcessed = array();
+					$intHighCount = 0;
+
+					//Pre-process the restricted results to get the best match
+					//Currently this is found by using the URI's will the most parts (These will be more accurate)
+					foreach($arrFoundMatched as $intKey => $arrEachMatch){
+
+						$strProcessedURI = str_replace(array('/%','%'),'',$arrEachMatch['uri']);
+						$intCount = count(explode('/',$strProcessedURI));
+
+						if($intCount > $intHighCount) {
+							$intHighCount = $intCount;
+							$arrFoundMatchedProcessed = array();
+							$arrFoundMatchedProcessed[] = $arrEachMatch;
+						}elseif($intCount == $intHighCount){
+							$arrFoundMatchedProcessed[] = $arrEachMatch;
+						}
+					}
+
 					//Process Multi-Matches, find the highest level from the found matches, user must match or exceed this level (0 is God)
 					$intHighestLevel = 0;
-					foreach($arrFoundMatched as $arrEachMatch){
+					foreach($arrFoundMatchedProcessed as $arrEachMatch){
 						if($arrEachMatch['level'] == 0 || $arrEachMatch['level'] > $intHighestLevel){
 							$intHighestLevel = $arrEachMatch['level'];
 							$arrMatch = $arrEachMatch;
@@ -1223,8 +1254,8 @@ class Route extends Base{
 
 	/**
 	 * Check to see if a URI is present in an array od URIs, the key must be the URI and the value can either be 1 (denotes wildcard check enabled) or 0 (no wildcard check)
-	 * @param $arrURIs
-	 * @param $strCurrentURI
+	 * @param array $arrURIs
+	 * @param string $strCurrentURI
 	 * @return bool
 	 */
 	protected function findURI($arrURIs,$strCurrentURI){
@@ -1248,7 +1279,7 @@ class Route extends Base{
 
 	/**
 	 * Serve is used to active the routes system after all routes have been set
-	 * @param $blExitOnComplete Exit script once the page has been served
+	 * @param bool $blExitOnComplete Exit script once the page has been served
 	 * @throws \Exception
 	 */
 	public function serve($blExitOnComplete = true){
@@ -1260,7 +1291,7 @@ class Route extends Base{
 		$arrRoute = $this->current();
 
 		if(count($arrRoute)){
-						
+
 			$arrRoute['request_method'] = strtoupper($_SERVER['REQUEST_METHOD']);
 
 			//First of all check for a package interface and do that

@@ -86,12 +86,8 @@
 
 		public function write($intSessionID, $mxdData){
 
-			$blOut = false;
-
 			$strFile = sprintf("%s/sess_%s",$this->savePath,$intSessionID);
-			$blOut = (file_put_contents($strFile, $mxdData) === false) ? false : true;
-
-			return $blOut;
+			return (file_put_contents($strFile, $mxdData) === false) ? false : true;
 		}
 
 		public function destroy($intSessionID){

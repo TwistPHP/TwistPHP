@@ -48,7 +48,8 @@ class Resources{
 	 *
 	 * An example of the tag with all the above parameters in use {resource:jquery,inline=1,async=async,version=2.0.0}
 	 *
-	 * @param $strReference
+	 * @param string $strReference
+	 * @param array $arrParameters
 	 * @return string Processed HTML output for the resource view tag
 	 */
 	public function viewResource($strReference,$arrParameters = array()){
@@ -125,7 +126,7 @@ class Resources{
 	 * Define the type of asynchronously loading, the choice of async or defer can be optionally set.
 	 *
 	 * An example of the tag with all the above parameters in use {css:packages/Lavish/Resources/css/base.css,inline=1,async=async}
-	 * @param $strReference
+	 * @param string $strReference
 	 * @param array $arrParameters
 	 * @return string Processed HTML output for the CSS view tag
 	 */
@@ -163,7 +164,7 @@ class Resources{
 	 * Define the type of asynchronously loading, the choice of async or defer can be optionally set.
 	 *
 	 * An example of the tag with all the above parameters in use {js:packages/Lavish/Resources/js/base.js,inline=1,async=async}
-	 * @param $strReference
+	 * @param string $strReference
 	 * @param array $arrParameters
 	 * @return string Processed HTML output for the JS view tag
 	 */
@@ -203,7 +204,7 @@ class Resources{
 	 * All other parameters passed in will be output as attributes of the IMG tag, for example title='Hello World'
 	 *
 	 * An example of the tag with the title and id parameters set {img:packages/Lavish/Resources/images/user.png,title='Hello World',id='user-77'}
-	 * @param $strReference
+	 * @param string $strReference
 	 * @param array $arrParameters
 	 * @return string
 	 */
@@ -249,7 +250,7 @@ class Resources{
 	 *
 	 * To allow these overrides you must place a .htaccess file containing "Allow from all" in "app/Twist/Core/Resources/" or "app/Packages/Lavish/Resources/"
 	 *
-	 * @param $dirPath
+	 * @param string $dirPath
 	 * @return array An array of teh file name and the path and URI to the file
 	 */
 	protected function locateFile($dirPath){
@@ -297,9 +298,9 @@ class Resources{
 
 	/**
 	 * Process the JS files and output them in the desired HTML format
-	 * @param $arrFiles
-	 * @param $strPath
-	 * @param $strURI
+	 * @param array $arrFiles
+	 * @param string $strPath
+	 * @param string $strURI
 	 * @param bool $blInline
 	 * @param null|string $mxdAsyncType
 	 * @return string
@@ -333,9 +334,9 @@ class Resources{
 
 	/**
 	 * Process the CSS files and output them in the desired HTML format
-	 * @param $arrFiles
-	 * @param $strPath
-	 * @param $strURI
+	 * @param array $arrFiles
+	 * @param string $strPath
+	 * @param string $strURI
 	 * @param bool $blInline
 	 * @param null|string $mxdAsyncType
 	 * @return string
@@ -397,7 +398,7 @@ class Resources{
 
 	/**
 	 * Get the correct package form the library
-	 * @param $strRequestedResource
+	 * @param string $strRequestedResource
 	 * @param null $strRequestedVersion
 	 * @return array
 	 */
@@ -425,8 +426,8 @@ class Resources{
 
 	/**
 	 * Apply the correct URI to a resource based on its resource directory path.
-	 * @param $arrParameters
-	 * @param $dirResourcePath
+	 * @param array $arrParameters
+	 * @param string $dirResourcePath
 	 * @return mixed
 	 */
 	protected function applyPath($arrParameters,$dirResourcePath){
@@ -446,8 +447,8 @@ class Resources{
 	/**
 	 * Extend the resource library with a whole new set of resources. This function can be called if you want to put some custom rescources into the system that the site or package can use.
 	 * The resources will then become accessible via the {resource:} view tag.
-	 * @param $dirManifest
-	 * @param $dirResourcePath
+	 * @param string $dirManifest
+	 * @param string $dirResourcePath
 	 * @throws \Exception
 	 */
 	public function extendLibrary($dirManifest,$dirResourcePath){

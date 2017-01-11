@@ -42,7 +42,7 @@
 
 		/**
 		 * Load all the default options for the cache system, create folders and '.htaccess' if required.
-		 * @param $strInstanceKey Instance key to help group cache data
+		 * @param string $strInstanceKey Instance key to help group cache data
 		 */
 		public function __construct($strInstanceKey){
 
@@ -80,7 +80,8 @@
 
 		/**
 		 * Set/Get the storage location for cache files
-		 * @param $dirStorageLocation Full path to the new storage location
+		 * @param string $dirStorageLocation Full path to the new storage location
+		 * @return null|string
 		 */
 		public function location($dirStorageLocation = null){
 
@@ -93,7 +94,8 @@
 
 		/**
 		 * Set/Get the cache file extension that will be used when storing cache files
-		 * @param $strFileExtension Custom cache file extension to use
+		 * @param string $strFileExtension Custom cache file extension to use
+		 * @return null|string
 		 */
 		public function extension($strFileExtension = null){
 
@@ -108,9 +110,9 @@
 		 * Store data in the cache, default life time is 1 hour (3600 seconds). Setting the life time to '0' will mean that the cache will be stored as a PHP Runtime Session and will be no longer exists once the current runtime has ended.
 		 * A Unique ID must be passed in so that you can reference the data again later.
 		 *
-		 * @param $strUniqueID Unique ID used to reference the cache
-		 * @param $mxdData Data to be stored in the cache
-		 * @param $intLifeTime Life of the cache, time until expiry
+		 * @param string|integer $mxdUniqueID Unique ID used to reference the cache
+		 * @param string|array $mxdData Data to be stored in the cache
+		 * @param integer $intLifeTime Life of the cache, time until expiry
 		 */
 		public function write($mxdUniqueID,$mxdData,$intLifeTime = 3600){
 
@@ -140,7 +142,7 @@
 		/**
 		 * Retrieve the data form the cache at any point by passing in the Unique ID. Expired cache date will be purged and passed back as NULL in the result.
 		 *
-		 * @param $mxdUniqueID string Unique ID used to reference the cache
+		 * @param mixed $mxdUniqueID string Unique ID used to reference the cache
 		 * @return mixed Returns cache data or array of cache properties
 		 */
 		public function read($mxdUniqueID){
@@ -171,7 +173,7 @@
 		/**
 		 * Remove a cache manually (before expiry) if you want to stop using it or no longer require its contents. Pass in the Unique ID to reference the cache you want to remove, alternatively passing in null will remove all cache files for this instance.
 		 *
-		 * @param $mxdUniqueID Unique ID used to reference the cache
+		 * @param mixed $mxdUniqueID Unique ID used to reference the cache
 		 * @return bool Status of the cache removal
 		 */
 		public function remove($mxdUniqueID = null){
@@ -199,7 +201,7 @@
 
 		/**
 		 * Get the created time for the cache file
-		 * @param $mxdUniqueID
+		 * @param mixed $mxdUniqueID
 		 * @return int|null
 		 */
 		public function created($mxdUniqueID){
@@ -222,7 +224,7 @@
 
 		/**
 		 * Get the last modified time of the cache file
-		 * @param $mxdUniqueID
+		 * @param mixed $mxdUniqueID
 		 * @return int|null
 		 */
 		public function modified($mxdUniqueID){
@@ -240,7 +242,7 @@
 
 		/**
 		 * Get the expiry timestamp of a cache file by its unique ID
-		 * @param $mxdUniqueID
+		 * @param mixed $mxdUniqueID
 		 * @return null
 		 * @throws \Exception
 		 */
@@ -271,8 +273,8 @@
 
 		/**
 		 * Cleans out a directory and all its sub directories
-		 * @param $strDirectory
-		 * @param $intCurrentTime
+		 * @param string $strDirectory
+		 * @param integer $intCurrentTime
 		 */
 		protected function cleanDirectory($strDirectory,$intCurrentTime){
 

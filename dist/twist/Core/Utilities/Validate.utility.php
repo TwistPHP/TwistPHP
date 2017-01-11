@@ -45,8 +45,8 @@ class Validate extends Base{
 	/**
 	 * Validate the comparison between two items/strings/integers.
 	 *
-	 * @param $mxdValue1 Item one to be compared
-	 * @param $mxdValue2 Item two to be compared
+	 * @param mixed $mxdValue1 Item one to be compared
+	 * @param mixed $mxdValue2 Item two to be compared
 	 * @return boolean True returned upon successful comparison of the two items/strings/integers
 	 */
 	public function compare($mxdValue1,$mxdValue2){
@@ -57,7 +57,7 @@ class Validate extends Base{
 	 * Validate the format of a Email
 	 *
 	 * @reference http://php.net/manual/en/filter.constants.php
-	 * @param $strEmailAddress Email Address to be validated
+	 * @param string $strEmailAddress Email Address to be validated
 	 * @return mixed
 	 */
 	public function email($strEmailAddress){
@@ -73,18 +73,18 @@ class Validate extends Base{
 	 * - a.b
 	 * The first character and last character of any part (split by .) cannot be a - or _ and the last part (.com or .co.uk) can only contain a-z
 	 *
-	 * @param $strDomain Domain name excluding the protocol, slashes and spaces
+	 * @param string $strDomain Domain name excluding the protocol, slashes and spaces
 	 * @return mixed The returned data will either be the validated domain or false
 	 */
 	public function domain($strDomain){
-		return $this->regx($strDomain,"/^(locahost|([a-z\d]([a-z\d\-\_]+[a-z\d])*\.)*([a-z\d]([a-z\d\-\_]+[a-z\d])*)(\.[a-z]+)+)$/i");
+		return $this->regx($strDomain,"/^(localhost|([a-z\d]([a-z\d\-\_]*[a-z\d]+|)[\.]?)+(\.[a-z]+)+)$/i");
 	}
 
 	/**
 	 * Validate the format of a URL
 	 *
 	 * @reference http://php.net/manual/en/filter.constants.php
-	 * @param $urlFullLink URL to be validated
+	 * @param string $urlFullLink URL to be validated
 	 * @return mixed
 	 */
 	public function url($urlFullLink){
@@ -95,8 +95,8 @@ class Validate extends Base{
 	 * Validate the format of a IP address, can validate both IPv4 and IPv6 addresses
 	 *
 	 * @reference http://php.net/manual/en/filter.constants.php
-	 * @param $mxdIPAddress IP address to be validated
-	 * @param $blValidateIPV6 Set to true if and IPv6 address is to be validated
+	 * @param string $mxdIPAddress IP address to be validated
+	 * @param bool $blValidateIPV6 Set to true if and IPv6 address is to be validated
 	 * @return mixed
 	 */
 	public function ip($mxdIPAddress,$blValidateIPV6 = false){
@@ -120,7 +120,7 @@ class Validate extends Base{
 	 * Validate a boolean state
 	 *
 	 * @reference http://php.net/manual/en/filter.constants.php
-	 * @param $blBoolean Boolean to be validated
+	 * @param bool $blBoolean Boolean to be validated
 	 * @return mixed
 	 */
 	public function boolean($blBoolean){
@@ -142,9 +142,9 @@ class Validate extends Base{
 	 * Validate an integer, optionally you can pass in a min and max range for further validation
 	 *
 	 * @reference http://php.net/manual/en/filter.constants.php
-	 * @param $intInteger Integer to be validated
-	 * @param $intRangeMin Lowest acceptable integer value
-	 * @param $intRangeMax Highest acceptable integer value
+	 * @param integer $intInteger Integer to be validated
+	 * @param integer $intRangeMin Lowest acceptable integer value
+	 * @param integer $intRangeMax Highest acceptable integer value
 	 * @return mixed
 	 */
 	public function integer($intInteger,$intRangeMin = null,$intRangeMax = null){
@@ -169,7 +169,7 @@ class Validate extends Base{
 	/**
 	 * Validate a sting, this will ensure the is is not an object, resource or boolean value
 	 *
-	 * @param $mxdString String to be validated
+	 * @param string $mxdString String to be validated
 	 * @return bool
 	 */
 	public function string($mxdString){
@@ -180,7 +180,7 @@ class Validate extends Base{
 	 * Validate a telephone number, this function if very universal phone number validator also allow for ext|ext.|,|; with upto 4 digit extension.
 	 * Optional spacing, brackets and dashes throughout
 	 *
-	 * @param $mxdPhoneNumber Phone number to be validated
+	 * @param string $mxdPhoneNumber Phone number to be validated
 	 * @return bool|mixed
 	 */
 	public function telephone($mxdPhoneNumber){
@@ -198,7 +198,7 @@ class Validate extends Base{
 	/**
 	 * Validate a UK postcode
 	 *
-	 * @param $strPostcode Postcode to be validated
+	 * @param string $strPostcode Postcode to be validated
 	 * @return bool|mixed|string
 	 */
 	public function postcode($strPostcode){
@@ -262,8 +262,8 @@ class Validate extends Base{
 	/**
 	 * Validate some data using an Regular Expression
 	 *
-	 * @param $mxdData Data to be validated
-	 * @param $strRegX Expression used to validate the data
+	 * @param mixed $mxdData Data to be validated
+	 * @param string $strRegX Expression used to validate the data
 	 * @return bool
 	 */
 	public function regx($mxdData,$strRegX){

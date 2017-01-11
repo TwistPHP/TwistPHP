@@ -43,7 +43,7 @@
 
 		/**
 		 * Set the database that is being used in the current request if it is different from TWIST_DATABASE_NAME.
-		 * @param string $strTable SQL database name
+		 * @param string $strDatabase SQL database name
 		 */
 		public function __setDatabase($strDatabase){
 			$this->strDatabase = $strDatabase;
@@ -58,7 +58,7 @@
 			//Get the structure of the table
 			$arrStructure = \Twist::Database()->table($this->strTable,$this->strDatabase)->structure();
 
-			return (is_null($arrStructure)) ? null : new \Twist\Core\Models\Database\Record($this->strDatabase,$this->strTable,$arrStructure,array());
+			return (is_null($arrStructure)) ? null : new Record($this->strDatabase,$this->strTable,$arrStructure,array());
 		}
 
 		/**
@@ -86,7 +86,7 @@
 				if($blReturnArray == false){
 
 					//Get the editable database record
-					$mxdRecord = new \Twist\Core\Models\Database\Record(
+					$mxdRecord = new Record(
 						$this->strDatabase,
 						$this->strTable,
 						\Twist::Database()->table($this->strTable,$this->strDatabase)->structure(),
@@ -122,7 +122,7 @@
 						$arrRecord[$arrStructure['auto_increment']] = null;
 					}
 
-					$resRecord = new \Twist\Core\Models\Database\Record($this->strDatabase,$this->strTable,$arrStructure,$arrRecord,true);
+					$resRecord = new Record($this->strDatabase,$this->strTable,$arrStructure,$arrRecord,true);
 				}
 			}
 

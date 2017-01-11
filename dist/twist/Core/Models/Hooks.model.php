@@ -84,10 +84,10 @@
 
 		/**
 		 * Register a hook to extend framework or package functionality
-		 * @param $strHook
-		 * @param $mxdUniqueKey
-		 * @param $mxdData
-		 * @param $blPermanent
+		 * @param string $strHook
+		 * @param mixed $mxdUniqueKey
+		 * @param mixed $mxdData
+		 * @param bool $blPermanent
 		 */
 		public function register($strHook,$mxdUniqueKey,$mxdData,$blPermanent = false){
 
@@ -104,9 +104,9 @@
 
 		/**
 		 * Cancel a hook from being active in the system, this will cancel the hook form the current page load only
-		 * @param $strHook
-		 * @param $mxdUniqueKey
-		 * @param $blPermanent
+		 * @param string $strHook
+		 * @param mixed $mxdUniqueKey
+		 * @param bool $blPermanent
 		 */
 		public function cancel($strHook,$mxdUniqueKey,$blPermanent = false){
 
@@ -119,8 +119,8 @@
 
 		/**
 		 * Get the array of extensions for the requested hook and key
-		 * @param $strHook
-		 * @param $mxdUniqueKey
+		 * @param string $strHook
+		 * @param mixed $mxdUniqueKey
 		 * @return array
 		 */
 		public function get($strHook,$mxdUniqueKey){
@@ -129,7 +129,7 @@
 
 		/**
 		 * Get all the hooks, you can filter by package or leave blank for everything
-		 * @param $strHook
+		 * @param string $strHook
 		 * @return array
 		 */
 		public function getAll($strHook = null){
@@ -177,9 +177,9 @@
 
 		/**
 		 * Permanently store a new hook
-		 * @param $strHook
-		 * @param $mxdUniqueKey
-		 * @param $mxdData
+		 * @param string $strHook
+		 * @param mixed $mxdUniqueKey
+		 * @param mixed $mxdData
 		 */
 		protected function storeHook($strHook,$mxdUniqueKey,$mxdData){
 
@@ -204,8 +204,8 @@
 
 		/**
 		 * Remove a permanently stored hook, only wo
-		 * @param $strHook
-		 * @param $mxdUniqueKey
+		 * @param string $strHook
+		 * @param mixed $mxdUniqueKey
 		 */
 		protected function removeHook($strHook,$mxdUniqueKey){
 

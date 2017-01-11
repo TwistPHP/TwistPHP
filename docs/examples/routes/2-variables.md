@@ -8,11 +8,11 @@ If you need to catch variables in your requests then you can just add the variab
     require_once( 'twist/framework.php' );
 
     /*
-     * --------------------------------
+     * ================================
      * Any request URI that begins with
-     * shop will match this rule and be
+     * vars will match this rule and be
      * sent on to the MySite controller
-     * --------------------------------
+     * ================================
      * URI           | METHOD | myVar
      * /vars         | _index | ''
      * /vars/alpha   | _index | 'alpha'
@@ -24,7 +24,7 @@ If you need to catch variables in your requests then you can just add the variab
      * /vars/y/alpha | alpha  | 'y'
      * /vars/y/beta  | beta   | 'y'
      * /vars/y/gamma | gamma  | 'y'
-     * --------------------------------
+     * ================================
      */
     Twist::Route() -> controller( '/vars/{myVar}/%', '' );
 
@@ -37,20 +37,20 @@ The variables can be retrieved within your controller with the `_var()` method:
 <?php
     
     /*
-     * --------------------------------
+     * ================================
      * This will return you an array of
      * all the caught variables in your
      * requested URI
-     * --------------------------------
+     * ================================
      */
     $this -> _var();
     
     /*
-     * --------------------------------
+     * ================================
      * To get just one of the variables
      * all you need do is pass its name
      * as the methods first parameter
-     * --------------------------------
+     * ================================
      */
     $this -> _var( 'myVar' );
 ```

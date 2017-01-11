@@ -35,7 +35,7 @@ class Autoload{
 
 	/**
 	 * Initialise the AutoLoader and register the class as an AutoLoader
-	 * @param $strBaseDir Base directory of the framework
+	 * @param string $strBaseDir Base directory of the framework
 	 */
 	public static function init($strBaseDir){
 		self::$strBaseDir = $strBaseDir;
@@ -44,7 +44,7 @@ class Autoload{
 
 	/**
 	 * Handler for each individual request, the path for the required file will be worked out here
-	 * @param $strRequest The full class and namespace of the file to be loaded
+	 * @param string $strRequest The full class and namespace of the file to be loaded
 	 * @throws \Exception
 	 */
 	public static function load($strRequest){

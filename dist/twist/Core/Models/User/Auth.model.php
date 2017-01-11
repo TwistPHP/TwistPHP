@@ -85,8 +85,9 @@ class Auth{
 
     /**
      * Log the user in and generate an active session (Stores session data into the browser)
-     * @param $strEmail
-     * @param $strPassword
+     * @param string $strEmail
+     * @param string $strPassword
+     * @param bool $blRememberMeCookie
      * @return array
      */
     public static function login($strEmail,$strPassword,$blRememberMeCookie = false){
@@ -128,8 +129,8 @@ class Auth{
 
     /**
      * Validate a users credentials without logging the user into the system
-     * @param $strEmail
-     * @param $strPassword
+     * @param string $strEmail
+     * @param string $strPassword
      * @return array
      */
     public static function validate($strEmail,$strPassword){
@@ -137,7 +138,7 @@ class Auth{
         //If the user is still not valid then check email and password
         if(!is_null($strEmail) && !is_null($strPassword)){
 
-	        $arrUserData = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->get($strEmail,'email',true);
+            $arrUserData = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->get($strEmail,'email',true);
 
             if(count($arrUserData)){
                 if($arrUserData['password'] == sha1($strPassword)){
@@ -161,6 +162,9 @@ class Auth{
                                 self::$arrCurrentSession['diagnosis'] = 'The account is running on a temporary password and needs to be reset';
                             }
                         }else{
+                            \Twist::Session()->data('user-email',$strEmail);
+                            self::$arrCurrentSession['user_data'] = array('email' => $strEmail);
+
                             self::$arrCurrentSession['issue'] = 'verify';
                             self::$arrCurrentSession['message'] = 'You have not verified your email address';
                             self::$arrCurrentSession['diagnosis'] = 'The account has not been verified';
@@ -187,7 +191,7 @@ class Auth{
 
     /**
      * Log the user out of the system
-     * @return array
+     * @return bool
      */
     public static function logout(){
 

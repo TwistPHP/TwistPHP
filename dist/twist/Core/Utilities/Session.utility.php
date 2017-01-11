@@ -95,8 +95,8 @@
 		 * Set and get the Twist session data
 		 * Passing only a key will return the data stored against that key, pass in a value as well will set and return the result
 		 * @note You can pass multidimensional keys separated by '/', but this will not be able to change an existing value from a non-array value to an array value
-		 * @param $strKey The key for the item to be returned
-		 * @param $mxdValue The value to be set against the provided key, passing null will not set any data
+		 * @param string $strKey The key for the item to be returned
+		 * @param null $mxdValue The value to be set against the provided key, passing null will not set any data
 		 * @return mixed Return the data that is contained in the provided key (if any exists otherwise NULL)
 		 */
 		public function data($strKey,$mxdValue = null){
@@ -116,7 +116,7 @@
 		/**
 		 * Null a value in the session array
 		 * @note You can pass multidimensional keys separated by '/'
-		 * @param $strKey The key for the item to be nulled
+		 * @param string $strKey The key for the item to be nulled
 		 * @return void
 		 */
 		public function nullData($strKey){
@@ -132,7 +132,7 @@
 		/**
 		 * Remove a single session item or clear the whole session by leaving the key field null
 		 * @note You can pass multidimensional keys separated by '/'
-		 * @param $strKey The key for the item to be removed, passing null removes all
+		 * @param string $strKey The key for the item to be removed, passing null removes all
 		 */
 		public function delete($strKey = null){
 
@@ -147,22 +147,22 @@
 
 		/**
 		 * @alias delete
+		 * @param string $strKey
 		 */
 		public function remove($strKey = null){
 			$this->delete($strKey);
 		}
 
+		/**
+		 * @param string $strReference
+		 */
 		public function viewExtension($strReference){
-
-			$strData = '';
 
 			if(strstr($strReference,'/')){
 				$mxdTempData = \Twist::framework()->tools()->arrayParse($strReference,$_SESSION['twist-session']);
-				$strData = (is_array($mxdTempData)) ? print_r($mxdTempData,true) : $mxdTempData;
+				return (is_array($mxdTempData)) ? print_r($mxdTempData,true) : $mxdTempData;
 			}elseif(array_key_exists($strReference,$_SESSION['twist-session'])){
-				$strData = (is_array($_SESSION['twist-session'][$strReference])) ? print_r($_SESSION['twist-session'][$strReference],true) : $_SESSION['twist-session'][$strReference];
+				return (is_array($_SESSION['twist-session'][$strReference])) ? print_r($_SESSION['twist-session'][$strReference],true) : $_SESSION['twist-session'][$strReference];
 			}
-
-			return $strData;
 		}
 	}

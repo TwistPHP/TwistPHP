@@ -102,7 +102,7 @@
 
 		/**
 		 * Remove a registered even from the event list
-		 * @param $strEventKey
+		 * @param string $strEventKey
 		 */
 		public static function cancelEvent($strEventKey){
 			unset(self::$arrCallbackEvents[$strEventKey]);

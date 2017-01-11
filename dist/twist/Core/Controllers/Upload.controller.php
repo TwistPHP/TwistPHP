@@ -80,17 +80,27 @@ class Upload extends Base{
 		//Now if the file upload was successful process the asset (if required)
 		if($arrOut['status']){
 
-			$arrDynamicRoute = $this->_route('dynamic');
-
 			//Get the asset group to be used for the upload
+			$arrAssetGroup = array();
 			$intAssetGroup = \Twist::framework()->setting('ASSET_DEFAULT_GROUP');
 
-			if(count($arrDynamicRoute)){
-				if(count($arrDynamicRoute) > 1 && $arrDynamicRoute[0] == 'asset'){
-					$intAssetGroup = \Twist::Asset()->getGroupBySlug($arrDynamicRoute[1]);
-				}elseif($arrDynamicRoute[0] !== 'asset'){
-					$intAssetGroup = \Twist::Asset()->getGroupBySlug($arrDynamicRoute[0]);
+			//Allow for a URI to be registered such as: Twist::Route()->upload('/account/upload/{function}/{asset_group}');
+			if($this->_var('asset_group') != null && $this->_var('asset_group') != ''){
+				$arrAssetGroup = \Twist::Asset()->getGroupBySlug($this->_var('asset_group'));
+			}else{
+				$arrDynamicRoute = $this->_route('dynamic');
+
+				if(count($arrDynamicRoute)){
+					if(count($arrDynamicRoute) > 1 && $arrDynamicRoute[0] == 'asset'){
+						$arrAssetGroup = \Twist::Asset()->getGroupBySlug($arrDynamicRoute[1]);
+					}elseif($arrDynamicRoute[0] !== 'asset'){
+						$arrAssetGroup = \Twist::Asset()->getGroupBySlug($arrDynamicRoute[0]);
+					}
 				}
+			}
+
+			if(count($arrAssetGroup)){
+				$intAssetGroup = $arrAssetGroup['id'];
 			}
 
 			$intAssetID = \Twist::Asset()->add($arrOut['file']['path'],$intAssetGroup);
@@ -121,7 +131,7 @@ class Upload extends Base{
 	protected function storeFile($strFileKey = null,$intIndex = null){
 
 		if(is_array($_FILES) && count($_FILES)){
-			$arrOut = \Twist::File()->upload($strFileKey,null,$intIndex);
+			$arrOut = \Twist::File()->upload($strFileKey,null,$intIndex); //TODO: Is $intIndex used?
 		}else{
 			$arrOut = \Twist::File()->uploadPUT();
 		}

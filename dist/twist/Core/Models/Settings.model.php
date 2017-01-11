@@ -136,7 +136,7 @@
 
 		/**
 		 * Get the setting value that is associated with the provided key, is the key does not exists NULL will be returned.
-		 * @param $strKey
+		 * @param string $strKey
 		 * @return null|mixed
 		 */
 	    public function get($strKey){
@@ -145,7 +145,7 @@
 
 		/**
 		 * Get all information that is associated with the provided key, is the key does not exists NULL will be returned.
-		 * @param $strKey
+		 * @param string $strKey
 		 * @return null
 		 */
 	    public function getInfo($strKey){
@@ -154,8 +154,8 @@
 
 		/**
 		 * Set a value against a particular setting Key, the value will be stored in the Database or File depending on how TwistPHP has been configured.
-		 * @param $strKey
-		 * @param $mxdData
+		 * @param string $strKey
+		 * @param mixed $mxdData
 		 * @return bool
 		 */
 	    public function set($strKey,$mxdData){
@@ -197,8 +197,8 @@
 
 		/**
 		 * Remove/Uninstall a particular setting or group of settings form the Database or File depending on how TwistPHP has been configured.
-		 * @param $strPackage
-		 * @param $strGroup
+		 * @param string $strPackage
+		 * @param string $strGroup
 		 * @param null $strKey
 		 */
 		public function uninstall($strPackage,$strGroup,$strKey = null){
@@ -248,15 +248,15 @@
 
 		/**
 		 * Install/Add a new setting into the Database or File depending on how TwistPHP has been configured.
-		 * @param $strPackage
-		 * @param $strGroup
-		 * @param $strKey
-		 * @param $mxdValue
-		 * @param $strTitle
-		 * @param $strDescription
-		 * @param $strDefault
-		 * @param $strType
-		 * @param $strOptions
+		 * @param string $strPackage
+		 * @param string $strGroup
+		 * @param string $strKey
+		 * @param mixed $mxdValue
+		 * @param string $strTitle
+		 * @param string $strDescription
+		 * @param string $strDefault
+		 * @param string $strType
+		 * @param string $strOptions
 		 * @param bool $blNull
 		 * @return bool|null
 		 * @throws \Exception

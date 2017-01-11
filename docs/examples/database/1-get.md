@@ -16,7 +16,7 @@ You can get a single row from the database as an object by using the `get()` met
 <?php
     
     /*
-     * --------------------------------
+     * ================================
      * The get method will find the one
      * row that matches your string and
      * in the field that you specified,
@@ -24,7 +24,7 @@ You can get a single row from the database as an object by using the `get()` met
      * one area in the areas table that
      * matches the postcode field value
      * of 'PL4 7EX'
-     * --------------------------------
+     * ================================
      */
     $area = Twist::Database() -> records( 'areas' ) -> get( 'PL4 7EX', 'postcode' );
     
@@ -37,12 +37,12 @@ Alternatively you can get a single row as an array rather than an object, to do 
  <?php
      
      /*
-      * --------------------------------
+      * ================================
       * Passing a value of 'true' to the
       * third parameter returns an array
       * with the results, rather than an
       * object
-      * --------------------------------
+      * ================================
       */
      $area = Twist::Database() -> records( 'areas' ) -> get( 'PL4 7EX', 'postcode', true );
      
@@ -57,22 +57,22 @@ When using the `find()` method, all the rows that match your string are returned
 <?php
     
     /*
-     * --------------------------------
+     * ================================
      * In reality, we hope you use link
      * tables to store data such as the
      * car's layout - we have just done
      * this as an example
-     * --------------------------------
+     * ================================
      */
     $hatchbacks = Twist::Database() -> records( 'cars' ) -> find( 'layout', 'hatchback' );
     
     foreach( $hatchbacks as $hatchback ) {
         /*
-         * --------------------------------
+         * ================================
          * The returned value for find() is
          * an array of values which you can
          * iterate through
-         * --------------------------------
+         * ================================
          */
         echo $hatchback['model']; // Fiesta etc.
     }
@@ -86,12 +86,12 @@ You can get an array of all the rows in the table by using the `find()` method, 
 <?php
     
     /*
-     * --------------------------------
+     * ================================
      * Exercise caution using the all()
      * method, as you may be returned a
      * huge number of rows depending on
      * your database size
-     * --------------------------------
+     * ================================
      */
     $likes = Twist::Database() -> records( 'likes' ) -> all();
     

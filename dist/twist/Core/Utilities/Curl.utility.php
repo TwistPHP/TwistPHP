@@ -48,7 +48,7 @@
 		/**
 		 * Automatically return a JSON response as an array
 		 *
-		 * @param $blEnable Determines if functionality should be used
+		 * @param bool $blEnable Determines if functionality should be used
 		 */
 		public function decodeResponseJSON($blEnable = false){
 			$this->blResponseJSON = $blEnable;
@@ -57,7 +57,7 @@
 		/**
 		 * Stop the system from URL encoding all parameters before they are sent
 		 *
-		 * @param $blEnable Determines if functionality should be used
+		 * @param bool $blEnable Determines if functionality should be used
 		 */
 		public function disableUrlEncoding($blEnable = true){
 			$this->blDisableUrlEncoding = $blEnable;
@@ -66,7 +66,7 @@
 		/**
 		 * Tell Curl whether to verify the Host and Peer when making requests to HTTPS urls
 		 *
-		 * @param $blEnable Determines if functionality should be enabled (Default setting: disabled)
+		 * @param bool $blEnable Determines if functionality should be enabled (Default setting: disabled)
 		 */
 		public function verifySSLRequest($blEnable = true){
 			$this->blVerifySSLRequest = $blEnable;
@@ -75,7 +75,7 @@
 		/**
 		 * Set the max timeout for the requests to be made
 		 *
-		 * @param $intTimeout Time in seconds
+		 * @param integer $intTimeout Time in seconds
 		 */
 		public function setTimeout($intTimeout = 5){
 			$this->intTimeout = $intTimeout;
@@ -84,7 +84,7 @@
 		/**
 		 * Set a custom user agent header to be used when making the request, pass in null to use default user agent
 		 *
-		 * @param $strUserAgent Custom User Agent Header
+		 * @param string $strUserAgent Custom User Agent Header
 		 */
 		public function setUserAgent($strUserAgent = null){
 			$this->strUserAgent = (is_null($strUserAgent)) ? $this->strDefaultUserAgent : $strUserAgent;
@@ -93,8 +93,8 @@
 		/**
 		 * Set a username and password, this will log you into any request that may have HTTP User Restriction in place
 		 *
-		 * @param $strUsername Username required for the request
-		 * @param $strPassword Password required for the request
+		 * @param string $strUsername Username required for the request
+		 * @param string $strPassword Password required for the request
 		 */
 		public function setUserPass($strUsername,$strPassword){
 			$this->strUserPassword = sprintf("%s:%s",$strUsername,$strPassword);
@@ -103,10 +103,10 @@
 		/**
 		 * Encrypt the Curl request using a SSL certificate and key pair
 		 *
-		 * @param $dirSSLCertificate The path of a file containing a PEM formatted certificate.
-		 * @param $dirSSLKey The path of a file containing a private SSL key.
-		 * @param $strCertificateType The format of the certificate. Supported formats are "PEM" (default), "DER", and "ENG".
-		 * @param $strKeyType The key type of the private SSL key. Supported key types are "PEM" (default), "DER", and "ENG".
+		 * @param string $dirSSLCertificate The path of a file containing a PEM formatted certificate.
+		 * @param string $dirSSLKey The path of a file containing a private SSL key.
+		 * @param string $strCertificateType The format of the certificate. Supported formats are "PEM" (default), "DER", and "ENG".
+		 * @param string $strKeyType The key type of the private SSL key. Supported key types are "PEM" (default), "DER", and "ENG".
 		 */
 		public function setSSLCertificate($dirSSLCertificate,$dirSSLKey,$strCertificateType = 'PEM',$strKeyType = 'PEM'){
 			$this->arrSSLCertificate = array(
@@ -120,7 +120,7 @@
 		/**
 		 * Set the content type of the request, this will be merged with the headers array if required
 		 *
-		 * @param $strContentType Content type of the body data (if required)
+		 * @param string $strContentType Content type of the body data (if required)
 		 */
 		public function setContentType($strContentType){
 			$this->arrHeaders[] = sprintf("Content-Type: %s",trim($strContentType));
@@ -129,7 +129,7 @@
 		/**
 		 * The contents of the "Cookie: " header to be used in the HTTP request. Note that multiple cookies are separated with a semicolon followed by a space (e.g., "fruit=apple; colour=red")
 		 *
-		 * @param $strCookies The cookie content to be, separated multiple cookies with a semicolon followed by a space
+		 * @param string $strCookies The cookie content to be, separated multiple cookies with a semicolon followed by a space
 		 */
 		public function setCookies($strCookies){
 			$this->strCookies = $strCookies;
@@ -138,9 +138,9 @@
 		/**
 		 * Make a GET request to the provided URL, set the User Agent header when required
 		 *
-		 * @param $strURL Full URL for the request
-		 * @param $arrRequestData Array of get parameters
-		 * @param $arrHeaders Array of additional headers to be sent
+		 * @param string $strURL Full URL for the request
+		 * @param array $arrRequestData Array of get parameters
+		 * @param array $arrHeaders Array of additional headers to be sent
 		 * @return mixed Returns the results of the request, will be an array if 'decodeResponseJSON' is enabled
 		 */
 		public function get($strURL,$arrRequestData = array(),$arrHeaders = array()){
@@ -153,9 +153,9 @@
 		 *
 		 * @related get
 		 *
-		 * @param $strURL Full URL for the request
-		 * @param $mxdRequestData Pass in an array of post parameters or raw body data of e.g. XML,JSON to be posted
-		 * @param $arrHeaders Array of additional headers to be sent
+		 * @param string $strURL Full URL for the request
+		 * @param mixed $mxdRequestData Pass in an array of post parameters or raw body data of e.g. XML,JSON to be posted
+		 * @param array $arrHeaders Array of additional headers to be sent
 		 * @return mixed Returns the results of the request, will be an array if 'decodeResponseJSON' is enabled
 		 */
 		public function post($strURL,$mxdRequestData = array(),$arrHeaders = array()){
@@ -167,10 +167,10 @@
 		 *
 		 * @related get
 		 *
-		 * @param $strURL Full URL for the request
-		 * @param $strRawData Raw data to be posted
-		 * @param $arrRequestData Array of get parameters
-		 * @param $arrHeaders Array of additional headers to be sent
+		 * @param string $strURL Full URL for the request
+		 * @param string $strRawData Raw data to be posted
+		 * @param array $arrRequestData Array of get parameters
+		 * @param array $arrHeaders Array of additional headers to be sent
 		 * @return mixed Returns the results of the request, will be an array if 'decodeResponseJSON' is enabled
 		 */
 		public function put($strURL,$strRawData,$arrRequestData = array(),$arrHeaders = array()){
@@ -183,9 +183,9 @@
 		 *
 		 * @related get
 		 *
-		 * @param $strURL Full URL for the request
-		 * @param $mxdRequestData Pass in an array of post parameters or raw body data of e.g. XML,JSON to be posted
-		 * @param $arrHeaders Array of additional headers to be sent
+		 * @param string $strURL Full URL for the request
+		 * @param mixed $mxdRequestData Pass in an array of post parameters or raw body data of e.g. XML,JSON to be posted
+		 * @param array $arrHeaders Array of additional headers to be sent
 		 * @return mixed Returns the results of the request, will be an array if 'decodeResponseJSON' is enabled
 		 */
 		public function patch($strURL,$mxdRequestData = array(),$arrHeaders = array()){
@@ -198,9 +198,9 @@
 		 *
 		 * @related get
 		 *
-		 * @param $strURL Full URL for the request
-		 * @param $mxdRequestData Pass in an array of post parameters or raw body data of e.g. XML,JSON to be posted
-		 * @param $arrHeaders Array of additional headers to be sent
+		 * @param string $strURL Full URL for the request
+		 * @param mixed $mxdRequestData Pass in an array of post parameters or raw body data of e.g. XML,JSON to be posted
+		 * @param array $arrHeaders Array of additional headers to be sent
 		 * @return mixed Returns the results of the request, will be an array if 'decodeResponseJSON' is enabled
 		 */
 		public function delete($strURL,$mxdRequestData = array(),$arrHeaders = array()){
@@ -210,9 +210,10 @@
 		/**
 		 * A method used but POST, PATCH and DELETE as they are all similar requests with a different method name
 		 *
-		 * @param $strURL Full URL for the request
-		 * @param $mxdRequestData Pass in an array of post parameters or raw body data of e.g. XML,JSON to be posted
-		 * @param $arrHeaders Array of additional headers to be sent
+		 * @param string $strURL Full URL for the request
+		 * @param mixed $mxdRequestData Pass in an array of post parameters or raw body data of e.g. XML,JSON to be posted
+		 * @param array $arrHeaders Array of additional headers to be sent
+		 * @param string $strMethod
 		 * @return mixed Returns the results of the request, will be an array if 'decodeResponseJSON' is enabled
 		 */
 		protected function makePostRequest($strURL,$mxdRequestData = array(),$arrHeaders = array(),$strMethod = 'post'){
@@ -233,11 +234,11 @@
 		/**
 		 * The function that makes the CURL requests, all data is passed in and the response is returned
 		 *
-		 * @param $strURL Full URL for the request
-		 * @param $arrRequestData Array of post/get parameters
-		 * @param $strType HTTP protocol of the request
-		 * @param $arrHeaders Array of additional headers to be sent
-		 * @param $strRawData Raw data to be posted
+		 * @param string $strURL Full URL for the request
+		 * @param array $arrRequestData Array of post/get parameters
+		 * @param string $strType HTTP protocol of the request
+		 * @param array $arrHeaders Array of additional headers to be sent
+		 * @param string $strRawData Raw data to be posted
 		 * @return mixed Returns the results of the request, will be an array if 'decodeResponseJSON' is enabled
 		 */
 		protected function makeRequest($strURL,$arrRequestData = array(),$strType = 'get',$arrHeaders=array(),$strRawData = ''){
@@ -392,7 +393,7 @@
 
 		/**
 		 * Parse the response headers and output them as an array of key value pairs
-		 * @param string $strRawHeaders Raw response headers to be parsed
+		 * @param mixed $mxdRawHeaders Raw response headers to be parsed
 		 * @return array Key Value pare of all response headers
 		 */
 		protected function httpParseHeaders($mxdRawHeaders){

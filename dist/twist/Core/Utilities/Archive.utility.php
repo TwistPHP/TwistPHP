@@ -65,7 +65,7 @@
 
 		/**
 		 * Create a new empty archive ready to have files and directories added
-		 * @param $dirZipArchive Full path for the new Zip archive, the Archive will be created here
+		 * @param string $dirZipArchive Full path for the new Zip archive, the Archive will be created here
 		 */
 		public function create($dirZipArchive = null){
 
@@ -81,7 +81,7 @@
 
 		/**
 		 * Load in an existing archive to be modified or added to
-		 * @param $dirZipArchive Full path to an existing Zip archive (on the server)
+		 * @param string $dirZipArchive Full path to an existing Zip archive (on the server)
 		 */
 		public function load($dirZipArchive){
 			$this->dirZipFile = $dirZipArchive;
@@ -90,7 +90,7 @@
 
 		/**
 		 * Set the main comment to display in the archive
-		 * @param $strComment
+		 * @param string $strComment
 		 */
 		public function setComment($strComment){
 			$this->resHandler->setArchiveComment($strComment);
@@ -98,8 +98,8 @@
 
 		/**
 		 * Add a file or directory to the current Zip Archive, the archive must be loaded or created using the 'load' or 'create' functions
-		 * @param $dirLocalFile Full path to the local file that will be added to the Zip Archive
-		 * @param $dirZipBasePath Base path to place the file within the zip, leave blank for the zip root
+		 * @param string $dirLocalFile Full path to the local file that will be added to the Zip Archive
+		 * @param string $dirZipBasePath Base path to place the file within the zip, leave blank for the zip root
 		 */
 		public function addFile($dirLocalFile,$dirZipBasePath = ''){
 			$this->addItem($dirLocalFile,$dirZipBasePath);
@@ -107,7 +107,7 @@
 
 		/**
 		 * Add an empty directory to the zip, the directory path must be set from the root of the zip
-		 * @param $dirZipDirectoryPath Path of the empty directory to create
+		 * @param string $dirZipDirectoryPath Path of the empty directory to create
 		 */
 		public function addEmptyDirectory($dirZipDirectoryPath = ''){
 
@@ -120,7 +120,7 @@
 
 		/**
 		 * Delete a file or directory from the current ZIP file
-		 * @param $dirZipFilePath Path of the file to be deleted
+		 * @param string $dirZipFilePath Path of the file to be deleted
 		 */
 		public function deleteFile($dirZipFilePath = ''){
 
@@ -133,7 +133,7 @@
 
 		/**
 		 * Decides how to deal with the path being entered into the zip
-		 * @param $dirLocalPath Local path of hte item to be added
+		 * @param string $dirLocalPath Local path of hte item to be added
 		 * @param string $strCurrentPath Base path within the zip where the item will be addded
 		 */
 		protected function addItem($dirLocalPath,$strCurrentPath = ''){
@@ -171,6 +171,7 @@
 		/**
 		 * Finish and save the archive
 		 * If a temp file a new save file must be passed in otherwise the temp file will be deleted
+		 * @param string $dirSaveFile
 		 */
 		public function save($dirSaveFile = null){
 
@@ -188,6 +189,7 @@
 		/**
 		 * Serve the newly created archive to the browser, this will allow the user to download the Archive to there computer
 		 * Temp files are deleted upon serve
+		 * @param string $strFileName
 		 */
 		public function serve($strFileName = null){
 
@@ -199,7 +201,7 @@
 
 		/**
 		 * Extract the loaded Zip Archive to a given folder on the local server
-		 * @param $dirExtractPath Full path to the local directory in which to extract the archive
+		 * @param string $dirExtractPath Full path to the local directory in which to extract the archive
 		 */
 		public function extract($dirExtractPath){
 			$this->resHandler->extract($dirExtractPath);

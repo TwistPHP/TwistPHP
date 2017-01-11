@@ -33,7 +33,7 @@
 		/**
 		 * Similar to print_r but corrects issues such as booleans, also give more useful information about the data
 		 *
-		 * @param        $arrData
+		 * @param array $arrData
 		 * @param string $strIndent
 		 * @return string
 		 */
@@ -60,8 +60,8 @@
 		/**
 		 * Return a value in an array using multi dimensional key to parse the structure of the array
 		 *
-		 * @param        $strKey       Location of the value in the array
-		 * @param        $arrData      Array to parse
+		 * @param string $strKey Location of the value in the array
+		 * @param array $arrData Array to parse
 		 * @param string $strSplitChar Structure separator
 		 * @return null $mxdOut
 		 */
@@ -87,8 +87,8 @@
 		/**
 		 * Remove an item from a multi-dimensional array using a key, the split char indicates a change in array level
 		 *
-		 * @param        $strKey
-		 * @param        $arrData
+		 * @param string $strKey
+		 * @param string $arrData
 		 * @param string $strSplitChar
 		 * @return array Returns either the original array or the array with the item removed
 		 */
@@ -107,9 +107,9 @@
 		/**
 		 * Collapse a multidimensional array into a single associative array
 		 *
-		 * @param        $arrIn          Array to transform
-		 * @param string $strJoinChar    Structure separator
-		 * @param null   $mxdPreviousKey Previous key encountered (used in the recursive process)
+		 * @param array $arrIn Array to transform
+		 * @param string $strJoinChar Structure separator
+		 * @param mixed $mxdPreviousKey Previous key encountered (used in the recursive process)
 		 * @return array
 		 */
 		public function array3dTo2d( $arrIn, $strJoinChar = '/', $mxdPreviousKey = null ) {
@@ -133,9 +133,9 @@
 		/**
 		 * Transform an associative array into a multidimensional array using a key to define the structure
 		 *
-		 * @param        $arrIn                  Array to transform
-		 * @param null   $strMultiDimensionalKey Key in the array to use to define a structure
-		 * @param string $strSplitChar           Structure separator
+		 * @param array $arrIn Array to transform
+		 * @param null $strMultiDimensionalKey Key in the array to use to define a structure
+		 * @param string $strSplitChar Structure separator
 		 * @return array
 		 */
 		public function array2dTo3d( $arrIn, $strMultiDimensionalKey = null, $strSplitChar = '/' ) {
@@ -166,8 +166,8 @@
 		/**
 		 * Fully merge two multidimensional arrays and return the new merged array.
 		 *
-		 * @param $arrPrimary   Primary array
-		 * @param $arrSecondary Secondary array
+		 * @param array $arrPrimary Primary array
+		 * @param array $arrSecondary Secondary array
 		 * @return mixed
 		 */
 		public function arrayMergeRecursive( $arrPrimary, $arrSecondary ) {
@@ -208,8 +208,8 @@
 		 *     'contact' => array('id' => 3, 'name' => 'Contact', 'slug' => 'contact'),
 		 * )
 		 *
-		 * @param      $arrData
-		 * @param      $strKeyField
+		 * @param array $arrData
+		 * @param string $strKeyField
 		 * @param bool $blGroup
 		 * @return array|bool
 		 */
@@ -290,10 +290,10 @@
 		}
 
 		/**
-		 * @param $arrList
-		 * @param $arrParents
-		 * @param $strIDField
-		 * @param $strChildrenKey
+		 * @param array $arrList
+		 * @param array $arrParents
+		 * @param string $strIDField
+		 * @param string $strChildrenKey
 		 * @return array
 		 */
 		private function buildRelationalTree( &$arrList, $arrParents, $strIDField, $strChildrenKey ) {
@@ -325,9 +325,9 @@
 		/**
 		 * Traverse the current URI in $_SERVER['REQUEST_URI'] or pass in a starting URI
 		 *
-		 * @param $urlRelativePath
-		 * @param $urlStartingURI
-		 * @param $blPreserveQueryString Keep/merge the current query string with the query string of the redirect
+		 * @param string $urlRelativePath
+		 * @param string$urlStartingURI
+		 * @param bool $blPreserveQueryString Keep/merge the current query string with the query string of the redirect
 		 * @return string Return the traversed URI
 		 */
 		public function traverseURI( $urlRelativePath, $urlStartingURI = null, $blPreserveQueryString = false ) {
@@ -419,17 +419,21 @@
 
 		/**
 		 * Generate a random string, default length is set in the framework settings
-		 *
-		 * @param $intStringLength The default value is set in "RANDOM_STRING_LENGTH" setting
-		 * @param $mxdCharset
+		 * @param null $intStringLength Default value is set in "RANDOM_STRING_LENGTH" setting
+		 * @param null $mxdCharset
+		 * @param bool $blIgnoreSimilarChars True will not use the chars "015IJLSOijlos"
 		 * @return string
 		 */
-		public function randomString( $intStringLength = null, $mxdCharset = null ) {
+		public function randomString( $intStringLength = null, $mxdCharset = null, $blIgnoreSimilarChars = true ) {
 
 			$strOut = '';
 			$intStringLength = ( !is_null( $intStringLength ) && $intStringLength > 0 ) ? $intStringLength : \Twist::framework() -> setting( 'RANDOM_STRING_LENGTH' );
 
-			$strChars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz';
+			if($blIgnoreSimilarChars){
+				$strChars = '2346789ABCDEFGHKMNPQRTUVWXYZabcdefghkmnpqrtuvwxyz';
+			}else{
+				$strChars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghiklmnopqrstuvwxyz';
+			}
 
 			if( $mxdCharset === true ) {
 				$strChars .= '!@£$%^&*()_-=+[]{};:|<>?/';
@@ -483,8 +487,8 @@
 		/**
 		 * Create a 'zipped' string of characters (useful for sha1() + uniqid() to avoid similar-looking uniqid()'s)
 		 *
-		 * @param $strString1
-		 * @param $strString2
+		 * @param string $strString1
+		 * @param string $strString2
 		 * @return string
 		 */
 		public function zipStrings( $strString1, $strString2 ) {

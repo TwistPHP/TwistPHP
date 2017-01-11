@@ -101,6 +101,7 @@
 
 		/**
 		 * Get an array of all the installed packages on the system
+		 * @param bool $blRebuild
 		 * @return array|bool
 		 */
 		public function getInstalled($blRebuild = false){
@@ -188,8 +189,8 @@
 
 		/**
 		 * Load the package into the framework for us
-		 * @param $strSlug
-		 * @param $arrPackageData
+		 * @param string $strSlug
+		 * @param array $arrPackageData
 		 */
 		protected function load($strSlug,$arrPackageData){
 
@@ -224,7 +225,7 @@
 
 		/**
 		 * Find the uninstalled package by its slug and run the install.php file within the package folder.
-		 * @param $strInstallSlug
+		 * @param string $strInstallSlug
 		 * @return bool
 		 */
 		public function installer($strInstallSlug){
@@ -267,7 +268,7 @@
 
 		/**
 		 * Install any DB and tables required by the package, this function is called by the packages install.php file located in the package folder.
-		 * @param $dirInstallSQL
+		 * @param string $dirInstallSQL
 		 */
 		public function importSQL($dirInstallSQL){
 
@@ -286,7 +287,7 @@
 
 		/**
 		 * Install any framework settings that are required by the package, this function is called by the packages install.php file located in the package folder.
-		 * @param $dirSettingsJSON
+		 * @param string $dirSettingsJSON
 		 * @throws \Exception
 		 */
 		public function importSettings($dirSettingsJSON){
@@ -296,7 +297,7 @@
 
 				$dirInstallFile = $arrBacktrace[0]['file'];
 				$dirPackage = dirname($dirInstallFile);
-				$strSlug = strtolower(basename($dirPackage));
+				$strSlug = strtolower(basename($dirPackage)); //TODO: Remove?
 
 				//Install the SQL tables when required
 				$dirSettingsJSON = (!file_exists($dirSettingsJSON)) ? sprintf('%s/%s', $dirPackage, $dirSettingsJSON) : $dirSettingsJSON;
@@ -323,15 +324,15 @@
 
 		/**
 		 * Find the installed package by its slug and run the uninstall.php file within the package folder.
-		 * @param $strInstallSlug
+		 * @param string $strUninstallSlug
 		 * @return bool
 		 */
-		public function uninstaller($strUnInstallSlug){
+		public function uninstaller($strUninstallSlug){
 
 			$blOut = false;
 
 			foreach($this->getInstalled() as $strSlug => $arrEachPackage){
-				if($strUnInstallSlug === $strSlug){
+				if($strUninstallSlug === $strSlug){
 					include sprintf('%s/%s/uninstall.php',TWIST_PACKAGES,$arrEachPackage['folder']);
 					$blOut = true;
 					break;
@@ -361,7 +362,7 @@
 
 		/**
 		 * Check to see if a package is installed on the framework by its package slug (lowercase package folder name)
-		 * @param $strPackageSlug
+		 * @param string $strPackageSlug
 		 * @return bool
 		 */
 		public function isInstalled($strPackageSlug){
@@ -370,9 +371,10 @@
 
 		/**
 		 * Check to see that a package is installed and usable, optional throw an exception of the package dosnt exist
-		 * @param $strPackage
-		 * @param $blThrowException
+		 * @param string $strPackageSlug
+		 * @param bool $blThrowException
 		 * @return bool
+		 * @throws \Exception
 		 */
 		public function exists($strPackageSlug,$blThrowException = false){
 
@@ -387,7 +389,7 @@
 
 		/**
 		 * Get the details of an installed package and return them as an array
-		 * @param $strPackageSlug
+		 * @param string $strPackageSlug
 		 * @return array
 		 */
 		public function get($strPackageSlug){
@@ -397,7 +399,7 @@
 
 		/**
 		 * Get the details of a local/installed package and return them as an array
-		 * @param $strPackageKey
+		 * @param string $strPackageKey
 		 * @return array
 		 */
 		public function getByKey($strPackageKey){
@@ -413,7 +415,7 @@
 
 		/**
 		 * Get all the current information for any installed package
-		 * @param $strPackage
+		 * @param string $strPackage
 		 * @return array
 		 */
 		public function information($strPackage){
@@ -425,7 +427,9 @@
 
 		/**
 		 * Load the interface that comes as part of a package
-		 * @param $strPackage
+		 * @param string $strPackageRoute
+		 * @param string $strRegisteredURI
+		 * @param mixed $mxdBaseView
 		 * @throws \Exception
 		 */
 		public function route($strPackageRoute,$strRegisteredURI,$mxdBaseView){

@@ -40,8 +40,8 @@
 
 		/**
 		 * Define PHP Defines but automatically checks to see if has already been defined, if so the new define is ignored but no error is thrown.
-		 * @param $strKey
-		 * @param $mxdValue
+		 * @param string $strKey
+		 * @param mixed $mxdValue
 		 */
 		public static function define($strKey,$mxdValue){
 			if(!defined($strKey)){
@@ -60,7 +60,7 @@
 			$arrVersion = array(
 				'major' => 3,
 				'minor' => 0,
-				'patch' => 4,
+				'patch' => 5,
 				'pre-release' => ''//pre-release can be set to 'dev'
 			);
 
@@ -220,7 +220,7 @@
 
 		/**
 		 * Log an error message that can be output using the {messages:} template tag
-		 * @param $strMessage
+		 * @param string $strMessage
 		 * @param null $strKey
 		 */
 		public static function errorMessage($strMessage,$strKey = null){
@@ -229,7 +229,7 @@
 
 		/**
 		 * Log an warning message that can be output using the {messages:} template tag
-		 * @param $strMessage
+		 * @param string $strMessage
 		 * @param null $strKey
 		 */
 		public static function warningMessage($strMessage,$strKey = null){
@@ -238,7 +238,7 @@
 
 		/**
 		 * Log an notice message that can be output using the {messages:} template tag
-		 * @param $strMessage
+		 * @param string $strMessage
 		 * @param null $strKey
 		 */
 		public static function noticeMessage($strMessage,$strKey = null){
@@ -247,7 +247,7 @@
 
 		/**
 		 * Log an success message that can be output using the {messages:} template tag
-		 * @param $strMessage
+		 * @param string $strMessage
 		 * @param null $strKey
 		 */
 		public static function successMessage($strMessage,$strKey = null){
@@ -257,8 +257,8 @@
 		/**
 		 * Redirect the user to a new page or site by URL, optionally you can make the redirect permanent.
 		 * URL redirects can be passed in as full path/URL or relative to your current URI. For example you can pass in '../../' or './test'
-		 * @param $urlRedirectURL URL that the user will be redirected too
-		 * @param $blPermanent Set the redirect type to be a Permanent 301 redirect
+		 * @param string $urlRedirect URL that the user will be redirected too
+		 * @param bool $blPermanent Set the redirect type to be a Permanent 301 redirect
 		 */
 		public static function redirect($urlRedirect,$blPermanent = false){
 
@@ -290,7 +290,7 @@
 		/**
 		 * Record events on for the current page load can be logged and a time-line produced, helps with debugging.
 		 * The TwistPHP event recorder only records and outputs events if DEVELOPMENT_MODE and DEVELOPMENT_EVENT_RECORDER settings are set to true|1.
-		 * @param $strEventName
+		 * @param string $strEventName
 		 */
 		public static function recordEvent($strEventName){
 			if(self::$blRecordEvents){
@@ -310,9 +310,9 @@
 
 		/**
 		 * Process each message as they are added and store them for the current PHP session only
-		 * @param $strMessage
-		 * @param $strKey
-		 * @param $strType
+		 * @param string $strMessage
+		 * @param string $strKey
+		 * @param string $strType
 		 */
 		protected static function messageProcess($strMessage,$strKey,$strType){
 
@@ -349,7 +349,7 @@
 		 * Example Tag:
 		 * {messages:error,combine=true,key=andi|dan,style=html}
 		 *
-		 * @param $strReference
+		 * @param string $strReference
 		 * @param array $arrParameters
 		 * @return string
 		 */
@@ -425,7 +425,7 @@
 		/**
 		 * Call 3rd parky packages in the framework located in your packages folder
 		 * Alternatively packages can be called '$resMyPackage = new Package\MyPackage();'
-		 * @param $strPackageName
+		 * @param string $strPackageName
 		 * @return mixed
 		 */
 		public static function package($strPackageName){

@@ -32,9 +32,9 @@
 
 		/**
 		 * Register a handler for shutdown events, errors and exceptions. All default handlers are registered with this method by TwistPHP.
-		 * @param $strType
-		 * @param $strClass
-		 * @param $strFunction
+		 * @param string $strType
+		 * @param string $strClass
+		 * @param string $strFunction
 		 * @param null $strEventKey
 		 */
 		public function handler($strType,$strClass,$strFunction,$strEventKey = null){
@@ -61,7 +61,7 @@
 
 		/**
 		 * Cancel a registered handler, these handlers can be for shutdown events, errors and exceptions.
-		 * @param $strType
+		 * @param string $strType
 		 * @param null $strEventKey
 		 */
 		public function cancelHandler($strType,$strEventKey = null){
@@ -89,9 +89,9 @@
 		/**
 		 * Alias function with the first parameter preset to 'shutdown'.
 		 * @alias handler
-		 * @param $strEventKey
-		 * @param $strClass
-		 * @param $strFunction
+		 * @param string $strEventKey
+		 * @param string $strClass
+		 * @param string $strFunction
 		 */
 		public function shutdownEvent($strEventKey,$strClass,$strFunction){
 			$this->handler('shutdown',$strClass,$strFunction,$strEventKey);
@@ -100,7 +100,7 @@
 		/**
 		 * Alias function with the first parameter preset to 'shutdown'.
 		 * @alias cancelHandler
-		 * @param $strEventKey
+		 * @param string $strEventKey
 		 */
 		public function cancelShutdownEvent($strEventKey){
 			$this->cancelHandler('shutdown',$strEventKey);

@@ -27,10 +27,10 @@ To output the view to the user, add the following method to your controller:
     public function viewtest() {
     
         /*
-         * --------------------------------
+         * ================================
          * Set up an array of the data that
          * you want to pass into your view
-         * --------------------------------
+         * ================================
          */
         $arrData = array(
             'title' => 'My test view',
@@ -38,11 +38,11 @@ To output the view to the user, add the following method to your controller:
         );
         
         /*
-         * --------------------------------
+         * ================================
          * Pass the array into the standard
          * view method and return it to the
          * user
-         * --------------------------------
+         * ================================
          */
         return $this -> _view( 'viewtest.tpl', $arrData );
         

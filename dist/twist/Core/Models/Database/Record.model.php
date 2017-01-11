@@ -37,11 +37,11 @@
 
 		/**
 		 * Construct the class with all the required data to make usable
-		 * @param $strDatabase
-		 * @param $strTable
-		 * @param $arrStructure
-		 * @param $arrRecord
-		 * @param $blClone
+		 * @param string $strDatabase
+		 * @param string $strTable
+		 * @param array $arrStructure
+		 * @param array $arrRecord
+		 * @param bool $blClone
 		 */
 		public function __construct($strDatabase,$strTable,$arrStructure,$arrRecord,$blClone = false){
 			$this->strDatabase = $strDatabase;
@@ -108,7 +108,7 @@
 
 		/**
 		 * Get a field value
-		 * @param $strField
+		 * @param string $strField
 		 * @return null
 		 */
 		public function get($strField){
@@ -117,22 +117,19 @@
 
 		/**
 		 * Set a single field in the record to a new value, you must call "->save()" to store any changes made to the database
-		 * @param $strField
-		 * @param $strValue
+		 * @param string $strField
+		 * @param string $strValue
 		 * @return bool
+		 * @throws \Exception
 		 */
 		public function set($strField,$strValue){
 
-			$blOut = false;
-
 			if(array_key_exists($strField,$this->arrStructure['columns'])){
 				$this->arrRecord[$strField] = $strValue;
-				$blOut = true;
+				return true;
 			}else{
 				throw new \Exception(sprintf("Error adding data to database record, invalid field '%s' passed",$strField));
 			}
-
-			return $blOut;
 		}
 
 		/**

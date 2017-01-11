@@ -75,7 +75,7 @@
 		/**
 		 * Get a single-dimensional array of language information related to the provided 2 Character ISO language code.
 		 *
-		 * @param $strLanguageISO 2 Character ISO code
+		 * @param string $strLanguageISO 2 Character ISO code
 		 * @return array Returns a single-dimensional language array
 		 */
 		public function getLanguage($strLanguageISO){
@@ -87,7 +87,7 @@
 		 * Get multi-dimensional array of all languages. Optionally include the localised/native language name.
 		 *
 		 * @related getLanguage
-		 * @param $blIncludeLocalisation Enable localised/native language name
+		 * @param bool $blIncludeLocalisation Enable localised/native language name
 		 * @return array Returns a multi-dimensional array of languages
 		 */
 		public function getLanguages($blIncludeLocalisation = false){
@@ -98,7 +98,7 @@
 		 * Get the official language of any given country by 2 character ISO country code.
 		 *
 		 * @related getLanguage
-		 * @param $strCountryISO 2 Character ISO code
+		 * @param string $strCountryISO 2 Character ISO code
 		 * @return array Returns an single-dimensional language array
 		 */
 		public function getOfficialLanguage($strCountryISO){
@@ -109,7 +109,7 @@
 		/**
 		 * Get a single-dimensional array of country information by its 2 Character ISO country code.
 		 *
-		 * @param $strCountryISO 2 Character ISO code
+		 * @param string $strCountryISO 2 Character ISO code
 		 * @return array Returns an single-dimensional country array
 		 */
 		public function getCountry($strCountryISO){
@@ -130,7 +130,7 @@
 		/**
 		 * Get a single-dimensional array of currency information by its 3 Character ISO currency code.
 		 *
-		 * @param $strCurrencyISO 3 Character ISO code
+		 * @param string $strCurrencyISO 3 Character ISO code
 		 * @return array Returns an single-dimensional country array
 		 */
 		public function getCurrency($strCurrencyISO){
@@ -150,7 +150,7 @@
 		 * Get the official currency of any given country by 2 character ISO country code.
 		 *
 		 * @related getCurrency
-		 * @param $strCountryISO 2 Character ISO code
+		 * @param string $strCountryISO 2 Character ISO code
 		 * @return array Returns an single-dimensional language array
 		 */
 		public function getOfficialCurrency($strCountryISO){
@@ -161,7 +161,7 @@
 		/**
 		 * Get a single-dimensional array of timezone information related to the provided timezone code.
 		 *
-		 * @param $strTimezoneCode Timezone code i.e 'Europe/London'
+		 * @param string $strTimezoneCode Timezone code i.e 'Europe/London'
 		 * @return array Returns a single-dimensional language array
 		 */
 		public function getTimezone($strTimezoneCode){
@@ -181,8 +181,8 @@
 
 		/**
 		 * Convert an amount between two Currency ISO codes
-		 * @param $strFromISO
-		 * @param $strToISO
+		 * @param string $strFromISO
+		 * @param string $strToISO
 		 * @param $fltAmount
 		 * @param bool $blFormat
 		 * @return string
@@ -198,8 +198,8 @@
 
 		/**
 		 * Get the conversion rate between two provided currency ISO codes.
-		 * @param $strFromISO
-		 * @param $strToISO
+		 * @param string $strFromISO
+		 * @param string $strToISO
 		 * @return \SimpleXMLElement
 		 * @throws \Exception
 		 */
@@ -213,7 +213,7 @@
 
 					//Yahoo Currency API
 					$arrParameters = array(
-						'q' => sprintf('select * from yahoo.finance.xchange where pair in ("%s%s")',$strFromISO,$strToISO),
+						'q' => sprintf('SELECT * FROM yahoo.finance.xchange WHERE pair IN ("%s%s")',$strFromISO,$strToISO),
 						'format' => 'json',
 						'env' => 'store://datatables.org/alltableswithkeys',
 					);
