@@ -57,7 +57,15 @@
 		}
 
 		function ping(){
-			return $this->resLink->ping();
+			
+			try{
+				$this->resLink->query('SELECT 1');
+				$blOut = true;
+			}catch(PDOException $e){
+				$blOut = false;
+			}
+
+			return $blOut;
 		}
 
 		function selectDatabase($strDatabase){
