@@ -27,8 +27,8 @@ class Validate extends \PHPUnit_Framework_TestCase{
 		$this->assertFalse(\Twist::Validate()->domain('twistphp.com£ee'));
 
 		//Test URL
-		$this->assertTrue(\Twist::Validate()->domain('http://twistphp.com/docs') !== false);
-		$this->assertFalse(\Twist::Validate()->domain('http://twistphp|.com/d*ocs'));
+		$this->assertTrue(\Twist::Validate()->url('http://twistphp.com/docs') !== false);
+		$this->assertFalse(\Twist::Validate()->url('http://twistphp|.com/d*ocs'));
 
 		//Test IP address
 		$this->assertTrue(\Twist::Validate()->ip('192.168.0.1') !== false);
