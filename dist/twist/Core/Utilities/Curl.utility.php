@@ -347,6 +347,9 @@
 				curl_setopt($resCurl, CURLOPT_USERAGENT, $this->strUserAgent);
 			}
 
+			//Enable the request headers "request_header" to be added into the debug as well as the response headers 
+			curl_setopt($resCurl, CURLINFO_HEADER_OUT, true);
+			
 			//execute post
 			$mxdResponse = curl_exec($resCurl);
 			$this->arrRequestInfo = curl_getinfo($resCurl);
