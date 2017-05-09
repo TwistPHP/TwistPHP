@@ -57,11 +57,22 @@
 		}
 
 		function ping(){
-			return $this->resLink->ping();
+			try{
+				$this->resLink->query('SELECT 1');
+				return true;
+			}catch(\PDOException $e){
+				return false;
+			}
 		}
 
 		function selectDatabase($strDatabase){
-			return $this->resLink->select_db($strDatabase);
+			try{
+				$this->resLink->query("USE ".$strDatabase);
+				return true;
+			}catch (\PDOException $e){
+				$this->strConnectionError = sprintf('Failed to select Database: %s',$e->getMessage());
+				return false;
+			}
 		}
 
 		function setCharset($strCharset){//done
@@ -95,7 +106,7 @@
 		}
 
 		function fetchArray($resResult){//done
-			return $resResult->fetch(PDO::FETCH_ASSOC);
+			return $resResult->fetch(\PDO::FETCH_ASSOC);
 		}
 
 		function freeResult($resResult){//done

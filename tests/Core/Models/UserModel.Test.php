@@ -1,6 +1,6 @@
 <?php
 
-class User extends \PHPUnit_Framework_TestCase{
+class UserModel extends \PHPUnit_Framework_TestCase{
 
 	public function testCreate(){
 
@@ -30,6 +30,18 @@ class User extends \PHPUnit_Framework_TestCase{
 
 		$arrSessionArray = \Twist::User()->authenticate('travisci@unit-test-twistphp.com','IncorrectPassword');
 		$this -> assertFalse($arrSessionArray['status']);
+	}
+
+	public function testLoginPOST(){
+
+		$_POST['email'] = 'travisci@unit-test-twistphp.com';
+		$_POST['password'] = 'X123Password';
+
+		$arrSessionArray = \Twist::User()->authenticate();
+		$this -> assertTrue($arrSessionArray['status']);
+
+		\Twist::User()->logout();
+		$this -> assertFalse(\Twist::User()->loggedIn());
 	}
 
 	public function testEdit(){
