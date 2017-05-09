@@ -225,10 +225,10 @@
   },
   "ARCHIVE_HANDLER":{
     "title":"Archive Handling Library",
-    "description":"Set the library that will handle the creation for archive libraries",
+    "description":"Set the library that will handle the creation for archive libraries, PCLZip is available as a package, see twistphp.com",
     "default":"native",
     "type":"options",
-    "options":"native,pclzip",
+    "options":"native",
     "null":0
   },
   "ASSET_THUMBNAIL_SIZES":{
