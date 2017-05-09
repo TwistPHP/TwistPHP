@@ -24,7 +24,6 @@ before_install:
    - mysql -e "CREATE DATABASE IF NOT EXISTS travis_ci_twist_test;"
    - mysql -e "SHOW DATABASES"
    - if [ "$GULP" = 'ON' ]; then npm install; fi;
-   - composer require --dev --no-update phpunit/phpunit 5.7.5
 
 install:
   - if [ "$COVERALLS" = 'ON' ]; then composer require satooshi/php-coveralls '~1.0'; fi;
@@ -36,7 +35,7 @@ before_script:
    - sed -i 's/Twist::ServeRoutes(false);/echo "TwistPHP Framework Loaded!\n\n";/g' ./tests/index.php
 
 script:
-   - phpunit
+   - vendor/bin/phpunit
    - if [ "$GULP" = 'ON' ]; then gulp test; fi;
 
 notifications:
