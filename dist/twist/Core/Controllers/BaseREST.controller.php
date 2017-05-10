@@ -115,7 +115,7 @@ class BaseREST extends Base{
         //Basic Auth is an API key, BaseRESTUser has a more advance auth
 	    self::$blRequestHeaderAuth = \Twist::framework()->setting('API_REQUEST_HEADER_AUTH');
 
-	    self::$srtApiKey = (self::$blRequestHeaderAuth) ? $_SERVER['AUTH_KEY'] : $_REQUEST['auth_key'];
+	    self::$srtApiKey = (self::$blRequestHeaderAuth) ? $_SERVER['HTTP_AUTH_KEY'] : $_REQUEST['auth_key'];
 	    self::$arrKeyInfo = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'apikeys')->get(self::$srtApiKey,'key',true);
 
 	    if(count(self::$arrKeyInfo) == 0){

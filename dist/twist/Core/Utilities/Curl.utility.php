@@ -334,6 +334,16 @@
 
 			//Set the custom headers
 			if(is_array($arrHeaders) && count($arrHeaders) > 0){
+
+				//Convert key pair headers into header strings
+				if(is_array($arrHeaders[0])){
+					$arrHeadersNew = array();
+					foreach($arrHeaders as $strHeaderKey => $strHeaderValue){
+						$arrHeadersNew[] = $strHeaderKey.': '.$strHeaderValue;
+					}
+					$arrHeaders = $arrHeadersNew;
+				}
+
 				curl_setopt($resCurl, CURLOPT_HTTPHEADER,$arrHeaders);
 			}
 
