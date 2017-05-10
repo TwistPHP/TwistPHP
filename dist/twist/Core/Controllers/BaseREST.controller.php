@@ -23,6 +23,7 @@
  */
 
 namespace Twist\Core\Controllers;
+use Twist\Classes\Error;
 
 /**
  * An REST API base controller that can be used instead of Base when adding REST API support to your site. This controller should be used as an extension to a route controller class.
@@ -30,7 +31,7 @@ namespace Twist\Core\Controllers;
  */
 class BaseREST extends Base{
 
-	protected static $blMetaAuth = true;
+	protected static $blRequestHeaderAuth = true;
 	protected static $srtFormat = 'json';
 	protected static $srtApiKey = '';
 	protected static $arrKeyInfo = array();
@@ -46,6 +47,9 @@ class BaseREST extends Base{
         $this->_timeout(60);
         $this->_ignoreUserAbort(true);
 
+	    //Determine the format in which to return the data, default is JSON
+	    self::$srtFormat = (array_key_exists('format',$_REQUEST)) ?  $_REQUEST['format'] : strtolower(self::$srtFormat);
+
 	    $this->_auth();
     }
 
@@ -55,17 +59,20 @@ class BaseREST extends Base{
     public function _auth(){
 
         //Basic Auth is an API key, BaseRESTUser has a more advance auth
-	    self::$blMetaAuth = \Twist::framework()->setting('API_META_AUTH');
+	    self::$blRequestHeaderAuth = \Twist::framework()->setting('API_REQUEST_HEADER_AUTH');
 
-	    self::$srtApiKey = (self::$blMetaAuth) ? $_SERVER['AUTH_KEY'] : $_REQUEST['auth_key'];
-	    self::$arrKeyInfo = \Twist::Database()->records('twist_apikeys')->get(self::$srtApiKey,'key',true);
+	    self::$srtApiKey = (self::$blRequestHeaderAuth) ? $_SERVER['AUTH_KEY'] : $_REQUEST['auth_key'];
+	    self::$arrKeyInfo = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'apikeys')->get(self::$srtApiKey,'key',true);
 
 	    if(count(self::$arrKeyInfo) == 0){
 		    //Invalid API Key
 		    return $this->_respondError('Unauthorized Access: Invalid API key passed',401);
-	    }
 
-	    if(!is_null(self::$arrKeyInfo['allowed_ips']) && !in_array($_SERVER['REMOTE_ADDR'],explode(',',self::$arrKeyInfo['allowed_ips']))){
+	    }elseif(self::$arrKeyInfo['enabled'] == '0'){
+		    //Disabled API key
+		    return $this->_respondError('Disabled: API key has been disabled',401);
+
+	    }elseif(self::$arrKeyInfo['allowed_ips'] != '' && !in_array($_SERVER['REMOTE_ADDR'],explode(',',self::$arrKeyInfo['allowed_ips']))){
 		    //Invalid IP address
 		    return $this->_respondError('Forbidden: you IP address is not on the allowed list',403);
 	    }
@@ -95,7 +102,9 @@ class BaseREST extends Base{
 	 */
     public function _respond($mxdResults,$intCount = 1,$intResponseCode = 200){
 
-	    header(sprintf("HTTP/1.1 %s %s",$intResponseCode,$this->responseStatus($intResponseCode)));
+	    header(sprintf("HTTP/1.1 %s %s",$intResponseCode,Error::responseInfo($intResponseCode)));
+	    header("Cache-Control: no-cache, must-revalidate");
+	    header("Expires: Wed, 24 Sep 1986 14:20:00 GMT");
 
 	    $strOutput = '';
 	    $arrOut = array(
@@ -107,12 +116,17 @@ class BaseREST extends Base{
 	    );
 
 	    if(self::$srtFormat == 'json'){
+		    header("Content-type: application/json");
 		    $strOutput = json_encode($arrOut);
 	    }elseif(self::$srtFormat == 'xml'){
+		    header("Content-type: text/xml");
 		    $strOutput = \Twist::XML()->arrayToXML($arrOut);
 	    }
 
+	    header(sprintf("Content-length: %d", function_exists('mb_strlen') ? mb_strlen($strOutput) : strlen($strOutput)));
+
 	    echo $strOutput;
+	    die();
     }
 
 	/**
@@ -122,7 +136,9 @@ class BaseREST extends Base{
 	 */
 	public function _respondError($strErrorMessage,$intResponseCode = 404){
 
-		header(sprintf("HTTP/1.1 %s %s",$intResponseCode,$this->responseStatus($intResponseCode)));
+		header(sprintf("HTTP/1.1 %s %s",$intResponseCode,Error::responseInfo($intResponseCode)));
+		header("Cache-Control: no-cache, must-revalidate");
+		header("Expires: Wed, 24 Sep 1986 14:20:00 GMT");
 
 		$strOutput = '';
 		$arrOut = array(
@@ -134,12 +150,17 @@ class BaseREST extends Base{
 		);
 
 		if(self::$srtFormat == 'json'){
+			header("Content-type: application/json");
 			$strOutput = json_encode($arrOut);
 		}elseif(self::$srtFormat == 'xml'){
+			header("Content-type: text/xml");
 			$strOutput = \Twist::XML()->arrayToXML($arrOut);
 		}
 
+		header(sprintf("Content-length: %d", function_exists('mb_strlen') ? mb_strlen($strOutput) : strlen($strOutput)));
+
 		echo $strOutput;
+		die();
 	}
 
 }

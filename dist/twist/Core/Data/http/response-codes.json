@@ -1,0 +1,298 @@
+{
+	"100": {
+		"return": "Continue",
+		"description": ""
+	},
+	"101": {
+		"return": "Switching Protocols",
+		"description": ""
+	},
+	"102": {
+		"return": "Processing (WebDAV; RFC 2518)",
+		"description": ""
+	},
+	"200": {
+		"return": "OK",
+		"description": ""
+	},
+	"201": {
+		"return": "Created",
+		"description": ""
+	},
+	"202": {
+		"return": "Accepted",
+		"description": ""
+	},
+	"203": {
+		"return": "Non-Authoritative Information (since HTTP/1.1)",
+		"description": ""
+	},
+	"204": {
+		"return": "No Content",
+		"description": ""
+	},
+	"205": {
+		"return": "Reset Content",
+		"description": ""
+	},
+	"206": {
+		"return": "Partial Content",
+		"description": ""
+	},
+	"207": {
+		"return": "Multi-Status (WebDAV; RFC 4918)",
+		"description": ""
+	},
+	"208": {
+		"return": "Already Reported (WebDAV; RFC 5842)",
+		"description": ""
+	},
+	"226": {
+		"return": "IM Used (RFC 3229)",
+		"description": ""
+	},
+	"300": {
+		"return": "Redirected",
+		"description": ""
+	},
+	"301": {
+		"return": "Moved Permanently",
+		"description": ""
+	},
+	"302": {
+		"return": "Found",
+		"description": ""
+	},
+	"303": {
+		"return": "See Other (since HTTP/1.1)",
+		"description": ""
+	},
+	"304": {
+		"return": "Not Modified",
+		"description": ""
+	},
+	"305": {
+		"return": "Use Proxy (since HTTP/1.1)",
+		"description": ""
+	},
+	"306": {
+		"return": "Switch Proxy",
+		"description": ""
+	},
+	"307": {
+		"return": "Temporary Redirect (since HTTP/1.1)",
+		"description": ""
+	},
+	"308": {
+		"return": "Permanent Redirect (approved as experimental RFC)",
+		"description": ""
+	},
+	"400": {
+		"return": "Bad Request",
+		"description": ""
+	},
+	"401": {
+		"return": "Unauthorized",
+		"description": ""
+	},
+	"402": {
+		"return": "Payment Required",
+		"description": ""
+	},
+	"403": {
+		"return": "Forbidden",
+		"description": ""
+	},
+	"404": {
+		"return": "Not Found",
+		"description": "The requested file was not found"
+	},
+	"405": {
+		"return": "Method Not Allowed",
+		"description": ""
+	},
+	"406": {
+		"return": "Not Acceptable",
+		"description": ""
+	},
+	"407": {
+		"return": "Proxy Authentication Required",
+		"description": ""
+	},
+	"408": {
+		"return": "Request Timeout",
+		"description": ""
+	},
+	"409": {
+		"return": "Conflict",
+		"description": ""
+	},
+	"410": {
+		"return": "Gone",
+		"description": ""
+	},
+	"411": {
+		"return": "Length Required",
+		"description": ""
+	},
+	"412": {
+		"return": "Precondition Failed",
+		"description": ""
+	},
+	"413": {
+		"return": "Request Entity Too Large",
+		"description": ""
+	},
+	"414": {
+		"return": "Request-URI Too Long",
+		"description": ""
+	},
+	"415": {
+		"return": "Unsupported media platform",
+		"description": ""
+	},
+	"416": {
+		"return": "Requested Range Not Satisfiable",
+		"description": ""
+	},
+	"417": {
+		"return": "Expectation Failed",
+		"description": ""
+	},
+	"418": {
+		"return": "I'm a teapot (RFC 2324)",
+		"description": ""
+	},
+	"419": {
+		"return": "Authentication Timeout",
+		"description": ""
+	},
+	"420": {
+		"return": "Enhance Your Calm (Twitter)",
+		"description": ""
+	},
+	"422": {
+		"return": "Unprocessable Entity (WebDAV; RFC 4918)",
+		"description": ""
+	},
+	"423": {
+		"return": "Locked (WebDAV; RFC 4918)",
+		"description": ""
+	},
+	"424": {
+		"return": "Failed Dependency (WebDAV; RFC 4918)/Method Failure (WebDAV)",
+		"description": ""
+	},
+	"425": {
+		"return": "Unordered Collection (Internet draft)",
+		"description": ""
+	},
+	"426": {
+		"return": "Upgrade Required (RFC 2817)",
+		"description": ""
+	},
+	"428": {
+		"return": "Precondition Required (RFC 6585)",
+		"description": ""
+	},
+	"429": {
+		"return": "Too Many Requests (RFC 6585)",
+		"description": ""
+	},
+	"431": {
+		"return": "Request Header Fields Too Large (RFC 6585)",
+		"description": ""
+	},
+	"444": {
+		"return": "No Response (Nginx)",
+		"description": ""
+	},
+	"449": {
+		"return": "Retry With (Microsoft)",
+		"description": ""
+	},
+	"450": {
+		"return": "Blocked by Windows Parental Controls (Microsoft)",
+		"description": ""
+	},
+	"451": {
+		"return": "Unavailable For Legal Reasons (Internet draft)/Redirect (Microsoft)",
+		"description": ""
+	},
+	"494": {
+		"return": "Request Header Too Large (Nginx)",
+		"description": ""
+	},
+	"495": {
+		"return": "Cert Error (Nginx)",
+		"description": ""
+	},
+	"496": {
+		"return": "No Cert (Nginx)",
+		"description": ""
+	},
+	"497": {
+		"return": "HTTP to HTTPS (Nginx)",
+		"description": ""
+	},
+	"499": {
+		"return": "Client Closed Request (Nginx)",
+		"description": ""
+	},
+	"500": {
+		"return": "Internal Server Error",
+		"description": ""
+	},
+	"501": {
+		"return": "Not Implemented",
+		"description": ""
+	},
+	"502": {
+		"return": "Bad Gateway",
+		"description": ""
+	},
+	"503": {
+		"return": "Service Unavailable",
+		"description": "The requested site is currently in maintenance mode, please check back shortly"
+	},
+	"504": {
+		"return": "Gateway Timeout",
+		"description": ""
+	},
+	"505": {
+		"return": "HTTP Version Not Supported",
+		"description": ""
+	},
+	"506": {
+		"return": "Variant Also Negotiates (RFC 2295)",
+		"description": ""
+	},
+	"507": {
+		"return": "Insufficient Storage (WebDAV; RFC 4918)",
+		"description": ""
+	},
+	"508": {
+		"return": "Loop Detected (WebDAV; RFC 5842)",
+		"description": ""
+	},
+	"509": {
+		"return": "Bandwidth Limit Exceeded (Apache bw/limited extension)",
+		"description": ""
+	},
+	"510": {
+		"return": "Not Extended (RFC 2774)",
+		"description": ""
+	},
+	"511": {
+		"return": "Network Authentication Required (RFC 6585)",
+		"description": ""
+	},
+	"598": {
+		"return": "Network read timeout error (Unknown)",
+		"description": ""
+	},
+	"599": {
+		"return": "Network connect timeout error (Unknown)",
+		"description": ""
+	}
+}

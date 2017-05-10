@@ -23,7 +23,6 @@
  */
 
 namespace Twist\Core\Utilities;
-use \Twist\Core\Controllers\BaseAJAX;
 use \Twist\Core\Models\Route\Meta;
 use \Twist\Classes\Instance;
 
@@ -452,6 +451,18 @@ class Route extends Base{
 	public function ajax($strURI,$mxdController){
 		$arrController = (is_array($mxdController)) ? $mxdController : array($mxdController);
 		$this->addRoute($strURI,'ajax',$arrController,false,false,array());
+	}
+
+	/**
+	 * Add a REST API that will be called upon a any request (HTTP METHOD) to the given URI.
+	 * The URI can be made dynamic by adding a '%' symbol at the end.
+	 *
+	 * @param string $strURI
+	 * @param null $mxdController
+	 */
+	public function rest($strURI,$mxdController){
+		$arrController = (is_array($mxdController)) ? $mxdController : array($mxdController);
+		$this->addRoute($strURI,'rest',$arrController,false,false,array());
 	}
 
 	/**
@@ -1356,7 +1367,7 @@ class Route extends Base{
 
 					\Twist::recordEvent('Route processed');
 
-					if($arrRoute['type'] == 'ajax'){
+					if($arrRoute['type'] == 'ajax' || $arrRoute['type'] == 'rest'){
 						header( 'Cache-Control: no-cache, must-revalidate' );
 						header( 'Expires: Wed, 24 Sep 1986 14:20:00 GMT' );
 						header( 'Content-type: application/json' );
@@ -1395,7 +1406,7 @@ class Route extends Base{
 						}
 
 						//Output the Debug window to the screen when in debug mode (Do not output when its an ajax request)
-						if($this->blDebugMode && !(TWIST_AJAX_REQUEST || $arrRoute['type'] == 'ajax')){
+						if($this->blDebugMode && !(TWIST_AJAX_REQUEST || $arrRoute['type'] == 'ajax' || $arrRoute['type'] == 'rest')){
 							if(strstr($strPageOut, '</body>')) {
 								$strPageOut = str_replace( '</body>', \Twist::framework()->debug()->window( $arrRoute ) . '</body>', $strPageOut );
 							}else{
@@ -1475,12 +1486,26 @@ class Route extends Base{
 						$arrTags['response'] = $this->processController($arrRoute);
 					}catch(\Exception $resException){
 						//Response with the relevant error message
-						$resControllerAJAX = new BaseAJAX();
+						$resControllerAJAX = new \Twist\Core\Controllers\BaseAJAX();
 
 						$resControllerAJAX->_ajaxFail();
 						$resControllerAJAX->_ajaxMessage($resException->getMessage());
 
 						$arrTags['response'] = $resControllerAJAX->_ajaxRespond();
+					}
+				}
+				break;
+			case'rest':
+				//Check the HTTP method is allowed in this scenario
+				if(!in_array($arrRoute['request_method'],explode(',',\Twist::framework()->setting('API_ALLOWED_REQUEST_METHODS')))){
+					\Twist::respond(403,'Unsupported HTTP protocol used to request this URI',$blExitOnComplete);
+				}else{
+					try{
+						$arrTags['response'] = $this->processController($arrRoute);
+					}catch(\Exception $resException){
+						//Response with the relevant error message
+						$resControllerREST = new \Twist\Core\Controllers\BaseREST();
+						$arrTags['response'] = $resControllerREST->_respondError($resException->getMessage(),500);
 					}
 				}
 				break;

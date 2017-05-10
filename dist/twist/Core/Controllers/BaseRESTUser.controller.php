@@ -45,7 +45,7 @@ class BaseRESTUser extends BaseREST{
 	    parent::_auth();
 
 	    //Basic Auth is an API key, BaseRESTUser has a more advance auth
-	    self::$srtSessionToken = (self::$blMetaAuth) ? $_SERVER['AUTH_TOKEN'] : $_REQUEST['auth_token'];
+	    self::$srtSessionToken = (self::$blRequestHeaderAuth) ? $_SERVER['AUTH_TOKEN'] : $_REQUEST['auth_token'];
 
 	    //If a session key is set try to validate the session
 	    if(self::$srtSessionToken != ''){
@@ -74,8 +74,8 @@ class BaseRESTUser extends BaseREST{
     public function _authenticate(){
 
 	    //Create a valid session that can be used for all connections
-	    $srtApiEmail = (self::$blMetaAuth) ? $_SERVER['AUTH_EMAIL'] : $_REQUEST['auth_email'];
-	    $srtApiPassword = (self::$blMetaAuth) ? $_SERVER['AUTH_PASSWORD'] : $_REQUEST['auth_password'];
+	    $srtApiEmail = (self::$blRequestHeaderAuth) ? $_SERVER['AUTH_EMAIL'] : $_REQUEST['auth_email'];
+	    $srtApiPassword = (self::$blRequestHeaderAuth) ? $_SERVER['AUTH_PASSWORD'] : $_REQUEST['auth_password'];
 
 	    //Advanced AUTH using framework user authentication
 	    $arrResult = Auth::login($srtApiEmail,$srtApiPassword);
