@@ -266,7 +266,7 @@
   "API_ALLOWED_REQUEST_METHODS":{
     "title":"API Allowed Request Methods",
     "description":"Comma seperated list of request methods that are enabled. Common methods: GET,POST,PUT,DELETE,HEAD,OPTIONS,CONNECT",
-    "default":"GET,POST,PUT,DELETE",
+    "default":"GET,POST",
     "type":"string",
     "options":"",
     "null":0
