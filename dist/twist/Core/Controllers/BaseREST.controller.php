@@ -35,24 +35,29 @@ class BaseREST extends Base{
 	protected static $srtApiKey = '';
 	protected static $arrKeyInfo = array();
 
+	/**
+	 * Default functionality for every request that is made though the REST API. Every call must be authenticated.
+	 */
     public function _baseCalls(){
 
 	    header("Access-Control-Allow-Orgin: *");
 	    header("Access-Control-Allow-Methods: *");
 
         $this->_timeout(60);
+        $this->_ignoreUserAbort(true);
+
 	    $this->_auth();
     }
 
 	/**
-	 * API Key and IP address authentication
+	 * Standard function to validate the Auth Key and connection IP address to ensure that access has been granted
 	 */
     public function _auth(){
 
         //Basic Auth is an API key, BaseRESTUser has a more advance auth
 	    self::$blMetaAuth = \Twist::framework()->setting('API_META_AUTH');
 
-	    self::$srtApiKey = (self::$blMetaAuth) ? $_SERVER['TWIST_API_KEY'] : $_REQUEST['key'];
+	    self::$srtApiKey = (self::$blMetaAuth) ? $_SERVER['AUTH_KEY'] : $_REQUEST['auth_key'];
 	    self::$arrKeyInfo = \Twist::Database()->records('twist_apikeys')->get(self::$srtApiKey,'key',true);
 
 	    if(count(self::$arrKeyInfo) == 0){
@@ -68,15 +73,27 @@ class BaseREST extends Base{
 	    return true;
     }
 
+	/**
+	 * The main response of the controller, treat this function as though it where an index.php file.
+	 */
     public function _index(){
 	    return $this->_respond('Welcome: API connection successful',1);
     }
 
+	/**
+	 * This is the function that will be called in the even that Routes was unable to find a exact controller response.
+	 */
 	public function _fallback(){
 		return $this->_respondError('Invalid function called',404);
 	}
 
-    public function _respond($mxdData,$intCount = 1,$intResponseCode = 200){
+	/**
+	 * Successful response to an API call should be used to return a standardised RESTful success response
+	 * @param mixed $mxdResults Results of the function call to be returned to the user
+	 * @param int $intCount Number of results returned by the function call
+	 * @param int $intResponseCode HTTP response code for the call
+	 */
+    public function _respond($mxdResults,$intCount = 1,$intResponseCode = 200){
 
 	    header(sprintf("HTTP/1.1 %s %s",$intResponseCode,$this->responseStatus($intResponseCode)));
 
@@ -86,7 +103,7 @@ class BaseREST extends Base{
 	    	'type' => '',
 	    	'format' => self::$srtFormat,
 	    	'count' => $intCount,
-	    	'results' => $mxdData
+	    	'results' => $mxdResults
 	    );
 
 	    if(self::$srtFormat == 'json'){
@@ -98,6 +115,11 @@ class BaseREST extends Base{
 	    echo $strOutput;
     }
 
+	/**
+	 * Error response to an API call should be used to return a standardised RESTful error response
+	 * @param string $strErrorMessage Error message to indicate what when wrong
+	 * @param int $intResponseCode HTTP response code for the call
+	 */
 	public function _respondError($strErrorMessage,$intResponseCode = 404){
 
 		header(sprintf("HTTP/1.1 %s %s",$intResponseCode,$this->responseStatus($intResponseCode)));

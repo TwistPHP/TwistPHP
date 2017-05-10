@@ -91,7 +91,7 @@
 		}
 
 		/**
-		 * This is that function that will be called in the even that Routes was unable to find a exact controller response.
+		 * This is the function that will be called in the even that Routes was unable to find a exact controller response.
 		 *
 		 * @return bool
 		 */
