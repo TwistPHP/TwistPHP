@@ -23,6 +23,7 @@
  */
 
 namespace Twist\Core\Controllers;
+use Twist\Core\Models\User\Auth;
 
 /**
  * An REST API base controller that can be used instead of Base when adding REST API support to your site. This controller should be used as an extension to a route controller class.
@@ -30,11 +31,55 @@ namespace Twist\Core\Controllers;
  */
 class BaseRESTUser extends BaseREST{
 
+	protected static $srtApiSession = '';
+	protected static $arrSessionData = array();
+
     public function _auth(){
-        //Advanced AUTH using framework user authentication
+
+	    //Call the default API key and IP restrictions before validating the users session
+	    parent::_auth();
+
+	    //Basic Auth is an API key, BaseRESTUser has a more advance auth
+	    self::$srtApiSession = (self::$blMetaAuth) ? $_SERVER['TWIST_API_SESSION'] : $_REQUEST['session'];
+
+	    if(self::$srtApiSession != ''){
+		    \Twist::Session()->data('user-session_key',self::$srtApiSession);
+	    }
+
+	    self::$arrSessionData = Auth::current();
+
+	    if(self::$arrSessionData['status'] == false){
+		    //Error user is not logged in
+		    return $this->_respondError('Unauthorized Access: Invalid session token',401);
+	    }
+
+	    return true;
     }
 
-    public function POSTconnect(){
+    public function connect(){
+
         //Create a valid session that can be used for all connections
+	    $srtApiEmail = (self::$blMetaAuth) ? $_SERVER['TWIST_API_EMAIL'] : $_REQUEST['email'];
+	    $srtApiPassword = (self::$blMetaAuth) ? $_SERVER['TWIST_API_PASSWORD'] : $_REQUEST['email'];
+
+	    //Advanced AUTH using framework user authentication
+	    $arrResult = Auth::login($srtApiEmail,$srtApiPassword);
+
+	    if($arrResult['issue'] != ''){
+
+		    return $this->_respondError('Authentication Failed: '.$arrResult['message'],401);
+
+	    }elseif($arrResult['status']){
+
+		    $arrResponseData = array(
+		    	'message' => 'Authenticated: Successfully logged in as '.$srtApiEmail,
+			    'session' => $arrResult['status']
+		    );
+
+		    return $this->_respond($arrResponseData,1);
+	    }else{
+		    //Failed to login
+		    return $this->_respondError('Authentication Failed: Invalid login credentials, please try again',401);
+	    }
     }
 }
