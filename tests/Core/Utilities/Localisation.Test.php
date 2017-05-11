@@ -13,13 +13,13 @@ class Localisation extends \PHPUnit_Framework_TestCase{
 		$arrLanguagesLocalised = \Twist::Localisation()->getLanguages(true);
 		$this->assertTrue(count($arrLanguagesLocalised) > count($arrLanguages));
 
-		$arrOfficialLanguage = \Twist::Localisation()->getOfficialLanguage('UK');
+		$arrOfficialLanguage = \Twist::Localisation()->getOfficialLanguage('GB');
 		$this->assertTrue(count($arrOfficialLanguage) > 0);
 	}
 
 	public function testCountries(){
 
-		$arrCountry = \Twist::Localisation()->getCountry('EN');
+		$arrCountry = \Twist::Localisation()->getCountry('GB');
 		$this->assertTrue(count($arrCountry) > 0);
 
 		$arrCountries = \Twist::Localisation()->getCountries();
@@ -34,7 +34,7 @@ class Localisation extends \PHPUnit_Framework_TestCase{
 		$arrCountries = \Twist::Localisation()->getCurrencies();
 		$this->assertTrue(count($arrCountries) > 1);
 
-		$arrOfficialCurrency = \Twist::Localisation()->getOfficialCurrency('UK');
+		$arrOfficialCurrency = \Twist::Localisation()->getOfficialCurrency('GB');
 		$this->assertTrue(count($arrOfficialCurrency) > 0);
 
 		$fltConversionRate = \Twist::Localisation()->currencyConversionRate('GBP','USD');
