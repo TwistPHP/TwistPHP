@@ -25,6 +25,8 @@ class Routes extends \PHPUnit_Framework_TestCase{
 
 	private function simulateAPIRequest($strURI,$strAPIKey='',$strEmail='',$strPassword='',$strToken='',$strRequestMethod='GET',$arrParameterData = array()){
 
+		$strPageContent = '';
+
 		//Set the parameter data
 		if($strRequestMethod == 'GET'){
 			$_GET = $arrParameterData;
@@ -71,14 +73,14 @@ class Routes extends \PHPUnit_Framework_TestCase{
 
 	public function testControllerRequest(){
 
-		\Twist::Route()->controller('/test-standard-controller/%','Standard');
+		\Twist::Route()->controller('/test-standard-controller/%','TwistStandard');
 		$this -> assertEquals('test',$this->simulateRequest('/test-standard-controller/test'));
 	}
 
 	public function testRestControllerRequest(){
 
-		\Twist::Route()->controller('/test-basicapi-controller/%','BasicAPI');
-		\Twist::Route()->controller('/test-userapi-controller/%','UserAPI');
+		\Twist::Route()->controller('/test-basicapi-controller/%','TwistBasicAPI');
+		\Twist::Route()->controller('/test-userapi-controller/%','TwistUserAPI');
 
 		$strAPIKey = 'ABC123XYZ42';
 
@@ -102,8 +104,8 @@ class Routes extends \PHPUnit_Framework_TestCase{
 		//$this -> assertEquals('error',$arrResponse['status']);
 
 		//Test with API key
-		$arrResponse = json_decode($this->simulateAPIRequest('/test-basicapi-controller/test',$strAPIKey),true);
-		$this -> assertEquals('success',$arrResponse['status']);
+		$arrRESTResponse = json_decode($this->simulateAPIRequest('/test-basicapi-controller/test',$strAPIKey),true);
+		$this -> assertEquals('success',$arrRESTResponse['status']);
 
 		//Test with API key (XML format)
 		$strResponseXML = $this->simulateAPIRequest('/test-basicapi-controller/test',$strAPIKey,'','','','GET',array('format' => 'xml'));
@@ -114,20 +116,20 @@ class Routes extends \PHPUnit_Framework_TestCase{
 		//$this -> assertEquals('error',$arrResponse['status']);
 
 		//Test with user
-		$arrResponse = json_decode($this->simulateAPIRequest('/test-userapi-controller/test',$strAPIKey,'travisci@unit-test-rest-twistphp.com','X123Password'),true);
-		$this -> assertEquals('success',$arrResponse['status']);
-		$this -> assertTrue(array_key_exists('auth_token',$arrResponse['results']));
+		$arrRESTResponse = json_decode($this->simulateAPIRequest('/test-userapi-controller/test',$strAPIKey,'travisci@unit-test-rest-twistphp.com','X123Password'),true);
+		$this -> assertEquals('success',$arrRESTResponse['status']);
+		$this -> assertTrue(array_key_exists('auth_token',$arrRESTResponse['results']));
 
-		$strTokenKey = $arrResponse['results']['auth_token'];
+		$strTokenKey = $arrRESTResponse['results']['auth_token'];
 
 		//Test authenticated
-		$arrResponse = json_decode($this->simulateAPIRequest('/test-userapi-controller/authenticated',$strAPIKey,'','',$strTokenKey),true);
-		$this -> assertEquals('success',$arrResponse['status']);
+		$arrRESTResponse = json_decode($this->simulateAPIRequest('/test-userapi-controller/authenticated',$strAPIKey,'','',$strTokenKey),true);
+		$this -> assertEquals('success',$arrRESTResponse['status']);
 
 		//Test after login
-		$arrResponse = json_decode($this->simulateAPIRequest('/test-userapi-controller/test',$strAPIKey,'','',$strTokenKey),true);
-		$this -> assertEquals('success',$arrResponse['status']);
-		$this -> assertEquals('test',$arrResponse['results'][1]);
+		$arrRESTResponse = json_decode($this->simulateAPIRequest('/test-userapi-controller/test',$strAPIKey,'','',$strTokenKey),true);
+		$this -> assertEquals('success',$arrRESTResponse['status']);
+		$this -> assertEquals('test',$arrRESTResponse['results'][1]);
 	}
 
 	public function testGetRequest(){
