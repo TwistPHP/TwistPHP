@@ -4,6 +4,9 @@ class Routes extends \PHPUnit_Framework_TestCase{
 
 	private function simulateRequest($strURI,$strRequestMethod = 'GET',$arrParameterData = array()){
 
+		//Reset the global vars before test
+		$_REQUEST = $_GET = $_POST = array();
+
 		//Set the parameter data
 		if($strRequestMethod == 'GET'){
 			$_GET = $arrParameterData;
@@ -26,7 +29,8 @@ class Routes extends \PHPUnit_Framework_TestCase{
 
 	private function simulateAPIRequest($strURI,$strAPIKey='',$strEmail='',$strPassword='',$strToken='',$strRequestMethod='GET',$arrParameterData = array()){
 
-		$strPageContent = '';
+		//Reset the global vars before test
+		$_REQUEST = $_GET = $_POST = array();
 
 		//Set the parameter data
 		if($strRequestMethod == 'GET'){
@@ -114,9 +118,8 @@ class Routes extends \PHPUnit_Framework_TestCase{
 		$this->assertContains('<status>success</status>', $strResponseXML);
 
 		//Test before login
-		$this -> assertEquals('error',$this->simulateAPIRequest('/test-userapi-controller/test',$strAPIKey));
 		$arrRESTResponse = json_decode($this->simulateAPIRequest('/test-userapi-controller/test',$strAPIKey),true);
-		//$this -> assertEquals('error',$arrRESTResponse['status']);
+		$this -> assertEquals('error',$arrRESTResponse['status']);
 
 		//Test with user
 		$arrRESTResponse = json_decode($this->simulateAPIRequest('/test-userapi-controller/connect',$strAPIKey,'travisci@unit-test-rest-twistphp.com','X123Password'),true);
