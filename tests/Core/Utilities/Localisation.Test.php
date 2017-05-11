@@ -37,6 +37,13 @@ class Localisation extends \PHPUnit_Framework_TestCase{
 		$arrOfficialCurrency = \Twist::Localisation()->getOfficialCurrency('GB');
 		$this->assertTrue(count($arrOfficialCurrency) > 0);
 
+		\Twist::framework()->setting('CURRENCY_CONVERSION_API','webservicex.net');
+
+		$fltConversionRate = \Twist::Localisation()->currencyConversionRate('GBP','USD');
+		$this->assertTrue($fltConversionRate !== false);
+
+		\Twist::framework()->setting('CURRENCY_CONVERSION_API','yahooapis');
+
 		$fltConversionRate = \Twist::Localisation()->currencyConversionRate('GBP','USD');
 		$this->assertTrue($fltConversionRate !== false);
 
