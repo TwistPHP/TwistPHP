@@ -2,10 +2,10 @@ language: php
 
 php:
   - 5.6
-  - 7.0
-  - 7.0
+  - 7
+  - 7
     env GULP=ON
-  - 7.0
+  - 7
     env COVERALLS=ON
   - nightly
 
