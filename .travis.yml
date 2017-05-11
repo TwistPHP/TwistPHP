@@ -9,6 +9,9 @@ php:
   - 7
   - nightly
 
+node_js:
+  - 7
+
 services:
   - mysql
 
@@ -24,7 +27,7 @@ before_install:
   - mysql -V
   - mysql -e "CREATE DATABASE IF NOT EXISTS travis_ci_twist_test;"
   - mysql -e "SHOW DATABASES"
-  - if [ "$GULP" = 'ON' ]; then sudo npm cache clean -f&&sudo npm install -g n&&sudo n stable&&node -v&&npm i; fi;
+  - if [ "$GULP" = 'ON' ]; then npm install fi;
 
 install:
   - if [ "$COVERALLS" = 'ON' ]; then composer require satooshi/php-coveralls '~1.0'; fi;
