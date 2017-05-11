@@ -317,8 +317,8 @@
 			$arrResponses = json_decode($jsonResponses,true);
 
 			if(array_key_exists($intErrorCode,$arrResponses)){
-				$arrOut['return'] = $arrResponses['return'];
-				$arrOut['description'] = $arrResponses['description'];
+				$arrOut['return'] = $arrResponses[$intErrorCode]['return'];
+				$arrOut['description'] = $arrResponses[$intErrorCode]['description'];
 			}
 
 			return $arrOut;

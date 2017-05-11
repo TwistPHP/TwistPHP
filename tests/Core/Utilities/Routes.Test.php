@@ -111,7 +111,7 @@ class Routes extends \PHPUnit_Framework_TestCase{
 
 		//Test with API key (XML format)
 		$strResponseXML = $this->simulateAPIRequest('/test-basicapi-controller/test',$strAPIKey,'','','','GET',array('format' => 'xml'));
-		$this -> assertEquals($strResponseXML,'<status>success</status>');
+		$this->assertRegexp('/'.preg_quote('<status>success</status>').'/', $strResponseXML);
 
 		//Test before login
 		$arrResponse = json_decode($this->simulateAPIRequest('/test-userapi-controller/test',$strAPIKey),true);
@@ -165,7 +165,7 @@ class Routes extends \PHPUnit_Framework_TestCase{
 	public function test404Page(){
 		$strPageData = $this->simulateRequest('/random/page/uri');
 		$this -> assertEquals('pass',$strPageData);
-		$this -> assertTrue((strstr($strPageData,'404 Not Found') !== false));
+		$this->assertRegexp('/'.preg_quote('404 Not Found').'/', $strPageData);
 	}
 
 	public function testCaseInsensitiveRouting(){
@@ -193,10 +193,9 @@ class Routes extends \PHPUnit_Framework_TestCase{
 		$this -> assertEquals('42',$this->simulateRequest('/TEST/case/page'));
 
 		$strPageData1 = $this->simulateRequest('/test/case/page');
-		$this -> assertEquals('pass',$strPageData);
-		$this -> assertTrue((strstr($strPageData1,'404 Not Found') !== false));
+		$this->assertRegexp('/'.preg_quote('404 Not Found').'/', $strPageData1);
 
 		$strPageData2 = $this->simulateRequest('/TEST/CASE/PAGE');
-		$this -> assertTrue((strstr($strPageData2,'404 Not Found') !== false));
+		$this->assertRegexp('/'.preg_quote('404 Not Found').'/', $strPageData2);
 	}
 }
