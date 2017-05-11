@@ -1,6 +1,6 @@
 <?php
 
-class Localisation extends \PHPUnit_Framework_TestCase{
+class File extends \PHPUnit_Framework_TestCase{
 
 	public function testFileSize(){
 
@@ -9,7 +9,7 @@ class Localisation extends \PHPUnit_Framework_TestCase{
 
 	public function testFileName(){
 
-		$this->assertEquals('A-funny-File-name-OK.png',\Twist::File()->sanitizeName('A funny - File name (OK).png'));
+		$this->assertEquals('a-funny-file-name-ok.png',\Twist::File()->sanitizeName('A funny - File name (OK).png'));
 
 		$this->assertEquals('php',\Twist::File()->extension('/some/file/name.php'));
 
@@ -21,7 +21,7 @@ class Localisation extends \PHPUnit_Framework_TestCase{
 		$this->assertEquals('image/png',\Twist::File()->mimeType('/some/file/name.png'));
 
 		$arrInfo = \Twist::File()->mimeTypeInfo('/some/file/name.png');
-		$this->assertEquals('Portable Network Graphics (PNG)',$arrInfo['name']);
+		$this->assertEquals('Image',$arrInfo['name']);
 
 		$arrTypes = \Twist::File()->mimeTypes();
 		$this->assertTrue(count($arrTypes) > 1);
