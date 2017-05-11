@@ -111,7 +111,7 @@ class Routes extends \PHPUnit_Framework_TestCase{
 
 		//Test with API key (XML format)
 		$strResponseXML = $this->simulateAPIRequest('/test-basicapi-controller/test',$strAPIKey,'','','','GET',array('format' => 'xml'));
-		$this->assertRegexp('/'.preg_quote('<status>success</status>').'/', $strResponseXML);
+		$this->assertContains('<status>success</status>', $strResponseXML);
 
 		//Test before login
 		$arrResponse = json_decode($this->simulateAPIRequest('/test-userapi-controller/test',$strAPIKey),true);
