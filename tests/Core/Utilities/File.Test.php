@@ -26,5 +26,5 @@ class Localisation extends \PHPUnit_Framework_TestCase{
 		$arrTypes = \Twist::File()->mimeTypes();
 		$this->assertTrue(count($arrTypes) > 1);
 	}
-	
+
 }
