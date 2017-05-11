@@ -136,7 +136,7 @@
 		}
 
 		protected function lastModified(){
-			$this->arrData['LAST-MODIFIED'] = gmstrftime("%Y%m%dT%H%M00Z", \Twist::DateTime()->date('Y-m-d H:i:s'));
+			$this->arrData['LAST-MODIFIED'] = gmstrftime("%Y%m%dT%H%M00Z", strtotime(\Twist::DateTime()->date('Y-m-d H:i:s')));
 		}
 
 		public function getRaw(){

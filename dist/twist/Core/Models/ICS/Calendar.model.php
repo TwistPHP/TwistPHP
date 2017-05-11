@@ -131,7 +131,7 @@
 			}
 
 			if(is_null($intUID)){
-				$resEvent = new ICSEvent(); //TODO: Where?
+				$resEvent = new \Twist\Core\Models\ICS\Event();
 				$this->arrEvents[$resEvent->uid()] = $resEvent;
 			}else{
 				$resEvent = $this->arrEvents[$intUID];

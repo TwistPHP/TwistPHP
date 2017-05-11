@@ -23,6 +23,7 @@
  */
 
 namespace Twist\Core\Models\Image;
+use Twist\Classes\Exception;
 
 /**
  * Image object that allow the manipulation of images, adding text, inserting watermarks, applying effects, resizing and altering output quality.
@@ -92,6 +93,7 @@ class Image{
 			'width' => $arrImageInfo[0],
 			'height' => $arrImageInfo[1],
 			'orientation' => $this->detectOrientation(),
+			'aspect' => $this->aspectRatio($arrImageInfo[0],$arrImageInfo[1]),
 			'exif' => (function_exists('exif_read_data') && $arrImageInfo['mime'] === 'image/jpeg') ? @exif_read_data($this->mxdFile) : null,
 			'format' => preg_replace('/^image\//', '', $arrImageInfo['mime']),
 			'mime' => $arrImageInfo['mime']
@@ -112,6 +114,7 @@ class Image{
 			'width' => $intWidth,
 			'height' => $intHeight,
 			'orientation' => $this->detectOrientation(),
+			'aspect_ratio' => $this->aspectRatio($intWidth,$intHeight),
 			'exif' => null,
 			'format' => 'png',
 			'mime' => 'image/png'
@@ -121,6 +124,30 @@ class Image{
 		if(!is_null($strFillColour)){
 			$this->fill($strFillColour);
 		}
+	}
+
+	/**
+	 * Information about the original image such as width, height, orientation
+	 * @return array Image Information
+	 */
+	public function originalInfo(){
+		return $this->arrImageInfo;
+	}
+
+	/**
+	 * Information about the image in its current state such as width, height, orientation
+	 * @return array Image Information
+	 */
+	public function currentInfo(){
+
+		$arrCurrentInfo = $this->arrImageInfo;
+
+		$arrCurrentInfo['width'] = $this->intWidth;
+		$arrCurrentInfo['height'] = $this->intHeight;
+		$arrCurrentInfo['orientation'] = $this->detectOrientation();
+		$arrCurrentInfo['aspect_ratio'] = $this->aspectRatio($this->intWidth,$this->intHeight);
+
+		return $arrCurrentInfo;
 	}
 
 	/**
@@ -242,6 +269,14 @@ class Image{
 		ob_end_clean();
 
 		return $arrOut;
+	}
+
+	/**
+	 * Get the PHP resource for the image in its current state
+	 * @return resource an image resource identifier
+	 */
+	public function resource(){
+		return $this->resImage;
 	}
 
 	/**
@@ -477,13 +512,12 @@ class Image{
 		imagesavealpha($resTempImage, true);
 		imagecopy($resTempImage, $this->resImage, 0, 0, 0, 0, $this->intWidth, $this->intHeight);
 
-		//TODO: Need to look into as this will wipe all original data
-
-		// Create transparent layer
-		$this->create($this->intWidth, $this->intHeight, array(0, 0, 0, 127));
+		//Create new image with transparent layer (same size as original)
+		$this->resImage = imagecreatetruecolor($this->intWidth, $this->intHeight);
+		$this->fill(array(0, 0, 0, 127));
 
 		// Merge with specified opacity
-		$this->imagecopymerge_alpha($this->resImage, $resTempImage, 0, 0, 0, 0, $this->intWidth, $this->intHeight, $this->keepWithinRange($intOpacity, 0, 1) * 100); //TODO: Where is imagecopymerge_alpha?
+		imagecopymerge($this->resImage, $resTempImage, 0, 0, 0, 0, $this->intWidth, $this->intHeight, $this->keepWithinRange($intOpacity, 0, 1) * 100);
 		imagedestroy($resTempImage);
 
 		return $this;
@@ -513,7 +547,47 @@ class Image{
 		$this->resImage = $resTempImage;
 
 		return $this;
+	}
 
+	/**
+	 * Embed a new image into the main image, a TwistPHP image library object or a local image file path can be passed in with X, Y coordinates
+	 * @param resource|string Twist Image Object or File Path
+	 * @param integer $intX X position of the overlay image
+	 * @param integer $intY Y position of the overlay image
+	 * @return $this
+	 * @throws \Exception
+	 */
+	public function copy($mxdImage,$intX,$intY){
+
+		$blRemoveImage = false;
+
+		if(is_object($mxdImage) && get_class($mxdImage) == 'Twist\Core\Models\Image\Image'){
+
+			//The object is a tewist image object and is OK to use
+			$resResource = $mxdImage;
+
+		}elseif(!is_object($mxdImage) && is_file($mxdImage)){
+
+			//Generate an invoice object
+			$resResource = new self();
+			$resResource->load($mxdImage);
+
+			//As the resource has been generated in this function kill it after use
+			$blRemoveImage = true;
+		}else{
+			throw new \Exception("The image to be copied must either be a TwistPHP image library object or a local image file path");
+		}
+
+		$arrInfo = $resResource->currentInfo();
+
+		//Copy the watermark image onto the main image
+		imagecopy($this->resImage, $resResource->resource(), $intX, $intY, 0, 0, $arrInfo['width'], $arrInfo['height']);
+
+		if($blRemoveImage){
+			$resResource->__destruct();
+		}
+
+		return $this;
 	}
 
 
@@ -731,15 +805,15 @@ class Image{
 		return $this;
 	}
 
-
-
 	/** IMAGE EFFECTS */
 
 	/**
 	 * Apply Antialias to the image
+	 * @return $this
 	 */
 	public function antialias(){
 		imageantialias( $this->resImage, true );
+		return $this;
 	}
 
 	/**
@@ -790,6 +864,7 @@ class Image{
 
 	/**
 	 * Apply a Edges effect to the image, the image will be converted to greyscale
+	 * @return $this
 	 */
 	public function filterDesaturate(){
 		imagefilter($this->resImage, IMG_FILTER_GRAYSCALE);
@@ -798,15 +873,16 @@ class Image{
 
 	/**
 	 * Apply a Edges effect to the image
+	 * @return $this
 	 */
 	public function filterEdges(){
 		imagefilter($this->resImage, IMG_FILTER_EDGEDETECT);
 		return $this;
 	}
 
-
 	/**
 	 * Apply a Emboss effect to the image
+	 * @return $this
 	 */
 	public function filterEmboss(){
 		imagefilter($this->resImage, IMG_FILTER_EMBOSS);
@@ -815,6 +891,7 @@ class Image{
 
 	/**
 	 * Apply a Invert effect to the image, the image will be inverted to a negative of the original
+	 * @return $this
 	 */
 	public function filterInvert(){
 		imagefilter($this->resImage, IMG_FILTER_NEGATE);
@@ -822,7 +899,8 @@ class Image{
 	}
 
 	/**
-	 *
+	 * Apply a Sketch effect to the image
+	 * @return $this
 	 */
 	public function filterMeanRemoval(){
 		imagefilter($this->resImage, IMG_FILTER_MEAN_REMOVAL);
@@ -841,6 +919,7 @@ class Image{
 
 	/**
 	 * Apply a Sepia effect to the image
+	 * @return $this
 	 */
 	public function filterSepia(){
 		imagefilter($this->resImage, IMG_FILTER_GRAYSCALE);
@@ -849,8 +928,8 @@ class Image{
 	}
 
 	/**
-	 * Apply a Sketch effect to the image
-	 * @alias sketch
+	 * @alias filterMeanRemoval
+	 * @return $this
 	 */
 	public function filterSketch(){
 		return $this->filterMeanRemoval();
@@ -861,8 +940,39 @@ class Image{
 	 * @param int $intLevel
 	 * @return $this
 	 */
-	public function smooth($intLevel = 0){
+	public function filterSmooth($intLevel = 0){
 		imagefilter($this->resImage, IMG_FILTER_SMOOTH, $this->keepWithinRange($intLevel, -10, 10));
 		return $this;
+	}
+
+	/**
+	 * Load an image to be overlaid onto the main image as a watermark
+	 * @param string $strFilename Local path to image file
+	 * @param int $intMarginRight Pixel margin between the right of the main image and the right of the watermark
+	 * @param int $intMarginBottom Pixel margin between the right of the main image and the right of the watermark
+	 * @param null|integer $intWidth Output width of the watermark image
+	 * @param null|integer $intHeight Output height of the watermark image
+	 * @return Image
+	 */
+	public function watermark($strFilename,$intMarginRight = 30,$intMarginBottom = 30,$intWidth = null,$intHeight = null){
+
+		$resWatermark = new self();
+		$resWatermark->load($strFilename);
+
+		//Resize the image if required
+		if(!is_null($intWidth) && !is_null($intHeight)){
+			$resWatermark->resize($intWidth,$intHeight);
+		}elseif(!is_null($intWidth)){
+			$resWatermark->resizeWidth($intWidth);
+		}elseif(!is_null($intHeight)){
+			$resWatermark->resizeHeight($intHeight);
+		}
+
+		$arrInfo = $resWatermark->currentInfo();
+
+		$intPositionX = ($this->intWidth - $arrInfo['width']) - $intMarginRight;
+		$intPositionY = ($this->intHeight - $arrInfo['height']) - $intMarginBottom;
+
+		return $this->copy($resWatermark,$intPositionX,$intPositionY);
 	}
 }
