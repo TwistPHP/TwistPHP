@@ -31,6 +31,13 @@ class Routes extends \PHPUnit_Framework_TestCase{
 
 		//Reset the global vars before test
 		$_REQUEST = $_GET = $_POST = array();
+		unset($_SERVER['HTTP_AUTH_KEY']);
+		unset($_SERVER['HTTP_AUTH_EMAIL']);
+		unset($_SERVER['HTTP_AUTH_PASSWORD']);
+		unset($_SERVER['HTTP_AUTH_TOKEN']);
+
+		//Make sure no user account is logged in
+		\Twist\Core\Models\User\Auth::logout();
 
 		//Set the parameter data
 		if($strRequestMethod == 'GET'){
@@ -101,7 +108,7 @@ class Routes extends \PHPUnit_Framework_TestCase{
 		$resUser = \Twist::User()->create();
 		$resUser->firstname('Travis');
 		$resUser->surname('CI');
-		$resUser->email('travisci@unit-test-rest-twistphp.com');
+		$resUser->email('travisci3@unit-test-twistphp.com');
 		$resUser->password('X123Password');
 		$resUser->commit();
 
@@ -122,7 +129,10 @@ class Routes extends \PHPUnit_Framework_TestCase{
 		$this -> assertEquals('error',$arrRESTResponse['status']);
 
 		//Test with user
-		$arrRESTResponse = json_decode($this->simulateAPIRequest('/test-userapi-controller/connect',$strAPIKey,'travisci@unit-test-rest-twistphp.com','X123Password','','GET',array('format' => 'json')),true);
+		$strDebugData = $this->simulateAPIRequest('/test-userapi-controller/connect',$strAPIKey,'travisci3@unit-test-twistphp.com','X123Password','','GET',array('format' => 'json'));
+		$this -> assertEquals('success',$strDebugData);
+		
+		$arrRESTResponse = json_decode($strDebugData,true);
 		$this -> assertEquals('success',$arrRESTResponse['status']);
 		$this -> assertTrue(array_key_exists('auth_token',$arrRESTResponse['results']));
 
