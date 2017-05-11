@@ -10,6 +10,7 @@ class Routes extends \PHPUnit_Framework_TestCase{
 		}elseif($strRequestMethod == 'POST'){
 			$_POST = $arrParameterData;
 		}
+		$_REQUEST = $arrParameterData;
 
 		//Capture and test the resulting output
 		$_SERVER['REQUEST_URI'] = $strURI;
@@ -33,6 +34,7 @@ class Routes extends \PHPUnit_Framework_TestCase{
 		}elseif($strRequestMethod == 'POST'){
 			$_POST = $arrParameterData;
 		}
+		$_REQUEST = $arrParameterData;
 
 		//Capture and test the resulting output
 		$_SERVER['REQUEST_URI'] = $strURI;
@@ -100,8 +102,8 @@ class Routes extends \PHPUnit_Framework_TestCase{
 		$resUser->commit();
 
 		//Test with no API key
-		//$arrResponse = json_decode($this->simulateAPIRequest('/test-basicapi-controller/test'),true);
-		//$this -> assertEquals('error',$arrResponse['status']);
+		$arrResponse = json_decode($this->simulateAPIRequest('/test-basicapi-controller/test'),true);
+		$this -> assertEquals('error',$arrResponse['status']);
 
 		//Test with API key
 		$arrRESTResponse = json_decode($this->simulateAPIRequest('/test-basicapi-controller/test',$strAPIKey),true);
@@ -112,8 +114,8 @@ class Routes extends \PHPUnit_Framework_TestCase{
 		$this -> assertEquals($strResponseXML,'<status>success</status>');
 
 		//Test before login
-		//$arrResponse = json_decode($this->simulateAPIRequest('/test-userapi-controller/test',$strAPIKey),true);
-		//$this -> assertEquals('error',$arrResponse['status']);
+		$arrResponse = json_decode($this->simulateAPIRequest('/test-userapi-controller/test',$strAPIKey),true);
+		$this -> assertEquals('error',$arrResponse['status']);
 
 		//Test with user
 		$arrRESTResponse = json_decode($this->simulateAPIRequest('/test-userapi-controller/test',$strAPIKey,'travisci@unit-test-rest-twistphp.com','X123Password'),true);
@@ -162,6 +164,7 @@ class Routes extends \PHPUnit_Framework_TestCase{
 
 	public function test404Page(){
 		$strPageData = $this->simulateRequest('/random/page/uri');
+		$this -> assertEquals('pass',$strPageData);
 		$this -> assertTrue((strstr($strPageData,'404 Not Found') !== false));
 	}
 
@@ -190,6 +193,7 @@ class Routes extends \PHPUnit_Framework_TestCase{
 		$this -> assertEquals('42',$this->simulateRequest('/TEST/case/page'));
 
 		$strPageData1 = $this->simulateRequest('/test/case/page');
+		$this -> assertEquals('pass',$strPageData);
 		$this -> assertTrue((strstr($strPageData1,'404 Not Found') !== false));
 
 		$strPageData2 = $this->simulateRequest('/TEST/CASE/PAGE');
