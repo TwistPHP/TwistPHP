@@ -59,8 +59,6 @@ class Routes extends \PHPUnit_Framework_TestCase{
 
 	public function testViewRequest(){
 
-		//file_put_contents(TWIST_APP_VIEWS.'test.tpl','test');
-
 		\Twist::Route()->view('/test','test.tpl');
 		$this -> assertEquals('test',$this->simulateRequest('/test'));
 	}
@@ -73,54 +71,72 @@ class Routes extends \PHPUnit_Framework_TestCase{
 
 	public function testControllerRequest(){
 
-		\Twist::Route()->get('/test-function',function(){ return 'test'; });
-		$this -> assertEquals('test',$this->simulateRequest('/test-function'));
+		\Twist::Route()->controller('/test-standard-controller/%','Standard');
+		$this -> assertEquals('test',$this->simulateRequest('/test-standard-controller/test'));
 	}
 
 	public function testRESTControllerRequest(){
 
-		\Twist::Route()->get('/test-function',function(){ return 'test'; });
+		\Twist::Route()->controller('/test-basicapi-controller/%','BasicAPI');
+		\Twist::Route()->controller('/test-userapi-controller/%','UserAPI');
+
+		$strAPIKey = 'ABC123XYZ44';
+
+		//Insert test API key
+		$resRecord = \Twist::Database()->records('twist_apikeys')->create();
+		$resRecord->set('key',$strAPIKey);
+		$resRecord->set('enabled','1');
+		$resRecord->set('created',date('Y-m-d H:i:s'));
+		$resRecord->commit();
+
+		//Create test rest user
+		$resUser = \Twist::User()->create();
+		$resUser->firstname('Travis');
+		$resUser->surname('CI');
+		$resUser->email('travisci@unit-test-rest-twistphp.com');
+		$resUser->password('X123Password');
+		$resUser->commit();
 
 		//Test with not API key
-		$arrResponse = json_decode($this->simulateRequest('/test-function'),true);
-		$this -> assertEquals('test',$arrResponse);
+		$arrResponse = json_decode($this->simulateAPIRequest('/test-basicapi-controller/test'),true);
+		$this -> assertEquals('error',$arrResponse['status']);
 
 		//Test with API key
-		$arrResponse = json_decode($this->simulateRequest('/test-function'),true);
-		$this -> assertEquals('test',$arrResponse);
+		$arrResponse = json_decode($this->simulateAPIRequest('/test-basicapi-controller/test',$strAPIKey));
+		$this -> assertEquals('success',$arrResponse['status']);
 
 		//Test with API key (XML format)
-		$arrResponse = json_decode($this->simulateRequest('/test-function'),true);
+		$strResponseXML = $this->simulateAPIRequest('/test-basicapi-controller/test',$strAPIKey,'','','','GET',array('format' => 'xml'));
 		$this -> assertEquals('test',$arrResponse);
 
 		//Test before login
-		$arrResponse = json_decode($this->simulateRequest('/test-function'),true);
-		$this -> assertEquals('test',$arrResponse);
+		$arrResponse = json_decode($this->simulateAPIRequest('/test-userapi-controller/test',$strAPIKey),true);
+		$this -> assertEquals('error',$arrResponse['status']);
 
 		//Test with user
-		$arrResponse = json_decode($this->simulateRequest('/test-function'),true);
-		$this -> assertEquals('test',$arrResponse);
+		$arrResponse = json_decode($this->simulateAPIRequest('/test-userapi-controller/test',$strAPIKey,'travisci@unit-test-rest-twistphp.com','X123Password'),true);
+		$this -> assertEquals('success',$arrResponse['status']);
+		$this -> assertTrue(array_key_exists('auth_token',$arrResponse['results']));
+
+		$strTokenKey = $arrResponse['results']['auth_token'];
 
 		//Test authenticated
-		$arrResponse = json_decode($this->simulateRequest('/test-function'),true);
-		$this -> assertEquals('test',$arrResponse);
+		$arrResponse = json_decode($this->simulateAPIRequest('/test-userapi-controller/authenticated',$strAPIKey,'','',$strTokenKey),true);
+		$this -> assertEquals('success',$arrResponse['status']);
 
 		//Test after login
-		$arrResponse = json_decode($this->simulateRequest('/test-function'),true);
-		$this -> assertEquals('test',$arrResponse);
+		$arrResponse = json_decode($this->simulateAPIRequest('/test-userapi-controller/test',$strAPIKey,'','',$strTokenKey),true);
+		$this -> assertEquals('success',$arrResponse['status']);
+		$this -> assertEquals('test',$arrResponse['results'][1]);
 	}
 
 	public function testGetRequest(){
-
-		//file_put_contents(TWIST_APP_VIEWS.'test-get.tpl','{get:param}');
 
 		\Twist::Route()->getView('/test-method','test-get.tpl');
 		$this -> assertEquals('42',$this->simulateRequest('/test-method?param=42','GET',array('param' => 42)));
 	}
 
 	public function testPostRequest(){
-
-		//file_put_contents(TWIST_APP_VIEWS.'test-post.tpl','{post:param}');
 
 		\Twist::Route()->postView('/test-method','test-post.tpl');
 		$this -> assertEquals('42',$this->simulateRequest('/test-method','POST',array('param' => 42)));
