@@ -106,7 +106,7 @@ class BaseRESTUser extends BaseREST{
 
 		    \Twist::Session()->data('user-session_key',self::$srtSessionToken);
 
-		    self::$arrSessionData = Auth::current();
+		    self::$arrSessionData = Auth::current(false);
 		    if(count(self::$arrSessionData) && self::$arrSessionData['status'] == true){
 
 			    //Valid user has been detected, allow the controller to continue

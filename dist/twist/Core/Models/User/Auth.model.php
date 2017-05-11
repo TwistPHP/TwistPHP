@@ -38,7 +38,7 @@ class Auth{
         'user_data' => array()
     );
 
-    public static function current(){
+    public static function current($blUpdateKey = true){
 
         if(self::$arrCurrentSession['status'] === false && self::$blValidated === false){
 
@@ -50,9 +50,9 @@ class Auth{
 
             //Validate the session if available else validate the cookie if remembered
             if(!is_null($strSessionKey)){
-                $intUserID = self::SessionHandler()->validateCode($strSessionKey);
+                $intUserID = self::SessionHandler()->validateCode($strSessionKey,$blUpdateKey);
             }elseif(self::SessionHandler()->remembered()){
-                $intUserID = self::SessionHandler()->validateCookie();
+                $intUserID = self::SessionHandler()->validateCookie($blUpdateKey);
             }
 
             //Rebuild the users auth array if is a valid user

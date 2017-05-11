@@ -165,6 +165,48 @@ class Manager extends BaseUser{
 		}
 	}
 
+    /**
+     * HTaccess manager to all the editing of browser cache settings, rewrite rules and default host name redirects such as using www. or not and forcing https.
+     * @return string
+     */
+    public function apikeys(){
+
+        if(array_key_exists('generate',$_GET)){
+
+            $resNewKey = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'apikeys')->create();
+            $resNewKey->set('key',\Twist::framework()->tools()->randomString(16));
+            $resNewKey->set('enabled','1');
+            $resNewKey->set('created',date('Y-m-d H:i:s'));
+            $resNewKey->commit();
+
+            \Twist::redirect('apikeys');
+        }
+
+        $arrTags = array('keys' => '');
+        $arrKeys = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'apikeys')->all();
+
+        foreach($arrKeys as $arrEachKey){
+            $arrTags['keys'] .= $this->_view('components/apikeys/key-each.tpl',$arrEachKey);
+        }
+
+        if($arrTags['keys'] == ''){
+            $arrTags['keys'] = $this->_view('components/apikeys/key-none.tpl');
+        }
+
+        return $this->_view('pages/apikeys.tpl',$arrTags);
+    }
+
+    /**
+     * Allow a select few settings to be updated using GET parameters, these are settings that are displayed as buttons throughout the manager.
+     */
+    public function POSTapikeys(){
+
+        \Twist::framework()->setting('API_ALLOWED_REQUEST_METHODS',$_POST['API_ALLOWED_REQUEST_METHODS']);
+        \Twist::framework()->setting('API_REQUEST_HEADER_AUTH',(array_key_exists('API_REQUEST_HEADER_AUTH',$_POST)) ? true : false);
+
+        \Twist::redirect('./apikeys');
+    }
+
 	/**
 	 * HTaccess manager to all the editing of browser cache settings, rewrite rules and default host name redirects such as using www. or not and forcing https.
 	 * @return string
