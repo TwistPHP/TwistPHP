@@ -23,9 +23,43 @@ class Routes extends \PHPUnit_Framework_TestCase{
 		return $strPageContent;
 	}
 
+	private function simulateAPIRequest($strURI,$strAPIKey='',$strEmail='',$strPassword='',$strToken='',$strRequestMethod='GET',$arrParameterData = array()){
+
+		//Set the parameter data
+		if($strRequestMethod == 'GET'){
+			$_GET = $arrParameterData;
+		}elseif($strRequestMethod == 'POST'){
+			$_POST = $arrParameterData;
+		}
+
+		//Capture and test the resulting output
+		$_SERVER['REQUEST_URI'] = $strURI;
+		$_SERVER['REQUEST_METHOD'] = $strRequestMethod;
+		$_SERVER['HTTP_AUTH_KEY'] = $strAPIKey;
+
+		if($strEmail != ''){
+			$_SERVER['HTTP_AUTH_EMAIL'] = $strEmail;
+		}
+
+		if($strPassword != ''){
+			$_SERVER['HTTP_AUTH_PASSWORD'] = $strPassword;
+		}
+
+		if($strToken != ''){
+			$_SERVER['HTTP_AUTH_TOKEN'] = $strToken;
+		}
+
+		ob_start();
+		\Twist::ServeRoutes(false);
+		$strPageContent = ob_get_contents();
+		ob_end_clean();
+
+		return $strPageContent;
+	}
+
 	public function testViewRequest(){
 
-		file_put_contents(TWIST_APP_VIEWS.'test.tpl','test');
+		//file_put_contents(TWIST_APP_VIEWS.'test.tpl','test');
 
 		\Twist::Route()->view('/test','test.tpl');
 		$this -> assertEquals('test',$this->simulateRequest('/test'));
@@ -37,9 +71,48 @@ class Routes extends \PHPUnit_Framework_TestCase{
 		$this -> assertEquals('test',$this->simulateRequest('/test-function'));
 	}
 
+	public function testControllerRequest(){
+
+		\Twist::Route()->get('/test-function',function(){ return 'test'; });
+		$this -> assertEquals('test',$this->simulateRequest('/test-function'));
+	}
+
+	public function testRESTControllerRequest(){
+
+		\Twist::Route()->get('/test-function',function(){ return 'test'; });
+
+		//Test with not API key
+		$arrResponse = json_decode($this->simulateRequest('/test-function'),true);
+		$this -> assertEquals('test',$arrResponse);
+
+		//Test with API key
+		$arrResponse = json_decode($this->simulateRequest('/test-function'),true);
+		$this -> assertEquals('test',$arrResponse);
+
+		//Test with API key (XML format)
+		$arrResponse = json_decode($this->simulateRequest('/test-function'),true);
+		$this -> assertEquals('test',$arrResponse);
+
+		//Test before login
+		$arrResponse = json_decode($this->simulateRequest('/test-function'),true);
+		$this -> assertEquals('test',$arrResponse);
+
+		//Test with user
+		$arrResponse = json_decode($this->simulateRequest('/test-function'),true);
+		$this -> assertEquals('test',$arrResponse);
+
+		//Test authenticated
+		$arrResponse = json_decode($this->simulateRequest('/test-function'),true);
+		$this -> assertEquals('test',$arrResponse);
+
+		//Test after login
+		$arrResponse = json_decode($this->simulateRequest('/test-function'),true);
+		$this -> assertEquals('test',$arrResponse);
+	}
+
 	public function testGetRequest(){
 
-		file_put_contents(TWIST_APP_VIEWS.'test-get.tpl','{get:param}');
+		//file_put_contents(TWIST_APP_VIEWS.'test-get.tpl','{get:param}');
 
 		\Twist::Route()->getView('/test-method','test-get.tpl');
 		$this -> assertEquals('42',$this->simulateRequest('/test-method?param=42','GET',array('param' => 42)));
@@ -47,7 +120,7 @@ class Routes extends \PHPUnit_Framework_TestCase{
 
 	public function testPostRequest(){
 
-		file_put_contents(TWIST_APP_VIEWS.'test-post.tpl','{post:param}');
+		//file_put_contents(TWIST_APP_VIEWS.'test-post.tpl','{post:param}');
 
 		\Twist::Route()->postView('/test-method','test-post.tpl');
 		$this -> assertEquals('42',$this->simulateRequest('/test-method','POST',array('param' => 42)));
