@@ -129,10 +129,7 @@ class Routes extends \PHPUnit_Framework_TestCase{
 		$this -> assertEquals('error',$arrRESTResponse['status']);
 
 		//Test with user
-		$strDebugData = $this->simulateAPIRequest('/test-userapi-controller/connect',$strAPIKey,'travisci3@unit-test-twistphp.com','X123Password','','GET',array('format' => 'json'));
-		$this -> assertEquals('success',$strDebugData);
-		
-		$arrRESTResponse = json_decode($strDebugData,true);
+		$arrRESTResponse = json_decode($this->simulateAPIRequest('/test-userapi-controller/connect',$strAPIKey,'travisci3@unit-test-twistphp.com','X123Password','','GET',array('format' => 'json')),true);
 		$this -> assertEquals('success',$arrRESTResponse['status']);
 		$this -> assertTrue(array_key_exists('auth_token',$arrRESTResponse['results']));
 
