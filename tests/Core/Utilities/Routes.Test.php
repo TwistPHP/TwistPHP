@@ -75,12 +75,12 @@ class Routes extends \PHPUnit_Framework_TestCase{
 		$this -> assertEquals('test',$this->simulateRequest('/test-standard-controller/test'));
 	}
 
-	public function testRESTControllerRequest(){
+	public function testRestControllerRequest(){
 
 		\Twist::Route()->controller('/test-basicapi-controller/%','BasicAPI');
 		\Twist::Route()->controller('/test-userapi-controller/%','UserAPI');
 
-		$strAPIKey = 'ABC123XYZ44';
+		$strAPIKey = 'ABC123XYZ42';
 
 		//Insert test API key
 		$resRecord = \Twist::Database()->records('twist_apikeys')->create();
@@ -102,12 +102,12 @@ class Routes extends \PHPUnit_Framework_TestCase{
 		$this -> assertEquals('error',$arrResponse['status']);
 
 		//Test with API key
-		$arrResponse = json_decode($this->simulateAPIRequest('/test-basicapi-controller/test',$strAPIKey));
+		$arrResponse = json_decode($this->simulateAPIRequest('/test-basicapi-controller/test',$strAPIKey),true);
 		$this -> assertEquals('success',$arrResponse['status']);
 
 		//Test with API key (XML format)
 		$strResponseXML = $this->simulateAPIRequest('/test-basicapi-controller/test',$strAPIKey,'','','','GET',array('format' => 'xml'));
-		$this -> assertEquals('test',$arrResponse);
+		$this -> assertEquals($strResponseXML,'<status>success</status>');
 
 		//Test before login
 		$arrResponse = json_decode($this->simulateAPIRequest('/test-userapi-controller/test',$strAPIKey),true);
