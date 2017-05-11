@@ -135,11 +135,6 @@ class Routes extends \PHPUnit_Framework_TestCase{
 
 		$strTokenKey = $arrRESTResponse['results']['auth_token'];
 
-		\Twist\Core\Models\User\Auth::logout();
-		\Twist::Session()->data('user-session_key',$strTokenKey);
-		$arrSessionData = \Twist\Core\Models\User\Auth::current(false);
-		$this -> assertEquals($strTokenKey,print_r($arrSessionData,true));
-
 		$arrRESTResponse = json_decode($this->simulateAPIRequest('/test-userapi-controller/authenticated',$strAPIKey,'','',$strTokenKey,'GET',array('format' => 'json')),true);
 		$this -> assertEquals('success',$arrRESTResponse['status']);
 

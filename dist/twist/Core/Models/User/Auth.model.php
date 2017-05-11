@@ -198,6 +198,8 @@ class Auth{
         self::SessionHandler()->forget();
         \Twist::Session()->remove();
 
+	    self::$blValidated = false;
+
         self::$arrCurrentSession = array(
             'status' => false,
             'issue' => '',
