@@ -2,11 +2,9 @@ language: php
 
 php:
   - 5.6
-  - 5.6
-    env GULP=ON
-  - 5.6
     env COVERALLS=ON
   - 7
+    env GULP=ON
   - nightly
 
 services:
@@ -38,8 +36,6 @@ before_script:
   - if ["$GULP" = 'ON' ]; then npm install -g gulp; fi;
 
 script:
-<<<<<<< HEAD
-  - phpunit
   - if [ "$GULP" = 'ON' ]; then gulp test; fi;
   - vendor/bin/phpunit
 
