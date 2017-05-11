@@ -1,0 +1,55 @@
+<?php
+
+class Localisation extends \PHPUnit_Framework_TestCase{
+
+	public function testLanguages(){
+
+		$arrLanguage = \Twist::Localisation()->getLanguage('EN');
+		$this->assertTrue(count($arrLanguage) > 0);
+
+		$arrLanguages = \Twist::Localisation()->getLanguages();
+		$this->assertTrue(count($arrLanguages) > 1);
+
+		$arrLanguagesLocalised = \Twist::Localisation()->getLanguages(true);
+		$this->assertTrue(count($arrLanguagesLocalised) > count($arrLanguages));
+
+		$arrOfficialLanguage = \Twist::Localisation()->getOfficialLanguage('UK');
+		$this->assertTrue(count($arrOfficialLanguage) > 0);
+	}
+
+	public function testCountries(){
+
+		$arrCountry = \Twist::Localisation()->getCountry('EN');
+		$this->assertTrue(count($arrCountry) > 0);
+
+		$arrCountries = \Twist::Localisation()->getCountries();
+		$this->assertTrue(count($arrCountries) > 1);
+	}
+
+	public function testCurrency(){
+
+		$arrCurrency = \Twist::Localisation()->getCurrency('GBP');
+		$this->assertTrue(count($arrCurrency) > 0);
+
+		$arrCountries = \Twist::Localisation()->getCurrencies();
+		$this->assertTrue(count($arrCountries) > 1);
+
+		$arrOfficialCurrency = \Twist::Localisation()->getOfficialCurrency('UK');
+		$this->assertTrue(count($arrOfficialCurrency) > 0);
+
+		$fltConversionRate = \Twist::Localisation()->currencyConversionRate('GBP','USD');
+		$this->assertTrue($fltConversionRate !== false);
+
+		$fltUSD = \Twist::Localisation()->convertCurrency('GBP','USD',10,false);
+		$this->assertTrue(($fltConversionRate * 10) == $fltUSD);
+	}
+
+	public function testTimezones(){
+
+		$arrTimezone = \Twist::Localisation()->getTimezone('Europe/London');
+		$this->assertTrue(count($arrTimezone) > 0);
+
+		$arrTimezones = \Twist::Localisation()->getTimezones();
+		$this->assertTrue(count($arrTimezones) > 1);
+	}
+}
