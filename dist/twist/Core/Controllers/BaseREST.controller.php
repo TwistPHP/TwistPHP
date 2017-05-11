@@ -104,7 +104,7 @@ class BaseREST extends Base{
 	    //Determine the format in which to return the data, default is JSON
 	    self::$srtFormat = (array_key_exists('format',$_REQUEST)) ?  $_REQUEST['format'] : strtolower(self::$srtFormat);
 
-	    $this->_auth();
+	    return $this->_auth();
     }
 
 	/**
@@ -157,8 +157,6 @@ class BaseREST extends Base{
     public function _respond($mxdResults,$intCount = 1,$intResponseCode = 200){
 
 	    header(sprintf("HTTP/1.1 %s %s",$intResponseCode,Error::responseInfo($intResponseCode)));
-	    header("Cache-Control: no-cache, must-revalidate");
-	    header("Expires: Wed, 24 Sep 1986 14:20:00 GMT");
 
 	    $strOutput = '';
 	    $arrOut = array(
@@ -176,10 +174,7 @@ class BaseREST extends Base{
 		    $strOutput = \Twist::XML()->arrayToXML($arrOut);
 	    }
 
-	    header(sprintf("Content-length: %d", function_exists('mb_strlen') ? mb_strlen($strOutput) : strlen($strOutput)));
-
-	    echo $strOutput;
-	    die();
+	    return $strOutput;
     }
 
 	/**
@@ -190,8 +185,6 @@ class BaseREST extends Base{
 	public function _respondError($strErrorMessage,$intResponseCode = 404){
 
 		header(sprintf("HTTP/1.1 %s %s",$intResponseCode,Error::responseInfo($intResponseCode)));
-		header("Cache-Control: no-cache, must-revalidate");
-		header("Expires: Wed, 24 Sep 1986 14:20:00 GMT");
 
 		$strOutput = '';
 		$arrOut = array(
@@ -209,10 +202,7 @@ class BaseREST extends Base{
 			$strOutput = \Twist::XML()->arrayToXML($arrOut);
 		}
 
-		header(sprintf("Content-length: %d", function_exists('mb_strlen') ? mb_strlen($strOutput) : strlen($strOutput)));
-
-		echo $strOutput;
-		die();
+		return $strOutput;
 	}
 
 }

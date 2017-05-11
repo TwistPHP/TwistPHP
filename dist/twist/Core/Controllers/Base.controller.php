@@ -57,9 +57,7 @@
 			//Store the route data for use later
 			$this->arrRoute = $arrRouteData;
 
-			$this->_baseCalls();
-
-			return true;
+			return $this->_baseCalls();
 		}
 
 		/**
@@ -68,6 +66,7 @@
 		 */
 		protected function _baseCalls(){
 			//Leave empty - this is to be extended only!
+			return true;
 		}
 
 		/**

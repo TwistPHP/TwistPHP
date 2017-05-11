@@ -35,6 +35,7 @@ class BaseAJAX extends Base{
 
 	public function _baseCalls(){
 		$this->_timeout(60);
+		return true;
 	}
 
 	/**
