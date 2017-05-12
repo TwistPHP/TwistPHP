@@ -31,7 +31,7 @@ use Twist\Core\Models\User\Auth;
  *
  * @package Twist\Core\Controllers
  */
-class BaseRESTUser extends BaseREST{
+class BaseRESTUser extends BaseRESTKey{
 
 	protected static $srtSessionToken = '';
 	protected static $arrSessionData = array();
@@ -44,30 +44,35 @@ class BaseRESTUser extends BaseREST{
     public function _auth(){
 
 	    //Call the default API key and IP restrictions before validating the users session
-	    parent::_auth();
+        $mxdResponse = parent::_auth();
 
-	    //Basic Auth is an API key, BaseRESTUser has a more advance auth
-	    self::$srtSessionToken = (self::$blRequestHeaderAuth) ? $_SERVER['HTTP_AUTH_TOKEN'] : $_REQUEST[(array_key_exists('Auth-Token',$_REQUEST)) ? 'Auth-Token' : 'auth-token'];
+        if($mxdResponse === true || is_null($mxdResponse)){
 
-	    //If a session key is set try to validate the session
-	    if(self::$srtSessionToken != ''){
+            //Basic Auth is an API key, BaseRESTUser has a more advance auth
+            self::$srtSessionToken = (self::$blRequestHeaderAuth) ? $_SERVER['HTTP_AUTH_TOKEN'] : $_REQUEST[(array_key_exists('Auth-Token',$_REQUEST)) ? 'Auth-Token' : 'auth-token'];
 
-		    \Twist::Session()->data('user-session_key',self::$srtSessionToken);
+            //If a session key is set try to validate the session
+            if(self::$srtSessionToken != ''){
 
-		    self::$arrSessionData = Auth::current(false);
-		    if(count(self::$arrSessionData) && self::$arrSessionData['status'] == true){
+                \Twist::Session()->data('user-session_key',self::$srtSessionToken);
 
-			    //Valid user has been detected, allow the controller to continue
-			    return true;
-		    }
+                self::$arrSessionData = Auth::current(false);
+                if(count(self::$arrSessionData) && self::$arrSessionData['status'] == true){
 
-		    //Error user is not logged in
-		    return $this->_respondError('Unauthorized Access: Invalid auth token provided',401);
-	    }
+                    //Valid user has been detected, allow the controller to continue
+                    return true;
+                }
 
-	    //If no session key has been passed in then try to authenticate the user
-	    //Every possible outcome of this function call will end the script here
-	    return $this->_authenticate();
+                //Error user is not logged in
+                return $this->_respondError('Unauthorized Access: Invalid auth token provided',401);
+            }
+
+            //If no session key has been passed in then try to authenticate the user
+            //Every possible outcome of this function call will end the script here
+            return $this->_authenticate();
+        }
+
+        return $mxdResponse;
     }
 
 	/**

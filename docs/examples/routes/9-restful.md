@@ -2,12 +2,12 @@
 
 You can use routes to create a REST API that can have a multitude of uses, for example the TwistPHP Ajax server, Inline file uploader and of course a REST API.
 
-To use RESTful routing you will need a Controller that extends *BaseREST* or *BaseRESTUser*.
+To use RESTful routing you will need a Controller that extends *BaseREST*, *BaseRESTKey* or *BaseRESTUser*.
 
-## BaseREST (Base Controller with API Key)
-BaseREST requires an API Key to make valid requests to the controller functions, the API Keys are stored in the apikeys database table. You can add/edit and manage the API keys though the framework manager. IP address restrictions can also be setup along with the API key.
+## BaseREST (Base Controller with no authentication)
+BaseREST dosn't require authentication to make valid requests to the controller functions.
 
-Create a new file called `BasicAPI.controller.php` in your `/app/Controllers` directory:
+Create a new file called `OpenAPI.controller.php` in your `/app/Controllers` directory:
 
 ```php
 <?php
@@ -35,7 +35,7 @@ Create a new file called `BasicAPI.controller.php` in your `/app/Controllers` di
      * base controller
      * ================================
      */
-    class BasicAPI extends BaseREST {
+    class OpenAPI extends BaseREST {
     
         /*
          * ================================
@@ -48,8 +48,6 @@ Create a new file called `BasicAPI.controller.php` in your `/app/Controllers` di
         }
     }
 ```
-
-** Note: If your controller implements the `_baseCalls()` function ensure you add `return parent::_baseCalls()` at the end of the function. Not doing so will prevent the API Key, IP Restriction and User validation from working.
 
 Register your REST controller by adding the following lines to your main `index.php` file in your site root:
 
@@ -71,7 +69,7 @@ Register your REST controller by adding the following lines to your main `index.
      * base for the site)
      * ================================
      */
-    Twist::Route() -> rest( '/api/basic/%', 'BasicAPI' );
+    Twist::Route() -> rest( '/api/open/%', 'OpenAPI' );
     
     /*
      * ================================
@@ -81,6 +79,50 @@ Register your REST controller by adding the following lines to your main `index.
      */
 	Twist::Route() -> serve();
 ```
+
+An example of calling the REST controller using the TwistPHP Curl package, you do not need to use Twist or even CURL for that matter as long as you can make a HTTP request to the REST controller you can use the API.
+
+```php
+<?php
+
+    /*
+     * ================================
+     * Require the TwistPHP framework
+     * ================================
+     */
+    require_once( 'twist/framework.php' );
+    
+    $jsonData = \Twist::Curl()->get('https://www.example.com/api/open/doSomthing');
+    $arrOut = json_decode($jsonData,true);
+    
+    print_r($arrOut);
+    /**
+     * 'status' => 'success',
+     * 'format' => 'json',
+     * 'count' => 1,
+     * 'results' => array(1 => 'test')
+     */
+    
+```
+
+## BaseRESTKey (Base Controller with API Key)
+BaseRESTKey extends the BaseREST controller which means all the above functionality applies with the addition of API Key validation which you need in order to make valid functions requests, the API Keys are stored in the apikeys database table. You can add/edit and manage the API keys though the framework manager. IP address restrictions can also be setup along with the API key.
+
+Using the same code example as above to create and add your controller `BasicAPI.controller.php` apart from you will need to use and extend from `BaseRESTKey` rather than `BaseREST`
+
+```php
+use Twist\Core\Controllers\BaseRESTKey;
+```
+
+```php
+class BasicAPI extends BaseRESTKey {
+```
+
+```php
+Twist::Route() -> rest( '/api/basic/%', 'BasicAPI' );
+```
+
+** Note: If your controller implements the `_baseCalls()` function ensure you add `return parent::_baseCalls()` at the end of the function. Not doing so will prevent the API Key, IP Restriction and User validation from working.
 
 An example of calling the REST controller using the TwistPHP Curl package, you do not need to use Twist or even CURL for that matter as long as you can make a HTTP request to the REST controller you can use the API. You will need to pass in the `Auth-Key` as a request header (or via GET/POST if you have disabled `API_REQUEST_HEADER_AUTH`).
 
@@ -97,10 +139,10 @@ An example of calling the REST controller using the TwistPHP Curl package, you d
     $arrRequestHeaders = array(
         'Auth-Key' => 'XXXXXXXXXXXXXXXX'
     );
-
+    
     $jsonData = \Twist::Curl()->get('https://www.example.com/api/basic/doSomthing',array(),$arrRequestHeaders);
     $arrOut = json_decode($jsonData,true);
-
+    
     print_r($arrOut);
     /**
      * 'status' => 'success',
@@ -112,9 +154,9 @@ An example of calling the REST controller using the TwistPHP Curl package, you d
 ```
 
 ## BaseRESTUser (Base Controller with API Key and User Login)
-BaseRESTUser extends the BaseREST controller which means all the above functionality applies with the addition of a user login being required to access the REST controller. Once successfully logged in a token will be returned that will allow all subsequent requests to be make without sending the login credentials.
+BaseRESTUser extends the BaseRESTKey controller which means all the above functionality applies with the addition of a user login being required to access the REST controller. Once successfully logged in a token will be returned that will allow all subsequent requests to be make without sending the login credentials.
 
-Using the same code example as above to create and add your controller to twist apart from you will need to use and extend from `BaseRESTUser` rather than `BaseREST`
+Using the same code example as above to create and add your controller `RestrictedAPI.controller.php` apart from you will need to use and extend from `BaseRESTUser` rather than `BaseRESTKey`
 
 ```php
 use Twist\Core\Controllers\BaseRESTUser;
@@ -134,30 +176,30 @@ When connecting to your API you will now need to pass in two new header paramete
 <?php
 
     $arrRequestHeaders = array(
-		'Auth-Key' => 'XXXXXXXXXXXXXXXX',
-		'Auth-Email' => 'xxxxxxxx@xxxxxx.xxx',
-		'Auth-Password' => 'xxxxxxxxxx'
-	);
-
-	$jsonData = \Twist::Curl()->get('https://www.example.com/api/restricted/connect',array(),$arrRequestHeaders);
-	$arrOut = json_decode($jsonData,true);
-
-	if($arrOut['status'] == 'success'){
-		$strAutToken = $arrOut['results']['auth_token'];
-	}else{
-		echo $arrOut['error'];
-	}
-
-	print_r($arrOut);
-	/**
-	 * 'status' => 'success',
-	 * 'format' => 'json',
-	 * 'count' => 1,
-	 * 'results' => array(
-	 *                  'message' => 'Authenticated: Successfully logged in as xxxxxxxx@xxxxxx.xxx',
-	 *				    'auth_token' => 'xxXXxxxXXxxxxXXxXxXXXXXXXXxxxXXXXXX'
-	 *              )
-	 */
+        'Auth-Key' => 'XXXXXXXXXXXXXXXX',
+        'Auth-Email' => 'xxxxxxxx@xxxxxx.xxx',
+        'Auth-Password' => 'xxxxxxxxxx'
+    );
+    
+    $jsonData = \Twist::Curl()->get('https://www.example.com/api/restricted/connect',array(),$arrRequestHeaders);
+    $arrOut = json_decode($jsonData,true);
+    
+    if($arrOut['status'] == 'success'){
+        $strAutToken = $arrOut['results']['auth_token'];
+    }else{
+        echo $arrOut['error'];
+    }
+    
+    print_r($arrOut);
+    /**
+     * 'status' => 'success',
+     * 'format' => 'json',
+     * 'count' => 1,
+     * 'results' => array(
+     *                  'message' => 'Authenticated: Successfully logged in as xxxxxxxx@xxxxxx.xxx',
+     *                  'auth_token' => 'xxXXxxxXXxxxxXXxXxXXXXXXXXxxxXXXXXX'
+     *              )
+     */
 ```
 
 Now you can start using the API with your auth token, you will need to pass the auth token as a header parameter `Auth-Token` (or via GET/POST if you have disabled `API_REQUEST_HEADER_AUTH`).
@@ -166,20 +208,20 @@ Now you can start using the API with your auth token, you will need to pass the 
 <?php
 
     $arrRequestHeaders = array(
-		'Auth-Key' => 'XXXXXXXXXXXXXXXX',
-		'Auth-Token' => 'xxXXxxxXXxxxxXXxXxXXXXXXXXxxxXXXXXX',
-	);
-	
+        'Auth-Key' => 'XXXXXXXXXXXXXXXX',
+        'Auth-Token' => 'xxXXxxxXXxxxxXXxXxXXXXXXXXxxxXXXXXX',
+    );
+    
     $jsonData = \Twist::Curl()->get('https://www.example.com/api/restricted/test',array(),$arrRequestHeaders);
-	$arrOut = json_decode($jsonData,true);
-
-	print_r($arrOut);
-	/**
-	 * 'status' => 'success',
-	 * 'format' => 'json',
-	 * 'count' => 1,
-	 * 'results' => array(1 => 'test')
-	 */
+    $arrOut = json_decode($jsonData,true);
+    
+    print_r($arrOut);
+    /**
+     * 'status' => 'success',
+     * 'format' => 'json',
+     * 'count' => 1,
+     * 'results' => array(1 => 'test')
+     */
 ```
 
 To determine if your auth token is still valid you can call the `authenticated` function that comes as part of the `BaseRESTUser` base controller.
@@ -188,20 +230,20 @@ To determine if your auth token is still valid you can call the `authenticated` 
 <?php
 
     $arrRequestHeaders = array(
-   		'Auth-Key' => 'XXXXXXXXXXXXXXXX',
-   		'Auth-Token' => 'xxXXxxxXXxxxxXXxXxXXXXXXXXxxxXXXXXX',
-   	);
-
-	$jsonData = \Twist::Curl()->get('http://twocoastmedia.com/dev/api/user/authenticated',array(),$arrRequestHeaders);
-	$arrOut = json_decode($jsonData,true);
-
-	print_r($arrOut);
-	/**
-	 * 'status' => 'success',
-	 * 'format' => 'json',
-	 * 'count' => 1,
-	 * 'results' => 'Welcome: API connection successful, you are authenticated'
-	 */
+        'Auth-Key' => 'XXXXXXXXXXXXXXXX',
+        'Auth-Token' => 'xxXXxxxXXxxxxXXxXxXXXXXXXXxxxXXXXXX',
+    );
+    
+    $jsonData = \Twist::Curl()->get('http://twocoastmedia.com/dev/api/user/authenticated',array(),$arrRequestHeaders);
+    $arrOut = json_decode($jsonData,true);
+    
+    print_r($arrOut);
+    /**
+     * 'status' => 'success',
+     * 'format' => 'json',
+     * 'count' => 1,
+     * 'results' => 'Welcome: API connection successful, you are authenticated'
+     */
 ```
 
 ## Controller Responses

@@ -92,6 +92,7 @@ class Routes extends \PHPUnit_Framework_TestCase{
 
 	public function testRestControllerRequest(){
 
+		\Twist::Route()->controller('/test-openapi-controller/%','TwistOpenAPI');
 		\Twist::Route()->controller('/test-basicapi-controller/%','TwistBasicAPI');
 		\Twist::Route()->controller('/test-userapi-controller/%','TwistUserAPI');
 
@@ -111,6 +112,10 @@ class Routes extends \PHPUnit_Framework_TestCase{
 		$resUser->email('travisci3@unit-test-twistphp.com');
 		$resUser->password('X123Password');
 		$resUser->commit();
+
+        //Test open API with no auth
+        $arrRESTResponse = json_decode($this->simulateAPIRequest('/test-openapi-controller/test'),true);
+        $this -> assertEquals('success',$arrRESTResponse['status']);
 
 		//Test with no API key
 		$arrRESTResponse = json_decode($this->simulateAPIRequest('/test-basicapi-controller/test'),true);

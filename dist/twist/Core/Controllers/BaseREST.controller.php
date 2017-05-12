@@ -26,131 +26,109 @@ namespace Twist\Core\Controllers;
 use Twist\Classes\Error;
 
 /*
- * An REST API base controller (basic API Key auth) that can be used instead of Base when adding REST API support to your site. This controller should be used as an extension to a route controller class.
+ * An REST API base controller (no authentication) that can be used instead of Base when adding REST API support to your site. This controller should be used as an extension to a route controller class.
  * See twistphp.com/examples for a full guide on RESTful routing
  *
  * @package Twist\Core\Controllers
  */
 class BaseREST extends Base{
 
-	protected static $blRequestHeaderAuth = true;
-	protected static $srtFormat = 'json';
-	protected static $srtApiKey = '';
-	protected static $arrKeyInfo = array();
+    protected static $srtFormat = 'json';
 
-	/**
-	 * Default functionality for every request that is made though the REST API. Every call must be authenticated.
-	 */
+    /**
+     * Default functionality for every request that is made though the REST API.
+     */
     public function _baseCalls(){
 
-	    header("Access-Control-Allow-Orgin: *");
-	    header("Access-Control-Allow-Methods: *");
+        header("Access-Control-Allow-Orgin: *");
+        header("Access-Control-Allow-Methods: *");
 
         $this->_timeout(60);
         $this->_ignoreUserAbort(true);
 
-	    //Determine the format in which to return the data, default is JSON
-	    self::$srtFormat = (array_key_exists('format',$_REQUEST)) ?  $_REQUEST['format'] : strtolower(self::$srtFormat);
+        //Determine the format in which to return the data, default is JSON
+        self::$srtFormat = (array_key_exists('format',$_REQUEST)) ?  $_REQUEST['format'] : strtolower(self::$srtFormat);
 
-	    return $this->_auth();
+        return $this->_auth();
     }
 
-	/**
-	 * Standard function to validate the Auth Key and connection IP address to ensure that access has been granted
-	 */
+    /**
+     * Open REST dosnt require any auth but this function is needed for RESTKey and RESTUser
+     * @return bool
+     */
     public function _auth(){
-
-        //Basic Auth is an API key, BaseRESTUser has a more advance auth
-	    self::$blRequestHeaderAuth = \Twist::framework()->setting('API_REQUEST_HEADER_AUTH');
-
-	    self::$srtApiKey = (self::$blRequestHeaderAuth) ? $_SERVER['HTTP_AUTH_KEY'] : $_REQUEST[(array_key_exists('Auth-Key',$_REQUEST)) ? 'Auth-Key' : 'auth-key'];
-	    self::$arrKeyInfo = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'apikeys')->get(self::$srtApiKey,'key',true);
-
-	    if(count(self::$arrKeyInfo) == 0){
-		    //Invalid API Key
-		    return $this->_respondError('Unauthorized Access: Invalid API key passed',401);
-
-	    }elseif(self::$arrKeyInfo['enabled'] == '0'){
-		    //Disabled API key
-		    return $this->_respondError('Disabled: API key has been disabled',401);
-
-	    }elseif(self::$arrKeyInfo['allowed_ips'] != '' && !in_array($_SERVER['REMOTE_ADDR'],explode(',',self::$arrKeyInfo['allowed_ips']))){
-		    //Invalid IP address
-		    return $this->_respondError('Forbidden: you IP address is not on the allowed list',403);
-	    }
-
-	    return true;
+        return true;
     }
 
-	/**
-	 * The main response of the controller, treat this function as though it where an index.php file.
-	 */
+    /**
+     * The main response of the controller, treat this function as though it where an index.php file.
+     */
     public function _index(){
-	    return $this->_respond('Welcome: API connection successful',1);
+        return $this->_respond('Welcome: API connection successful',1);
     }
 
-	/**
-	 * This is the function that will be called in the even that Routes was unable to find a exact controller response.
-	 */
-	public function _fallback(){
-		return $this->_respondError('Invalid function called',404);
-	}
+    /**
+     * This is the function that will be called in the even that Routes was unable to find a exact controller response.
+     */
+    public function _fallback(){
+        return $this->_respondError('Invalid function called',404);
+    }
 
-	/**
-	 * Successful response to an API call should be used to return a standardised RESTful success response
-	 * @param mixed $mxdResults Results of the function call to be returned to the user
-	 * @param int $intCount Number of results returned by the function call
-	 * @param int $intResponseCode HTTP response code for the call
-	 */
+    /**
+     * Successful response to an API call should be used to return a standardised RESTful success response
+     * @param mixed $mxdResults Results of the function call to be returned to the user
+     * @param int $intCount Number of results returned by the function call
+     * @param int $intResponseCode HTTP response code for the call
+     */
     public function _respond($mxdResults,$intCount = 1,$intResponseCode = 200){
 
-	    header(sprintf("HTTP/1.1 %s %s",$intResponseCode,Error::responseInfo($intResponseCode)));
+        header(sprintf("HTTP/1.1 %s %s",$intResponseCode,Error::responseInfo($intResponseCode)));
 
-	    $strOutput = '';
-	    $arrOut = array(
-	    	'status' => 'success',
-	    	'format' => self::$srtFormat,
-	    	'count' => $intCount,
-	    	'results' => $mxdResults
-	    );
+        $strOutput = '';
+        $arrOut = array(
+            'status' => 'success',
+            'format' => self::$srtFormat,
+            'count' => $intCount,
+            'results' => $mxdResults
+        );
 
-	    if(self::$srtFormat == 'json'){
-		    header("Content-type: application/json");
-		    $strOutput = json_encode($arrOut);
-	    }elseif(self::$srtFormat == 'xml'){
-		    header("Content-type: text/xml");
-		    $strOutput = \Twist::XML()->arrayToXML($arrOut);
-	    }
+        if(self::$srtFormat == 'json'){
+            header("Content-type: application/json");
+            $strOutput = json_encode($arrOut);
+        }elseif(self::$srtFormat == 'xml'){
+            header("Content-type: text/xml");
+            $strOutput = \Twist::XML()->arrayToXML($arrOut);
+        }
 
-	    return $strOutput;
+        return $strOutput;
     }
 
-	/**
-	 * Error response to an API call should be used to return a standardised RESTful error response
-	 * @param string $strErrorMessage Error message to indicate what when wrong
-	 * @param int $intResponseCode HTTP response code for the call
-	 */
-	public function _respondError($strErrorMessage,$intResponseCode = 404){
+    /**
+     * Error response to an API call should be used to return a standardised RESTful error response
+     * @param string $strErrorMessage Error message to indicate what when wrong
+     * @param int $intResponseCode HTTP response code for the call
+     */
+    public function _respondError($strErrorMessage,$intResponseCode = 404){
 
-		header(sprintf("HTTP/1.1 %s %s",$intResponseCode,Error::responseInfo($intResponseCode)));
+        header(sprintf("HTTP/1.1 %s %s",$intResponseCode,Error::responseInfo($intResponseCode)));
 
-		$strOutput = '';
-		$arrOut = array(
-			'status' => 'error',
-			'error' => $strErrorMessage,
-			'count' => 0,
-			'format' => self::$srtFormat,
-		);
+        $strOutput = '';
+        $arrOut = array(
+            'status' => 'error',
+            'error' => $strErrorMessage,
+            'count' => 0,
+            'format' => self::$srtFormat,
+        );
 
-		if(self::$srtFormat == 'json'){
-			header("Content-type: application/json");
-			$strOutput = json_encode($arrOut);
-		}elseif(self::$srtFormat == 'xml'){
-			header("Content-type: text/xml");
-			$strOutput = \Twist::XML()->arrayToXML($arrOut);
-		}
+        if(self::$srtFormat == 'json'){
+            header("Content-type: application/json");
+            $strOutput = json_encode($arrOut);
+        }elseif(self::$srtFormat == 'xml'){
+            header("Content-type: text/xml");
+            $strOutput = \Twist::XML()->arrayToXML($arrOut);
+        }
 
-		return $strOutput;
-	}
+        return $strOutput;
+    }
 
 }
