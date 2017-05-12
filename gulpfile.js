@@ -1,6 +1,6 @@
 var gulp = require( 'gulp' ),
 		babel = require( 'gulp-babel' ),
-		jshint = require( 'gulp-jshint' ),
+		eslint = require( 'gulp-eslint' ),
 		sass = require( 'gulp-sass' ),
 		concat = require( 'gulp-concat' ),
 		uglify = require( 'gulp-uglify' ),
@@ -12,12 +12,6 @@ var gulp = require( 'gulp' ),
 
 gulp.task( 'ajax-js', ['ajax-test'],
 	function() {
-
-
-//		return gulp.src( strTwistSource + 'ajax/js/*.js' )
-//				.pipe( babel() )
-//				.pipe( gulp.dest( strTwistDestination + 'ajax/js' ) );
-
 		return gulp.src( strTwistSource + 'ajax/js/twistajax.js' )
 				//.pipe( concat( 'twistajax.min.js' ) )
 				.pipe( babel( {
@@ -36,16 +30,6 @@ gulp.task( 'ajax-css',
 				.pipe( rename( 'twistajax.min.css' ) )
 				.pipe( sourcemaps.write( './' ) )
 				.pipe( gulp.dest( strTwistDestination + 'ajax/css' ) );
-	}
-);
-
-gulp.task( 'ajax-test',
-	function() {
-		return gulp.src( strTwistSource + 'ajax/js/twistajax.js' )
-				.pipe( jshint( {
-					esversion: 6
-				} ) )
-				.pipe( jshint.reporter( 'default' ) );
 	}
 );
 
@@ -82,14 +66,6 @@ gulp.task( 'debug-css',
 	}
 );
 
-gulp.task( 'debug-test',
-		function() {
-			return gulp.src( strTwistSource + 'debug/js/twistdebug.js' )
-					.pipe( jshint() )
-					.pipe( jshint.reporter( 'default' ) );
-		}
-);
-
 gulp.task( 'fileupload-js',
 	function() {
 		return gulp.src( strTwistSource + 'fileupload/js/twistfileupload.js' )
@@ -111,14 +87,6 @@ gulp.task( 'fileupload-css',
 				.pipe( rename( 'twistfileupload.min.css' ) )
 				.pipe( sourcemaps.write( './' ) )
 				.pipe( gulp.dest( strTwistDestination + 'fileupload/css' ) );
-	}
-);
-
-gulp.task( 'fileupload-test',
-	function() {
-		return gulp.src( strTwistSource + 'fileupload/js/twistfileupload.js' )
-				.pipe( jshint() )
-				.pipe( jshint.reporter( 'default' ) );
 	}
 );
 
@@ -144,14 +112,6 @@ gulp.task( 'manager-css',
 	}
 );
 
-gulp.task( 'manager-test',
-	function() {
-		return gulp.src( strTwistSource + 'manager/js/twistmanager.js' )
-				.pipe( jshint() )
-				.pipe( jshint.reporter( 'default' ) );
-	}
-);
-
 gulp.task( 'setup-js',
 	function() {
 		return gulp.src( strTwistSource + 'setup/js/twistsetup.js' )
@@ -174,24 +134,10 @@ gulp.task( 'setup-css',
 	}
 );
 
-gulp.task( 'setup-test',
-	function() {
-		return gulp.src( strTwistSource + 'setup/js/twistsetup.js' )
-				.pipe( jshint() )
-				.pipe( jshint.reporter( 'default' ) );
-	}
-);
-
 gulp.task( 'docs',
 	function() {
 		return gulp.src( strTwistSource + '**/*.js' )
 				.pipe( jsdoc( { opts: { destination: './docs/resources/' } } ) );
-	}
-);
-
-gulp.task( 'watch-docs',
-	function() {
-		return gulp.watch( strTwistSource + '**/*.js', ['docs'] );
 	}
 );
 
@@ -201,5 +147,39 @@ gulp.task( 'fileupload', ['fileupload-js', 'fileupload-css'] );
 gulp.task( 'manager', ['manager-js', 'manager-css'] );
 gulp.task( 'setup', ['setup-js', 'setup-css'] );
 
-gulp.task( 'test', ['ajax-test', 'debug-test', 'fileupload-test', 'manager-test', 'setup-test'] );
-gulp.task( 'default', ['ajax', 'cssreset', 'debug', 'fileupload', 'manager', 'setup'] );
+gulp.task( 'test',
+	function() {
+		return gulp.src( strTwistSource + '**/*.js' )
+		.pipe(
+			eslint(
+				{
+					parserOptions: {
+						ecmaVersion: 6,
+						sourceType: 'module',
+						ecmaFeatures: {
+							impliedStrict: false
+						}
+					},
+					rules: {
+						'eqeqeq': 2,
+						'no-inner-declarations': 2,
+						'no-irregular-whitespace': 1,
+						//'valid-jsdoc': 1,
+						'no-dupe-keys': 1,
+						'valid-typeof': 2,
+						'no-unreachable': 2,
+						'no-alert': 2,
+						'no-eval': 2,
+						quotes: ['error', 'single']
+					},
+					//globals: ['jQuery', '$'],
+					envs: ['browser']
+				}
+			)
+		)
+		.pipe( eslint.format() )
+		.pipe( eslint.failAfterError() );
+	}
+);
+
+gulp.task( 'default', ['test', 'ajax', 'cssreset', 'debug', 'fileupload', 'manager', 'setup'] );

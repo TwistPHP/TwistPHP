@@ -524,7 +524,7 @@
 											thisUploader.request.onreadystatechange = function() {
 												switch( thisUploader.request.status ) {
 													case 200:
-														if( thisUploader.request.readyState == 4 ) {
+														if( thisUploader.request.readyState === 4 ) {
 															log( 'Uploaded ' + strFileName + ' (' + prettySize( intFileSize ) + ')' );
 
 															thisUploader.queue.shift();
@@ -687,7 +687,8 @@
 									log( 'Allowed file extensions: ' + thisUploader.acceptExtentions.join( ', ' ) );
 								}
 
-								alert( thisUploader.settings.invalidtypemessage );
+								//TODO: Handle this without using alert()
+								//alert( thisUploader.settings.invalidtypemessage );
 
 								thisUploader.clearInput();
 							}

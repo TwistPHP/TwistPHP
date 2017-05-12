@@ -69,7 +69,7 @@ export default class twistajax {
 	/*
 	 * TODO: Major rewrite required, remove jQuery dependencies
 	 */
-	serializeJSON( jqoForm ) {
+	static serializeJSON( jqoForm ) {
 		let objJSON = {},
 			arrFormElements = [];
 

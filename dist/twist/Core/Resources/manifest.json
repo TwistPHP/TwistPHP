@@ -74,7 +74,7 @@
 		"all": {
 			"default": true,
 			"css": ["css/twistajax.min.css"],
-			"js": ["js/twistajax.min.js"]
+			"js": ["js/twistajax.js"]
 		},
 		"css": {
 			"default": false,
@@ -84,7 +84,7 @@
 		"js": {
 			"default": false,
 			"css": [],
-			"js": ["js/twistajax.min.js"]
+			"js": ["js/twistajax.js"]
 		}
 	},
 	"twist/cssreset": {
