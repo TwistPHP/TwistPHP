@@ -44,7 +44,7 @@ Create a new file called `OpenAPI.controller.php` in your `/app/Controllers` dir
          * ================================
          */
         public function doSomthing(){
-            return $this->_response(array(1 => 'test'),1);
+            return $this -> _response( array( 1 => 'test' ), 1 );
         }
     }
 ```
@@ -85,22 +85,16 @@ An example of calling the REST controller using the TwistPHP Curl package, you d
 ```php
 <?php
 
-    /*
-     * ================================
-     * Require the TwistPHP framework
-     * ================================
-     */
     require_once( 'twist/framework.php' );
     
-    $jsonData = \Twist::Curl()->get('https://www.example.com/api/open/doSomthing');
-    $arrOut = json_decode($jsonData,true);
+    $jsonData = \Twist::Curl() -> get( 'https://www.example.com/api/open/doSomthing' );
     
-    print_r($arrOut);
+    print_r( json_decode( $jsonData, true ) );
     /**
      * 'status' => 'success',
      * 'format' => 'json',
      * 'count' => 1,
-     * 'results' => array(1 => 'test')
+     * 'results' => array( 1 => 'test' )
      */
     
 ```
@@ -129,21 +123,15 @@ An example of calling the REST controller using the TwistPHP Curl package, you d
 ```php
 <?php
 
-    /*
-     * ================================
-     * Require the TwistPHP framework
-     * ================================
-     */
     require_once( 'twist/framework.php' );
     
     $arrRequestHeaders = array(
         'Auth-Key' => 'XXXXXXXXXXXXXXXX'
     );
     
-    $jsonData = \Twist::Curl()->get('https://www.example.com/api/basic/doSomthing',array(),$arrRequestHeaders);
-    $arrOut = json_decode($jsonData,true);
+    $jsonData = \Twist::Curl() -> get( 'https://www.example.com/api/basic/doSomthing', array(), $arrRequestHeaders );
     
-    print_r($arrOut);
+    print_r( json_decode( $jsonData, true ) );
     /**
      * 'status' => 'success',
      * 'format' => 'json',
@@ -181,16 +169,16 @@ When connecting to your API you will now need to pass in two new header paramete
         'Auth-Password' => 'xxxxxxxxxx'
     );
     
-    $jsonData = \Twist::Curl()->get('https://www.example.com/api/restricted/connect',array(),$arrRequestHeaders);
-    $arrOut = json_decode($jsonData,true);
+    $jsonData = \Twist::Curl() -> get( 'https://www.example.com/api/restricted/connect', array(), $arrRequestHeaders );
+    $arrOut = json_decode( $jsonData, true );
     
-    if($arrOut['status'] == 'success'){
+    if( $arrOut['status'] === 'success' ) {
         $strAutToken = $arrOut['results']['auth_token'];
-    }else{
+    } else {
         echo $arrOut['error'];
     }
     
-    print_r($arrOut);
+    print_r( $arrOut );
     /**
      * 'status' => 'success',
      * 'format' => 'json',
@@ -212,15 +200,14 @@ Now you can start using the API with your auth token, you will need to pass the 
         'Auth-Token' => 'xxXXxxxXXxxxxXXxXxXXXXXXXXxxxXXXXXX',
     );
     
-    $jsonData = \Twist::Curl()->get('https://www.example.com/api/restricted/test',array(),$arrRequestHeaders);
-    $arrOut = json_decode($jsonData,true);
+    $jsonData = \Twist::Curl() -> get( 'https://www.example.com/api/restricted/test', array(), $arrRequestHeaders );
     
-    print_r($arrOut);
+    print_r( json_decode( $jsonData, true ) );
     /**
      * 'status' => 'success',
      * 'format' => 'json',
      * 'count' => 1,
-     * 'results' => array(1 => 'test')
+     * 'results' => array( 1 => 'test' )
      */
 ```
 
@@ -234,10 +221,9 @@ To determine if your auth token is still valid you can call the `authenticated` 
         'Auth-Token' => 'xxXXxxxXXxxxxXXxXxXXXXXXXXxxxXXXXXX',
     );
     
-    $jsonData = \Twist::Curl()->get('http://twocoastmedia.com/dev/api/user/authenticated',array(),$arrRequestHeaders);
-    $arrOut = json_decode($jsonData,true);
+    $jsonData = \Twist::Curl() -> get( 'http://twocoastmedia.com/dev/api/user/authenticated', array(), $arrRequestHeaders );
     
-    print_r($arrOut);
+    print_r( json_decode( $jsonData, true ) );
     /**
      * 'status' => 'success',
      * 'format' => 'json',
@@ -252,12 +238,12 @@ When creating your REST controller you have two choices for response, success or
 
 A successful response can be triggered as per below, the first param is the data to be returned, the second parameter indicates the number of results being returned and the third parameter is the HTTP response code that will be used. By default the response code is set to 200.
 ```php
-return $this->_response($arrResults,1,200);
+return $this -> _response( $arrResults, 1, 200 );
 ```
 
 An error response can be triggers as follows, the first parameters is the error message to return and the second is the HTTP response code that will be used.
 ```php
-return $this->_responseError('This is my error message',404);
+return $this -> _responseError( 'This is my error message', 404 );
 ```
 
 In the response `count` should be an indication of how may results have been returned (Default is 1) and `results` contains the data that is being returned.
