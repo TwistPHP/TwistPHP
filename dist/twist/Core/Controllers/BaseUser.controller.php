@@ -52,6 +52,8 @@ class BaseUser extends Base{
 		$this -> _replaceURI( 'POSTverify-account', 'POSTverifyaccount' );
 		$this -> _replaceURI( 'device-manager', 'devicemanager' );
 		$this -> _replaceURI( 'POSTdevice-manager', 'POSTdevicemanager' );
+
+		return true;
 	}
 
 	/**

@@ -374,9 +374,14 @@ class Database extends Base{
 				$strSQLData = file_get_contents($dirSQLFile);
 				$arrQueries = explode(';',$strSQLData);
 
+				$blAnyIssues = false;
 				foreach($arrQueries as $strQuery){
-					$blOut = $this->query($strQuery.';');
+					$blResponse = $this->query($strQuery.';');
+					if(!$blResponse){
+						$blAnyIssues = true;
+					}
 				}
+				$blOut = !$blAnyIssues;
 			}
 		}
 

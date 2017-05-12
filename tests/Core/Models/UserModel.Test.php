@@ -2,6 +2,8 @@
 
 class UserModel extends \PHPUnit_Framework_TestCase{
 
+	public static $intUserID = 0;
+
 	public function testCreate(){
 
 		$resUser = \Twist::User()->create();
@@ -11,7 +13,8 @@ class UserModel extends \PHPUnit_Framework_TestCase{
 		$resUser->email('travisci@unit-test-twistphp.com');
 		$resUser->password('X123Password');
 
-		$this -> assertEquals(1,$resUser->commit());
+		self::$intUserID = $resUser->commit();
+		$this -> assertTrue((self::$intUserID > 0));
 	}
 
 	public function testLogin(){
@@ -46,19 +49,19 @@ class UserModel extends \PHPUnit_Framework_TestCase{
 
 	public function testEdit(){
 
-		$resUser = \Twist::User()->get(1);
+		$resUser = \Twist::User()->get(self::$intUserID);
 		$resUser->surname('CI_2');
 
 		$this -> assertEquals(1,$resUser->commit());
 		unset($resUser);
 
-		$resUser = \Twist::User()->get(1);
+		$resUser = \Twist::User()->get(self::$intUserID);
 		$this -> assertEquals('CI_2',$resUser->surname());
 	}
 
 	public function testDisable(){
 
-		$resUser = \Twist::User()->get(1);
+		$resUser = \Twist::User()->get(self::$intUserID);
 		$resUser->disable();
 
 		$this -> assertEquals(1,$resUser->commit());
@@ -70,9 +73,9 @@ class UserModel extends \PHPUnit_Framework_TestCase{
 
 	public function testDelete(){
 
-		$resUser = \Twist::User()->get(1);
+		$resUser = \Twist::User()->get(self::$intUserID);
 		$this -> assertTrue($resUser->delete());
 
-		$this -> assertEquals(0,count(\Twist::User()->getData(1)));
+		$this -> assertEquals(0,count(\Twist::User()->getData(self::$intUserID)));
 	}
 }
