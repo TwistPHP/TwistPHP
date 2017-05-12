@@ -73,12 +73,12 @@
 	"twist/ajax": {
 		"all": {
 			"default": true,
-			"css": ["css/twistajax.min.css"],
+			"css": ["css/twistajax.css"],
 			"js": ["js/twistajax.js"]
 		},
 		"css": {
 			"default": false,
-			"css": ["css/twistajax.min.css"],
+			"css": ["css/twistajax.css"],
 			"js": []
 		},
 		"js": {

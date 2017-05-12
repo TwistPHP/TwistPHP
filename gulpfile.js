@@ -26,7 +26,7 @@ gulp.task( 'ajax-css',
 		return gulp.src( strTwistSource + 'ajax/scss/twistajax.scss' )
 				.pipe( sourcemaps.init() )
 				.pipe( sass( { errLogToConsole: true, outputStyle: 'compressed' } ) )
-				.pipe( rename( 'twistajax.min.css' ) )
+				//.pipe( rename( 'twistajax.min.css' ) )
 				.pipe( sourcemaps.write( './' ) )
 				.pipe( gulp.dest( strTwistDestination + 'ajax/css' ) );
 	}

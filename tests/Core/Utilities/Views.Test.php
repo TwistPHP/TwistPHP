@@ -39,9 +39,9 @@ class Views extends \PHPUnit_Framework_TestCase{
 
 		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax}");
 		$this->assertContains('<script', $strTagOutput);
-		$this->assertContains('twist/Core/Resources/twist/ajax/js/twistajax.min.js', $strTagOutput);
+		$this->assertContains('twist/Core/Resources/twist/ajax/js/twistajax.js', $strTagOutput);
 		$this->assertContains('<link', $strTagOutput);
-		$this->assertContains('twist/Core/Resources/twist/ajax/css/twistajax.min.css', $strTagOutput);
+		$this->assertContains('twist/Core/Resources/twist/ajax/css/twistajax.css', $strTagOutput);
 
 		//A resource an only be included once per page load when RESOURCE_INCLUDE_ONCE is enabled
 		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,js=true}");
@@ -52,21 +52,21 @@ class Views extends \PHPUnit_Framework_TestCase{
 
 		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,js=true}");
 		$this->assertContains('<script', $strTagOutput);
-		$this->assertContains('twistajax.min.js', $strTagOutput);
+		$this->assertContains('twistajax.js', $strTagOutput);
 
 		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,css=true}");
 		$this->assertContains('<link', $strTagOutput);
-		$this->assertContains('twistajax.min.css', $strTagOutput);
+		$this->assertContains('twistajax.css', $strTagOutput);
 
 		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,js,async=async}");
 		$this->assertContains('<script', $strTagOutput);
 		$this->assertContains('async', $strTagOutput);
-		$this->assertContains('twistajax.min.js', $strTagOutput);
+		$this->assertContains('twistajax.js', $strTagOutput);
 
 		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,js,async=defer}");
 		$this->assertContains('<script', $strTagOutput);
 		$this->assertContains('defer', $strTagOutput);
-		$this->assertContains('twistajax.min.js', $strTagOutput);
+		$this->assertContains('twistajax.js', $strTagOutput);
 
 		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,js=true,inline=true}");
 		$this->assertContains('<script', $strTagOutput);
