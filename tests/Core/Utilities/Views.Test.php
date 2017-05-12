@@ -80,7 +80,7 @@ class Views extends \PHPUnit_Framework_TestCase{
 		//Check the tag is being output
 		$strTagOutput = \Twist::View()->replace("{css:twist/Core/Resources/twist/ajax/css/twistajax.css}");
 		$this->assertContains('<link', $strTagOutput);
-		$this->assertContains('twist/Core/Resources/twist/ajax/css/twistajax.min.css', $strTagOutput);
+		$this->assertContains('twist/Core/Resources/twist/ajax/css/twistajax.css', $strTagOutput);
 		
 		//Create an override JS file
 		mkdir(sprintf('%s/Twist/Core/Resources/twist/ajax/css',TWIST_APP),0777,true);
