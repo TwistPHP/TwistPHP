@@ -27,59 +27,7 @@ use Twist\Classes\Error;
 
 /*
  * An REST API base controller (basic API Key auth) that can be used instead of Base when adding REST API support to your site. This controller should be used as an extension to a route controller class.
- *
- * Twist Base REST Controller
- * ==========================
- *
- * When creating the REST controllers you have the choice of extending one of two base controllers BaseREST or BaseRESTUser.
- *
- *  BaseREST - Authentication is achieved using the auth_key (API Key) and IP restrictions can be applied
- *  BaseRESTUser - Same as above with the extra security of requiring a valid user login using Twist Users++
- *
- *  ++Once logged in the use of an auth_token will allow you to continue to use the API until it expires or canceled
- *
- * API Keys and IP restrictions can be setup in the apikeys database table
- *
- * By default all authentication is done in the request headers, a setting in framework settings 'API_REQUEST_HEADER_AUTH' can be disabled,
- * this will allow the authentication to be done via GET/POST parameters
- *
- * The API can be locked down to only accept certain request methods, by default the API will only accept GET,POST requests. To allow
- * other types of requests to reach the controller i.e GET,POST,PUT,DELETE,HEAD,OPTIONS,CONNECT you can edit the following framework
- * setting 'API_ALLOWED_REQUEST_METHODS'
- *
- * The output format can be either JSON or XML, by default it will be JSON. by passing in the GET/POST parameter of ?format=xml you get
- * and XML response back from the system.
- *
- * By default a HTTP response code of 200 is good and anything else is an error. As these can be changed by the developer you can refer
- * to the 'status' field in the response which will either be 'success' or 'error'. An error response will have a field of 'message'
- * which will contain the error message.
- *
- * In the response 'count' should be an indication of how may results have been found, plans to add in pagination and offset
- * later will make this feature become more useful. 'results' will be the data that is returned.
- *
- *
- *
- * ===== Creating a REST Controller =====
- *
- * class MyAPI extends BaseREST{}
- *
- * -OR-
- *
- * class MyAPI extends BaseRESTUser{}
- *
- *
- *
- * ===== Returning data from a REST function =====
- *
- * return $this->_response($arrResults,2,200);      //Params: Result Data, Result Count, HTTP Response Code**
- *
- * -OR-
- *
- * return $this->_responseError('This is my error message',404);    //Params: Error Message, HTTP Response Code++
- *
- *
- *
- * ++The HTTP response code is reset but can be passed as a param if you want to customise them
+ * See twistphp.com/examples for a full guide on RESTful routing
  *
  * @package Twist\Core\Controllers
  */
@@ -115,7 +63,7 @@ class BaseREST extends Base{
         //Basic Auth is an API key, BaseRESTUser has a more advance auth
 	    self::$blRequestHeaderAuth = \Twist::framework()->setting('API_REQUEST_HEADER_AUTH');
 
-	    self::$srtApiKey = (self::$blRequestHeaderAuth) ? $_SERVER['HTTP_AUTH_KEY'] : $_REQUEST['auth_key'];
+	    self::$srtApiKey = (self::$blRequestHeaderAuth) ? $_SERVER['HTTP_AUTH_KEY'] : $_REQUEST[(array_key_exists('Auth-Key',$_REQUEST)) ? 'Auth-Key' : 'auth-key'];
 	    self::$arrKeyInfo = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'apikeys')->get(self::$srtApiKey,'key',true);
 
 	    if(count(self::$arrKeyInfo) == 0){

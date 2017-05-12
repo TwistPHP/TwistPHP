@@ -15,7 +15,7 @@ To make an alias of a method, allowing it to be accessed by another URI, you can
     
     class Aliases extends Base {
     
-        public function __construct() {
+        public function _baseCalls() {
             /*
              * ================================
              * In the construct method when the
