@@ -20,6 +20,135 @@
  * @link       https://twistphp.com
  */
 
+import {serialize} from '../../../../../node_modules/form-serialize';
+
+export default class twistajax {
+
+	constructor( URI ) {
+		this.URI = URI;
+		this.globalSuccessFunction = () => {};
+		this.globalFailureFunction = () => {};
+		this.timeout = 10000;
+		this.cache = false;
+		this.requests = 0;
+		this.debug = false;
+		this.loader = null;
+	}
+
+	get( data, success = () => {}, fail = () => {} ) {
+		return this.send( 'GET', data );
+	}
+
+	post( data, success = () => {}, fail = () => {} ) {
+		return this.send( 'POST', data );
+	}
+
+	send( data, success = () => {}, fail = () => {}, method = 'GET' ) {
+		return new Promise( ( resolve, reject ) => {
+			fetch( this.URI, {
+				method: method,
+				headers: myHeaders,
+				cache: this.cache ? 'default' : 'no-store'
+			} )
+				.then( response => response.json() )
+				.then( response => {
+					//DO THINGS
+					return response;
+				} )
+				.then( response => {
+					success.apply( response );
+				} )
+				.then( response => resolve( response ) )
+				.catch( e => {
+					fail.apply();
+					reject( e );
+				} );
+		} );	
+	}
+
+	/*
+	 * TODO: Major rewrite required, remove jQuery dependencies
+	 */
+	serializeJSON( jqoForm ) {
+		let objJSON = {},
+			arrFormElements = [];
+
+		jQuery.map( jqoForm.serializeArray(), ( arrElement, intIndex ) => {
+			arrFormElements.push( { name: arrElement.name, value: arrElement.value } );
+		} );
+
+		jqoForm.find( 'input[type="submit"][name][value], input[type="reset"][name][value], input[type="button"][name][value], button[name][value]' ).each( () => {
+			var jqoElement = $( this );
+			arrFormElements.push( {name: jqoElement.attr( 'name' ), value: jqoElement.val()} );
+		} );
+
+		let returnNameObject = ( strFullName, strNameSoFar, strName, mxdValue ) => {
+			let objOut = {},
+				arrNameMatches = strName.match( /^(\[([^\[]*)\])((\[[^\[]*\])*)$/i );
+
+			if( arrNameMatches ) {
+				var strThisKey = arrNameMatches[2];
+
+				if( isBlank( strThisKey ) ) {
+					var intKey = 1,
+						blKeyExists = true;
+
+										do {
+											var blKeyFree = true;
+											for( var intFormElement in arrFormElements ) {
+												if( contains( strNameSoFar + '[' + intKey + ']', arrFormElements[intFormElement].name ) ) {
+													intKey++;
+													blKeyFree = false;
+												}
+											}
+
+											if( blKeyFree ) {
+												var blKeyReplaced = false;
+												for( var intFormElement2 in arrFormElements ) {
+													if( !blKeyReplaced &&
+															arrFormElements[intFormElement2].name === strNameSoFar + '[]' &&
+															arrFormElements[intFormElement2].value === mxdValue ) {
+														arrFormElements[intFormElement2].name = strNameSoFar + '[' + intKey + ']';
+														blKeyReplaced = true;
+													}
+												}
+
+												blKeyExists = false;
+											}
+										} while( blKeyExists );
+											strThisKey = intKey;
+										}
+
+										if( arrNameMatches[3] ) {
+											objOut[strThisKey] = returnNameObject( strFullName, strNameSoFar + '[' + strThisKey + ']', arrNameMatches[3], mxdValue );
+										} else {
+											objOut[strThisKey] = mxdValue;
+										}
+									}
+									return objOut;
+								};
+
+								$.each( arrFormElements, ( intIndex, arrFormElement ) => {
+									let arrNameMatches = arrFormElement.name.match( /^([^\[]+)((\[[^\[]*\])+)$/i );
+									if( arrNameMatches ) {
+										let objThisName = {};
+											objThisName[arrNameMatches[1]] = returnNameObject( arrFormElement.name, arrNameMatches[1], arrNameMatches[2], arrFormElement.value );
+											objJSON = $.extend( true, objJSON, objThisName );
+										} else {
+											objJSON[arrFormElement.name] = arrFormElement.value;
+										}
+									}
+								);
+
+							return objJSON;
+						}
+}
+
+
+
+
+
+//OLD
 (
 	(
 		function( root, factory ) {
@@ -680,4 +809,4 @@
 			}
 		}
 	)
-);
+)
