@@ -90,19 +90,19 @@
 	"twist/cssreset": {
 		"standard": {
 			"default": true,
-			"css": ["css/twistcssreset.min.css"],
+			"css": ["css/twistcssreset.css"],
 			"js": []
 		}
 	},
 	"twist/debug": {
 		"standard": {
 			"default": true,
-			"css": ["css/twistdebug.min.css"],
-			"js": ["js/twistdebug.min.js"]
+			"css": ["css/twistdebug.css"],
+			"js": ["js/twistdebug.js"]
 		},
 		"css": {
 			"default": false,
-			"css": ["css/twistdebug.min.css"],
+			"css": ["css/twistdebug.css"],
 			"js": []
 		},
 		"js": {
@@ -115,7 +115,7 @@
 		"standard": {
 			"default": true,
 			"css": [],
-			"js": ["js/twistfileupload.min.js"]
+			"js": ["js/twistfileupload.js"]
 		},
 		"development": {
 			"default": false,
@@ -126,14 +126,14 @@
 	"twist/manager": {
 		"standard": {
 			"default": true,
-			"css": ["css/twistmanager.min.css"],
+			"css": ["css/twistmanager.css"],
 			"js": []
 		}
 	},
 	"twist/setup": {
 		"standard": {
 			"default": true,
-			"css": ["css/twistsetup.min.css"],
+			"css": ["css/twistsetup.css"],
 			"js": []
 		}
 	},
