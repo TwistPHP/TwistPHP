@@ -63,7 +63,7 @@ class User extends Base{
      * @return array|mixed
      */
     public function loggedInData($strKey = null){
-        return (is_object($this->current())) ? $this->current()->get($strKey) : null;
+        return $this->current()->get($strKey);
     }
 
     /**
@@ -89,7 +89,7 @@ class User extends Base{
     public function current(){
 
         $arrAuthData = Auth::current();
-        if(is_null($this->resCurrentUser) && $arrAuthData['status']){
+        if($this->resCurrentUser == null && $arrAuthData['status']){
             $this->resCurrentUser = $this->get($arrAuthData['user_id']);
         }
 
@@ -105,7 +105,7 @@ class User extends Base{
         return $arrAuthData['user_id'];
     }
 
-    /**
+    /**Level()
      * Get the current users user level
      * @return null|int
      */
@@ -128,7 +128,7 @@ class User extends Base{
             $strPassword = (array_key_exists('password',$_POST) && !is_null($_POST['password'])) ? $_POST['password'] : null;
         }
 
-        $blRememberMe = (is_null($blRememberMe)) ? ((array_key_exists('remember',$_POST) && $_POST['remember'] === '1') ? true : false) : $blRememberMe;
+        $blRememberMe = (is_null($blRememberMe)) ? ((array_key_exists('remember',$_POST) && $_POST['remember'] == '1') ? true : false) : $blRememberMe;
 
         return Auth::login($strEmailAddress,$strPassword,$blRememberMe);
     }
@@ -140,13 +140,11 @@ class User extends Base{
         return Auth::logout();
     }
 
-	/**
-	 * Get the pre-built, unbranded HTML registration form and return it as a string.
-	 * @param string $strLoginPage
-	 * @return string
-	 */
+    /**
+     * Get the pre-built, unbranded HTML registration form and return it as a string.
+     */
     public function getRegistrationForm($strLoginPage = ''){
-        return $this->viewExtension(($strLoginPage === '') ? 'registration_form' : sprintf('%s,%s','registration_form',$strLoginPage));
+        return $this->viewExtension(($strLoginPage == '') ? 'registration_form' : sprintf('%s,%s','registration_form',$strLoginPage));
     }
 
     /**
@@ -155,7 +153,7 @@ class User extends Base{
      * @return mixed
      */
     public function getLoginForm($strLoginPage = ''){
-        return $this->viewExtension(($strLoginPage === '') ? 'login_form' : sprintf('%s,%s','login_form',$strLoginPage));
+        return $this->viewExtension(($strLoginPage == '') ? 'login_form' : sprintf('%s,%s','login_form',$strLoginPage));
     }
 
     /**
@@ -164,7 +162,7 @@ class User extends Base{
      * @return mixed
      */
     public function getForgottenPasswordForm($strLoginPage = ''){
-        return $this->viewExtension(($strLoginPage === '') ? 'forgotten_password_form' : sprintf('%s,%s','forgotten_password_form',$strLoginPage));
+        return $this->viewExtension(($strLoginPage == '') ? 'forgotten_password_form' : sprintf('%s,%s','forgotten_password_form',$strLoginPage));
     }
 
     /**
@@ -173,7 +171,7 @@ class User extends Base{
      * @return mixed
      */
     public function getChangePasswordForm($strLoginPage = ''){
-        return $this->viewExtension(($strLoginPage === '') ? 'change_password_form' : sprintf('%s,%s','change_password_form',$strLoginPage));
+        return $this->viewExtension(($strLoginPage == '') ? 'change_password_form' : sprintf('%s,%s','change_password_form',$strLoginPage));
     }
 
     public function afterLoginRedirect(){
@@ -199,24 +197,17 @@ class User extends Base{
                 //$this->goToPage( sprintf('%s?change',$this->strLoginUrl), false );
                 $this->goToPage( sprintf('%s%s?change',\Twist::Route()->current('registered_uri'),$this->strLoginUrl), false );
             }
-        }elseif($objSession->data('user-temp_password') === '1' && !strstr($_SERVER['REQUEST_URI'],'?change')){
+        }elseif($objSession->data('user-temp_password') == '1' && !strstr($_SERVER['REQUEST_URI'],'?change')){
             //$this->goToPage( '?change', false );
             $this->goToPage( sprintf('%s%s?change',\Twist::Route()->current('registered_uri'),$this->strLoginUrl), false );
         }
     }
 
-	/**
-	 * @param null $strRedirectURL
-	 * @return mixed
-	 */
     public function setAfterLoginRedirect($strRedirectURL = null){
         $strRedirectURL = (is_null($strRedirectURL)) ? $_SERVER['REQUEST_URI'] : str_replace('//','/',$strRedirectURL);
         return \Twist::Session()->data('site-login_redirect',$strRedirectURL);
     }
 
-	/**
-	 * @return mixed
-	 */
     public function getAfterLoginRedirect(){
         return \Twist::Session()->data('site-login_redirect');
     }
@@ -227,7 +218,7 @@ class User extends Base{
 
     /**
      * Redirect the user to a relevant page when required
-     * @param string $strPageURI
+     * @param $strPageURI
      * @param bool $blReturnUserAfterLogin
      */
     protected function goToPage($strPageURI, $blReturnUserAfterLogin = false){
@@ -244,7 +235,7 @@ class User extends Base{
 
     /**
      * Get the user as an object
-     * @param integer $intUserID
+     * @param $intUserID
      * @return \Twist\Core\Models\User\User
      */
     public function get($intUserID){
@@ -261,7 +252,7 @@ class User extends Base{
 
     /**
      * Get an array of the users default information by User ID
-     * @param integer $intUserID
+     * @param $intUserID
      * @return array
      */
     public function getData($intUserID){
@@ -270,40 +261,40 @@ class User extends Base{
 
     /**
      * Get and array of the users default information by User Email
-     * @param string $strEmail
+     * @param $strEmail
      * @return array
      */
     public function getByEmail($strEmail){
-        return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->get($strEmail,'email',true);
+	    return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->get($strEmail,'email',true);
     }
 
     /**
      * Get user full details by User ID
-     * @param integer $intUserID
+     * @param $intUserID
      * @return array
      */
     public function getDetailsByID($intUserID){
 
-        $arrUserDetails = array();
+	    $arrUserDetails = array();
 
-        $resResult = \Twist::Database()->query("SELECT `ud`.`data`,`udf`.`slug` FROM `%suser_data` AS `ud` JOIN `%suser_data_fields` AS `udf` ON `ud`.`field_id` = `udf`.`id` WHERE `ud`.`user_id` = %d",
-            TWIST_DATABASE_TABLE_PREFIX,
-            TWIST_DATABASE_TABLE_PREFIX,
-            $intUserID
-        );
+	    $resResult = \Twist::Database()->query("SELECT `ud`.`data`,`udf`.`slug` FROM `%suser_data` AS `ud` JOIN `%suser_data_fields` AS `udf` ON `ud`.`field_id` = `udf`.`id` WHERE `ud`.`user_id` = %d",
+		    TWIST_DATABASE_TABLE_PREFIX,
+		    TWIST_DATABASE_TABLE_PREFIX,
+		    $intUserID
+	    );
 
-        if($resResult->status() && $resResult->numberRows()){
-            foreach($resResult->rows() as $arrEachItem){
-                $arrUserDetails[$arrEachItem['slug']] = $arrEachItem['data'];
-            }
-        }
+	    if($resResult->status() && $resResult->numberRows()){
+		    foreach($resResult->rows() as $arrEachItem){
+			    $arrUserDetails[$arrEachItem['slug']] = $arrEachItem['data'];
+		    }
+	    }
 
         return $arrUserDetails;
     }
 
     /**
      * Get and array of the users default information by User ID
-     * @param integer $intUserID
+     * @param $intUserID
      * @return array
      */
     public function getAll($strOrderBy = 'id'){
@@ -312,7 +303,7 @@ class User extends Base{
 
     /**
      * Get and array of the users default information by User ID
-     * @param integer $intUserID
+     * @param $intUserID
      * @return array
      */
     public function getAllByLevel($intLevelID){
@@ -321,7 +312,7 @@ class User extends Base{
 
     /**
      * Get information about any given user level ID
-     * @param integer $intLevelID
+     * @param $intLevelID
      * @return array
      */
     public function getLevel($intLevelID){
@@ -330,16 +321,12 @@ class User extends Base{
 
     /**
      * Get all the levels in the system
-     * @return array
+     * @return int
      */
     public function getLevels(){
-        return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'user_levels')->find();
+	    return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'user_levels')->find();
     }
 
-	/**
-	 * @param string $strVerificationCode
-	 * @return bool
-	 */
     public function verifyEmail($strVerificationCode){
 
         $blOut = false;
@@ -350,9 +337,9 @@ class User extends Base{
             $arrParts = explode('|',$strVerifyData);
 
             //Check that the email address is semi valid and code is long enough
-            if(strstr($arrParts[0],'@') && strstr($arrParts[0],'.') && strlen($arrParts[1]) === 16){
+            if(strstr($arrParts[0],'@') && strstr($arrParts[0],'.') && strlen($arrParts[1]) == 16){
 
-                $resResult = \Twist::Database()->query("UPDATE `%s`.`%susers`
+	            $resResult = \Twist::Database()->query("UPDATE `%s`.`%susers`
 												SET `verified` = '1',
 													`verification_code` = ''
 												WHERE `email` = '%s'
@@ -367,8 +354,6 @@ class User extends Base{
                 if($resResult->status() && $resResult->affectedRows()){
                     $blOut = true;
                     \Twist::Session()->data('site-login_message','Your account has been verified');
-                }else{
-                    \Twist::Session()->data('site-login_error_message','Failed to verify your account, invalid verification code');
                 }
             }
         }
@@ -376,20 +361,12 @@ class User extends Base{
         return $blOut;
     }
 
-	/**
-	 * @param string $strData
-	 * @return string
-	 */
     protected function base64url_encode($strData) {
         $strBase64 = base64_encode($strData);
         $strBase64URL = strtr($strBase64, '+/=', '-_$');
         return $strBase64URL;
     }
 
-	/**
-	 * @param string $strBase64URL
-	 * @return string
-	 */
     protected function base64url_decode($strBase64URL) {
         $strBase64 = strtr($strBase64URL, '-_$', '+/=');
         $strData = base64_decode($strBase64);
@@ -399,8 +376,8 @@ class User extends Base{
     /**
      * Update the users password to a new password. THis is the non secure method for when you don't know the users original password.
      * Default use would be for a forgotten password system etc.
-     * @param integer $intUserID
-     * @param string $strNewPassword
+     * @param $intUserID
+     * @param $strNewPassword
      * @return bool
      */
     public function updatePassword($intUserID,$strNewPassword){
@@ -429,10 +406,9 @@ class User extends Base{
     /**
      * Change password, this used when you have both the users old and new password, very useful to ensure the user who is changing
      * the password is the valid account holder.
-     * @param integer $intUserID
-     * @param string $strNewPassword
-     * @param string $strCurrentPassword
-     * @param bool $blRedirectOnFail
+     * @param $intUserID
+     * @param $strNewPassword
+     * @param $strCurrentPassword
      * @return bool
      */
     public function changePassword($intUserID,$strNewPassword,$strCurrentPassword,$blRedirectOnFail=true){
@@ -443,7 +419,7 @@ class User extends Base{
         if($strNewPassword === $strCurrentPassword){
             \Twist::Session()->data('site-error_message','Your new password must be different from your current password');
         }else{
-            if($resUser->comparePasswordHash(sha1($strCurrentPassword))){
+            if($resUser->comparePasswordHash($strCurrentPassword)){
                 $arrOut = $resUser->password($strNewPassword);
 
                 if($arrOut['status']){
@@ -467,9 +443,6 @@ class User extends Base{
         return $blPasswordChanged;
     }
 
-	/**
-	 * @param string $strViewLocation
-	 */
     public function setCustomTemplateLocation($strViewLocation){
 
         if(!file_exists($strViewLocation)){
@@ -482,10 +455,6 @@ class User extends Base{
         $this->strViewLocation = $strViewLocation;
     }
 
-	/**
-	 * @param string $strReference
-	 * @return string
-	 */
     public function viewExtension($strReference){
 
         $strData = '';
@@ -500,7 +469,7 @@ class User extends Base{
         }
 
         //If the user is on a temp password show the change password form
-        if(\Twist::Session()->data('user-temp_password') === '1' && $strReference === 'login_form'){
+        if(\Twist::Session()->data('user-temp_password') == '1' && $strReference == 'login_form'){
             $strReference = 'change_password_form';
         }
 
@@ -523,7 +492,7 @@ class User extends Base{
             case'login_form':
 
                 if($this->loggedIn()){
-                    //\Twist::redirect(($strLoginPage === $_SERVER['REQUEST_URI']) ? './' : $strLoginPage);
+                    //\Twist::redirect(($strLoginPage == $_SERVER['REQUEST_URI']) ? './' : $strLoginPage);
                     \Twist::redirect('./');
                 }else{
 
@@ -557,7 +526,7 @@ class User extends Base{
                 );
                 \Twist::Session()->data('site-error_message',null);
 
-                if(\Twist::Session()->data('user-temp_password') === '0' || is_null(\Twist::Session()->data('user-temp_password'))){
+                if(\Twist::Session()->data('user-temp_password') == '0'){
                     $strData = $this->resView->build( $this->strViewLocation.'change-password.tpl', $arrTags );
                 }else{
                     $strData = $this->resView->build( $this->strViewLocation.'change-password-initial.tpl', $arrTags );
@@ -598,9 +567,9 @@ class User extends Base{
                 $strDeviceList = '';
                 foreach($arrDevices as $arrEachDevice){
 
-                    $arrEachDevice['current'] = ($arrCurrentDevices['id'] === $arrEachDevice['id']) ? true : false;
+                    $arrEachDevice['current'] = ($arrCurrentDevices['id'] == $arrEachDevice['id']) ? true : false;
 
-                    if(array_key_exists('edit-device',$_GET) && $arrEachDevice['device'] === $_GET['edit-device']){
+                    if(array_key_exists('edit-device',$_GET) && $arrEachDevice['device'] == $_GET['edit-device']){
                         $strDeviceList .= $this->resView->build($this->strViewLocation.'device-each-edit.tpl',$arrEachDevice);
                     }else{
                         $strDeviceList .= $this->resView->build($this->strViewLocation.'device-each.tpl',$arrEachDevice);
@@ -624,14 +593,14 @@ class User extends Base{
                 break;
 
             case'level_description':
-                $intUsersLevel = $this->loggedInData('level');
+				$intUsersLevel = $this->loggedInData('level');
 
-                if($intUsersLevel === 0){
-                    $strData = 'Root';
-                }else{
-                    $arrLevelData = $this->getLevel($intUsersLevel);
-                    $strData = $arrLevelData['description'];
-                }
+				if($intUsersLevel == 0){
+					$strData = 'Root';
+				}else{
+					$arrLevelData = $this->getLevel($intUsersLevel);
+					$strData = $arrLevelData['description'];
+				}
                 break;
 
             case'email':
@@ -648,6 +617,14 @@ class User extends Base{
 
             case'surname':
                 $strData = $this->loggedInData('surname');
+                break;
+
+            case'last_login':
+                $strData = $this->loggedInData('last_login');
+                break;
+
+            case'last_login_ip':
+                $strData = $this->loggedInData('last_login_ip');
                 break;
         }
 

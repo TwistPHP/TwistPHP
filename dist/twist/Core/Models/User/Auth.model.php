@@ -85,9 +85,8 @@ class Auth{
 
     /**
      * Log the user in and generate an active session (Stores session data into the browser)
-     * @param string $strEmail
-     * @param string $strPassword
-     * @param bool $blRememberMeCookie
+     * @param $strEmail
+     * @param $strPassword
      * @return array
      */
     public static function login($strEmail,$strPassword,$blRememberMeCookie = false){
@@ -129,8 +128,8 @@ class Auth{
 
     /**
      * Validate a users credentials without logging the user into the system
-     * @param string $strEmail
-     * @param string $strPassword
+     * @param $strEmail
+     * @param $strPassword
      * @return array
      */
     public static function validate($strEmail,$strPassword){
@@ -138,52 +137,70 @@ class Auth{
         //If the user is still not valid then check email and password
         if(!is_null($strEmail) && !is_null($strPassword)){
 
-            $arrUserData = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->get($strEmail,'email',true);
+	        $resUser = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->get($strEmail,'email');
 
-            if(count($arrUserData)){
-                if($arrUserData['password'] == sha1($strPassword)){
-                    if($arrUserData['enabled'] == '1'){
-                        if(\Twist::framework()->setting('USER_EMAIL_VERIFICATION') == false || (\Twist::framework()->setting('USER_EMAIL_VERIFICATION') && $arrUserData['verified'] == '1')){
+	        if( !is_null( $resUser ) ) {
+		        $arrUserData = $resUser->values();
+		        if( array_key_exists( 'id', $arrUserData ) ) {
+			        $blValidPassword = false;
 
-                            //We don't want to store the users hashed password in the auth array
-                            unset($arrUserData['password']);
+			        if( password_verify( $strPassword, $arrUserData['password'] ) ) {
+				        $blValidPassword = true;
+			        } else {
+				        if( $arrUserData['password'] === sha1( $strPassword ) ) {
+					        $blValidPassword = true;
+						//TODO: Make the password_hash params changable in the settings table
+					        $strPasswordHash = password_hash( $strPassword, PASSWORD_BCRYPT, array( 'cost' => 12, 'salt' => mcrypt_create_iv( 22, MCRYPT_DEV_URANDOM ) ) );
+					        $resUser->set( 'password', $strPasswordHash );
+					        $resUser->commit();
+				        }
+			        }
 
-                            //But we do want to save the email address (don't return it in the SQL as it is more secure not to return both email and password in at together)
-                            $arrUserData['email'] = $strEmail;
+			        if( $blValidPassword ) {
+				        if( $arrUserData['enabled'] == '1' ) {
+					        if( \Twist::framework()->setting( 'USER_EMAIL_VERIFICATION' ) == false || ( \Twist::framework()->setting( 'USER_EMAIL_VERIFICATION' ) && $arrUserData['verified'] == '1' ) ) {
 
-                            self::$arrCurrentSession['status'] = true;
-                            self::$arrCurrentSession['user_id'] = $arrUserData['id'];
-                            self::$arrCurrentSession['user_data'] = $arrUserData;
+						        //We don't want to store the users hashed password in the auth array
+						        unset( $arrUserData['password'] );
 
-                            if(\Twist::framework()->setting('USER_PASSWORD_CHANGE') == true && $arrUserData['temp_password'] == '1'){
-                                //The user is on a temporary password and a change is required by the system
-                                self::$arrCurrentSession['issue'] = 'temporary';
-                                self::$arrCurrentSession['message'] = 'You are using a temporary password, please change your password';
-                                self::$arrCurrentSession['diagnosis'] = 'The account is running on a temporary password and needs to be reset';
-                            }
-                        }else{
-                            \Twist::Session()->data('user-email',$strEmail);
-                            self::$arrCurrentSession['user_data'] = array('email' => $strEmail);
+						        //But we do want to save the email address (don't return it in the SQL as it is more secure not to return both email and password in at together)
+						        $arrUserData['email'] = $strEmail;
 
-                            self::$arrCurrentSession['issue'] = 'verify';
-                            self::$arrCurrentSession['message'] = 'You have not verified your email address';
-                            self::$arrCurrentSession['diagnosis'] = 'The account has not been verified';
-                        }
-                    }else{
-                        self::$arrCurrentSession['issue'] = 'disabled';
-                        self::$arrCurrentSession['message'] = 'Your account has been disabled';
-                        self::$arrCurrentSession['diagnosis'] = 'The account has been set to disabled';
-                    }
-                }else{
-                    self::$arrCurrentSession['issue'] = 'password';
-                    self::$arrCurrentSession['message'] = 'Invalid login credentials, please try again';
-                    self::$arrCurrentSession['diagnosis'] = 'Password does not match that of the requested account';
-                }
-            }else{
-                self::$arrCurrentSession['issue'] = 'email';
-                self::$arrCurrentSession['message'] = 'Invalid login credentials, please try again';
-                self::$arrCurrentSession['diagnosis'] = 'Email address not registered to a user';
-            }
+						        self::$arrCurrentSession['status'] = true;
+						        self::$arrCurrentSession['user_id'] = $arrUserData['id'];
+						        self::$arrCurrentSession['user_data'] = $arrUserData;
+
+						        if( \Twist::framework()->setting( 'USER_PASSWORD_CHANGE' ) == true && $arrUserData['temp_password'] == '1' ) {
+							        //The user is on a temporary password and a change is required by the system
+							        self::$arrCurrentSession['issue'] = 'temporary';
+							        self::$arrCurrentSession['message'] = 'You are using a temporary password, please change your password';
+							        self::$arrCurrentSession['diagnosis'] = 'The account is running on a temporary password and needs to be reset';
+						        }
+					        } else {
+						        self::$arrCurrentSession['issue'] = 'verify';
+						        self::$arrCurrentSession['message'] = 'You have not verified your email address';
+						        self::$arrCurrentSession['diagnosis'] = 'The account has not been verified';
+					        }
+				        } else {
+					        self::$arrCurrentSession['issue'] = 'disabled';
+					        self::$arrCurrentSession['message'] = 'Your account has been disabled';
+					        self::$arrCurrentSession['diagnosis'] = 'The account has been set to disabled';
+				        }
+			        } else {
+				        self::$arrCurrentSession['issue'] = 'password';
+				        self::$arrCurrentSession['message'] = 'Invalid login credentials, please try again';
+				        self::$arrCurrentSession['diagnosis'] = 'Password does not match that of the requested account';
+			        }
+		        } else {
+			        self::$arrCurrentSession['issue'] = 'email';
+			        self::$arrCurrentSession['message'] = 'Invalid login credentials, please try again';
+			        self::$arrCurrentSession['diagnosis'] = 'Email address not registered to a user';
+		        }
+	        } else {
+		        self::$arrCurrentSession['issue'] = 'email';
+		        self::$arrCurrentSession['message'] = 'Invalid login credentials, please try again';
+		        self::$arrCurrentSession['diagnosis'] = 'Email address not registered to a user';
+	        }
         }
 
         return self::$arrCurrentSession;
@@ -191,7 +208,7 @@ class Auth{
 
     /**
      * Log the user out of the system
-     * @return bool
+     * @return array
      */
     public static function logout(){
 
