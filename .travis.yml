@@ -1,11 +1,10 @@
 language: php
 
 php:
-  - 5.5
-    env GULP=ON
   - 5.6
     env COVERALLS=ON
-  - 7.0
+    env GULP=ON
+  - 7
   - nightly
 
 services:
@@ -20,10 +19,10 @@ mysql:
   encoding: utf8
 
 before_install:
-   - mysql -V
-   - mysql -e "CREATE DATABASE IF NOT EXISTS travis_ci_twist_test;"
-   - mysql -e "SHOW DATABASES"
-   - if [ "$GULP" = 'ON' ]; then npm install; fi;
+  - mysql -V
+  - mysql -e "CREATE DATABASE IF NOT EXISTS travis_ci_twist_test;"
+  - mysql -e "SHOW DATABASES"
+  - if [ "$GULP" = 'ON' ]; then nvm install 6.10&&npm install; fi;
 
 install:
   - if [ "$COVERALLS" = 'ON' ]; then composer require satooshi/php-coveralls '~1.0'; fi;
@@ -31,17 +30,18 @@ install:
   - php ./tests/install.php
 
 before_script:
-   - mkdir -p ./build/logs
-   - mysql -e "USE travis_ci_twist_test; SHOW TABLES;"
-   - sed -i 's/Twist::ServeRoutes(false);/echo "TwistPHP Framework Loaded!\n\n";/g' ./tests/index.php
+  - mkdir -p ./build/logs
+  - mysql -e "USE travis_ci_twist_test; SHOW TABLES;"
+  - sed -i 's/Twist::ServeRoutes(false);/echo "TwistPHP Framework Loaded!\n\n";/g' ./tests/index.php
+  - if ["$GULP" = 'ON' ]; then npm install -g gulp; fi;
 
 script:
-   - vendor/bin/phpunit
-   - if [ "$GULP" = 'ON' ]; then gulp test; fi;
+  - if [ "$GULP" = 'ON' ]; then gulp test; fi;
+  - vendor/bin/phpunit
 
 notifications:
   on_success: never
   on_failure: always
 
 after_success:
-   - if [ "$COVERALLS" = 'ON' ]; then ./vendor/bin/coveralls -v; fi;
+  - if [ "$COVERALLS" = 'ON' ]; then ./vendor/bin/coveralls -v; fi;
