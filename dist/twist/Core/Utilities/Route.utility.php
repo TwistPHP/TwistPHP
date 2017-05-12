@@ -23,7 +23,6 @@
  */
 
 namespace Twist\Core\Utilities;
-use \Twist\Core\Controllers\BaseAJAX;
 use \Twist\Core\Models\Route\Meta;
 use \Twist\Classes\Instance;
 
@@ -452,6 +451,18 @@ class Route extends Base{
 	public function ajax($strURI,$mxdController){
 		$arrController = (is_array($mxdController)) ? $mxdController : array($mxdController);
 		$this->addRoute($strURI,'ajax',$arrController,false,false,array());
+	}
+
+	/**
+	 * Add a REST API that will be called upon a any request (HTTP METHOD) to the given URI.
+	 * The URI can be made dynamic by adding a '%' symbol at the end.
+	 *
+	 * @param string $strURI
+	 * @param null $mxdController
+	 */
+	public function rest($strURI,$mxdController){
+		$arrController = (is_array($mxdController)) ? $mxdController : array($mxdController);
+		$this->addRoute($strURI,'rest',$arrController,false,false,array());
 	}
 
 	/**
@@ -1183,65 +1194,73 @@ class Route extends Base{
 			if(in_array("_extended", get_class_methods($objController))){
 
 				//Register the route and route data
-				$objController->_extended($this,$arrRoute);
+				$mxdResponse = $objController->_extended($this,$arrRoute);
 
-				$arrAliases = $objController->_getAliases();
-				$arrReplacements = $objController->_getReplacements();
+				//Anything other than true or null from _extended() / _baseCalls() will be returned to the user as the response in the else below
+				if($mxdResponse === true || $mxdResponse === null){
 
-				$blCaseSensitive = \Twist::framework()->setting('ROUTE_CASE_SENSITIVE');
+					$arrAliases = $objController->_getAliases();
+					$arrReplacements = $objController->_getReplacements();
 
-				$arrControllerFunctions = array();
-				foreach(get_class_methods($objController) as $strFunctionName){
-					if(array_key_exists($strFunctionName, $arrReplacements)){
-						$arrControllerFunctions[($blCaseSensitive) ? $arrReplacements[$strFunctionName] : strtolower($arrReplacements[$strFunctionName])] = $strFunctionName;
-					}else{
-						$arrControllerFunctions[($blCaseSensitive) ? $strFunctionName : strtolower($strFunctionName)] = $strFunctionName;
+					$blCaseSensitive = \Twist::framework()->setting('ROUTE_CASE_SENSITIVE');
+
+					$arrControllerFunctions = array();
+					foreach(get_class_methods($objController) as $strFunctionName){
+						if(array_key_exists($strFunctionName, $arrReplacements)){
+							$arrControllerFunctions[($blCaseSensitive) ? $arrReplacements[$strFunctionName] : strtolower($arrReplacements[$strFunctionName])] = $strFunctionName;
+						}else{
+							$arrControllerFunctions[($blCaseSensitive) ? $strFunctionName : strtolower($strFunctionName)] = $strFunctionName;
+						}
 					}
-				}
 
-				//Correct the case of the function to match
-				$strControllerFunction = ($blCaseSensitive) ? $strControllerFunction : strtolower($strControllerFunction);
+					//Correct the case of the function to match
+					$strControllerFunction = ($blCaseSensitive) ? $strControllerFunction : strtolower($strControllerFunction);
 
-				//Lower the case of all aliases if we are in case insensitive mode
-				if(!$blCaseSensitive){
-					$arrAliases = array_change_key_case($arrAliases, CASE_LOWER);
-				}
+					//Lower the case of all aliases if we are in case insensitive mode
+					if(!$blCaseSensitive){
+						$arrAliases = array_change_key_case($arrAliases, CASE_LOWER);
+					}
 
-				//Update the request if an alias has been registered
-				if(array_key_exists($strControllerFunction,$arrAliases)){
-					$strControllerFunction = ($blCaseSensitive) ? $arrAliases[$strControllerFunction] : strtolower($arrAliases[$strControllerFunction]);
-				}
+					//Update the request if an alias has been registered
+					if(array_key_exists($strControllerFunction,$arrAliases)){
+						$strControllerFunction = ($blCaseSensitive) ? $arrAliases[$strControllerFunction] : strtolower($arrAliases[$strControllerFunction]);
+					}
 
-				//Create a method function key as well in the correct case
-				$strRequestMethodFunction = (substr($strControllerFunction,0,1) == '_') ? sprintf('_%s%s', strtoupper($_SERVER['REQUEST_METHOD']), ltrim($strControllerFunction,'_')) : sprintf('%s%s', strtoupper($_SERVER['REQUEST_METHOD']), $strControllerFunction);
+					//Create a method function key as well in the correct case
+					$strRequestMethodFunction = (substr($strControllerFunction,0,1) == '_') ? sprintf('_%s%s', strtoupper($_SERVER['REQUEST_METHOD']), ltrim($strControllerFunction,'_')) : sprintf('%s%s', strtoupper($_SERVER['REQUEST_METHOD']), $strControllerFunction);
 
-				//Lower the case of all aliases if we are in case insensitive mode
-				if(!$blCaseSensitive){
-					$strRequestMethodFunction = strtolower($strRequestMethodFunction);
-				}
-
-				if(array_key_exists($strRequestMethodFunction, $arrControllerFunctions)){
-
-					$strControllerFunction = $arrControllerFunctions[$strRequestMethodFunction];
-					$strOut = $objController->$strControllerFunction();
-
-				}elseif(array_key_exists($strControllerFunction, $arrControllerFunctions)){
-
-					$strControllerFunction = $arrControllerFunctions[$strControllerFunction];
-					$strOut = $objController->$strControllerFunction();
-				}else{
-
-					//Check for method fallback before calling the standard fallback
-					$strRequestMethodFunction = sprintf('_%sfallback', strtoupper($_SERVER['REQUEST_METHOD']));
-					$strControllerFunction = '_fallback';
+					//Lower the case of all aliases if we are in case insensitive mode
+					if(!$blCaseSensitive){
+						$strRequestMethodFunction = strtolower($strRequestMethodFunction);
+					}
 
 					if(array_key_exists($strRequestMethodFunction, $arrControllerFunctions)){
+
 						$strControllerFunction = $arrControllerFunctions[$strRequestMethodFunction];
 						$strOut = $objController->$strControllerFunction();
-					}else{
+
+					}elseif(array_key_exists($strControllerFunction, $arrControllerFunctions)){
+
+						$strControllerFunction = $arrControllerFunctions[$strControllerFunction];
 						$strOut = $objController->$strControllerFunction();
+					}else{
+
+						//Check for method fallback before calling the standard fallback
+						$strRequestMethodFunction = sprintf('_%sfallback', strtoupper($_SERVER['REQUEST_METHOD']));
+						$strControllerFunction = '_fallback';
+
+						if(array_key_exists($strRequestMethodFunction, $arrControllerFunctions)){
+							$strControllerFunction = $arrControllerFunctions[$strRequestMethodFunction];
+							$strOut = $objController->$strControllerFunction();
+						}else{
+							$strOut = $objController->$strControllerFunction();
+						}
 					}
+				}else{
+					//Return the response from the base call/extend
+					$strOut = $mxdResponse;
 				}
+
 			}else{
 				throw new \Exception(sprintf("Controller '%s' must extend BaseController", $strControllerClass));
 			}
@@ -1356,7 +1375,16 @@ class Route extends Base{
 
 					\Twist::recordEvent('Route processed');
 
-					if($arrRoute['type'] == 'ajax'){
+					if($arrRoute['type'] == 'rest'){
+
+						header( 'Cache-Control: no-cache, must-revalidate' );
+						header( 'Expires: Wed, 24 Sep 1986 14:20:00 GMT' );
+						header( sprintf( 'Content-length: %d', function_exists('mb_strlen') ? mb_strlen( $arrTags['response'] ) : strlen( $arrTags['response'] ) ) );
+
+						echo $arrTags['response'];
+
+					}elseif($arrRoute['type'] == 'ajax'){
+
 						header( 'Cache-Control: no-cache, must-revalidate' );
 						header( 'Expires: Wed, 24 Sep 1986 14:20:00 GMT' );
 						header( 'Content-type: application/json' );
@@ -1395,7 +1423,7 @@ class Route extends Base{
 						}
 
 						//Output the Debug window to the screen when in debug mode (Do not output when its an ajax request)
-						if($this->blDebugMode && !(TWIST_AJAX_REQUEST || $arrRoute['type'] == 'ajax')){
+						if($this->blDebugMode && !(TWIST_AJAX_REQUEST || $arrRoute['type'] == 'ajax' || $arrRoute['type'] == 'rest')){
 							if(strstr($strPageOut, '</body>')) {
 								$strPageOut = str_replace( '</body>', \Twist::framework()->debug()->window( $arrRoute ) . '</body>', $strPageOut );
 							}else{
@@ -1475,12 +1503,26 @@ class Route extends Base{
 						$arrTags['response'] = $this->processController($arrRoute);
 					}catch(\Exception $resException){
 						//Response with the relevant error message
-						$resControllerAJAX = new BaseAJAX();
+						$resControllerAJAX = new \Twist\Core\Controllers\BaseAJAX();
 
 						$resControllerAJAX->_ajaxFail();
 						$resControllerAJAX->_ajaxMessage($resException->getMessage());
 
 						$arrTags['response'] = $resControllerAJAX->_ajaxRespond();
+					}
+				}
+				break;
+			case'rest':
+				//Check the HTTP method is allowed in this scenario
+				if(!in_array($arrRoute['request_method'],explode(',',\Twist::framework()->setting('API_ALLOWED_REQUEST_METHODS')))){
+					\Twist::respond(403,'Unsupported HTTP protocol used to request this URI',$blExitOnComplete);
+				}else{
+					try{
+						$arrTags['response'] = $this->processController($arrRoute);
+					}catch(\Exception $resException){
+						//Response with the relevant error message
+						$resControllerREST = new \Twist\Core\Controllers\BaseREST();
+						$arrTags['response'] = $resControllerREST->_respondError($resException->getMessage(),500);
 					}
 				}
 				break;

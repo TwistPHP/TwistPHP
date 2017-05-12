@@ -4,12 +4,16 @@ class Routes extends \PHPUnit_Framework_TestCase{
 
 	private function simulateRequest($strURI,$strRequestMethod = 'GET',$arrParameterData = array()){
 
+		//Reset the global vars before test
+		$_REQUEST = $_GET = $_POST = array();
+
 		//Set the parameter data
 		if($strRequestMethod == 'GET'){
 			$_GET = $arrParameterData;
 		}elseif($strRequestMethod == 'POST'){
 			$_POST = $arrParameterData;
 		}
+		$_REQUEST = $arrParameterData;
 
 		//Capture and test the resulting output
 		$_SERVER['REQUEST_URI'] = $strURI;
@@ -23,9 +27,52 @@ class Routes extends \PHPUnit_Framework_TestCase{
 		return $strPageContent;
 	}
 
-	public function testViewRequest(){
+	private function simulateAPIRequest($strURI,$strAPIKey='',$strEmail='',$strPassword='',$strToken='',$strRequestMethod='GET',$arrParameterData = array()){
 
-		file_put_contents(TWIST_APP_VIEWS.'test.tpl','test');
+		//Reset the global vars before test
+		$_REQUEST = $_GET = $_POST = array();
+		unset($_SERVER['HTTP_AUTH_KEY']);
+		unset($_SERVER['HTTP_AUTH_EMAIL']);
+		unset($_SERVER['HTTP_AUTH_PASSWORD']);
+		unset($_SERVER['HTTP_AUTH_TOKEN']);
+
+		//Make sure no user account is logged in
+		\Twist\Core\Models\User\Auth::logout();
+
+		//Set the parameter data
+		if($strRequestMethod == 'GET'){
+			$_GET = $arrParameterData;
+		}elseif($strRequestMethod == 'POST'){
+			$_POST = $arrParameterData;
+		}
+		$_REQUEST = $arrParameterData;
+
+		//Capture and test the resulting output
+		$_SERVER['REQUEST_URI'] = $strURI;
+		$_SERVER['REQUEST_METHOD'] = $strRequestMethod;
+		$_SERVER['HTTP_AUTH_KEY'] = $strAPIKey;
+
+		if($strEmail != ''){
+			$_SERVER['HTTP_AUTH_EMAIL'] = $strEmail;
+		}
+
+		if($strPassword != ''){
+			$_SERVER['HTTP_AUTH_PASSWORD'] = $strPassword;
+		}
+
+		if($strToken != ''){
+			$_SERVER['HTTP_AUTH_TOKEN'] = $strToken;
+		}
+
+		ob_start();
+		\Twist::ServeRoutes(false);
+		$strPageContent = ob_get_contents();
+		ob_end_clean();
+
+		return $strPageContent;
+	}
+
+	public function testViewRequest(){
 
 		\Twist::Route()->view('/test','test.tpl');
 		$this -> assertEquals('test',$this->simulateRequest('/test'));
@@ -37,17 +84,78 @@ class Routes extends \PHPUnit_Framework_TestCase{
 		$this -> assertEquals('test',$this->simulateRequest('/test-function'));
 	}
 
-	public function testGetRequest(){
+	public function testControllerRequest(){
 
-		file_put_contents(TWIST_APP_VIEWS.'test-get.tpl','{get:param}');
+		\Twist::Route()->controller('/test-standard-controller/%','TwistStandard');
+		$this -> assertEquals('test',$this->simulateRequest('/test-standard-controller/test'));
+	}
+
+	public function testRestControllerRequest(){
+
+		\Twist::Route()->controller('/test-openapi-controller/%','TwistOpenAPI');
+		\Twist::Route()->controller('/test-basicapi-controller/%','TwistBasicAPI');
+		\Twist::Route()->controller('/test-userapi-controller/%','TwistUserAPI');
+
+		$strAPIKey = 'ABC123XYZ42';
+
+		//Insert test API key
+		$resRecord = \Twist::Database()->records('twist_apikeys')->create();
+		$resRecord->set('key',$strAPIKey);
+		$resRecord->set('enabled','1');
+		$resRecord->set('created',date('Y-m-d H:i:s'));
+		$resRecord->commit();
+
+		//Create test rest user
+		$resUser = \Twist::User()->create();
+		$resUser->firstname('Travis');
+		$resUser->surname('CI');
+		$resUser->email('travisci3@unit-test-twistphp.com');
+		$resUser->password('X123Password');
+		$resUser->commit();
+
+        //Test open API with no auth
+        $arrRESTResponse = json_decode($this->simulateAPIRequest('/test-openapi-controller/test'),true);
+        $this -> assertEquals('success',$arrRESTResponse['status']);
+
+		//Test with no API key
+		$arrRESTResponse = json_decode($this->simulateAPIRequest('/test-basicapi-controller/test'),true);
+		$this -> assertEquals('error',$arrRESTResponse['status']);
+
+		//Test with API key
+		$arrRESTResponse = json_decode($this->simulateAPIRequest('/test-basicapi-controller/test',$strAPIKey),true);
+		$this -> assertEquals('success',$arrRESTResponse['status']);
+
+		//Test with API key (XML format)
+		$strResponseXML = $this->simulateAPIRequest('/test-basicapi-controller/test',$strAPIKey,'','','','GET',array('format' => 'xml'));
+		$this->assertContains('<status>success</status>', $strResponseXML);
+
+		//Test before login
+		$arrRESTResponse = json_decode($this->simulateAPIRequest('/test-userapi-controller/test',$strAPIKey,'','','','GET',array('format' => 'json')),true);
+		$this -> assertEquals('error',$arrRESTResponse['status']);
+
+		//Test with user
+		$arrRESTResponse = json_decode($this->simulateAPIRequest('/test-userapi-controller/connect',$strAPIKey,'travisci3@unit-test-twistphp.com','X123Password','','GET',array('format' => 'json')),true);
+		$this -> assertEquals('success',$arrRESTResponse['status']);
+		$this -> assertTrue(array_key_exists('auth_token',$arrRESTResponse['results']));
+
+		$strTokenKey = $arrRESTResponse['results']['auth_token'];
+
+		$arrRESTResponse = json_decode($this->simulateAPIRequest('/test-userapi-controller/authenticated',$strAPIKey,'','',$strTokenKey,'GET',array('format' => 'json')),true);
+		$this -> assertEquals('success',$arrRESTResponse['status']);
+
+		//Test after login
+		$arrRESTResponse = json_decode($this->simulateAPIRequest('/test-userapi-controller/test',$strAPIKey,'','',$strTokenKey,'GET',array('format' => 'json')),true);
+		$this -> assertEquals('success',$arrRESTResponse['status']);
+		$this -> assertEquals('test',$arrRESTResponse['results'][1]);
+	}
+
+	public function testGetRequest(){
 
 		\Twist::Route()->getView('/test-method','test-get.tpl');
 		$this -> assertEquals('42',$this->simulateRequest('/test-method?param=42','GET',array('param' => 42)));
 	}
 
 	public function testPostRequest(){
-
-		file_put_contents(TWIST_APP_VIEWS.'test-post.tpl','{post:param}');
 
 		\Twist::Route()->postView('/test-method','test-post.tpl');
 		$this -> assertEquals('42',$this->simulateRequest('/test-method','POST',array('param' => 42)));
@@ -71,7 +179,7 @@ class Routes extends \PHPUnit_Framework_TestCase{
 
 	public function test404Page(){
 		$strPageData = $this->simulateRequest('/random/page/uri');
-		$this -> assertTrue((strstr($strPageData,'404 Not Found') !== false));
+		$this->assertContains('404 Not Found', $strPageData);
 	}
 
 	public function testCaseInsensitiveRouting(){
@@ -99,9 +207,9 @@ class Routes extends \PHPUnit_Framework_TestCase{
 		$this -> assertEquals('42',$this->simulateRequest('/TEST/case/page'));
 
 		$strPageData1 = $this->simulateRequest('/test/case/page');
-		$this -> assertTrue((strstr($strPageData1,'404 Not Found') !== false));
+		$this->assertContains('404 Not Found', $strPageData1);
 
 		$strPageData2 = $this->simulateRequest('/TEST/CASE/PAGE');
-		$this -> assertTrue((strstr($strPageData2,'404 Not Found') !== false));
+		$this->assertContains('404 Not Found', $strPageData2);
 	}
 }
