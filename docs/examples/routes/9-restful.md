@@ -65,7 +65,7 @@ Register your REST controller by adding the following lines to your main `index.
     
     /*
      * ================================
-     * Register the 'BasicAPI' controller
+     * Register the BasicAPI controller
      * for all requests that start with
      * the URI '/' (which should be the
      * base for the site)
