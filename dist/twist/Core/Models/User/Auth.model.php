@@ -157,8 +157,8 @@ class Auth{
 			        }
 
 			        if( $blValidPassword ) {
-				        if( $arrUserData['enabled'] == '1' ) {
-					        if( \Twist::framework()->setting( 'USER_EMAIL_VERIFICATION' ) == false || ( \Twist::framework()->setting( 'USER_EMAIL_VERIFICATION' ) && $arrUserData['verified'] == '1' ) ) {
+				        if( $arrUserData['enabled'] === '1' ) {
+					        if( \Twist::framework()->setting( 'USER_EMAIL_VERIFICATION' ) === false || ( \Twist::framework()->setting( 'USER_EMAIL_VERIFICATION' ) && $arrUserData['verified'] === '1' ) ) {
 
 						        //We don't want to store the users hashed password in the auth array
 						        unset( $arrUserData['password'] );
@@ -170,7 +170,7 @@ class Auth{
 						        self::$arrCurrentSession['user_id'] = $arrUserData['id'];
 						        self::$arrCurrentSession['user_data'] = $arrUserData;
 
-						        if( \Twist::framework()->setting( 'USER_PASSWORD_CHANGE' ) == true && $arrUserData['temp_password'] == '1' ) {
+						        if( \Twist::framework()->setting( 'USER_PASSWORD_CHANGE' ) === true && $arrUserData['temp_password'] === '1' ) {
 							        //The user is on a temporary password and a change is required by the system
 							        self::$arrCurrentSession['issue'] = 'temporary';
 							        self::$arrCurrentSession['message'] = 'You are using a temporary password, please change your password';
