@@ -10,10 +10,9 @@ var gulp = require( 'gulp' ),
 		strTwistSource = './src/Core/Resources/twist/',
 		strTwistDestination = './dist/twist/Core/Resources/twist/';
 
-gulp.task( 'ajax-js', ['ajax-test'],
+gulp.task( 'ajax-js',
 	function() {
 		return gulp.src( strTwistSource + 'ajax/js/twistajax.js' )
-				//.pipe( concat( 'twistajax.min.js' ) )
 				.pipe( babel( {
 					presets: ['es2015']
 				} ) )
@@ -47,8 +46,6 @@ gulp.task( 'cssreset',
 gulp.task( 'debug-js',
 	function() {
 		return gulp.src( strTwistSource + 'debug/js/twistdebug.js' )
-				.pipe( jshint() )
-				.pipe( jshint.reporter( 'default' ) )
 				.pipe( concat( 'twistdebug.min.js' ) )
 				.pipe( uglify( { preserveComments: 'license' } ) )
 				.pipe( gulp.dest( strTwistDestination + 'debug/js' ) );
@@ -69,8 +66,6 @@ gulp.task( 'debug-css',
 gulp.task( 'fileupload-js',
 	function() {
 		return gulp.src( strTwistSource + 'fileupload/js/twistfileupload.js' )
-				.pipe( jshint() )
-				.pipe( jshint.reporter( 'default' ) )
 				.pipe( concat( 'twistfileupload.js' ) )
 				.pipe( gulp.dest( strTwistDestination + 'fileupload/js' ) )
 				.pipe( rename( 'twistfileupload.min.js' ) )
@@ -93,8 +88,6 @@ gulp.task( 'fileupload-css',
 gulp.task( 'manager-js',
 	function() {
 		return gulp.src( strTwistSource + 'manager/js/twistmanager.js' )
-				.pipe( jshint() )
-				.pipe( jshint.reporter( 'default' ) )
 				.pipe( concat( 'twistmanager.min.js' ) )
 				.pipe( uglify( { preserveComments: 'license' } ) )
 				.pipe( gulp.dest( strTwistDestination + 'manager/js' ) );
@@ -115,8 +108,6 @@ gulp.task( 'manager-css',
 gulp.task( 'setup-js',
 	function() {
 		return gulp.src( strTwistSource + 'setup/js/twistsetup.js' )
-				.pipe( jshint() )
-				.pipe( jshint.reporter( 'default' ) )
 				.pipe( concat( 'twistsetup.min.js' ) )
 				.pipe( uglify( { preserveComments: 'license' } ) )
 				.pipe( gulp.dest( strTwistDestination + 'setup/js' ) );
