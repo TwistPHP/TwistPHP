@@ -324,10 +324,7 @@ class Database extends Base{
 		}
 
 		$this->resRecords->__setTable($strTable);
-
-		if(!is_null($strDatabase)){
-			$this->resRecords->__setDatabase($strDatabase);
-		}
+		$this->resRecords->__setDatabase((is_null($strDatabase)) ? $this->arrConnectionDetails['database'] : $strDatabase);
 
 		return $this->resRecords;
 	}
@@ -345,10 +342,7 @@ class Database extends Base{
 		}
 
 		$this->resTables->__setTable($strTable);
-
-		if(!is_null($strDatabase)){
-			$this->resTables->__setDatabase($strDatabase);
-		}
+		$this->resRecords->__setDatabase((is_null($strDatabase)) ? $this->arrConnectionDetails['database'] : $strDatabase);
 
 		return $this->resTables;
 	}
