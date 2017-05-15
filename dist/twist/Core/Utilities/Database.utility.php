@@ -370,6 +370,12 @@ class Database extends Base{
 
 				$blOut = \Twist::Command()->execute($strCommand);
 			}else{
+
+				if(!is_null($strDatabaseName)){
+					//Set the database for an inport
+					$this->resLibrary->selectDatabase($strDatabaseName);
+				}
+
 				//Run the import using the query function. May want to do some sanitation here?
 				$strSQLData = file_get_contents($dirSQLFile);
 				$arrQueries = explode(';',$strSQLData);
@@ -381,7 +387,13 @@ class Database extends Base{
 						$blAnyIssues = true;
 					}
 				}
+
 				$blOut = !$blAnyIssues;
+
+				if(!is_null($strDatabaseName)){
+					//Reset the database after the import
+					$this->resLibrary->selectDatabase($this->strDatabaseName);
+				}
 			}
 		}
 
