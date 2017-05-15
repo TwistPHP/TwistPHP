@@ -368,7 +368,8 @@ class Database extends Base{
 					$dirSQLFile
 				);
 
-				$blOut = \Twist::Command()->execute($strCommand);
+				$arrResult = \Twist::Command()->execute($strCommand);
+				$blOut = $arrResult['status'];
 			}else{
 
 				if(!is_null($strDatabaseName)){
