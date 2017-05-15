@@ -36,6 +36,7 @@ class Database extends Base{
 	protected $resResult = null;
 	protected $strConnectionKey = null;
 	protected $blConnectionAttempt = false;
+	protected $arrConnectionDetails = array();
 	protected $strDatabaseName = null;
 	protected $blNoDatabase = false;
 	protected $blDebugMode = false;
@@ -86,24 +87,39 @@ class Database extends Base{
 			if(!is_null($strHost) || !is_null($strUsername) || !is_null($strPassword) || !is_null($strDatabaseName)){
 				if( !( !is_null($strHost) && !is_null($strUsername) && !is_null($strPassword) && !is_null($strDatabaseName) ) ){
 					throw new \Exception('Missing parameters passed into database connect');
+				}else{
+					//Store the connection details here, if custom details where used this will allow for reconnection if required
+					$this->arrConnectionDetails = array(
+						'host' => $strHost,
+						'username' => $strUsername,
+						'password' => $strPassword,
+						'database' => $strDatabaseName,
+						'protocol' => $strProtocol
+					);
 				}
 			}else{
 				$this->checkSettings(true);
-				$strHost = TWIST_DATABASE_HOST;
-				$strUsername = TWIST_DATABASE_USERNAME;
-				$strPassword = TWIST_DATABASE_PASSWORD;
-				$strDatabaseName = TWIST_DATABASE_NAME;
+
+				if(count($this->arrConnectionDetails) == 0){
+					$this->arrConnectionDetails = array(
+						'host' => TWIST_DATABASE_HOST,
+						'username' => TWIST_DATABASE_USERNAME,
+						'password' => TWIST_DATABASE_PASSWORD,
+						'database' => TWIST_DATABASE_NAME,
+						'protocol' => TWIST_DATABASE_PROTOCOL
+					);
+				}
 			}
 
 			$this->resLibrary = new $strLibraryClass();
-			$this->resLibrary->connect($strHost,$strUsername,$strPassword,$strDatabaseName);
+			$this->resLibrary->connect($this->arrConnectionDetails['host'],$this->arrConnectionDetails['username'],$this->arrConnectionDetails['password'],$this->arrConnectionDetails['database']);
 
 			//Set the parameter to say that the database has already been connected
 			$this->blConnectionAttempt = true;
 
 			if($this->connected()){
-				$this->strDatabaseName = $strDatabaseName;
-				$this->resLibrary->selectDatabase($strDatabaseName);
+				$this->strDatabaseName = $this->arrConnectionDetails['database'];
+				$this->resLibrary->selectDatabase($this->strDatabaseName);
 				$this->resLibrary->setCharset('UTF8');
 				$this->autoCommit(true);
 			}
