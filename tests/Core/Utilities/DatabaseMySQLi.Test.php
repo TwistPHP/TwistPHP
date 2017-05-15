@@ -115,6 +115,18 @@ class DatabaseMySQLi extends \PHPUnit_Framework_TestCase{
 		$this->assertEquals($intResult,count($arrResult));
 	}
 
+	public function testIncrementDecrement(){
+
+		$resNewRecord = \Twist::Database()->records('settings')->get('key','EMAIL_SMTP_PORT');
+		$intOldValue = $resNewRecord->get('default');
+
+		$intNewValue = $resNewRecord->increment('default');
+		$this->assertEquals($intOldValue+1,$intNewValue);
+
+		$intNewValue = $resNewRecord->decrement('default');
+		$this->assertEquals($intOldValue,$intNewValue);
+	}
+
 	public function testCreateAlterTable(){
 
 		$resNewTable = \Twist::Database()->table('test_table')->create();

@@ -181,42 +181,6 @@
 		}
 
 		/**
-		 * Increment the value of a field by 1, setting the fourth parameter will increment by a custom number. The new value of the incremented field si returned.
-		 * @param string|array $mxdValue Value(s) to filter by
-		 * @param string $strField Field to be filtered
-		 * @param string $strIncrementField Field to be incremented
-		 * @param int $intIncrementStep Number to increment the field by
-		 * @return null Value of the field after increment
-		 */
-		public function increment($mxdValue,$strField = 'id',$strIncrementField,$intIncrementStep = 1){
-
-			$intOut = null;
-			
-			\Twist::Database()->query(sprintf("UPDATE `%s`.`%s` SET `%s` = `%s` + %d %s",
-				\Twist::Database()->escapeString($this->strDatabase),
-				\Twist::Database()->escapeString($this->strTable),
-				\Twist::Database()->escapeString($strIncrementField),
-				\Twist::Database()->escapeString($strIncrementField),
-				\Twist::Database()->escapeString($intIncrementStep),
-				$this->buildWhereClause($mxdValue,$strField)
-			));
-
-			$resResult = \Twist::Database()->query(sprintf("SELECT `%s` FROM `%s`.`%s`%s",
-				\Twist::Database()->escapeString($strIncrementField),
-				\Twist::Database()->escapeString($this->strDatabase),
-				\Twist::Database()->escapeString($this->strTable),
-				$this->buildWhereClause($mxdValue,$strField)
-			));
-
-			if($resResult->status() && $resResult->numberRows()){
-				$arrRecord = $resResult->row();
-				$intOut = $arrRecord[$strIncrementField];
-			}
-
-			return $intOut;
-		}
-
-		/**
 		 * Get/Search data in the database, leaving all the parameters blank will return all records form the database. Set the parameters accordingly if you need to filter, order or limit.
 		 * If the filter value contains a '%' it will be filtered as a LIKE, if the value contains an array it will be imploded and filtered as an IN otherwise filtering will be done as an EQUALS.
 		 * @param null|string|array $mxdValue Value(s) to filter by

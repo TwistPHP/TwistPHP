@@ -155,6 +155,32 @@
 		}
 
 		/**
+		 * Increment the value of a field by 1 or by the provided increment step
+		 * @param string $strField
+		 * @param int $intIncrementStep Value to increase the field by
+		 * @return int New value of the field
+		 */
+		public function increment($strField,$intIncrementStep = 1){
+			$intValue = $this->get($strField);
+			$intNewValue = $intValue+$intIncrementStep;
+			$this->set($strField,$intNewValue);
+			return $intNewValue;
+		}
+
+		/**
+		 * Decrement the value of a field by 1 or by the provided increment step
+		 * @param string $strField
+		 * @param int $intIncrementStep Value to decrease the field by
+		 * @return null New value of the field
+		 */
+		public function decrement($strField,$intIncrementStep = 1){
+			$intValue = $this->get($strField);
+			$intNewValue = $intValue-$intIncrementStep;
+			$this->set($strField,$intValue-$intIncrementStep);
+			return $intNewValue;
+		}
+
+		/**
 		 * Commit the updated record to the database table, setting the second parameter true - adds as new row (default: false). False is returned if the query fails, a successful insert returns insertID, a successful update returns numAffectedRows or true if numAffectedRows is 0.
 		 * @param bool $blInsert
 		 * @return bool|int
