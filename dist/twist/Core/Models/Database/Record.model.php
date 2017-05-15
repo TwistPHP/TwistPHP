@@ -157,12 +157,12 @@
 		/**
 		 * Increment the value of a field by 1 or by the provided increment step
 		 * @param string $strField
-		 * @param int $intIncrementStep Value to increase the field by
+		 * @param int $intStep Value to increase the field by
 		 * @return int New value of the field
 		 */
-		public function increment($strField,$intIncrementStep = 1){
+		public function increment($strField,$intStep = 1){
 			$intValue = $this->get($strField);
-			$intNewValue = $intValue+$intIncrementStep;
+			$intNewValue = $intValue+$intStep;
 			$this->set($strField,$intNewValue);
 			return $intNewValue;
 		}
@@ -170,12 +170,12 @@
 		/**
 		 * Decrement the value of a field by 1 or by the provided increment step
 		 * @param string $strField
-		 * @param int $intIncrementStep Value to decrease the field by
+		 * @param int $intStep Value to decrease the field by
 		 * @return null New value of the field
 		 */
-		public function decrement($strField,$intIncrementStep = 1){
+		public function decrement($strField,$intStep = 1){
 			$intValue = $this->get($strField);
-			$intNewValue = $intValue-$intIncrementStep;
+			$intNewValue = $intValue-$intStep;
 			$this->set($strField,$intValue-$intIncrementStep);
 			return $intNewValue;
 		}
