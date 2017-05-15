@@ -117,7 +117,7 @@ class DatabaseMySQLi extends \PHPUnit_Framework_TestCase{
 
 	public function testIncrementDecrement(){
 
-		$resNewRecord = \Twist::Database()->records('settings')->get('key','EMAIL_SMTP_PORT');
+		$resNewRecord = \Twist::Database()->records('twist_settings')->get('key','EMAIL_SMTP_PORT');
 		$intOldValue = $resNewRecord->get('default');
 
 		$intNewValue = $resNewRecord->increment('default');
