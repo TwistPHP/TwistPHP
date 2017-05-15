@@ -96,8 +96,14 @@ class DatabaseMySQLi extends \PHPUnit_Framework_TestCase{
 		$blResult = \Twist::Database()->importSQL(TWIST_APP.'/Data/import.sql',TWIST_DATABASE_NAME);
 		$this->assertTrue($blResult);
 
-		$resRecord = \Twist::Database()->records('twist_settings')->get('SITE_NAME_TEST','key');
+		$resRecord = \Twist::Database()->records('twist_settings')->get('SITE_AUTHOR','key',true);
 		$this->assertEquals('import-test',$resRecord['value']);
+	}
+
+	public function testSetDatabase(){
+
+		$blResult = \Twist::Database()->setDatabase('something-blah');
+		$this->assertTrue(!$blResult);
 	}
 
 	public function testFindCount(){

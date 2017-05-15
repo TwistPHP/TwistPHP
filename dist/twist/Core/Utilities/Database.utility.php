@@ -118,8 +118,7 @@ class Database extends Base{
 			$this->blConnectionAttempt = true;
 
 			if($this->connected()){
-				$this->strDatabaseName = $this->arrConnectionDetails['database'];
-				$this->resLibrary->selectDatabase($this->strDatabaseName);
+				$this->setDatabase($this->arrConnectionDetails['database']);
 				$this->resLibrary->setCharset('UTF8');
 				$this->autoCommit(true);
 			}
@@ -224,6 +223,23 @@ class Database extends Base{
 		}
 
 		return $blMultibyteSupport;
+	}
+
+	/**
+	 * Select the default database for this connection to be using, all further queries will then be run on the newly selected database
+	 * @param string $strDatabase Name of the database to be selected
+	 * @return bool True indicates a successful database switch
+	 */
+	public function setDatabase($strDatabase){
+
+		if($this->resLibrary->selectDatabase($strDatabase)){
+
+			$this->arrConnectionDetails['database'] = $strDatabase;
+			$this->strDatabaseName = $strDatabase;
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
