@@ -58,9 +58,9 @@
 		public static function version($strVersionPart = null){
 
 			$arrVersion = array(
-				'major' => 3,
+				'major' => 4,
 				'minor' => 0,
-				'patch' => 5,
+				'patch' => 0,
 				'pre-release' => ''//pre-release can be set to 'dev'
 			);
 
