@@ -24,35 +24,13 @@
 
 namespace Twist\Core\Models\Email;
 
-class ProtocolSMTP{
-
-	protected $resConnection = null;
-	protected $strMessageLog = '';
-	protected $strLastResponse = '';
-	protected $strErrorMessage = '';
-	protected $intErrorNo = 0;
-	protected $blConnected = false;
-	protected $intTimeout = 90;
-	protected $strBody = '';
-	protected $blUseFromParameter = false;
-
-	public function setTimeout($intTimeout = 90){
-		$this->intTimeout = (is_null($intTimeout)) ? 90 : $intTimeout;
-	}
-
-	public function getMessageLog(){
-		return $this->strMessageLog;
-	}
-
-	public function getLastMessage(){
-		return $this->strLastResponse;
-	}
+class ProtocolSMTP extends BaseProtocol{
 
 	/**
 	 * Open a new FTP connection
 	 * @param string $strHost
 	 * @param integer $intPort
-	 * @throws RuntimeException
+	 * @return boolean
 	 */
 	public function connect($strHost,$intPort = 25){
 
@@ -107,15 +85,6 @@ class ProtocolSMTP{
 		return true;
 	}
 
-	protected function setError($intErrorNo, $strErrorMessage){
-		$this->intErrorNo = $intErrorNo;
-		$this->strErrorMessage = $strErrorMessage;
-	}
-
-	public function connected(){
-		return $this->blConnected;
-	}
-
 	/**
 	 * Disconnect the current session (connection)
 	 */
@@ -162,10 +131,6 @@ class ProtocolSMTP{
 		return true;
 	}
 
-	public function useFromParam(){
-		//Ignored for SMTP sending
-	}
-
 	public function from($strFromAddress){
 
 		$arrResponse = $this->request(sprintf('MAIL FROM: %s',$strFromAddress));
@@ -185,20 +150,6 @@ class ProtocolSMTP{
 			return false;
 		}
 
-		return true;
-	}
-
-	/**
-	 * Null function, this is just to match the native controller
-	 * @param $strSubject
-	 * @return bool
-	 */
-	public function subject($strSubject){
-		return true;
-	}
-
-	public function body($strBody){
-		$this->strBody = $strBody;
 		return true;
 	}
 
@@ -267,6 +218,4 @@ class ProtocolSMTP{
 
 		return $arrResponse;
 	}
-
-
 }

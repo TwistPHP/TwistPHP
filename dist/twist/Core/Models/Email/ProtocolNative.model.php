@@ -24,58 +24,12 @@
 
 	namespace Twist\Core\Models\Email;
 
-	class ProtocolNative{
+	class ProtocolNative extends BaseProtocol{
 
-		protected $resConnection = null;
-		protected $strLastMessage = '';
 		protected $blConnected = true;
-
-		protected $strTo = null;
-		protected $strFrom = null;
-		protected $strSubject = null;
-		protected $strBody = null;
-		protected $blUseFromParameter = false;
-
-		public function setTimeout($intTimeout = 90){ //TODO: $intTimeout not used
-			return true;
-		}
-
-		public function getLastMessage(){ return ''; }
-
-		public function connect($strHost,$intPort = 25){ //TODO: $strHost and $intPort not used
-			return true;
-		}
-
-		public function connected(){ return $this->blConnected; }
-
-		public function disconnect(){}
-
-		public function login($strEmailAddress,$strPassword){ //TODO: $strEmailAddress and $strPassword not used
-			return true;
-		}
 
 		public function useFromParam($blStatus = true){
 			$this->blUseFromParameter = $blStatus;
-		}
-
-		public function from($strFromAddress){
-			$this->strFrom = $strFromAddress;
-			return true;
-		}
-
-		public function to($strToAddress){
-			$this->strTo = $strToAddress;
-			return true;
-		}
-
-		public function subject($strSubject){
-			$this->strSubject = $strSubject;
-			return true;
-		}
-
-		public function body($strToAddress){
-			$this->strBody = $strToAddress;
-			return true;
 		}
 
 		public function send($strEmailSource){
