@@ -27,7 +27,10 @@ namespace Twist\Core\Models\Email;
 class ProtocolSMTP{
 
 	protected $resConnection = null;
-	protected $strLastMessage = '';
+	protected $strMessageLog = '';
+	protected $strErrorMessage = '';
+	protected $intErrorNo = 0;
+	protected $blConnected = false;
 	protected $intTimeout = 90;
 	protected $strBody = '';
 	protected $blUseFromParameter = false;
@@ -37,7 +40,7 @@ class ProtocolSMTP{
 	}
 
 	public function getLastMessage(){
-		return $this->strLastMessage;
+		return $this->strMessageLog;
 	}
 
 	/**
@@ -48,27 +51,57 @@ class ProtocolSMTP{
 	 */
 	public function connect($strHost,$intPort = 25){
 
-		/**
-		 * May be a valid way to specify the IP address of the server when on a server with multiple IP addresses
-		 */
-		//$strInterfaceIP = '192.168.1.100'
-		//$this->resConnection = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-		//socket_bind($this->resConnection, $strInterfaceIP);
-		//socket_connect($this->resConnection, $strHost, $intPort);
+		$arrContextOptions = array();
 
-		$this->resConnection = fsockopen($strHost, $intPort);
+		$intErrorNo = 0;
+		$strErrorMessage = '';
 
-		stream_set_blocking($this->resConnection, true);
-		stream_set_timeout($this->resConnection, $this->intTimeout);
+		if(in_array($intPort,array(465,587)) && !strstr($strHost,'ssl://')){
+			$strHost = 'ssl://'.$strHost;
+		}
 
-		if($this->communicate() !== 220){
+		if(function_exists('stream_socket_client')){
+
+			$cxtStreamSocket = stream_context_create($arrContextOptions);
+
+			$this->resConnection = stream_socket_client(
+				sprintf('%s:%d',$strHost,$intPort),
+				$intErrorNo,
+				$strErrorMessage,
+				$this->intTimeout,
+				STREAM_CLIENT_CONNECT,
+				$cxtStreamSocket
+			);
+
+		}else{
+
+			$this->resConnection = fsockopen($strHost, $intPort,$intErrorNo,$strErrorMessage,$this->intTimeout);
+			stream_set_blocking($this->resConnection, true);
+			stream_set_timeout($this->resConnection, $this->intTimeout,0);
+		}
+
+		if($intErrorNo != 0 || !is_resource($this->resConnection)){
+			$this->setError($intErrorNo,$strErrorMessage);
 			return false;
 		}
 
+		$arrResponse = $this->communicate();
+		if($arrResponse['code'] !== 220){
+			return false;
+		}
+
+		$this->blConnected = true;
 		return true;
 	}
 
-	public function connected(){ return $this->blConnected; }
+	protected function setError($intErrorNo, $strErrorMessage){
+		$this->intErrorNo = $intErrorNo;
+		$this->strErrorMessage = $strErrorMessage;
+	}
+
+	public function connected(){
+		return $this->blConnected;
+	}
 
 	/**
 	 * Disconnect the current session (connection)
@@ -84,13 +117,27 @@ class ProtocolSMTP{
 
 		list($strLocalPart,$strEmailHost) = explode('@',$strEmailAddress);
 
-		if($this->communicate(sprintf('EHLO %s',$strEmailHost)) === 250){
-			if($this->communicate(sprintf('AUTH LOGIN')) === 334){
-				return ($this->communicate(base64_encode($strEmailAddress)) === 334 && $this->communicate(base64_encode($strPassword)) === 235);
-			}
+		$arrResponse = $this->communicate(sprintf('EHLO %s',$strEmailHost));
+		if($arrResponse['code'] !== 250){
+			return false;
 		}
 
-		return false;
+		$arrResponse = $this->communicate('AUTH LOGIN');
+		if($arrResponse['code'] !== 334){
+			return false;
+		}
+
+		$arrResponse = $this->communicate(base64_encode($strEmailAddress));
+		if($arrResponse['code'] !== 334){
+			return false;
+		}
+
+		$arrResponse = $this->communicate(base64_encode($strPassword));
+		if($arrResponse['code'] !== 235){
+			return false;
+		}
+
+		return true;
 	}
 
 	public function useFromParam(){
@@ -98,13 +145,30 @@ class ProtocolSMTP{
 	}
 
 	public function from($strFromAddress){
-		return $this->communicate(sprintf('MAIL FROM: %s',$strFromAddress)) === 250;
+
+		$arrResponse = $this->communicate(sprintf('MAIL FROM: %s',$strFromAddress));
+		if($arrResponse['code'] !== 250){
+			return false;
+		}
+
+		return true;
 	}
 
 	public function to($strToAddress){
-		return $this->communicate(sprintf('RCPT TO: %s',$strToAddress)) === 250;
+
+		$arrResponse = $this->communicate(sprintf('RCPT TO: %s',$strToAddress));
+		if($arrResponse['code'] !== 250){
+			return false;
+		}
+
+		return true;
 	}
 
+	/**
+	 * Null function, this is just to match the native controller
+	 * @param $strSubject
+	 * @return bool
+	 */
 	public function subject($strSubject){
 		return true;
 	}
@@ -115,43 +179,66 @@ class ProtocolSMTP{
 	}
 
 	public function send($strEmailSource){
-		if($this->communicate('DATA') === 354){
-			return $this->communicate(sprintf("%s%s.",$strEmailSource,$this->strBody)) === 250;
+
+		$arrResponse = $this->communicate('DATA');
+		if($arrResponse['code'] !== 354){
+			return false;
 		}
+
+		$arrResponse = $this->communicate(sprintf("%s%s.",$strEmailSource,$this->strBody));
+		if($arrResponse['code'] !== 250){
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
 	 * Send and read data from the FTP connection, this function is used to send and receive all comms with the FTP server.
 	 * @param null $strRequestString
-	 * @return int
+	 * @return array
 	 */
 	protected function communicate($strRequestString = null){
 
-		$intResponseCode = 0;
-		$this->strLastMessage = '';
+		$intStartTime = time();
+		$arrResponse = array(
+			'data' => '',
+			'code' => 0
+		);
 
-		//echo '> '.$strRequestString.'<br>';
-
-		//Post the request data if required, otherwise get the response data only
+		//PUT the request data if required, otherwise get the response data only
 		if(!is_null($strRequestString)){
+			$this->strMessageLog .= "> ".$strRequestString."\n";
 			fputs($this->resConnection, $strRequestString."\r\n");
 		}
 
-		while(true){
+		while (is_resource($this->resConnection) && !feof($this->resConnection)){
+
 			$mxdLine = fgets($this->resConnection, 1024);
-			$this->strLastMessage .= $mxdLine;
+			$arrResponse['data'] .= $mxdLine;
+			$this->strMessageLog .= $arrResponse['data'];
 
 			if(preg_match('#^([0-9]{3})\s#',$mxdLine,$arrMatches)){
-				$intResponseCode = intval($arrMatches[0]);
+				$arrResponse['code'] = intval($arrMatches[0]);
+				break;
+			}
+
+			// Timed-out? Log and break
+			$arrMetaInfo = stream_get_meta_data($this->resConnection);
+			if(array_key_exists('timed_out',$arrMetaInfo)){
+				$this->setError(0,'Request timeout');
+				break;
+			}
+
+			if(time() - $intStartTime > $this->intTimeout){
+				$this->setError(0,'Request timeout - Hard time limit reached');
 				break;
 			}
 		}
 
 		//Clean the message string
-		$this->strLastMessage = trim($this->strLastMessage);
+		$this->strMessageLog = trim($this->strMessageLog);
 
-		//echo $this->strLastMessage.'<br>';
-
-		return $intResponseCode;
+		return $arrResponse;
 	}
 }
