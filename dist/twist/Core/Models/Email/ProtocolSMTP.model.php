@@ -208,7 +208,7 @@ class ProtocolSMTP extends BaseProtocol{
 			}
 
 			//Check for a hard timeout to prevent endless loops
-			if(time() - $intStartTime > $this->intTimeout){
+			if((time() - $intStartTime) > $this->intTimeout){
 				$this->setError(0,'Request timeout - Hard time limit reached');
 				break;
 			}
