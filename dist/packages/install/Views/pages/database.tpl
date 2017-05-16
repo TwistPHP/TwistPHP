@@ -1,4 +1,4 @@
-<form class="inline foldable" action="settings" method="post">
+<form class="inline foldable" action="../../../../index.php" method="post">
     <h2>Database Settings</h2>
     <p>Set up your database connection settings here. Alternatively, you can use TwistPHP without a database at the cost of limiting what features are available.</p>
     {data:error_message}
