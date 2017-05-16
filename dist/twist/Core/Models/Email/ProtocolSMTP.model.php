@@ -28,6 +28,7 @@ class ProtocolSMTP{
 
 	protected $resConnection = null;
 	protected $strMessageLog = '';
+	protected $strLastResponse = '';
 	protected $strErrorMessage = '';
 	protected $intErrorNo = 0;
 	protected $blConnected = false;
@@ -39,8 +40,12 @@ class ProtocolSMTP{
 		$this->intTimeout = (is_null($intTimeout)) ? 90 : $intTimeout;
 	}
 
-	public function getLastMessage(){
+	public function getMessageLog(){
 		return $this->strMessageLog;
+	}
+
+	public function getLastMessage(){
+		return $this->strLastResponse;
 	}
 
 	/**
@@ -75,7 +80,14 @@ class ProtocolSMTP{
 
 		}else{
 
-			$this->resConnection = fsockopen($strHost, $intPort,$intErrorNo,$strErrorMessage,$this->intTimeout);
+			$this->resConnection = fsockopen(
+				$strHost,
+				$intPort,
+				$intErrorNo,
+				$strErrorMessage,
+				$this->intTimeout
+			);
+
 			stream_set_blocking($this->resConnection, true);
 			stream_set_timeout($this->resConnection, $this->intTimeout,0);
 		}
@@ -85,8 +97,9 @@ class ProtocolSMTP{
 			return false;
 		}
 
-		$arrResponse = $this->communicate();
+		$arrResponse = $this->request();
 		if($arrResponse['code'] !== 220){
+			$this->setError($arrResponse['code'],$arrResponse['data']);
 			return false;
 		}
 
@@ -107,7 +120,12 @@ class ProtocolSMTP{
 	 * Disconnect the current session (connection)
 	 */
 	public function disconnect(){
-		$this->communicate('QUIT');
+
+		$arrResponse = $this->request('QUIT');
+		if($arrResponse['code'] !== 221){
+			$this->setError($arrResponse['code'],$arrResponse['data']);
+		}
+
 		fclose($this->resConnection);
 		$this->resConnection = null;
 		$this->blConnected = false;
@@ -117,23 +135,27 @@ class ProtocolSMTP{
 
 		list($strLocalPart,$strEmailHost) = explode('@',$strEmailAddress);
 
-		$arrResponse = $this->communicate(sprintf('EHLO %s',$strEmailHost));
+		$arrResponse = $this->request(sprintf('EHLO %s',$strEmailHost));
 		if($arrResponse['code'] !== 250){
+			$this->setError($arrResponse['code'],$arrResponse['data']);
 			return false;
 		}
 
-		$arrResponse = $this->communicate('AUTH LOGIN');
+		$arrResponse = $this->request('AUTH LOGIN');
 		if($arrResponse['code'] !== 334){
+			$this->setError($arrResponse['code'],$arrResponse['data']);
 			return false;
 		}
 
-		$arrResponse = $this->communicate(base64_encode($strEmailAddress));
+		$arrResponse = $this->request(base64_encode($strEmailAddress));
 		if($arrResponse['code'] !== 334){
+			$this->setError($arrResponse['code'],$arrResponse['data']);
 			return false;
 		}
 
-		$arrResponse = $this->communicate(base64_encode($strPassword));
+		$arrResponse = $this->request(base64_encode($strPassword));
 		if($arrResponse['code'] !== 235){
+			$this->setError($arrResponse['code'],$arrResponse['data']);
 			return false;
 		}
 
@@ -146,8 +168,9 @@ class ProtocolSMTP{
 
 	public function from($strFromAddress){
 
-		$arrResponse = $this->communicate(sprintf('MAIL FROM: %s',$strFromAddress));
+		$arrResponse = $this->request(sprintf('MAIL FROM: %s',$strFromAddress));
 		if($arrResponse['code'] !== 250){
+			$this->setError($arrResponse['code'],$arrResponse['data']);
 			return false;
 		}
 
@@ -156,8 +179,9 @@ class ProtocolSMTP{
 
 	public function to($strToAddress){
 
-		$arrResponse = $this->communicate(sprintf('RCPT TO: %s',$strToAddress));
+		$arrResponse = $this->request(sprintf('RCPT TO: %s',$strToAddress));
 		if($arrResponse['code'] !== 250){
+			$this->setError($arrResponse['code'],$arrResponse['data']);
 			return false;
 		}
 
@@ -180,13 +204,15 @@ class ProtocolSMTP{
 
 	public function send($strEmailSource){
 
-		$arrResponse = $this->communicate('DATA');
+		$arrResponse = $this->request('DATA');
 		if($arrResponse['code'] !== 354){
+			$this->setError($arrResponse['code'],$arrResponse['data']);
 			return false;
 		}
 
-		$arrResponse = $this->communicate(sprintf("%s%s.",$strEmailSource,$this->strBody));
+		$arrResponse = $this->request(sprintf("%s%s.",$strEmailSource,$this->strBody));
 		if($arrResponse['code'] !== 250){
+			$this->setError($arrResponse['code'],$arrResponse['data']);
 			return false;
 		}
 
@@ -198,7 +224,7 @@ class ProtocolSMTP{
 	 * @param null $strRequestString
 	 * @return array
 	 */
-	protected function communicate($strRequestString = null){
+	protected function request($strRequestString = null){
 
 		$intStartTime = time();
 		$arrResponse = array(
@@ -216,29 +242,31 @@ class ProtocolSMTP{
 
 			$mxdLine = fgets($this->resConnection, 1024);
 			$arrResponse['data'] .= $mxdLine;
-			$this->strMessageLog .= $arrResponse['data'];
+			$this->strMessageLog .= $mxdLine;
 
 			if(preg_match('#^([0-9]{3})\s#',$mxdLine,$arrMatches)){
 				$arrResponse['code'] = intval($arrMatches[0]);
 				break;
 			}
 
-			// Timed-out? Log and break
+			//Check for a socket timeout
 			$arrMetaInfo = stream_get_meta_data($this->resConnection);
 			if(array_key_exists('timed_out',$arrMetaInfo)){
 				$this->setError(0,'Request timeout');
 				break;
 			}
 
+			//Check for a hard timeout to prevent endless loops
 			if(time() - $intStartTime > $this->intTimeout){
 				$this->setError(0,'Request timeout - Hard time limit reached');
 				break;
 			}
 		}
 
-		//Clean the message string
-		$this->strMessageLog = trim($this->strMessageLog);
+		$this->strLastResponse = $arrResponse['data'];
 
 		return $arrResponse;
 	}
+
+
 }
