@@ -41,6 +41,7 @@
 		protected $blUseFromParameter = false;
 
 		public function setTimeout($intTimeout = 30){
+			$this->intTimeout = $intTimeout;
 			return true;
 		}
 

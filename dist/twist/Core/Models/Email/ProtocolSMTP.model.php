@@ -191,7 +191,7 @@ class ProtocolSMTP extends BaseProtocol{
 
 		while (is_resource($this->resConnection) && !feof($this->resConnection)){
 
-			$mxdLine = fgets($this->resConnection, 1024);
+			$mxdLine = fgets($this->resConnection, 515);
 			$arrResponse['data'] .= $mxdLine;
 			$this->strMessageLog .= $mxdLine;
 
@@ -202,7 +202,7 @@ class ProtocolSMTP extends BaseProtocol{
 
 			//Check for a socket timeout
 			$arrMetaInfo = stream_get_meta_data($this->resConnection);
-			if(array_key_exists('timed_out',$arrMetaInfo)){
+			if(array_key_exists('timed_out',$arrMetaInfo) && $arrMetaInfo['timed_out']){
 				$this->setError(0,'Request timeout');
 				break;
 			}
