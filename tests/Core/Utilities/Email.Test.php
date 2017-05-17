@@ -7,7 +7,7 @@ class Email extends \PHPUnit_Framework_TestCase{
 	public function testCreate(){
 
 		$resEmail = \Twist::Email()->create();
-		$resEmail->setEncoding();
+		$resEmail->setEncoding('7bit');
 		$resEmail->setCharEncoding();
 		$resEmail->setSensitivity();
 		$resEmail->setPriority();
@@ -17,7 +17,6 @@ class Email extends \PHPUnit_Framework_TestCase{
 		$resEmail->setFrom('travisci@unit-test-twistphp.com','Travis CI');
 		$resEmail->setSubject('A test email');
 		$resEmail->setBodyHTML('Body of a test email<br>From TwistPHP');
-		$resEmail->addAttachment(TWIST_APP.'/Data/test.json');
 
 		self::$arrSource = $resEmail->source();
 
@@ -25,6 +24,13 @@ class Email extends \PHPUnit_Framework_TestCase{
 		$this->assertEquals('A test email',self::$arrSource['subject']);
 		$this->assertContains('Body of a test email', self::$arrSource['body']);
 		$this->assertContains('From: Travis CI <travisci@unit-test-twistphp.com>', self::$arrSource['raw']);
+
+		//Adding an attachment will force encoding to be base64
+		$resEmail->addAttachment(TWIST_APP.'/Data/test.json');
+		self::$arrSource = $resEmail->source();
+
+		$this->assertContains('Qm9keSBvZiBhIHRlc3QgZW1haWwKRnJvbSBUd2lzdFBIUA==', self::$arrSource['body']);
+		$this->assertContains('Content-Description: test.json', self::$arrSource['body']);
 	}
 
 	public function testParser(){
