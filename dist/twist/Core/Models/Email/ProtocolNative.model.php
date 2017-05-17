@@ -34,6 +34,9 @@
 
 		public function send($strEmailSource){
 
+			$strEmailSource = preg_replace('/To\: .*\r\n/im', '', $strEmailSource);
+			$strEmailSource = preg_replace('/Subject\: .*\r\n/im', '', $strEmailSource);
+
 			$strAdditionalParam = null;
 
 			if($this->blUseFromParameter){

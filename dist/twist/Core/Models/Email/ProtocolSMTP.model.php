@@ -155,13 +155,18 @@ class ProtocolSMTP extends BaseProtocol{
 
 	public function send($strEmailSource){
 
+		//Send the initiator for the email source to be passed
 		$arrResponse = $this->request('DATA');
 		if($arrResponse['code'] !== 354){
 			$this->setError($arrResponse['code'],$arrResponse['data']);
 			return false;
 		}
 
-		$arrResponse = $this->request(sprintf("%s%s.",$strEmailSource,$this->strBody));
+		//Send the email source
+		$this->request($strEmailSource,true);
+
+		//Send the end signal for the email data source
+		$arrResponse = $this->request('.');
 		if($arrResponse['code'] !== 250){
 			$this->setError($arrResponse['code'],$arrResponse['data']);
 			return false;
@@ -173,9 +178,10 @@ class ProtocolSMTP extends BaseProtocol{
 	/**
 	 * Send and read data from the FTP connection, this function is used to send and receive all comms with the FTP server.
 	 * @param null $strRequestString
+	 * @param boolean $blWriteOnly
 	 * @return array
 	 */
-	protected function request($strRequestString = null){
+	protected function request($strRequestString = null,$blWriteOnly = false){
 
 		$intStartTime = time();
 		$arrResponse = array(
@@ -189,32 +195,35 @@ class ProtocolSMTP extends BaseProtocol{
 			fputs($this->resConnection, $strRequestString."\r\n");
 		}
 
-		while (is_resource($this->resConnection) && !feof($this->resConnection)){
+		if($blWriteOnly == false){
 
-			$mxdLine = fgets($this->resConnection, 515);
-			$arrResponse['data'] .= $mxdLine;
-			$this->strMessageLog .= $mxdLine;
+			while (is_resource($this->resConnection) && !feof($this->resConnection)){
 
-			if(preg_match('#^([0-9]{3})\s#',$mxdLine,$arrMatches)){
-				$arrResponse['code'] = intval($arrMatches[0]);
-				break;
+				$mxdLine = fgets($this->resConnection, 515);
+				$arrResponse['data'] .= $mxdLine;
+				$this->strMessageLog .= $mxdLine;
+
+				if(preg_match('#^([0-9]{3})\s#',$mxdLine,$arrMatches)){
+					$arrResponse['code'] = intval($arrMatches[0]);
+					break;
+				}
+
+				//Check for a socket timeout
+				$arrMetaInfo = stream_get_meta_data($this->resConnection);
+				if(array_key_exists('timed_out',$arrMetaInfo) && $arrMetaInfo['timed_out']){
+					$this->setError(0,'Request timeout');
+					break;
+				}
+
+				//Check for a hard timeout to prevent endless loops
+				if((time() - $intStartTime) > $this->intTimeout){
+					$this->setError(0,'Request timeout - Hard time limit reached');
+					break;
+				}
 			}
 
-			//Check for a socket timeout
-			$arrMetaInfo = stream_get_meta_data($this->resConnection);
-			if(array_key_exists('timed_out',$arrMetaInfo) && $arrMetaInfo['timed_out']){
-				$this->setError(0,'Request timeout');
-				break;
-			}
-
-			//Check for a hard timeout to prevent endless loops
-			if((time() - $intStartTime) > $this->intTimeout){
-				$this->setError(0,'Request timeout - Hard time limit reached');
-				break;
-			}
+			$this->strLastResponse = $arrResponse['data'];
 		}
-
-		$this->strLastResponse = $arrResponse['data'];
 
 		return $arrResponse;
 	}

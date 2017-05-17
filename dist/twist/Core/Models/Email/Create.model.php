@@ -332,26 +332,27 @@ class Create{
 	}
 
 	/**
-	 * Send the email once all the data ans emails addresses have been added, this by default will user PHP mail unless otherwise specified.
-	 * @param bool $blClearCache
-	 * @return bool
-	 * @throws \Exception
+	 * Process and return all the source components that make up the Raw email
+	 * @return array
 	 */
-	public function send($blClearCache = true){
+	public function source(){
 
 		$this->arrEmailData['headers'] = "MIME-Version: 1.0\r\n";
-		$this->arrEmailData['headers'] .= "X-Mailer: TwistPHPEmail\r\n";
+		$this->arrEmailData['headers'] .= "X-Mailer: TwistPHP ".\Twist::version()." (https://github.com/TwistPHP/TwistPHP)\r\n";
 
-		$strEmailTo = "";
+		$strEmailTo = $strListCC = $strListBCC = "";
 
 		/** Add TO to the email headers */
 		if(array_key_exists('to',$this->arrEmailData) && is_array($this->arrEmailData['to']) && count($this->arrEmailData['to']) > 0){
+
+			$strEmailTo = 'To: ';
 
 			foreach($this->arrEmailData['to'] as $strEmailAddress => $strName){
 				$strEmailTo .= ($strName != '') ? sprintf("%s <%s>,",$this->convertEncodingHeader($strName),$strEmailAddress) : sprintf('%s,',$strEmailAddress);
 			}
 
 			$strEmailTo = rtrim($strEmailTo,',');
+			$this->arrEmailData['headers'] .= sprintf("%s\r\n",$strEmailTo);
 		}
 
 		/** Add CC to the email headers if required */
@@ -363,7 +364,8 @@ class Create{
 				$strListCC .= ($strName != '') ? sprintf("%s <%s>,",$this->convertEncodingHeader($strName),$strEmailAddress) : sprintf('%s,',$strEmailAddress);
 			}
 
-			$this->arrEmailData['headers'] .= sprintf("%s\r\n",rtrim($strListCC,','));
+			$strListCC = rtrim($strListCC,',');
+			$this->arrEmailData['headers'] .= sprintf("%s\r\n",$strListCC);
 		}
 
 		/** Add BCC to the email headers if required */
@@ -375,7 +377,8 @@ class Create{
 				$strListBCC .= ($strName != '') ? sprintf("%s <%s>,",$this->convertEncodingHeader($strName),$strEmailAddress) : sprintf('%s,',$strEmailAddress);
 			}
 
-			$this->arrEmailData['headers'] .= sprintf("%s\r\n",rtrim($strListBCC,','));
+			$strListBCC = rtrim($strListBCC,',');
+			$this->arrEmailData['headers'] .= sprintf("%s\r\n",$strListBCC);
 		}
 
 		$this->senderValidation();
@@ -398,10 +401,32 @@ class Create{
 			}
 		}
 
-		$this->buildBody();
-
 		//Encode the subject
 		$this->arrEmailData['subject'] = $this->convertEncodingHeader($this->arrEmailData['subject']);
+		$this->arrEmailData['headers'] .= sprintf("Subject: %s\r\n",$this->arrEmailData['subject']);
+
+		$this->buildBody();
+
+		return array(
+			'headers' => $this->arrEmailData['headers'],
+			'to' => ($strEmailTo != '') ? substr($strEmailTo,4) : '',
+			'cc' => ($strListCC != '') ? substr($strListCC,4) : '',
+			'bcc' => ($strListBCC != '') ? substr($strListBCC,5) : '',
+			'subject' => $this->arrEmailData['subject'],
+			'body' => $this->arrEmailData['body'],
+			'raw' => $this->arrEmailData['headers'].$this->arrEmailData['body']
+		);
+	}
+
+	/**
+	 * Send the email once all the data ans emails addresses have been added, this by default will user PHP mail unless otherwise specified.
+	 * @param bool $blClearCache
+	 * @return bool
+	 * @throws \Exception
+	 */
+	public function send($blClearCache = true){
+
+		$arrSource = $this->source();
 
 		//If no connected then reconnect (Used only for SMTP)
 		if(!$this->resProtocol->connected()){
@@ -418,11 +443,11 @@ class Create{
 		$this->resProtocol->useFromParam($this->blUseFromParameter);
 
 		$this->resProtocol->from($this->arrEmailData['from_email']);
-		$this->resProtocol->to($strEmailTo);
+		$this->resProtocol->to($arrSource['to']);
 		$this->resProtocol->subject($this->arrEmailData['subject']);
 		$this->resProtocol->body($this->arrEmailData['body']);
 
-		$blResult = $this->resProtocol->send($this->arrEmailData['headers']);
+		$blResult = $this->resProtocol->send(($this->strProtocol == 'smtp') ? $this->arrEmailData['raw'] : $this->arrEmailData['headers']);
 
 		if($blClearCache == true){
 			//Clear the email data ready for the next email
