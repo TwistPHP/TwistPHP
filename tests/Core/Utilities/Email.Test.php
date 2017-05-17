@@ -40,10 +40,7 @@ class Email extends \PHPUnit_Framework_TestCase{
 		$this->assertEquals('travisci2@unit-test-twistphp.com',$arrEmailData['to']);
 		$this->assertEquals('travisci@unit-test-twistphp.com',$arrEmailData['from']);
 		$this->assertEquals('A test email',$arrEmailData['subject']);
-
-		$this->assertContains('Body of a test email',$arrEmailData['body']['plain']);
-		$this->assertContains('Body of a test email',$arrEmailData['body']['html']);
-
+		
 		$this->assertTrue(count($arrEmailData['attachments']) > 0);
 	}
 }
