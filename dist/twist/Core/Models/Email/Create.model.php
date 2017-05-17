@@ -432,11 +432,13 @@ class Create{
 		if(!$this->resProtocol->connected()){
 
 			if(!$this->resProtocol->connect($this->arrSettingsSMTP['host'],$this->arrSettingsSMTP['port'])){
-				throw new \Exception($this->resProtocol->getLastMessage());
+				$arrError = $this->resProtocol->getError();
+				throw new \Exception($arrError['message'],$arrError['code']);
 			}
 
 			if(!$this->resProtocol->login($this->arrSettingsSMTP['username'],$this->arrSettingsSMTP['password'])){
-				throw new \Exception($this->resProtocol->getLastMessage());
+				$arrError = $this->resProtocol->getError();
+				throw new \Exception($arrError['message'],$arrError['code']);
 			}
 		}
 

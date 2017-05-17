@@ -26,6 +26,10 @@
 
 	class ProtocolNative extends BaseProtocol{
 
+		/**
+		 * Hard coded to true so that the connection/login process will not be done upon sending
+		 * @var bool
+		 */
 		protected $blConnected = true;
 
 		public function useFromParam($blStatus = true){
