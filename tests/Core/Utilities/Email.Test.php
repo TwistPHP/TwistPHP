@@ -29,7 +29,7 @@ class Email extends \PHPUnit_Framework_TestCase{
 
 	public function testParser(){
 
-		$arrEmailData = \Twist::Email()->parseSource(self::$arrSource);
+		$arrEmailData = \Twist::Email()->parseSource(self::$arrSource['raw']);
 
 		$this->assertEquals('travisci2@unit-test-twistphp.com',$arrEmailData['to']);
 		$this->assertEquals('travisci@unit-test-twistphp.com',$arrEmailData['from']);
