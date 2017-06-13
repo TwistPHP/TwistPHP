@@ -149,7 +149,6 @@ class Auth{
 			        } else {
 				        if( $arrUserData['password'] === sha1( $strPassword ) ) {
 					        $blValidPassword = true;
-						//TODO: Make the password_hash params changable in the settings table
 					        $strPasswordHash = password_hash( $strPassword, PASSWORD_BCRYPT, array( 'cost' => 12, 'salt' => mcrypt_create_iv( 22, MCRYPT_DEV_URANDOM ) ) );
 					        $resUser->set( 'password', $strPasswordHash );
 					        $resUser->commit();
