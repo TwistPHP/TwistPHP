@@ -1,5 +1,8 @@
-.idea
-node_modules
 .DS_Store
+.idea
+.vagrant
 *.log
+demo/public/*
+!demo/public/index.php
 docs/resources
+node_modules
