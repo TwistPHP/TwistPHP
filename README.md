@@ -24,6 +24,7 @@ To get started with a Vagrant machine:
 * Install [Vagrant](https://www.vagrantup.com/downloads.html)
 * Install [VirtualBox](https://www.virtualbox.org/)
 * Run `vargrant up`
+* Load up [localhost:8080](http://localhost:8080/)
 
 ## Documentation
 
