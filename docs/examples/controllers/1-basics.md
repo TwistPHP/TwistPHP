@@ -41,7 +41,7 @@ Create a new file called `Basics.controller.php` in your `/app/Controllers` dire
          * done here
          * ================================
          */
-        public function __construct() {}
+        public function _baseCalls() {}
     
         /*
          * ================================

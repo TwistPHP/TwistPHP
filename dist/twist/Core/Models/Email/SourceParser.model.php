@@ -63,6 +63,22 @@ class SourceParser{
 		preg_match("#\nTo:(.*)\n#i",$strEmailSource,$arrResults);
 		$arrEmailData['to'] = (is_array($arrResults) && count($arrResults) > 1) ? trim($arrResults[1]) : '';
 
+		if(strstr($arrEmailData['to'],"<")){
+			preg_match("#([a-z0-9\-\_\s]+)\<([^\>]+)#i",$arrEmailData['to'],$strToMatch);
+			$arrEmailData['to'] = $strToMatch[2];
+			$arrEmailData['to_name'] = $strToMatch[1];
+		}
+
+		//Get the Cc address from the email
+		preg_match("#\nCc:(.*)\n#i",$strEmailSource,$arrResults);
+		$arrEmailData['cc'] = (is_array($arrResults) && count($arrResults) > 1) ? trim($arrResults[1]) : '';
+
+		if(strstr($arrEmailData['cc'],"<")){
+			preg_match("#([a-z0-9\-\_\s]+)\<([^\>]+)#i",$arrEmailData['cc'],$strCcMatch);
+			$arrEmailData['cc'] = $strCcMatch[2];
+			$arrEmailData['cc_name'] = $strCcMatch[1];
+		}
+
 		return $arrEmailData;
 	}
 

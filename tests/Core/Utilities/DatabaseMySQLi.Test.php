@@ -91,6 +91,21 @@ class DatabaseMySQLi extends \PHPUnit_Framework_TestCase{
 		$this->assertEquals(0,count($arrResult2));
 	}
 
+	public function testImport(){
+
+		$blResult = \Twist::Database()->importSQL(TWIST_APP.'/Data/import.sql',TWIST_DATABASE_NAME);
+		$this->assertTrue($blResult);
+
+		$resRecord = \Twist::Database()->records('twist_settings')->get('SITE_AUTHOR','key',true);
+		$this->assertEquals('import-test',$resRecord['value']);
+	}
+
+	public function testSetDatabase(){
+
+		$blResult = \Twist::Database()->setDatabase('something-blah');
+		$this->assertTrue(!$blResult);
+	}
+
 	public function testFindCount(){
 
 		$intResult = \Twist::Database()->records('twist_settings')->count('SITE_%','key');
@@ -98,6 +113,18 @@ class DatabaseMySQLi extends \PHPUnit_Framework_TestCase{
 		$arrResult = \Twist::Database()->records('twist_settings')->find('SITE_%','key');
 
 		$this->assertEquals($intResult,count($arrResult));
+	}
+
+	public function testIncrementDecrement(){
+
+		$resNewRecord = \Twist::Database()->records('twist_settings')->get('EMAIL_SMTP_PORT','key');
+		$intOldValue = $resNewRecord->get('default');
+
+		$intNewValue = $resNewRecord->increment('default');
+		$this->assertEquals($intOldValue+1,$intNewValue);
+
+		$intNewValue = $resNewRecord->decrement('default');
+		$this->assertEquals($intOldValue,$intNewValue);
 	}
 
 	public function testCreateAlterTable(){

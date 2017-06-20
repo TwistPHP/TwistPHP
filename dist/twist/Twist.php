@@ -59,8 +59,8 @@
 
 			$arrVersion = array(
 				'major' => 3,
-				'minor' => 0,
-				'patch' => 5,
+				'minor' => 1,
+				'patch' => 0,
 				'pre-release' => ''//pre-release can be set to 'dev'
 			);
 

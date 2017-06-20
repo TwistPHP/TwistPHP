@@ -15,7 +15,7 @@ In order to allow URIs with other characters, we have to replace the method with
     
     class Replace extends Base {
     
-        public function __construct() {
+        public function _baseCalls() {
             /*
              * ================================
              * In the construct method when the

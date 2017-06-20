@@ -36,6 +36,7 @@ class Database extends Base{
 	protected $resResult = null;
 	protected $strConnectionKey = null;
 	protected $blConnectionAttempt = false;
+	protected $arrConnectionDetails = array();
 	protected $strDatabaseName = null;
 	protected $blNoDatabase = false;
 	protected $blDebugMode = false;
@@ -86,24 +87,38 @@ class Database extends Base{
 			if(!is_null($strHost) || !is_null($strUsername) || !is_null($strPassword) || !is_null($strDatabaseName)){
 				if( !( !is_null($strHost) && !is_null($strUsername) && !is_null($strPassword) && !is_null($strDatabaseName) ) ){
 					throw new \Exception('Missing parameters passed into database connect');
+				}else{
+					//Store the connection details here, if custom details where used this will allow for reconnection if required
+					$this->arrConnectionDetails = array(
+						'host' => $strHost,
+						'username' => $strUsername,
+						'password' => $strPassword,
+						'database' => $strDatabaseName,
+						'protocol' => $strProtocol
+					);
 				}
 			}else{
 				$this->checkSettings(true);
-				$strHost = TWIST_DATABASE_HOST;
-				$strUsername = TWIST_DATABASE_USERNAME;
-				$strPassword = TWIST_DATABASE_PASSWORD;
-				$strDatabaseName = TWIST_DATABASE_NAME;
+
+				if(count($this->arrConnectionDetails) == 0){
+					$this->arrConnectionDetails = array(
+						'host' => TWIST_DATABASE_HOST,
+						'username' => TWIST_DATABASE_USERNAME,
+						'password' => TWIST_DATABASE_PASSWORD,
+						'database' => TWIST_DATABASE_NAME,
+						'protocol' => TWIST_DATABASE_PROTOCOL
+					);
+				}
 			}
 
 			$this->resLibrary = new $strLibraryClass();
-			$this->resLibrary->connect($strHost,$strUsername,$strPassword,$strDatabaseName);
+			$this->resLibrary->connect($this->arrConnectionDetails['host'],$this->arrConnectionDetails['username'],$this->arrConnectionDetails['password'],$this->arrConnectionDetails['database']);
 
 			//Set the parameter to say that the database has already been connected
 			$this->blConnectionAttempt = true;
 
 			if($this->connected()){
-				$this->strDatabaseName = $strDatabaseName;
-				$this->resLibrary->selectDatabase($strDatabaseName);
+				$this->setDatabase($this->arrConnectionDetails['database']);
 				$this->resLibrary->setCharset('UTF8');
 				$this->autoCommit(true);
 			}
@@ -211,6 +226,23 @@ class Database extends Base{
 	}
 
 	/**
+	 * Select the default database for this connection to be using, all further queries will then be run on the newly selected database
+	 * @param string $strDatabase Name of the database to be selected
+	 * @return bool True indicates a successful database switch
+	 */
+	public function setDatabase($strDatabase){
+
+		if($this->resLibrary->selectDatabase($strDatabase)){
+
+			$this->arrConnectionDetails['database'] = $strDatabase;
+			$this->strDatabaseName = $strDatabase;
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Run a fully formed SQL query on the database, optionally pass the query in as a raw sprintf() string "SELECT * FROM `table` WHERE `id` = %d" followed by all the parameters to fill the string
 	 * All parameters are escaped before being entered into the sprintf(). A Database result object will be returned containing all the stats and results for the query.
 	 * @param string $strQuery SQL query to be run against the database
@@ -292,10 +324,7 @@ class Database extends Base{
 		}
 
 		$this->resRecords->__setTable($strTable);
-
-		if(!is_null($strDatabase)){
-			$this->resRecords->__setDatabase($strDatabase);
-		}
+		$this->resRecords->__setDatabase((is_null($strDatabase)) ? $this->arrConnectionDetails['database'] : $strDatabase);
 
 		return $this->resRecords;
 	}
@@ -313,10 +342,7 @@ class Database extends Base{
 		}
 
 		$this->resTables->__setTable($strTable);
-
-		if(!is_null($strDatabase)){
-			$this->resTables->__setDatabase($strDatabase);
-		}
+		$this->resRecords->__setDatabase((is_null($strDatabase)) ? $this->arrConnectionDetails['database'] : $strDatabase);
 
 		return $this->resTables;
 	}
@@ -368,8 +394,15 @@ class Database extends Base{
 					$dirSQLFile
 				);
 
-				$blOut = \Twist::Command()->execute($strCommand);
+				$arrResult = \Twist::Command()->execute($strCommand);
+				$blOut = $arrResult['status'];
 			}else{
+
+				if(!is_null($strDatabaseName)){
+					//Set the database for an inport
+					$this->resLibrary->selectDatabase($strDatabaseName);
+				}
+
 				//Run the import using the query function. May want to do some sanitation here?
 				$strSQLData = file_get_contents($dirSQLFile);
 				$arrQueries = explode(';',$strSQLData);
@@ -381,7 +414,13 @@ class Database extends Base{
 						$blAnyIssues = true;
 					}
 				}
+
 				$blOut = !$blAnyIssues;
+
+				if(!is_null($strDatabaseName)){
+					//Reset the database after the import
+					$this->resLibrary->selectDatabase($this->strDatabaseName);
+				}
 			}
 		}
 
