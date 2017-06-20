@@ -146,13 +146,11 @@ class Auth{
 
 			        if( password_verify( $strPassword, $arrUserData['password'] ) ) {
 				        $blValidPassword = true;
-			        } else {
-				        if( $arrUserData['password'] === sha1( $strPassword ) ) {
-					        $blValidPassword = true;
-					        $strPasswordHash = password_hash( $strPassword, PASSWORD_BCRYPT, array( 'cost' => 12, 'salt' => mcrypt_create_iv( 22, MCRYPT_DEV_URANDOM ) ) );
-					        $resUser->set( 'password', $strPasswordHash );
-					        $resUser->commit();
-				        }
+			        } else if( $arrUserData['password'] === sha1( $strPassword ) ) {
+				        $blValidPassword = true;
+				        $strPasswordHash = password_hash( $strPassword, PASSWORD_BCRYPT, array( 'cost' => 12 ) );
+				        $resUser->set( 'password', $strPasswordHash );
+				        $resUser->commit();
 			        }
 
 			        if( $blValidPassword ) {

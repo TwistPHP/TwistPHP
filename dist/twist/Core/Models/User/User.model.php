@@ -266,7 +266,7 @@ class User{
 
 	public function password($strPassword){
 		//TODO: Make params variable
-		$strPasswordHash = password_hash( $strPassword, PASSWORD_BCRYPT, array( 'cost' => 12, 'salt' => mcrypt_create_iv( 22, MCRYPT_DEV_URANDOM ) ) );
+		$strPasswordHash = password_hash( $strPassword, PASSWORD_BCRYPT, array( 'cost' => 12 ) );
 
 		$arrAllowPassword = $this->allowPassword($strPassword);
 
@@ -291,7 +291,7 @@ class User{
 
 		//Store the new temp password until the reset email is sent upon commit
 		$this->strTempPassword = $strPassword;
-		$strPasswordHash = password_hash( $strPassword, PASSWORD_BCRYPT, array( 'cost' => 12, 'salt' => mcrypt_create_iv( 22, MCRYPT_DEV_URANDOM ) ) );
+		$strPasswordHash = password_hash( $strPassword, PASSWORD_BCRYPT, array( 'cost' => 12 ) );
 		$this->resDatabaseRecord->set('password',$strPasswordHash);
 		$this->resDatabaseRecord->set('temp_password',1);
 
