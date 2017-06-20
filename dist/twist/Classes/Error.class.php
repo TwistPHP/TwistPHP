@@ -305,6 +305,25 @@
 			self::response($intErrorCode,$strCustomDescription,$blExitOnComplete);
 		}
 
+		public static function responseInfo($intErrorCode){
+			
+			$arrOut = array(
+				'code' => $intErrorCode,
+				'return' => 'Unknown',
+				'description' => ''
+			);
+
+			$jsonResponses = file_get_contents(sprintf('%sCore/Data/http/response-codes.json',TWIST_FRAMEWORK));
+			$arrResponses = json_decode($jsonResponses,true);
+
+			if(array_key_exists($intErrorCode,$arrResponses)){
+				$arrOut['return'] = $arrResponses[$intErrorCode]['return'];
+				$arrOut['description'] = $arrResponses[$intErrorCode]['description'];
+			}
+
+			return $arrOut;
+		}
+		
 		/**
 		 * Output HTTP error response code and a custom message if required to the user, this function handles all HTTP response codes.
 		 * @param int $intErrorCode
@@ -313,313 +332,12 @@
 		 */
 		public static function response($intErrorCode,$strCustomDescription = null,$blExitOnComplete = true){
 
-			$strReturn = 'Unknown';
-			$strDescription = '';
-
-			switch( $intErrorCode ) {
-				case 100:
-					$strReturn = 'Continue';
-					break;
-
-				case 101:
-					$strReturn = 'Switching Protocols';
-					break;
-
-				case 102:
-					$strReturn = 'Processing (WebDAV; RFC 2518)';
-					break;
-
-				case 200:
-					$strReturn = 'OK';
-					break;
-
-				case 201:
-					$strReturn = 'Created';
-					break;
-
-				case 202:
-					$strReturn = 'Accepted';
-					break;
-
-				case 203:
-					$strReturn = 'Non-Authoritative Information (since HTTP/1.1)';
-					break;
-
-				case 204:
-					$strReturn = 'No Content';
-					break;
-
-				case 205:
-					$strReturn = 'Reset Content';
-					break;
-
-				case 206:
-					$strReturn = 'Partial Content';
-					break;
-
-				case 207:
-					$strReturn = 'Multi-Status (WebDAV; RFC 4918)';
-					break;
-
-				case 208:
-					$strReturn = 'Already Reported (WebDAV; RFC 5842)';
-					break;
-
-				case 226:
-					$strReturn = 'IM Used (RFC 3229)';
-					break;
-
-				case 300:
-					$strReturn = 'Redirected';
-					break;
-
-				case 301:
-					$strReturn = 'Moved Permanently';
-					break;
-
-				case 302:
-					$strReturn = 'Found';
-					break;
-
-				case 303:
-					$strReturn = 'See Other (since HTTP/1.1)';
-					break;
-
-				case 304:
-					$strReturn = 'Not Modified';
-					break;
-
-				case 305:
-					$strReturn = 'Use Proxy (since HTTP/1.1)';
-					break;
-
-				case 306:
-					$strReturn = 'Switch Proxy';
-					break;
-
-				case 307:
-					$strReturn = 'Temporary Redirect (since HTTP/1.1)';
-					break;
-
-				case 308:
-					$strReturn = 'Permanent Redirect (approved as experimental RFC)';
-					break;
-
-				case 400:
-					$strReturn = 'Bad Request';
-					break;
-
-				case 401:
-					$strReturn = 'Unauthorized';
-					break;
-
-				case 402:
-					$strReturn = 'Payment Required';
-					break;
-
-				case 403:
-					$strReturn = 'Forbidden';
-					break;
-
-				case 404:
-					$strReturn = 'Not Found';
-					$strDescription = 'The requested file was not found';
-					break;
-
-				case 405:
-					$strReturn = 'Method Not Allowed';
-					break;
-
-				case 406:
-					$strReturn = 'Not Acceptable';
-					break;
-
-				case 407:
-					$strReturn = 'Proxy Authentication Required';
-					break;
-
-				case 408:
-					$strReturn = 'Request Timeout';
-					break;
-
-				case 409:
-					$strReturn = 'Conflict';
-					break;
-
-				case 410:
-					$strReturn = 'Gone';
-					break;
-
-				case 411:
-					$strReturn = 'Length Required';
-					break;
-
-				case 412:
-					$strReturn = 'Precondition Failed';
-					break;
-
-				case 413:
-					$strReturn = 'Request Entity Too Large';
-					break;
-
-				case 414:
-					$strReturn = 'Request-URI Too Long';
-					break;
-
-				case 415:
-					$strReturn = 'Unsupported media platform';
-					break;
-
-				case 416:
-					$strReturn = 'Requested Range Not Satisfiable';
-					break;
-
-				case 417:
-					$strReturn = 'Expectation Failed';
-					break;
-
-				case 418:
-					$strReturn = 'I\'m a teapot (RFC 2324)';
-					break;
-
-				case 419:
-					$strReturn = 'Authentication Timeout';
-					break;
-
-				case 420:
-					$strReturn = 'Enhance Your Calm (Twitter)';
-					break;
-
-				case 422:
-					$strReturn = 'Unprocessable Entity (WebDAV; RFC 4918)';
-					break;
-
-				case 423:
-					$strReturn = 'Locked (WebDAV; RFC 4918)';
-					break;
-
-				case 424:
-					$strReturn = 'Failed Dependency (WebDAV; RFC 4918)/Method Failure (WebDAV)';
-					break;
-
-				case 425:
-					$strReturn = 'Unordered Collection (Internet draft)';
-					break;
-
-				case 426:
-					$strReturn = 'Upgrade Required (RFC 2817)';
-					break;
-
-				case 428:
-					$strReturn = 'Precondition Required (RFC 6585)';
-					break;
-
-				case 429:
-					$strReturn = 'Too Many Requests (RFC 6585)';
-					break;
-
-				case 431:
-					$strReturn = 'Request Header Fields Too Large (RFC 6585)';
-					break;
-
-				case 444:
-					$strReturn = 'No Response (Nginx)';
-					break;
-
-				case 449:
-					$strReturn = 'Retry With (Microsoft)';
-					break;
-
-				case 450:
-					$strReturn = 'Blocked by Windows Parental Controls (Microsoft)';
-					break;
-
-				case 451:
-					$strReturn = 'Unavailable For Legal Reasons (Internet draft)/Redirect (Microsoft)';
-					break;
-
-				case 494:
-					$strReturn = 'Request Header Too Large (Nginx)';
-					break;
-
-				case 495:
-					$strReturn = 'Cert Error (Nginx)';
-					break;
-
-				case 496:
-					$strReturn = 'No Cert (Nginx)';
-					break;
-
-				case 497:
-					$strReturn = 'HTTP to HTTPS (Nginx)';
-					break;
-
-				case 499:
-					$strReturn = 'Client Closed Request (Nginx)';
-					break;
-
-				case 500:
-					$strReturn = 'Internal Server Error';
-					break;
-
-				case 501:
-					$strReturn = 'Not Implemented';
-					break;
-
-				case 502:
-					$strReturn = 'Bad Gateway';
-					break;
-
-				case 503:
-					$strReturn = 'Service Unavailable';
-					$strDescription = 'The requested site is currently in maintenance mode, please check back shortly';
-					break;
-
-				case 504:
-					$strReturn = 'Gateway Timeout';
-					break;
-
-				case 505:
-					$strReturn = 'HTTP Version Not Supported';
-					break;
-
-				case 506:
-					$strReturn = 'Variant Also Negotiates (RFC 2295)';
-					break;
-
-				case 507:
-					$strReturn = 'Insufficient Storage (WebDAV; RFC 4918)';
-					break;
-
-				case 508:
-					$strReturn = 'Loop Detected (WebDAV; RFC 5842)';
-					break;
-
-				case 509:
-					$strReturn = 'Bandwidth Limit Exceeded (Apache bw/limited extension)';
-					break;
-
-				case 510:
-					$strReturn = 'Not Extended (RFC 2774)';
-					break;
-
-				case 511:
-					$strReturn = 'Network Authentication Required (RFC 6585)';
-					break;
-
-				case 598:
-					$strReturn = 'Network read timeout error (Unknown)';
-					break;
-
-				case 599:
-					$strReturn = 'Network connect timeout error (Unknown)';
-					break;
-			}
-
+			$arrResponse = self::responseInfo($intErrorCode);
+			
 			//Output the correct
 			$strHttpProtocol = ("HTTP/1.1" === $_SERVER["SERVER_PROTOCOL"]) ? 'HTTP/1.1' : 'HTTP/1.0';
 
-			header(sprintf('%s %d %s',$strHttpProtocol,$intErrorCode,$strReturn),true,$intErrorCode);
+			header(sprintf('%s %d %s',$strHttpProtocol,$intErrorCode,$arrResponse['return']),true,$intErrorCode);
 
 			if($intErrorCode == 503){
 				header("Retry-After: 3600");
@@ -630,8 +348,8 @@
 
 			$arrTags = array(
 				'code' => $intErrorCode,
-				'title' => $strReturn,
-				'description' => (is_null($strCustomDescription)) ? $strDescription : $strCustomDescription,
+				'title' => $arrResponse['return'],
+				'description' => (is_null($strCustomDescription)) ? $arrResponse['description'] : $strCustomDescription,
 				'name' => \Twist::framework() -> setting('SITE_NAME'),
 				'domain' => \Twist::framework() -> setting('SITE_HOST')
 			);

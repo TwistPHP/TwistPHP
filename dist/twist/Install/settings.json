@@ -255,6 +255,22 @@
     "options":"",
     "null":0
   },
+  "API_REQUEST_HEADER_AUTH":{
+    "title":"API Auth via Request Headers",
+    "description":"The base REST controllers will require authentication to be carried out via HTTP Request Headers",
+    "default":"1",
+    "type":"boolean",
+    "options":"0,1",
+    "null":0
+  },
+  "API_ALLOWED_REQUEST_METHODS":{
+    "title":"API Allowed Request Methods",
+    "description":"Comma seperated list of request methods that are enabled. Common methods: GET,POST,PUT,DELETE,HEAD,OPTIONS,CONNECT",
+    "default":"GET,POST",
+    "type":"string",
+    "options":"",
+    "null":0
+  },
   "EMAIL_MULTIPART_ENCODING":{
     "title":"Default Encoding",
     "description":"Set the default encoding type to use when sending emails",
