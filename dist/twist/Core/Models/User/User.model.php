@@ -23,6 +23,7 @@
 	 */
 
 	namespace Twist\Core\Models\User;
+	use Twist\Core\Models\User\Auth;
 	use Twist\Core\Models\Database\Record;
 
 	class User{
@@ -319,7 +320,7 @@
 
 		public function password($strPassword){
 
-			$strPasswordHash = password_hash( $strPassword, PASSWORD_BCRYPT, array( 'cost' => 12 ) );
+			$strPasswordHash = Auth::hashPassword($strPassword);
 
 			$arrAllowPassword = $this->allowPassword($strPassword);
 
@@ -345,7 +346,7 @@
 			//Store the new temp password until the reset email is sent upon commit
 			$this->strTempPassword = $strPassword;
 
-			$strPasswordHash = password_hash( $strPassword, PASSWORD_BCRYPT, array( 'cost' => 12 ) );
+			$strPasswordHash = Auth::hashPassword($strPassword);
 			$this->resDatabaseRecord->set('password',$strPasswordHash);
 			$this->resDatabaseRecord->set('temp_password',1);
 

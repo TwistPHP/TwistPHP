@@ -38,6 +38,10 @@ class Auth{
         'user_data' => array()
     );
 
+    public static function hashPassword($strPassword) {
+	    return password_hash( $strPassword, PASSWORD_BCRYPT, array( 'cost' => 12 ) );
+    }
+
     public static function current($blUpdateKey = true){
 
         if(self::$arrCurrentSession['status'] === false && self::$blValidated === false){
@@ -149,7 +153,7 @@ class Auth{
 				        $blValidPassword = true;
 			        } else if( $arrUserData['password'] === sha1( $strPassword ) ) {
 				        $blValidPassword = true;
-				        $strPasswordHash = password_hash( $strPassword, PASSWORD_BCRYPT, array( 'cost' => 12 ) );
+				        $strPasswordHash = self::hashPassword($strPassword);
 				        $resUser->set( 'password', $strPasswordHash );
 				        $resUser->commit();
 			        }
