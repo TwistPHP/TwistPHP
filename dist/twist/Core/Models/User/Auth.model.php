@@ -38,6 +38,11 @@ class Auth{
         'user_data' => array()
     );
 
+	/**
+	 * Hash a password
+	 * @param string $strPassword The password to hash
+	 * @return bool|string
+	 */
     public static function hashPassword($strPassword) {
 	    return password_hash( $strPassword, PASSWORD_BCRYPT, array( 'cost' => 12 ) );
     }
