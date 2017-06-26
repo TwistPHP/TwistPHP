@@ -36,5 +36,28 @@ class User extends \PHPUnit_Framework_TestCase{
 
 		$this -> assertEquals(0,\Twist::User()->currentLevel());
 	}
+
+	public function testLegacyPassword(){
+
+		$resUser = \Twist::Database()->records('twist_users')->get(self::$intUserID);
+		$resUser->set('password',sha1('X123Password'));
+		$resUser->commit();
+
+		\Twist::User()->logout();
+
+		//Test the login using a legacy password hash (in this case sha1)
+		$arrSessionArray = \Twist::User()->authenticate('travisci2@unit-test-twistphp.com','X123Password');
+		$this -> assertTrue($arrSessionArray['status']);
+
+		//Check that the legacy password has been updated
+		$this -> assertNotEquals(sha1('X123Password'),$resUser->get('password'));
+
+		//Logout again
+		\Twist::User()->logout();
+
+		//Test the login again this time using the new passwrod hash
+		$arrSessionArray = \Twist::User()->authenticate('travisci2@unit-test-twistphp.com','X123Password');
+		$this -> assertTrue($arrSessionArray['status']);
+	}
 }
 
