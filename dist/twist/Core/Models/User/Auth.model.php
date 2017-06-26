@@ -44,8 +44,19 @@ class Auth{
 	 * @return bool|string
 	 */
     public static function hashPassword($strPassword) {
-	    return password_hash( $strPassword, PASSWORD_BCRYPT, array( 'cost' => 12 ) );
+	    $intCost = (!is_null(\Twist::framework()->setting('USER_AUTH_HASH_COST'))) ? \Twist::framework()->setting('USER_AUTH_HASH_COST') : 12;
+	    return password_hash( $strPassword, PASSWORD_BCRYPT, array( 'cost' => $intCost ) );
     }
+
+	/**
+	 * Legacy password has for backwards comparability, the hash algorthyim used is defined in the USER_AUTH_LEGACY_HASH setting
+	 * @param string $strPassword The password to hash
+	 * @return bool|string
+	 */
+	public static function legacyPassword($strPassword) {
+		$strAlgorthum = (!is_null(\Twist::framework()->setting('USER_AUTH_LEGACY_HASH'))) ? \Twist::framework()->setting('USER_AUTH_LEGACY_HASH') : 'sha1';
+		return hash($strAlgorthum,$strPassword);
+	}
 
     public static function current($blUpdateKey = true){
 
@@ -156,7 +167,7 @@ class Auth{
 
 			        if( password_verify( $strPassword, $arrUserData['password'] ) ) {
 				        $blValidPassword = true;
-			        } else if( $arrUserData['password'] === sha1( $strPassword ) ) {
+			        } else if( $arrUserData['password'] === self::legacyPassword( $strPassword ) ) {
 				        $blValidPassword = true;
 				        $strPasswordHash = self::hashPassword($strPassword);
 				        $resUser->set( 'password', $strPasswordHash );
