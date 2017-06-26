@@ -49,6 +49,9 @@ class User extends \PHPUnit_Framework_TestCase{
 		$arrSessionArray = \Twist::User()->authenticate('travisci2@unit-test-twistphp.com','X123Password');
 		$this -> assertTrue($arrSessionArray['status']);
 
+		//Re-retrieve the users database record
+		$resUser = \Twist::Database()->records('twist_users')->get(self::$intUserID);
+
 		//Check that the legacy password has been updated
 		$this -> assertNotEquals(sha1('X123Password'),$resUser->get('password'));
 
