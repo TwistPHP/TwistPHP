@@ -71,6 +71,23 @@ CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`hooks` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `apikeys`
+--
+
+CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`apikeys` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `key` char(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `allowed_ips` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Leave blank for no IP restrictions',
+  `enabled` ENUM('0','1') NOT NULL DEFAULT '1' COMMENT 'Set to 1 to enable this API key',
+  `ext_id` char(128) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Any external info or reference to help identify this key',
+  `created` datetime DEFAULT NULL COMMENT 'Date the API key was created',
+  KEY `id` (`id`),
+  UNIQUE KEY `key` (`key`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `sessions`
 --
 
@@ -92,7 +109,7 @@ CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`users` (
   `email` char(250) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Unique email of user',
   `firstname` char(128) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Users first name',
   `surname` char(128) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'The last (given) name of the user',
-  `password` char(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Hash of the users password using SHA512 algorithm',
+  `password` char(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Hash of the users password',
   `temp_password` ENUM('0','1') NOT NULL DEFAULT '0' COMMENT 'Set to 1 if the users password is temp',
   `verified` ENUM('0','1') NOT NULL DEFAULT '0' COMMENT 'Set to 1 if email address is verified',
   `verification_code` CHAR( 16 ) NOT NULL COMMENT 'Verification code used by the email verification system',

@@ -24,57 +24,77 @@
 
 namespace Twist\Core\Models\Email;
 
-class ProtocolSMTP{
-
-	protected $resConnection = null;
-	protected $strLastMessage = '';
-	protected $intTimeout = 90;
-	protected $strBody = '';
-	protected $blUseFromParameter = false;
-
-	public function setTimeout($intTimeout = 90){
-		$this->intTimeout = (is_null($intTimeout)) ? 90 : $intTimeout;
-	}
-
-	public function getLastMessage(){
-		return $this->strLastMessage;
-	}
+class ProtocolSMTP extends BaseProtocol{
 
 	/**
 	 * Open a new FTP connection
 	 * @param string $strHost
 	 * @param integer $intPort
-	 * @throws RuntimeException
+	 * @return boolean
 	 */
 	public function connect($strHost,$intPort = 25){
 
-		/**
-		 * May be a valid way to specify the IP address of the server when on a server with multiple IP addresses
-		 */
-		//$strInterfaceIP = '192.168.1.100'
-		//$this->resConnection = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-		//socket_bind($this->resConnection, $strInterfaceIP);
-		//socket_connect($this->resConnection, $strHost, $intPort);
+		$arrContextOptions = array();
 
-		$this->resConnection = fsockopen($strHost, $intPort);
+		$intErrorNo = 0;
+		$strErrorMessage = '';
 
-		stream_set_blocking($this->resConnection, true);
-		stream_set_timeout($this->resConnection, $this->intTimeout);
+		if(in_array($intPort,array(465,587)) && !strstr($strHost,'ssl://')){
+			$strHost = 'ssl://'.$strHost;
+		}
 
-		if($this->communicate() !== 220){
+		if(function_exists('stream_socket_client')){
+
+			$cxtStreamSocket = stream_context_create($arrContextOptions);
+
+			$this->resConnection = stream_socket_client(
+				sprintf('%s:%d',$strHost,$intPort),
+				$intErrorNo,
+				$strErrorMessage,
+				$this->intTimeout,
+				STREAM_CLIENT_CONNECT,
+				$cxtStreamSocket
+			);
+
+		}else{
+
+			$this->resConnection = fsockopen(
+				$strHost,
+				$intPort,
+				$intErrorNo,
+				$strErrorMessage,
+				$this->intTimeout
+			);
+
+			stream_set_blocking($this->resConnection, true);
+			stream_set_timeout($this->resConnection, $this->intTimeout,0);
+		}
+
+		if($intErrorNo != 0 || !is_resource($this->resConnection)){
+			$this->setError($intErrorNo,$strErrorMessage);
 			return false;
 		}
 
+		$arrResponse = $this->request();
+		if($arrResponse['code'] !== 220){
+			$this->setError($arrResponse['code'],$arrResponse['data']);
+			return false;
+		}
+
+		$this->blConnected = true;
 		return true;
 	}
-
-	public function connected(){ return $this->blConnected; }
 
 	/**
 	 * Disconnect the current session (connection)
 	 */
 	public function disconnect(){
-		$this->communicate('QUIT');
+
+		$arrResponse = $this->request('QUIT');
+		if($arrResponse['code'] !== 221){
+			$this->setError($arrResponse['code'],$arrResponse['data']);
+		}
+
 		fclose($this->resConnection);
 		$this->resConnection = null;
 		$this->blConnected = false;
@@ -84,74 +104,127 @@ class ProtocolSMTP{
 
 		list($strLocalPart,$strEmailHost) = explode('@',$strEmailAddress);
 
-		if($this->communicate(sprintf('EHLO %s',$strEmailHost)) === 250){
-			if($this->communicate(sprintf('AUTH LOGIN')) === 334){
-				return ($this->communicate(base64_encode($strEmailAddress)) === 334 && $this->communicate(base64_encode($strPassword)) === 235);
-			}
+		$arrResponse = $this->request(sprintf('EHLO %s',$strEmailHost));
+		if($arrResponse['code'] !== 250){
+			$this->setError($arrResponse['code'],$arrResponse['data']);
+			return false;
 		}
 
-		return false;
-	}
+		$arrResponse = $this->request('AUTH LOGIN');
+		if($arrResponse['code'] !== 334){
+			$this->setError($arrResponse['code'],$arrResponse['data']);
+			return false;
+		}
 
-	public function useFromParam(){
-		//Ignored for SMTP sending
-	}
+		$arrResponse = $this->request(base64_encode($strEmailAddress));
+		if($arrResponse['code'] !== 334){
+			$this->setError($arrResponse['code'],$arrResponse['data']);
+			return false;
+		}
 
-	public function from($strFromAddress){
-		return $this->communicate(sprintf('MAIL FROM: %s',$strFromAddress)) === 250;
-	}
+		$arrResponse = $this->request(base64_encode($strPassword));
+		if($arrResponse['code'] !== 235){
+			$this->setError($arrResponse['code'],$arrResponse['data']);
+			return false;
+		}
 
-	public function to($strToAddress){
-		return $this->communicate(sprintf('RCPT TO: %s',$strToAddress)) === 250;
-	}
-
-	public function subject($strSubject){
 		return true;
 	}
 
-	public function body($strBody){
-		$this->strBody = $strBody;
+	public function from($strFromAddress){
+
+		$arrResponse = $this->request(sprintf('MAIL FROM: %s',$strFromAddress));
+		if($arrResponse['code'] !== 250){
+			$this->setError($arrResponse['code'],$arrResponse['data']);
+			return false;
+		}
+
+		return true;
+	}
+
+	public function to($strToAddress){
+
+		$arrResponse = $this->request(sprintf('RCPT TO: %s',$strToAddress));
+		if($arrResponse['code'] !== 250){
+			$this->setError($arrResponse['code'],$arrResponse['data']);
+			return false;
+		}
+
 		return true;
 	}
 
 	public function send($strEmailSource){
-		if($this->communicate('DATA') === 354){
-			return $this->communicate(sprintf("%s%s.",$strEmailSource,$this->strBody)) === 250;
+
+		//Send the initiator for the email source to be passed
+		$arrResponse = $this->request('DATA');
+		if($arrResponse['code'] !== 354){
+			$this->setError($arrResponse['code'],$arrResponse['data']);
+			return false;
 		}
+
+		//Send the email source
+		$this->request($strEmailSource,true);
+
+		//Send the end signal for the email data source
+		$arrResponse = $this->request('.');
+		if($arrResponse['code'] !== 250){
+			$this->setError($arrResponse['code'],$arrResponse['data']);
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
 	 * Send and read data from the FTP connection, this function is used to send and receive all comms with the FTP server.
 	 * @param null $strRequestString
-	 * @return int
+	 * @param boolean $blWriteOnly
+	 * @return array
 	 */
-	protected function communicate($strRequestString = null){
+	protected function request($strRequestString = null,$blWriteOnly = false){
 
-		$intResponseCode = 0;
-		$this->strLastMessage = '';
+		$intStartTime = time();
+		$arrResponse = array(
+			'data' => '',
+			'code' => 0
+		);
 
-		//echo '> '.$strRequestString.'<br>';
-
-		//Post the request data if required, otherwise get the response data only
+		//PUT the request data if required, otherwise get the response data only
 		if(!is_null($strRequestString)){
+			$this->strMessageLog .= "> ".$strRequestString."\n";
 			fputs($this->resConnection, $strRequestString."\r\n");
 		}
 
-		while(true){
-			$mxdLine = fgets($this->resConnection, 1024);
-			$this->strLastMessage .= $mxdLine;
+		if($blWriteOnly == false){
 
-			if(preg_match('#^([0-9]{3})\s#',$mxdLine,$arrMatches)){
-				$intResponseCode = intval($arrMatches[0]);
-				break;
+			while (is_resource($this->resConnection) && !feof($this->resConnection)){
+
+				$mxdLine = fgets($this->resConnection, 515);
+				$arrResponse['data'] .= $mxdLine;
+				$this->strMessageLog .= $mxdLine;
+
+				if(preg_match('#^([0-9]{3})\s#',$mxdLine,$arrMatches)){
+					$arrResponse['code'] = intval($arrMatches[0]);
+					break;
+				}
+
+				//Check for a socket timeout
+				$arrMetaInfo = stream_get_meta_data($this->resConnection);
+				if(array_key_exists('timed_out',$arrMetaInfo) && $arrMetaInfo['timed_out']){
+					$this->setError(0,'Request timeout');
+					break;
+				}
+
+				//Check for a hard timeout to prevent endless loops
+				if((time() - $intStartTime) > $this->intTimeout){
+					$this->setError(0,'Request timeout - Hard time limit reached');
+					break;
+				}
 			}
+
+			$this->strLastResponse = $arrResponse['data'];
 		}
 
-		//Clean the message string
-		$this->strLastMessage = trim($this->strLastMessage);
-
-		//echo $this->strLastMessage.'<br>';
-
-		return $intResponseCode;
+		return $arrResponse;
 	}
 }
