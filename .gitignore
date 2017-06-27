@@ -1,5 +1,32 @@
-.idea
-node_modules
+# --- OS --- #
 .DS_Store
+
+# --- JETBRAINS --- #
+.idea
+
+# --- VAGRANT --- #
+.vagrant
+
+# --- LOGS --- #
 *.log
+
+# --- DEMO --- #
+demo/public/app/Assets/*
+!demo/public/app/Assets/.htaccess
+demo/public/app/Cache
+demo/public/app/Controllers/*
+!demo/public/app/Controllers/DEMO_*
+demo/public/app/Logs
+demo/public/app/Models/*
+!demo/public/app/Models/DEMO_*
+demo/public/app/Packages
+demo/public/app/Resources/*
+!demo/public/app/Resources/.htaccess
+demo/public/app/Views/*
+!demo/public/app/Views/DEMO_*
+
+# --- JS DOC RESOURCES --- #
 docs/resources
+
+# --- NODE MODULES --- #
+node_modules

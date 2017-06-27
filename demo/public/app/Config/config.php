@@ -22,34 +22,18 @@
 	 * @link       https://twistphp.com
 	 */
 
-	namespace Twist\Core\Models\Email;
-
-	class ProtocolNative extends BaseProtocol{
-
-		/**
-		 * Hard coded to true so that the connection/login process will not be done upon sending
-		 * @var bool
-		 */
-		protected $blConnected = true;
-
-		public function useFromParam($blStatus = true){
-			$this->blUseFromParameter = $blStatus;
-		}
-
-		public function send($strEmailSource){
-
-			$strEmailSource = preg_replace('/To\: .*\r\n/im', '', $strEmailSource);
-			$strEmailSource = preg_replace('/Subject\: .*\r\n/im', '', $strEmailSource);
-
-			$strAdditionalParam = null;
-
-			if($this->blUseFromParameter){
-				ini_set('sendmail_from', $this->strFrom);
-				$strAdditionalParam = sprintf('-f%s',$this->strFrom);
-			}
-
-			$blOut = mail($this->strTo,$this->strSubject,$this->strBody,$strEmailSource,$strAdditionalParam);
-			$this->strTo = $this->strSubject = $this->strBody = $this->strFrom = null;
-			return $blOut;
-		}
-	}
+	/**
+	 * Database Configuration Settings
+	 * TWIST_DATABASE_NAME			- The name of your primary database
+	 * TWIST_DATABASE_HOST			- Host IP / Name of the database server
+	 * TWIST_DATABASE_USERNAME		- Username to use whilst connecting to the database
+	 * TWIST_DATABASE_PASSWORD		- Password to use whilst connecting to the database
+	 * TWIST_DATABASE_PROTOCOL		- Select the protocol to use (mysql,mysqli) default: mysqli
+	 * TWIST_DATABASE_TABLE_PREFIX 	- Prefix that will be applied to all tables installed by Twist
+	 */
+	Twist::define('TWIST_DATABASE_NAME','twistphp');
+	Twist::define('TWIST_DATABASE_HOST','localhost');
+	Twist::define('TWIST_DATABASE_USERNAME','root');
+	Twist::define('TWIST_DATABASE_PASSWORD','twistphp');
+	Twist::define('TWIST_DATABASE_PROTOCOL','mysqli');
+	Twist::define('TWIST_DATABASE_TABLE_PREFIX','twist_');

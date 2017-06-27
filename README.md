@@ -17,6 +17,16 @@ One line is all it takes:
 require_once( 'twist/framework.php' );
 ```
 
+## Vagrant
+
+To get started with a Vagrant machine:
+
+* Install [Vagrant](https://www.vagrantup.com/downloads.html)
+* Install [VirtualBox](https://www.virtualbox.org/)
+* Run `vagrant up`
+* Load up [localhost:8080](http://localhost:8080/)
+* You can SSH into the Vagrant server with `vagrant ssh`
+
 ## Documentation
 
 Full documentation of the framework can be found on the [TwistPHP website](https://twistphp.com/docs).
