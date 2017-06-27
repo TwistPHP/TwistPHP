@@ -71,18 +71,8 @@
 		}
 	},
 	"twist/ajax": {
-		"all": {
-			"default": true,
-			"css": ["css/twistajax.css"],
-			"js": ["js/twistajax.js"]
-		},
-		"css": {
-			"default": false,
-			"css": ["css/twistajax.css"],
-			"js": []
-		},
 		"js": {
-			"default": false,
+			"default": true,
 			"css": [],
 			"js": ["js/twistajax.js"]
 		}

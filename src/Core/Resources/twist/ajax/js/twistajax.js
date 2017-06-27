@@ -20,47 +20,64 @@
  * @link       https://twistphp.com
  */
 
-import {serialize} from '../../../../../../node_modules/form-serialize/index';
+import serialize from '../../../../../../node_modules/form-serialize/index';
 
 export default class twistajax {
 
-	constructor( URI ) {
-		this.URI = URI;
-		this.globalSuccessFunction = () => {};
-		this.globalFailureFunction = () => {};
+	constructor( uri ) {
+		this.uri = uri.replace( /\/$/, '' );
 		this.timeout = 10000;
 		this.cache = false;
 		this.requests = 0;
 		this.debug = false;
-		this.loader = null;
+		this.preSuccess = response => { return response };
 	}
 
-	get( data, success = () => {}, fail = () => {} ) {
-		return this.send( 'GET', data );
+	set timeout( timeout ) {
+		console.log( 'Changed timeout to ' + timeout );
 	}
 
-	post( data, success = () => {}, fail = () => {} ) {
-		return this.send( 'POST', data );
+	get( location ) {
+		return this.send( location, {}, 'GET' );
 	}
 
-	send( data, success = () => {}, fail = () => {}, method = 'GET' ) {
+	post( location, data ) {
+		return this.send( location, data, 'POST' );
+	}
+
+	postForm( location, formSelector ) {
+		// let data = new FormData( document.querySelector( formSelector ) );
+		// console.log( data );
+		// return this.send( location, data, 'POST' );
+
+		let data = serialize( document.querySelector( formSelector ), { empty: true } );
+		console.log( data );
+		return this.post( location, data );
+	}
+
+	send( location, bodydata = {}, method = 'GET' ) {
+		console.log( bodydata );
 		return new Promise( ( resolve, reject ) => {
-			fetch( this.URI, {
+			fetch( this.uri + '/' + location, {
 				method: method,
-				headers: myHeaders,
+				headers: {
+					Accept: 'application/json, text/plain, */*',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify( bodydata ),
 				cache: this.cache ? 'default' : 'no-store'
 			} )
 				.then( response => response.json() )
+				.then( response => typeof this.preSuccess === 'function' ? this.preSuccess( response ) : response )
 				.then( response => {
-					//DO THINGS
-					return response;
-				} )
-				.then( response => {
-					success.apply( response );
+					if( response.status !== true ) {
+						throw( response.message || 'Status returned FALSE' );
+					}
+
+					return response.data;
 				} )
 				.then( response => resolve( response ) )
 				.catch( e => {
-					fail.apply();
 					reject( e );
 				} );
 		} );
