@@ -68,7 +68,7 @@ mysql -u root --password=${MYSQL_ROOT_PASSWORD} <<-MSQL
 	FLUSH PRIVILEGES;
 MSQL
 
-mysql -u root --password=${MYSQL_ROOT_PASSWORD} twistphp < /vagrant/demo/demo.sql
+mysql -u root --password=${MYSQL_ROOT_PASSWORD} ${DATABASE} < /vagrant/demo/demo.sql
 
 ### SMTP RELAY ###
 DEBIAN_FRONTEND=noninteractive apt-get -y install mailutils
