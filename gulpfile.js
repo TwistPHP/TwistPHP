@@ -3,9 +3,9 @@ var gulp = require( 'gulp' ),
 		rollup = require( 'rollup' ),
 		rollupUglify = require( 'rollup-plugin-uglify' ),
 		rollupBabel = require( 'rollup-plugin-babel' ),
-		rollupEslint = require( 'rollup-plugin-eslint' ),
+		rollupESLint = require( 'rollup-plugin-eslint' ),
 		eslint = require( 'gulp-eslint' ),
-		cjs = require( 'rollup-plugin-commonjs' ),
+		rollupCJS = require( 'rollup-plugin-commonjs' ),
 		sass = require( 'gulp-sass' ),
 		concat = require( 'gulp-concat' ),
 		uglify = require( 'gulp-uglify' ),
@@ -40,7 +40,7 @@ gulp.task( 'ajax-js', () => {
 	return rollup.rollup( {
 		entry: strTwistSource + 'ajax/js/twistajax.js',
 		plugins: [
-			cjs( {
+			rollupCJS( {
 				namedExports: {'./node_modules/form-serialize/index.js': ['serialize']}
 			} ),
 			rollupBabel( {
@@ -48,7 +48,7 @@ gulp.task( 'ajax-js', () => {
 				sourceMaps: true,
 				babelrc: false
 			} ),
-			rollupEslint( esOptions ),
+			rollupESLint( esOptions ),
 			rollupUglify()
 		],
 	} )
