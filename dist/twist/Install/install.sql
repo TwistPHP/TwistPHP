@@ -109,7 +109,7 @@ CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`users` (
   `email` char(250) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Unique email of user',
   `firstname` char(128) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Users first name',
   `surname` char(128) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'The last (given) name of the user',
-  `password` char(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Hash of the users password using SHA512 algorithm',
+  `password` char(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Hash of the users password',
   `temp_password` ENUM('0','1') NOT NULL DEFAULT '0' COMMENT 'Set to 1 if the users password is temp',
   `verified` ENUM('0','1') NOT NULL DEFAULT '0' COMMENT 'Set to 1 if email address is verified',
   `verification_code` CHAR( 16 ) NOT NULL COMMENT 'Verification code used by the email verification system',
