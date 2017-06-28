@@ -6,18 +6,10 @@
 
 	class DEMO_AJAX123 extends BaseAJAX {
 
-		private $arrPostedJSON = null;
-
-		private function _getPostedJSONField( $strField ) {
-			if( is_null( $this -> arrPostedJSON ) ) {
-				$this -> arrPostedJSON = json_decode( file_get_contents( 'php://input' ), true );
-			}
-			return array_key_exists( $strField, $this -> arrPostedJSON ) ? $this -> arrPostedJSON[$strField] : null;
-		}
-
 		public function knock() {
+			sleep( 5 );
 			$this -> _ajaxFail();
-			$this -> _ajaxMessage( 'The knock was quiet' );
+			$this -> _ajaxMessage( 'The knock was too quiet' );
 			return $this -> _ajaxRespond();
 		}
 
@@ -32,17 +24,15 @@
 
 		public function GETage() {
 			$this -> _ajaxFail();
-			$this -> _ajaxMessage( 'Please POST your age form' );
+			$this -> _ajaxMessage( 'Please POST your age rather than GET' );
 			return $this -> _ajaxRespond();
 		}
 
 		public function POSTage() {
 			$this -> _ajaxMessage( 'Wow! You\'re old!' );
-
 			$objResponse = array(
-				'posted' => $this -> arrPostedJSON,
-				'yourDob' => $this -> _getPostedJSONField( 'dob' ),
-				'yourAge' => \Twist::DateTime() -> getAge( strtotime( $this -> _getPostedJSONField( 'dob' ) ) )
+				'yourDob' => $this -> _posted( 'dob' ),
+				'yourAge' => \Twist::DateTime() -> getAge( strtotime( $this -> _posted( 'dob' ) ) )
 			);
 			return $this -> _ajaxRespond( $objResponse );
 		}

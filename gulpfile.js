@@ -10,7 +10,11 @@ var gulp = require( 'gulp' ),
 		concat = require( 'gulp-concat' ),
 		uglify = require( 'gulp-uglify' ),
 		jsdoc = require( 'gulp-jsdoc3' ),
-		sourcemaps = require( 'gulp-sourcemaps' ),
+		sourcemaps = require( 'gulp-sourcemaps' );
+
+
+var strTwistSource = './src/Core/Resources/twist/',
+		strTwistDestination = './dist/twist/Core/Resources/twist/',
 		esOptions = {
 			parserOptions: {
 				ecmaVersion: 6,
@@ -33,46 +37,35 @@ var gulp = require( 'gulp' ),
 			},
 			envs: ['browser']
 		},
-		strTwistSource = './src/Core/Resources/twist/',
-		strTwistDestination = './dist/twist/Core/Resources/twist/';
-
-
-
-gulp.task( 'watch', () => {
-
-	var watcher = gulp.watch(strTwistSource + 'ajax/js/twistajax.js', ['ajax-js']);
-	watcher.on('change', function(event) {
-		console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
-	});
-
-} );
-
-
-
-gulp.task( 'ajax-js', () => {
-	return rollup.rollup( {
-		entry: strTwistSource + 'ajax/js/twistajax.js',
-		plugins: [
-			rollupCJS( {
-				namedExports: {'./node_modules/form-serialize/index.js': ['serialize']}
-			} ),
-			rollupBabel( {
-				presets: [['es2015', {modules: false}]],
-				sourceMaps: true,
-				babelrc: false
-			} ),
-			rollupESLint( esOptions ),
-			rollupUglify()
-		],
-	} )
-			.then( bundle => {
-				return bundle.write( {
-					format: 'umd',
+		rollupConfig = entry => {
+			return {
+				entry: entry,
+				plugins: [
+					rollupCJS( {
+						namedExports: {'./node_modules/form-serialize/index.js': ['serialize']}
+					} ),
+					rollupBabel( {
+						presets: [['es2015', {modules: false}]],
+						sourceMaps: true,
+						babelrc: false
+					} ),
+					rollupESLint( esOptions ),
+					rollupUglify()
+				],
+			};
+		},
+		rollupExport = ( bundle, dest ) => {
+			return bundle.write( {
+					format: 'iife',
 					moduleName: 'twistajax',
-					dest: strTwistDestination + 'ajax/js/twistajax.js',
+					dest: dest,
 					sourceMap: true
 				} );
-			} );
+		};
+
+gulp.task( 'ajax-js', () => {
+	return rollup.rollup( rollupConfig( strTwistSource + 'ajax/js/twistajax.js' ) )
+			.then( bundle => rollupExport( bundle, strTwistDestination + 'ajax/js/twistajax.js' ) );
 } );
 
 gulp.task( 'cssreset', () => {
@@ -88,6 +81,32 @@ gulp.task( 'debug-js', () => {
 			.pipe( uglify( {preserveComments: 'license'} ) )
 			.pipe( gulp.dest( strTwistDestination + 'debug/js' ) );
 } );
+
+
+
+
+
+
+gulp.task( 'watch', () => {
+
+	var watcher = gulp.watch(strTwistSource + 'ajax/js/twistajax.js', ['ajax-js']);
+	watcher.on('change', function(event) {
+		console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
+	});
+
+} );
+
+
+
+
+
+
+
+
+
+
+
+
 
 gulp.task( 'debug-css', () => {
 	return gulp.src( strTwistSource + 'debug/scss/twistdebug.scss' )

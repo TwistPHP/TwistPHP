@@ -15,6 +15,7 @@
     <input name="lastname" type="text" value="Fry">
     <input name="dob" type="date" value="1974-08-14">
 </form>
+{resource:babel,polyfill}
 {resource:twist/ajax}
 <script>
 	var door = new twistajax( '/ajax' );
@@ -22,27 +23,34 @@
 	//door.timeout = 2000;
 	door.debug = true;
 
-	/*door.get( 'knock' )
-            .then( response => {
-	            console.log( response );
-            } )
-            .catch( e => {
-	            console.error( 'Sorry, I didn\'t hear you knock because: ' + e );
+	door.on( 'request', () => {
+        console.info( 'REQ' );
+    } );
+	door.on( 'response', () => {
+        console.info( 'RES' );
+    } );
 
-	            door.get( 'ring' )
-			            .then( response => {
-				            console.log( response );
-			            } )
-			            .catch( e => {
-				            console.error( 'Sorry, I didn\'t hear you ring because:', e );
-			            } );
-            } );*/
+	door.get( 'knock' )
+			.then( response => {
+				console.log( response );
+			} )
+			.catch( e => {
+				console.error( 'Sorry, I didn\'t hear you knock because: ' + e );
+
+				door.get( 'ring' )
+						.then( response => {
+							console.log( response );
+						} )
+						.catch( e => {
+							console.error( 'Sorry, I didn\'t hear you ring because:', e );
+						} );
+			} );
 
 	door.post( 'age', {
-        firstname: 'Andrew',
-        lastname: 'Hosgood',
-        dob: '1986-09-24'
-    } )
+		firstname: 'Andrew',
+		lastname: 'Hosgood',
+		dob: '1986-09-24'
+	} )
 			.then( response => {
 				console.log( response );
 				door.debug = false;

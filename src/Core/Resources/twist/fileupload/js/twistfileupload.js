@@ -20,6 +20,8 @@
  * @link       https://twistphp.com
  */
 
+//export default class twistfieupload {}
+
 (
 	(
 		function( root, factory ) {

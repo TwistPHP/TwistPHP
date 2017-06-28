@@ -32,10 +32,18 @@ class BaseAJAX extends Base{
 
 	protected $blAjaxResponse = true;
 	protected $strAjaxResponseMessage = '';
+	private $arrPostedJSON = null;
 
 	public function _baseCalls(){
 		$this->_timeout(60);
 		return true;
+	}
+
+	protected function _posted( $strField ) {
+		if( is_null( $this -> arrPostedJSON ) ) {
+			$this -> arrPostedJSON = json_decode( file_get_contents( 'php://input' ), true );
+		}
+		return array_key_exists( $strField, $this -> arrPostedJSON ) ? $this -> arrPostedJSON[$strField] : null;
 	}
 
 	/**
@@ -43,21 +51,21 @@ class BaseAJAX extends Base{
 	 *
 	 * @param bool $blStatus
 	 */
-	public function _ajaxStatus($blStatus){
+	protected function _ajaxStatus($blStatus){
 		$this->blAjaxResponse = ($blStatus !== false);
 	}
 
 	/**
 	 * Call to mark the AJAX request as successfully complete, calls the _ajaxStatus function and passes in true.
 	 */
-	public function _ajaxSucceed(){
+	protected function _ajaxSucceed(){
 		$this->_ajaxStatus(true);
 	}
 
 	/**
 	 * Call to mark the AJAX request as failed, calls the _ajaxStatus function and passes in false.
 	 */
-	public function _ajaxFail(){
+	protected function _ajaxFail(){
 		$this->_ajaxStatus(false);
 	}
 
@@ -65,7 +73,7 @@ class BaseAJAX extends Base{
 	 * Set a message to be returned to the Ajax call, can be used for an error message
 	 * @param string $strMessage
 	 */
-	public function _ajaxMessage($strMessage=''){
+	protected function _ajaxMessage($strMessage=''){
 		$this->strAjaxResponseMessage = $strMessage;
 	}
 
@@ -75,7 +83,7 @@ class BaseAJAX extends Base{
 	 * @param bool  $blDebug
 	 * @return string
 	 */
-	public function _ajaxRespond($mxdData=array(), $blDebug = false){
+	protected function _ajaxRespond($mxdData=array(), $blDebug = false){
 		$arrResponse = array();
 		$arrResponse['status'] = $this->blAjaxResponse;
 		$arrResponse['message'] = $this->strAjaxResponseMessage;

@@ -13,6 +13,13 @@
 			"js": []
 		}
 	},
+	"babel": {
+		"polyfill": {
+			"default": true,
+			"css": [],
+			"js": ["polyfill.min.js"]
+		}
+	},
 	"firebug-lite": {
 		"1.4.0": {
 			"default": true,

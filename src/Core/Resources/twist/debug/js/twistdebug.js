@@ -18,10 +18,6 @@
  * @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
  * @license    https://www.gnu.org/licenses/gpl.html GPL License
  * @link       https://twistphp.com
- * 
- * --------------
- * TwistPHP Debug
- * --------------
  */
 
 (function( window, document, undefined ) {
