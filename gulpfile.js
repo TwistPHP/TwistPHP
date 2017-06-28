@@ -36,6 +36,19 @@ var gulp = require( 'gulp' ),
 		strTwistSource = './src/Core/Resources/twist/',
 		strTwistDestination = './dist/twist/Core/Resources/twist/';
 
+
+
+gulp.task( 'watch', () => {
+
+	var watcher = gulp.watch(strTwistSource + 'ajax/js/twistajax.js', ['ajax-js']);
+	watcher.on('change', function(event) {
+		console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
+	});
+
+} );
+
+
+
 gulp.task( 'ajax-js', () => {
 	return rollup.rollup( {
 		entry: strTwistSource + 'ajax/js/twistajax.js',

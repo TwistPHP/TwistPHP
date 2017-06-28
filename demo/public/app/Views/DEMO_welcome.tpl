@@ -20,6 +20,7 @@
 	var door = new twistajax( '/ajax' );
 
 	//door.timeout = 2000;
+	door.debug = true;
 
 	/*door.get( 'knock' )
             .then( response => {
@@ -36,6 +37,19 @@
 				            console.error( 'Sorry, I didn\'t hear you ring because:', e );
 			            } );
             } );*/
+
+	door.post( 'age', {
+        firstname: 'Andrew',
+        lastname: 'Hosgood',
+        dob: '1986-09-24'
+    } )
+			.then( response => {
+				console.log( response );
+				door.debug = false;
+			} )
+			.catch( e => {
+				console.error( 'Something broke', e );
+			} );
 
 	door.postForm( 'age', '#test-form' )
 			.then( response => {

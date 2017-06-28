@@ -30,46 +30,85 @@ export default class twistajax {
 		this.cache = false;
 		this.requests = 0;
 		this.debug = false;
-		this.preSuccess = response => { return response };
+		// this.preSuccess = response => { return response };
 	}
 
-	set timeout( timeout ) {
-		console.log( 'Changed timeout to ' + timeout );
+	set debug( debug ) {
+		if( debug ) {
+			try {
+				let args = [
+					'%c %c %c TwistPHP AJAX %c %c ',
+					'font-size: 15px; background: #2a5200;',
+					'font-size: 17px; background: #3f7a00;',
+					'color: #FFF; font-size: 18px; background: #539F00;',
+					'font-size: 17px; background: #3f7a00;',
+					'font-size: 15px; background: #2a5200;'
+				];
+
+				console.log.apply( console, args );
+			} catch( e ) {
+				if( console.info ) {
+					console.info( 'TwistPHP AJAX' );
+				} else {
+					console.log( 'TwistPHP AJAX' );
+				}
+			}
+
+			let instanceData = {
+				uri: this.uri,
+				timeout: this.timeout,
+				cache: this.cache,
+				requests: this.requests
+			};
+
+			console.log( instanceData );
+		}
 	}
 
-	get( location ) {
-		return this.send( location, {}, 'GET' );
+	delete( location, data = {} ) {
+		return this.send( location, data, 'DELETE' );
 	}
 
-	post( location, data ) {
+	get( location, data = {} ) {
+		return this.send( location, data, 'GET' );
+	}
+
+	patch( location, data = {} ) {
+		return this.send( location, data, 'PATCH' );
+	}
+
+	post( location, data = {} ) {
 		return this.send( location, data, 'POST' );
 	}
 
-	postForm( location, formSelector ) {
-		// let data = new FormData( document.querySelector( formSelector ) );
-		// console.log( data );
-		// return this.send( location, data, 'POST' );
+	put( location, data = {} ) {
+		return this.send( location, data, 'PUT' );
+	}
 
+	postForm( location, formSelector ) {
 		let data = serialize( document.querySelector( formSelector ), { empty: true } );
-		console.log( data );
 		return this.post( location, data );
 	}
 
 	send( location, bodydata = {}, method = 'GET' ) {
-		console.log( bodydata );
+		console.info( 'Requests: ' + this.requests );
 		return new Promise( ( resolve, reject ) => {
+			this.requests++;
 			fetch( this.uri + '/' + location, {
 				method: method,
 				headers: {
 					Accept: 'application/json, text/plain, */*',
-					'Content-Type': 'application/json'
+					'Content-Type': 'application/json; charset=utf-8'
 				},
 				body: JSON.stringify( bodydata ),
 				cache: this.cache ? 'default' : 'no-store'
 			} )
 				.then( response => response.json() )
-				.then( response => typeof this.preSuccess === 'function' ? this.preSuccess( response ) : response )
+				// .then( response => typeof this.preSuccess === 'function' ? this.preSuccess( response ) : response )
 				.then( response => {
+					this.requests--;
+					console.info( 'Requests: ' + this.requests );
+
 					if( response.status !== true ) {
 						throw( response.message || 'Status returned FALSE' );
 					}
@@ -82,87 +121,6 @@ export default class twistajax {
 				} );
 		} );
 	}
-
-	serialise( stuff ) {
-		return serialize( stuff );
-	}
-
-	/*
-	 * TODO: Major rewrite required, remove jQuery dependencies
-	 */
-	/*static serializeJSON( jqoForm ) {
-		let objJSON = {},
-			arrFormElements = [];
-
-		jQuery.map( jqoForm.serializeArray(), ( arrElement, intIndex ) => {
-			arrFormElements.push( { name: arrElement.name, value: arrElement.value } );
-		} );
-
-		jqoForm.find( 'input[type="submit"][name][value], input[type="reset"][name][value], input[type="button"][name][value], button[name][value]' ).each( () => {
-			var jqoElement = $( this );
-			arrFormElements.push( {name: jqoElement.attr( 'name' ), value: jqoElement.val()} );
-		} );
-
-		let returnNameObject = ( strFullName, strNameSoFar, strName, mxdValue ) => {
-			let objOut = {},
-				arrNameMatches = strName.match( /^(\[([^\[]*)\])((\[[^\[]*\])*)$/i );
-
-			if( arrNameMatches ) {
-				var strThisKey = arrNameMatches[2];
-
-				if( isBlank( strThisKey ) ) {
-					var intKey = 1,
-						blKeyExists = true;
-
-										do {
-											var blKeyFree = true;
-											for( var intFormElement in arrFormElements ) {
-												if( contains( strNameSoFar + '[' + intKey + ']', arrFormElements[intFormElement].name ) ) {
-													intKey++;
-													blKeyFree = false;
-												}
-											}
-
-											if( blKeyFree ) {
-												var blKeyReplaced = false;
-												for( var intFormElement2 in arrFormElements ) {
-													if( !blKeyReplaced &&
-															arrFormElements[intFormElement2].name === strNameSoFar + '[]' &&
-															arrFormElements[intFormElement2].value === mxdValue ) {
-														arrFormElements[intFormElement2].name = strNameSoFar + '[' + intKey + ']';
-														blKeyReplaced = true;
-													}
-												}
-
-												blKeyExists = false;
-											}
-										} while( blKeyExists );
-											strThisKey = intKey;
-										}
-
-										if( arrNameMatches[3] ) {
-											objOut[strThisKey] = returnNameObject( strFullName, strNameSoFar + '[' + strThisKey + ']', arrNameMatches[3], mxdValue );
-										} else {
-											objOut[strThisKey] = mxdValue;
-										}
-									}
-									return objOut;
-								};
-
-								$.each( arrFormElements, ( intIndex, arrFormElement ) => {
-									let arrNameMatches = arrFormElement.name.match( /^([^\[]+)((\[[^\[]*\])+)$/i );
-									if( arrNameMatches ) {
-										let objThisName = {};
-											objThisName[arrNameMatches[1]] = returnNameObject( arrFormElement.name, arrNameMatches[1], arrNameMatches[2], arrFormElement.value );
-											objJSON = $.extend( true, objJSON, objThisName );
-										} else {
-											objJSON[arrFormElement.name] = arrFormElement.value;
-										}
-									}
-								);
-
-							return objJSON;
-						}*/
 }
 
 
