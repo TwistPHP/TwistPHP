@@ -37,40 +37,40 @@ class Views extends \PHPUnit_Framework_TestCase{
 
 		\Twist::framework()->setting('RESOURCE_INCLUDE_ONCE',true);
 
-		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax}");
+		$strTagOutput = \Twist::View()->replace("{resource:twist/debug}");
 		$this->assertContains('<script', $strTagOutput);
-		$this->assertContains('twist/Core/Resources/twist/ajax/js/twistajax.js', $strTagOutput);
+		$this->assertContains('twist/Core/Resources/twist/debug/js/twistdebug.js', $strTagOutput);
 		$this->assertContains('<link', $strTagOutput);
-		$this->assertContains('twist/Core/Resources/twist/ajax/css/twistajax.css', $strTagOutput);
+		$this->assertContains('twist/Core/Resources/twist/debug/css/twistdebug.css', $strTagOutput);
 
 		//A resource an only be included once per page load when RESOURCE_INCLUDE_ONCE is enabled
-		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,js=true}");
+		$strTagOutput = \Twist::View()->replace("{resource:twist/debug,js=true}");
 		$this->assertEquals('', $strTagOutput);
 
 		//Turn include once off so that we can test multiple times with the same resource
 		\Twist::framework()->setting('RESOURCE_INCLUDE_ONCE',false);
 
-		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,js=true}");
+		$strTagOutput = \Twist::View()->replace("{resource:twist/debug,js=true}");
 		$this->assertContains('<script', $strTagOutput);
-		$this->assertContains('twistajax.js', $strTagOutput);
+		$this->assertContains('twistdebug.js', $strTagOutput);
 
-		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,css=true}");
+		$strTagOutput = \Twist::View()->replace("{resource:twist/debug,css=true}");
 		$this->assertContains('<link', $strTagOutput);
-		$this->assertContains('twistajax.css', $strTagOutput);
+		$this->assertContains('twistdebug.css', $strTagOutput);
 
-		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,js,async=async}");
+		$strTagOutput = \Twist::View()->replace("{resource:twist/debug,js,async=async}");
 		$this->assertContains('<script', $strTagOutput);
 		$this->assertContains('async', $strTagOutput);
-		$this->assertContains('twistajax.js', $strTagOutput);
+		$this->assertContains('twistdebug.js', $strTagOutput);
 
-		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,js,async=defer}");
+		$strTagOutput = \Twist::View()->replace("{resource:twist/debug,js,async=defer}");
 		$this->assertContains('<script', $strTagOutput);
 		$this->assertContains('defer', $strTagOutput);
-		$this->assertContains('twistajax.js', $strTagOutput);
+		$this->assertContains('twistdebug.js', $strTagOutput);
 
-		$strTagOutput = \Twist::View()->replace("{resource:twist/ajax,js=true,inline=true}");
+		$strTagOutput = \Twist::View()->replace("{resource:twist/debug,js=true,inline=true}");
 		$this->assertContains('<script', $strTagOutput);
-		$this->assertContains('.twistajax', $strTagOutput);
+		$this->assertContains('.twistdebug', $strTagOutput);
 
 		\Twist::framework()->setting('RESOURCE_INCLUDE_ONCE',true);
 	}
@@ -78,35 +78,35 @@ class Views extends \PHPUnit_Framework_TestCase{
 	public function testTagCSS(){
 
 		//Check the tag is being output
-		$strTagOutput = \Twist::View()->replace("{css:twist/Core/Resources/twist/ajax/css/twistajax.css}");
+		$strTagOutput = \Twist::View()->replace("{css:twist/Core/Resources/twist/debug/css/twistdebug.css}");
 		$this->assertContains('<link', $strTagOutput);
-		$this->assertContains('twist/Core/Resources/twist/ajax/css/twistajax.css', $strTagOutput);
+		$this->assertContains('twist/Core/Resources/twist/debug/css/twistdebug.css', $strTagOutput);
 		
 		//Create an override JS file
-		mkdir(sprintf('%s/Twist/Core/Resources/twist/ajax/css',TWIST_APP),0777,true);
-		file_put_contents(sprintf('%s/Twist/Core/Resources/twist/ajax/css/twistajax.css',TWIST_APP),'test override file');
-		$this -> assertTrue(file_exists(sprintf('%s/Twist/Core/Resources/twist/ajax/css/twistajax.css',TWIST_APP)));
+		mkdir(sprintf('%s/Twist/Core/Resources/twist/debug/css',TWIST_APP),0777,true);
+		file_put_contents(sprintf('%s/Twist/Core/Resources/twist/debug/css/twistdebug.css',TWIST_APP),'test override file');
+		$this -> assertTrue(file_exists(sprintf('%s/Twist/Core/Resources/twist/debug/css/twistdebug.css',TWIST_APP)));
 
 		//Check the replacement is being used
-		$strTagOutput = \Twist::View()->replace("{css:twist/Core/Resources/twist/ajax/css/twistajax.css}");
+		$strTagOutput = \Twist::View()->replace("{css:twist/Core/Resources/twist/debug/css/twistdebug.css}");
 		$this->assertContains('<link', $strTagOutput);
-		$this->assertContains('app/Twist/Core/Resources/twist/ajax/css/twistajax.css', $strTagOutput);
+		$this->assertContains('app/Twist/Core/Resources/twist/debug/css/twistdebug.css', $strTagOutput);
 	}
 
 	public function testTagJS(){
 
-		$strTagOutput = \Twist::View()->replace("{js:twist/Core/Resources/twist/ajax/js/twistajax.js}");
+		$strTagOutput = \Twist::View()->replace("{js:twist/Core/Resources/twist/debug/js/twistdebug.js}");
 		$this->assertContains('<script', $strTagOutput);
-		$this->assertContains('twist/Core/Resources/twist/ajax/js/twistajax.js', $strTagOutput);
+		$this->assertContains('twist/Core/Resources/twist/debug/js/twistdebug.js', $strTagOutput);
 
 		//Create an override JS file
-		mkdir(sprintf('%s/Twist/Core/Resources/twist/ajax/js',TWIST_APP),0777,true);
-		file_put_contents(sprintf('%s/Twist/Core/Resources/twist/ajax/js/twistajax.js',TWIST_APP),'test override file');
-		$this -> assertTrue(file_exists(sprintf('%s/Twist/Core/Resources/twist/ajax/js/twistajax.js',TWIST_APP)));
+		mkdir(sprintf('%s/Twist/Core/Resources/twist/debug/js',TWIST_APP),0777,true);
+		file_put_contents(sprintf('%s/Twist/Core/Resources/twist/debug/js/twistdebug.js',TWIST_APP),'test override file');
+		$this -> assertTrue(file_exists(sprintf('%s/Twist/Core/Resources/twist/debug/js/twistdebug.js',TWIST_APP)));
 
-		$strTagOutput = \Twist::View()->replace("{js:twist/Core/Resources/twist/ajax/js/twistajax.js}");
+		$strTagOutput = \Twist::View()->replace("{js:twist/Core/Resources/twist/debug/js/twistdebug.js}");
 		$this->assertContains('<script', $strTagOutput);
-		$this->assertContains('app/Twist/Core/Resources/twist/ajax/js/twistajax.js', $strTagOutput);
+		$this->assertContains('app/Twist/Core/Resources/twist/debug/js/twistdebug.js', $strTagOutput);
 	}
 
 	public function testTagImg(){
