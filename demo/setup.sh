@@ -5,6 +5,8 @@ MYSQL_ROOT_PASSWORD='twistphp'
 DATABASE='twistphp'
 SMTP_RELAY='1.2.3.4'
 
+sudo chown -fR vagrant:vagrant ${DOCUMENT_ROOT}
+
 ### Bookeeping ###
 mkdir -p /root/.provisioning
 
