@@ -7,7 +7,7 @@
 	class DEMO_AJAX123 extends BaseAJAX {
 
 		public function knock() {
-			sleep( 5 );
+			sleep( 2 );
 			$this -> _ajaxFail();
 			$this -> _ajaxMessage( 'The knock was too quiet' );
 			return $this -> _ajaxRespond();

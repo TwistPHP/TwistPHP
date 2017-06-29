@@ -11,24 +11,21 @@
 <h1>Welcome!</h1>
 <h2>What a beautiful {date:l} it is :)</h2>
 <form id="test-form">
-    <input name="firstname" type="text" value="Philip">
-    <input name="lastname" type="text" value="Fry">
-    <input name="dob" type="date" value="1974-08-14">
+    <input name="firstname" type="text" value="Philip"> <input name="lastname" type="text" value="Fry"> <input name="dob" type="date" value="1974-08-14">
 </form>
 {resource:babel,polyfill}
 {resource:twist/ajax}
 <script>
 	var door = new twistajax( '/ajax' );
 
-	//door.timeout = 2000;
 	door.debug = true;
 
 	door.on( 'request', () => {
-        console.info( 'REQ' );
-    } );
-	door.on( 'response', () => {
-        console.info( 'RES' );
-    } );
+		console.log( door.requests.length + ' active requests' );
+	} )
+			.on( 'response', () => {
+				console.log( door.requests.length + ' active requests' );
+			} );
 
 	door.get( 'knock' )
 			.then( response => {
@@ -42,7 +39,7 @@
 							console.log( response );
 						} )
 						.catch( e => {
-							console.error( 'Sorry, I didn\'t hear you ring because:', e );
+							console.error( 'Sorry, I didn\'t hear you ring because: ' + e );
 						} );
 			} );
 
@@ -56,7 +53,7 @@
 				door.debug = false;
 			} )
 			.catch( e => {
-				console.error( 'Something broke', e );
+				console.error( 'Something broke:', e );
 			} );
 
 	door.postForm( 'age', '#test-form' )
@@ -64,7 +61,7 @@
 				console.log( response );
 			} )
 			.catch( e => {
-				console.error( 'Something broke', e );
+				console.error( 'Something broke:', e );
 			} );
 </script>
 </body>

@@ -163,7 +163,7 @@ gulp.task( 'docs', () => {
 			.pipe( jsdoc( {opts: {destination: './docs/resources/'}} ) );
 } );
 
-gulp.task( 'ajax', ['ajax-js', 'ajax-css'] );
+gulp.task( 'ajax', ['ajax-js'] );
 gulp.task( 'debug', ['debug-js', 'debug-css'] );
 gulp.task( 'fileupload', ['fileupload-js', 'fileupload-css'] );
 gulp.task( 'manager', ['manager-js', 'manager-css'] );

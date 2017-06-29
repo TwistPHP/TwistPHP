@@ -22,28 +22,21 @@
 
 import serialize from '../../../../../../node_modules/form-serialize/index';
 
-/*let prettySize = function( intBytes, blUseSpace ) {
-			let arrLimits = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
-					intLimit = 0;
-
-			while( arrLimits[intLimit] && intBytes > Math.pow( 1024, intLimit + 1 ) ) {
-				intLimit++;
-			}
-
-			return round( intBytes / Math.pow( 1024, intLimit ), 2 ) + ( typeof blUseSpace === 'boolean' && blUseSpace ? ' ' : '' ) + arrLimits[intLimit];
-		},
-		round = function( intNumber, intDP ) {
-			intDP = ( typeof intDP !== 'number' ) ? 0 : intDP;
-			return intDP === 0 ? parseInt( Math.round( intNumber * Math.pow( 10, intDP ) ) / Math.pow( 10, intDP ) ) : parseFloat( Math.round( intNumber * Math.pow( 10, intDP ) ) / Math.pow( 10, intDP ) );
-		};*/
-
 export default class twistajax {
 	constructor( uri = '' ) {
 		this.uri = uri.replace( /\/$/, '' );
 		this.cache = false;
-		this.requests = 0;
+		this.requests = [];
 		this.debug = false;
 		this.events = {};
+
+		if( !window.twist ) {
+			window.twist = {ajax: {instances: []}};
+		} else if( !window.twist.ajax ) {
+			window.twist.ajax = {instances: []};
+		}
+
+		window.twist.ajax.instances.push( this );
 	}
 
 	set debug( debug ) {
@@ -66,15 +59,6 @@ export default class twistajax {
 					console.log( 'TwistPHP AJAX' );
 				}
 			}
-
-			let instanceData = {
-				uri: this.uri,
-				timeout: this.timeout,
-				cache: this.cache,
-				requests: this.requests
-			};
-
-			console.log( instanceData );
 		}
 	}
 
@@ -113,6 +97,8 @@ export default class twistajax {
 		}
 
 		this.events[event].push( callback );
+
+		return this;
 	}
 
 	trigger( event ) {
@@ -122,9 +108,7 @@ export default class twistajax {
 	}
 
 	send( location, bodydata = {}, method = 'GET' ) {
-
-		return new Promise( ( resolve, reject ) => {
-			this.requests++;
+		let request = new Promise( ( resolve, reject ) => {
 			this.trigger( 'request' );
 
 			let fetchOptions = {
@@ -141,13 +125,34 @@ export default class twistajax {
 			}
 
 			fetch( this.uri + '/' + location, fetchOptions )
-					.then( response => response.json() )
+					//.then( response => response.json() )
 					.then( response => {
-						this.requests--;
+						return response.text()
+								.then( response => {
+									try {
+										return JSON.parse( response );
+									} catch( e ) {
+										let expectedFields = '("status" ?: ?(true|false)?|"message" ?: ?".*"|"data" ?: ?(\\{.*\\}|\\[.*\\]))',
+												regex = new RegExp( '\{(' + expectedFields + ' ?, ?){2}' + expectedFields + '\}', 'g' ),
+												matches = regex.exec( response );
+
+										if( matches !== null ) {
+											console.warn( 'Broken AJAX response parsed' );
+											return JSON.parse( matches[0] );
+										} else {
+											throw response;
+										}
+									}
+								} )
+								.catch( e => {
+									throw( e );
+								} );
+					} )
+					.then( response => {
 						this.trigger( 'response' );
 
 						if( response.status !== true ) {
-							throw( response.message || 'Status returned FALSE' );
+							throw( response.message || 'AJAX status returned FALSE' );
 						}
 
 						return response.data;
@@ -157,5 +162,9 @@ export default class twistajax {
 						reject( e );
 					} );
 		} );
+
+		this.requests.push( request );
+
+		return request;
 	}
 }
