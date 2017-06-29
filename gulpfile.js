@@ -77,9 +77,16 @@ gulp.task( 'cssreset', () => {
 } );
 
 gulp.task( 'debug-js', () => {
-	return gulp.src( strTwistSource + 'debug/js/twistdebug.js' )
-			.pipe( uglify( {preserveComments: 'license'} ) )
-			.pipe( gulp.dest( strTwistDestination + 'debug/js' ) );
+	// return gulp.src( strTwistSource + 'debug/js/twistdebug.js' )
+	// 		.pipe( uglify( {preserveComments: 'license'} ) )
+	// 		.pipe( gulp.dest( strTwistDestination + 'debug/js' ) );
+
+
+
+	return rollup.rollup( rollupConfig( strTwistSource + 'debug/js/twistdebug.js' ) )
+			.then( bundle => rollupExport( bundle, strTwistDestination + 'debug/js/twistdebug.js' ) );
+
+
 } );
 
 
@@ -89,7 +96,7 @@ gulp.task( 'debug-js', () => {
 
 gulp.task( 'watch', () => {
 
-	var watcher = gulp.watch(strTwistSource + 'ajax/js/twistajax.js', ['ajax-js']);
+	var watcher = gulp.watch(strTwistSource + 'debug/js/twistdebug.js', ['debug-js']);
 	watcher.on('change', function(event) {
 		console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
 	});
