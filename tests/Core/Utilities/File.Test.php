@@ -31,6 +31,6 @@ class File extends \PHPUnit_Framework_TestCase{
 
 		$this->assertTrue(\Twist::File()->recursiveCreate(TWIST_APP.'/test'));
 
-		$this->assertFalse(\Twist::File()->recursiveCreate(TWIST_APP.'/test&(@HF@(F* 1`{][,.,./,+==%``~§ ^1w w-1 ?. w//s[qs\||'));
+		$this->assertFalse(\Twist::File()->recursiveCreate(TWIST_APP.'/../../../../../../../../../../../../../../../../test'));
 	}
 }
