@@ -82,7 +82,8 @@ class BaseREST extends Base{
      */
     public function _respond($mxdResults,$intCount = 1,$intResponseCode = 200){
 
-        header(sprintf("HTTP/1.1 %s %s",$intResponseCode,Error::responseInfo($intResponseCode)));
+		$arrResponse = Error::responseInfo($intResponseCode);
+		header(sprintf("HTTP/1.1 %s %s",$intResponseCode,$arrResponse['return']));
 
         $strOutput = '';
         $arrOut = array(
@@ -110,7 +111,8 @@ class BaseREST extends Base{
      */
     public function _respondError($strErrorMessage,$intResponseCode = 404){
 
-        header(sprintf("HTTP/1.1 %s %s",$intResponseCode,Error::responseInfo($intResponseCode)));
+		$arrResponse = Error::responseInfo($intResponseCode);
+        header(sprintf("HTTP/1.1 %s %s",$intResponseCode,$arrResponse['return']));
 
         $strOutput = '';
         $arrOut = array(
