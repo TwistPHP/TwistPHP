@@ -51,21 +51,21 @@ class BaseAJAX extends Base{
 	 *
 	 * @param bool $blStatus
 	 */
-	protected function _ajaxStatus($blStatus){
+	public function _ajaxStatus($blStatus){
 		$this->blAjaxResponse = ($blStatus !== false);
 	}
 
 	/**
 	 * Call to mark the AJAX request as successfully complete, calls the _ajaxStatus function and passes in true.
 	 */
-	protected function _ajaxSucceed(){
+	public function _ajaxSucceed(){
 		$this->_ajaxStatus(true);
 	}
 
 	/**
 	 * Call to mark the AJAX request as failed, calls the _ajaxStatus function and passes in false.
 	 */
-	protected function _ajaxFail(){
+	public function _ajaxFail(){
 		$this->_ajaxStatus(false);
 	}
 
@@ -73,7 +73,7 @@ class BaseAJAX extends Base{
 	 * Set a message to be returned to the Ajax call, can be used for an error message
 	 * @param string $strMessage
 	 */
-	protected function _ajaxMessage($strMessage=''){
+	public function _ajaxMessage($strMessage=''){
 		$this->strAjaxResponseMessage = $strMessage;
 	}
 
@@ -83,7 +83,7 @@ class BaseAJAX extends Base{
 	 * @param bool  $blDebug
 	 * @return string
 	 */
-	protected function _ajaxRespond($mxdData=array(), $blDebug = false){
+	public function _ajaxRespond($mxdData=array(), $blDebug = false){
 		$arrResponse = array();
 		$arrResponse['status'] = $this->blAjaxResponse;
 		$arrResponse['message'] = $this->strAjaxResponseMessage;

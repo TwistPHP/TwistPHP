@@ -1497,7 +1497,7 @@ class Route extends Base{
 				break;
 			case'ajax':
 				if(!TWIST_AJAX_REQUEST){
-					\Twist::respond(403,'Unsupported HTTP protocol used to request this URI',$blExitOnComplete);
+					\Twist::respond(400,'Request not made with the X-Requested-With header',$blExitOnComplete);
 				}else{
 					try{
 						$arrTags['response'] = $this->processController($arrRoute);

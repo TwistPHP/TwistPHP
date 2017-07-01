@@ -56,11 +56,11 @@ var strTwistSource = './src/Core/Resources/twist/',
 		},
 		rollupExport = ( bundle, dest ) => {
 			return bundle.write( {
-					format: 'iife',
-					moduleName: 'twistajax',
-					dest: dest,
-					sourceMap: true
-				} );
+				format: 'iife',
+				moduleName: 'twistajax',
+				dest: dest,
+				sourceMap: true
+			} );
 		};
 
 gulp.task( 'ajax-js', () => {
@@ -82,38 +82,11 @@ gulp.task( 'debug-js', () => {
 	// 		.pipe( gulp.dest( strTwistDestination + 'debug/js' ) );
 
 
-
 	return rollup.rollup( rollupConfig( strTwistSource + 'debug/js/twistdebug.js' ) )
 			.then( bundle => rollupExport( bundle, strTwistDestination + 'debug/js/twistdebug.js' ) );
 
 
 } );
-
-
-
-
-
-
-gulp.task( 'watch', () => {
-
-	var watcher = gulp.watch(strTwistSource + 'debug/js/twistdebug.js', ['debug-js']);
-	watcher.on('change', function(event) {
-		console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
-	});
-
-} );
-
-
-
-
-
-
-
-
-
-
-
-
 
 gulp.task( 'debug-css', () => {
 	return gulp.src( strTwistSource + 'debug/scss/twistdebug.scss' )
@@ -182,5 +155,10 @@ gulp.task( 'test', () => {
 			.pipe( eslint.format() )
 			.pipe( eslint.failAfterError() );
 } );
+gulp.task( 'watch', () => {
+	gulp.watch( strTwistSource + 'debug/js/twistdebug.js', ['debug-js'] );
+	gulp.watch( strTwistSource + 'ajax/js/twistajax.js', ['ajax-js'] );
+} );
 
+gulp.task( 'dev', ['default', 'watch'] );
 gulp.task( 'default', ['test', 'ajax', 'cssreset', 'debug', 'fileupload', 'manager', 'setup'] );

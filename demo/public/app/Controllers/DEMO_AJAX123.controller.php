@@ -22,12 +22,6 @@
 			return $this -> _ajaxRespond( $objResponse );
 		}
 
-		public function GETage() {
-			$this -> _ajaxFail();
-			$this -> _ajaxMessage( 'Please POST your age rather than GET' );
-			return $this -> _ajaxRespond();
-		}
-
 		public function POSTage() {
 			$this -> _ajaxMessage( 'Wow! You\'re old!' );
 			$objResponse = array(

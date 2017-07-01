@@ -47,13 +47,14 @@ class twistdebug {
 			this.error( objErrorLog.title, objErrorLog.message, objErrorLog.url, objErrorLog.line, objErrorLog.column, objErrorLog.error );
 		}
 
-		window.onerror = ( strErrorMessage, strURL, intLineNumber, intColumn, objError ) => {
-			console.log( 'HAHAHAHA' );
-			this.error( 'OH NOES!', strErrorMessage, strURL, intLineNumber, intColumn, objError );
-			return true;
-		};
+		/*window.onerror = ( strErrorMessage, strURL, intLineNumber, intColumn, objError ) => {
+		 console.log( 'HAHAHAHA' );
+		 this.error( strErrorMessage, 'OH NOES!', strURL, intLineNumber, intColumn, objError );
+		 return true;
+		 };*/
 
 		this.setupUI();
+		this.outputExistingAJAX();
 
 		console.info( 'TwistPHP Debug is now loaded with jQuery v.' + $.fn.jquery );
 	}
@@ -100,6 +101,16 @@ class twistdebug {
 		return intLength;
 	}
 
+	outputExistingAJAX() {
+		if( twist.ajax ) {
+			for( let instance of twist.ajax.instances ) {
+				for( let request of instance.requests ) {
+					this.logAJAX( request );
+				}
+			}
+		}
+	}
+
 	logToTwist( jqsAppendTo, strColour, mxdValue, objDetails, strURL, intLineNumber, intColumn ) {
 		if( mxdValue ) {
 			let strLogHTML = mxdValue || '',
@@ -116,6 +127,10 @@ class twistdebug {
 							strValue = ( typeof objDetails[strDetail] === 'object' ) ? '<pre>' + JSON.stringify( objDetails[strDetail], undefined, 2 ) + '</pre>' : objDetails[strDetail];
 					strDetailsHTML += '<dt>' + strKey + '</dt><dd>' + strValue + '</dd>';
 				}
+
+				strDetailsHTML = '<dl class="details">' + strDetailsHTML + '</dl>';
+			} else {
+				strDetailsHTML = '<p class="details">' + objDetails + '</p>';
 			}
 
 			if( strURL !== undefined ) {
@@ -139,12 +154,12 @@ class twistdebug {
 			let jqoLogBox = $( '<div class="twist-debug-box-' + strColour + '" data-title="' + strTitle + '"/>' ).html( strLogHTML );
 
 			if( strDetailsHTML !== '' ) {
-				jqoLogBox.append( '<div class="twist-debug-more-details"><dl>' + strDetailsHTML + '</dl></div><a href="#twist-debug-more-details" class="twist-debug-more-details">&ctdot;</a>' );
+				jqoLogBox.append( '<div class="twist-debug-more-details">' + strDetailsHTML + '</div><a href="#twist-debug-more-details" class="twist-debug-more-details">&ctdot;</a>' );
 			}
 
 			$( jqsAppendTo ).append( jqoLogBox );
 
-			return true;
+			return jqoLogBox;
 		} else {
 			return false;
 		}
@@ -189,19 +204,24 @@ class twistdebug {
 		}
 	}
 
-	logAJAX( blSuccess, objResponse, objRequest ) {
+	logAJAX( objRequest ) {
 		let objRequestToLog = {
-			type: objRequest.type,
-			URL: objRequest.url,
-			timeout: objRequest.timeout,
-			cache: objRequest.cache,
-			request_data: objRequest.data
+			uri: objRequest.url,
+			options: objRequest.options
 		};
 
-		if( this.logToTwist( '#twist-debug-ajax-list', blSuccess ? 'green' : 'red', objResponse, objRequestToLog, objRequest.type + ' ' + objRequest.url ) ) {
+		if( objRequestToLog.options.body ) {
+			objRequestToLog.options.body = JSON.parse( objRequestToLog.options.body );
+		}
+
+		let log = this.logToTwist( '#twist-debug-ajax-list', '', objRequestToLog, 'Waiting...', objRequest.options.method + ' ' + objRequest.url );
+
+		if( log ) {
 			let jqoErrorCount = $( '#twist-debug-ajax-count' );
 
 			jqoErrorCount.attr( 'data-count', parseInt( jqoErrorCount.attr( 'data-count' ) ) + 1 );
+
+			objRequest.$debug = log;
 		}
 	}
 
@@ -254,7 +274,7 @@ class twistdebug {
 				function( e ) {
 					e.preventDefault();
 
-					$( this ).prev( '.twist-debug-more-details' ).slideToggle();
+					$( this ).prev( '.twist-debug-more-details' ).toggle();
 				}
 		);
 		jqoTwistDebugDetails.find( 'table' ).wrap( '<div class="table-wrapper"/>' );
@@ -264,50 +284,50 @@ class twistdebug {
 }
 
 
-
-
-
-
 (function( window, undefined ) {
-			let blOtherJSLibrary = false,
-					arrThingsToLog = [],
-					addDebugToWindow = ( instance ) => {
-						if( !window.twist ) {
-							window.twist = {debug: instance};
-						} else {
-							window.twist.debug = instance;
-						}
-					};
+	let blOtherJSLibrary = false,
+			arrThingsToLog = [],
+			addDebugToWindow = ( instance ) => {
+				if( !window.twist ) {
+					window.twist = {debug: instance};
+				} else {
+					window.twist.debug = instance;
+				}
+			},
+			originalWindowError = window.onerror;
 
-			window.onerror = ( strErrorMessage, strURL, intLineNumber, intColumn, objError ) => {
-				arrThingsToLog.push( {
-					message: '<strong>JS Error:</strong> ' + strErrorMessage,
-					url: strURL,
-					line: intLineNumber,
-					column: intColumn,
-					error: objError
-				} );
+	window.onerror = ( strErrorMessage, strURL, intLineNumber, intColumn, objError ) => {
+		arrThingsToLog.push( {
+			message: '<strong>JS Error:</strong> ' + strErrorMessage,
+			url: strURL,
+			line: intLineNumber,
+			column: intColumn,
+			error: objError
+		} );
+		console.error( '123' );
 
-				return true;
-			};
+		originalWindowError( strErrorMessage, strURL, intLineNumber, intColumn, objError );
 
+		return true;
+	};
+
+	if( typeof window.jQuery === 'undefined' ) {
+		blOtherJSLibrary = ( typeof window.$ === 'function' );
+
+		twistdebug.getScript( 'https://code.jquery.com/jquery-3.2.1.slim.min.js', 'sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=', () => {
 			if( typeof window.jQuery === 'undefined' ) {
-				blOtherJSLibrary = ( typeof window.$ === 'function' );
-
-				twistdebug.getScript( 'https://code.jquery.com/jquery-3.2.1.slim.min.js', 'sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=', () => {
-							if( typeof window.jQuery === 'undefined' ) {
-								console.error( 'This is embarrassing... jQuery couldn\'t be loaded' );
-							} else {
-								if( !blOtherJSLibrary ) {
-									addDebugToWindow( new twistdebug( false, arrThingsToLog ) );
-								} else {
-									console.warn( 'Another JS library controls $' );
-									addDebugToWindow( new twistdebug( true, arrThingsToLog ) );
-								}
-							}
-						} );
+				console.error( 'This is embarrassing... jQuery couldn\'t be loaded' );
 			} else {
-				console.info( 'jQuery v.' + $.fn.jquery + ' already exists' );
-				addDebugToWindow( new twistdebug( false, arrThingsToLog ) );
+				if( !blOtherJSLibrary ) {
+					addDebugToWindow( new twistdebug( false, arrThingsToLog ) );
+				} else {
+					console.warn( 'Another JS library controls $' );
+					addDebugToWindow( new twistdebug( true, arrThingsToLog ) );
+				}
 			}
-		})( window );
+		} );
+	} else {
+		console.info( 'jQuery v.' + $.fn.jquery + ' already exists' );
+		addDebugToWindow( new twistdebug( false, arrThingsToLog ) );
+	}
+})( window );

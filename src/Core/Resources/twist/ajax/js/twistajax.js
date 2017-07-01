@@ -36,30 +36,56 @@ export default class twistajax {
 			window.twist.ajax = {instances: []};
 		}
 
-		window.twist.ajax.instances.push( this );
-	}
-
-	set debug( debug ) {
-		if( debug ) {
-			try {
-				let args = [
-					'%c %c %c TwistPHP AJAX %c %c ',
-					'font-size: 15px; background: #2a5200;',
-					'font-size: 17px; background: #3f7a00;',
-					'color: #FFF; font-size: 18px; background: #539F00;',
-					'font-size: 17px; background: #3f7a00;',
-					'font-size: 15px; background: #2a5200;'
-				];
-
-				console.log.apply( console, args );
-			} catch( e ) {
-				if( console.info ) {
-					console.info( 'TwistPHP AJAX' );
-				} else {
-					console.log( 'TwistPHP AJAX' );
-				}
+		this.on( 'response', request => {
+			if( window.twist.debug &&
+					request.$debug ) {
+				request.$debug
+						.find( '.details' )
+						.replaceWith( '<pre>' + JSON.stringify( {response: request.response}, undefined, 2 ) + '</pre>' );
+			} else if( this.debug ) {
+				//DEBUG OLD SKOOL
 			}
-		}
+		} )
+				.on( 'success', request => {
+					if( window.twist.debug &&
+							request.$debug ) {
+						if( request.$debug.attr( 'class' ) === 'twist-debug-box-' ) {
+							request.$debug
+									.removeClass( 'twist-debug-box-' )
+									.addClass( 'twist-debug-box-green' );
+						}
+					} else if( this.debug ) {
+						//DEBUG OLD SKOOL
+					}
+				} )
+				.on( 'fail', request => {
+					if( window.twist.debug &&
+							request.$debug ) {
+						if( request.$debug.attr( 'class' ) === 'twist-debug-box-' ) {
+							request.$debug
+									.removeClass( 'twist-debug-box-' )
+									.addClass( 'twist-debug-box-yellow' );
+						}
+					} else if( this.debug ) {
+						//DEBUG OLD SKOOL
+					}
+				} )
+				.on( 'error', request => {
+					if( window.twist.debug &&
+							request.$debug ) {
+						if( request.$debug.attr( 'class' ) === 'twist-debug-box-' ) {
+							request.$debug
+									.removeClass( 'twist-debug-box-' )
+									.addClass( 'twist-debug-box-red' )
+									.find( '.details' )
+									.replaceWith( '<p>Error: ' + request.error + '</p>' );
+						}
+					} else if( this.debug ) {
+						//DEBUG OLD SKOOL
+					}
+				} );
+
+		window.twist.ajax.instances.push( this );
 	}
 
 	delete( location, data = {} ) {
@@ -101,70 +127,100 @@ export default class twistajax {
 		return this;
 	}
 
-	trigger( event ) {
-		for( let callbackEvent of this.events[event] ) {
-			callbackEvent.call( this );
+	trigger( event, context ) {
+		if( this.events[event] ) {
+			for( let callbackEvent of this.events[event] ) {
+				callbackEvent.call( this, context );
+			}
 		}
+
+		return this;
 	}
 
 	send( location, bodydata = {}, method = 'GET' ) {
-		let request = new Promise( ( resolve, reject ) => {
-			this.trigger( 'request' );
+		let fetchOptions = {
+			method: method,
+			headers: {
+				Accept: 'application/json, text/plain, */*',
+				'Content-Type': 'application/json; charset=utf-8',
+				'X-Requested-With': 'XMLHttpRequest'
+			},
+			cache: this.cache ? 'default' : 'no-store'
+		};
 
-			let fetchOptions = {
-				method: method,
-				headers: {
-					Accept: 'application/json, text/plain, */*',
-					'Content-Type': 'application/json; charset=utf-8'
-				},
-				cache: this.cache ? 'default' : 'no-store'
-			};
+		if( method !== 'GET' ) {
+			fetchOptions.body = JSON.stringify( bodydata );
+		}
 
-			if( method !== 'GET' ) {
-				fetchOptions.body = JSON.stringify( bodydata );
-			}
+		let request = {
+			url: this.uri + '/' + location,
+			options: fetchOptions
+		};
 
+		request.instance = new Promise( ( resolve, reject ) => {
 			fetch( this.uri + '/' + location, fetchOptions )
-					//.then( response => response.json() )
 					.then( response => {
-						return response.text()
-								.then( response => {
-									try {
-										return JSON.parse( response );
-									} catch( e ) {
-										let expectedFields = '("status" ?: ?(true|false)?|"message" ?: ?".*"|"data" ?: ?(\\{.*\\}|\\[.*\\]))',
-												regex = new RegExp( '\{(' + expectedFields + ' ?, ?){2}' + expectedFields + '\}', 'g' ),
-												matches = regex.exec( response );
+						if( response.ok ) {
+							return response.text()
+									.then( response => {
+										try {
+											return JSON.parse( response );
+										} catch( e ) {
+											let expectedFields = '("status" ?: ?(true|false)?|"message" ?: ?".*"|"data" ?: ?(\\{.*\\}|\\[.*\\]))',
+													regex = new RegExp( '\{(' + expectedFields + ' ?, ?){2}' + expectedFields + '\}', 'g' ),
+													matches = regex.exec( response );
 
-										if( matches !== null ) {
-											console.warn( 'Broken AJAX response parsed' );
-											return JSON.parse( matches[0] );
-										} else {
-											throw response;
+											if( matches !== null ) {
+												console.warn( 'Broken AJAX response parsed' );
+												return JSON.parse( matches[0] );
+											} else {
+												throw response;
+											}
 										}
-									}
-								} )
-								.catch( e => {
-									throw( e );
-								} );
+									} )
+									.catch( e => {
+										throw( e );
+									} );
+						} else {
+							console.log( response );
+							throw( response.status + ' ' + response.statusText );
+						}
 					} )
 					.then( response => {
-						this.trigger( 'response' );
+						request.response = response;
+
+						this.trigger( 'response', request );
 
 						if( response.status !== true ) {
+							this.trigger( 'fail', request );
 							throw( response.message || 'AJAX status returned FALSE' );
+						} else {
+							this.trigger( 'success', request );
 						}
 
-						return response.data;
+						resolve( response.data );
+
+						return response;
 					} )
-					.then( response => resolve( response ) )
 					.catch( e => {
+						request.error = e;
+
+						this.trigger( 'error', request );
+
 						reject( e );
 					} );
 		} );
 
+		this.trigger( 'request', request );
+
+		if( window.twist.debug ) {
+			window.twist.debug.logAJAX( request );
+		} else if( this.debug ) {
+			console.info( 'New AJAX Request', request );
+		}
+
 		this.requests.push( request );
 
-		return request;
+		return request.instance;
 	}
 }

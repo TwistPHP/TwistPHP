@@ -28,9 +28,7 @@
                         <tr>
                             <th>Event</th>
                             <th>Time</th>
-                            <!--<th>Timecode</th>-->
                             <th>Memory</th>
-                            <!--<th>Memory (bytes)</th>-->
                             <th>Description</th>
                         </tr>
                     </thead>

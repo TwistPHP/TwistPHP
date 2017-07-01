@@ -18,14 +18,7 @@
 <script>
 	var door = new twistajax( '/ajax' );
 
-	door.debug = true;
-
-	door.on( 'request', () => {
-		console.log( door.requests.length + ' active requests' );
-	} )
-			.on( 'response', () => {
-				console.log( door.requests.length + ' active requests' );
-			} );
+//	door.debug = true;
 
 	door.get( 'knock' )
 			.then( response => {
@@ -50,7 +43,6 @@
 	} )
 			.then( response => {
 				console.log( response );
-				door.debug = false;
 			} )
 			.catch( e => {
 				console.error( 'Something broke:', e );
