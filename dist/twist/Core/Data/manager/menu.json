@@ -35,10 +35,17 @@
     "sections": []
   },
   {
+    "name": "API Keys",
+    "uri": "apikeys",
+    "icon": "fa-key",
+    "order": 6,
+    "sections": []
+  },
+  {
     "name": "Logout",
     "uri": "logout",
     "icon": "fa-sign-out",
-    "order": 6,
+    "order": 7,
     "sections": []
   }
 ]

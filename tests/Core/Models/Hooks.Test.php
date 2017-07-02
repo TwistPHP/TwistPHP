@@ -19,5 +19,4 @@ class Hooks extends \PHPUnit_Framework_TestCase{
 		\Twist::framework()->hooks()->cancel('travisCI','travis-test-hook');
 		$this->assertEquals(null,\Twist::framework()->hooks()->get('travisCI','travis-test-hook'));
 	}
-
 }

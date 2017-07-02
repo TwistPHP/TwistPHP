@@ -225,10 +225,10 @@
   },
   "ARCHIVE_HANDLER":{
     "title":"Archive Handling Library",
-    "description":"Set the library that will handle the creation for archive libraries",
+    "description":"Set the library that will handle the creation for archive libraries, PCLZip is available as a package, see twistphp.com",
     "default":"native",
     "type":"options",
-    "options":"native,pclzip",
+    "options":"native",
     "null":0
   },
   "ASSET_THUMBNAIL_SIZES":{
@@ -252,6 +252,22 @@
     "description":"Default group for assets to be uploaded and browsed",
     "default":1,
     "type":"integer",
+    "options":"",
+    "null":0
+  },
+  "API_REQUEST_HEADER_AUTH":{
+    "title":"API Auth via Request Headers",
+    "description":"The base REST controllers will require authentication to be carried out via HTTP Request Headers",
+    "default":"1",
+    "type":"boolean",
+    "options":"0,1",
+    "null":0
+  },
+  "API_ALLOWED_REQUEST_METHODS":{
+    "title":"API Allowed Request Methods",
+    "description":"Comma seperated list of request methods that are enabled. Common methods: GET,POST,PUT,DELETE,HEAD,OPTIONS,CONNECT",
+    "default":"GET,POST",
+    "type":"string",
     "options":"",
     "null":0
   },
@@ -599,20 +615,20 @@
     "options":"1,0",
     "null":0
   },
-  "USER_PASSWORD_HASH":{
-    "title":"Strong Password Encryption",
-    "description":"Hash the passwords, this function requires PHP MCRYPT to be installed, More secure and reliable than SHA1",
-    "default":0,
-    "type":"boolean",
-    "options":"1,0",
+  "USER_AUTH_HASH_COST":{
+    "title":"Password Hash Cost",
+    "description":"Denotes the algorithmic cost that should be used. PASSWORD_BCRYPT is used to create new password hashes using the CRYPT_BLOWFISH algorithm",
+    "default":12,
+    "type":"integer",
+    "options":"",
     "null":0
   },
-  "USER_PASSWORD_ENCRYPTION":{
-    "title":"Standard Encryption",
-    "description":"If 'Strong Password Encryption' is set to false then encryption type must be set, Options 'sha1','sha512'",
+  "USER_AUTH_LEGACY_HASH":{
+    "title":"Legacy Password Hash",
+    "description":"The hash algorthum used for users passwords before the user of PASSWORD_BCRYPT introduced in TWISTPHP 3.1.0. Passwords will be converet to a new hash upon successful login.",
     "default":"sha1",
     "type":"options",
-    "options":"sha1,sha512",
+    "options":"md5,sha1,sha256,sha512",
     "null":0
   },
   "USER_AUTO_AUTHENTICATE":{

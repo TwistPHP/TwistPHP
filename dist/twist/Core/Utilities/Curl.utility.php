@@ -32,6 +32,9 @@
 		protected $blResponseJSON = false;
 		protected $blDisableUrlEncoding = false;
 		protected $blVerifySSLRequest = false;
+        protected $blNoBody = false;
+        protected $blFollowRedirects = false;
+        protected $blFailOnError = false;
 		protected $arrSSLCertificate = array();
 		protected $strDefaultUserAgent = 'TwistPHP Curl';
 		protected $strCookies = '';
@@ -80,6 +83,33 @@
 		public function setTimeout($intTimeout = 5){
 			$this->intTimeout = $intTimeout;
 		}
+
+        /**
+         * Return only the response headers, no body
+         *
+         * @param boolean $blEnable Determines if functionality should be used
+         */
+        public function setNoBody($blEnable = true){
+            $this->blNoBody = $blEnable;
+        }
+
+        /**
+         * Follow 301 and 302 redirects when enabled
+         *
+         * @param boolean $blEnable Determines if functionality should be used
+         */
+        public function setFollowRedirects($blEnable = true){
+            $this->blFollowRedirects = $blEnable;
+        }
+
+        /**
+         * Fail on error, Error HTTP response codes will cause a fail and will not return a response body
+         *
+         * @param boolean $blEnable Determines if functionality should be used
+         */
+        public function setFailOnError($blEnable = true){
+            $this->blFailOnError = $blEnable;
+        }
 
 		/**
 		 * Set a custom user agent header to be used when making the request, pass in null to use default user agent
@@ -321,19 +351,35 @@
 			curl_setopt($resCurl, CURLOPT_SSL_VERIFYHOST, ($this->blVerifySSLRequest) ? 1 : 0);
 			curl_setopt($resCurl, CURLOPT_SSL_VERIFYPEER, ($this->blVerifySSLRequest) ? 1 : 0);
 
+            curl_setopt($resCurl, CURLOPT_NOBODY, ($this->blNoBody) ? 1 : 0);
+            curl_setopt($resCurl, CURLOPT_FOLLOWLOCATION, ($this->blFollowRedirects) ? 1 : 0);
+			curl_setopt($resCurl, CURLOPT_FAILONERROR, ($this->blFailOnError) ? 1 : 0);
+
 			//Set the other data
 			curl_setopt($resCurl, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($resCurl, CURLOPT_VERBOSE, 1);
 			curl_setopt($resCurl, CURLOPT_HEADER, 1);
 			curl_setopt($resCurl, CURLOPT_TIMEOUT, $this->intTimeout);
-			curl_setopt($resCurl, CURLOPT_FAILONERROR, true);
 			curl_setopt($resCurl, CURLOPT_REFERER, sprintf('%s://%s/',
 					\Twist::framework()->setting('SITE_PROTOCOL'),
-					\Twist::framework()->setting('HTTP_HOST'))
+					\Twist::framework()->setting('SITE_HOST'))
 			);
 
 			//Set the custom headers
 			if(is_array($arrHeaders) && count($arrHeaders) > 0){
+
+                if(!array_key_exists(0,$arrHeaders)){
+
+                    //Convert key pair headers into header strings
+                    $arrHeadersNew = array();
+
+                    foreach($arrHeaders as $strHeaderKey => $strHeaderValue){
+                        $arrHeadersNew[] = $strHeaderKey.': '.$strHeaderValue;
+                    }
+
+                    $arrHeaders = $arrHeadersNew;
+                }
+
 				curl_setopt($resCurl, CURLOPT_HTTPHEADER,$arrHeaders);
 			}
 
@@ -347,6 +393,9 @@
 				curl_setopt($resCurl, CURLOPT_USERAGENT, $this->strUserAgent);
 			}
 
+			//Enable the request headers "request_header" to be added into the debug as well as the response headers 
+			curl_setopt($resCurl, CURLINFO_HEADER_OUT, true);
+			
 			//execute post
 			$mxdResponse = curl_exec($resCurl);
 			$this->arrRequestInfo = curl_getinfo($resCurl);
