@@ -47,11 +47,11 @@ class twistdebug {
 			this.error( objErrorLog.title, objErrorLog.message, objErrorLog.url, objErrorLog.line, objErrorLog.column, objErrorLog.error );
 		}
 
-		/*window.onerror = ( strErrorMessage, strURL, intLineNumber, intColumn, objError ) => {
-		 console.log( 'HAHAHAHA' );
-		 this.error( strErrorMessage, 'OH NOES!', strURL, intLineNumber, intColumn, objError );
-		 return true;
-		 };*/
+		window.onerror = ( strErrorMessage, strURL, intLineNumber, intColumn, objError ) => {
+			console.log( 'HAHAHAHA' );
+			this.error( strErrorMessage, 'OH NOES!', strURL, intLineNumber, intColumn, objError );
+			return false;
+		};
 
 		this.setupUI();
 		this.outputExistingAJAX();
@@ -304,7 +304,6 @@ class twistdebug {
 			column: intColumn,
 			error: objError
 		} );
-		console.error( '123' );
 
 		originalWindowError( strErrorMessage, strURL, intLineNumber, intColumn, objError );
 

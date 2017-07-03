@@ -55,6 +55,15 @@
 			.catch( e => {
 				console.error( 'Something broke:', e );
 			} );
+
+	door.postForm( 'age2', '#test-form' )
+			.then( response => {
+				console.log( response );
+			} )
+			.catch( e => {
+				console.error( 'Something broke:', e );
+			} );
 </script>
+{file:upload}
 </body>
 </html>

@@ -8,7 +8,6 @@ var gulp = require( 'gulp' ),
 		rollupCJS = require( 'rollup-plugin-commonjs' ),
 		sass = require( 'gulp-sass' ),
 		concat = require( 'gulp-concat' ),
-		uglify = require( 'gulp-uglify' ),
 		jsdoc = require( 'gulp-jsdoc3' ),
 		sourcemaps = require( 'gulp-sourcemaps' );
 
@@ -54,10 +53,10 @@ var strTwistSource = './src/Core/Resources/twist/',
 				],
 			};
 		},
-		rollupExport = ( bundle, dest ) => {
+		rollupExport = ( bundle, dest, umd ) => {
 			return bundle.write( {
-				format: 'iife',
-				moduleName: 'twistajax',
+				format: 'umd',
+				moduleName: umd,
 				dest: dest,
 				sourceMap: true
 			} );
@@ -65,27 +64,12 @@ var strTwistSource = './src/Core/Resources/twist/',
 
 gulp.task( 'ajax-js', () => {
 	return rollup.rollup( rollupConfig( strTwistSource + 'ajax/js/twistajax.js' ) )
-			.then( bundle => rollupExport( bundle, strTwistDestination + 'ajax/js/twistajax.js' ) );
-} );
-
-gulp.task( 'cssreset', () => {
-	return gulp.src( strTwistSource + 'cssreset/scss/twistcssreset.scss' )
-			.pipe( sourcemaps.init() )
-			.pipe( sass( {errLogToConsole: true, outputStyle: 'compressed'} ) )
-			.pipe( sourcemaps.write( './' ) )
-			.pipe( gulp.dest( strTwistDestination + 'cssreset/css' ) );
+			.then( bundle => rollupExport( bundle, strTwistDestination + 'ajax/js/twistajax.js', 'twistajax' ) );
 } );
 
 gulp.task( 'debug-js', () => {
-	// return gulp.src( strTwistSource + 'debug/js/twistdebug.js' )
-	// 		.pipe( uglify( {preserveComments: 'license'} ) )
-	// 		.pipe( gulp.dest( strTwistDestination + 'debug/js' ) );
-
-
 	return rollup.rollup( rollupConfig( strTwistSource + 'debug/js/twistdebug.js' ) )
-			.then( bundle => rollupExport( bundle, strTwistDestination + 'debug/js/twistdebug.js' ) );
-
-
+			.then( bundle => rollupExport( bundle, strTwistDestination + 'debug/js/twistdebug.js', 'twistdebug' ) );
 } );
 
 gulp.task( 'debug-css', () => {
@@ -97,23 +81,8 @@ gulp.task( 'debug-css', () => {
 } );
 
 gulp.task( 'fileupload-js', () => {
-	return gulp.src( strTwistSource + 'fileupload/js/twistfileupload.js' )
-			.pipe( uglify( {preserveComments: 'license'} ) )
-			.pipe( gulp.dest( strTwistDestination + 'fileupload/js' ) );
-} );
-
-gulp.task( 'fileupload-css', () => {
-	return gulp.src( strTwistSource + 'fileupload/scss/twistfileupload.scss' )
-			.pipe( sourcemaps.init() )
-			.pipe( sass( {errLogToConsole: true, outputStyle: 'compressed'} ) )
-			.pipe( sourcemaps.write( './' ) )
-			.pipe( gulp.dest( strTwistDestination + 'fileupload/css' ) );
-} );
-
-gulp.task( 'manager-js', () => {
-	return gulp.src( strTwistSource + 'manager/js/twistmanager.js' )
-			.pipe( uglify( {preserveComments: 'license'} ) )
-			.pipe( gulp.dest( strTwistDestination + 'manager/js' ) );
+	return rollup.rollup( rollupConfig( strTwistSource + 'fileupload/js/twistfileupload.js' ) )
+			.then( bundle => rollupExport( bundle, strTwistDestination + 'fileupload/js/twistfileupload.js', 'twistfileupload' ) );
 } );
 
 gulp.task( 'manager-css', () => {
@@ -122,12 +91,6 @@ gulp.task( 'manager-css', () => {
 			.pipe( sass( {errLogToConsole: true, outputStyle: 'compressed'} ) )
 			.pipe( sourcemaps.write( './' ) )
 			.pipe( gulp.dest( strTwistDestination + 'manager/css' ) );
-} );
-
-gulp.task( 'setup-js', () => {
-	return gulp.src( strTwistSource + 'setup/js/twistsetup.js' )
-			.pipe( uglify( {preserveComments: 'license'} ) )
-			.pipe( gulp.dest( strTwistDestination + 'setup/js' ) );
 } );
 
 gulp.task( 'setup-css', () => {
@@ -145,9 +108,9 @@ gulp.task( 'docs', () => {
 
 gulp.task( 'ajax', ['ajax-js'] );
 gulp.task( 'debug', ['debug-js', 'debug-css'] );
-gulp.task( 'fileupload', ['fileupload-js', 'fileupload-css'] );
-gulp.task( 'manager', ['manager-js', 'manager-css'] );
-gulp.task( 'setup', ['setup-js', 'setup-css'] );
+gulp.task( 'fileupload', ['fileupload-js'] );
+gulp.task( 'manager', ['manager-css'] );
+gulp.task( 'setup', ['setup-css'] );
 
 gulp.task( 'test', () => {
 	return gulp.src( strTwistSource + '**/*.js' )
@@ -155,10 +118,13 @@ gulp.task( 'test', () => {
 			.pipe( eslint.format() )
 			.pipe( eslint.failAfterError() );
 } );
+
 gulp.task( 'watch', () => {
-	gulp.watch( strTwistSource + 'debug/js/twistdebug.js', ['debug-js'] );
 	gulp.watch( strTwistSource + 'ajax/js/twistajax.js', ['ajax-js'] );
+	gulp.watch( strTwistSource + 'debug/js/twistdebug.js', ['debug-js'] );
+	gulp.watch( strTwistSource + 'fileupload/js/twistfileupload.js', ['fileupload-js'] );
 } );
 
 gulp.task( 'dev', ['default', 'watch'] );
-gulp.task( 'default', ['test', 'ajax', 'cssreset', 'debug', 'fileupload', 'manager', 'setup'] );
+
+gulp.task( 'default', ['ajax', 'debug', 'fileupload', 'manager', 'setup'] );
