@@ -70,7 +70,7 @@ class Views extends \PHPUnit_Framework_TestCase{
 
 		$strTagOutput = \Twist::View()->replace("{resource:twist/debug,js=true,inline=true}");
 		$this->assertContains('<script', $strTagOutput);
-		$this->assertContains('.twistdebug', $strTagOutput);
+		$this->assertContains('twist.debug=', $strTagOutput);
 
 		\Twist::framework()->setting('RESOURCE_INCLUDE_ONCE',true);
 	}
