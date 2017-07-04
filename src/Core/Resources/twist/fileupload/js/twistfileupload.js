@@ -325,11 +325,7 @@ export default class twistfileupload {
 
 
 
-	/**
-	 * Do the upload with the selected files
-	 * @param e The upload event
-	 * @param arrFiles The files selected
-	 */
+	// Do the upload with the selected files
 	upload( e, arrFiles ) {
 		try {
 			if( e ) {
@@ -593,9 +589,7 @@ export default class twistfileupload {
 		}
 	}
 
-	/**
-	 * Add a listener to the remove file button
-	 */
+	//Add a listener to the remove file button
 	addRemoveFileListener() {
 		let funRemoveFile = ( intUploadedFileIndex ) => {
 			return () => {
@@ -612,9 +606,7 @@ export default class twistfileupload {
 		}
 	}
 
-	/**
-	 * Hide the upload progress bar
-	 */
+	// Hide the upload progress bar
 	hideProgress() {
 		if( this.element( 'Input' ) ) {
 			this.element( 'Input' ).style.display = this.element( 'InputDisplay' );
@@ -629,16 +621,12 @@ export default class twistfileupload {
 		}
 	}
 
-	/**
-	 * Cancel the current upload
-	 */
+	// Cancel the current upload
 	cancelUpload() {
 		this.request.abort();
 	}
 
-	/**
-	 * Clear the file input
-	 */
+	// Clear the file input
 	clearInput() {
 		this.element( 'Input' ).value = '';
 
@@ -651,18 +639,13 @@ export default class twistfileupload {
 		this.settings.onclear();
 	}
 
-	/**
-	 * Remove an uploaded file from the list
-	 * @param intFileIndex
-	 */
+	// Remove an uploaded file from the list
 	removeFileFromListFunction( intFileIndex ) {
 		this.uploaded.splice( intFileIndex, 1 );
 		this.updateUploadedList();
 	}
 
-	/**
-	 * Show the progress upload bar
-	 */
+	// Show the progress upload bar
 	showProgress() {
 		this.element( 'Input' ).style.display = 'none';
 
@@ -675,9 +658,7 @@ export default class twistfileupload {
 		}
 	}
 
-	/**
-	 * Update the list of uploaded files
-	 */
+	// Update the list of uploaded files
 	updateUploadedList() {
 		let strListHTML = '',
 				arrUploadedFormValues = [];
