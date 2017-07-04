@@ -23,13 +23,13 @@ var strTwistSource = './src/Core/Resources/twist/',
 				}
 			},
 			rules: {
-				'eqeqeq': 2,
+				'eqeqeq': 1,
 				'no-inner-declarations': 2,
 				'no-irregular-whitespace': 1,
 				'valid-jsdoc': 1,
 				'no-dupe-keys': 1,
 				'valid-typeof': 2,
-				'no-unreachable': 2,
+				'no-unreachable': 1,
 				'no-alert': 2,
 				'no-eval': 2,
 				//quotes: ['warn', 'single']
@@ -120,9 +120,10 @@ gulp.task( 'test', () => {
 } );
 
 gulp.task( 'watch', () => {
-	gulp.watch( strTwistSource + 'ajax/js/twistajax.js', ['ajax-js'] );
-	gulp.watch( strTwistSource + 'debug/js/twistdebug.js', ['debug-js'] );
-	gulp.watch( strTwistSource + 'fileupload/js/twistfileupload.js', ['fileupload-js'] );
+	gulp.watch( strTwistSource + 'ajax/js/**/*.js', ['ajax-js'] );
+	gulp.watch( strTwistSource + 'debug/js/**/*.js', ['debug-js'] );
+	gulp.watch( strTwistSource + 'debug/scss/**/*.scss', ['debug-css'] );
+	gulp.watch( strTwistSource + 'fileupload/js/**/*.js', ['fileupload-js'] );
 } );
 
 gulp.task( 'dev', ['default', 'watch'] );

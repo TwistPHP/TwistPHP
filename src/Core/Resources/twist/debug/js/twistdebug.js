@@ -21,7 +21,7 @@
  */
 
 class twistdebug {
-	constructor( noConflict, arrThingsToLog = [] ) {
+	constructor() {
 		try {
 			let args = [
 				'%c %c %c TwistPHP Debug %c %c ',
@@ -41,11 +41,11 @@ class twistdebug {
 			}
 		}
 
-		const $ = ( noConflict === true ) ? window.jQuery.noConflict( true ) : window.jQuery;
+		// const $ = ( noConflict === true ) ? window.jQuery.noConflict( true ) : window.jQuery;
 
-		for( let objErrorLog of arrThingsToLog ) {
-			this.error( objErrorLog.title, objErrorLog.message, objErrorLog.url, objErrorLog.line, objErrorLog.column, objErrorLog.error );
-		}
+		// for( let objErrorLog of arrThingsToLog ) {
+		// 	this.error( objErrorLog.title, objErrorLog.message, objErrorLog.url, objErrorLog.line, objErrorLog.column, objErrorLog.error );
+		// }
 
 		window.onerror = ( strErrorMessage, strURL, intLineNumber, intColumn, objError ) => {
 			console.log( 'HAHAHAHA' );
@@ -56,7 +56,7 @@ class twistdebug {
 		this.setupUI();
 		this.outputExistingAJAX();
 
-		console.info( 'TwistPHP Debug is now loaded with jQuery v.' + $.fn.jquery );
+		// console.info( 'TwistPHP Debug is now loaded with jQuery v.' + $.fn.jquery );
 	}
 
 	static getScript( url, integrity = null, onSuccess = () => {} ) {
@@ -151,15 +151,32 @@ class twistdebug {
 				strTitle = 'JavaScript [' + ( new Date() ).getTime() + ']';
 			}
 
-			let jqoLogBox = $( '<div class="twist-debug-box-' + strColour + '" data-title="' + strTitle + '"/>' ).html( strLogHTML );
+			// let jqoLogBox = $( '<div class="twist-debug-box-' + strColour + '" data-title="' + strTitle + '"/>' ).html( strLogHTML );
+
+			// if( strDetailsHTML !== '' ) {
+			// 	jqoLogBox.append( '<div class="twist-debug-more-details">' + strDetailsHTML + '</div><a href="#twist-debug-more-details" class="twist-debug-more-details">&ctdot;</a>' );
+			// }
+
+			//$( jqsAppendTo ).append( jqoLogBox );
+
+
+			let domLogBox = document.createElement( 'div' );
+
+			domLogBox.classList.add( 'twist-debug-box-' + strColour );
+			domLogBox.setAttribute( 'data-title', strTitle );
+
 
 			if( strDetailsHTML !== '' ) {
-				jqoLogBox.append( '<div class="twist-debug-more-details">' + strDetailsHTML + '</div><a href="#twist-debug-more-details" class="twist-debug-more-details">&ctdot;</a>' );
+				domLogBox.innerHTML = strLogHTML + '<div class="twist-debug-more-details">' + strDetailsHTML + '</div><a href="#twist-debug-more-details" class="twist-debug-more-details">&ctdot;</a>';
+			} else {
+				domLogBox.innerHTML = strLogHTML;
 			}
 
-			$( jqsAppendTo ).append( jqoLogBox );
 
-			return jqoLogBox;
+			document.querySelector( jqsAppendTo ).appendChild( domLogBox );
+
+			//return jqoLogBox;
+			return domLogBox;
 		} else {
 			return false;
 		}
@@ -172,9 +189,8 @@ class twistdebug {
 		};
 
 		if( this.logToTwist( '#twist-debug-messages-list', 'red', '<p>' + mxdValue + '</p>', objDetails, strURL, intLineNumber, intColumn ) ) {
-			let jqoErrorCount = $( '#twist-debug-errors' );
-
-			jqoErrorCount.attr( 'data-count', parseInt( jqoErrorCount.attr( 'data-count' ) ) + 1 );
+			let domErrorCount = document.getElementById( 'twist-debug-errors' );
+			domErrorCount.setAttribute( 'data-count', parseInt( domErrorCount.getAttribute( 'data-count' ) ) + 1 );
 		}
 	}
 
@@ -185,9 +201,8 @@ class twistdebug {
 		};
 
 		if( this.logToTwist( '#twist-debug-messages-list', 'yellow', '<p>' + mxdValue + '</p>', objDetails, strURL, intLineNumber, intColumn ) ) {
-			let jqoErrorCount = $( '#twist-debug-warnings' );
-
-			jqoErrorCount.attr( 'data-count', parseInt( jqoErrorCount.attr( 'data-count' ) ) + 1 );
+			let domErrorCount = document.getElementById( 'twist-debug-warnings' );
+			domErrorCount.setAttribute( 'data-count', parseInt( domErrorCount.getAttribute( 'data-count' ) ) + 1 );
 		}
 	}
 
@@ -198,9 +213,9 @@ class twistdebug {
 		};
 
 		if( this.logToTwist( '#twist-debug-messages-list', 'blue', '<p>' + mxdValue + '</p>', objDetails, strURL, intLineNumber, intColumn ) ) {
-			let jqoErrorCount = $( '#twist-debug-dumps' );
+			let domErrorCount = document.getElementById( 'twist-debug-dumps' );
+			domErrorCount.setAttribute( 'data-count', parseInt( domErrorCount.getAttribute( 'data-count' ) ) + 1 );
 
-			jqoErrorCount.attr( 'data-count', parseInt( jqoErrorCount.attr( 'data-count' ) ) + 1 );
 		}
 	}
 
@@ -217,9 +232,8 @@ class twistdebug {
 		let log = this.logToTwist( '#twist-debug-ajax-list', '', objRequestToLog, 'Waiting...', objRequest.options.method + ' ' + objRequest.url );
 
 		if( log ) {
-			let jqoErrorCount = $( '#twist-debug-ajax-count' );
-
-			jqoErrorCount.attr( 'data-count', parseInt( jqoErrorCount.attr( 'data-count' ) ) + 1 );
+			let domErrorCount = document.getElementById( 'twist-debug-ajax-count' );
+			domErrorCount.setAttribute( 'data-count', parseInt( domErrorCount.getAttribute( 'data-count' ) ) + 1 );
 
 			objRequest.$debug = log;
 		}
@@ -230,103 +244,86 @@ class twistdebug {
 				strLogHTML = '<pre>' + JSON.stringify( objResponse, undefined, 2 ) + '</pre><div class="twist-debug-fileupload-preview"><img src="' + strPreview + '"></div>';
 
 		if( this.logToTwist( '#twist-debug-fileupload-list', 'green', strLogHTML, resFile, resFile.name ) ) {
-			let jqoErrorCount = $( '#twist-debug-fileupload-count' );
-
-			jqoErrorCount.attr( 'data-count', parseInt( jqoErrorCount.attr( 'data-count' ) ) + 1 );
+			let domErrorCount = document.getElementById( 'twist-debug-fileupload-count' );
+			domErrorCount.setAttribute( 'data-count', parseInt( domErrorCount.getAttribute( 'data-count' ) ) + 1 );
 		}
 	}
 
 	setupUI() {
-		let jqoTwistDebugBlocks = $( '#twist-debug-blocks' ),
-				jqoTwistDebugDetails = $( '#twist-debug-details' );
+		let domTwistDebugBlocks = document.getElementById( 'twist-debug-blocks' ),
+				domTwistDebugDetails = document.getElementById( 'twist-debug-details' );
 
-		$( '.twist-debug-box, [class^="twist-debug-box-"], [class*=" twist-debug-box-"]' ).has( '.twist-debug-more-details' ).each(
-				function() {
-					let jqoMoreDetails = $( this ).find( '.twist-debug-more-details' );
+		for( let boxEl of document.getElementById( 'twist-debug-details' ).querySelectorAll( '.twist-debug-box, [class^="twist-debug-box-"], [class*=" twist-debug-box-"]' ) ) {
+			if( boxEl.querySelector( '.twist-debug-more-details' ) ) {
+				let domMoreDetails = boxEl.querySelector( '.twist-debug-more-details' ),
+						moreDetailsButton = document.createElement( 'a' );
 
-					jqoMoreDetails.after( '<a href="#twist-debug-more-details" class="twist-debug-more-details">&ctdot;</a>' );
-				}
-		);
-		jqoTwistDebugBlocks.on( 'click', 'a',
+				moreDetailsButton.setAttribute( 'href', '#twist-debug-more-details' );
+				moreDetailsButton.classList.add( 'twist-debug-more-details' );
+				moreDetailsButton.innerHTML = '&ctdot;';
+
+				domMoreDetails.parentNode.appendChild( moreDetailsButton );
+			}
+		}
+
+		for( let el of domTwistDebugBlocks.querySelectorAll( 'button' ) ) {
+			el.addEventListener( 'click',
+					function( e ) {
+						e.preventDefault();
+						let domThisBlock = this;
+
+						if( domThisBlock.classList.contains( 'current' ) ) {
+							domTwistDebugDetails.classList.remove( 'show' );
+							domThisBlock.removeClass( 'current' );
+						} else {
+							let jqsTarget = domThisBlock.getAttribute( 'data-panel' );
+
+							domTwistDebugDetails.classList.add( 'show' );
+							for( let el of domTwistDebugDetails.children ) {
+								if( el.tagName.toLowerCase() === 'div' ) {
+									el.style.display = 'none';
+								}
+							}
+							document.querySelector( jqsTarget ).style.display = 'block';
+
+							for( let el of domTwistDebugBlocks.querySelectorAll( 'button.current' ) ) {
+								el.classList.remove( 'current' );
+							}
+
+							domThisBlock.classList.add( 'current' );
+						}
+					} );
+		}
+
+		document.getElementById( 'close-twist-debug-details' ).addEventListener( 'click',
 				function( e ) {
 					e.preventDefault();
-					let jqoThisBlock = $( this );
-					if( jqoThisBlock.hasClass( 'current' ) ) {
-						jqoTwistDebugDetails.removeClass( 'show' );
-						jqoThisBlock.removeClass( 'current' );
-					} else {
-						let jqsTarget = jqoThisBlock.attr( 'href' );
+					domTwistDebugBlocks.querySelector( 'button.current' ).classList.remove( 'current' );
+					domTwistDebugDetails.classList.remove( 'show' );
+				}
+		);
 
-						jqoTwistDebugDetails.addClass( 'show' ).children( 'div' ).hide().filter( jqsTarget ).show();
-						jqoTwistDebugBlocks.find( 'a.current' ).removeClass( 'current' );
-						jqoThisBlock.addClass( 'current' );
+
+		for( let el of domTwistDebugDetails.querySelectorAll( 'a[href="#twist-debug-more-details"]' ) ) {
+			el.addEventListener( 'click',
+					function( e ) {
+						//TODO
+						// $( this ).prev( '.twist-debug-more-details' ).toggle();
+
 					}
-				}
-		);
-		$( '#close-twist-debug-details' ).on( 'click',
-				function( e ) {
-					e.preventDefault();
-					jqoTwistDebugBlocks.find( 'a.current' ).removeClass( 'current' );
-					jqoTwistDebugDetails.removeClass( 'show' );
-				}
-		);
-		jqoTwistDebugDetails.on( 'click', 'a[href="#twist-debug-more-details"]',
-				function( e ) {
-					e.preventDefault();
+			);
+		}
 
-					$( this ).prev( '.twist-debug-more-details' ).toggle();
-				}
-		);
-		jqoTwistDebugDetails.find( 'table' ).wrap( '<div class="table-wrapper"/>' );
 
-		$( '#twist-debug' ).addClass( 'ready' );
+		//TODO
+		//jqoTwistDebugDetails.find( 'table' ).wrap( '<div class="table-wrapper"/>' );
+
+		document.getElementById( 'twist-debug' ).classList.add( 'ready' );
 	}
 }
 
-
-(function( window, undefined ) {
-	let blOtherJSLibrary = false,
-			arrThingsToLog = [],
-			addDebugToWindow = ( instance ) => {
-				if( !window.twist ) {
-					window.twist = {debug: instance};
-				} else {
-					window.twist.debug = instance;
-				}
-			},
-			originalWindowError = window.onerror;
-
-	window.onerror = ( strErrorMessage, strURL, intLineNumber, intColumn, objError ) => {
-		arrThingsToLog.push( {
-			message: '<strong>JS Error:</strong> ' + strErrorMessage,
-			url: strURL,
-			line: intLineNumber,
-			column: intColumn,
-			error: objError
-		} );
-
-		originalWindowError( strErrorMessage, strURL, intLineNumber, intColumn, objError );
-
-		return true;
-	};
-
-	if( typeof window.jQuery === 'undefined' ) {
-		blOtherJSLibrary = ( typeof window.$ === 'function' );
-
-		twistdebug.getScript( 'https://code.jquery.com/jquery-3.2.1.slim.min.js', 'sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=', () => {
-			if( typeof window.jQuery === 'undefined' ) {
-				console.error( 'This is embarrassing... jQuery couldn\'t be loaded' );
-			} else {
-				if( !blOtherJSLibrary ) {
-					addDebugToWindow( new twistdebug( false, arrThingsToLog ) );
-				} else {
-					console.warn( 'Another JS library controls $' );
-					addDebugToWindow( new twistdebug( true, arrThingsToLog ) );
-				}
-			}
-		} );
-	} else {
-		console.info( 'jQuery v.' + $.fn.jquery + ' already exists' );
-		addDebugToWindow( new twistdebug( false, arrThingsToLog ) );
-	}
-})( window );
+if( !window.twist ) {
+	window.twist = {debug: new twistdebug()};
+} else {
+	window.twist.debug = new twistdebug();
+}

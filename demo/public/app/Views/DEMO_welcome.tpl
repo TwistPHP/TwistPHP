@@ -13,6 +13,7 @@
 <form id="test-form">
     <input name="firstname" type="text" value="Philip"> <input name="lastname" type="text" value="Fry"> <input name="dob" type="date" value="1974-08-14">
 </form>
+<!--{resource:jquery}-->
 {resource:babel,polyfill}
 {resource:twist/ajax}
 <script>

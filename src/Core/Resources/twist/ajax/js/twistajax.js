@@ -36,52 +36,58 @@ export default class twistajax {
 			window.twist.ajax = {instances: []};
 		}
 
-		this.on( 'response', request => {
-			if( window.twist.debug &&
-					request.$debug ) {
-				request.$debug
-						.find( '.details' )
-						.replaceWith( '<pre>' + JSON.stringify( {response: request.response}, undefined, 2 ) + '</pre>' );
+		this.on( 'request', request => {
+			if( window.twist.debug ) {
+				window.twist.debug.logAJAX( request );
 			} else if( this.debug ) {
-				//DEBUG OLD SKOOL
+				console.info( 'New AJAX Request', request );
 			}
 		} )
+				.on( 'response', request => {
+					if( window.twist.debug &&
+							request.$debug ) {
+						/*request.$debug
+								.find( '.details' )
+								.replaceWith( '<pre>' + JSON.stringify( {response: request.response}, undefined, 2 ) + '</pre>' );*/
+					} else if( this.debug ) {
+						//TODO: DEBUG OLD SKOOL
+					}
+				} )
 				.on( 'success', request => {
 					if( window.twist.debug &&
 							request.$debug ) {
-						if( request.$debug.attr( 'class' ) === 'twist-debug-box-' ) {
-							request.$debug
-									.removeClass( 'twist-debug-box-' )
-									.addClass( 'twist-debug-box-green' );
+						if( request.$debug.getAttribute( 'class' ) === 'twist-debug-box-' ) {
+							request.$debug.classList.remove( 'twist-debug-box-' );
+							request.$debug.classList.add( 'twist-debug-box-green' );
 						}
 					} else if( this.debug ) {
-						//DEBUG OLD SKOOL
+						//TODO: DEBUG OLD SKOOL
 					}
 				} )
 				.on( 'fail', request => {
 					if( window.twist.debug &&
 							request.$debug ) {
-						if( request.$debug.attr( 'class' ) === 'twist-debug-box-' ) {
-							request.$debug
-									.removeClass( 'twist-debug-box-' )
-									.addClass( 'twist-debug-box-yellow' );
+						if( request.$debug.getAttribute( 'class' ) === 'twist-debug-box-' ) {
+							request.$debug.classList.remove( 'twist-debug-box-' );
+							request.$debug.classList.add( 'twist-debug-box-yellow' );
 						}
 					} else if( this.debug ) {
-						//DEBUG OLD SKOOL
+						//TODO: DEBUG OLD SKOOL
 					}
 				} )
 				.on( 'error', request => {
 					if( window.twist.debug &&
 							request.$debug ) {
-						if( request.$debug.attr( 'class' ) === 'twist-debug-box-' ) {
-							request.$debug
-									.removeClass( 'twist-debug-box-' )
-									.addClass( 'twist-debug-box-red' )
-									.find( '.details' )
-									.replaceWith( '<p>Error: ' + request.error + '</p>' );
+						if( request.$debug.getAttribute( 'class' ) === 'twist-debug-box-' ) {
+							request.$debug.classList.remove( 'twist-debug-box-' );
+							request.$debug.classList.add( 'twist-debug-box-red' );
+							let domError = document.createElement( 'p' );
+							domError.innerHTML = 'Error: ' + request.error;
+							let domDetails = request.$debug.querySelector( '.details' );
+							domDetails.parentNode.replaceChild( domError, domDetails );
 						}
 					} else if( this.debug ) {
-						//DEBUG OLD SKOOL
+						//TODO: DEBUG OLD SKOOL
 					}
 				} );
 
@@ -211,15 +217,9 @@ export default class twistajax {
 					} );
 		} );
 
-		this.trigger( 'request', request );
-
-		if( window.twist.debug ) {
-			window.twist.debug.logAJAX( request );
-		} else if( this.debug ) {
-			console.info( 'New AJAX Request', request );
-		}
-
 		this.requests.push( request );
+
+		this.trigger( 'request', request );
 
 		return request.instance;
 	}
