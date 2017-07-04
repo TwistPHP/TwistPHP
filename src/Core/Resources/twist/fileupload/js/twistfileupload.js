@@ -303,8 +303,6 @@ export default class twistfileupload {
 			this.hideProgress();
 
 			console.warn( 'Your browser does not support AJAX uploading', 'warn', true );
-
-			return null;
 		}
 
 
@@ -433,8 +431,8 @@ export default class twistfileupload {
 
 													this.updateUploadedList();
 
-													if( window.twistdebug ) {
-														window.twistdebug.logFileUpload( resFile,jsonResponse );
+													if( window.twist.debug ) {
+														window.twist.debug.logFileUpload( resFile,jsonResponse );
 													}
 
 													this.settings.oncompletefile( jsonResponse, resFile );
@@ -459,8 +457,8 @@ export default class twistfileupload {
 
 													this.updateUploadedList();
 
-													if( window.twistdebug ) {
-														window.twistdebug.logFileUpload( resFile,jsonResponse );
+													if( window.twist.debug ) {
+														window.twist.debug.logFileUpload( resFile,jsonResponse );
 													}
 
 													this.settings.oncompletefile( jsonResponse, resFile );

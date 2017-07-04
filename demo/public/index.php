@@ -19,6 +19,7 @@
 	//Define a controller
 	Twist::Route()->controller( '/%', 'DEMO_HelloWorld' );
 	Twist::Route()->ajax( '/ajax/%', 'DEMO_AJAX123' );
+	Twist::Route()->upload();
 
 	//Register the framework manager
 	Twist::Route()->manager( '/manager' );

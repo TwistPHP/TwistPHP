@@ -22,6 +22,7 @@ demo/public/app/Models/*
 demo/public/app/Packages
 demo/public/app/Resources/*
 !demo/public/app/Resources/.htaccess
+demo/public/uploads
 demo/public/app/Views/*
 !demo/public/app/Views/DEMO_*
 
