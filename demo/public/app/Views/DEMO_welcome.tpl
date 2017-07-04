@@ -65,5 +65,8 @@
 			} );
 </script>
 {file:upload}
+{file:upload,multiple=1}
+{asset:upload}
+{asset:upload,multiple=1}
 </body>
 </html>
