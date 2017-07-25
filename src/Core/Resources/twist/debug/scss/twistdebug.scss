@@ -257,6 +257,11 @@ $z-index: 1337;
 			&.current {
 				background-color: $bar-background-hover;
 			}
+
+			&[data-panel="#twist-debug-messages"] {
+				padding-right: 0;
+				padding-left: 0;
+			}
 		}
 
 		[data-count] {

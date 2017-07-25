@@ -165,12 +165,41 @@ class twistdebug {
 			domLogBox.classList.add( 'twist-debug-box-' + strColour );
 			domLogBox.setAttribute( 'data-title', strTitle );
 
+			domLogBox.innerHTML = strLogHTML + '<div class="twist-debug-more-details">' + strDetailsHTML + '</div>';
+
+
 
 			if( strDetailsHTML !== '' ) {
-				domLogBox.innerHTML = strLogHTML + '<div class="twist-debug-more-details">' + strDetailsHTML + '</div><a href="#twist-debug-more-details" class="twist-debug-more-details">&ctdot;</a>';
-			} else {
-				domLogBox.innerHTML = strLogHTML;
+				//'<a href="#twist-debug-more-details" class="twist-debug-more-details">&ctdot;</a>';
+
+
+
+				let domMoreDetails = document.createElement( 'a' );
+
+				domMoreDetails.classList.add( 'twist-debug-more-details' );
+				domMoreDetails.innerHTML = '&ctdot;';
+				domMoreDetails.setAttribute( 'href', '#twist-debug-more-details' );
+
+				domLogBox.appendChild( domMoreDetails );
+
+				domMoreDetails.addEventListener( 'click',
+						function( e ) {
+							e.preventDefault();
+							console.log( '123' );
+							// $( this ).prev( '.twist-debug-more-details' ).toggle();
+						}
+				);
 			}
+
+
+
+
+
+
+
+
+
+
 
 
 			document.querySelector( jqsAppendTo ).appendChild( domLogBox );
@@ -307,6 +336,7 @@ class twistdebug {
 		for( let el of domTwistDebugDetails.querySelectorAll( 'a[href="#twist-debug-more-details"]' ) ) {
 			el.addEventListener( 'click',
 					function( e ) {
+						e.preventDefault();
 						//TODO
 						// $( this ).prev( '.twist-debug-more-details' ).toggle();
 
