@@ -146,7 +146,8 @@ class DatabaseMySQLi extends \PHPUnit_Framework_TestCase{
 
 		//Alter the table
 		$resExistingTable = \Twist::Database()->table('test_table')->get();
-		$resExistingTable->autoIncrement('id',2);
+		$resExistingTable->autoIncrement('id');
+		echo $resExistingTable->sql();
 		$resExistingTable->commit();
 
 		$resNewRecord = \Twist::Database()->records('test_table')->create();
