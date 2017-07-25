@@ -200,16 +200,14 @@
 
 					if(substr($strSQL,0,6) === 'INSERT'){
 						
+						$mxdOut = true;
 						$strAutoIncrementField = $this->detectAutoIncrement();
 						
-						if(is_null($strAutoIncrementField)){
-							$mxdOut = true;
-						}else{
+						if(!is_null($strAutoIncrementField)){
 							$mxdOut = $resResult->insertID();
 							
-							//Find an auto increment field and update the ID in the record
-							$this->arrOriginalRecord[$strAutoIncrementField] = $mxdOut;
-							$this->arrRecord[$strAutoIncrementField] = $mxdOut;
+							//Update the auto increment field in the record
+							$this->arrOriginalRecord[$strAutoIncrementField] = $this->arrRecord[$strAutoIncrementField] = $mxdOut;
 						}
 						
 					}else if($resResult->affectedRows() !== 0){
