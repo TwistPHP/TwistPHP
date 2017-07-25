@@ -199,16 +199,19 @@
 					$this->arrOriginalRecord = $this->arrRecord;
 
 					if(substr($strSQL,0,6) === 'INSERT'){
-						$mxdOut = $resResult->insertID();
-
-						//Find an auto increment field and update the ID in the record
-						foreach($this->arrStructure['columns'] as $strField => $arrOptions){
-							if($arrOptions['auto_increment'] == '1'){
-								$this->arrOriginalRecord[$strField] = $mxdOut;
-								$this->arrRecord[$strField] = $mxdOut;
-								break;
-							}
+						
+						$strAutoIncrementField = $this->detectAutoIncrement();
+						
+						if(is_null($strAutoIncrementField)){
+							$mxdOut = true;
+						}else{
+							$mxdOut = $resResult->insertID();
+							
+							//Find an auto increment field and update the ID in the record
+							$this->arrOriginalRecord[$strAutoIncrementField] = $mxdOut;
+							$this->arrRecord[$strAutoIncrementField] = $mxdOut;
 						}
+						
 					}else if($resResult->affectedRows() !== 0){
 						$mxdOut = $resResult->affectedRows();
 					}
