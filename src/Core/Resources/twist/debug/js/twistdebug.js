@@ -48,7 +48,6 @@ class twistdebug {
 		// }
 
 		window.onerror = ( strErrorMessage, strURL, intLineNumber, intColumn, objError ) => {
-			console.log( 'HAHAHAHA' );
 			this.error( strErrorMessage, 'OH NOES!', strURL, intLineNumber, intColumn, objError );
 			return false;
 		};
@@ -151,60 +150,41 @@ class twistdebug {
 				strTitle = 'JavaScript [' + ( new Date() ).getTime() + ']';
 			}
 
-			// let jqoLogBox = $( '<div class="twist-debug-box-' + strColour + '" data-title="' + strTitle + '"/>' ).html( strLogHTML );
-
-			// if( strDetailsHTML !== '' ) {
-			// 	jqoLogBox.append( '<div class="twist-debug-more-details">' + strDetailsHTML + '</div><a href="#twist-debug-more-details" class="twist-debug-more-details">&ctdot;</a>' );
-			// }
-
-			//$( jqsAppendTo ).append( jqoLogBox );
-
-
 			let domLogBox = document.createElement( 'div' );
-
+			domLogBox.innerHTML = strLogHTML;
 			domLogBox.classList.add( 'twist-debug-box-' + strColour );
 			domLogBox.setAttribute( 'data-title', strTitle );
 
-			domLogBox.innerHTML = strLogHTML + '<div class="twist-debug-more-details">' + strDetailsHTML + '</div>';
+			let domMoreDetails = document.createElement( 'div' );
+			domMoreDetails.classList.add( 'twist-debug-more-details' );
+			domMoreDetails.innerHTML = strDetailsHTML;
 
-
+			domLogBox.appendChild( domMoreDetails );
 
 			if( strDetailsHTML !== '' ) {
-				//'<a href="#twist-debug-more-details" class="twist-debug-more-details">&ctdot;</a>';
-
-
-
-				let domMoreDetails = document.createElement( 'a' );
-
-				domMoreDetails.classList.add( 'twist-debug-more-details' );
-				domMoreDetails.innerHTML = '&ctdot;';
-				domMoreDetails.setAttribute( 'href', '#twist-debug-more-details' );
-
-				domLogBox.appendChild( domMoreDetails );
-
-				domMoreDetails.addEventListener( 'click',
+				let domMoreDetailsButton = document.createElement( 'a' );
+				domMoreDetailsButton.classList.add( 'twist-debug-more-details' );
+				domMoreDetailsButton.innerHTML = '&ctdot;';
+				domMoreDetailsButton.setAttribute( 'href', '#twist-debug-more-details' );
+				domMoreDetailsButton.addEventListener( 'click',
 						function( e ) {
 							e.preventDefault();
-							console.log( '123' );
+
+							if( domMoreDetails.offsetWidth > 0 && domMoreDetails.offsetHeight > 0 ) {
+								domMoreDetails.style.display = 'none';
+							} else {
+								domMoreDetails.style.display = 'block';
+							}
+
 							// $( this ).prev( '.twist-debug-more-details' ).toggle();
 						}
 				);
+
+				domLogBox.appendChild( domMoreDetailsButton );
 			}
-
-
-
-
-
-
-
-
-
-
-
 
 			document.querySelector( jqsAppendTo ).appendChild( domLogBox );
 
-			//return jqoLogBox;
 			return domLogBox;
 		} else {
 			return false;
@@ -303,7 +283,7 @@ class twistdebug {
 
 						if( domThisBlock.classList.contains( 'current' ) ) {
 							domTwistDebugDetails.classList.remove( 'show' );
-							domThisBlock.removeClass( 'current' );
+							domThisBlock.classList.remove( 'current' );
 						} else {
 							let jqsTarget = domThisBlock.getAttribute( 'data-panel' );
 
@@ -331,18 +311,6 @@ class twistdebug {
 					domTwistDebugDetails.classList.remove( 'show' );
 				}
 		);
-
-
-		for( let el of domTwistDebugDetails.querySelectorAll( 'a[href="#twist-debug-more-details"]' ) ) {
-			el.addEventListener( 'click',
-					function( e ) {
-						e.preventDefault();
-						//TODO
-						// $( this ).prev( '.twist-debug-more-details' ).toggle();
-
-					}
-			);
-		}
 
 
 		//TODO

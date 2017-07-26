@@ -46,9 +46,9 @@ export default class twistajax {
 				.on( 'response', request => {
 					if( window.twist.debug &&
 							request.$debug ) {
-						/*request.$debug
-								.find( '.details' )
-								.replaceWith( '<pre>' + JSON.stringify( {response: request.response}, undefined, 2 ) + '</pre>' );*/
+						request.$debug
+								.querySelector( '.details' )
+								.outerHTML = '<pre>' + JSON.stringify( {response: request.response}, undefined, 2 ) + '</pre>';
 					} else if( this.debug ) {
 						//TODO: DEBUG OLD SKOOL
 					}
