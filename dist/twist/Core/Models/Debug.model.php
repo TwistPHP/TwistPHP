@@ -236,4 +236,11 @@ final class Debug{
 
 		return $this->resTemplate->build('_base.tpl',$arrTags);
 	}
+
+	public function catcher() {
+
+		$resResource = new \Twist\Core\Models\Resources();
+		$resResource -> viewResource( 'core-uri' );
+		return sprintf('<script>%s</script>',file_get_contents(sprintf('%sCore/Resources/twist/debug/js/twistdebugcatcher.js',TWIST_FRAMEWORK)));
+	}
 }

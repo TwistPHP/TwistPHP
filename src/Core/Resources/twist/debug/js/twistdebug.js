@@ -41,9 +41,29 @@ class twistdebug {
 			}
 		}
 
-		window.onerror = ( strErrorMessage, strURL, intLineNumber, intColumn, objError ) => {
-			this.error( strErrorMessage, 'OH NOES!', strURL, intLineNumber, intColumn, objError );
-			return false;
+		if( window.twist &&
+				window.twist.catches ) {
+			for( let caught of window.twist.catches ) {
+				console.log( caught );
+				switch( caught.type ) {
+					case 'error':
+						this.error.apply( this, caught.details );
+						break;
+					case 'warning':
+						this.warn.apply( this, caught.details );
+						break;
+				}
+			}
+		}
+
+		window.onerror = ( strErrorMessage, strURL, intLineNumber, intColumn ) => {
+			this.error( strErrorMessage, strURL, intLineNumber, intColumn );
+			//return false;
+		};
+
+		window.onwarn = ( strErrorMessage, strURL, intLineNumber, intColumn ) => {
+			this.warn( strErrorMessage, strURL, intLineNumber, intColumn );
+			//return false;
 		};
 
 		this.setupUI();
@@ -61,8 +81,8 @@ class twistdebug {
 	}
 
 	outputExistingAJAX() {
-		if( twist.ajax ) {
-			for( let instance of twist.ajax.instances ) {
+		if( window.twist && window.twist.ajax ) {
+			for( let instance of window.twist.ajax.instances ) {
 				for( let request of instance.requests ) {
 					this.logAJAX( request );
 				}
@@ -125,7 +145,7 @@ class twistdebug {
 
 			if( strDetailsHTML !== '' ) {
 				let domMoreDetailsButton = document.createElement( 'a' );
-				domMoreDetailsButton.classList.add( 'twist-debug-more-details' );
+				domMoreDetailsButton.classList.add( 'twist-debug-more-details-button' );
 				domMoreDetailsButton.innerHTML = '&ctdot;';
 				domMoreDetailsButton.setAttribute( 'href', '#twist-debug-more-details' );
 				domMoreDetailsButton.addEventListener( 'click',
@@ -223,15 +243,27 @@ class twistdebug {
 				domTwistDebugDetails = document.getElementById( 'twist-debug-details' );
 
 		for( let boxEl of document.getElementById( 'twist-debug-details' ).querySelectorAll( '.twist-debug-box, [class^="twist-debug-box-"], [class*=" twist-debug-box-"]' ) ) {
-			if( boxEl.querySelector( '.twist-debug-more-details' ) ) {
+			if( boxEl.querySelector( '.twist-debug-more-details' ) &&
+					!boxEl.querySelector( '.twist-debug-more-details-button' ) ) {
 				let domMoreDetails = boxEl.querySelector( '.twist-debug-more-details' ),
-						moreDetailsButton = document.createElement( 'a' );
+						domMoreDetailsButton = document.createElement( 'a' );
 
-				moreDetailsButton.setAttribute( 'href', '#twist-debug-more-details' );
-				moreDetailsButton.classList.add( 'twist-debug-more-details' );
-				moreDetailsButton.innerHTML = '&ctdot;';
+				domMoreDetailsButton.classList.add( 'twist-debug-more-details-button' );
+				domMoreDetailsButton.innerHTML = '&ctdot;';
+				domMoreDetailsButton.setAttribute( 'href', '#twist-debug-more-details' );
+				domMoreDetailsButton.addEventListener( 'click',
+						function( e ) {
+							e.preventDefault();
 
-				domMoreDetails.parentNode.appendChild( moreDetailsButton );
+							if( domMoreDetails.offsetWidth > 0 && domMoreDetails.offsetHeight > 0 ) {
+								domMoreDetails.style.display = 'none';
+							} else {
+								domMoreDetails.style.display = 'block';
+							}
+						}
+				);
+
+				boxEl.appendChild( domMoreDetailsButton );
 			}
 		}
 

@@ -72,6 +72,29 @@ gulp.task( 'debug-js', () => {
 			.then( bundle => rollupExport( bundle, strTwistDestination + 'debug/js/twistdebug.js', 'twistdebug' ) );
 } );
 
+gulp.task( 'debug-catch-js', () => {
+	return rollup.rollup( {
+		entry: strTwistSource + 'debug/js/twistdebugcatcher.js',
+		plugins: [
+			rollupBabel( {
+				presets: [['es2015', {modules: false}]],
+				sourceMaps: false,
+				babelrc: false
+			} ),
+			rollupESLint( esOptions ),
+			rollupUglify()
+		]
+	} )
+			.then( bundle => {
+				return bundle.write( {
+					format: 'iife',
+					moduleName: 'twistdebugcatcher',
+					dest: strTwistDestination + 'debug/js/twistdebugcatcher.js',
+					sourceMap: false
+				} );
+			} );
+} );
+
 gulp.task( 'debug-css', () => {
 	return gulp.src( strTwistSource + 'debug/scss/twistdebug.scss' )
 			.pipe( sourcemaps.init() )
@@ -107,10 +130,11 @@ gulp.task( 'docs', () => {
 } );
 
 gulp.task( 'ajax', ['ajax-js'] );
-gulp.task( 'debug', ['debug-js', 'debug-css'] );
+gulp.task( 'debug', ['debug-js', 'debug-css', 'debug-catch-js'] );
 gulp.task( 'fileupload', ['fileupload-js'] );
 gulp.task( 'manager', ['manager-css'] );
 gulp.task( 'setup', ['setup-css'] );
+gulp.task( 'css', ['debug-css', 'manager-css', 'setup-css'] );
 
 gulp.task( 'test', () => {
 	return gulp.src( strTwistSource + '**/*.js' )
@@ -120,10 +144,14 @@ gulp.task( 'test', () => {
 } );
 
 gulp.task( 'watch', () => {
-	gulp.watch( strTwistSource + 'ajax/js/**/*.js', ['ajax-js'] );
-	gulp.watch( strTwistSource + 'debug/js/**/*.js', ['debug-js'] );
+	gulp.watch( strTwistSource + 'ajax/js/twistajax.js', ['ajax-js'] );
+	gulp.watch( strTwistSource + 'debug/js/twistdebug.js', ['debug-js'] );
+	gulp.watch( strTwistSource + 'debug/js/twistdebugcatcher.js', ['debug-catch-js'] );
+	gulp.watch( strTwistSource + 'fileupload/js/twistfileupload.js', ['fileupload-js'] );
 	gulp.watch( strTwistSource + 'debug/scss/**/*.scss', ['debug-css'] );
-	gulp.watch( strTwistSource + 'fileupload/js/**/*.js', ['fileupload-js'] );
+	gulp.watch( strTwistSource + 'manager/scss/**/*.scss', ['manager-css'] );
+	gulp.watch( strTwistSource + 'setup/scss/**/*.scss', ['setup-css'] );
+	gulp.watch( strTwistSource + '_common.scss', ['css'] );
 } );
 
 gulp.task( 'dev', ['default', 'watch'] );

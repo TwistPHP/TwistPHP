@@ -13,18 +13,19 @@
 # --- DEMO --- #
 demo/public/app/Assets/*
 !demo/public/app/Assets/.htaccess
-demo/public/app/Cache
+demo/public/app/Cache/*
+!demo/public/app/Cache/.htaccess
 demo/public/app/Controllers/*
-!demo/public/app/Controllers/DEMO_*
+!demo/public/app/Controllers/TEST_*
 demo/public/app/Logs
 demo/public/app/Models/*
-!demo/public/app/Models/DEMO_*
+!demo/public/app/Models/TEST_*
 demo/public/app/Packages
 demo/public/app/Resources/*
 !demo/public/app/Resources/.htaccess
 demo/public/uploads
 demo/public/app/Views/*
-!demo/public/app/Views/DEMO_*
+!demo/public/app/Views/TEST_*
 
 # --- JS DOC RESOURCES --- #
 docs/resources

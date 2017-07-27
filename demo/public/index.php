@@ -17,8 +17,8 @@
 	require_once '../../dist/twist/framework.php';
 
 	//Define a controller
-	Twist::Route()->controller( '/%', 'DEMO_HelloWorld' );
-	Twist::Route()->ajax( '/ajax/%', 'DEMO_AJAX123' );
+	Twist::Route()->controller( '/%', 'HelloWorld' );
+	Twist::Route()->ajax( '/ajax/%', 'AJAX123' );
 	Twist::Route()->upload();
 
 	//Register the framework manager

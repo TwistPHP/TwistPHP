@@ -20,15 +20,8 @@
 			"js": ["polyfill.min.js"]
 		}
 	},
-	"firebug-lite": {
-		"1.4.0": {
-			"default": true,
-			"css": [],
-			"js": ["firebug-lite.js"]
-		}
-	},
 	"font-awesome": {
-		"4.5.0": {
+		"4.7.0": {
 			"default": true,
 			"css": ["css/font-awesome.min.css"],
 			"js": []
@@ -38,17 +31,27 @@
 		"legacy": {
 			"default": false,
 			"css": [],
-			"js": ["jquery-1.12.0.min.js"]
+			"js": ["jquery-1.12.4.min.js"]
 		},
-		"1.12.0": {
+		"1": {
 			"default": false,
 			"css": [],
-			"js": ["jquery-1.12.0.min.js"]
+			"js": ["jquery-1.12.4.min.js"]
 		},
-		"2.2.0": {
+		"2": {
+			"default": false,
+			"css": [],
+			"js": ["jquery-2.2.4.min.js"]
+		},
+		"3": {
+			"default": false,
+			"css": [],
+			"js": ["jquery-3.2.1.min.js"]
+		},
+		"slim": {
 			"default": true,
 			"css": [],
-			"js": ["jquery-2.2.0.min.js"]
+			"js": ["jquery-3.2.1.slim.min.js"]
 		}
 	},
 	"jquery-ui": {
@@ -105,17 +108,17 @@
 		"js": {
 			"default": false,
 			"css": [],
-			"js": ["js/twistdebug.min.js"]
+			"js": ["js/twistdebug.js"]
+		},
+		"catcher": {
+			"default": false,
+			"css": [],
+			"js": ["js/twistdebugcatcher.js"]
 		}
 	},
 	"twist/fileupload": {
 		"standard": {
 			"default": true,
-			"css": [],
-			"js": ["js/twistfileupload.js"]
-		},
-		"development": {
-			"default": false,
 			"css": [],
 			"js": ["js/twistfileupload.js"]
 		}

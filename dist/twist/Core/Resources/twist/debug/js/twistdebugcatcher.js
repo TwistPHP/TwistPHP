@@ -1,0 +1,1 @@
+!function(){"use strict";!function(t){t.twist?t.twist.catches=[]:t.twist={catches:[]};var n=function(n,r,i,c,e){return t.twist.catches.push({type:n,details:[r,i,c,e]}),!1};t.onerror=function(t,r,i,c){return n("error",t,r,i,c)},t.onwarn=function(t,r,i,c){return n("warning",t,r,i,c)}}(window)}();
