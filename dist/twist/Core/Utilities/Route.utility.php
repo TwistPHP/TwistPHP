@@ -254,7 +254,7 @@ class Route extends Base{
 
 	/**
 	 * Get an array of restricted routes and the restriction overrides (these are found in the unrestricted sub array)
-	 * @return array An array with tow sub arrays 'restrcited' and 'unrestricted'
+	 * @return array An array with tow sub arrays 'restricted' and 'unrestricted'
 	 */
 	public function getRestrictions(){
 		return array(

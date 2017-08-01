@@ -184,6 +184,7 @@ class Validator{
 	 *
 	 * @param array $arrData
 	 * @return array
+	 * @throws \Exception
 	 */
 	public function test(&$arrData){
 

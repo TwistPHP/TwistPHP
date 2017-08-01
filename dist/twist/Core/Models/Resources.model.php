@@ -445,7 +445,7 @@ class Resources{
 	}
 
 	/**
-	 * Extend the resource library with a whole new set of resources. This function can be called if you want to put some custom rescources into the system that the site or package can use.
+	 * Extend the resource library with a whole new set of resources. This function can be called if you want to put some custom resources into the system that the site or package can use.
 	 * The resources will then become accessible via the {resource:} view tag.
 	 * @param string $dirManifest
 	 * @param string $dirResourcePath
@@ -510,7 +510,7 @@ class Resources{
 	 * color = #ffffff
 	 * line and font color used on the image placeholder
 	 *
-	 * An example of the tag with all the above parameters in use {placholder:'Banner Image',width=400,height=300,background-color='#999999',color='#ffffff'}
+	 * An example of the tag with all the above parameters in use {placeholder:'Banner Image',width=400,height=300,background-color='#999999',color='#ffffff'}
 	 *
 	 * @param string $strReference Message to be displayed on the image, pass in '' for site name
 	 * @param array $arrParameters

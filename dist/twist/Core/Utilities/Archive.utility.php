@@ -133,7 +133,7 @@
 		/**
 		 * Decides how to deal with the path being entered into the zip
 		 * @param string $dirLocalPath Local path of hte item to be added
-		 * @param string $strCurrentPath Base path within the zip where the item will be addded
+		 * @param string $strCurrentPath Base path within the zip where the item will be added
 		 */
 		protected function addItem($dirLocalPath,$strCurrentPath = ''){
 

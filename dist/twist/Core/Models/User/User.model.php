@@ -23,7 +23,6 @@
 	 */
 
 	namespace Twist\Core\Models\User;
-	use Twist\Core\Models\User\Auth;
 	use Twist\Core\Models\Database\Record;
 
 	class User{

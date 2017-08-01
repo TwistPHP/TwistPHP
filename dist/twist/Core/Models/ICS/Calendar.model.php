@@ -23,6 +23,7 @@
 	 */
 
 	namespace Twist\Core\Models\ICS;
+	use Twist\Core\Models\ICS\Event;
 
 	class Calendar{
 
@@ -131,7 +132,7 @@
 			}
 
 			if(is_null($intUID)){
-				$resEvent = new \Twist\Core\Models\ICS\Event();
+				$resEvent = new Event();
 				$this->arrEvents[$resEvent->uid()] = $resEvent;
 			}else{
 				$resEvent = $this->arrEvents[$intUID];

@@ -23,7 +23,6 @@
  */
 
 namespace Twist\Core\Controllers;
-use Twist\Classes\Exception;
 use Twist\Core\Models\Install;
 
 /**

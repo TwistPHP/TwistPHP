@@ -23,7 +23,6 @@
  */
 
 namespace Twist\Core\Controllers;
-use Twist\Classes\Error;
 
 /*
  * An REST API base controller (basic API Key auth) that can be used instead of Base when adding REST API support to your site. This controller should be used as an extension to a route controller class.

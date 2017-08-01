@@ -53,7 +53,7 @@ class BaseREST extends Base{
     }
 
     /**
-     * Open REST dosnt require any auth but this function is needed for RESTKey and RESTUser
+     * Open REST does not require any auth but this function is needed for RESTKey and RESTUser
      * @return bool
      */
     public function _auth(){

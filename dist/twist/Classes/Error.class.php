@@ -280,7 +280,7 @@
 			if(self::getType($arrLastError['type']) === "Fatal Error"){
 
 				//throw new Exception($arrLastError['message']);
-				//A fatal error has occured, throw and exception instead.
+				//A fatal error has occurred, throw and exception instead.
 				$objException = new Exception($arrLastError['message'],1,$arrLastError['file'],$arrLastError['line']);
 
 				self::handleException($objException,$arrLastError);

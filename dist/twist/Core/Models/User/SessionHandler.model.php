@@ -244,7 +244,7 @@ class SessionHandler{
 	}
 
 	/**
-	 * Forget the user, nolonger remeber the user
+	 * Forget the user, no longer remember the user
 	 */
 	public function forget(){
 

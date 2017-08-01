@@ -312,7 +312,7 @@
 		/**
 		 * Returns the Meta object so that page titles, keywords and other meta items can all be updated before being output to the base template.
 		 *
-		 * @return \Twist\Core\Models\Route\Meta
+		 * @return null|object|resource|\Twist\Core\Models\Route\Meta
 		 */
         public function _meta(){
 			return $this->resRoute->meta();

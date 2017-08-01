@@ -303,7 +303,7 @@
 
 		/**
 		 * Get and array of the users default information by User ID
-		 * @param integer $intUserID
+		 * @param string $strOrderBy
 		 * @return array
 		 */
 		public function getAll($strOrderBy = 'id'){
@@ -312,7 +312,7 @@
 
 		/**
 		 * Get and array of the users default information by User ID
-		 * @param integer $intUserID
+		 * @param $intLevelID
 		 * @return array
 		 */
 		public function getAllByLevel($intLevelID){

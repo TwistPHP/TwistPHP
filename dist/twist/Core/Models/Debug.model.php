@@ -24,6 +24,7 @@
 
 namespace Twist\Core\Models;
 use Twist\Classes\Error;
+use Twist\Core\Models\Resources;
 
 /**
  * Debugging the framework and its modules, functionality to access debug data can be found here. Data will only be present if Debugging is enabled in your settings.
@@ -243,7 +244,7 @@ final class Debug{
 	 */
 	public function catcher() {
 
-		$resResource = new \Twist\Core\Models\Resources();
+		$resResource = new Resources();
 		$resResource -> viewResource( 'core-uri' );
 		return sprintf('<script>%s</script>',file_get_contents(sprintf('%sCore/Resources/twist/debug/js/twistdebugcatcher.js',TWIST_FRAMEWORK)));
 	}

@@ -92,7 +92,7 @@ class Builder{
 		return $this->updateField($strName,'suffix',$strSuffix);
 	}
 
-	public function addSumbit($strName,$strSuccessRedirect){
+	public function addSubmit($strName,$strSuccessRedirect){
 		$this->arrDetails['submit'] = array('name' => $strName,'redirect' => $strSuccessRedirect);
 	}
 

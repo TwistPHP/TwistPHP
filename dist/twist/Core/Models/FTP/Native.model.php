@@ -81,7 +81,7 @@
 
 			$mxdOut = array();
 
-			//Custom built as dosnt appear to be a natively supported command
+			//Custom built as doesn't appear to be a natively supported command
 			$strResponse = ftp_raw($this->resConnection,"FEAT");
 
 			if(preg_match('#^([0-9]{3})\s#',$strResponse,$arrMatches) && $arrMatches[0] == 211){

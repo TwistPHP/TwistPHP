@@ -369,7 +369,7 @@
 		}
 
 		/**
-		 * Check to see that a package is installed and usable, optional throw an exception of the package dosnt exist
+		 * Check to see that a package is installed and usable, optional throw an exception of the package doesn't exist
 		 * @param string $strPackageSlug
 		 * @param bool $blThrowException
 		 * @return bool

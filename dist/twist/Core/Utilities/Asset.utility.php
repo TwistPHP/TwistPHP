@@ -474,7 +474,6 @@
 		public function upload($strFileKey,$intGroupID,$strTitle='',$strDescription='',$blActive=true){
 
 			//Upload the file to the system
-			$intOut = 0;
 			$arrFile = \Twist::File()->upload($strFileKey,\Twist::DateTime()->time());
 
 			//Store the file as an asset

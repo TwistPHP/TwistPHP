@@ -1,3 +1,3 @@
 <video>
-	<source></source>
+	<source>
 </video>

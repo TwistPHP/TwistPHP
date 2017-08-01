@@ -75,7 +75,7 @@ class File extends Base{
 		if(($intBytes >= 0) && ($intBytes < $intKilobyte)){
 			$strOut = sprintf('%sB',$intBytes);
 		}elseif(($intBytes >= $intKilobyte) && ($intBytes < $intMegabyte)){
-			//For Kilobytes make sure to remove odd bits as it is not nessasery to see all decimals at this level
+			//For Kilobytes make sure to remove odd bits as it is not necessary to see all decimals at this level
 			$intKilobytesFull = round($intBytes / $intKilobyte, 2);
 			switch(strlen($intKilobytesFull)){
 				case 7:

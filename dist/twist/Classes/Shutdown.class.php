@@ -26,7 +26,7 @@
 
 	/**
 	 * Shutdown handler to call registered functions upon completion or failure of the PHP instance.
-	 * The functions are run in the order that they are registered, using shutdown functions will help to imporve page load time by completing tasks after the page has loaded.
+	 * The functions are run in the order that they are registered, using shutdown functions will help to improve page load time by completing tasks after the page has loaded.
 	 * For example storing/removing cache files, updating last logged in data etc.
 	 * @package Twist\Classes
 	 */

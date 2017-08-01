@@ -23,7 +23,6 @@
  */
 
 namespace Twist\Core\Models\Image;
-use Twist\Classes\Exception;
 
 /**
  * Image object that allow the manipulation of images, adding text, inserting watermarks, applying effects, resizing and altering output quality.

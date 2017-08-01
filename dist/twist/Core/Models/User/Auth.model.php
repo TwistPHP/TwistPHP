@@ -49,13 +49,13 @@ class Auth{
     }
 
 	/**
-	 * Legacy password has for backwards comparability, the hash algorthyim used is defined in the USER_AUTH_LEGACY_HASH setting
+	 * Legacy password has for backwards comparability, the hash algorithm used is defined in the USER_AUTH_LEGACY_HASH setting
 	 * @param string $strPassword The password to hash
 	 * @return bool|string
 	 */
 	public static function legacyPassword($strPassword) {
-		$strAlgorthum = (!is_null(\Twist::framework()->setting('USER_AUTH_LEGACY_HASH'))) ? \Twist::framework()->setting('USER_AUTH_LEGACY_HASH') : 'sha1';
-		return hash($strAlgorthum,$strPassword);
+		$strAlgorithm = (!is_null(\Twist::framework()->setting('USER_AUTH_LEGACY_HASH'))) ? \Twist::framework()->setting('USER_AUTH_LEGACY_HASH') : 'sha1';
+		return hash($strAlgorithm,$strPassword);
 	}
 
     public static function current($blUpdateKey = true){
