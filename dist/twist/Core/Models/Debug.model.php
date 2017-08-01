@@ -237,6 +237,10 @@ final class Debug{
 		return $this->resTemplate->build('_base.tpl',$arrTags);
 	}
 
+	/**
+	 * Return the JS catcher script for errors and warnings
+	 * @return string
+	 */
 	public function catcher() {
 
 		$resResource = new \Twist\Core\Models\Resources();

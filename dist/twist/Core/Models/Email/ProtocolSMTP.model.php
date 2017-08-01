@@ -26,6 +26,8 @@ namespace Twist\Core\Models\Email;
 
 class ProtocolSMTP extends BaseProtocol{
 
+	private $strLastResponse;
+
 	/**
 	 * Open a new FTP connection
 	 * @param string $strHost

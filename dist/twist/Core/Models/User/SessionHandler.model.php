@@ -65,8 +65,6 @@ class SessionHandler{
 
 			//setcookie('device', $strDeviceID, (\Twist::DateTime()->time()+$this->intDeviceLife), '/', $_SERVER["HTTP_HOST"], isset($_SERVER["HTTPS"]), true);
 			setcookie('device', $strDeviceID, (\Twist::DateTime()->time()+$this->intDeviceLife), '/');
-			//echo "Create Cookie";
-			//die();
 			$_COOKIE['device'] = $strDeviceID;
 			$arrDevice = \Twist::Device()->get();
 
@@ -222,6 +220,8 @@ class SessionHandler{
 
 	/**
 	 * Forget a device and if it is current device log the user out.
+	 * @param int $intUserID The user's ID
+	 * @param string $mxdDevice The unique device ID
 	 */
 	public function forgetDevice($intUserID,$mxdDevice){
 
@@ -260,7 +260,7 @@ class SessionHandler{
 	 * Get and set the device notifications status, if set a new device being used to login will send an email notification to the user.
 	 * @param integer $intUserID
 	 * @param null $blNotificationStatus
-	 * @return array|int|null|void
+	 * @return array|int|mixed|null
 	 */
 	public function notifications($intUserID,$blNotificationStatus = null){
 

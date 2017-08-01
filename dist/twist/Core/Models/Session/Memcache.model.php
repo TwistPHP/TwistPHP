@@ -75,7 +75,7 @@
 		public function read($intSessionID){
 
 			$mxdOut = null;
-			$mxdOut = memcached::get(spritnf("sessions/sess_%s",$intSessionID));
+			$mxdOut = memcached::get(sprintf("sessions/sess_%s",$intSessionID));
 
 			return $mxdOut;
 		}
@@ -83,14 +83,14 @@
 		public function write($intSessionID, $mxdData){
 
 			$blOut = false;
-			$blOut = memcached::set(spritnf("sessions/sess_%s",$intSessionID), $mxdData, $this->maxLifetime);
+			$blOut = memcached::set(sprintf("sessions/sess_%s",$intSessionID), $mxdData, $this->maxLifetime);
 
 			return $blOut;
 		}
 
 		public function destroy($intSessionID){
 
-			memcached::delete(spritnf("sessions/sess_%s",$intSessionID));
+			memcached::delete(sprintf("sessions/sess_%s",$intSessionID));
 			return true;
 		}
 

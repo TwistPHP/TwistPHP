@@ -227,14 +227,14 @@ class Resources{
 				$strOut = $strImageSRC;
 			}else{
 
-				$strAttributes = '';
+				$arrAttributes = array();
 				foreach($arrParameters as $strKey => $mxdValue){
 					if(!in_array(strtolower($strKey),array('src','base64','uri'))){
-						$strAttributes .= sprintf(' %s="%s"',strtolower($strKey),htmlentities($mxdValue));
+						$arrAttributes[] = sprintf('%s="%s"',strtolower($strKey),htmlentities($mxdValue));
 					}
 				}
 
-				$strOut = sprintf('<img src="%s"%s>',$strImageSRC,$strAttributes);
+				$strOut = sprintf('<img src="%s" %s>',$strImageSRC,implode(' ',$arrAttributes));
 			}
 		}
 
@@ -318,15 +318,15 @@ class Resources{
 				}
 			}else{
 				if(substr($strEachItem,0,2) === '//'){
-					$strOut .= sprintf('<script src="%s"%s></script>',$strEachItem,(is_null( $mxdAsyncType ) ? '' : sprintf( ' %s', $mxdAsyncType )));
+					$strOut .= sprintf('<script src="%s" %s></script>',$strEachItem,(is_null( $mxdAsyncType ) ? '' : $mxdAsyncType ));
 				}else{
-					$strOut .= sprintf('<script src="%s/%s"%s></script>',$strURI,$strEachItem,(is_null( $mxdAsyncType ) ? '' : sprintf( ' %s', $mxdAsyncType )));
+					$strOut .= sprintf('<script src="%s/%s" %s></script>',$strURI,$strEachItem,(is_null( $mxdAsyncType ) ? '' : $mxdAsyncType ));
 				}
 			}
 		}
 
 		if($blInline){
-			$strOut = sprintf( '<script%s>%s</script>',(is_null( $mxdAsyncType ) ? '' : sprintf( ' %s', $mxdAsyncType ) ), $strOut );
+			$strOut = sprintf( '<script %s>%s</script>',(is_null( $mxdAsyncType ) ? '' : $mxdAsyncType ), $strOut );
 		}
 
 		return $strOut;

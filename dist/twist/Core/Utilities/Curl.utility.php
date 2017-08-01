@@ -43,6 +43,7 @@
 		protected $arrRequestInfo = array();
 		protected $arrRequestError = array();
 		protected $intTimeout = 5;
+		protected $arrHeaders = array();
 
 		function __construct(){
 			$this->setUserAgent();

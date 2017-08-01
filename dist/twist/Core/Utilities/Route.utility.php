@@ -25,6 +25,8 @@
 namespace Twist\Core\Utilities;
 use \Twist\Core\Models\Route\Meta;
 use \Twist\Classes\Instance;
+use \Twist\Core\Controllers\BaseAJAX;
+use \Twist\Core\Controllers\BaseREST;
 
 /**
  * Simply setup a website with multiple pages in minutes. Create restricted areas with login pages and dynamic sections with wild carded URI's.
@@ -211,7 +213,7 @@ class Route extends Base{
 	}
 
 	/**
-	 * @return null|\Twist\Core\Models\Route\Meta
+	 * @return null|object|resource
 	 */
 	public function meta(){
 		return (Instance::isObject($this->strMetaInstanceKey)) ? Instance::retrieveObject($this->strMetaInstanceKey) : null;
@@ -648,10 +650,10 @@ class Route extends Base{
 			 * Into the Regx '#^(?<twist_uri>\/my\/(?<tmodel_user>[^\/]+)\/uri)#i'
 			 * If Wildcard '#^(?<twist_uri>\/my\/(?<tmodel_user>[^\/]+)\/uri)(?<twist_wildcard>.*)#i'
 			 */
-			if(preg_match("/\{model\:([a-z0-9\_\\\]+)\}/i", $strURI, $arrModelDetails)){
+			if(preg_match('/\{model\:([a-z0-9\_\\\]+)\}/i', $strURI, $arrModelDetails)){
 				$strModel = $arrModelDetails[1];
 				$arrParts = explode("\\",$strModel);
-				$regxMatchURI = str_replace($arrModelDetails[0],sprintf("(?<tmodel_%s>[^\/]+)",array_pop($arrParts)),$regxMatchURI);
+				$regxMatchURI = str_replace($arrModelDetails[0],sprintf('(?<tmodel_%s>[^\/]+)',array_pop($arrParts)),$regxMatchURI);
 			}
 
 			/**
@@ -762,7 +764,7 @@ class Route extends Base{
 	protected function loadPageCache($strPageCacheKey){
 
 		//Get the page cache if exists
-		$strCacheData = \Twist::Cache('twist/utility/route')->read($strPageCacheKey,true);
+		$strCacheData = \Twist::Cache('twist/utility/route')->read($strPageCacheKey);
 		$intCreatedTime = \Twist::Cache('twist/utility/route')->created($strPageCacheKey);
 		$intExpiryTime = \Twist::Cache('twist/utility/route')->expiry($strPageCacheKey);
 
@@ -943,7 +945,6 @@ class Route extends Base{
 						$arrRouteParts = (!in_array(trim($strRouteDynamic,'/'),array('','/'))) ? explode('/',trim($strRouteDynamic,'/')) : array();
 
 						$strCurrentURI = $strCurrentURIKey = $strWildCard;
-						$blMatched = true; //TODO: Remove?
 					}
 				}
 			}
@@ -1191,7 +1192,7 @@ class Route extends Base{
 
 			$objController = new $strControllerClass();
 
-			if(in_array("_extended", get_class_methods($objController))){
+			if(in_array('_extended', get_class_methods($objController))){
 
 				//Register the route and route data
 				$mxdResponse = $objController->_extended($this,$arrRoute);
@@ -1509,7 +1510,7 @@ class Route extends Base{
 						$arrTags['response'] = $this->processController($arrRoute);
 					}catch(\Exception $resException){
 						//Response with the relevant error message
-						$resControllerAJAX = new \Twist\Core\Controllers\BaseAJAX();
+						$resControllerAJAX = new BaseAJAX();
 
 						$resControllerAJAX->_ajaxFail();
 						$resControllerAJAX->_ajaxMessage($resException->getMessage());
@@ -1527,7 +1528,7 @@ class Route extends Base{
 						$arrTags['response'] = $this->processController($arrRoute);
 					}catch(\Exception $resException){
 						//Response with the relevant error message
-						$resControllerREST = new \Twist\Core\Controllers\BaseREST();
+						$resControllerREST = new BaseREST();
 						$arrTags['response'] = $resControllerREST->_respondError($resException->getMessage(),500);
 					}
 				}

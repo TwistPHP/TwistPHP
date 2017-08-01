@@ -23,7 +23,7 @@
 	 */
 
 	namespace Twist\Core\Controllers;
-	use Twist\Core\Models\Route\Meta;
+
 	use Twist\Classes\Error;
 
 	/**

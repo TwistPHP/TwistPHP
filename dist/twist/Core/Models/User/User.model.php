@@ -42,6 +42,12 @@
 
 		private $strTempPassword = null;
 
+		/**
+		 * User constructor.
+		 *
+		 * @param Record $resDatabaseRecord
+		 * @param        $resParentClass
+		 */
 		public function __construct(Record $resDatabaseRecord,$resParentClass){
 			$this->resParentClass = $resParentClass;
 			$this->resDatabaseRecord = $resDatabaseRecord;

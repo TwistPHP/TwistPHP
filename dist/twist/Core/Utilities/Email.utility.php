@@ -23,6 +23,8 @@
  */
 
 namespace Twist\Core\Utilities;
+use Twist\Core\Models\Email\Create;
+use Twist\Core\Models\Email\SourceParser;
 
 /**
  * Process and send full HTML emails with attachments and parse the raw source of email messages into a usable data array.
@@ -30,11 +32,11 @@ namespace Twist\Core\Utilities;
 class Email extends Base{
 
 	public function create(){
-		return new \Twist\Core\Models\Email\Create();
+		return new Create();
 	}
 
 	public function parseSource($strEmailSource){
-		$resSourceParser = new \Twist\Core\Models\Email\SourceParser();
+		$resSourceParser = new SourceParser();
 		return $resSourceParser->processEmailSource($strEmailSource);
 	}
 }

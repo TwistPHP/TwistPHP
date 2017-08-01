@@ -88,7 +88,7 @@
 		 * Remove an item from a multi-dimensional array using a key, the split char indicates a change in array level
 		 *
 		 * @param string $strKey
-		 * @param string $arrData
+		 * @param array $arrData
 		 * @param string $strSplitChar
 		 * @return array Returns either the original array or the array with the item removed
 		 */

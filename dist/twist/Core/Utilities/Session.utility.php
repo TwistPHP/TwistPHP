@@ -154,7 +154,8 @@
 		}
 
 		/**
-		 * @param string $strReference
+		 * @param $strReference
+		 * @return mixed|null|string
 		 */
 		public function viewExtension($strReference){
 
@@ -164,5 +165,6 @@
 			}elseif(array_key_exists($strReference,$_SESSION['twist-session'])){
 				return (is_array($_SESSION['twist-session'][$strReference])) ? print_r($_SESSION['twist-session'][$strReference],true) : $_SESSION['twist-session'][$strReference];
 			}
+			return '';
 		}
 	}

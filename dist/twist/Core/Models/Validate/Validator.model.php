@@ -43,6 +43,11 @@ class Validator{
 
 	/**
 	 * @alias checkCompare
+	 * @param      $strKey
+	 * @param      $strKey2
+	 * @param bool $blAllowBlank
+	 * @param bool $blRequired
+	 * @param bool $blTrim
 	 */
 	public function checkComparison($strKey,$strKey2,$blAllowBlank = false,$blRequired = true,$blTrim = true){
 		$this->checkCompare($strKey,$strKey2,$blAllowBlank,$blRequired,$blTrim);
@@ -192,7 +197,6 @@ class Validator{
 		foreach($arrChecks as $strKey => $arrEachCheck){
 
 			$mxdTestValue = $mxdTestValue2 = null;
-			$mxdTestResult = false;
 
 			if(array_key_exists($strKey,$arrData)){
 				$mxdTestValue = $arrData[$strKey];

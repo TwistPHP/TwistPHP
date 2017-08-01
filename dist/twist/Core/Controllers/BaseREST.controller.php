@@ -79,7 +79,8 @@ class BaseREST extends Base{
      * @param mixed $mxdResults Results of the function call to be returned to the user
      * @param int $intCount Number of results returned by the function call
      * @param int $intResponseCode HTTP response code for the call
-     */
+	 * @return string Response to serve to the client
+	 */
     public function _respond($mxdResults,$intCount = 1,$intResponseCode = 200){
 
         header(sprintf("HTTP/1.1 %s %s",$intResponseCode,Error::responseInfo($intResponseCode)));
@@ -107,7 +108,8 @@ class BaseREST extends Base{
      * Error response to an API call should be used to return a standardised RESTful error response
      * @param string $strErrorMessage Error message to indicate what when wrong
      * @param int $intResponseCode HTTP response code for the call
-     */
+	 * @return string Response to the client with an error
+	 */
     public function _respondError($strErrorMessage,$intResponseCode = 404){
 
         header(sprintf("HTTP/1.1 %s %s",$intResponseCode,Error::responseInfo($intResponseCode)));

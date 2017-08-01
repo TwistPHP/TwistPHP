@@ -287,7 +287,7 @@
 						'type' => $strType,
 						'options' => $strOptions,
 						'null' => ($blNull) ? 1 : 0,
-						`deprecated` => 0
+						'deprecated' => 0
 					);
 				}else{
 
@@ -302,7 +302,7 @@
 						'type' => $strType,
 						'options' => $strOptions,
 						'null' => ($blNull) ? 1 : 0,
-						`deprecated` => 0
+						'deprecated' => 0
 					);
 				}
 

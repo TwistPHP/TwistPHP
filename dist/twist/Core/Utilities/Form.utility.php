@@ -39,10 +39,10 @@
 			return new Builder($intFormID);
 		}
 
-		public function process($intFormID){
+		/*public function process($intFormID){
 			$resForm = new Builder($intFormID);
 			$resForm->process();
-		}
+		}*/
 
 		public function render($intFormID){
 			$resForm = new Builder($intFormID);

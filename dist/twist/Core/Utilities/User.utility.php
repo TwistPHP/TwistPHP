@@ -491,7 +491,6 @@
 			$strData = '';
 			$arrParts = explode(',',$strReference);
 
-			$strParameter = '';
 			$strLoginPage = $this->strLoginUrl;
 
 			if(count($arrParts) > 1){

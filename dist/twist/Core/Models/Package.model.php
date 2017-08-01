@@ -297,7 +297,6 @@
 
 				$dirInstallFile = $arrBacktrace[0]['file'];
 				$dirPackage = dirname($dirInstallFile);
-				$strSlug = strtolower(basename($dirPackage)); //TODO: Remove?
 
 				//Install the SQL tables when required
 				$dirSettingsJSON = (!file_exists($dirSettingsJSON)) ? sprintf('%s/%s', $dirPackage, $dirSettingsJSON) : $dirSettingsJSON;

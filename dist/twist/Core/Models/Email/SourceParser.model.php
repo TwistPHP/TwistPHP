@@ -215,7 +215,6 @@ class SourceParser{
 
 		$arrParts = explode("\n\n",$strEmailSource);
 
-		$strHeaders = $arrParts[0]; //TODO: Remove?
 		$arrParts[0] = null;
 
 		$strEmailSource = implode("\n\n",$arrParts);

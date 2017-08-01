@@ -23,6 +23,7 @@
 	 */
 
 	namespace Twist\Classes;
+	use Twist\Core\Models\String\SyntaxHighlight;
 
 	/**
 	 * A custom error handler that handles all of TwistPHPs Errors, Exceptions and Fatal Errors, it also handles errors produced in your PHP code and outputs all HTTP status pages.
@@ -187,14 +188,14 @@
 					$arrTags['dump_data'] = '';
 				}
 
-				$arrTags['php_code'] = \Twist\Core\Models\String\SyntaxHighlight::file($resException->getFile(),'em',$resException->getLine(),5);
+				$arrTags['php_code'] = SyntaxHighlight::file($resException->getFile(),'em',$resException->getLine(),5);
 
 				$arrTags['trace'] = '';
 				if(count($resException->getTrace())){
 					$arrTags['trace'] = '<h3>Backtrace</h3>';
 					foreach($resException->getTrace() as $arrEachCall){
 						if(array_key_exists('file',$arrEachCall)){
-							$arrTags['trace'] .= sprintf('<pre class="code" lang="php" title="%s">%s</pre>',$arrEachCall['file'],\Twist\Core\Models\String\SyntaxHighlight::file($arrEachCall['file'],'em',$arrEachCall['line'],2));
+							$arrTags['trace'] .= sprintf('<pre class="code" lang="php" title="%s">%s</pre>',$arrEachCall['file'],SyntaxHighlight::file($arrEachCall['file'],'em',$arrEachCall['line'],2));
 						}
 					}
 				}
@@ -260,7 +261,7 @@
 					'file' => $strErrorFile,
 					'file_size' => (file_exists($strErrorFile)) ? filesize($strErrorFile) : 0,
 					'code_line' => $intErrorLine,
-					'code' => \Twist\Core\Models\String\SyntaxHighlight::file($strErrorFile,'em',$intErrorLine,3)
+					'code' => SyntaxHighlight::file($strErrorFile,'em',$intErrorLine,3)
 				);
 
 				\Twist::framework()->debug()->log('Error','php',$arrError);
@@ -276,7 +277,7 @@
 			$arrLastError = error_get_last();
 
 			//Check if the last error was fatal (INSTANT DEATH)
-			if(self::getType($arrLastError['type'],true) === "Fatal Error"){
+			if(self::getType($arrLastError['type']) === "Fatal Error"){
 
 				//throw new Exception($arrLastError['message']);
 				//A fatal error has occured, throw and exception instead.
@@ -450,7 +451,6 @@
 		 */
 		public static function getType($intErrorNo){
 
-			$strErrorType = '';
 			$strDeprecated = $strDeprecatedUser = 'Unknown';
 
 			if(defined('E_DEPRECATED')){

@@ -67,8 +67,6 @@ class File extends Base{
 	 */
 	public function bytesToSize($intBytes){
 
-		$strOut = '';
-
 		$intKilobyte = 1024;
 		$intMegabyte = $intKilobyte * 1024;
 		$intGigabyte = $intMegabyte * 1024;
@@ -165,7 +163,7 @@ class File extends Base{
 	 *
 	 * @param string $dirFile Full path to file including file name
 	 * @param bool $blReturnDefaultOnly If multiple types available return as array
-	 * @return string Returns the content type
+	 * @return array|mixed|null|string Returns the content type
 	 */
 	public function mimeType($dirFile,$blReturnDefaultOnly = true){
 
@@ -377,13 +375,13 @@ class File extends Base{
 						}
 					}else{
 						//header("HTTP/1.1 500 Internal Server Error");
-						Error::errorPage(500);
+						Error::response(500);
 					}
 				}
 			}
 		}else{
 			//header("HTTP/1.1 404 Not Found");
-			Error::errorPage(404);
+			Error::response(404);
 		}
 
 		die();

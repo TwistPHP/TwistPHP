@@ -39,7 +39,7 @@ class BaseRESTUser extends BaseRESTKey{
 	/**
 	 * An extension of BaseRest->_auth to determine if the request is a logged in user, if so validate the auth token otherwise try to log the user in.
 	 * A valid auth key and IP address is still required here, Failure to get a valid user session will terminate the request here, the controller function will not be run
-	 * @return bool|void
+	 * @return bool|string
 	 */
     public function _auth(){
 

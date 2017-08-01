@@ -361,7 +361,6 @@ class View extends Base{
 	 */
 	public function removeUnusedTags($strViewData){
 
-	    $arrTags = array();
 	    $arrViewTags = $this->getTags($strViewData,false);
 
 	    if(is_array($arrViewTags) && count($arrViewTags) > 0){
@@ -431,9 +430,8 @@ class View extends Base{
 
 	/**
 	 * Get the raw View data form the View file
-	 *
-	 * @param string $strViewFullPath
-	 * @return string
+	 * @param $strView
+	 * @return null|string
 	 * @throws \Exception
 	 */
 	protected function get($strView){
