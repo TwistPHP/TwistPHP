@@ -22,7 +22,7 @@
  * @link       https://twistphp.com
  */
 
-namespace Twist\Core\Utilities;
+namespace Twist\Core\Helpers;
 
 /**
  * Execute bash command line commands on the server and get back nicely formatted result array.

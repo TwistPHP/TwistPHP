@@ -22,7 +22,7 @@
 	 * @link       https://twistphp.com
 	 */
 
-	namespace Twist\Core\Utilities;
+	namespace Twist\Core\Helpers;
 
 	/**
 	 * Localisation of websites is becoming a necessity, the ability to list counties, currencies, timezones, languages and there relationship is essential.

@@ -22,7 +22,7 @@
 	 * @link       https://twistphp.com
 	 */
 
-	namespace Twist\Core\Utilities;
+	namespace Twist\Core\Helpers;
 
 	/**
 	 * Easy session management allowing the use of a user and site array of data. All stored using the PHP session.

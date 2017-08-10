@@ -22,11 +22,11 @@
 	 * @link       https://twistphp.com
 	 */
 
-	namespace Twist\Core\Utilities;
+	namespace Twist\Core\Helpers;
 
 	/**
 	 * Asset management utility that allows the addition and grouping of assets. Assets can be images, videos, files, links and other data that can be uploaded to a website/service.
-	 * @package Twist\Core\Utilities
+	 * @package Twist\Core\Helper
 	 */
 	class Asset extends Base{
 

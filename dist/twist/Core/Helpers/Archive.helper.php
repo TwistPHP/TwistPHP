@@ -22,7 +22,7 @@
 	 * @link       https://twistphp.com
 	 */
 
-	namespace Twist\Core\Utilities;
+	namespace Twist\Core\Helpers;
 
 	use \Twist\Core\Models\Archive\PclZip;
 	use \Twist\Core\Models\Archive\Native;
@@ -30,7 +30,7 @@
 	/**
 	 * Create ZIP archives of compressed files, easily zip up whole directories and single files. Default handler is PHP's native ZipArchive, the option to use the third party class PclZip can be installed as a package.
 	 *
-	 * @package Twist\Core\Utilities
+	 * @package Twist\Core\Helper
 	 */
 	class Archive extends Base{
 

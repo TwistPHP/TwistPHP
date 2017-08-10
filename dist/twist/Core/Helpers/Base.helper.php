@@ -22,11 +22,11 @@
 	 * @link       https://twistphp.com
 	 */
 
-	namespace Twist\Core\Utilities;
+	namespace Twist\Core\Helpers;
 
 	/**
 	 * All core utilities should extend the utility base controller, this controller gives some default functionality that is required.
-	 * @package Twist\Core\Utilities
+	 * @package Twist\Core\Helper
 	 */
 	class Base{
 

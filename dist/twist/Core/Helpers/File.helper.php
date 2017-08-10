@@ -22,7 +22,7 @@
  * @link       https://twistphp.com
  */
 
-namespace Twist\Core\Utilities;
+namespace Twist\Core\Helpers;
 
 use Twist\Classes\Error;
 

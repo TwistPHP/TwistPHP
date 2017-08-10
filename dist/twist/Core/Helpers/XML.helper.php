@@ -22,11 +22,11 @@
 	 * @link       https://twistphp.com
 	 */
 
-	namespace Twist\Core\Utilities;
+	namespace Twist\Core\Helpers;
 
 	/**
 	 * Import and Export XML files, turn XML into a usable PHP array. The utility supports XML files with UTF8 Encoding.
-	 * @package Twist\Core\Utilities
+	 * @package Twist\Core\Helper
 	 */
 	class XML extends Base{
 

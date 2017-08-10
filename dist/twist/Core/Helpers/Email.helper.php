@@ -22,7 +22,7 @@
  * @link       https://twistphp.com
  */
 
-namespace Twist\Core\Utilities;
+namespace Twist\Core\Helpers;
 
 /**
  * Process and send full HTML emails with attachments and parse the raw source of email messages into a usable data array.

@@ -22,7 +22,7 @@
 	 * @link       https://twistphp.com
 	 */
 
-	namespace Twist\Core\Utilities;
+	namespace Twist\Core\Helpers;
 
 	/**
 	 * Simply Create, Serve and Import CSV files. Create a CSV file from and array of data, database query results can be directly exported as a CSV file with. Import CSV files into a usable indexed array of data.
