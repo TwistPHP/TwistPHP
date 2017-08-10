@@ -32,7 +32,7 @@
 	use Twist\Core\Models\Tools;
 
 	/**
-	 * This utility is used by the framework directly providing support for all core framework features such as debug, settings, tools and handlers.
+	 * This helper is used by the framework directly providing support for all core framework features such as debug, settings, tools and handlers.
 	 * @package Twist\Core\Helper
 	 */
 	class Framework{

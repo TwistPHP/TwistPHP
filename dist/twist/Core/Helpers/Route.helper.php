@@ -762,9 +762,9 @@ class Route extends Base{
 	protected function loadPageCache($strPageCacheKey){
 
 		//Get the page cache if exists
-		$strCacheData = \Twist::Cache('twist/utility/route')->read($strPageCacheKey,true);
-		$intCreatedTime = \Twist::Cache('twist/utility/route')->created($strPageCacheKey);
-		$intExpiryTime = \Twist::Cache('twist/utility/route')->expiry($strPageCacheKey);
+		$strCacheData = \Twist::Cache('twist/helper/route')->read($strPageCacheKey,true);
+		$intCreatedTime = \Twist::Cache('twist/helper/route')->created($strPageCacheKey);
+		$intExpiryTime = \Twist::Cache('twist/helper/route')->expiry($strPageCacheKey);
 
 		if(!is_null($strCacheData)){
 
@@ -804,8 +804,8 @@ class Route extends Base{
 	 */
 	protected function storePageCache($strPageCacheKey,$strPageData,$intCacheTime = 3600){
 
-		\Twist::Cache('twist/utility/route')->write($strPageCacheKey,$strPageData,$intCacheTime);
-		$intCreatedTime = \Twist::Cache('twist/utility/route')->created($strPageCacheKey);
+		\Twist::Cache('twist/helper/route')->write($strPageCacheKey,$strPageData,$intCacheTime);
+		$intCreatedTime = \Twist::Cache('twist/helper/route')->created($strPageCacheKey);
 
 		$mxdModifiedTime = gmdate('D, d M Y H:i:s ', $intCreatedTime) . 'GMT';
 		$strEtag = sha1($strPageCacheKey . $mxdModifiedTime);

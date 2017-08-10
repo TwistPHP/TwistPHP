@@ -65,7 +65,7 @@ class View extends Base{
 	}
 
 	/**
-	 * Get the current View directory/path that is in use by the View utility
+	 * Get the current View directory/path that is in use by the View helper
 	 * @return string Returns the current View path
 	 */
 	public function getDirectory(){
@@ -109,7 +109,7 @@ class View extends Base{
 
 		//Load in the cache data
 		if(!array_key_exists($strCacheKey,$this->arrCacheData)){
-			$this->arrCacheData[$strCacheKey] = \Twist::Cache('twist/utility/views')->read($strCacheKey);
+			$this->arrCacheData[$strCacheKey] = \Twist::Cache('twist/helper/views')->read($strCacheKey);
 		}
 
 		//Find the tpl cache data if it exists
@@ -128,7 +128,7 @@ class View extends Base{
 
 		$this->arrCacheData[$strCacheKey][$strViewPath] = $arrData;
 
-		\Twist::Cache('twist/utility/views')->write($strCacheKey,$this->arrCacheData[$strCacheKey],\Twist::framework()->setting('VIEW_PRE_PROCESS_CACHE'));
+		\Twist::Cache('twist/helper/views')->write($strCacheKey,$this->arrCacheData[$strCacheKey],\Twist::framework()->setting('VIEW_PRE_PROCESS_CACHE'));
 	}
 
 	/**
@@ -144,7 +144,7 @@ class View extends Base{
 			unset($this->arrCacheData[$strCacheKey][$strViewPath]);
 		}
 
-		\Twist::Cache('twist/utility/views')->write($strCacheKey,$this->arrCacheData[$strCacheKey],\Twist::framework()->setting('VIEW_PRE_PROCESS_CACHE'));
+		\Twist::Cache('twist/helper/views')->write($strCacheKey,$this->arrCacheData[$strCacheKey],\Twist::framework()->setting('VIEW_PRE_PROCESS_CACHE'));
 	}
 
 	/**

@@ -27,8 +27,8 @@ namespace Twist\Core\Helpers;
 use \Twist\Classes\Instance;
 
 /**
- * A utility to simplify database connections for your PHP projects. Allowing connections to be made using MySQL, MySQLi and PDO.
- * Connections to multiple database servers can be created and used side by site with this unique instancable utility.
+ * A helper to simplify database connections for your PHP projects. Allowing connections to be made using MySQL, MySQLi and PDO.
+ * Connections to multiple database servers can be created and used side by site with this unique instancable helper.
  */
 class Database extends Base{
 
@@ -550,7 +550,7 @@ class Database extends Base{
 			'function' => $arrTrace[$intKey]['function']
 		);
 
-		while(strstr($arrTrace[$intKey]['file'],'Database.utility.php')){
+		while(strstr($arrTrace[$intKey]['file'],'Database.helper.php')){
 
 			$intKey++;
 			$arrStack[] = array(

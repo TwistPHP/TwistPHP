@@ -25,7 +25,7 @@
 	namespace Twist\Core\Helpers;
 
 	/**
-	 * Asset management utility that allows the addition and grouping of assets. Assets can be images, videos, files, links and other data that can be uploaded to a website/service.
+	 * Asset management helper that allows the addition and grouping of assets. Assets can be images, videos, files, links and other data that can be uploaded to a website/service.
 	 * @package Twist\Core\Helper
 	 */
 	class Asset extends Base{
@@ -564,7 +564,7 @@
 		}
 
 		/**
-		 * Extends the default functionality of the View utility, adding the ability to output simple upload forms and asset information directly into a template
+		 * Extends the default functionality of the View helper, adding the ability to output simple upload forms and asset information directly into a template
 		 * {asset:upload}
 		 * {asset:upload-html}
 		 * {asset:upload-init}
@@ -582,7 +582,7 @@
 		 * @extends Template
 		 * @param string $strReference View tag passed in from a tpl file
 		 * @param array $arrParameters
-		 * @return mixed|string Formatted HTML/Markup to be output by the View utility
+		 * @return mixed|string Formatted HTML/Markup to be output by the View helper
 		 */
 		public function viewExtension($strReference,$arrParameters = array()){
 

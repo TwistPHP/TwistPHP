@@ -25,13 +25,13 @@
 	namespace Twist\Core\Helpers;
 
 	/**
-	 * All core utilities should extend the utility base controller, this controller gives some default functionality that is required.
+	 * All core helpers should extend the helper base controller, this controller gives some default functionality that is required.
 	 * @package Twist\Core\Helper
 	 */
 	class Base{
 
 		/**
-		 * Return the name of the utility class
+		 * Return the name of the helper class
 		 * @return string
 		 */
 		protected function __calledClass(){
@@ -39,7 +39,7 @@
 		}
 
 		/**
-		 * Return information about the current utility as an array
+		 * Return information about the current helper as an array
 		 * @return array
 		 */
 		protected function __info(){
@@ -47,7 +47,7 @@
 		}
 
 		/**
-		 * Return the version number of the current utility
+		 * Return the version number of the current helper
 		 * @return mixed
 		 */
 		protected function __version(){
@@ -56,7 +56,7 @@
 		}
 
 		/**
-		 * Return the URI of the current utility
+		 * Return the URI of the current helper
 		 * @return mixed
 		 */
 		protected function __uri(){
@@ -65,7 +65,7 @@
 		}
 
 		/**
-		 * Return the path to the current utility
+		 * Return the path to the current helper
 		 * @return mixed
 		 */
 		protected function __path(){

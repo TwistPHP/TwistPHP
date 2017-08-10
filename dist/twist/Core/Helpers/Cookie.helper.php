@@ -26,7 +26,7 @@
 
 	/**
 	 * Easy session management allowing the use of a user and site array of data. All stored using the PHP session.
-	 * Also extends the View utility to allow the use of session vars in templates.
+	 * Also extends the View helper to allow the use of session vars in templates.
 	 */
 	class Cookie extends Base{
 
