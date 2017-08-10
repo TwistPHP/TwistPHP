@@ -169,7 +169,7 @@ class Database extends Base{
 			$this->resLibrary = null;
 		}
 
-		Instance::removeObject(($this->strConnectionKey == 'twist') ? 'pkgDatabase' : sprintf('pkgDatabase-%s',$this->strConnectionKey));
+		Instance::removeObject(($this->strConnectionKey == 'twist') ? 'helperDatabase' : sprintf('helperDatabase-%s',$this->strConnectionKey));
 	}
 
 	/**
