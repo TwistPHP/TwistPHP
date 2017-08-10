@@ -29,7 +29,7 @@
 
 	/**
 	 * ICS Calendar and Event Handler, can import, edita nd create ics files that are compatible with Google Calendars and iCAl/Mac Calendar
-	 * @package TwistPHP\utilities
+	 * @package TwistPHP\helpers
 	 */
 	class ICS extends Base{
 
