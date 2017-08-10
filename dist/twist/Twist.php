@@ -542,7 +542,7 @@
 				$resTwistHelper = (!Instance::isObject('helperDatabase')) ? new Helpers\Database($strObjectKey) : Instance::retrieveObject('helperDatabase');
 				Instance::storeObject('helperDatabase',$resTwistHelper);
 			}
-			
+
 			return $resTwistHelper;
 		}
 
