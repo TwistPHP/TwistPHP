@@ -418,7 +418,7 @@ class File extends Base{
 		$strUploadFolder = TWIST_UPLOADS;
 
 		if(!is_dir($strUploadFolder)){
-			mkdir($strUploadFolder);
+			$this->recursiveCreate($strUploadFolder);
 		}
 
 		if(!is_null($strUID) && $strUID != ''){
@@ -490,7 +490,7 @@ class File extends Base{
 		$strUploadFolder = TWIST_UPLOADS;
 
 		if(!is_dir($strUploadFolder)){
-			mkdir($strUploadFolder);
+			$this->recursiveCreate($strUploadFolder);
 		}
 
 		$strFileData = file_get_contents("php://input");
@@ -516,7 +516,7 @@ class File extends Base{
 	}
 
 	/**
-	 * Download/Copy a remote file over HTTP in chunks, outputting the chunks direclty to a local file handler. Download large files to the server without running out of system memory.
+	 * Download/Copy a remote file over HTTP in chunks, outputting the chunks directly to a local file handler. Download large files to the server without running out of system memory.
 	 * @param string $strRemoteFile Full URL to the remote file
 	 * @param string $strLocalFile Local path where the file is to be saved
 	 * @return bool|int Total bytes downloaded, false upon failure
@@ -864,7 +864,7 @@ class File extends Base{
 
 		if(is_dir($strSourcePath)){
 
-			mkdir($strDestinationPath);
+			$this->recursiveCreate($strDestinationPath);
 			$arrFiles = scandir($strSourcePath);
 
 			//For each file and folder in the array recursively copy it
@@ -884,24 +884,17 @@ class File extends Base{
 	 * Recursively create a directory on the local server
 	 *
 	 * @param string $strDirectoryPath New directory path
+	 * @param int $intMode CHMOD creation mode
 	 * @return boolean Returns that status of the new directory
 	 */
-	public function recursiveCreate($strDirectoryPath){
+	public function recursiveCreate($strDirectoryPath,$intMode = 0777){
 
-		if(!file_exists($strDirectoryPath)){
-			$arrDirectoryParts = explode('/',trim($strDirectoryPath,'/'));
-			$strNewDirectory = '';
-
-			foreach($arrDirectoryParts as $strEachFolder){
-
-				$strNewDirectory .= sprintf('/%s',$strEachFolder);
-				if(!file_exists($strNewDirectory)){
-					mkdir($strNewDirectory);
-				}
-			}
+		if(!file_exists($strDirectoryPath) && mkdir($strDirectoryPath,$intMode,true) == false){
+			trigger_error(sprintf("Twist File Handler: Failed to create directory %s",$strDirectoryPath));
+			return false;
 		}
 
-		return file_exists($strDirectoryPath);
+		return true;
 	}
 
 	/**
