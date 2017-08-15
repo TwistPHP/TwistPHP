@@ -58,12 +58,10 @@ class twistdebug {
 
 		window.onerror = ( strErrorMessage, strURL, intLineNumber, intColumn ) => {
 			this.error( strErrorMessage, strURL, intLineNumber, intColumn );
-			//return false;
 		};
 
 		window.onwarn = ( strErrorMessage, strURL, intLineNumber, intColumn ) => {
 			this.warn( strErrorMessage, strURL, intLineNumber, intColumn );
-			//return false;
 		};
 
 		this.setupUI();
@@ -80,6 +78,18 @@ class twistdebug {
 		return intLength;
 	}
 
+	static wrap( query, tag, classes = '' ) {
+		document.querySelectorAll( query )
+				.forEach( elem => {
+					const wrapper = document.createElement( tag );
+					if( classes ) {
+						wrapper.className = classes;
+					}
+					elem.parentElement.insertBefore( wrapper, elem );
+					wrapper.appendChild( elem );
+				} );
+	}
+
 	outputExistingAJAX() {
 		if( window.twist && window.twist.ajax ) {
 			for( let instance of window.twist.ajax.instances ) {
@@ -90,43 +100,37 @@ class twistdebug {
 		}
 	}
 
-	logToTwist( jqsAppendTo, strColour, mxdValue, objDetails, strURL, intLineNumber, intColumn ) {
+	logToTwist( jqsAppendTo, strColour, mxdValue, objDetails = null, strURL = undefined, intLineNumber = undefined, intColumn = undefined ) {
 		if( mxdValue ) {
 			let strLogHTML = mxdValue || '',
 					strTitle = '',
-					strDetailsHTML = '';
+					strDetailsHTML = null;
 
 			if( typeof mxdValue === 'object' ) {
 				strLogHTML = '<pre>' + JSON.stringify( mxdValue, undefined, 2 ) + '</pre>';
 			}
 
-			if( typeof objDetails === 'object' ) {
-				for( let strDetail in objDetails ) {
-					if( objDetails.hasOwnProperty( strDetail ) ) {
-						let strKey = strDetail.charAt( 0 ).toUpperCase() + strDetail.slice( 1 ).replace( '_', ' ' ),
-								strValue = ( typeof objDetails[strDetail] === 'object' ) ? '<pre>' + JSON.stringify( objDetails[strDetail], undefined, 2 ) + '</pre>' : objDetails[strDetail];
-						strDetailsHTML += '<dt>' + strKey + '</dt><dd>' + strValue + '</dd>';
-					}
+			if( typeof objDetails === 'string' ) {
+				strDetailsHTML = '<p class="details">' + objDetails + '</p>';
+			} else if( twistdebug.objectLength( objDetails ) ) {
+				for( let objDetail of objDetails ) {
+					let strKey = strDetail.charAt( 0 ).toUpperCase() + strDetail.slice( 1 ).replace( '_', ' ' ),
+							strValue = ( typeof objDetail === 'object' ) ? '<pre>' + JSON.stringify( objDetail, undefined, 2 ) + '</pre>' : objDetail;
+					strDetailsHTML += '<dt>' + strKey + '</dt><dd>' + strValue + '</dd>';
 				}
 
 				strDetailsHTML = '<dl class="details">' + strDetailsHTML + '</dl>';
-			} else {
-				strDetailsHTML = '<p class="details">' + objDetails + '</p>';
 			}
 
-			if( strURL !== undefined ) {
-				if( strURL !== '' ) {
-					if( intLineNumber !== undefined &&
-							intLineNumber !== '' ) {
-						if( intColumn !== undefined &&
-								intColumn !== '' ) {
-							strTitle = strURL + ', line ' + intLineNumber + ', column ' + intColumn;
-						} else {
-							strTitle = strURL + ', line ' + intLineNumber;
-						}
+			if( strURL ) {
+				if( intLineNumber ) {
+					if( intColumn ) {
+						strTitle = strURL + ', line ' + intLineNumber + ', column ' + intColumn;
 					} else {
-						strTitle = strURL;
+						strTitle = strURL + ', line ' + intLineNumber;
 					}
+				} else {
+					strTitle = strURL;
 				}
 			} else {
 				strTitle = 'JavaScript [' + ( new Date() ).getTime() + ']';
@@ -137,13 +141,13 @@ class twistdebug {
 			domLogBox.classList.add( 'twist-debug-box-' + strColour );
 			domLogBox.setAttribute( 'data-title', strTitle );
 
-			let domMoreDetails = document.createElement( 'div' );
-			domMoreDetails.classList.add( 'twist-debug-more-details' );
-			domMoreDetails.innerHTML = strDetailsHTML;
+			if( strDetailsHTML ) {
+				let domMoreDetails = document.createElement( 'div' );
+				domMoreDetails.classList.add( 'twist-debug-more-details' );
+				domMoreDetails.innerHTML = strDetailsHTML;
 
-			domLogBox.appendChild( domMoreDetails );
+				domLogBox.appendChild( domMoreDetails );
 
-			if( strDetailsHTML !== '' ) {
 				let domMoreDetailsButton = document.createElement( 'a' );
 				domMoreDetailsButton.classList.add( 'twist-debug-more-details-button' );
 				domMoreDetailsButton.innerHTML = '&ctdot;';
@@ -232,7 +236,7 @@ class twistdebug {
 		let strPreview = ( objResponse.support && objResponse.support['thumb-128'] ) ? objResponse.support['thumb-128'] : objResponse.uri_preview,
 				strLogHTML = '<pre>' + JSON.stringify( objResponse, undefined, 2 ) + '</pre><div class="twist-debug-fileupload-preview"><img src="' + strPreview + '"></div>';
 
-		if( this.logToTwist( '#twist-debug-fileupload-list', 'green', strLogHTML, resFile, resFile.name ) ) {
+		if( this.logToTwist( '#twist-debug-fileupload-list', 'green', strLogHTML, null, resFile.name ) ) {
 			let domErrorCount = document.getElementById( 'twist-debug-fileupload-count' );
 			domErrorCount.setAttribute( 'data-count', ( parseInt( domErrorCount.getAttribute( 'data-count' ) ) + 1 ).toString() );
 		}
@@ -243,8 +247,7 @@ class twistdebug {
 				domTwistDebugDetails = document.getElementById( 'twist-debug-details' );
 
 		for( let boxEl of document.getElementById( 'twist-debug-details' ).querySelectorAll( '.twist-debug-box, [class^="twist-debug-box-"], [class*=" twist-debug-box-"]' ) ) {
-			if( boxEl.querySelector( '.twist-debug-more-details' ) &&
-					!boxEl.querySelector( '.twist-debug-more-details-button' ) ) {
+			if( boxEl.querySelector( '.twist-debug-more-details' ) && !boxEl.querySelector( '.twist-debug-more-details-button' ) ) {
 				let domMoreDetails = boxEl.querySelector( '.twist-debug-more-details' ),
 						domMoreDetailsButton = document.createElement( 'a' );
 
@@ -304,8 +307,7 @@ class twistdebug {
 				}
 		);
 
-		//TODO
-		//jqoTwistDebugDetails.find( 'table' ).wrap( '<div class="table-wrapper"/>' );
+		twistdebug.wrap( '#twist-debug-details table', 'div', 'table-wrapper' );
 
 		document.getElementById( 'twist-debug' ).classList.add( 'ready' );
 	}
