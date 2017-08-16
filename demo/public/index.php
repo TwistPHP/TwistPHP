@@ -11,7 +11,6 @@
 
 	//Define the globals required
 	define( 'TWIST_PUBLIC_ROOT', '/vagrant/demo/public' );
-	define( 'TWIST_APP', './app' );
 
 	//Include TwistPHP
 	require_once '../../dist/twist/framework.php';
