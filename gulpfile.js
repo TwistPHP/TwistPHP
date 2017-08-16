@@ -136,7 +136,7 @@ gulp.task( 'manager', ['manager-css'] );
 gulp.task( 'setup', ['setup-css'] );
 gulp.task( 'css', ['debug-css', 'manager-css', 'setup-css'] );
 
-gulp.task( 'test', () => {
+gulp.task( 'test', ['default'], () => {
 	return gulp.src( strTwistSource + '**/*.js' )
 			.pipe( eslint( esOptions ) )
 			.pipe( eslint.format() )
