@@ -199,12 +199,6 @@ export default class twistfileupload {
 
 			console.warn( 'Your browser does not support AJAX uploading', 'warn', true );
 		}
-
-		// setInterval( () => {
-		// 	if( this.uploaded.length ) {
-		// 		console.log( this.uploaded );
-		// 	}
-		// }, 1000 );
 	}
 
 	static prettySize( intBytes ) {
