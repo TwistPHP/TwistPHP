@@ -25,7 +25,7 @@
 	namespace Twist\Core\Models\Database;
 
 	/**
-	 * Object containing the results of a query run by the TwistPHP database utility. The object contains all the information from the query run including SQL the query itself.
+	 * Object containing the results of a query run by the TwistPHP database helper. The object contains all the information from the query run including SQL the query itself.
 	 */
 	class Result{
 

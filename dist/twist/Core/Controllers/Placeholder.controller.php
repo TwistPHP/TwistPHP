@@ -39,7 +39,7 @@ class Placeholder extends Base{
 	 * line - Line color as a Hex code
 	 *
 	 * To register this functionality look at Twist::Route()->placeholder()
-	 * @related \Twist\Core\Utilities\Route
+	 * @related \Twist\Core\Helpers\Route
 	 */
 	public function _index(){
 

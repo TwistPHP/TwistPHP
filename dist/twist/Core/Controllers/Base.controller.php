@@ -38,14 +38,14 @@
 		protected $arrRoute = array();
 
         /**
-         * @var \Twist\Core\Utilities\Route
+         * @var \Twist\Core\Helpers\Route
          */
 		protected $resRoute = null;
 
         /**
          * A function that is called by Routes both to ensure that the controller has been extended and so that we can pass in resources and information required by the controller.
          *
-         * @param \Twist\Core\Utilities\Route $resRoute
+         * @param \Twist\Core\Helpers\Route $resRoute
          * @param array $arrRouteData
          * @return bool
          */

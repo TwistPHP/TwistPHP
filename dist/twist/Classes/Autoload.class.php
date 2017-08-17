@@ -66,8 +66,8 @@ class Autoload{
 				$strFile .= '.controller.php';
 			}elseif(strstr($strRequest,'\\Models\\')){
 				$strFile .= '.model.php';
-			}elseif(strstr($strRequest,'\\Utilities\\')){
-				$strFile .= '.utility.php';
+			}elseif(strstr($strRequest,'\\Helpers\\')){
+				$strFile .= '.helper.php';
 			}else{
 				$strFile .= '.php';
 			}

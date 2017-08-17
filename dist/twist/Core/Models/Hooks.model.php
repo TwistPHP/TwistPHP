@@ -38,7 +38,7 @@
 
 			$this->loadHooks();
 
-			//Register the default Twist utility extensions
+			//Register the default Twist helper extensions
 			$this->arrHooks['TWIST_VIEW_TAG']['asset'] = array('module' => 'Asset','function' => 'viewExtension');
 			$this->arrHooks['TWIST_VIEW_TAG']['file'] = array('module' => 'File','function' => 'viewExtension');
 			$this->arrHooks['TWIST_VIEW_TAG']['session'] = array('module' => 'Session','function' => 'viewExtension');

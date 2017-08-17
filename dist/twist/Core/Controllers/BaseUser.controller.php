@@ -33,7 +33,7 @@ use \Twist\Core\Models\UserAgent;
 class BaseUser extends Base{
 
 	/**
-	 * @var \Twist\Core\Utilities\User
+	 * @var \Twist\Core\Helpers\User
 	 */
 	protected $resUser = null;
 

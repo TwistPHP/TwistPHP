@@ -23,7 +23,7 @@
 	 */
 
 	namespace Twist\Core\Routes;
-	use Twist\Core\Utilities\Route;
+	use Twist\Core\Helpers\Route;
 
 	/**
 	 * The base route that all route files must extend in order for Twist to be able to process them correctly. This base class added some core features required to initialise a route file.

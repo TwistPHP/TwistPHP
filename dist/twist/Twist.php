@@ -24,7 +24,7 @@
 
 	use Twist\Classes\Instance;
 	use Twist\Classes\Error;
-	use Twist\Core\Utilities as Utilities;
+	use Twist\Core\Helpers as Helpers;
 
 	/**
 	 * Main functionality for the Framework, this main class is that gateway to makes it all possible to use the framework in a simple yet powerful way.
@@ -58,8 +58,8 @@
 		public static function version($strVersionPart = null){
 
 			$arrVersion = array(
-				'major' => 3,
-				'minor' => 1,
+				'major' => 4,
+				'minor' => 0,
 				'patch' => 0,
 				'pre-release' => ''//pre-release can be set to 'dev'
 			);
@@ -413,13 +413,13 @@
 
 		/**
 		 * Returns the core framework classes, these are not packages but contain some useful tools such as settings.
-		 * @return \Twist\Core\Utilities\Framework
+		 * @return \Twist\Core\Helpers\Framework
 		 */
 		public static function framework(){
 
-			$resTwistUtility = (!Instance::isObject('CoreFramework')) ? new Utilities\Framework() : Instance::retrieveObject('CoreFramework');
-			Instance::storeObject('CoreFramework',$resTwistUtility);
-			return $resTwistUtility;
+			$resTwistHelper = (!Instance::isObject('CoreFramework')) ? new Helpers\Framework() : Instance::retrieveObject('CoreFramework');
+			Instance::storeObject('CoreFramework',$resTwistHelper);
+			return $resTwistHelper;
 		}
 
 		/**
@@ -439,52 +439,52 @@
 		}
 
 		/**
-		 * Return an instance of the Archive utility.
-		 * @return \Twist\Core\Utilities\Archive
+		 * Return an instance of the Archive helper.
+		 * @return \Twist\Core\Helpers\Archive
 		 */
 		public static function Archive(){
 
-			$resTwistUtility = (!Instance::isObject('pkgArchive')) ? new Utilities\Archive() : Instance::retrieveObject('pkgArchive');
-			Instance::storeObject('pkgArchive',$resTwistUtility);
-			return $resTwistUtility;
+			$resTwistHelper = (!Instance::isObject('helperArchive')) ? new Helpers\Archive() : Instance::retrieveObject('helperArchive');
+			Instance::storeObject('helperArchive',$resTwistHelper);
+			return $resTwistHelper;
 		}
 
 		/**
-		 * Return an instance of the Asset utility.
-		 * @return \Twist\Core\Utilities\Asset
+		 * Return an instance of the Asset helper.
+		 * @return \Twist\Core\Helpers\Asset
 		 */
 		public static function Asset(){
 
-			$resTwistUtility = (!Instance::isObject('pkgAsset')) ? new Utilities\Asset() : Instance::retrieveObject('pkgAsset');
-			Instance::storeObject('pkgAsset',$resTwistUtility);
-			return $resTwistUtility;
+			$resTwistHelper = (!Instance::isObject('helperAsset')) ? new Helpers\Asset() : Instance::retrieveObject('helperAsset');
+			Instance::storeObject('helperAsset',$resTwistHelper);
+			return $resTwistHelper;
 		}
 
 		/**
-		 * Return an instance of the Cookie utility.
-		 * @return \Twist\Core\Utilities\Cookie
+		 * Return an instance of the Cookie helper.
+		 * @return \Twist\Core\Helpers\Cookie
 		 */
 		public static function Cookie(){
 
-			$resTwistUtility = (!Instance::isObject('pkgCookie')) ? new Utilities\Cookie() : Instance::retrieveObject('pkgCookie');
-			Instance::storeObject('pkgCookie',$resTwistUtility);
-			return $resTwistUtility;
+			$resTwistHelper = (!Instance::isObject('helperCookie')) ? new Helpers\Cookie() : Instance::retrieveObject('helperCookie');
+			Instance::storeObject('helperCookie',$resTwistHelper);
+			return $resTwistHelper;
 		}
 
 		/**
-		 * Return an instance of the CSV utility.
-		 * @return \Twist\Core\Utilities\CSV
+		 * Return an instance of the CSV helper.
+		 * @return \Twist\Core\Helpers\CSV
 		 */
 		public static function CSV(){
 
-			$resTwistUtility = (!Instance::isObject('pkgCSV')) ? new Utilities\CSV() : Instance::retrieveObject('pkgCSV');
-			Instance::storeObject('pkgCSV',$resTwistUtility);
-			return $resTwistUtility;
+			$resTwistHelper = (!Instance::isObject('helperCSV')) ? new Helpers\CSV() : Instance::retrieveObject('helperCSV');
+			Instance::storeObject('helperCSV',$resTwistHelper);
+			return $resTwistHelper;
 		}
 
 		/**
-		 * Return an instance of the Cache utility.
-		 * @return \Twist\Core\Utilities\Cache
+		 * Return an instance of the Cache helper.
+		 * @return \Twist\Core\Helpers\Cache
 		 */
 		public static function Cache(){
 
@@ -492,42 +492,42 @@
 
 			//Could be done in 2 lines of code but PHP editors are not smart enough to auto-complete
 			if(count(func_get_args())){
-				$strInstanceKey = sprintf('pkgCache-%s',$strObjectKey);
-				$resTwistUtility = (!Instance::isObject($strInstanceKey)) ? new Utilities\Cache($strObjectKey) : Instance::retrieveObject($strInstanceKey);
-				Instance::storeObject($strInstanceKey,$resTwistUtility);
+				$strInstanceKey = sprintf('helperCache-%s',$strObjectKey);
+				$resTwistHelper = (!Instance::isObject($strInstanceKey)) ? new Helpers\Cache($strObjectKey) : Instance::retrieveObject($strInstanceKey);
+				Instance::storeObject($strInstanceKey,$resTwistHelper);
 			}else{
-				$resTwistUtility = (!Instance::isObject('pkgCache')) ? new Utilities\Cache($strObjectKey) : Instance::retrieveObject('pkgCache');
-				Instance::storeObject('pkgCache',$resTwistUtility);
+				$resTwistHelper = (!Instance::isObject('helperCache')) ? new Helpers\Cache($strObjectKey) : Instance::retrieveObject('helperCache');
+				Instance::storeObject('helperCache',$resTwistHelper);
 			}
 
-			return $resTwistUtility;
+			return $resTwistHelper;
 		}
 
 		/**
-		 * Return an instance of the Command utility.
-		 * @return \Twist\Core\Utilities\Command
+		 * Return an instance of the Command helper.
+		 * @return \Twist\Core\Helpers\Command
 		 */
 		public static function Command(){
 
-			$resTwistUtility = (!Instance::isObject('pkgCommand')) ? new Utilities\Command() : Instance::retrieveObject('pkgCommand');
-			Instance::storeObject('pkgCommand',$resTwistUtility);
-			return $resTwistUtility;
+			$resTwistHelper = (!Instance::isObject('helperCommand')) ? new Helpers\Command() : Instance::retrieveObject('helperCommand');
+			Instance::storeObject('helperCommand',$resTwistHelper);
+			return $resTwistHelper;
 		}
 
 		/**
-		 * Return an instance of the Curl utility.
-		 * @return \Twist\Core\Utilities\Curl
+		 * Return an instance of the Curl helper.
+		 * @return \Twist\Core\Helpers\Curl
 		 */
 		public static function Curl(){
 
-			$resTwistUtility = (!Instance::isObject('pkgCurl')) ? new Utilities\Curl() : Instance::retrieveObject('pkgCurl');
-			Instance::storeObject('pkgCurl',$resTwistUtility);
-			return $resTwistUtility;
+			$resTwistHelper = (!Instance::isObject('helperCurl')) ? new Helpers\Curl() : Instance::retrieveObject('helperCurl');
+			Instance::storeObject('helperCurl',$resTwistHelper);
+			return $resTwistHelper;
 		}
 
 		/**
-		 * Return an instance of the Database utility.
-		 * @return \Twist\Core\Utilities\Database
+		 * Return an instance of the Database helper.
+		 * @return \Twist\Core\Helpers\Database
 		 */
 		public static function Database(){
 
@@ -535,122 +535,122 @@
 
 			//Could be done in 2 lines of code but PHP editors are not smart enough to auto-complete
 			if(count(func_get_args())){
-				$strInstanceKey = sprintf('pkgDatabase-%s',$strObjectKey);
-				$resTwistUtility = (!Instance::isObject($strInstanceKey)) ? new Utilities\Database($strObjectKey) : Instance::retrieveObject($strInstanceKey);
-				Instance::storeObject($strInstanceKey,$resTwistUtility);
+				$strInstanceKey = sprintf('helperDatabase-%s',$strObjectKey);
+				$resTwistHelper = (!Instance::isObject($strInstanceKey)) ? new Helpers\Database($strObjectKey) : Instance::retrieveObject($strInstanceKey);
+				Instance::storeObject($strInstanceKey,$resTwistHelper);
 			}else{
-				$resTwistUtility = (!Instance::isObject('pkgDatabase')) ? new Utilities\Database($strObjectKey) : Instance::retrieveObject('pkgDatabase');
-				Instance::storeObject('pkgDatabase',$resTwistUtility);
+				$resTwistHelper = (!Instance::isObject('helperDatabase')) ? new Helpers\Database($strObjectKey) : Instance::retrieveObject('helperDatabase');
+				Instance::storeObject('helperDatabase',$resTwistHelper);
 			}
 
-			return $resTwistUtility;
+			return $resTwistHelper;
 		}
 
 		/**
-		 * Return an instance of the DateTime utility.
-		 * @return \Twist\Core\Utilities\DateTime
+		 * Return an instance of the DateTime helper.
+		 * @return \Twist\Core\Helpers\DateTime
 		 */
 		public static function DateTime(){
 
-			$resTwistUtility = (!Instance::isObject('pkgDateTime')) ? new Utilities\DateTime() : Instance::retrieveObject('pkgDateTime');
-			Instance::storeObject('pkgDateTime',$resTwistUtility);
-			return $resTwistUtility;
+			$resTwistHelper = (!Instance::isObject('helperDateTime')) ? new Helpers\DateTime() : Instance::retrieveObject('helperDateTime');
+			Instance::storeObject('helperDateTime',$resTwistHelper);
+			return $resTwistHelper;
 		}
 
 		/**
-		 * Return an instance of the Device utility.
-		 * @return \Twist\Core\Utilities\Device
+		 * Return an instance of the Device helper.
+		 * @return \Twist\Core\Helpers\Device
 		 */
 		public static function Device(){
 
-			$resTwistUtility = (!Instance::isObject('pkgDevice')) ? new Utilities\Device() : Instance::retrieveObject('pkgDevice');
-			Instance::storeObject('pkgDevice',$resTwistUtility);
-			return $resTwistUtility;
+			$resTwistHelper = (!Instance::isObject('helperDevice')) ? new Helpers\Device() : Instance::retrieveObject('helperDevice');
+			Instance::storeObject('helperDevice',$resTwistHelper);
+			return $resTwistHelper;
 		}
 
 		/**
-		 * Return an instance of the Email utility.
-		 * @return \Twist\Core\Utilities\Email
+		 * Return an instance of the Email helper.
+		 * @return \Twist\Core\Helpers\Email
 		 */
 		public static function Email(){
 
-			$resTwistUtility = (!Instance::isObject('pkgEmail')) ? new Utilities\Email() : Instance::retrieveObject('pkgEmail');
-			Instance::storeObject('pkgEmail',$resTwistUtility);
-			return $resTwistUtility;
+			$resTwistHelper = (!Instance::isObject('helperEmail')) ? new Helpers\Email() : Instance::retrieveObject('helperEmail');
+			Instance::storeObject('helperEmail',$resTwistHelper);
+			return $resTwistHelper;
 		}
 
 		/**
-		 * Return an instance of the File utility.
-		 * @return \Twist\Core\Utilities\File
+		 * Return an instance of the File helper.
+		 * @return \Twist\Core\Helpers\File
 		 */
 		public static function File(){
 
-			$resTwistUtility = (!Instance::isObject('pkgFile')) ? new Utilities\File() : Instance::retrieveObject('pkgFile');
-			Instance::storeObject('pkgFile',$resTwistUtility);
-			return $resTwistUtility;
+			$resTwistHelper = (!Instance::isObject('helperFile')) ? new Helpers\File() : Instance::retrieveObject('helperFile');
+			Instance::storeObject('helperFile',$resTwistHelper);
+			return $resTwistHelper;
 		}
 
 		/**
-		 * Return an instance of the FTP utility.
-		 * @return \Twist\Core\Utilities\FTP
+		 * Return an instance of the FTP helper.
+		 * @return \Twist\Core\Helpers\FTP
 		 */
 		public static function FTP(){
 
-			$resTwistUtility = (!Instance::isObject('pkgFTP')) ? new Utilities\FTP() : Instance::retrieveObject('pkgFTP');
-			Instance::storeObject('pkgFTP',$resTwistUtility);
-			return $resTwistUtility;
+			$resTwistHelper = (!Instance::isObject('helperFTP')) ? new Helpers\FTP() : Instance::retrieveObject('helperFTP');
+			Instance::storeObject('helperFTP',$resTwistHelper);
+			return $resTwistHelper;
 		}
 
 		/**
-		 * Return an instance of the ICS utility.
-		 * @return \Twist\Core\Utilities\ICS
+		 * Return an instance of the ICS helper.
+		 * @return \Twist\Core\Helpers\ICS
 		 */
 		public static function ICS(){
 
-			$resTwistUtility = (!Instance::isObject('pkgICS')) ? new Utilities\ICS() : Instance::retrieveObject('pkgICS');
-			Instance::storeObject('pkgICS',$resTwistUtility);
-			return $resTwistUtility;
+			$resTwistHelper = (!Instance::isObject('helperICS')) ? new Helpers\ICS() : Instance::retrieveObject('helperICS');
+			Instance::storeObject('helperICS',$resTwistHelper);
+			return $resTwistHelper;
 		}
 
 		/**
-		 * Return an instance of the Image utility.
-		 * @return \Twist\Core\Utilities\Image
+		 * Return an instance of the Image helper.
+		 * @return \Twist\Core\Helpers\Image
 		 */
 		public static function Image(){
 
-			$resTwistUtility = (!Instance::isObject('pkgImage')) ? new Utilities\Image() : Instance::retrieveObject('pkgImage');
-			Instance::storeObject('pkgImage',$resTwistUtility);
-			return $resTwistUtility;
+			$resTwistHelper = (!Instance::isObject('helperImage')) ? new Helpers\Image() : Instance::retrieveObject('helperImage');
+			Instance::storeObject('helperImage',$resTwistHelper);
+			return $resTwistHelper;
 		}
 
 		/**
-		 * Return an instance of the Localisation utility.
-		 * @return \Twist\Core\Utilities\Localisation
+		 * Return an instance of the Localisation helper.
+		 * @return \Twist\Core\Helpers\Localisation
 		 */
 		public static function Localisation(){
 
-			$resTwistUtility = (!Instance::isObject('pkgLocalisation')) ? new Utilities\Localisation() : Instance::retrieveObject('pkgLocalisation');
-			Instance::storeObject('pkgLocalisation',$resTwistUtility);
-			return $resTwistUtility;
+			$resTwistHelper = (!Instance::isObject('helperLocalisation')) ? new Helpers\Localisation() : Instance::retrieveObject('helperLocalisation');
+			Instance::storeObject('helperLocalisation',$resTwistHelper);
+			return $resTwistHelper;
 		}
 
 		/**
-		 * Return an instance of the Route utility.
-		 * @return \Twist\Core\Utilities\Route
+		 * Return an instance of the Route helper.
+		 * @return \Twist\Core\Helpers\Route
 		 */
 		public static function Route(){
 
 			//Could be done in 2 lines of code but PHP editors are not smart enough to auto-complete
 			if(count(func_get_args())){
-				$strInstanceKey = sprintf('pkgRoute-%s',func_get_arg(0));
-				$resTwistUtility = (!Instance::isObject($strInstanceKey)) ? new Utilities\Route(func_get_arg(0)) : Instance::retrieveObject($strInstanceKey);
-				Instance::storeObject($strInstanceKey,$resTwistUtility);
+				$strInstanceKey = sprintf('helperRoute-%s',func_get_arg(0));
+				$resTwistHelper = (!Instance::isObject($strInstanceKey)) ? new Helpers\Route(func_get_arg(0)) : Instance::retrieveObject($strInstanceKey);
+				Instance::storeObject($strInstanceKey,$resTwistHelper);
 			}else{
-				$resTwistUtility = (!Instance::isObject('pkgRoute')) ? new Utilities\Route() : Instance::retrieveObject('pkgRoute');
-				Instance::storeObject('pkgRoute',$resTwistUtility);
+				$resTwistHelper = (!Instance::isObject('helperRoute')) ? new Helpers\Route() : Instance::retrieveObject('helperRoute');
+				Instance::storeObject('helperRoute',$resTwistHelper);
 			}
 
-			return $resTwistUtility;
+			return $resTwistHelper;
 		}
 
 		/**
@@ -669,7 +669,7 @@
 
 			foreach($arrInstances as $strInstanceKey){
 
-				if(substr($strInstanceKey,0,8) == 'pkgRoute'){
+				if(substr($strInstanceKey,0,8) == 'helperRoute'){
 
 					//Get the Route instance
 					$resInstance = Instance::retrieveObject($strInstanceKey);
@@ -703,19 +703,19 @@
 		}
 
 		/**
-		 * Return an instance of the Session utility.
-		 * @return \Twist\Core\Utilities\Session
+		 * Return an instance of the Session helper.
+		 * @return \Twist\Core\Helpers\Session
 		 */
 		public static function Session(){
 
-			$resTwistUtility = (!Instance::isObject('pkgSession')) ? new Utilities\Session() : Instance::retrieveObject('pkgSession');
-			Instance::storeObject('pkgSession',$resTwistUtility);
-			return $resTwistUtility;
+			$resTwistHelper = (!Instance::isObject('helperSession')) ? new Helpers\Session() : Instance::retrieveObject('helperSession');
+			Instance::storeObject('helperSession',$resTwistHelper);
+			return $resTwistHelper;
 		}
 
 		/**
-		 * Return an instance of the Timer utility.
-		 * @return \Twist\Core\Utilities\Timer
+		 * Return an instance of the Timer helper.
+		 * @return \Twist\Core\Helpers\Timer
 		 */
 		public static function Timer(){
 
@@ -723,42 +723,42 @@
 
 			//Could be done in 2 lines of code but PHP editors are not smart enough to auto-complete
 			if(count(func_get_args())){
-				$strInstanceKey = sprintf('pkgTimer-%s',$strObjectKey);
-				$resTwistUtility = (!Instance::isObject($strInstanceKey)) ? new Utilities\Timer($strObjectKey) : Instance::retrieveObject($strInstanceKey);
-				Instance::storeObject($strInstanceKey,$resTwistUtility);
+				$strInstanceKey = sprintf('helperTimer-%s',$strObjectKey);
+				$resTwistHelper = (!Instance::isObject($strInstanceKey)) ? new Helpers\Timer($strObjectKey) : Instance::retrieveObject($strInstanceKey);
+				Instance::storeObject($strInstanceKey,$resTwistHelper);
 			}else{
-				$resTwistUtility = (!Instance::isObject('pkgTimer')) ? new Utilities\Timer($strObjectKey) : Instance::retrieveObject('pkgTimer');
-				Instance::storeObject('pkgTimer',$resTwistUtility);
+				$resTwistHelper = (!Instance::isObject('helperTimer')) ? new Helpers\Timer($strObjectKey) : Instance::retrieveObject('helperTimer');
+				Instance::storeObject('helperTimer',$resTwistHelper);
 			}
 
-			return $resTwistUtility;
+			return $resTwistHelper;
 		}
 
 		/**
-		 * Return an instance of the User utility.
-		 * @return \Twist\Core\Utilities\User
+		 * Return an instance of the User helper.
+		 * @return \Twist\Core\Helpers\User
 		 */
 		public static function User(){
 
-			$resTwistUtility = (!Instance::isObject('pkgUser')) ? new Utilities\User() : Instance::retrieveObject('pkgUser');
-			Instance::storeObject('pkgUser',$resTwistUtility);
-			return $resTwistUtility;
+			$resTwistHelper = (!Instance::isObject('helperUser')) ? new Helpers\User() : Instance::retrieveObject('helperUser');
+			Instance::storeObject('helperUser',$resTwistHelper);
+			return $resTwistHelper;
 		}
 
 		/**
-		 * Return an instance of the Validate utility.
-		 * @return \Twist\Core\Utilities\Validate
+		 * Return an instance of the Validate helper.
+		 * @return \Twist\Core\Helpers\Validate
 		 */
 		public static function Validate(){
 
-			$resTwistUtility = (!Instance::isObject('pkgValidate')) ? new Utilities\Validate() : Instance::retrieveObject('pkgValidate');
-			Instance::storeObject('pkgValidate',$resTwistUtility);
-			return $resTwistUtility;
+			$resTwistHelper = (!Instance::isObject('helperValidate')) ? new Helpers\Validate() : Instance::retrieveObject('helperValidate');
+			Instance::storeObject('helperValidate',$resTwistHelper);
+			return $resTwistHelper;
 		}
 
 		/**
-		 * Return an instance of the View utility.
-		 * @return \Twist\Core\Utilities\View
+		 * Return an instance of the View helper.
+		 * @return \Twist\Core\Helpers\View
 		 */
 		public static function View(){
 
@@ -766,25 +766,25 @@
 
 			//Could be done in 2 lines of code but PHP editors are not smart enough to auto-complete
 			if(count(func_get_args())){
-				$strInstanceKey = sprintf('pkgView-%s',$strObjectKey);
-				$resTwistUtility = (!Instance::isObject($strInstanceKey)) ? new Utilities\View($strObjectKey) : Instance::retrieveObject($strInstanceKey);
-				Instance::storeObject($strInstanceKey,$resTwistUtility);
+				$strInstanceKey = sprintf('helperView-%s',$strObjectKey);
+				$resTwistHelper = (!Instance::isObject($strInstanceKey)) ? new Helpers\View($strObjectKey) : Instance::retrieveObject($strInstanceKey);
+				Instance::storeObject($strInstanceKey,$resTwistHelper);
 			}else{
-				$resTwistUtility = (!Instance::isObject('pkgView')) ? new Utilities\View($strObjectKey) : Instance::retrieveObject('pkgView');
-				Instance::storeObject('pkgView',$resTwistUtility);
+				$resTwistHelper = (!Instance::isObject('helperView')) ? new Helpers\View($strObjectKey) : Instance::retrieveObject('helperView');
+				Instance::storeObject('helperView',$resTwistHelper);
 			}
 
-			return $resTwistUtility;
+			return $resTwistHelper;
 		}
 
 		/**
-		 * Return an instance of the XML utility.
-		 * @return \Twist\Core\Utilities\XML
+		 * Return an instance of the XML helper.
+		 * @return \Twist\Core\Helpers\XML
 		 */
 		public static function XML(){
 
-			$resTwistUtility = (!Instance::isObject('pkgXML')) ? new Utilities\XML() : Instance::retrieveObject('pkgXML');
-			Instance::storeObject('pkgXML',$resTwistUtility);
-			return $resTwistUtility;
+			$resTwistHelper = (!Instance::isObject('helperXML')) ? new Helpers\XML() : Instance::retrieveObject('helperXML');
+			Instance::storeObject('helperXML',$resTwistHelper);
+			return $resTwistHelper;
 		}
 	}

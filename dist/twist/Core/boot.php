@@ -67,7 +67,7 @@
 	TwistDefine('TWIST_FRAMEWORK_CLASSES',sprintf('%sClasses/',TWIST_FRAMEWORK));
 	TwistDefine('TWIST_FRAMEWORK_DATA',sprintf('%sCore/Data/',TWIST_FRAMEWORK));
 	TwistDefine('TWIST_FRAMEWORK_MODELS',sprintf('%sCore/Models/',TWIST_FRAMEWORK));
-	TwistDefine('TWIST_FRAMEWORK_UTILITIES',sprintf('%sCore/Utilities/',TWIST_FRAMEWORK));
+	TwistDefine('TWIST_FRAMEWORK_HELPERS',sprintf('%sCore/Helpers/',TWIST_FRAMEWORK));
 	TwistDefine('TWIST_FRAMEWORK_VIEWS',sprintf('%sCore/Views/',TWIST_FRAMEWORK));
 	TwistDefine('TWIST_FRAMEWORK_RESOURCES',sprintf('%sCore/Resources/',TWIST_FRAMEWORK));
 	TwistDefine('TWIST_FRAMEWORK_INSTALL',sprintf('%sInstall/',TWIST_FRAMEWORK));
