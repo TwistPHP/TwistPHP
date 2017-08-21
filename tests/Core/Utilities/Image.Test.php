@@ -23,29 +23,6 @@
 			$this->assertEquals($arrInfo['orientation'], 'square');
 		}
 
-		public function testAspectRatio(){
-
-			$intAspectRatio = self::$resImage->aspectRatio();
-			$this->assertEquals($intAspectRatio, 1);
-
-			self::$strImageCode = self::$resImage->outputBase64();
-		}
-
-		public function testNormalizeColor(){
-
-			$arrColour = self::$resImage->normalizeColor('#FF0000');
-			$this->assertTrue(is_array($arrColour));
-
-			//set the alpha too high
-			$arrColour['a'] = 129;
-			$arrColour = self::$resImage->normalizeColor($arrColour);
-
-			//Check is has been lowered
-			$this->assertEquals($arrColour['a'], 127);
-
-			self::$strImageCode = self::$resImage->outputBase64();
-		}
-
 		public function testFill(){
 
 			self::$resImage->fill('#FF0000');
