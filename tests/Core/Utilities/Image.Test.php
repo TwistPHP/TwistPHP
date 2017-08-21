@@ -17,12 +17,10 @@
 			self::$strImageCode = $strNewImageCode;
 		}
 
-		public function testDetectOrientation(){
+		public function testGetInfo(){
 
-			$strOrientation = self::$resImage->detectOrientation();
-			$this->assertEquals($strOrientation, 'square');
-
-			self::$strImageCode = self::$resImage->outputBase64();
+			$arrInfo = self::$resImage->currentInfo();
+			$this->assertEquals($arrInfo['orientation'], 'square');
 		}
 
 		public function testAspectRatio(){
