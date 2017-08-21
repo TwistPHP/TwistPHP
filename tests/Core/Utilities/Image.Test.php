@@ -5,7 +5,7 @@
 		public static $resImage = null;
 		public static $strImageCode = '';
 
-		public function create(){
+		public function testCreate(){
 
 			self::$resImage = \Twist::Image()->create(16,16, '#000000');
 			$strNewImageCode = self::$resImage->outputBase64();
@@ -17,7 +17,7 @@
 			self::$strImageCode = $strNewImageCode;
 		}
 
-		public function detectOrientation(){
+		public function testDetectOrientation(){
 
 			$strOrientation = self::$resImage->detectOrientation();
 			$this->assertEquals($strOrientation, 'square');
@@ -25,7 +25,7 @@
 			self::$strImageCode = self::$resImage->outputBase64();
 		}
 
-		public function aspectRatio(){
+		public function testAspectRatio(){
 
 			$intAspectRatio = self::$resImage->aspectRatio();
 			$this->assertEquals($intAspectRatio, 1);
@@ -33,7 +33,7 @@
 			self::$strImageCode = self::$resImage->outputBase64();
 		}
 
-		public function normalizeColor(){
+		public function testNormalizeColor(){
 
 			$arrColour = self::$resImage->normalizeColor('#FF0000');
 			$this->assertTrue(is_array($arrColour));
@@ -48,7 +48,7 @@
 			self::$strImageCode = self::$resImage->outputBase64();
 		}
 
-		public function fill(){
+		public function testFill(){
 
 			self::$resImage->fill('#FF0000');
 			$strNewImageCode = self::$resImage->outputBase64();
@@ -60,7 +60,7 @@
 			self::$strImageCode = $strNewImageCode;
 		}
 
-		public function line(){
+		public function testLine(){
 
 			self::$resImage->line(0,0,16,16);
 			$strNewImageCode = self::$resImage->outputBase64();
@@ -72,7 +72,7 @@
 			self::$strImageCode = $strNewImageCode;
 		}
 
-		public function rectangle(){
+		public function testRectangle(){
 
 			self::$resImage->rectangle(4,4,12,8);
 			$strNewImageCode = self::$resImage->outputBase64();
@@ -84,7 +84,7 @@
 			self::$strImageCode = $strNewImageCode;
 		}
 
-		public function text(){
+		public function testString(){
 
 			self::$resImage->string(5,5,'T');
 			$strNewImageCode = self::$resImage->outputBase64();
@@ -96,7 +96,7 @@
 			self::$strImageCode = $strNewImageCode;
 		}
 
-		public function flip(){
+		public function testFlip(){
 
 			self::$resImage->flip('vertical');
 			$strNewImageCode = self::$resImage->outputBase64();
@@ -108,7 +108,7 @@
 			self::$strImageCode = $strNewImageCode;
 		}
 
-		public function opacity(){
+		public function testOpacity(){
 
 			self::$resImage->opacity(0.5);
 			$strNewImageCode = self::$resImage->outputBase64();
@@ -120,7 +120,7 @@
 			self::$strImageCode = $strNewImageCode;
 		}
 
-		public function rotate(){
+		public function testRotate(){
 
 			self::$resImage->rotate(90);
 			$strNewImageCode = self::$resImage->outputBase64();
@@ -132,7 +132,7 @@
 			self::$strImageCode = $strNewImageCode;
 		}
 
-		public function crop(){
+		public function testCrop(){
 
 			self::$resImage->crop(1,1,15,15);
 			$strNewImageCode = self::$resImage->outputBase64();
@@ -147,5 +147,5 @@
 
 			self::$strImageCode = $strNewImageCode;
 		}
-		
+
 	}
