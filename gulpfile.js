@@ -12,7 +12,7 @@ var gulp = require( 'gulp' ),
 		sourcemaps = require( 'gulp-sourcemaps' );
 
 
-var strTwistSource = './src/Core/Resources/twist/',
+var strTwistSource = './src/',
 		strTwistDestination = './dist/twist/Core/Resources/twist/',
 		esOptions = {
 			parserOptions: {
