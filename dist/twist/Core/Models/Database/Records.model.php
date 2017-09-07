@@ -250,9 +250,9 @@
 
 					array_walk( $mxdValue, array( \Twist::Database(), 'escapeString' ) );
 
-					$strWhereClause = sprintf(" WHERE `%s` IN (%s)",
+					$strWhereClause = sprintf(" WHERE `%s` IN ('%s')",
 						\Twist::Database()->escapeString($strField),
-						implode(',',$mxdValue)
+						implode("','",$mxdValue)
 					);
 
 				}else{
