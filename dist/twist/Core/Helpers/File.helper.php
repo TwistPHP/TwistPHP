@@ -957,7 +957,7 @@ class File extends Base{
 			foreach($arrParameters['accept'] as $strFileExtension){
 
 				//Use as key to avoid duplication
-				if(substr($strFileExtension,0,1) === '.' || strstr('/',$strFileExtension)){
+				if(substr($strFileExtension,0,1) === '.' || strpos($strFileExtension,'/') !== false){
 					$arrTypes[$strFileExtension] = $strFileExtension;
 				}else{
 					$strMimeType = implode(',',$this->mimeType($strFileExtension,false));
