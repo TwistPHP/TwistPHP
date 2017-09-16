@@ -2,7 +2,7 @@
 
 	/**
 	 * TwistPHP - An open source PHP MVC framework built from the ground up.
-	 * Copyright (C) 2016  Shadow Technologies Ltd.
+	 * Shadow Technologies Ltd.
 	 *
 	 * This program is free software: you can redistribute it and/or modify
 	 * it under the terms of the GNU General Public License as published by
@@ -133,7 +133,7 @@
 		/**
 		 * Decides how to deal with the path being entered into the zip
 		 * @param string $dirLocalPath Local path of hte item to be added
-		 * @param string $strCurrentPath Base path within the zip where the item will be addded
+		 * @param string $strCurrentPath Base path within the zip where the item will be added
 		 */
 		protected function addItem($dirLocalPath,$strCurrentPath = ''){
 

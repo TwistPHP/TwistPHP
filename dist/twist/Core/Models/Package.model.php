@@ -2,7 +2,7 @@
 
 	/**
 	 * TwistPHP - An open source PHP MVC framework built from the ground up.
-	 * Copyright (C) 2016  Shadow Technologies Ltd.
+	 * Shadow Technologies Ltd.
 	 *
 	 * This program is free software: you can redistribute it and/or modify
 	 * it under the terms of the GNU General Public License as published by
@@ -297,7 +297,6 @@
 
 				$dirInstallFile = $arrBacktrace[0]['file'];
 				$dirPackage = dirname($dirInstallFile);
-				$strSlug = strtolower(basename($dirPackage)); //TODO: Remove?
 
 				//Install the SQL tables when required
 				$dirSettingsJSON = (!file_exists($dirSettingsJSON)) ? sprintf('%s/%s', $dirPackage, $dirSettingsJSON) : $dirSettingsJSON;
@@ -370,7 +369,7 @@
 		}
 
 		/**
-		 * Check to see that a package is installed and usable, optional throw an exception of the package dosnt exist
+		 * Check to see that a package is installed and usable, optional throw an exception of the package doesn't exist
 		 * @param string $strPackageSlug
 		 * @param bool $blThrowException
 		 * @return bool

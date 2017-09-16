@@ -2,7 +2,7 @@
 
 /**
  * TwistPHP - An open source PHP MVC framework built from the ground up.
- * Copyright (C) 2016  Shadow Technologies Ltd.
+ * Shadow Technologies Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,6 @@
  */
 
 namespace Twist\Core\Models\Image;
-use Twist\Classes\Exception;
 
 /**
  * Image object that allow the manipulation of images, adding text, inserting watermarks, applying effects, resizing and altering output quality.

@@ -2,7 +2,7 @@
 
 /**
  * TwistPHP - An open source PHP MVC framework built from the ground up.
- * Copyright (C) 2016  Shadow Technologies Ltd.
+ * Shadow Technologies Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -227,14 +227,14 @@ class Resources{
 				$strOut = $strImageSRC;
 			}else{
 
-				$strAttributes = '';
+				$arrAttributes = array();
 				foreach($arrParameters as $strKey => $mxdValue){
 					if(!in_array(strtolower($strKey),array('src','base64','uri'))){
-						$strAttributes .= sprintf(' %s="%s"',strtolower($strKey),htmlentities($mxdValue));
+						$arrAttributes[] = sprintf('%s="%s"',strtolower($strKey),htmlentities($mxdValue));
 					}
 				}
 
-				$strOut = sprintf('<img src="%s"%s>',$strImageSRC,$strAttributes);
+				$strOut = sprintf('<img src="%s" %s>',$strImageSRC,implode(' ',$arrAttributes));
 			}
 		}
 
@@ -318,15 +318,15 @@ class Resources{
 				}
 			}else{
 				if(substr($strEachItem,0,2) === '//'){
-					$strOut .= sprintf('<script src="%s"%s></script>',$strEachItem,(is_null( $mxdAsyncType ) ? '' : sprintf( ' %s', $mxdAsyncType )));
+					$strOut .= sprintf('<script src="%s" %s></script>',$strEachItem,(is_null( $mxdAsyncType ) ? '' : $mxdAsyncType ));
 				}else{
-					$strOut .= sprintf('<script src="%s/%s"%s></script>',$strURI,$strEachItem,(is_null( $mxdAsyncType ) ? '' : sprintf( ' %s', $mxdAsyncType )));
+					$strOut .= sprintf('<script src="%s/%s" %s></script>',$strURI,$strEachItem,(is_null( $mxdAsyncType ) ? '' : $mxdAsyncType ));
 				}
 			}
 		}
 
 		if($blInline){
-			$strOut = sprintf( '<script%s>%s</script>',(is_null( $mxdAsyncType ) ? '' : sprintf( ' %s', $mxdAsyncType ) ), $strOut );
+			$strOut = sprintf( '<script %s>%s</script>',(is_null( $mxdAsyncType ) ? '' : $mxdAsyncType ), $strOut );
 		}
 
 		return $strOut;
@@ -445,7 +445,7 @@ class Resources{
 	}
 
 	/**
-	 * Extend the resource library with a whole new set of resources. This function can be called if you want to put some custom rescources into the system that the site or package can use.
+	 * Extend the resource library with a whole new set of resources. This function can be called if you want to put some custom resources into the system that the site or package can use.
 	 * The resources will then become accessible via the {resource:} view tag.
 	 * @param string $dirManifest
 	 * @param string $dirResourcePath
@@ -510,7 +510,7 @@ class Resources{
 	 * color = #ffffff
 	 * line and font color used on the image placeholder
 	 *
-	 * An example of the tag with all the above parameters in use {placholder:'Banner Image',width=400,height=300,background-color='#999999',color='#ffffff'}
+	 * An example of the tag with all the above parameters in use {placeholder:'Banner Image',width=400,height=300,background-color='#999999',color='#ffffff'}
 	 *
 	 * @param string $strReference Message to be displayed on the image, pass in '' for site name
 	 * @param array $arrParameters

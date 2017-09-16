@@ -2,7 +2,7 @@
 
 /**
  * TwistPHP - An open source PHP MVC framework built from the ground up.
- * Copyright (C) 2016  Shadow Technologies Ltd.
+ * Shadow Technologies Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -361,7 +361,6 @@ class View extends Base{
 	 */
 	public function removeUnusedTags($strViewData){
 
-	    $arrTags = array();
 	    $arrViewTags = $this->getTags($strViewData,false);
 
 	    if(is_array($arrViewTags) && count($arrViewTags) > 0){
@@ -431,9 +430,8 @@ class View extends Base{
 
 	/**
 	 * Get the raw View data form the View file
-	 *
-	 * @param string $strViewFullPath
-	 * @return string
+	 * @param $strView
+	 * @return null|string
 	 * @throws \Exception
 	 */
 	protected function get($strView){

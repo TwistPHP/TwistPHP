@@ -2,7 +2,7 @@
 
 /**
  * TwistPHP - An open source PHP MVC framework built from the ground up.
- * Copyright (C) 2016  Shadow Technologies Ltd.
+ * Shadow Technologies Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 namespace Twist\Core\Controllers;
 
 use \Twist\Core\Models\Install;
+use \Twist\Core\Models\Security\CodeScanner;
 
 /**
  * The route controller for the framework manager, generates the pages of the manager tool.
@@ -92,7 +93,7 @@ class Manager extends BaseUser{
 			$arrTags['version_status'] = '<span class="tag red">Failed to retrieve version information, try again later!</span>';
 		}
 
-		$objCodeScanner = new \Twist\Core\Models\Security\CodeScanner();
+		$objCodeScanner = new CodeScanner();
 		$arrTags['scanner'] = $objCodeScanner->getLastScan(TWIST_DOCUMENT_ROOT);
 
 		$arrRoutes = \Twist::Route()->getAll();
@@ -289,7 +290,7 @@ class Manager extends BaseUser{
 	public function scanner(){
 
 		$arrTags = array();
-		$objCodeScanner = new \Twist\Core\Models\Security\CodeScanner();
+		$objCodeScanner = new CodeScanner();
 
 		if(array_key_exists('scan-now',$_GET)){
 			$objCodeScanner->scan(TWIST_DOCUMENT_ROOT);
@@ -328,7 +329,7 @@ class Manager extends BaseUser{
 			if($arrEachItem['type'] === 'string'){
 				$arrEachItem['input'] .= sprintf('<input type="text" name="settings[%s]" value="%s">',$arrEachItem['key'],$arrEachItem['value']);
 			}elseif($arrEachItem['type'] === 'boolean'){
-				$arrEachItem['input'] .= sprintf('<input type="checkbox" name="settings[%s]" %svalue="1">',$arrEachItem['key'],($arrEachItem['value'] == '1') ? 'checked ' : '');
+				$arrEachItem['input'] .= sprintf('<input type="checkbox" name="settings[%s]" value="1" %s>',$arrEachItem['key'],($arrEachItem['value'] == '1') ? 'checked ' : '');
 			}elseif($arrEachItem['type'] === 'options'){
 
 				$strOptions = '';
@@ -336,14 +337,14 @@ class Manager extends BaseUser{
 
 				if(count($arrOptions) <= 3){
 					foreach($arrOptions as $strEachOption){
-						$strChecked = (trim($strEachOption) == $arrEachItem['value']) ? ' checked': '';
+						$strChecked = (trim($strEachOption) == $arrEachItem['value']) ? 'checked': '';
 						$strOptionKey = sprintf('%s-%s',$arrEachItem['key'],trim($strEachOption));
-						$arrEachItem['input'] .= sprintf('<input type="radio" id="settings_%s" name="settings[%s]" value="%s"%s><label for="settings_%s">%s</label>',$strOptionKey,$arrEachItem['key'],trim($strEachOption),$strChecked,$strOptionKey,trim($strEachOption));
+						$arrEachItem['input'] .= sprintf('<input type="radio" id="settings_%s" name="settings[%s]" value="%s" %s><label for="settings_%s">%s</label>',$strOptionKey,$arrEachItem['key'],trim($strEachOption),$strChecked,$strOptionKey,trim($strEachOption));
 					}
 				}else{
 					foreach($arrOptions as $strEachOption){
 						$strChecked = (trim($strEachOption) == $arrEachItem['value']) ? 'selected ': '';
-						$strOptions .= sprintf('<option %svalue="%s">%s</option>',$strChecked,trim($strEachOption),trim($strEachOption));
+						$strOptions .= sprintf('<option value="%s" %s>%s</option>',trim($strEachOption),$strChecked,trim($strEachOption));
 					}
 					$arrEachItem['input'] .= sprintf('<select name="settings[%s]">%s</select>',$arrEachItem['key'],$strOptions);
 				}

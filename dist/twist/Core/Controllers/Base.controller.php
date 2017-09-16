@@ -2,7 +2,7 @@
 
 	/**
 	 * TwistPHP - An open source PHP MVC framework built from the ground up.
-	 * Copyright (C) 2016  Shadow Technologies Ltd.
+	 * Shadow Technologies Ltd.
 	 *
 	 * This program is free software: you can redistribute it and/or modify
 	 * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 	 */
 
 	namespace Twist\Core\Controllers;
-	use Twist\Core\Models\Route\Meta;
+
 	use Twist\Classes\Error;
 
 	/**
@@ -312,7 +312,7 @@
 		/**
 		 * Returns the Meta object so that page titles, keywords and other meta items can all be updated before being output to the base template.
 		 *
-		 * @return \Twist\Core\Models\Route\Meta
+		 * @return null|object|resource|\Twist\Core\Models\Route\Meta
 		 */
         public function _meta(){
 			return $this->resRoute->meta();

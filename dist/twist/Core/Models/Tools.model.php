@@ -2,7 +2,7 @@
 
 	/**
 	 * TwistPHP - An open source PHP MVC framework built from the ground up.
-	 * Copyright (C) 2016  Shadow Technologies Ltd.
+	 * Shadow Technologies Ltd.
 	 *
 	 * This program is free software: you can redistribute it and/or modify
 	 * it under the terms of the GNU General Public License as published by
@@ -88,7 +88,7 @@
 		 * Remove an item from a multi-dimensional array using a key, the split char indicates a change in array level
 		 *
 		 * @param string $strKey
-		 * @param string $arrData
+		 * @param array $arrData
 		 * @param string $strSplitChar
 		 * @return array Returns either the original array or the array with the item removed
 		 */

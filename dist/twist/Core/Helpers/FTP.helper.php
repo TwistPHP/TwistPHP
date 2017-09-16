@@ -2,7 +2,7 @@
 
 	/**
 	 * TwistPHP - An open source PHP MVC framework built from the ground up.
-	 * Copyright (C) 2016  Shadow Technologies Ltd.
+	 * Shadow Technologies Ltd.
 	 *
 	 * This program is free software: you can redistribute it and/or modify
 	 * it under the terms of the GNU General Public License as published by
@@ -142,6 +142,7 @@
 		 * Make a new directory on the remote FTP server
 		 *
 		 * @param string $strDirectory Path for the new directory
+		 * @param bool $blRecursive
 		 * @return bool Returns the status of directory creation
 		 */
 		public function makeDirectory($strDirectory,$blRecursive = false){
@@ -170,6 +171,7 @@
 		 * Remove a directory on the remote FTP server
 		 *
 		 * @param string $strDirectory Path of the directory to remove
+		 * @param bool $blRecursive
 		 * @return bool Returns the status of the removal
 		 */
 		public function removeDirectory($strDirectory,$blRecursive = false){

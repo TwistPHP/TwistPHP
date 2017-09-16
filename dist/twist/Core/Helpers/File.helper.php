@@ -2,7 +2,7 @@
 
 /**
  * TwistPHP - An open source PHP MVC framework built from the ground up.
- * Copyright (C) 2016  Shadow Technologies Ltd.
+ * Shadow Technologies Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,8 +67,6 @@ class File extends Base{
 	 */
 	public function bytesToSize($intBytes){
 
-		$strOut = '';
-
 		$intKilobyte = 1024;
 		$intMegabyte = $intKilobyte * 1024;
 		$intGigabyte = $intMegabyte * 1024;
@@ -77,7 +75,7 @@ class File extends Base{
 		if(($intBytes >= 0) && ($intBytes < $intKilobyte)){
 			$strOut = sprintf('%sB',$intBytes);
 		}elseif(($intBytes >= $intKilobyte) && ($intBytes < $intMegabyte)){
-			//For Kilobytes make sure to remove odd bits as it is not nessasery to see all decimals at this level
+			//For Kilobytes make sure to remove odd bits as it is not necessary to see all decimals at this level
 			$intKilobytesFull = round($intBytes / $intKilobyte, 2);
 			switch(strlen($intKilobytesFull)){
 				case 7:
@@ -165,7 +163,7 @@ class File extends Base{
 	 *
 	 * @param string $dirFile Full path to file including file name
 	 * @param bool $blReturnDefaultOnly If multiple types available return as array
-	 * @return string Returns the content type
+	 * @return array|mixed|null|string Returns the content type
 	 */
 	public function mimeType($dirFile,$blReturnDefaultOnly = true){
 
@@ -377,13 +375,13 @@ class File extends Base{
 						}
 					}else{
 						//header("HTTP/1.1 500 Internal Server Error");
-						Error::errorPage(500);
+						Error::response(500);
 					}
 				}
 			}
 		}else{
 			//header("HTTP/1.1 404 Not Found");
-			Error::errorPage(404);
+			Error::response(404);
 		}
 
 		die();
@@ -959,7 +957,7 @@ class File extends Base{
 			foreach($arrParameters['accept'] as $strFileExtension){
 
 				//Use as key to avoid duplication
-				if(substr($strFileExtension,0,1) === '.' || strstr('/',$strFileExtension)){
+				if(substr($strFileExtension,0,1) === '.' || strpos($strFileExtension,'/') !== false){
 					$arrTypes[$strFileExtension] = $strFileExtension;
 				}else{
 					$strMimeType = implode(',',$this->mimeType($strFileExtension,false));

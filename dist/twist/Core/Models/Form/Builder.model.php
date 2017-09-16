@@ -2,7 +2,7 @@
 
 /**
  * TwistPHP - An open source PHP MVC framework built from the ground up.
- * Copyright (C) 2016  Shadow Technologies Ltd.
+ * Shadow Technologies Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -92,7 +92,7 @@ class Builder{
 		return $this->updateField($strName,'suffix',$strSuffix);
 	}
 
-	public function addSumbit($strName,$strSuccessRedirect){
+	public function addSubmit($strName,$strSuccessRedirect){
 		$this->arrDetails['submit'] = array('name' => $strName,'redirect' => $strSuccessRedirect);
 	}
 

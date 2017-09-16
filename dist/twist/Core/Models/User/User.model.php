@@ -2,7 +2,7 @@
 
 	/**
 	 * TwistPHP - An open source PHP MVC framework built from the ground up.
-	 * Copyright (C) 2016  Shadow Technologies Ltd.
+	 * Shadow Technologies Ltd.
 	 *
 	 * This program is free software: you can redistribute it and/or modify
 	 * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,6 @@
 	 */
 
 	namespace Twist\Core\Models\User;
-	use Twist\Core\Models\User\Auth;
 	use Twist\Core\Models\Database\Record;
 
 	class User{
@@ -42,6 +41,12 @@
 
 		private $strTempPassword = null;
 
+		/**
+		 * User constructor.
+		 *
+		 * @param Record $resDatabaseRecord
+		 * @param        $resParentClass
+		 */
 		public function __construct(Record $resDatabaseRecord,$resParentClass){
 			$this->resParentClass = $resParentClass;
 			$this->resDatabaseRecord = $resDatabaseRecord;

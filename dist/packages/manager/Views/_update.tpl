@@ -48,8 +48,8 @@
                                 getProgress = function() {
                                     $.get( 'progress',
                                         function( objResponse ) {
-                                            jqoProgress.html( objResponse.html ).scrollTop( 99999 ),
-                                                    jqoProgressPercentage.width( objResponse.progress + '%' );
+                                            jqoProgress.html( objResponse.html ).scrollTop( 99999 );
+                                            jqoProgressPercentage.width( objResponse.progress + '%' );
                                             if( objResponse.complete ) {
                                                 $( '#progress-percentage' ).css( 'opacity', 0 );
                                                 if( objResponse.success ) {
@@ -60,7 +60,7 @@
                                                         }, 3000
                                                     );
                                                 } else {
-                                                    $( '#back-to-manager' ).attr( 'href', objResponse.manager_url ),
+                                                    $( '#back-to-manager' ).attr( 'href', objResponse.manager_url );
                                                     $( '#complete-actions' ).show();
                                                 }
                                             } else {

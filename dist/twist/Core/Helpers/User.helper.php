@@ -2,7 +2,7 @@
 
 	/**
 	 * TwistPHP - An open source PHP MVC framework built from the ground up.
-	 * Copyright (C) 2016  Shadow Technologies Ltd.
+	 * Shadow Technologies Ltd.
 	 *
 	 * This program is free software: you can redistribute it and/or modify
 	 * it under the terms of the GNU General Public License as published by
@@ -303,7 +303,7 @@
 
 		/**
 		 * Get and array of the users default information by User ID
-		 * @param integer $intUserID
+		 * @param string $strOrderBy
 		 * @return array
 		 */
 		public function getAll($strOrderBy = 'id'){
@@ -312,7 +312,7 @@
 
 		/**
 		 * Get and array of the users default information by User ID
-		 * @param integer $intUserID
+		 * @param $intLevelID
 		 * @return array
 		 */
 		public function getAllByLevel($intLevelID){
@@ -491,7 +491,6 @@
 			$strData = '';
 			$arrParts = explode(',',$strReference);
 
-			$strParameter = '';
 			$strLoginPage = $this->strLoginUrl;
 
 			if(count($arrParts) > 1){

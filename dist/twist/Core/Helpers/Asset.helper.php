@@ -2,7 +2,7 @@
 
 	/**
 	 * TwistPHP - An open source PHP MVC framework built from the ground up.
-	 * Copyright (C) 2016  Shadow Technologies Ltd.
+	 * Shadow Technologies Ltd.
 	 *
 	 * This program is free software: you can redistribute it and/or modify
 	 * it under the terms of the GNU General Public License as published by
@@ -474,7 +474,6 @@
 		public function upload($strFileKey,$intGroupID,$strTitle='',$strDescription='',$blActive=true){
 
 			//Upload the file to the system
-			$intOut = 0;
 			$arrFile = \Twist::File()->upload($strFileKey,\Twist::DateTime()->time());
 
 			//Store the file as an asset

@@ -2,7 +2,7 @@
 
 	/**
 	 * TwistPHP - An open source PHP MVC framework built from the ground up.
-	 * Copyright (C) 2016  Shadow Technologies Ltd.
+	 * Shadow Technologies Ltd.
 	 *
 	 * This program is free software: you can redistribute it and/or modify
 	 * it under the terms of the GNU General Public License as published by
@@ -116,10 +116,9 @@
 		}
 
 		/**
-		 * @param null $resResult
 		 * @return int
 		 */
-		public function affectedRows($resResult = null){ //TODO: $resResult not used
+		public function affectedRows(){
 			return $this->resLink->affected_rows;
 		}
 

@@ -2,7 +2,7 @@
 
 /**
  * TwistPHP - An open source PHP MVC framework built from the ground up.
- * Copyright (C) 2016  Shadow Technologies Ltd.
+ * Shadow Technologies Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ class BaseREST extends Base{
     }
 
     /**
-     * Open REST dosnt require any auth but this function is needed for RESTKey and RESTUser
+     * Open REST does not require any auth but this function is needed for RESTKey and RESTUser
      * @return bool
      */
     public function _auth(){
@@ -79,7 +79,8 @@ class BaseREST extends Base{
      * @param mixed $mxdResults Results of the function call to be returned to the user
      * @param int $intCount Number of results returned by the function call
      * @param int $intResponseCode HTTP response code for the call
-     */
+	 * @return string Response to serve to the client
+	 */
     public function _respond($mxdResults,$intCount = 1,$intResponseCode = 200){
 
 		$arrResponse = Error::responseInfo($intResponseCode);
@@ -108,7 +109,8 @@ class BaseREST extends Base{
      * Error response to an API call should be used to return a standardised RESTful error response
      * @param string $strErrorMessage Error message to indicate what when wrong
      * @param int $intResponseCode HTTP response code for the call
-     */
+	 * @return string Response to the client with an error
+	 */
     public function _respondError($strErrorMessage,$intResponseCode = 404){
 
 		$arrResponse = Error::responseInfo($intResponseCode);

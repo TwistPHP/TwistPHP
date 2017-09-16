@@ -2,7 +2,7 @@
 
 /**
  * TwistPHP - An open source PHP MVC framework built from the ground up.
- * Copyright (C) 2016  Shadow Technologies Ltd.
+ * Shadow Technologies Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,10 +32,18 @@ class BaseAJAX extends Base{
 
 	protected $blAjaxResponse = true;
 	protected $strAjaxResponseMessage = '';
+	private $arrPostedJSON = null;
 
 	public function _baseCalls(){
 		$this->_timeout(60);
 		return true;
+	}
+
+	protected function _posted( $strField ) {
+		if( is_null( $this -> arrPostedJSON ) ) {
+			$this -> arrPostedJSON = json_decode( file_get_contents( 'php://input' ), true );
+		}
+		return array_key_exists( $strField, $this -> arrPostedJSON ) ? $this -> arrPostedJSON[$strField] : null;
 	}
 
 	/**

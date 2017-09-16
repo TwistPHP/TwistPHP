@@ -2,7 +2,7 @@
 
 	/**
 	 * TwistPHP - An open source PHP MVC framework built from the ground up.
-	 * Copyright (C) 2016  Shadow Technologies Ltd.
+	 * Shadow Technologies Ltd.
 	 *
 	 * This program is free software: you can redistribute it and/or modify
 	 * it under the terms of the GNU General Public License as published by
@@ -162,9 +162,9 @@
 		 */
 		public function increment($strField,$intStep = 1){
 			$intValue = $this->get($strField);
-			$intNewValue = $intValue+$intStep;
-			$this->set($strField,$intNewValue);
-			return $intNewValue;
+			$intValue += $intStep;
+			$this->set($strField,$intValue);
+			return $intValue;
 		}
 
 		/**
@@ -175,9 +175,9 @@
 		 */
 		public function decrement($strField,$intStep = 1){
 			$intValue = $this->get($strField);
-			$intNewValue = $intValue-$intStep;
-			$this->set($strField,$intValue-$intIncrementStep);
-			return $intNewValue;
+			$intValue -= $intStep;
+			$this->set($strField,$intValue);
+			return $intValue;
 		}
 
 		/**

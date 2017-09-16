@@ -2,7 +2,7 @@
 
 /**
  * TwistPHP - An open source PHP MVC framework built from the ground up.
- * Copyright (C) 2016  Shadow Technologies Ltd.
+ * Shadow Technologies Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,6 @@
  */
 
 namespace Twist\Core\Controllers;
-use Twist\Classes\Exception;
 use Twist\Core\Models\Install;
 
 /**
@@ -217,19 +216,19 @@ class InstallWizard extends Base{
 			'uploads_path' => ($strSiteRoot === '/') ? '' : ltrim($strSiteRoot,'/').'/uploads',
 		);
 
-		if(array_key_exists($arrSession['settings']['details'],'site_root')){
+		if(array_key_exists('site_root', $arrSession['settings']['details'])){
 			$arrTags['site_root'] = $arrSession['settings']['details']['site_root'];
 		}
 
-		if(array_key_exists($arrSession['settings']['details'],'app_path')){
+		if(array_key_exists('app_path', $arrSession['settings']['details'])){
 			$arrTags['app_path'] = $arrSession['settings']['details']['app_path'];
 		}
 
-		if(array_key_exists($arrSession['settings']['details'],'packages_path')){
+		if(array_key_exists('packages_path', $arrSession['settings']['details'])){
 			$arrTags['packages_path'] = $arrSession['settings']['details']['packages_path'];
 		}
 
-		if(array_key_exists($arrSession['settings']['details'],'uploads_path')){
+		if(array_key_exists('uploads_path', $arrSession['settings']['details'])){
 			$arrTags['uploads_path'] = $arrSession['settings']['details']['uploads_path'];
 		}
 

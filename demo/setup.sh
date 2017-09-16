@@ -13,7 +13,7 @@ mkdir -p /root/.provisioning
 ### Apache & PHP ###
 apt-get update -y
 apt-get install -y apache2
-apt-get install -y php5 libapache2-mod-php5 php5-cli php5-mcrypt php5-gd php5-curl php5-mysqlnd
+apt-get install -y php5 libapache2-mod-php5 php5-cli php5-mcrypt php5-gd php5-curl php5-mysqlnd php5-gd libgd2-xpm-dev*
 
 cat <<CONFIG > /etc/apache2/sites-enabled/000-default.conf
 <VirtualHost *:80>

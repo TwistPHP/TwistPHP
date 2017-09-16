@@ -22,7 +22,7 @@ before_install:
   - mysql -V
   - mysql -e "CREATE DATABASE IF NOT EXISTS travis_ci_twist_test;"
   - mysql -e "SHOW DATABASES"
-  - if [ "$GULP" = 'ON' ]; then nvm install 6.10&&npm install; fi;
+  - if [ "$GULP" = 'ON' ]; then nvm install 6.11&&npm install; fi;
 
 install:
   - if [ "$COVERALLS" = 'ON' ]; then composer require satooshi/php-coveralls '~1.0'; fi;
