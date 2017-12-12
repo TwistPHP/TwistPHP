@@ -70,7 +70,6 @@
 	TwistDefine('TWIST_FRAMEWORK_HELPERS',sprintf('%sCore/Helpers/',TWIST_FRAMEWORK));
 	TwistDefine('TWIST_FRAMEWORK_VIEWS',sprintf('%sCore/Views/',TWIST_FRAMEWORK));
 	TwistDefine('TWIST_FRAMEWORK_RESOURCES',sprintf('%sCore/Resources/',TWIST_FRAMEWORK));
-	TwistDefine('TWIST_FRAMEWORK_INSTALL',sprintf('%sInstall/',TWIST_FRAMEWORK));
 
 	TwistDefine('TWIST_APP_AJAX',sprintf('%s/Ajax/',rtrim(TWIST_APP,'/')));
 	TwistDefine('TWIST_APP_ASSETS',sprintf('%s/Assets/',rtrim(TWIST_APP,'/')));
@@ -82,6 +81,7 @@
 
 	//TWIST_PACKAGES - Can be defined in your index file
 	TwistDefine('TWIST_PACKAGES',sprintf('%s/packages/',rtrim(TWIST_PUBLIC_ROOT,'/')));
+	TwistDefine('TWIST_PACKAGE_INSTALL',sprintf('%s/packages/install/',rtrim(TWIST_PUBLIC_ROOT,'/')));
 
 	//TWIST_UPLOADS - Can be defined in your index file
 	TwistDefine('TWIST_UPLOADS',sprintf('%s/uploads/',rtrim(TWIST_PUBLIC_ROOT,'/')));

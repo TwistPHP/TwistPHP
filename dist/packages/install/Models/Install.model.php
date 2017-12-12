@@ -22,7 +22,7 @@
 	 * @link       https://twistphp.com
 	 */
 	
-	namespace Twist\Core\Models;
+	namespace Packages\install\Models;
 	
 	/**
 	 * Handle all package/package related enquiries, for instance if you want to know if a package is installed or what version it is.
@@ -100,11 +100,11 @@
 				//Disable file config as we are using database
 				\Twist::framework()->settings()->fileConfigOverride(false);
 
-				self::importSQL(sprintf('%sinstall.sql',TWIST_FRAMEWORK_INSTALL));
+				self::importSQL(sprintf('%sData/install.sql',TWIST_PACKAGE_INSTALL));
 			}
 
 			//Update all the core settings, add to a file when no Database is being used
-			self::importSettings(sprintf('%ssettings.json',TWIST_FRAMEWORK_INSTALL));
+			self::importSettings(sprintf('%sData/settings.json',TWIST_PACKAGE_INSTALL));
 
 			//Add new settings to the chosen settings storage method
 			\Twist::framework()->setting('SITE_NAME',$arrConfiguration['settings']['site_name']);

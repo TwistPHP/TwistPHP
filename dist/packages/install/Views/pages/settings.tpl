@@ -1,4 +1,4 @@
-<form class="inline foldable" action="../../../../index.php" method="post">
+<form class="inline foldable" action="{uri:./user}" method="post">
 	<h2>Site</h2>
 	{data:error_message}
 

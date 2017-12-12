@@ -122,7 +122,7 @@
 		protected function loadTempSettings(){
 
 			//Process the core settings of the framework
-			$strCoreJSON = sprintf('%ssettings.json',TWIST_FRAMEWORK_INSTALL);
+			$strCoreJSON = sprintf('%sData/settings.json',TWIST_PACKAGE_INSTALL);
 
 			$jsonData = file_get_contents($strCoreJSON);
 			$this->arrSettingsInfo = json_decode($jsonData,true);

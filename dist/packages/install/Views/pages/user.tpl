@@ -1,4 +1,4 @@
-<form class="inline foldable" action="../../../../index.php" method="post" autocomplete="off">
+<form class="inline foldable" action="{uri:./package}" method="post" autocomplete="off">
     <h2>Root User</h2>
     <p>Create a root level developer account that will have unrestricted access to all interfaces and user-based systems.</p>
     {data:error_message}

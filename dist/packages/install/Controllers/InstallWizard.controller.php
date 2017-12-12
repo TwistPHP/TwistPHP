@@ -22,8 +22,10 @@
  * @link       https://twistphp.com
  */
 
-namespace Twist\Core\Controllers;
-use Twist\Core\Models\Install;
+namespace Packages\install\Controllers;
+
+use Packages\install\Models\Install;
+use Twist\Core\Controllers\Base;
 
 /**
  * The route controller for the Install wizard that provides the TwistPHP with its in intuitive in-browser install wizard.

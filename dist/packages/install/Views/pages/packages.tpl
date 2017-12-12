@@ -1,4 +1,4 @@
-<form class="inline foldable" action="../../../../index.php" method="post">
+<form class="inline foldable" action="{uri:./finish}" method="post">
     <h2>Official TwistPHP Packages</h2>
 
     <table>
