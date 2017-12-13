@@ -168,7 +168,7 @@
 					self::framework()->register()->cancelHandler('fatal');
 					self::framework()->register()->cancelHandler('exception');
 
-					\Twist\Core\Models\Install::framework(json_decode(TWIST_QUICK_INSTALL,true));
+					\Packages\install\Models\Install::framework(json_decode(TWIST_QUICK_INSTALL,true));
 					echo "200 OK - Installation Complete";
 					die();
 				}else{
