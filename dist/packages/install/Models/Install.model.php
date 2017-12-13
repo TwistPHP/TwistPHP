@@ -21,14 +21,14 @@
 	 * @license    https://www.gnu.org/licenses/gpl.html GPL License
 	 * @link       https://twistphp.com
 	 */
-	
+
 	namespace Packages\install\Models;
-	
+
 	/**
 	 * Handle all package/package related enquiries, for instance if you want to know if a package is installed or what version it is.
 	 */
 	class Install{
-		
+
 		/**
 		 * Install/Configure the framework, this is required before the framework will function
 		 * @param array $arrConfiguration
@@ -100,11 +100,18 @@
 				//Disable file config as we are using database
 				\Twist::framework()->settings()->fileConfigOverride(false);
 
-				self::importSQL(sprintf('%sData/install.sql',TWIST_PACKAGE_INSTALL));
+				\Twist\Core\Models\Install::importSQL(sprintf('%sData/install.sql',TWIST_PACKAGE_INSTALL));
 			}
 
 			//Update all the core settings, add to a file when no Database is being used
-			self::importSettings(sprintf('%sData/settings.json',TWIST_PACKAGE_INSTALL));
+			\Twist\Core\Models\Install::importSettings(sprintf('%sData/settings.json',TWIST_PACKAGE_INSTALL));
+
+			//Install all the default packages
+			\Twist::framework()->package()->installer('install');
+			\Twist::framework()->package()->installer('manager');
+			\Twist::framework()->package()->installer('ajax');
+			\Twist::framework()->package()->installer('resources');
+			\Twist::framework()->package()->installer('uploader');
 
 			//Add new settings to the chosen settings storage method
 			\Twist::framework()->setting('SITE_NAME',$arrConfiguration['settings']['site_name']);
@@ -170,130 +177,5 @@
 			//Allow access to the Assets and Resources folder
 			file_put_contents(sprintf('%s/Assets/.htaccess',$dirAppFolder),"# Allow direct access to Assets\nAllow from all");
 			file_put_contents(sprintf('%s/Resources/.htaccess',$dirAppFolder),"# Allow direct access to Resources\nAllow from all");
-		}
-
-		/**
-		 * Install a package, this is required before a package can be run by the framework
-		 * @param string $dirPackageJSON
-		 * @return bool|int|null
-		 */
-		public static function package($dirPackageJSON){
-
-			$intPackage = null;
-
-			if(file_exists($dirPackageJSON)){
-
-				$dirPackage = dirname($dirPackageJSON);
-				$rawJson = file_get_contents($dirPackageJSON);
-				$arrDetails = json_decode($rawJson,true);
-
-				$strSlug = strtolower(basename($dirPackage));
-
-				$arrResources = $arrRoutes = $arrBlocks = $arrExtensions = array();
-
-				$resPackage = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'packages')->create();
-
-				$resPackage->set('slug',$strSlug);
-				$resPackage->set('name',$arrDetails['name']);
-				$resPackage->set('version',$arrDetails['version']);
-				$resPackage->set('folder',basename($dirPackage));
-				$resPackage->set('package',(is_file(sprintf('%s/package.php',$dirPackage))) ? '1' : '0');
-				$resPackage->set('installed',date('Y-m-d H:i:s'));
-				$resPackage->set('resources',json_encode($arrResources));
-				$resPackage->set('routes',json_encode($arrRoutes));
-				$resPackage->set('blocks',json_encode($arrBlocks));
-				$resPackage->set('extensions',json_encode($arrExtensions));
-
-				$intPackage = $resPackage->commit();
-				\Twist::framework()->package()->anonymousStats('install',$strSlug,$arrDetails['version']);
-			}
-
-			return $intPackage;
-		}
-
-		/**
-		 * Remove a package, un-registers it from the framework
-		 * @param string $strPackageSlug
-		 * @return null
-		 */
-		public static function removePackage($strPackageSlug){
-			\Twist::framework()->package()->anonymousStats('uninstall',$strPackageSlug,null);
-			return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'packages')->delete($strPackageSlug,'slug');
-		}
-
-		/**
-		 * Install any DB and tables required by the framework
-		 * @param string $dirInstallSQL
-		 */
-		public static function importSQL($dirInstallSQL){
-
-			if(file_exists($dirInstallSQL)) {
-
-				//Create a temp file with all the required table pre-fixes
-				$dirImportFile = tempnam(sys_get_temp_dir(), 'twist-import');
-
-				$blMBSupport = \Twist::Database()->mbSupport();
-
-				file_put_contents($dirImportFile, str_replace(
-					array(
-						"/*TWIST_DATABASE_TABLE_PREFIX*/`",
-						"/*TWIST_DATABASE_NAME*/",
-						($blMBSupport) ? 'utf8' : 'utf8mb4' //Only replace utf8mb4 with utf8 when there is no multi-byte support
-					),
-					array(
-						sprintf('`%s', TWIST_DATABASE_TABLE_PREFIX),
-						TWIST_DATABASE_NAME,
-						'utf8'
-					),
-					file_get_contents($dirInstallSQL)
-				));
-
-				//Import the SQL form the temp file
-				\Twist::Database()->importSQL($dirImportFile);
-
-				//Remove the temp file form the system
-				unlink($dirImportFile);
-			}
-		}
-
-		/**
-		 * Install any framework settings that are required by the core.
-		 * @param string $dirSettingsJSON
-		 * @throws \Exception
-		 */
-		public static function importSettings($dirSettingsJSON){
-
-			if(file_exists($dirSettingsJSON)){
-
-				$arrSettings = json_decode(file_get_contents($dirSettingsJSON),true);
-				if(count($arrSettings)){
-
-					foreach($arrSettings as $strKey => $arrOptions){
-
-						\Twist::framework()->settings()->install(
-							'core',
-							'core',
-							$strKey,
-							$arrOptions['default'],
-							$arrOptions['title'],
-							$arrOptions['description'],
-							$arrOptions['default'],
-							$arrOptions['type'],
-							$arrOptions['options'],
-							$arrOptions['null']
-						);
-					}
-				}
-			}
-		}
-
-		/**
-		 * Remove settings from the framework, these settings can be package or code settings
-		 * @param string $strSlug
-		 * @param string $strType
-		 * @param null $strKey to remove a single settings only pass its key
-		 */
-		public static function removeSettings($strSlug,$strType,$strKey = null){
-			\Twist::framework()->settings()->uninstall($strSlug,$strType,$strKey);
 		}
 	}

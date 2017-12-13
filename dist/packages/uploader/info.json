@@ -1,0 +1,16 @@
+{
+  "name": "TwistPHP File Uploader",
+  "description": "Allow files to be easily uploaded using Ajax",
+  "version": "1.0.0",
+  "author": {
+	"name": "Joe Blogs",
+	"website": "https://twistphp.com",
+	"email": "contact@twistphp.com",
+	"git": "",
+	"bugs": ""
+  },
+  "thirdparty": {
+	"info": "Thanks to twitter for the API example code used in this package",
+	"website": "https://twitter.com"
+  }
+}

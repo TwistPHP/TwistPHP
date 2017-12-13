@@ -1,0 +1,16 @@
+{
+  "name": "TwistPHP Resources",
+  "description": "Framework resource library for quick and easy implantation of generic third-party resources",
+  "version": "1.0.0",
+  "author": {
+	"name": "Joe Blogs",
+	"website": "https://twistphp.com",
+	"email": "contact@twistphp.com",
+	"git": "",
+	"bugs": ""
+  },
+  "thirdparty": {
+	"info": "Thanks to twitter for the API example code used in this package",
+	"website": "https://twitter.com"
+  }
+}
