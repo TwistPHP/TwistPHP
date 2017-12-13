@@ -2,8 +2,8 @@
 
 	$_SERVER['DOCUMENT_ROOT'] = dirname(__FILE__).'/';
 
-	define('TWIST_PACKAGES',dirname(__FILE__).'/dist/packages/');
-	define('TWIST_PACKAGE_INSTALL',dirname(__FILE__).'/dist/packages/install/');
+	define('TWIST_PACKAGES',realpath(dirname(__FILE__).'/../dist/packages/'));
+	define('TWIST_PACKAGE_INSTALL',realpath(dirname(__FILE__).'/../dist/packages/install/'));
 
 	/**
 	 * We don't want to create a user upon setup at this point
