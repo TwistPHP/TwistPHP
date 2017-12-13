@@ -1141,7 +1141,7 @@ class Route extends Base{
 	 */
 	public function manager($strURI = '/manager/%'){
 		\Twist::define('MANAGER_ROUTE_URI',$strURI);
-		$this->package($strURI,'Twist\Core\Routes\Manager');
+		$this->package($strURI,'Packages\manager\Routes\Manager');
 	}
 
 	/**

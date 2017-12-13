@@ -22,7 +22,9 @@
 	 * @link       https://twistphp.com
 	 */
 
-	namespace Twist\Core\Routes;
+	namespace Packages\manager\Routes;
+
+	use Twist\Core\Routes\Base;
 
 	/**
 	 * Manager route file that registers all the routes and restrictions required to allow the Manager to be run.
@@ -36,8 +38,10 @@
 			//Allow the manager to still be accessible even in maintenance mode
 			$this->bypassMaintenanceMode( '/%' );
 
-			$this->baseView('manager/_base.tpl');
-			$this->controller('/%','Twist\Core\Controllers\Manager');
+			$this->setDirectory(realpath(dirname(__FILE__).'/../Views'));
+
+			$this->baseView('_base.tpl');
+			$this->controller('/%','Packages\manager\Controllers\Manager');
 
 			$this->restrictSuperAdmin('/%','/login');
 			$this->unrestrict('/authenticate');

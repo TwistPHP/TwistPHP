@@ -1,7 +1,7 @@
 <?php
 
 	$arrMenu = $arrMenuKey = array();
-	$arrMenuItems = json_decode(file_get_contents(sprintf('%smanager/menu.json',TWIST_FRAMEWORK_DATA)),true);
+	$arrMenuItems = json_decode(file_get_contents(sprintf('%s/Data/menu.json',TWIST_MANAGER_PACKAGE)),true);
 
 	//Build the main menu array
 	foreach($arrMenuItems as $arrEachMenuItem){

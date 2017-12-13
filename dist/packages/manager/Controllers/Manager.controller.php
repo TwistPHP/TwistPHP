@@ -22,10 +22,11 @@
  * @link       https://twistphp.com
  */
 
-namespace Twist\Core\Controllers;
+namespace Packages\manager\Controllers;
 
-use \Twist\Core\Models\Install;
+use Packages\install\Models\Install;
 use \Twist\Core\Models\Security\CodeScanner;
+use \Twist\Core\Controllers\BaseUser;
 
 /**
  * The route controller for the framework manager, generates the pages of the manager tool.
@@ -34,7 +35,7 @@ use \Twist\Core\Models\Security\CodeScanner;
 class Manager extends BaseUser{
 
 	public function __construct(){
-		\Twist::Route()->setDirectory(sprintf('%smanager/',TWIST_FRAMEWORK_VIEWS));
+		\Twist::define('TWIST_MANAGER_PACKAGE',realpath(dirname(__FILE__).'/../'));
 		$this->_aliasURI('update-setting','GETupdatesetting');
 	}
 

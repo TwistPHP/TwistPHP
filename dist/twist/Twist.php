@@ -669,7 +669,7 @@
 
 			foreach($arrInstances as $strInstanceKey){
 
-				if(substr($strInstanceKey,0,8) == 'helperRoute'){
+				if(substr($strInstanceKey,0,11) == 'helperRoute'){
 
 					//Get the Route instance
 					$resInstance = Instance::retrieveObject($strInstanceKey);
