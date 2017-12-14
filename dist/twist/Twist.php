@@ -411,6 +411,21 @@
 			return $strOut;
 		}
 
+		public static function sheduledtasks(){
+
+			//If the code has been run by commandline and has the URI of index.php/cron
+			if(php_sapi_name() == "cli"){
+
+				$arrTasks = Twist\Core\Models\ScheduledTasks::activeTasks();
+
+				foreach($arrTasks as $arrEachTask){
+					Twist\Core\Models\ScheduledTasks::run($arrEachTask['id']);
+				}
+
+				die();
+			}
+		}
+
 		/**
 		 * Returns the core framework classes, these are not packages but contain some useful tools such as settings.
 		 * @return \Twist\Core\Helpers\Framework

@@ -35,17 +35,24 @@
     "sections": []
   },
   {
+    "name": "ScheduledTasks",
+    "uri": "scheduled-tasks",
+    "icon": "fa-clock-o",
+    "order": 6,
+    "sections": []
+  },
+  {
     "name": "API Keys",
     "uri": "apikeys",
     "icon": "fa-key",
-    "order": 6,
+    "order": 7,
     "sections": []
   },
   {
     "name": "Logout",
     "uri": "logout",
     "icon": "fa-sign-out",
-    "order": 7,
+    "order": 8,
     "sections": []
   }
 ]

@@ -27,3 +27,5 @@
 
 	//Launch the framework ready for use
 	Twist::launch();
+
+	Twist::sheduledtasks();

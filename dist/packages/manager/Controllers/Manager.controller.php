@@ -27,6 +27,7 @@ namespace Packages\manager\Controllers;
 use Packages\install\Models\Install;
 use \Twist\Core\Models\Security\CodeScanner;
 use \Twist\Core\Controllers\BaseUser;
+use \Twist\Core\Models\ScheduledTasks;
 
 /**
  * The route controller for the framework manager, generates the pages of the manager tool.
@@ -37,6 +38,7 @@ class Manager extends BaseUser{
 	public function __construct(){
 		\Twist::define('TWIST_MANAGER_PACKAGE',realpath(dirname(__FILE__).'/../'));
 		$this->_aliasURI('update-setting','GETupdatesetting');
+		$this->_aliasURI('scheduled-tasks','scheduledtasks');
 	}
 
 	/**
@@ -418,6 +420,27 @@ class Manager extends BaseUser{
 		}
 
 		\Twist::redirect('./dashboard');
+	}
+
+	public function scheduledtasks(){
+
+		$arrTags = array('tasks' => '');
+		$arrTasks = ScheduledTasks::getAll();
+
+		foreach($arrTasks as $arrEachTask){
+			$arrTags['tasks'] .= $this->_view('components/scheduled/task-each.tpl',$arrEachTask);
+		}
+
+		if($arrTags['tasks'] == ''){
+			$arrTags['tasks'] = $this->_view('components/scheduled/task-none.tpl');
+		}
+
+		return $this->_view('pages/scheduled-tasks.tpl',$arrTags);
+	}
+
+	public function POSTscheduledtasks(){
+		$arrTags = array();
+		return $this->_view('pages/scheduled-tasks.tpl',$arrTags);
 	}
 
 	/**
