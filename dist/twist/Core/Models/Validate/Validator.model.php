@@ -221,16 +221,18 @@ class Validator{
 					if(trim($mxdTestValue) == '' && array_key_exists('blank',$arrEachCheck) && $arrEachCheck['blank'] == 1){
 						$mxdTestResult = $mxdTestValue;
 					}else{
+						$strFunctionType = (string) trim($arrEachCheck['type']);
+
 						//Call the test function and get the result
 						switch($arrEachCheck['type']){
 							case'integer':
-								$mxdTestResult = \Twist::Validate()->$arrEachCheck['type']($mxdTestValue,$arrEachCheck['min_range'],$arrEachCheck['max_range']);
+								$mxdTestResult = \Twist::Validate()->$strFunctionType($mxdTestValue,$arrEachCheck['min_range'],$arrEachCheck['max_range']);
 								break;
 							case'ip':
-								$mxdTestResult = \Twist::Validate()->$arrEachCheck['type']($mxdTestValue,$arrEachCheck['ipv6']);
+								$mxdTestResult = \Twist::Validate()->$strFunctionType($mxdTestValue,$arrEachCheck['ipv6']);
 								break;
 							case'regx':
-								$mxdTestResult = \Twist::Validate()->$arrEachCheck['type']($mxdTestValue,$arrEachCheck['expression']);
+								$mxdTestResult = \Twist::Validate()->$strFunctionType($mxdTestValue,$arrEachCheck['expression']);
 								break;
 							case'compare':
 
@@ -248,10 +250,10 @@ class Validator{
 									$mxdTestValue2 = trim($mxdTestValue2);
 								}
 
-								$mxdTestResult = \Twist::Validate()->$arrEachCheck['type']($mxdTestValue,$mxdTestValue2);
+								$mxdTestResult = \Twist::Validate()->$strFunctionType($mxdTestValue,$mxdTestValue2);
 								break;
 							default:
-								$mxdTestResult = \Twist::Validate()->$arrEachCheck['type']($mxdTestValue);
+								$mxdTestResult = \Twist::Validate()->$strFunctionType($mxdTestValue);
 								break;
 						}
 					}
