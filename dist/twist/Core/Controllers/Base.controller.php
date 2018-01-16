@@ -195,7 +195,7 @@
 
 			if(array_key_exists($strRequestMethodFunction,$arrControllerFunctions)){
 				$strFunctionName = (string) $arrControllerFunctions[$strRequestMethodFunction];
-				return $strFunctionName();
+				return $this->$strFunctionName();
 			}elseif(array_key_exists(strtolower($strCallFunctionName),$arrControllerFunctions)){
 				$strFunctionName = (string) $arrControllerFunctions[strtolower($strCallFunctionName)];
 				return $this->$strFunctionName();
