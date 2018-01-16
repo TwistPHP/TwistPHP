@@ -194,9 +194,11 @@
 			$strRequestMethodFunction = sprintf('%s%s',strtolower($_SERVER['REQUEST_METHOD']),strtolower($strCallFunctionName));
 
 			if(array_key_exists($strRequestMethodFunction,$arrControllerFunctions)){
-				return $this->$arrControllerFunctions[$strRequestMethodFunction]();
+				$strFunctionName = (string) $arrControllerFunctions[$strRequestMethodFunction];
+				return $strFunctionName();
 			}elseif(array_key_exists(strtolower($strCallFunctionName),$arrControllerFunctions)){
-				return $this->$arrControllerFunctions[strtolower($strCallFunctionName)]();
+				$strFunctionName = (string) $arrControllerFunctions[strtolower($strCallFunctionName)];
+				return $this->$strFunctionName();
 			}else{
 				return $this->_404();
 			}
