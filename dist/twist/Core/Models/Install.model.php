@@ -116,9 +116,11 @@
 		/**
 		 * Install any framework settings that are required by the core.
 		 * @param string $dirSettingsJSON
+		 * @param string $strPackage
+		 * @param string $strGroup
 		 * @throws \Exception
 		 */
-		public static function importSettings($dirSettingsJSON){
+		public static function importSettings($dirSettingsJSON,$strPackage = 'core',$strGroup = 'core'){
 
 			if(file_exists($dirSettingsJSON)){
 
@@ -128,8 +130,8 @@
 					foreach($arrSettings as $strKey => $arrOptions){
 
 						\Twist::framework()->settings()->install(
-							'core',
-							'core',
+							$strPackage,
+							$strGroup,
 							$strKey,
 							$arrOptions['default'],
 							$arrOptions['title'],
@@ -146,11 +148,11 @@
 
 		/**
 		 * Remove settings from the framework, these settings can be package or code settings
-		 * @param string $strSlug
-		 * @param string $strType
+		 * @param string $strPackage
+		 * @param string $strGroup
 		 * @param null $strKey to remove a single settings only pass its key
 		 */
-		public static function removeSettings($strSlug,$strType,$strKey = null){
-			\Twist::framework()->settings()->uninstall($strSlug,$strType,$strKey);
+		public static function removeSettings($strPackage,$strGroup,$strKey = null){
+			\Twist::framework()->settings()->uninstall($strPackage,$strGroup,$strKey);
 		}
 	}

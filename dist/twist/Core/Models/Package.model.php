@@ -297,11 +297,12 @@
 
 				$dirInstallFile = $arrBacktrace[0]['file'];
 				$dirPackage = dirname($dirInstallFile);
+				$strPackage = strtolower(basename($dirPackage));
 
 				//Install the SQL tables when required
 				$dirSettingsJSON = (!file_exists($dirSettingsJSON)) ? sprintf('%s/%s', $dirPackage, $dirSettingsJSON) : $dirSettingsJSON;
 
-				Install::importSettings($dirSettingsJSON);
+				Install::importSettings($dirSettingsJSON,$strPackage,'package');
 			}
 		}
 
@@ -315,9 +316,9 @@
 
 				$dirInstallFile = $arrBacktrace[0]['file'];
 				$dirPackage = dirname($dirInstallFile);
-				$strSlug = strtolower(basename($dirPackage));
+				$strPackage = strtolower(basename($dirPackage));
 
-				Install::removeSettings($strSlug,'package');
+				Install::removeSettings($strPackage,'package');
 			}
 		}
 
