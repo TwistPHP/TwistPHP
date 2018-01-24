@@ -352,7 +352,7 @@
 					mkdir($strAssetGroupDir.'/original',0777,true);
 				}
 
-				$strTitle = \Twist::File()->sanitizeName(\Twist::File()->name($mxdData));
+				$strTitle = ($strTitle == '' || is_null($strTitle)) ? \Twist::File()->sanitizeName(\Twist::File()->name($mxdData)) : $strTitle;
 
 				//The filename for the asset
 				$strFileName = sprintf('%s-%s',\Twist::DateTime()->time(),\Twist::File()->name($mxdData));
@@ -497,11 +497,11 @@
 
 		public function import($mxdFile,$intGroupID,$strTitle='',$strDescription='',$blActive=true){
 
-			$strTempFile = tempnam(sys_get_temp_dir(), 'asset-import');
-			file_get_contents($strTempFile,$mxdFile);
+			$strTempFile = rtrim(sys_get_temp_dir(),'/').'/'.basename($mxdFile);
+			file_put_contents($strTempFile,file_get_contents($mxdFile));
 
 			//Store the file as an asset
-			$intOut = $this->add($mxdFile,$intGroupID,$strTitle,$strDescription,$blActive);
+			$intOut = $this->add($strTempFile,$intGroupID,$strTitle,$strDescription,$blActive);
 
 			return $intOut;
 		}
