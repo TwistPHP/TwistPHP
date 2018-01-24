@@ -186,4 +186,22 @@ class DatabaseMySQLi extends \PHPUnit_Framework_TestCase{
 
 		$this->assertFalse(\Twist::Database()->table('test_table')->exists());
 	}
+
+	public function testCreateBasicTable(){
+
+		$resNewTable = \Twist::Database()->table('test_table_basic')->create();
+		$resNewTable->addColumn('id', 'int', 11);
+		$resNewTable->addColumn('name', 'char', 30);
+		//$resNewTable->autoIncrement('id');
+		$this->assertTrue($resNewTable->commit());
+
+		$this->assertTrue(\Twist::Database()->table('test_table_basic')->exists());
+
+		$resNewRecord = \Twist::Database()->records('test_table_basic')->create();
+		$resNewRecord->set('id', 10);
+		$resNewRecord->set('name', 'test');
+		$this->assertTrue($resNewRecord->commit());
+
+		$this->assertEquals(1,\Twist::Database()->records('test_table_basic')->count());
+	}
 }
