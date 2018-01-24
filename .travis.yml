@@ -2,8 +2,8 @@ language: php
 
 php:
   - 5.6
-    env COVERALLS=ON
-    env GULP=ON
+    env COVERALLS=true
+    env GULP=true
   - 7
   - nightly
 
@@ -22,10 +22,10 @@ before_install:
   - mysql -V
   - mysql -e "CREATE DATABASE IF NOT EXISTS travis_ci_twist_test;"
   - mysql -e "SHOW DATABASES"
-  - if [ "$GULP" = 'ON' ]; then nvm install 6.10&&npm install; fi;
+  - if [ ${GULP} = "true" ]; then nvm install 6.11&&npm install; fi;
 
 install:
-  - if [ "$COVERALLS" = 'ON' ]; then composer require satooshi/php-coveralls '~1.0'; fi;
+  - if [ ${COVERALLS} = "true" ]; then composer require satooshi/php-coveralls '~1.0'; fi;
   - composer require phpunit/phpunit:5.6
   - php ./tests/install.php
 
@@ -33,10 +33,10 @@ before_script:
   - mkdir -p ./build/logs
   - mysql -e "USE travis_ci_twist_test; SHOW TABLES;"
   - sed -i 's/Twist::ServeRoutes(false);/echo "TwistPHP Framework Loaded!\n\n";/g' ./tests/index.php
-  - if ["$GULP" = 'ON' ]; then npm install -g gulp; fi;
+  - if [ ${GULP} = "true" ]; then npm install -g gulp; fi;
 
 script:
-  - if [ "$GULP" = 'ON' ]; then gulp test; fi;
+  - if [ ${GULP} = "true" ]; then gulp test; fi;
   - vendor/bin/phpunit
 
 notifications:
@@ -44,4 +44,4 @@ notifications:
   on_failure: always
 
 after_success:
-  - if [ "$COVERALLS" = 'ON' ]; then ./vendor/bin/coveralls -v; fi;
+  - if [ ${COVERALLS} = "true" ]; then ./vendor/bin/coveralls -v; fi;
