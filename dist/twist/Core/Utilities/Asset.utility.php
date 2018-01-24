@@ -498,7 +498,7 @@
 		public function import($mxdFile,$intGroupID,$strTitle='',$strDescription='',$blActive=true){
 
 			$strTempFile = rtrim(sys_get_temp_dir(),'/').'/'.basename($mxdFile);
-			file_put_contents($strTempFile,file_get_contents($mxdFile));
+			\Twist::File()->download($mxdFile,$strTempFile);
 
 			//Store the file as an asset
 			$intOut = $this->add($strTempFile,$intGroupID,$strTitle,$strDescription,$blActive);
