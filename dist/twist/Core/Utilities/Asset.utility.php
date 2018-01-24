@@ -493,12 +493,16 @@
 		 * @param string $strDescription Description for the asset
 		 * @param bool $blActive Default status of the asset once created in the system
 		 * @return int Returns the ID of the newly uploaded/added asset
+		 * @throws \Exception
 		 */
-
 		public function import($mxdFile,$intGroupID,$strTitle='',$strDescription='',$blActive=true){
 
 			$strTempFile = rtrim(sys_get_temp_dir(),'/').'/'.basename($mxdFile);
-			\Twist::File()->download($mxdFile,$strTempFile);
+			$arrResult = \Twist::File()->download($mxdFile,$strTempFile);
+
+			if(!$arrResult['status'] || $arrResult['content-length'] == 0){
+				throw new \Exception("Unable to import remote file: ".$arrResult['error_message']);
+			}
 
 			//Store the file as an asset
 			$intOut = $this->add($strTempFile,$intGroupID,$strTitle,$strDescription,$blActive);

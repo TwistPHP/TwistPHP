@@ -519,21 +519,29 @@ class File extends Base{
 	 * Download/Copy a remote file over HTTP in chunks, outputting the chunks directly to a local file handler. Download large files to the server without running out of system memory.
 	 * @param string $strRemoteFile Full URL to the remote file
 	 * @param string $strLocalFile Local path where the file is to be saved
-	 * @return bool|int Total bytes downloaded, false upon failure
+	 * @param int $intMaxRedirects Set to the maximum redirects you will allow
+	 * @return array Returns and array of information about the request
 	 */
-	public function download($strRemoteFile, $strLocalFile){
+	public function download($strRemoteFile, $strLocalFile,$intMaxRedirects = 0){
 
 		set_time_limit(0);
-		$intChunkSize = 10 * (1024 * 1024); // 10 Megs
+		$intChunkSize = 1 * (1024 * 1024); // 11 Megabyte
 		$intContentLength = 0;
+		$intCurrentContentLength = 0;
+
+		$blRedirect = false;
+		$arrRedirectData = array();
 
 		//Break the request URL up into usable parts
 		$arrURLParts = parse_url($strRemoteFile);
-		$resRemoteHandle = fsockopen($arrURLParts['host'], 80, $strError, $intErrorCode, 5);
+		$resRemoteHandle = fsockopen($arrURLParts['host'], 80, $intErrorCode, $strError, 5);
 		$resLocalHandle = fopen($strLocalFile, 'wb');
 
 		if($resRemoteHandle == false || $resLocalHandle == false){
-			return false;
+			return array(
+				'status' => false,
+				'error_message' => "Twist failed to open remote or local resource"
+			);
 		}
 
 		if(!empty($arrURLParts['query'])){
@@ -543,9 +551,9 @@ class File extends Base{
 		//Request the file from the remote server, send the request headers
 		$strRequest = sprintf("GET %s HTTP/1.1\r\n",$arrURLParts['path']);
 		$strRequest .= sprintf("Host: %s\r\n",$arrURLParts['host']);
-		$strRequest .= "User-Agent: TwistPHP/3.0\r\n";
-		$strRequest .= "Keep-Alive: 115\r\n";
-		$strRequest .= "Connection: keep-alive\r\n\r\n";
+		$strRequest .= "User-Agent: TwistPHP/".\Twist::version()."\r\n\r\n";
+		//$strRequest .= "Keep-Alive: 115\r\n";
+		//$strRequest .= "Connection: keep-alive\r\n\r\n";
 		fwrite($resRemoteHandle, $strRequest);
 
 		//Read the headers from the remote server and find the content length
@@ -561,37 +569,71 @@ class File extends Base{
 			$strKey = $arrHeaderParts[0];
 			unset($arrHeaderParts[0]);
 
+			if(strstr(strtolower(trim($strKey)),'302 moved')){
+				$blRedirect = true;
+			}
+
 			$arrResponseHeaders[strtolower(trim($strKey))] = trim(implode(':',$arrHeaderParts));
 		}
 
-		//Find the content length of the data to be downloaded
-		if(array_key_exists('content-length',$arrResponseHeaders)){
-			$intContentLength = (int)$arrResponseHeaders['content-length'];
-		}
+		if($blRedirect){
 
-		$intCurrentContentLength = 0;
+			//Close all open file handlers
+			fclose($resRemoteHandle);
+			fclose($resLocalHandle);
 
-		//Read the remote file and write directly into the local file handler
-		while(!feof($resRemoteHandle)){
-			$intBytes = fwrite($resLocalHandle, fread($resRemoteHandle, $intChunkSize));
-
-			if($intBytes == false){
-				return false;
+			//Follow the redirects, decrease the count of how many to follow on each iteration
+			if(array_key_exists('location',$arrResponseHeaders) && $intMaxRedirects > 0){
+				$intMaxRedirects--;
+				$arrRedirectData = $this->download($arrResponseHeaders['location'],$strLocalFile,$intMaxRedirects);
+			}else{
+				return array(
+					'status' => false,
+					'error_message' => "Max redirects exceeded"
+				);
 			}
 
-			$intCurrentContentLength += $intBytes;
+		}else{
 
-			if($intCurrentContentLength >= $intContentLength){
-				//All data required has been read, stop here
-				break;
+			//Find the content length of the data to be downloaded
+			if(array_key_exists('content-length',$arrResponseHeaders)){
+				$intContentLength = (int)$arrResponseHeaders['content-length'];
 			}
+
+			//Read the remote file and write directly into the local file handler
+			while(!feof($resRemoteHandle)){
+				$intBytes = fwrite($resLocalHandle, fread($resRemoteHandle, $intChunkSize));
+
+				if($intBytes == false){
+					return array(
+						'status' => false,
+						'error_message' => "Twist failed to write data to the local resource"
+					);
+				}
+
+				$intCurrentContentLength += $intBytes;
+
+				if($intCurrentContentLength >= $intContentLength){
+					//All data required has been read, stop here
+					break;
+				}
+			}
+
+			//Close all open file handlers
+			fclose($resRemoteHandle);
+			fclose($resLocalHandle);
 		}
 
-		//Close all open file handlers
-		fclose($resRemoteHandle);
-		fclose($resLocalHandle);
+		$arrOut = array(
+			'status' => (array_keys('status',$arrRedirectData) && !$arrRedirectData['status']) ? false : true,
+			'response-headers' => $arrResponseHeaders,
+			'content-length' => $intCurrentContentLength,
+			'error_no' => $intErrorCode,
+			'error_message' => $strError,
+			'redirect' => $arrRedirectData
+		);
 
-		return $intCurrentContentLength;
+		return $arrOut;
 	}
 
 	/**
