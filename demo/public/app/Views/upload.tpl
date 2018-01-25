@@ -33,7 +33,21 @@
 
 {file:upload}
 {file:upload,multiple=1}
+{file:upload,name=foo}
+{file:upload,accept=png}
+{file:upload,accept=.png|.mov}
+{file:upload,accept=video/*|.png,multiple=1}
 {asset:upload}
 {asset:upload,multiple=1}
+{asset:upload,name=bar}
+{asset:upload,accept=video/*}
+
+<div id="twistupload-test-4"></div>
+<div id="dropme" style="width: 400px; height: 300px; text-align: center; line-height: 300px; border: 2px #CCC dashed;">Drop files here</div>
+<script>
+	var fileuploadtest4 = new twistfileupload( 'twistupload-test-4', '/upload/asset', 'test-4', {
+        dragdrop: '#dropme'
+    } );
+</script>
 </body>
 </html>
