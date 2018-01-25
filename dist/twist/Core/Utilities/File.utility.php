@@ -540,7 +540,8 @@ class File extends Base{
 		if($resRemoteHandle == false || $resLocalHandle == false){
 			return array(
 				'status' => false,
-				'error_message' => "Twist failed to open remote or local resource"
+				'error_message' => "Twist failed to open remote or local resource",
+				'redirects' => array()
 			);
 		}
 
@@ -585,11 +586,13 @@ class File extends Base{
 			//Follow the redirects, decrease the count of how many to follow on each iteration
 			if(array_key_exists('location',$arrResponseHeaders) && $intMaxRedirects > 0){
 				$intMaxRedirects--;
-				$arrRedirectData = $this->download($arrResponseHeaders['location'],$strLocalFile,$intMaxRedirects);
+				$arrOut = $this->download($arrResponseHeaders['location'],$strLocalFile,$intMaxRedirects);
+				$arrOut['redirects'][] = $arrResponseHeaders['location'];
 			}else{
 				return array(
 					'status' => false,
-					'error_message' => "Max redirects exceeded"
+					'error_message' => "Max redirects exceeded",
+					'redirects' => array()
 				);
 			}
 
@@ -607,7 +610,8 @@ class File extends Base{
 				if($intBytes == false){
 					return array(
 						'status' => false,
-						'error_message' => "Twist failed to write data to the local resource"
+						'error_message' => "Twist failed to write data to the local resource",
+						'redirects' => array()
 					);
 				}
 
@@ -622,16 +626,16 @@ class File extends Base{
 			//Close all open file handlers
 			fclose($resRemoteHandle);
 			fclose($resLocalHandle);
-		}
 
-		$arrOut = array(
-			'status' => (array_keys('status',$arrRedirectData) && !$arrRedirectData['status']) ? false : true,
-			'response-headers' => $arrResponseHeaders,
-			'content-length' => $intCurrentContentLength,
-			'error_no' => $intErrorCode,
-			'error_message' => $strError,
-			'redirect' => $arrRedirectData
-		);
+			$arrOut = array(
+				'status' => true,
+				'response-headers' => $arrResponseHeaders,
+				'content-length' => $intCurrentContentLength,
+				'error_no' => $intErrorCode,
+				'error_message' => $strError,
+				'redirects' => array()
+			);
+		}
 
 		return $arrOut;
 	}
