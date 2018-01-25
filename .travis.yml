@@ -1,10 +1,10 @@
 language: php
 
 php:
-  - 5.6
+  - 7
+  - 7.1
     env COVERALLS=true
     env GULP=true
-  - 7
   - nightly
 
 services:
@@ -22,7 +22,7 @@ before_install:
   - mysql -V
   - mysql -e "CREATE DATABASE IF NOT EXISTS travis_ci_twist_test;"
   - mysql -e "SHOW DATABASES"
-  - if [ ${GULP} = "true" ]; then nvm install 6.11&&npm install; fi;
+  - if [ ${GULP} = "true" ]; then nvm install 8.9.4g&&npm install --only=production; fi;
 
 install:
   - if [ ${COVERALLS} = "true" ]; then composer require satooshi/php-coveralls '~1.0'; fi;
