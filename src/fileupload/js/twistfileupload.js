@@ -93,7 +93,7 @@ class Element {
 }
 
 export default class twistfileupload {
-	constructor( id, uri, name, multiple = false, settings = {} ) {
+	constructor( id, uri, name, settings = {} ) {
 		let uploadSupported = ( typeof new XMLHttpRequest().responseType === 'string' && 'withCredentials' in new XMLHttpRequest() );
 
 		if( uploadSupported ) {
@@ -113,9 +113,9 @@ export default class twistfileupload {
 			counter: true,
 			debug: false,
 			dragdrop: null,
-			dropableclass: 'twistupload-dropable',
-			hoverclass: 'twistupload-hover',
+			dragdrophoverclass: 'twistupload-drop-hover',
 			invalidtypemessage: 'This file type is not permitted',
+			multiple: false,
 			onabort: () => {},
 			onclear: () => {},
 			oncompletefile: () => {},
@@ -146,9 +146,10 @@ export default class twistfileupload {
 			Input: Element.create( 'input', '', (() => {
 				let attributes = {
 					type: 'file',
-					name: multiple ? name + '[]' : name
+					//name: multiple ? name + '[]' : name,
+					accept: this.settings.acceptTypes.concat( this.settings.acceptExtensions ).join( ',' )
 				};
-				if( multiple ) {
+				if( this.settings.multiple ) {
 					attributes.multiple = 'multiple';
 				}
 				return attributes;
@@ -169,13 +170,13 @@ export default class twistfileupload {
 			// The pseudo element containing the CSV values that will be posted
 			Pseudo: Element.create( 'input', '', {
 				type: 'hidden',
+				name: name,
 				value: ''
 			} ),
 
 			Wrapper: document.getElementById( id )
 		};
 		this.events = {};
-		this.multiple = multiple;
 		this.queue = [];
 		this.queueCount = 0;
 		this.queueSize = 0;
@@ -192,12 +193,10 @@ export default class twistfileupload {
 			this.elements.Input.addEventListener( 'change', ( e, files ) => {
 				this.upload( e, files );
 			} );
-
-			//this.elements.Input.addEventListener( 'change', this.upload );
 		} else {
 			this.hideProgress();
 
-			console.warn( 'Your browser does not support AJAX uploading', 'warn', true );
+			console.warn( 'Browser does not support AJAX uploading' );
 		}
 	}
 
@@ -219,7 +218,7 @@ export default class twistfileupload {
 	addMarkup() {
 		this.elements.ProgressWrapper.appendChild( this.elements.Progress );
 		this.elements.ProgressWrapper.appendChild( this.elements.CancelUpload );
-		if( this.multiple ) {
+		if( this.settings.multiple ) {
 			this.elements.CountWrapper.appendChild( this.elements.Count );
 			this.elements.CountWrapper.insertAdjacentHTML( 'beforeend', '/' );
 			this.elements.CountWrapper.appendChild( this.elements.CountTotal );
@@ -235,35 +234,30 @@ export default class twistfileupload {
 
 	addDragAndDropListeners() {
 		let dropArea = this.elements.Wrapper;
+		let possibleDropArea = this.settings.dragdrop ? document.querySelectorAll( this.settings.dragdrop ) : [];
 
-		if( this.settings.dragdrop ) {
-			dropArea = document.getElementById( this.settings.dragdrop );
+		if( possibleDropArea.length ) {
+			dropArea = possibleDropArea[0];
 		}
 
-		dropArea.ondrop = e => {
+		dropArea.addEventListener( 'dragover', e => {
+			e.stopPropagation();
+			e.preventDefault();
+			console.log( 'DRAG OVER' )
+			dropArea.classList.add( this.settings.dragdrophoverclass );
+		}, false );
+		dropArea.addEventListener( 'dragleave', e => {
+			e.stopPropagation();
+			e.preventDefault();
+			console.log( 'DRAG LEAVE' )
+			dropArea.classList.remove( this.settings.dragdrophoverclass );
+		}, false );
+		dropArea.addEventListener( 'drop', e => {
+			e.stopPropagation();
 			e.preventDefault();
 			this.upload( e, e.target.files || e.dataTransfer.files );
-
-			dropArea.classList.remove( this.settings.hoverclass );
-			dropArea.classList.remove( this.settings.dropableclass );
-		};
-		dropArea.ondragstart = () => {
-			dropArea.classList.add( this.settings.dropableclass );
-			return false;
-		};
-		dropArea.ondragover = () => {
-			dropArea.classList.add( this.settings.hoverclass );
-			return false;
-		};
-		dropArea.ondragleave = () => {
-			dropArea.classList.remove( this.settings.hoverclass );
-			return false;
-		};
-		dropArea.ondragend = () => {
-			dropArea.classList.remove( this.settings.hoverclass );
-			dropArea.classList.remove( this.settings.dropableclass );
-			return false;
-		};
+			dropArea.classList.remove( this.settings.dragdrophoverclass );
+		}, false );
 	}
 
 	upload( e, arrFiles ) {
@@ -282,7 +276,7 @@ export default class twistfileupload {
 					this.elements.CountTotal.innerText = this.queueCount;
 				}
 
-				console.log( 'Added ' + resFiles.length + ' files to the queue', 'info' );
+				//console.log( 'Added ' + resFiles.length + ' files to the queue', 'info' );
 			}
 
 			if( this.queue.length ) {
@@ -296,7 +290,7 @@ export default class twistfileupload {
 
 				if( !blAcceptedType ) {
 					for( let type of this.settings.acceptTypes ) {
-						if( new RegExp( '^' + type + '$', 'gi' ).test( strFileType ) ) {
+						if( new RegExp( '^' + type.replace( '*', '.*' ) + '$', 'gi' ).test( strFileType ) ) {
 							blAcceptedType = true;
 							break;
 						}
@@ -304,7 +298,12 @@ export default class twistfileupload {
 				}
 
 				if( !blAcceptedType ) {
+					if( this.settings.acceptExtensions.indexOf( '.' + strFileExtention ) !== -1 ) {
+						blAcceptedType = true;
+					}
+					
 					for( let extention of this.settings.acceptExtensions ) {
+
 						if( strFileExtention === extention ) {
 							blAcceptedType = true;
 							break;
@@ -336,7 +335,7 @@ export default class twistfileupload {
 									switch( this.request.status ) {
 										case 200:
 											if( this.request.readyState === 4 ) {
-												console.info( 'Uploaded ' + strFileName + ' (' + twistfileupload.prettySize( intFileSize ) + ')' );
+												//console.info( 'Uploaded ' + strFileName + ' (' + twistfileupload.prettySize( intFileSize ) + ')' );
 
 												this.queue.shift();
 												this.queueUploadedCount++;
@@ -345,7 +344,7 @@ export default class twistfileupload {
 												let jsonResponse = JSON.parse( this.request.responseText );
 
 												if( this.queue.length ) {
-													if( this.multiple ) {
+													if( this.settings.multiple ) {
 														this.uploaded.push( jsonResponse );
 													} else {
 														this.uploaded = [jsonResponse.form_value];
@@ -362,7 +361,7 @@ export default class twistfileupload {
 												} else {
 													this.hideProgress();
 
-													console.info( 'Finished uploading ' + this.queueUploadedCount + ' files (' + twistfileupload.prettySize( this.queueUploadedSize ) + ')', 'info' );
+													//console.info( 'Finished uploading ' + this.queueUploadedCount + ' files (' + twistfileupload.prettySize( this.queueUploadedSize ) + ')', 'info' );
 
 													this.queueCount = 0;
 													this.queueSize = 0;
@@ -371,7 +370,7 @@ export default class twistfileupload {
 
 													this.clearInput();
 
-													if( this.multiple ) {
+													if( this.settings.multiple ) {
 														this.uploaded.push( jsonResponse );
 													} else {
 														this.uploaded = [jsonResponse];
@@ -390,7 +389,7 @@ export default class twistfileupload {
 											break;
 
 										case 403:
-											console.error( 'Permission denied', 'error' );
+											console.error( 'Permission denied' );
 
 											this.queue.shift();
 											this.queueCount--;
@@ -406,7 +405,7 @@ export default class twistfileupload {
 											break;
 
 										case 404:
-											console.error( 'Invalid function call', 'error' );
+											console.error( 'Invalid function call' );
 
 											this.queue.shift();
 											this.queueCount--;
@@ -428,7 +427,7 @@ export default class twistfileupload {
 											let intPercentage = Math.round( ( e.loaded / e.total ) * 100 );
 											this.elements.Progress.value = intPercentage;
 
-											console.log( twistfileupload.prettySize( e.loaded ) + '/' + twistfileupload.prettySize( e.total ) + ' (' + intPercentage + '%)' );
+											//console.log( twistfileupload.prettySize( e.loaded ) + '/' + twistfileupload.prettySize( e.total ) + ' (' + intPercentage + '%)' );
 										}
 
 										this.settings.onprogress( resFile, e.loaded, e.total );
@@ -448,7 +447,7 @@ export default class twistfileupload {
 
 										this.settings.onerror( resFile );
 
-										console.error( 'An error occurred', 'error' );
+										console.error( 'An error occurred' );
 									}
 								}, false );
 								this.request.addEventListener( 'abort', () => {
@@ -463,7 +462,7 @@ export default class twistfileupload {
 
 										this.settings.onabort( resFile );
 
-										console.error( 'Upload aborted', 'warning' );
+										console.warn( 'Upload aborted' );
 									}
 								}, false );
 								this.request.open( 'PUT', this.uri, true );
@@ -480,26 +479,24 @@ export default class twistfileupload {
 					let objInvalidFile = this.queue.shift();
 					this.elements.Input.value = '';
 
-					this.settings.oninvalidtype( objInvalidFile, this.acceptTypes, this.acceptExtentions );
+					this.settings.oninvalidtype( objInvalidFile, this.settings.acceptTypes, this.settings.acceptExtensions );
 
-					console.error( strFileName + ' (' + strFileType + ') is not in the list of allowed types', 'warn' );
+					console.error( strFileName + ' (' + strFileType + ') is not in the list of allowed types or extensions' );
 
-					if( this.acceptTypes.length ) {
-						console.info( 'Allowed MIME types: ' + this.acceptTypes.join( ', ' ) );
+					if( this.settings.acceptTypes.length ) {
+						console.info( 'Allowed MIME types: ' + this.settings.acceptTypes.join( ', ' ) );
 					}
 
-					if( this.acceptExtentions.length ) {
-						console.info( 'Allowed file extensions: ' + this.acceptExtentions.join( ', ' ) );
+					if( this.settings.acceptExtensions.length ) {
+						console.info( 'Allowed file extensions: ' + this.settings.acceptExtensions.join( ', ' ) );
 					}
 
-					//TODO: Handle this without using alert()
-					//alert( this.settings.invalidtypemessage );
+					//alert( this.settings.invalidtypemessage ); //TODO: Handle this without using alert()
 
 					this.clearInput();
 				}
 			}
 		} catch( err ) {
-			console.log( this );
 			this.hideProgress();
 
 			this.settings.onerror( this.queue[0] );
@@ -511,7 +508,7 @@ export default class twistfileupload {
 			this.queueUploadedCount = 0;
 			this.queueUploadedSize = 0;
 
-			console.error( err, 'error' );
+			console.error( err );
 		}
 	}
 
@@ -520,7 +517,7 @@ export default class twistfileupload {
 		new Element( this.elements.ProgressWrapper ).show();
 
 		if( this.elements.CancelUpload ) {
-			this.elements.CancelUpload.addEventListener( 'click', this.cancelUpload );
+			this.elements.CancelUpload.addEventListener( 'click', () => { this.cancelUpload() } );
 		}
 	}
 
@@ -529,10 +526,9 @@ export default class twistfileupload {
 		new Element( this.elements.ProgressWrapper ).hide();
 
 		if( this.elements.CancelUpload ) {
-			this.elements.CancelUpload.removeEventListener( 'click', this.cancelUpload );
+			this.elements.CancelUpload.removeEventListener( 'click', () => { this.cancelUpload() } );
 		}
 	}
-
 
 	clearInput() {
 		this.elements.Input.value = '';
@@ -548,6 +544,7 @@ export default class twistfileupload {
 
 	cancelUpload() {
 		this.request.abort();
+		this.clearInput();
 	}
 
 	updateUploadedList() {
@@ -555,7 +552,7 @@ export default class twistfileupload {
 
 		this.elements.List.innerHTML = '';
 
-		console.log( this.uploaded );
+		//console.log( this.uploaded );
 
 		for( let objUploadedFile of this.uploaded ) {
 			let strFilePreview = objUploadedFile.uri_preview,
@@ -617,7 +614,7 @@ export default class twistfileupload {
 			this.elements.List.appendChild( listItem );
 		}
 
-		this.elements.Pseudo.value = arrUploadedFormValues.join( ',' );
+		this.elements.Pseudo.value = JSON.stringify( arrUploadedFormValues );
 	}
 
 	on( event, action, context = null ) {
@@ -632,31 +629,3 @@ export default class twistfileupload {
 		//TODO
 	}
 }
-
-
-// class old {
-// 	constructor( id, strUri, objSettings ) {
-// 		if( this.elements.Pseudo &&
-// 				this.elements.Pseudo.value &&
-// 				this.elements.Pseudo.value !== '' ) {
-// 			this.uploaded = this.elements.Pseudo.value.split( ',' ) || [];
-// 		}
-//
-// 		let strAccept = this.elements.Input ? this.elements.Input.getAttribute( 'accept' ) : '';
-// 		if( strAccept ) {
-// 			let arrAcceptValues = strAccept.replace( / /g, '' ).split( ',' );
-//
-// 			if( arrAcceptValues.length ) {
-// 				for( let intAccept in arrAcceptValues ) {
-// 					if( arrAcceptValues[intAccept].substr( 0, 1 ) === '.' ) {
-// 						this.acceptExtentions.push( arrAcceptValues[intAccept].substr( 1 ).toLowerCase() );
-// 					} else {
-// 						this.acceptTypes.push( arrAcceptValues[intAccept].replace( /\//g, '\\/' ).replace( /\*/g, '.*' ) );
-// 					}
-//
-// 					this.acceptRaw.push( arrAcceptValues[intAccept] );
-// 				}
-// 			}
-// 		}
-// 	}
-// }

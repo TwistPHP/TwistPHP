@@ -904,22 +904,19 @@ class File extends Base{
 	 * upload-init
 	 * upload-js
 	 *
-	 * There is no required order for the parameters
+	 * Parameters:
+	 * name      = string (default: 'file')
+	 * multiple  = 0 or 1 (default: 0)
+	 * accept    = pipe separated string of file extensions and/or MIME types
+	 *
+	 * There is no required order for the parameters, examples include:
 	 * {file:upload}
-	 * {file:upload,name=myname}
-	 * {file:upload,name=myname,multiple=1}
-	 * {file:upload,name=myname,multiple=1,id=myid}
-	 *
-	 * Parameter Contents:
-	 * name = string
-	 * multiple = 0|1
-	 * id = unique string
-	 * types = pipe separated string of file extensions
-	 *
-	 * Parameter Defaults:
-	 * name = file
-	 * multiple = 0
-	 * id = uniqid()
+	 * {file:upload,multiple=1}
+	 * {file:upload,name=foo}
+	 * {file:upload,accept=png}
+	 * {file:upload,accept=.png|.mov}
+	 * {file:upload,accept=video/*|.png,multiple=1}
+	 * {asset:upload}
 	 *
 	 * @param string $strReference
 	 * @param array $arrParameters
@@ -938,6 +935,10 @@ class File extends Base{
 			'value' => ''
 		);
 
+		if(array_key_exists('multiple', $arrParameters) && $arrParameters['multiple'] !== false) {
+			$arrParameters['multiple'] = '1';
+		}
+
 		$arrParameters = \Twist::framework()->tools()->arrayMergeRecursive($arrDefaultParams,$arrParameters);
 
 		//Now update the URI if only relative is passed in
@@ -945,6 +946,8 @@ class File extends Base{
 			$arrParameters['uri'] = str_replace('%',$arrParameters['uri'],(defined('UPLOAD_ROUTE_URI')) ? UPLOAD_ROUTE_URI : '/upload/%');
 		}
 
+		$strAcceptExtensions = array();
+		$strAcceptTypes = array();
 		//Get the mime types of the
 		if((is_array($arrParameters['accept']) && count($arrParameters['accept'])) || $arrParameters['accept'] != ''){
 
@@ -954,18 +957,18 @@ class File extends Base{
 
 			$arrTypes = array();
 
-			foreach($arrParameters['accept'] as $strFileExtension){
+			foreach($arrParameters['accept'] as $strAccept){
 
 				//Use as key to avoid duplication
-				if(substr($strFileExtension,0,1) === '.' || strpos($strFileExtension,'/') !== false){
-					$arrTypes[$strFileExtension] = $strFileExtension;
-				}else{
-					$strMimeType = implode(',',$this->mimeType($strFileExtension,false));
-					$arrTypes[$strMimeType] = $strMimeType;
+				if(substr($strAccept,0,1) === '.'){
+					$strAcceptExtensions[] = $strAccept;
+				}else if(strpos($strAccept,'/') === false){
+					$strMimeType = implode(',',$this->mimeType($strAccept,false));
+					$strAcceptTypes[] = $strMimeType;
+				} else {
+					$strAcceptTypes[] = $strAccept;
 				}
 			}
-
-			$strAccept = sprintf(' accept="%s"',implode(',',$arrTypes));
 		}
 
 		switch($strReference){
@@ -978,8 +981,10 @@ class File extends Base{
 					'name' => $arrParameters['name'],
 					'uri' => $arrParameters['uri'],
 					'include-js' => (is_null(\Twist::Cache()->read('asset-js-include'))) ? 1 : 0,
-					'multiple' => ($arrParameters['multiple'] == 1 || $arrParameters['multiple'] === 'true') ? 1 : 0,
+					'multiple' => (array_key_exists('multiple', $arrParameters) && $arrParameters['multiple'] != '0') ? 1 : 0,
 					'accept' => $strAccept,
+					'acceptTypes' => json_encode($strAcceptTypes),
+					'acceptExtensions' => json_encode($strAcceptExtensions),
 					'value' => $arrParameters['value']
 				);
 
@@ -997,8 +1002,10 @@ class File extends Base{
 					'name' => $arrParameters['name'],
 					'uri' => $arrParameters['uri'],
 					'include-js' => (is_null(\Twist::Cache()->read('asset-js-include'))) ? 1 : 0,
-					'multiple' => ($arrParameters['multiple'] == 1 || $arrParameters['multiple'] === 'true') ? 1 : 0,
+					'multiple' => (array_key_exists('multiple', $arrParameters) && $arrParameters['multiple'] != '0') ? 1 : 0,
 					'accept' => $strAccept,
+					'acceptTypes' => json_encode($strAcceptTypes),
+					'acceptExtensions' => json_encode($strAcceptExtensions),
 					'value' => $arrParameters['value']
 				);
 

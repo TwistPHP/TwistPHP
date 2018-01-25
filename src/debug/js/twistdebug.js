@@ -69,13 +69,7 @@ class twistdebug {
 	}
 
 	static objectLength( objIn ) {
-		let intLength = 0;
-		for( let mxdKey in objIn ) {
-			if( objIn.hasOwnProperty( mxdKey ) ) {
-				intLength++;
-			}
-		}
-		return intLength;
+		return objIn ? Object.keys( objIn ).length : 0;
 	}
 
 	static wrap( query, tag, classes = '' ) {
