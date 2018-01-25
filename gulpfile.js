@@ -11,7 +11,6 @@ var gulp = require( 'gulp' ),
 		jsdoc = require( 'gulp-jsdoc3' ),
 		sourcemaps = require( 'gulp-sourcemaps' );
 
-
 var strTwistSource = './src/',
 		strTwistDestination = './dist/twist/Core/Resources/twist/',
 		esOptions = {
@@ -36,9 +35,9 @@ var strTwistSource = './src/',
 			},
 			envs: ['browser']
 		},
-		rollupConfig = entry => {
+		rollupConfig = input => {
 			return {
-				entry: entry,
+				input: input,
 				plugins: [
 					rollupCJS( {
 						namedExports: {'./node_modules/form-serialize/index.js': ['serialize']}
@@ -50,15 +49,15 @@ var strTwistSource = './src/',
 					} ),
 					rollupESLint( esOptions ),
 					rollupUglify()
-				],
+				]
 			};
 		},
 		rollupExport = ( bundle, dest, umd ) => {
 			return bundle.write( {
 				format: 'umd',
-				moduleName: umd,
-				dest: dest,
-				sourceMap: true
+				name: umd,
+				file: dest,
+				sourcemap: true
 			} );
 		};
 
@@ -74,7 +73,7 @@ gulp.task( 'debug-js', () => {
 
 gulp.task( 'debug-catch-js', () => {
 	return rollup.rollup( {
-		entry: strTwistSource + 'debug/js/twistdebugcatcher.js',
+		input: strTwistSource + 'debug/js/twistdebugcatcher.js',
 		plugins: [
 			rollupBabel( {
 				presets: [['es2015', {modules: false}]],
@@ -88,9 +87,9 @@ gulp.task( 'debug-catch-js', () => {
 			.then( bundle => {
 				return bundle.write( {
 					format: 'iife',
-					moduleName: 'twistdebugcatcher',
-					dest: strTwistDestination + 'debug/js/twistdebugcatcher.js',
-					sourceMap: false
+					name: 'twistdebugcatcher',
+					file: strTwistDestination + 'debug/js/twistdebugcatcher.js',
+					sourcemap: false
 				} );
 			} );
 } );
