@@ -25,11 +25,11 @@ class twistdebug {
 		try {
 			let args = [
 				'%c %c %c TwistPHP Debug %c %c ',
-				'font-size: 15px; background: #2a5200;',
-				'font-size: 17px; background: #3f7a00;',
+				'font-size: 15px; background: #2A5200;',
+				'font-size: 17px; background: #3F7A00;',
 				'color: #FFF; font-size: 18px; background: #539F00;',
-				'font-size: 17px; background: #3f7a00;',
-				'font-size: 15px; background: #2a5200;'
+				'font-size: 17px; background: #3F7A00;',
+				'font-size: 15px; background: #2A5200;'
 			];
 
 			console.log.apply( console, args );
@@ -282,7 +282,7 @@ class twistdebug {
 									el.style.display = 'none';
 								}
 							}
-							document.querySelector( jqsTarget ).style.display = 'block';
+							domTwistDebugDetails.querySelector( jqsTarget ).style.display = 'block';
 
 							for( let el of domTwistDebugBlocks.querySelectorAll( 'button.current' ) ) {
 								el.classList.remove( 'current' );
