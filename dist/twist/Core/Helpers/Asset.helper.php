@@ -352,7 +352,7 @@
 					mkdir($strAssetGroupDir.'/original',0777,true);
 				}
 
-				$strTitle = \Twist::File()->sanitizeName(\Twist::File()->name($mxdData));
+				$strTitle = ($strTitle == '' || is_null($strTitle)) ? \Twist::File()->sanitizeName(\Twist::File()->name($mxdData)) : $strTitle;
 
 				//The filename for the asset
 				$strFileName = sprintf('%s-%s',\Twist::DateTime()->time(),\Twist::File()->name($mxdData));
@@ -492,15 +492,19 @@
 		 * @param string $strDescription Description for the asset
 		 * @param bool $blActive Default status of the asset once created in the system
 		 * @return int Returns the ID of the newly uploaded/added asset
+		 * @throws \Exception
 		 */
-
 		public function import($mxdFile,$intGroupID,$strTitle='',$strDescription='',$blActive=true){
 
-			$strTempFile = tempnam(sys_get_temp_dir(), 'asset-import');
-			file_get_contents($strTempFile,$mxdFile);
+			$strTempFile = rtrim(sys_get_temp_dir(),'/').'/'.basename($mxdFile);
+			$arrResult = \Twist::File()->download($mxdFile,$strTempFile);
+
+			if(!$arrResult['status'] || $arrResult['content-length'] == 0){
+				throw new \Exception("Unable to import remote file: ".$arrResult['error_message']);
+			}
 
 			//Store the file as an asset
-			$intOut = $this->add($mxdFile,$intGroupID,$strTitle,$strDescription,$blActive);
+			$intOut = $this->add($strTempFile,$intGroupID,$strTitle,$strDescription,$blActive);
 
 			return $intOut;
 		}

@@ -98,8 +98,8 @@ class Image{
 			'mime' => $arrImageInfo['mime']
 		);
 
+		imagealphablending($this->resImage, false);
 		imagesavealpha($this->resImage, true);
-		imagealphablending($this->resImage, true);
 	}
 
 	protected function create($intWidth,$intHeight,$strFillColour = null){
@@ -307,6 +307,43 @@ class Image{
 	}
 
 	/**
+	 * Determine the correct orientation from the Exif data and rotate/mirror is necessary
+	 * @return string
+	 */
+	public function fixOrientation(){
+
+		if(count($this->arrImageInfo['exif']) && array_key_exists('Orientation',$this->arrImageInfo['exif'])){
+
+			switch ($this->arrImageInfo['exif']['Orientation']){
+				case 2:
+					$this->flip('horizonal');
+					break;
+				case 3:
+					$this->rotate(180);
+					break;
+				case 4:
+					$this->rotate(180);
+					$this->flip('horizonal');
+					break;
+				case 5:
+					$this->rotate(90);
+					$this->flip('horizonal');
+					break;
+				case 6:
+					$this->rotate(90);
+					break;
+				case 7:
+					$this->rotate(-90);
+					$this->flip('horizonal');
+					break;
+				case 8:
+					$this->rotate(-90);
+					break;
+			}
+		}
+	}
+
+	/**
 	 * Converts a hex color value to its RGB equivalent, you can pass in a Hex color string, array(red, green, blue) or array(red, green, blue, alpha).
 	 * Red,Green,Blue must be integers between 0-255 and Alpha must be an integer between 0-127
 	 * @param mixed $mxdColour
@@ -476,6 +513,7 @@ class Image{
 	public function flip($strDirection){
 
 		$resTempImage = imagecreatetruecolor($this->intWidth, $this->intHeight);
+
 		imagealphablending($resTempImage, false);
 		imagesavealpha($resTempImage, true);
 
@@ -507,8 +545,10 @@ class Image{
 
 		// Make a copy of the image
 		$resTempImage = imagecreatetruecolor($this->intWidth, $this->intHeight);
+
 		imagealphablending($resTempImage, false);
 		imagesavealpha($resTempImage, true);
+
 		imagecopy($resTempImage, $this->resImage, 0, 0, 0, 0, $this->intWidth, $this->intHeight);
 
 		//Create new image with transparent layer (same size as original)
@@ -537,8 +577,9 @@ class Image{
 		$resColour = imagecolorallocatealpha($this->resImage, $arrRGBA['r'], $arrRGBA['g'], $arrRGBA['b'], $arrRGBA['a']);
 
 		$resTempImage = imagerotate($this->resImage,-($this->keepWithinRange($mxdAngle, -360, 360)), $resColour);
+
+		imagealphablending($resTempImage, false);
 		imagesavealpha($resTempImage, true);
-		imagealphablending($resTempImage, true);
 
 		// Update meta data
 		$this->intWidth = imagesx($resTempImage);
@@ -581,11 +622,13 @@ class Image{
 		$arrInfo = $resResource->currentInfo();
 
 		//Copy the watermark image onto the main image
+
 		if(is_null($intAlphaTransparency) || $intAlphaTransparency == 0){
 			imagecopy($this->resImage, $resResource->resource(), $intX, $intY, 0, 0, $arrInfo['width'], $arrInfo['height']);
 		}else{
 			imagecopymerge($this->resImage, $resResource->resource(), $intX, $intY, 0, 0, $arrInfo['width'], $arrInfo['height'],$intAlphaTransparency);
 		}
+
 		if($blRemoveImage){
 			$resResource->__destruct();
 		}
@@ -615,8 +658,10 @@ class Image{
 
 		//Preform the crop
 		$resTempImage = imagecreatetruecolor($intCropWidth, $intCropHeight);
+
 		imagealphablending($resTempImage, false);
 		imagesavealpha($resTempImage, true);
+
 		imagecopyresampled($resTempImage, $this->resImage, 0, 0, $intX1, $intY1, $intCropWidth, $intCropHeight, $intCropWidth, $intCropHeight);
 
 		//Update the object image details
