@@ -1,6 +1,8 @@
 <?php
 
-class Localisation extends \PHPUnit_Framework_TestCase{
+use PHPUnit\Framework\TestCase;
+
+class Localisation extends TestCase{
 
 	public function testLanguages(){
 

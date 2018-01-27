@@ -1,6 +1,8 @@
 <?php
 
-class File extends \PHPUnit_Framework_TestCase{
+use PHPUnit\Framework\TestCase;
+
+class File extends TestCase{
 
 	public function testFileSize(){
 

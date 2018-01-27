@@ -1,6 +1,8 @@
 <?php
 
-class Timer extends \PHPUnit_Framework_TestCase{
+use PHPUnit\Framework\TestCase;
+
+class Timer extends TestCase{
 
 	public function testStartStop(){
 

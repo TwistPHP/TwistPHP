@@ -1,6 +1,8 @@
 <?php
 
-class CSV extends \PHPUnit_Framework_TestCase{
+use PHPUnit\Framework\TestCase;
+
+class CSV extends TestCase{
 
 	public function testGenerate(){
 

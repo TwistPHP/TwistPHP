@@ -1,6 +1,8 @@
 <?php
 
-class UserAgent extends \PHPUnit_Framework_TestCase{
+use PHPUnit\Framework\TestCase;
+
+class UserAgent extends TestCase{
 
 	public function testGet(){
 		$_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1';

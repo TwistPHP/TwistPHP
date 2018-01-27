@@ -1,6 +1,8 @@
 <?php
 
-class Email extends \PHPUnit_Framework_TestCase{
+use PHPUnit\Framework\TestCase;
+
+class Email extends TestCase{
 
 	public static $arrSource = array();
 

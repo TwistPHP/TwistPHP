@@ -1,6 +1,8 @@
 <?php
 
-class Hooks extends \PHPUnit_Framework_TestCase{
+use PHPUnit\Framework\TestCase;
+
+class Hooks extends TestCase{
 
 	public function testGetAllHooks(){
 		$this->assertTrue(array_key_exists('TWIST_VIEW_TAG',\Twist::framework()->hooks()->getAll()));
