@@ -671,7 +671,7 @@ class View extends Base{
 	        $mxdValue = preg_replace('/^([\'|\"]{1})([\W\w]+)([\'|\"]{1})$/', '$2', $mxdValue);
 
 	        //If the length has stayed the same it is not a string and type needs correcting
-	        $blDetect = ($intLength == strlen($mxdValue));
+	        $blDetect = ($intLength != strlen($mxdValue));
 
 	        if($blDetect && $mxdValue == 'null'){
 	            $mxdValue = null;
