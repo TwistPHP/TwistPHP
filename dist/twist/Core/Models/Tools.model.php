@@ -176,7 +176,7 @@
 
 				if( is_array($arrPrimary) && array_key_exists( $strKey, $arrPrimary ) ) {
 
-					if( is_array( $mxdValue ) ) {
+					if( is_array($arrPrimary[$strKey]) && is_array( $mxdValue ) ) {
 
 						//Only time anything is different is when we process a sub-array
 						$arrPrimary[$strKey] = $this -> arrayMergeRecursive( $arrPrimary[$strKey], $mxdValue );
