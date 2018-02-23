@@ -36,7 +36,7 @@
 
 			//If no creation date is set then set one
 			if(!array_key_exists('DTSTAMP',$this->arrData)){
-				$this->creationDate(\Twist::DateTime()->date('Y-m-d H:i:s'));
+				$this->creationDate(strtotime(\Twist::DateTime()->date('Y-m-d H:i:s')));
 			}
 		}
 
@@ -183,11 +183,11 @@
 				$blValidEvent = false;
 			}
 
-			if(!array_key_exists('DTSTART;TZID=ALLDAY;VALUE=DATE',$this->arrData) && (!array_key_exists('DTSTART',$this->arrData) || $this->arrData['DTSTART'] == '')){
+			if(!(array_key_exists('DTSTART;TZID=ALLDAY;VALUE=DATE',$this->arrData) || (array_key_exists('DTSTART',$this->arrData) && $this->arrData['DTSTART'] != ''))){
 				$blValidEvent = false;
 			}
 
-			if(!array_key_exists('DTEND;TZID=ALLDAY;VALUE=DATE',$this->arrData) && (!array_key_exists('DTEND',$this->arrData) || $this->arrData['DTEND'] == '')){
+			if(!(array_key_exists('DTEND;TZID=ALLDAY;VALUE=DATE',$this->arrData) || (array_key_exists('DTEND',$this->arrData) && $this->arrData['DTEND'] != ''))){
 				$blValidEvent = false;
 			}
 
