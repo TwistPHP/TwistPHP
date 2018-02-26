@@ -783,9 +783,12 @@ class View extends Base{
 
 					$mxdValue = $this->detectType($mxdValue);
 					$arrParameters[$strKey] = (strstr($mxdValue,'|')) ? explode('|',$mxdValue) : $mxdValue;
-				}else{
+				}elseif(strstr($mxdItem,'|')){
 					$mxdItem = $this->detectType($mxdItem);
 					$arrParameters[] = (strstr($mxdItem,'|')) ? explode('|',$mxdItem) : $mxdItem;
+				}else{
+					$mxdItem = $this->detectType($mxdItem);
+					$arrParameters[$mxdItem] = true;
 				}
 			}
 		}
