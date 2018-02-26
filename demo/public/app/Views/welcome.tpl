@@ -12,7 +12,7 @@
 <ul>
     <li><a href="/view">Views</a></li>
     <li><a href="/ajaxrequests">AJAX requests</a></li>
-    <li><a href="/uploads">Fie uploads</a></li>
+    <li><a href="/upload">File uploads</a></li>
 </ul>
 </body>
 </html>
