@@ -1087,6 +1087,13 @@ class File extends Base{
 				}
 
 				break;
+
+			case 'upload-uri':
+			case 'asset-upload-uri':
+
+				$strOut = $arrParameters['uri'];
+
+				break;
 		}
 
 		return $strOut;
