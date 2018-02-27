@@ -245,6 +245,7 @@ $z-index: 1337;
 
 			border: 0 $bar-border solid;
 			border-right-width: 1px;
+			outline: none;
 
 			-webkit-transition: background ease 400ms;
 			transition: background ease 400ms;
@@ -302,7 +303,8 @@ $z-index: 1337;
 
 #twist-debug-errors,
 #twist-debug-warnings,
-#twist-debug-dumps {
+#twist-debug-info,
+#twist-debug-logs {
 	min-width: 8px;
 	padding: 0 10px;
 
@@ -327,8 +329,13 @@ $z-index: 1337;
 	//@include animate(bounceInLeft, 1s, 100ms);
 }
 
-#twist-debug-dumps {
+#twist-debug-info {
 	background-color: $blue;
+	//@include animate(bounceInLeft, 1s, 200ms);
+}
+
+#twist-debug-logs {
+	background-color: #888;
 	//@include animate(bounceInLeft, 1s, 200ms);
 }
 

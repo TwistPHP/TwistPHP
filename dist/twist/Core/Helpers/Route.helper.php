@@ -1431,6 +1431,17 @@ class Route extends Base{
 							}
 						}
 
+						//Output the Debug catcher to the screen when in debug mode (Do not output when its an ajax request)
+						if($this->blDebugMode && !(TWIST_AJAX_REQUEST || $arrRoute['type'] == 'ajax' || $arrRoute['type'] == 'rest')){
+							if(preg_match('/<head[^>]*>/', $strPageOut)) {
+								$strPageOut = preg_replace( '/(<head[^>]*>)/i', '$1' . \Twist::framework()->debug()->catcher(), $strPageOut );
+							}elseif(strstr($strPageOut, '</head>')) {
+								$strPageOut = str_replace( '</head>', \Twist::framework()->debug()->catcher() . '</head>', $strPageOut );
+							}else{
+								$strPageOut = \Twist::framework()->debug()->catcher() . $strPageOut;
+							}
+						}
+
 						//Enable GZip compression output, only when no other data has been output to the screen
 						$arrOBStatus = ob_get_status();
 						if(\Twist::framework()->setting('GZIP_COMPRESSION') && $arrOBStatus['buffer_used'] == 0 && strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false){

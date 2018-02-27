@@ -13,6 +13,7 @@
 		}
 
 		public function ring() {
+			sleep( 30 );
 			$this -> _ajaxMessage( 'The doorbell made a noise' );
 			$objResponse = array(
 				'response' => 'Hello? Who\'s there?',

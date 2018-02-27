@@ -13,7 +13,7 @@
 		{resource:arable}
 
 		<!--================================ INTERFACE RESOURCES ================================-->
-		{resource:twist/setup}
+		{resource:setup}
 
 	    <!--================================ LINKED DOCUMENTS ================================-->
 	    <link rel="shortcut icon" type="image/x-icon" href="{core:logo-favicon}">
@@ -26,7 +26,7 @@
 	<body>
 	    <div class="grid-container">
 	    <div class="grid-100 tablet-grid-100 mobile-grid-100">
-	        <h1 class="no-top-margin"><img src="{resource:core-uri}twist/logos/logo.png">TwistPHP Installation Wizard</h1>
+	        <h1 class="no-top-margin"><img src="{resource:core-uri}logos/logo.png">TwistPHP Installation Wizard</h1>
 	    </div>
 	    <ul class="tabs">
 	        {view:components/tabs.php}

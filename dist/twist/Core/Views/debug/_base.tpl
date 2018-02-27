@@ -1,7 +1,7 @@
 <div id="twist-debug">
-	<a href="https://twistphp.com/docs" target="_blank" id="twist-debug-icon" title="TwistPHP documentation"><img src="{resource:core-uri}twist/logos/logo-64.png" alt="TwistPHP documentation"></a>
+	<a href="https://twistphp.com/docs" target="_blank" id="twist-debug-icon" title="TwistPHP documentation"><img src="{resource:core-uri}logos/logo-64.png" alt="TwistPHP documentation"></a>
 	<ul id="twist-debug-blocks">
-		<li><button data-panel="#twist-debug-messages"><span id="twist-debug-errors" data-count="{data:warning_count}"><i class="fa fa-exclamation-circle"></i></span><span id="twist-debug-warnings" data-count="{data:notice_count}"><i class="fa fa-exclamation-triangle"></i></span><span id="twist-debug-dumps" data-count="{data:other_count}"><i class="fa fa-comment"></i></span></button></li><!--
+		<li><button data-panel="#twist-debug-messages"><span id="twist-debug-errors" data-count="{data:warning_count}"><i class="fa fa-exclamation-circle"></i></span><span id="twist-debug-warnings" data-count="{data:notice_count}"><i class="fa fa-exclamation-triangle"></i></span><span id="twist-debug-info" data-count="{data:other_count}"><i class="fa fa-info-circle"></i></span><span id="twist-debug-logs" data-count="0"><i class="fa fa-comment"></i></span></button></li><!--
 		--><li><button data-panel="#twist-debug-timeline"><i class="fa fa-fw fa-lg fa-clock-o"></i>{data:execution_time_formatted}<i class="fa fa-fw fa-lg fa-line-chart"></i>{bytestosize[data:memory/peak]}</button></li><!--
 		--><li><button data-panel="#twist-debug-database"><i class="fa fa-fw fa-lg fa-database"></i>{data:database_query_count}</button></li><!--
 		--><li><button data-panel="#twist-debug-ajax" id="twist-debug-ajax-count" data-count="0"><i class="fa fa-fw fa-lg fa-cloud"></i></button></li><!--
@@ -219,5 +219,4 @@
 		</div>
 	</div>
 </div>
-{resource:font-awesome}
-{resource:twist/debug}
+{resource:debug}

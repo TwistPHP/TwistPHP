@@ -13,7 +13,7 @@
 		{resource:jquery}
 
 		<!--================================ INTERFACE RESOURCES ================================-->
-		{resource:twist/manager}
+		{resource:manager}
 
 		<!--================================ LINKED DOCUMENTS ================================-->
 		<link rel="shortcut icon" type="image/x-icon" href="{core:logo-favicon}">
@@ -25,7 +25,7 @@
 	</head>
 	<body>
 	<div class="grid-container">
-		<h1 class="grid-100 tablet-grid-100 mobile-grid-100 no-vertical-margin"><img src="{resource:core-uri}twist/logos/logo.png">TwistPHP</h1>
+		<h1 class="grid-100 tablet-grid-100 mobile-grid-100 no-vertical-margin"><img src="{resource:core-uri}logos/logo.png">TwistPHP</h1>
         <ul id="menu" class="tabs grid-20 prefix-5 tablet-grid-25 mobile-grid-100">{view:./components/global/menu.php}</ul>
 		<div class="grid-70 prefix-5 tablet-grid-65 tablet-prefix-5 mobile-grid-90 mobile-prefix-5 grid-parent">
 			{route:response}

@@ -13,7 +13,7 @@
 			return $this -> _view( 'views.tpl' );
 		}
 
-		public function rajaxrequests() {
+		public function twistajax() {
 			return $this -> _view( 'ajax.tpl' );
 		}
 

@@ -13,10 +13,10 @@
         {resource:jquery}
 
         <!--================================ CSS ================================-->
-        <link href="{resource:core-uri}twist/manager/css/base.css" type="text/css" rel="stylesheet">
+        <link href="{resource:core-uri}manager/css/base.css" type="text/css" rel="stylesheet">
 
         <!--================================ JAVASCRIPT ================================-->
-        <!--<script src="{resource:core-uri}twist/manager/js/base.js"></script>-->
+        <!--<script src="{resource:core-uri}manager/js/base.js"></script>-->
 
         <!--================================ LINKED DOCUMENTS ================================-->
         <link rel="shortcut icon" type="image/x-icon" href="{core:logo-favicon}">

@@ -114,6 +114,7 @@ export default class twistfileupload {
 			debug: false,
 			dragdrop: null,
 			dragdrophoverclass: 'twistupload-drop-hover',
+			hideInput: false,
 			invalidtypemessage: 'This file type is not permitted',
 			multiple: false,
 			onabort: () => {},
@@ -228,6 +229,9 @@ export default class twistfileupload {
 		this.elements.Wrapper.appendChild( this.elements.Pseudo );
 		this.elements.Wrapper.appendChild( this.elements.ProgressWrapper );
 		this.elements.Wrapper.appendChild( this.elements.List );
+		if( this.settings.hideInput ) {
+			new Element( this.elements.Input ).hide();
+		}
 
 		this.hideProgress();
 	}
@@ -522,7 +526,9 @@ export default class twistfileupload {
 	}
 
 	hideProgress() {
-		new Element( this.elements.Input ).show();
+		if( !this.settings.hideInput ) {
+			new Element( this.elements.Input ).show();
+		}
 		new Element( this.elements.ProgressWrapper ).hide();
 
 		if( this.elements.CancelUpload ) {
