@@ -46,6 +46,18 @@ class BaseREST extends Base{
         $this->_timeout(60);
         $this->_ignoreUserAbort(true);
 
+		//If the method is POST and the data has been sent as JSON, extract the JSON into the global $_POST var
+		if(strtoupper($_SERVER['REQUEST_METHOD'] == 'POST') && strstr($_SERVER['CONTENT_TYPE'], 'application/json')){
+
+			$resSTDIN = (defined('STDIN')) ? STDIN : 'php://input';
+			$strSDIN = file_get_contents($resSTDIN);
+
+			$arrPostedJSON = json_decode($strSDIN, true);
+			if(json_last_error() === JSON_ERROR_NONE){
+				$_POST = $arrPostedJSON;
+			}
+		}
+
         //Determine the format in which to return the data, default is JSON
         self::$srtFormat = (array_key_exists('format',$_REQUEST)) ?  $_REQUEST['format'] : strtolower(self::$srtFormat);
 
