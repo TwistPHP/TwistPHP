@@ -146,6 +146,7 @@ export default class twistajax {
 	send( location, bodydata = {}, method = 'GET' ) {
 		let fetchOptions = {
 			method: method,
+			credentials: 'same-origin',
 			headers: {
 				Accept: 'application/json, text/plain, */*',
 				'Content-Type': 'application/json; charset=utf-8',
