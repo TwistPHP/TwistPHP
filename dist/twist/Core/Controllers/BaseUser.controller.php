@@ -38,6 +38,7 @@ class BaseUser extends Base{
 	protected $resUser = null;
 
 	protected $strEntryPageURI = null;
+	protected $arrAdditionalRegistrationFields = array();
 
 	public function _baseCalls(){
 
@@ -355,6 +356,14 @@ class BaseUser extends Base{
 	}
 
 	/**
+	 * Add additional feilds that will be collected upon registration, these fields must be added as inputs on the register page
+	 * @param $strFieldID
+	 */
+	public function _addRegistrationField($strFieldID){
+		$this->arrAdditionalRegistrationFields[$strFieldID] = $strFieldID;
+	}
+
+	/**
 	 * Registration form to allow a user to register for an account within the system. The registration form can be disabled within the frameworks settings for closed/invite only systems.
 	 * @return string
 	 */
@@ -414,6 +423,15 @@ class BaseUser extends Base{
 					$intUserID = $resUser->commit();
 
 					if($intUserID > 0){
+
+						if(count($this->arrAdditionalRegistrationFields)){
+
+							foreach($this->arrAdditionalRegistrationFields as $arrEachField){
+								$resUser->data($arrEachField,(array_key_exists($arrEachField,$_POST)) ? $_POST[$arrEachField] : '');
+							}
+
+							$resUser->commit();
+						}
 
 						if(\Twist::framework()->setting('USER_REGISTER_PASSWORD')){
 
