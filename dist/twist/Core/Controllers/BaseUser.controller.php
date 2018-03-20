@@ -426,8 +426,8 @@ class BaseUser extends Base{
 
 						if(count($this->arrAdditionalRegistrationFields)){
 
-							foreach($this->arrAdditionalRegistrationFields as $arrEachField){
-								$resUser->data($arrEachField,(array_key_exists($arrEachField,$_POST)) ? $_POST[$arrEachField] : '');
+							foreach($this->arrAdditionalRegistrationFields as $strEachField){
+								$resUser->data($strEachField,(array_key_exists($strEachField,$_POST)) ? $_POST[$strEachField] : '');
 							}
 
 							$resUser->commit();
