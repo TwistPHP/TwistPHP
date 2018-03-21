@@ -1099,7 +1099,9 @@ class View extends Base{
 			            $strDateFormat = $arrParameters['format'];
 		            }elseif(array_key_exists(0,$arrParameters)){
 			            $strDateFormat = $arrParameters[0];
-		            }
+		            }elseif(count($arrParameters) == 1){
+						$strDateFormat = array_pop(array_keys($arrParameters));
+					}
 
 	                $strData = date($strDateFormat,strtotime($strData));
 
