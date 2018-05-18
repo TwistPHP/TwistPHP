@@ -760,9 +760,9 @@ class View extends Base{
 		$arrParameters = array();
 
 		//Explode parameters they must be set as key=value pairs comma separated. To pass a unassociated array in the values split by  pipe symbol '|'
-		if(strstr($strReference,',')){
+		$arrReferenceParams = str_getcsv($strReference, ",", "'");
 
-			$arrReferenceParams = explode(',', $strReference);
+		if(count($arrReferenceParams)){
 			$strReference = $arrReferenceParams[0];
 
 			unset($arrReferenceParams[0]);
@@ -772,9 +772,8 @@ class View extends Base{
 					list($strKey,$mxdValue) = explode('=',$mxdItem);
 
 					//See if the value is a tag to be processed, return the value of the tag
-					if(strstr($mxdValue,':')){
-						$arrParamTagParts = explode(':',$mxdValue);
-
+					$arrParamTagParts = str_getcsv($mxdValue, ":", "'");
+					if(count($arrParamTagParts)){
 						//A tag should only have 2 parts, only process is there are 2 parts (no more, no less)
 						if(count($arrParamTagParts) == 2){
 							$mxdValue = $this->runTags(sprintf('{%s}',$mxdValue),$mxdValue,$arrParamTagParts[0],$arrParamTagParts[1],$arrData);

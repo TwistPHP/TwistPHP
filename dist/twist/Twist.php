@@ -117,6 +117,7 @@
 				self::define('TWIST_ABOVE_DOCUMENT_ROOT',$blAboveDocumentRoot);
 				self::define('TWIST_BASE_PATH',dirname($_SERVER['SCRIPT_FILENAME']));
 				self::define('TWIST_BASE_URI',$strBaseURI);
+				self::define('TWIST_BASE_URL',\Twist::framework()->setting('SITE_PROTOCOL').'://'.\Twist::framework()->setting('SITE_HOST').'/'.TWIST_BASE_URI);
 
 				date_default_timezone_set( !is_null( self::framework() -> setting('TIMEZONE') ) ? self::framework() -> setting('TIMEZONE') : 'Europe/London' );
 
