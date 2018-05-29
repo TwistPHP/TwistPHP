@@ -43,14 +43,17 @@ class twistdebug {
 
 		if( window.twist &&
 				window.twist.catches ) {
-			for( let caught of window.twist.catches ) {
-				switch( caught.type ) {
-					case 'error':
-						this.error.apply( this, caught.details );
-						break;
-					case 'warning':
-						this.warn.apply( this, caught.details );
-						break;
+			for( let caughtIndex in window.twist.catches ) {
+				if( window.twist.catches.hasOwnProperty( caughtIndex ) ) {
+					let caught = window.twist.catches[caughtIndex];
+					switch( caught.type ) {
+						case 'error':
+							this.error.apply( this, caught.details );
+							break;
+						case 'warning':
+							this.warn.apply( this, caught.details );
+							break;
+					}
 				}
 			}
 		}
@@ -84,22 +87,31 @@ class twistdebug {
 	}
 
 	static wrap( query, tag, classes = '' ) {
-		document.querySelectorAll( query )
-				.forEach( elem => {
-					const wrapper = document.createElement( tag );
-					if( classes ) {
-						wrapper.className = classes;
-					}
-					elem.parentElement.insertBefore( wrapper, elem );
-					wrapper.appendChild( elem );
-				} );
+		let els = document.querySelectorAll( query );
+
+		for( let elIndex in els ) {
+			if( els.hasOwnProperty( elIndex ) ) {
+				let el = els[elIndex]
+
+				const wrapper = document.createElement( tag );
+				if( classes ) {
+					wrapper.className = classes;
+				}
+				el.parentElement.insertBefore( wrapper, el );
+				wrapper.appendChild( el );
+			}
+		}
 	}
 
 	outputExistingAJAX() {
 		if( window.twist && window.twist.ajax ) {
-			for( let instance of window.twist.ajax.instances ) {
-				for( let request of instance.requests ) {
-					this.logAJAX( request );
+			for( let instance in window.twist.ajax.instances ) {
+				if( window.twist.ajax.instances.hasOwnProperty( instance ) ) {
+					for( let request in window.twist.ajax.instances[instance].requests ) {
+						if( window.twist.ajax.instances[instance].requests.hasOwnProperty( request ) ) {
+							this.logAJAX( window.twist.ajax.instances[instance].requests[request] );
+						}
+					}
 				}
 			}
 		}
@@ -137,7 +149,7 @@ class twistdebug {
 					if( objDetails.hasOwnProperty( strDetail ) ) {
 						let objDetail = objDetails[strDetail];
 						let strKey = strDetail.charAt( 0 ).toUpperCase() + strDetail.slice( 1 ).replace( '_', ' ' ),
-								strValue = ( typeof objDetail === 'object' ) ? '<pre>' + this.stringifyJSON( objDetail ) + '</pre>' : objDetail;
+								strValue = (typeof objDetail === 'object') ? '<pre>' + this.stringifyJSON( objDetail ) + '</pre>' : objDetail;
 						strDetailsHTML += '<dt>' + strKey + '</dt><dd>' + strValue + '</dd>';
 					}
 				}
@@ -201,7 +213,7 @@ class twistdebug {
 	recordLog( countElement, strColour, mxdValue, strURL = undefined, intLineNumber = undefined, intColumn = undefined ) {
 		let objDetails = {
 			type: typeof mxdValue,
-			length: !!mxdValue ? ( typeof mxdValue === 'object' ? Object.keys( mxdValue ).length : mxdValue.length ) : 0
+			length: !!mxdValue ? (typeof mxdValue === 'object' ? Object.keys( mxdValue ).length : mxdValue.length) : 0
 		};
 		let valueToLog = typeof mxdValue === 'object' ? mxdValue : '<p>' + mxdValue + '</p>';
 
@@ -240,15 +252,7 @@ class twistdebug {
 		let log = this.logToTwist( '#twist-debug-ajax-list', '', objRequestToLog, 'Waiting...', objRequest.options.method + ' ' + objRequest.url );
 
 
-
-
-
-
 		//console.debug( log )
-
-
-
-
 
 
 		if( log ) {
@@ -273,57 +277,66 @@ class twistdebug {
 		let domTwistDebugBlocks = document.getElementById( 'twist-debug-blocks' ),
 				domTwistDebugDetails = document.getElementById( 'twist-debug-details' );
 
-		for( let boxEl of document.getElementById( 'twist-debug-details' ).querySelectorAll( '.twist-debug-box, [class^="twist-debug-box-"], [class*=" twist-debug-box-"]' ) ) {
-			if( boxEl.querySelector( '.twist-debug-more-details' ) && !boxEl.querySelector( '.twist-debug-more-details-button' ) ) {
-				let domMoreDetails = boxEl.querySelector( '.twist-debug-more-details' ),
-						domMoreDetailsButton = document.createElement( 'a' );
+		for( let boxElIndex in document.getElementById( 'twist-debug-details' ).querySelectorAll( '.twist-debug-box, [class^="twist-debug-box-"], [class*=" twist-debug-box-"]' ) ) {
+			if( document.getElementById( 'twist-debug-details' ).querySelectorAll( '.twist-debug-box, [class^="twist-debug-box-"], [class*=" twist-debug-box-"]' ).hasOwnProperty( boxElIndex ) ) {
+				let boxEl = document.getElementById( 'twist-debug-details' ).querySelectorAll( '.twist-debug-box, [class^="twist-debug-box-"], [class*=" twist-debug-box-"]' )[boxElIndex];
+				if( boxEl.querySelector( '.twist-debug-more-details' ) &&
+						!boxEl.querySelector( '.twist-debug-more-details-button' ) ) {
+					let domMoreDetails = boxEl.querySelector( '.twist-debug-more-details' );
+					let domMoreDetailsButton = document.createElement( 'a' );
 
-				domMoreDetailsButton.classList.add( 'twist-debug-more-details-button' );
-				domMoreDetailsButton.innerHTML = '&ctdot;';
-				domMoreDetailsButton.setAttribute( 'href', '#twist-debug-more-details' );
-				domMoreDetailsButton.addEventListener( 'click',
-						function( e ) {
-							e.preventDefault();
+					domMoreDetailsButton.classList.add( 'twist-debug-more-details-button' );
+					domMoreDetailsButton.innerHTML = '&ctdot;';
+					domMoreDetailsButton.setAttribute( 'href', '#twist-debug-more-details' );
+					domMoreDetailsButton.addEventListener( 'click',
+							function( e ) {
+								e.preventDefault();
 
-							if( domMoreDetails.offsetWidth > 0 && domMoreDetails.offsetHeight > 0 ) {
-								domMoreDetails.style.display = 'none';
-							} else {
-								domMoreDetails.style.display = 'block';
+								if( domMoreDetails.offsetWidth > 0 && domMoreDetails.offsetHeight > 0 ) {
+									domMoreDetails.style.display = 'none';
+								} else {
+									domMoreDetails.style.display = 'block';
+								}
 							}
-						}
-				);
+					);
 
-				boxEl.appendChild( domMoreDetailsButton );
+					boxEl.appendChild( domMoreDetailsButton );
+				}
 			}
 		}
 
-		for( let el of domTwistDebugBlocks.querySelectorAll( 'button' ) ) {
-			el.addEventListener( 'click',
-					function( e ) {
-						e.preventDefault();
-						let domThisBlock = this;
+		for( let elIndex in domTwistDebugBlocks.querySelectorAll( 'button' ) ) {
+			if( domTwistDebugBlocks.querySelectorAll( 'button' ).hasOwnProperty( elIndex ) ) {
+				let el = domTwistDebugBlocks.querySelectorAll( 'button' )[elIndex];
+				el.addEventListener( 'click', function( e ) {
+					e.preventDefault();
+					let domThisBlock = this;
 
-						if( domThisBlock.classList.contains( 'current' ) ) {
-							domTwistDebugDetails.classList.remove( 'show' );
-							domThisBlock.classList.remove( 'current' );
-						} else {
-							let jqsTarget = domThisBlock.getAttribute( 'data-panel' );
+					if( domThisBlock.classList.contains( 'current' ) ) {
+						domTwistDebugDetails.classList.remove( 'show' );
+						domThisBlock.classList.remove( 'current' );
+					} else {
+						let jqsTarget = domThisBlock.getAttribute( 'data-panel' );
 
-							domTwistDebugDetails.classList.add( 'show' );
-							for( let el of domTwistDebugDetails.children ) {
-								if( el.tagName.toLowerCase() === 'div' ) {
-									el.style.display = 'none';
-								}
+						domTwistDebugDetails.classList.add( 'show' );
+						for( let elIndex in domTwistDebugDetails.children ) {
+							let el = domTwistDebugDetails.children[elIndex]
+							if( el.tagName.toLowerCase() === 'div' ) {
+								el.style.display = 'none';
 							}
-							domTwistDebugDetails.querySelector( jqsTarget ).style.display = 'block';
-
-							for( let el of domTwistDebugBlocks.querySelectorAll( 'button.current' ) ) {
-								el.classList.remove( 'current' );
-							}
-
-							domThisBlock.classList.add( 'current' );
 						}
-					} );
+						domTwistDebugDetails.querySelector( jqsTarget ).style.display = 'block';
+
+						for( let el in domTwistDebugBlocks.querySelectorAll( 'button.current' ) ) {
+							if( domTwistDebugBlocks.querySelectorAll( 'button.current' ).hasOwnProperty( el ) ) {
+								domTwistDebugBlocks.querySelectorAll( 'button.current' )[el].classList.remove( 'current' );
+							}
+						}
+
+						domThisBlock.classList.add( 'current' );
+					}
+				} );
+			}
 		}
 
 		document.getElementById( 'close-twist-debug-details' ).addEventListener( 'click',

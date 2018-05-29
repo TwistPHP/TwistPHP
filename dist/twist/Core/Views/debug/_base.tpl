@@ -112,10 +112,12 @@
 				<h6>Current Route</h6>
                 <table>
                     <thead>
-                        <th>Key</th>
-                        <th>Value</th>
-                        <th>Type</th>
-                        <th>Length</th>
+                        <tr>
+                            <th>Key</th>
+                            <th>Value</th>
+                            <th>Type</th>
+                            <th>Length</th>
+                        </tr>
                     </thead>
                     <tbody>
                         {data:current_route}
@@ -125,10 +127,12 @@
 					<h6>$_GET Params</h6>
                     <table>
                         <thead>
-                            <th>Key</th>
-                            <th>Value</th>
-                            <th>Type</th>
-                            <th>Length</th>
+                            <tr>
+                                <th>Key</th>
+                                <th>Value</th>
+                                <th>Type</th>
+                                <th>Length</th>
+                            </tr>
                         </thead>
                         <tbody>
                             {data:get}
@@ -139,10 +143,12 @@
 					<h6>$_POST Params</h6>
                     <table>
                         <thead>
-                            <th>Key</th>
-                            <th>Value</th>
-                            <th>Type</th>
-                            <th>Length</th>
+                            <tr>
+                                <th>Key</th>
+                                <th>Value</th>
+                                <th>Type</th>
+                                <th>Length</th>
+                            </tr>
                         </thead>
                         <tbody>
                             {data:post}
@@ -153,10 +159,12 @@
 					<h6>PHP $_SESSION</h6>
                     <table>
                         <thead>
-                            <th>Key</th>
-                            <th>Value</th>
-                            <th>Type</th>
-                            <th>Length</th>
+                            <tr>
+                                <th>Key</th>
+                                <th>Value</th>
+                                <th>Type</th>
+                                <th>Length</th>
+                            </tr>
                         </thead>
                         <tbody>
                             {data:php_session}
@@ -167,10 +175,12 @@
 					<h6>Twist $_SESSION</h6>
                     <table>
                         <thead>
-                            <th>Key</th>
-                            <th>Value</th>
-                            <th>Type</th>
-                            <th>Length</th>
+                            <tr>
+                                <th>Key</th>
+                                <th>Value</th>
+                                <th>Type</th>
+                                <th>Length</th>
+                            </tr>
                         </thead>
                         <tbody>
                             {data:twist_session}
@@ -181,10 +191,12 @@
 					<h6>Cookies</h6>
                     <table>
                         <thead>
-                            <th>Key</th>
-                            <th>Value</th>
-                            <th>Type</th>
-                            <th>Length</th>
+                            <tr>
+                                <th>Key</th>
+                                <th>Value</th>
+                                <th>Type</th>
+                                <th>Length</th>
+                            </tr>
                         </thead>
                         <tbody>
                             {data:cookie}
@@ -194,10 +206,12 @@
 				<h6>Request Headers</h6>
                 <table>
                     <thead>
-                        <th>Key</th>
-                        <th>Value</th>
-                        <th>Type</th>
-                        <th>Length</th>
+                        <tr>
+                            <th>Key</th>
+                            <th>Value</th>
+                            <th>Type</th>
+                            <th>Length</th>
+                        </tr>
                     </thead>
                     <tbody>
                         {data:request_headers}
@@ -206,10 +220,12 @@
 				<h6>Server Information</h6>
                 <table>
                     <thead>
-                        <th>Key</th>
-                        <th>Value</th>
-                        <th>Type</th>
-                        <th>Length</th>
+                        <tr>
+                            <th>Key</th>
+                            <th>Value</th>
+                            <th>Type</th>
+                            <th>Length</th>
+                        </tr>
                     </thead>
                     <tbody>
                         {data:server}
