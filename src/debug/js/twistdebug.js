@@ -320,9 +320,11 @@ class twistdebug {
 
 						domTwistDebugDetails.classList.add( 'show' );
 						for( let elIndex in domTwistDebugDetails.children ) {
-							let el = domTwistDebugDetails.children[elIndex]
-							if( el.tagName.toLowerCase() === 'div' ) {
-								el.style.display = 'none';
+							if( domTwistDebugDetails.children.hasOwnProperty( elIndex ) ) {
+								let el = domTwistDebugDetails.children[elIndex];
+								if( el.tagName.toLowerCase() === 'div' ) {
+									el.style.display = 'none';
+								}
 							}
 						}
 						domTwistDebugDetails.querySelector( jqsTarget ).style.display = 'block';
