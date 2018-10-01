@@ -369,7 +369,7 @@ export default class twistfileupload {
 
 													this.updateUploadedList();
 
-													if( window.twist.debug ) {
+													if( window.twist && window.twist.debug ) {
 														window.twist.debug.logFileUpload( resFile, jsonResponse );
 													}
 
@@ -395,7 +395,7 @@ export default class twistfileupload {
 
 													this.updateUploadedList();
 
-													if( window.twist.debug ) {
+													if( window.twist && window.twist.debug ) {
 														window.twist.debug.logFileUpload( resFile, jsonResponse );
 													}
 
