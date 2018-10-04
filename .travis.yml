@@ -31,6 +31,7 @@ before_install:
 
 install:
   - if [[ ${COVERALLS} == "true" ]]; then composer require satooshi/php-coveralls '~1.0'; fi;
+  - composer require phpunit/phpunit '5.7.*'
   - php ./tests/install.php
 
 before_script:
