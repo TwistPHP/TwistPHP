@@ -41,7 +41,7 @@ before_script:
 
 script:
   - if [[ ${GULP} == "true" ]]; then gulp test; fi;
-  - phpunit --configuration phpunit.xml --debug
+  - ./vendor/bin/phpunit --configuration phpunit.xml --debug
 
 notifications:
   on_success: never
