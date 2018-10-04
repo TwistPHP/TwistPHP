@@ -16,7 +16,7 @@
 
     <testsuites>
         <testsuite name="PHP Coveralls component test suite">
-            <directory>./tests/</directory>
+            <directory suffix="Test.php">./tests/</directory>
         </testsuite>
     </testsuites>
 
@@ -27,6 +27,7 @@
                 <file>./dist/twist/framework.php</file>
                 <directory>./dist/twist/Config</directory>
                 <file>./dist/twist/Core/boot.php</file>
+                <directory>./demo</directory>
                 <directory>./docs</directory>
                 <directory>./src</directory>
                 <directory>./tests</directory>

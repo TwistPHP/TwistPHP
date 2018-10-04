@@ -31,7 +31,6 @@ before_install:
 
 install:
   - if [[ ${COVERALLS} == "true" ]]; then composer require satooshi/php-coveralls '~1.0'; fi;
-  - composer require phpunit/phpunit '5.7.*'
   - php ./tests/install.php
 
 before_script:
@@ -42,7 +41,7 @@ before_script:
 
 script:
   - if [[ ${GULP} == "true" ]]; then gulp test; fi;
-  - ./vendor/bin/phpunit --configuration phpunit.xml --debug
+  - phpunit --configuration phpunit.xml --coverage-text
 
 notifications:
   on_success: never
