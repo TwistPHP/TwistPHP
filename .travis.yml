@@ -41,7 +41,7 @@ before_script:
 
 script:
   - if [[ ${GULP} == "true" ]]; then gulp test; fi;
-  - phpunit --configuration phpunit.xml --coverage-text
+  - phpunit --configuration phpunit.xml
 
 notifications:
   on_success: never

@@ -411,10 +411,18 @@
 			return $strOut;
 		}
 
+        /**
+         * Auto runs the corn jobs, example commands below:
+         * twist_cron=on php -t "/doc/root/if/required" ./index.php
+         * twist_cron=off php -t "/doc/root/if/required" ./index.php
+         *
+         */
 		public static function sheduledtasks(){
 
 			//If the code has been run by commandline and has the URI of index.php/cron
-			if(php_sapi_name() == "cli"){
+			if(php_sapi_name() == "cli" && getenv('twist_cron') == 'on'){
+
+                echo "== Starting TwistCron Manager ==\n";
 
 				$arrTasks = Twist\Core\Models\ScheduledTasks::activeTasks();
 
@@ -422,6 +430,7 @@
 					Twist\Core\Models\ScheduledTasks::run($arrEachTask['id']);
 				}
 
+				echo "== Finished TwistCron Manager ==\n";
 				die();
 			}
 		}
