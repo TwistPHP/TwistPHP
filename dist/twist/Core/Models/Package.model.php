@@ -85,7 +85,7 @@
 									'slug' => $strPackageSlug,
 									'name' => $arrDetails['name'],
 									'version' => $arrDetails['version'],
-									'key' => $arrDetails['key'],
+									'key' => (array_key_exists('key',$arrDetails)) ? $arrDetails['key'] : '',
 									'folder' => basename($dirPackage),
 									'package' => 1,
 									'details' => $arrDetails
