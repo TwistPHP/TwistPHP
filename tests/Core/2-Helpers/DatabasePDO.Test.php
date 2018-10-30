@@ -7,6 +7,8 @@ class DatabasePDO extends TestCase{
 	public function testConnect(){
 		//Create a conncetion using PDO rather than the default MySQLi
 		\Twist::Database('pdo-test')->connect(TWIST_DATABASE_HOST,TWIST_DATABASE_USERNAME,TWIST_DATABASE_PASSWORD,TWIST_DATABASE_NAME,'pdo');
+
+		$this->assertTrue(\Twist::Database('pdo-test')->connceted());
 	}
 
 	public function testQuery(){
