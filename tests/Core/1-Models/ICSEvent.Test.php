@@ -6,7 +6,7 @@
 
 		public function testCreate(){
 
-			$resEvent = \Twist::ICS()->createEvent()();
+			$resEvent = \Twist::ICS()->createEvent();
 			$this->assertTrue(strstr($resEvent->getRaw(), 'BEGIN:VEVENT') !== false);
 
 			$this->assertNull($resEvent->startDate());
