@@ -5,12 +5,11 @@ dist: trusty
 os: linux
 
 php:
-  - 7
-    env PHPUNIT6=true
   - 7.1
     env COVERALLS=true
     env GULP=true
   - 7.2
+  - 7.3
   - nightly
 
 services:
@@ -31,7 +30,6 @@ before_install:
   - if [[ ${GULP} == "true" ]]; then nvm install 8.9.4&&npm install; fi;
 
 install:
-  - if [[ ${PHPUNIT6} == "true" ]]; then composer require phpunit/phpunit '6.*'; fi;
   - if [[ ${COVERALLS} == "true" ]]; then composer require satooshi/php-coveralls '~1.0'; fi;
   - php ./tests/install.php
 
