@@ -9,10 +9,10 @@
 			$resEvent = \Twist::ICS()->createEvent();
 
 			//Check that the validation works
-			$this->assertTrue(strstr($resEvent->getRaw(), 'Event validation failed'));
+			$this->assertTrue(strstr($resEvent->getRaw(), 'Event validation failed') !== false);
 
 			//Check the output when bypassing validation
-			$this->assertTrue(strstr($resEvent->getRaw(true), 'BEGIN:VEVENT'));
+			$this->assertTrue(strstr($resEvent->getRaw(true), 'BEGIN:VEVENT') !== false);
 
 			$this->assertNull($resEvent->startDate());
 			$resEvent->startDate('2018-11-09 00:00:00');
@@ -43,6 +43,6 @@
 			$this->assertTrue(strstr($resEvent->getRaw(true), 'URL') && strstr($resEvent->getRaw(), 'https://twistphp.com'));
 
 			//Now check teh output without bypassing validation
-			$this->assertTrue(strstr($resEvent->getRaw(), 'BEGIN:VEVENT'));
+			$this->assertTrue(strstr($resEvent->getRaw(), 'BEGIN:VEVENT') !== false);
 		}
 	}
