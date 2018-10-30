@@ -16,11 +16,11 @@
 
 			$this->assertNull($resEvent->startDate());
 			$resEvent->startDate('2018-11-09 00:00:00');
-			$this->assertTrue(strstr($resEvent->getRaw(true), 'DTSTART') && strstr($resEvent->getRaw(true), '20181109'));
+			$this->assertTrue(strstr($resEvent->getRaw(true), 'DTSTART') !== false);
 
 			$this->assertNull($resEvent->endDate());
 			$resEvent->endDate('2018-11-10 00:00:00');
-			$this->assertTrue(strstr($resEvent->getRaw(true), 'DTEND') && strstr($resEvent->getRaw(true), '20181110'));
+			$this->assertTrue(strstr($resEvent->getRaw(true), 'DTEND') !== false);
 
 			$this->assertNull($resEvent->allDay());
 			$resEvent->allDay('2018-11-09 00:00:00');
