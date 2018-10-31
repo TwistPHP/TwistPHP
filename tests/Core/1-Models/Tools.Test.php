@@ -1,6 +1,8 @@
 <?php
 
-class Tools extends \PHPUnit_Framework_TestCase{
+use PHPUnit\Framework\TestCase;
+
+class Tools extends TestCase{
 
 	public function testTraverseURI(){
 		//Need to look at this

@@ -1,6 +1,8 @@
 <?php
 
-class Cache extends \PHPUnit_Framework_TestCase{
+use PHPUnit\Framework\TestCase;
+
+class Cache extends TestCase{
 
 	public function testReadWrite(){
 		\Twist::Cache()->write('cache-test','pass',10);

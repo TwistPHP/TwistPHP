@@ -1,12 +1,30 @@
 <?php
 
-class Validate extends \PHPUnit_Framework_TestCase{
+use PHPUnit\Framework\TestCase;
+
+class Validate extends TestCase{
 
 	public function testCreateTest(){
 
 		$resValidation = \Twist::Validate()->createTest();
 
 		$this->assertTrue(is_resource($resValidation) || is_object($resValidation));
+
+		$arrTestData = array(
+			'compare1' => 'test-string',
+			'compare2' => 'test-string',
+			'string' => 'test-string',
+			'email' => 'test-string',
+			'integer' => 12
+		);
+
+		$resValidation->checkCompare('compare1','compare2');
+		$resValidation->checkString('string');
+		$resValidation->checkEmail('email');
+		$resValidation->checkInteger('integer');
+		$resValidation->test($arrTestData);
+
+		$this->assertFalse($resValidation->success());
 	}
 
 	public function testComparisons(){

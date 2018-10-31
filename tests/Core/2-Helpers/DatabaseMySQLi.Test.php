@@ -1,6 +1,8 @@
 <?php
 
-class DatabaseMySQLi extends \PHPUnit_Framework_TestCase{
+use PHPUnit\Framework\TestCase;
+
+class DatabaseMySQLi extends TestCase{
 
 	public function testQuery(){
 

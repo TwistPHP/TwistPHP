@@ -139,9 +139,9 @@
 			$this->arrData['LAST-MODIFIED'] = gmstrftime("%Y%m%dT%H%M00Z", strtotime(\Twist::DateTime()->date('Y-m-d H:i:s')));
 		}
 
-		public function getRaw(){
+		public function getRaw($blBypassValidation = false){
 
-			if($this->validateEvent()){
+			if($blBypassValidation || $this->validateEvent()){
 
 				$strOut = sprintf("BEGIN:VEVENT%s",$this->strReturnCode);
 

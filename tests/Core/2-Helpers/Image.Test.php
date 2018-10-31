@@ -1,6 +1,8 @@
 <?php
 
-	class Image extends \PHPUnit_Framework_TestCase{
+	use PHPUnit\Framework\TestCase;
+
+	class Image extends TestCase{
 
 		public static $resImage = null;
 		public static $strImageCode = '';

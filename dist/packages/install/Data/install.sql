@@ -97,9 +97,9 @@ CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`scheduled_tasks` (
   `package_slug` char(64) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `frequency` char(16) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1',
   `command` char(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `enabled` enum('1','0') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1',
+  `enabled` ENUM('1','0') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1;
 
 -- --------------------------------------------------------
 

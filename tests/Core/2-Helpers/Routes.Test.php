@@ -1,6 +1,8 @@
 <?php
 
-class Routes extends \PHPUnit_Framework_TestCase{
+use PHPUnit\Framework\TestCase;
+
+class Routes extends TestCase{
 
 	private function simulateRequest($strURI,$strRequestMethod = 'GET',$arrParameterData = array()){
 

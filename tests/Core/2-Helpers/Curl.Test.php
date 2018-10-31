@@ -1,6 +1,8 @@
 <?php
 
-class Curl extends \PHPUnit_Framework_TestCase{
+use PHPUnit\Framework\TestCase;
+
+class Curl extends TestCase{
 
 	public function testGetRequest(){
 

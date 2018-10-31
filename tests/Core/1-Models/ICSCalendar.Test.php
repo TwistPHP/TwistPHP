@@ -1,6 +1,8 @@
 <?php
 
-class ICSCalendar extends \PHPUnit_Framework_TestCase{
+use PHPUnit\Framework\TestCase;
+
+class ICSCalendar extends TestCase{
 
 	public function testCreate(){
 

@@ -1,6 +1,8 @@
 <?php
 
-class Session extends \PHPUnit_Framework_TestCase{
+use PHPUnit\Framework\TestCase;
+
+class Session extends TestCase{
 
 	public function testReadWrite(){
 		\Twist::Session()->data('session-test','pass');

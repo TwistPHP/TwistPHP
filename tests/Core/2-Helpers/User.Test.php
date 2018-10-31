@@ -1,6 +1,8 @@
 <?php
 
-class User extends \PHPUnit_Framework_TestCase{
+use PHPUnit\Framework\TestCase;
+
+class User extends TestCase{
 
 	public static $intUserID = 0;
 

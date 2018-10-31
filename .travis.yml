@@ -1,10 +1,15 @@
 language: php
 
+group: stable
+dist: trusty
+os: linux
+
 php:
-  - 7
   - 7.1
     env COVERALLS=true
     env GULP=true
+  - 7.2
+  - 7.3
   - nightly
 
 services:
@@ -26,7 +31,6 @@ before_install:
 
 install:
   - if [[ ${COVERALLS} == "true" ]]; then composer require satooshi/php-coveralls '~1.0'; fi;
-  - composer require phpunit/phpunit:6.5.5
   - php ./tests/install.php
 
 before_script:
@@ -37,7 +41,7 @@ before_script:
 
 script:
   - if [[ ${GULP} == "true" ]]; then gulp test; fi;
-  - vendor/bin/phpunit
+  - phpunit --configuration phpunit.xml
 
 notifications:
   on_success: never
