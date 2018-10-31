@@ -1,7 +1,7 @@
 <div class="grid-100 tablet-grid-100 mobile-grid-100">
     <h2 class="no-top-padding">TwistProtect: Firewall</h2>
     <a href="?status=enable" class="button fat blue float-right"><i class="fa fa-key"></i> Enable Firewall</a>
-    <p>Visitors that have been blocked from accessing the site, these visitors will see a  error message for a specified period of time. Reasons for being block are too many failed login attempts, too many password resets, too many 403,404 requests or being manually blocked.</p>
+    <p>Visitors that have been blocked from accessing the site, these visitors will see a 403 error message for a specified period of time. Reasons for being block are too many failed login attempts, too many password resets, too many 403,404 requests or being manually blocked.</p>
 
     <dl>
         <dt>Watched IPs</dt><dd></dd>
