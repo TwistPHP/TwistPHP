@@ -5,7 +5,7 @@
 	class Asset extends TestCase{
 
 		public function testAdd(){
-			$intAssetID = \Twist::Asset()->add('https://twistphp.com');
+			$intAssetID = \Twist::Asset()->add('https://twistphp.com',9,'TwistPHP');
 			$this -> assertEquals($intAssetID,1);
 		}
 
