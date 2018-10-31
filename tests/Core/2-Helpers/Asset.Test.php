@@ -11,6 +11,6 @@
 
 		public function testGet(){
 			$arrAsset = \Twist::Asset()->get(1);
-			$this -> assertEquals($arrAsset['path'],'https://twistphp.com');
+			$this -> assertEquals($arrAsset['data'],'https://twistphp.com');
 		}
 	}
