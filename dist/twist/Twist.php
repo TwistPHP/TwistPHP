@@ -152,6 +152,8 @@
 
 				self::recordEvent('Framework ready');
 				self::define('TWIST_LAUNCHED',1);
+
+				\Twist\Core\Models\Security\Protect::firewall();
 			}
 		}
 

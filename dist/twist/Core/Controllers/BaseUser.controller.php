@@ -184,10 +184,12 @@ class BaseUser extends Base{
 				$resUser = $this->resUser->get($arrUserData['id']);
 				$resUser->resetPassword(true);
 				$resUser->commit();
-
-				\Twist::Session()->data('site-login_message','A temporary password has been emailed to you');
-				\Twist::redirect('./login');
 			}
+
+			Protect::passwordReset();
+
+			\Twist::Session()->data('site-login_message','If registered a temporary password will be sent to the provided email address');
+			\Twist::redirect('./login');
 		}
 
 		\Twist::redirect('./forgotten-password');

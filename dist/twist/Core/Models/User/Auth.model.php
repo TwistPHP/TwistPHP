@@ -24,6 +24,8 @@
 
 namespace Twist\Core\Models\User;
 
+use Twist\Core\Models\Security\Protect;
+
 class Auth{
 
     protected static $blValidated = false;
@@ -219,6 +221,12 @@ class Auth{
 		        self::$arrCurrentSession['message'] = 'Invalid login credentials, please try again';
 		        self::$arrCurrentSession['diagnosis'] = 'Email address not registered to a user';
 	        }
+
+			if(self::$arrCurrentSession['status']){
+				Protect::successLogin();
+			}else{
+				Protect::failedLogin();
+			}
         }
 
         return self::$arrCurrentSession;
