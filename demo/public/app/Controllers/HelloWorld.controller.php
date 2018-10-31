@@ -13,11 +13,11 @@
 			return $this -> _view( 'views.tpl' );
 		}
 
-		public function ajaxrequests() {
+		public function twistajax() {
 			return $this -> _view( 'ajax.tpl' );
 		}
 
-		public function testuploads() {
+		public function upload() {
 			return $this -> _view( 'upload.tpl' );
 		}
 

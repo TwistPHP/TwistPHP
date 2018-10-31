@@ -760,9 +760,9 @@ class View extends Base{
 		$arrParameters = array();
 
 		//Explode parameters they must be set as key=value pairs comma separated. To pass a unassociated array in the values split by  pipe symbol '|'
-		if(strstr($strReference,',')){
+		$arrReferenceParams = str_getcsv($strReference, ",", "'");
 
-			$arrReferenceParams = explode(',', $strReference);
+		if(count($arrReferenceParams)){
 			$strReference = $arrReferenceParams[0];
 
 			unset($arrReferenceParams[0]);
@@ -772,9 +772,8 @@ class View extends Base{
 					list($strKey,$mxdValue) = explode('=',$mxdItem);
 
 					//See if the value is a tag to be processed, return the value of the tag
-					if(strstr($mxdValue,':')){
-						$arrParamTagParts = explode(':',$mxdValue);
-
+					$arrParamTagParts = str_getcsv($mxdValue, ":", "'");
+					if(count($arrParamTagParts)){
 						//A tag should only have 2 parts, only process is there are 2 parts (no more, no less)
 						if(count($arrParamTagParts) == 2){
 							$mxdValue = $this->runTags(sprintf('{%s}',$mxdValue),$mxdValue,$arrParamTagParts[0],$arrParamTagParts[1],$arrData);
@@ -783,9 +782,12 @@ class View extends Base{
 
 					$mxdValue = $this->detectType($mxdValue);
 					$arrParameters[$strKey] = (strstr($mxdValue,'|')) ? explode('|',$mxdValue) : $mxdValue;
-				}else{
+				}elseif(strstr($mxdItem,'|')){
 					$mxdItem = $this->detectType($mxdItem);
 					$arrParameters[] = (strstr($mxdItem,'|')) ? explode('|',$mxdItem) : $mxdItem;
+				}else{
+					$mxdItem = $this->detectType($mxdItem);
+					$arrParameters[$mxdItem] = true;
 				}
 			}
 		}
@@ -1096,7 +1098,9 @@ class View extends Base{
 			            $strDateFormat = $arrParameters['format'];
 		            }elseif(array_key_exists(0,$arrParameters)){
 			            $strDateFormat = $arrParameters[0];
-		            }
+		            }elseif(count($arrParameters) == 1){
+						$strDateFormat = array_pop(array_keys($arrParameters));
+					}
 
 	                $strData = date($strDateFormat,strtotime($strData));
 

@@ -246,7 +246,7 @@ class Resources{
 	 * If requesting a file in either twist or packages it can be over-ridden by placing a corresponding file in the apps folder, for example:
 	 *
 	 * [packages/Lavish/Resources/css/base.css] is over-ridden by [app/Packages/Lavish/Resources/css/base.css]
-	 * [twist/Core/Resources/jquery/jquery-1.11.3.min.js] is over-ridden by [app/Twist/Core/Resources/jquery/jquery-1.11.3.min.js]
+	 * [twist/Core/Resources/ajax/twistajax.js] is over-ridden by [app/Twist/Core/Resources/ajax/twistajax.js]
 	 *
 	 * To allow these overrides you must place a .htaccess file containing "Allow from all" in "app/Twist/Core/Resources/" or "app/Packages/Lavish/Resources/"
 	 *

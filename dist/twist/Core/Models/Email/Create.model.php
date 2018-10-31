@@ -395,10 +395,8 @@ class Create{
 		$this->arrEmailData['headers'] .= ($this->arrEmailData['from_name'] != '') ? sprintf("From: %s <%s>\r\n",$this->convertEncodingHeader($this->arrEmailData['from_name']),$this->arrEmailData['from_email']) : sprintf("From: %s\r\n",$this->arrEmailData['from_email']);
 
 		if(array_key_exists('reply_to',$this->arrEmailData) && $this->arrEmailData['reply_to'] != ''){
-			if($this->arrEmailData['reply_to'] != ''){
-				$this->arrEmailData['headers'] .= sprintf("Reply-To: %s\r\n",$this->arrEmailData['reply_to']);
-				$this->arrEmailData['headers'] .= sprintf("Return-Path: %s\r\n",$this->arrEmailData['reply_to']);
-			}
+			$this->arrEmailData['headers'] .= sprintf("Reply-To: %s\r\n",$this->arrEmailData['reply_to']);
+			$this->arrEmailData['headers'] .= sprintf("Return-Path: %s\r\n",$this->arrEmailData['reply_to']);
 		}
 
 		//Encode the subject

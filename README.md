@@ -39,7 +39,7 @@ Please use the [GitHub's issue tracker](https://github.com/TwistPHP/TwistPHP/iss
 
 ### Modifications
 
-The CSS and JS resources for TwistPHP are compiled using Gulp. After cloning the repository, you can install the necessary packages with `npm install` and then compile using `gulp`. The source files for all the resources can be found in the `/src/Core/Resources/twist` directory.
+The CSS and JS resources for TwistPHP are compiled using Gulp. After cloning the repository, you can install the necessary packages with `npm install` and then compile using `gulp`. The source files for all the resources can be found in the `/src` directory.
 
 ### Branches
 

@@ -63,9 +63,9 @@ class Element {
 	}
 
 	toggle( show ) {
-		let value = this.el.getAttribute( 'data-initialdisplay' ),
-				display = this.el.style.display,
-				computedDisplay = (window.getComputedStyle ? getComputedStyle( this.el, null ) : this.el.currentStyle).display;
+		let value = this.el.getAttribute( 'data-initialdisplay' );
+		let display = this.el.style.display;
+		let computedDisplay = (window.getComputedStyle ? getComputedStyle( this.el, null ) : this.el.currentStyle).display;
 
 		if( show ) {
 			if( !value &&
@@ -106,7 +106,7 @@ export default class twistfileupload {
 			}
 		}
 
-		this.settings = Object.assign( {
+		let defaultSettings = {
 			abortable: true,
 			acceptTypes: [],
 			acceptExtensions: [],
@@ -114,6 +114,7 @@ export default class twistfileupload {
 			debug: false,
 			dragdrop: null,
 			dragdrophoverclass: 'twistupload-drop-hover',
+			hideInput: false,
 			invalidtypemessage: 'This file type is not permitted',
 			multiple: false,
 			onabort: () => {},
@@ -126,7 +127,20 @@ export default class twistfileupload {
 			onstart: () => {},
 			previewsize: 128,
 			previewsquare: true
-		}, settings );
+		};
+
+		//this.settings = Object.assign( {}, defaultSettings, settings );
+		this.settings = {};
+
+
+		for( let setting in defaultSettings ) {
+			this.settings[setting] = settings[setting] || defaultSettings[setting];
+		}
+
+
+
+
+
 
 		this.id = id;
 		this.elements = {
@@ -201,8 +215,8 @@ export default class twistfileupload {
 	}
 
 	static prettySize( intBytes ) {
-		let arrLimits = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
-				intLimit = 0;
+		let arrLimits = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+		let intLimit = 0;
 
 		while( arrLimits[intLimit] && intBytes > Math.pow( 1024, intLimit + 1 ) ) {
 			intLimit++;
@@ -228,6 +242,9 @@ export default class twistfileupload {
 		this.elements.Wrapper.appendChild( this.elements.Pseudo );
 		this.elements.Wrapper.appendChild( this.elements.ProgressWrapper );
 		this.elements.Wrapper.appendChild( this.elements.List );
+		if( this.settings.hideInput ) {
+			new Element( this.elements.Input ).hide();
+		}
 
 		this.hideProgress();
 	}
@@ -280,16 +297,17 @@ export default class twistfileupload {
 			}
 
 			if( this.queue.length ) {
-				let resFile = this.queue[0],
-						strFileName = resFile.name,
-						strFileType = resFile.type,
-						strFileExtention = strFileName.substr( strFileName.lastIndexOf( '.' ) + 1 ).toLowerCase(),
-						intFileSize = parseInt( resFile.size ),
-						resFileReader = new FileReader( {blob: true} ),
-						blAcceptedType = !this.settings.acceptTypes.length && !this.settings.acceptExtensions.length;
+				let resFile = this.queue[0];
+				let strFileName = resFile.name;
+				let strFileType = resFile.type;
+				let strFileExtention = strFileName.substr( strFileName.lastIndexOf( '.' ) + 1 ).toLowerCase();
+				let intFileSize = parseInt( resFile.size );
+				let resFileReader = new FileReader( {blob: true} );
+				let blAcceptedType = !this.settings.acceptTypes.length && !this.settings.acceptExtensions.length;
 
 				if( !blAcceptedType ) {
-					for( let type of this.settings.acceptTypes ) {
+					for( let typeIndex in this.settings.acceptTypes ) {
+						let type = this.settings.acceptTypes[typeIndex];
 						if( new RegExp( '^' + type.replace( '*', '.*' ) + '$', 'gi' ).test( strFileType ) ) {
 							blAcceptedType = true;
 							break;
@@ -301,9 +319,9 @@ export default class twistfileupload {
 					if( this.settings.acceptExtensions.indexOf( '.' + strFileExtention ) !== -1 ) {
 						blAcceptedType = true;
 					}
-					
-					for( let extention of this.settings.acceptExtensions ) {
 
+					for( let extentionIndex in this.settings.acceptExtensions ) {
+						let extention = this.settings.acceptExtensions[extentionIndex]
 						if( strFileExtention === extention ) {
 							blAcceptedType = true;
 							break;
@@ -329,8 +347,7 @@ export default class twistfileupload {
 						new Element( this.elements.CountWrapper ).show();
 					}
 
-					resFileReader.addEventListener( 'load',
-							e => {
+					resFileReader.addEventListener( 'load', e => {
 								this.request.onreadystatechange = () => {
 									switch( this.request.status ) {
 										case 200:
@@ -352,7 +369,7 @@ export default class twistfileupload {
 
 													this.updateUploadedList();
 
-													if( window.twist.debug ) {
+													if( window.twist && window.twist.debug ) {
 														window.twist.debug.logFileUpload( resFile, jsonResponse );
 													}
 
@@ -378,7 +395,7 @@ export default class twistfileupload {
 
 													this.updateUploadedList();
 
-													if( window.twist.debug ) {
+													if( window.twist && window.twist.debug ) {
 														window.twist.debug.logFileUpload( resFile, jsonResponse );
 													}
 
@@ -471,8 +488,7 @@ export default class twistfileupload {
 								this.request.setRequestHeader( 'Twist-Length', intFileSize );
 								this.request.setRequestHeader( 'Twist-UID', this.id );
 								this.request.send( resFileReader.result );
-							}
-					);
+							} );
 
 					resFileReader.readAsArrayBuffer( resFile );
 				} else {
@@ -522,7 +538,9 @@ export default class twistfileupload {
 	}
 
 	hideProgress() {
-		new Element( this.elements.Input ).show();
+		if( !this.settings.hideInput ) {
+			new Element( this.elements.Input ).show();
+		}
 		new Element( this.elements.ProgressWrapper ).hide();
 
 		if( this.elements.CancelUpload ) {
@@ -554,11 +572,12 @@ export default class twistfileupload {
 
 		//console.log( this.uploaded );
 
-		for( let objUploadedFile of this.uploaded ) {
-			let strFilePreview = objUploadedFile.uri_preview,
-					strFileDetails = '',
-					arrFileDetails = ['file/name', 'file/size', 'file_type'],
-					strPreview = 'thumb-' + this.settings.previewsize;
+		for( let objUploadedFileIndex in this.uploaded ) {
+			let objUploadedFile = this.uploaded[objUploadedFileIndex];
+			let strFilePreview = objUploadedFile.uri_preview;
+			let strFileDetails = '';
+			let arrFileDetails = ['file/name', 'file/size', 'file_type'];
+			let strPreview = 'thumb-' + this.settings.previewsize;
 
 			arrUploadedFormValues.push( objUploadedFile.form_value );
 
@@ -572,12 +591,12 @@ export default class twistfileupload {
 			}
 
 			for( let intFileDetail in arrFileDetails ) {
-				let strFileDetail = arrFileDetails[intFileDetail],
-						strProperty;
+				let strFileDetail = arrFileDetails[intFileDetail];
+				let strProperty;
 
 				if( strFileDetail.indexOf( '/' ) !== -1 ) {
-					let arrDelve = strFileDetail.split( '/' ),
-							objToDelve = objUploadedFile[arrDelve[0]] || null;
+					let arrDelve = strFileDetail.split( '/' );
+					let objToDelve = objUploadedFile[arrDelve[0]] || null;
 
 					arrDelve.shift();
 
@@ -595,10 +614,10 @@ export default class twistfileupload {
 				strFileDetails += '<li data-key="' + strFileDetail + '"><span>' + strFileDetail.replace( /[\/_]/g, ' ' ) + ' :</span>' + strProperty + '</li>';
 			}
 
-			let listItem = Element.create( 'li', 'twistupload-file-list-item' ),
-					listItemPreview = Element.create( 'img', '', {src: strFilePreview} ),
-					listItemInfo = Element.create( 'ul', 'twistupload-file-list-item-info', {}, strFileDetails ),
-					listItemRemoveButton = Element.create( 'button', '', {}, 'Remove' );
+			let listItem = Element.create( 'li', 'twistupload-file-list-item' );
+			let listItemPreview = Element.create( 'img', '', {src: strFilePreview} );
+			let listItemInfo = Element.create( 'ul', 'twistupload-file-list-item-info', {}, strFileDetails );
+			let listItemRemoveButton = Element.create( 'button', '', {}, 'Remove' );
 
 			listItemRemoveButton.addEventListener( 'click', (fileToRemove => {
 				return () => {

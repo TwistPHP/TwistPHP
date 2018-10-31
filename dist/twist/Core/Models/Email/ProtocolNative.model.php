@@ -38,8 +38,8 @@
 
 		public function send($strEmailSource){
 
-			$strEmailSource = preg_replace('/To\: .*\r\n/im', '', $strEmailSource);
-			$strEmailSource = preg_replace('/Subject\: .*\r\n/im', '', $strEmailSource);
+			$strEmailSource = preg_replace('/\r\nTo\: .*\r\n/im', "\r\n", $strEmailSource);
+			$strEmailSource = preg_replace('/\r\nSubject\: .*\r\n/im', "\r\n", $strEmailSource);
 
 			$strAdditionalParam = null;
 

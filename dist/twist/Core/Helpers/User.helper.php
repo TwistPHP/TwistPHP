@@ -517,6 +517,11 @@
 
 			$strDefaultLogin = $this->strViewLocation.'login.tpl';
 
+			if(strstr($strReference,'/')){
+				$arrReference = explode('/',$strReference);
+				$strReference = $arrReference[0];
+			}
+
 			switch($strReference){
 
 				case'login_form':
@@ -647,6 +652,11 @@
 
 				case'surname':
 					$strData = $this->loggedInData('surname');
+					break;
+
+				case'details':
+					$arrDetails = $this->getDetailsByID($this->loggedInID());
+					$strData = (array_key_exists($arrReference[1],$arrDetails)) ? $arrDetails[$arrReference[1]] : null;
 					break;
 			}
 

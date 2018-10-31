@@ -246,6 +246,6 @@ final class Debug{
 
 		$resResource = new Resources();
 		$resResource -> viewResource( 'core-uri' );
-		return sprintf('<script>%s</script>',file_get_contents(sprintf('%sCore/Resources/twist/debug/js/twistdebugcatcher.js',TWIST_FRAMEWORK)));
+		return sprintf('<script>%s</script>',file_get_contents(sprintf('%sCore/Resources/debug/js/twistdebugcatcher.js',TWIST_FRAMEWORK)));
 	}
 }
