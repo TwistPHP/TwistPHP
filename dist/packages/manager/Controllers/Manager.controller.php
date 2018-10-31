@@ -28,6 +28,7 @@ use Packages\install\Models\Install;
 use \Twist\Core\Models\Security\CodeScanner;
 use \Twist\Core\Controllers\BaseUser;
 use \Twist\Core\Models\ScheduledTasks;
+use Twist\Core\Models\Security\Protect;
 
 /**
  * The route controller for the framework manager, generates the pages of the manager tool.
@@ -514,5 +515,54 @@ class Manager extends BaseUser{
 		}
 
 		\Twist::redirect('./packages');
+	}
+
+	/**
+	 * Uninstall a package from the system, pass the package slug in the GET param 'package'.
+	 */
+	public function firewall(){
+
+		if(array_key_exists('list_action',$_POST) && array_key_exists('ip_address',$_POST)){
+
+			if($_POST['list_action'] == 'ban'){
+				Protect::banIP($_POST['ip_address'],'',true);
+				\Twist::successMessage('IP address '.$_POST['ip_address'].' has been banned!');
+			}elseif($_POST['list_action'] == 'whitelist'){
+				Protect::whitelistIP($_POST['ip_address']);
+				\Twist::successMessage('IP address '.$_POST['ip_address'].' has been whitelisted!');
+			}
+
+		}elseif(array_key_exists('unban',$_POST)){
+			Protect::unbanIP($_POST['unban']);
+			\Twist::successMessage('IP address '.$_POST['ip_address'].' has been unbanned!');
+		}elseif(array_key_exists('unwhitelist',$_POST)){
+			Protect::unwhitelistIP($_POST['unwhitelist']);
+			\Twist::successMessage('IP address '.$_POST['ip_address'].' has been removed from the whitelisted!');
+		}
+
+		$arrTags = array();
+		$arrData = Protect::info();
+
+		$arrTags['blocked_ips'] = '';
+		foreach($arrData['banned_ips'] as $mxdIPAddress => $arrSubData){
+			$arrSubData['ip_address'] = $mxdIPAddress;
+			$arrTags['blocked_ips'] .= $this->_view('components/firewall/blocked-ip.tpl',$arrSubData);
+		}
+
+		if($arrTags['blocked_ips'] == ''){
+			$arrTags['blocked_ips'] = '<tr><td colspan="5">No IPs have been added to the blocklist</td></tr>';
+		}
+
+		$arrTags['whitelist_ips'] = '';
+		foreach($arrData['whitelist_ips'] as $mxdIPAddress => $arrSubData){
+			$arrSubData['ip_address'] = $mxdIPAddress;
+			$arrTags['whitelist_ips'] .= $this->_view('components/firewall/whitelist-ip.tpl',$arrSubData);
+		}
+
+		if($arrTags['whitelist_ips'] == ''){
+			$arrTags['whitelist_ips'] = '<tr><td colspan="4">No IPs have been added to the whitelist</td></tr>';
+		}
+
+		return $this->_view('pages/firewall.tpl',$arrTags);
 	}
 }

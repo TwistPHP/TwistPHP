@@ -3,56 +3,63 @@
     "name": "Dashboard",
     "uri": "",
     "icon": "fa-tachometer",
-    "order": 1,
+    "order": 10,
     "sections": []
   },
   {
     "name": "Settings",
     "uri": "settings",
     "icon": "fa-cogs",
-    "order": 2,
+    "order": 20,
     "sections": []
   },
   {
     "name": "Cache",
     "uri": "cache",
     "icon": "fa-file-archive-o",
-    "order": 3,
+    "order": 30,
+    "sections": []
+  },
+  {
+    "name": "TwistProtect",
+    "uri": "firewall",
+    "icon": "fa-padlock",
+    "order": 40,
     "sections": []
   },
   {
     "name": ".htaccess",
     "uri": "htaccess",
     "icon": "fa-map-signs",
-    "order": 4,
+    "order": 50,
     "sub-sections": []
   },
   {
     "name": "Packages",
     "uri": "packages",
     "icon": "fa-puzzle-piece",
-    "order": 5,
+    "order": 60,
     "sections": []
   },
   {
     "name": "ScheduledTasks",
     "uri": "scheduled-tasks",
     "icon": "fa-clock-o",
-    "order": 6,
+    "order": 70,
     "sections": []
   },
   {
     "name": "API Keys",
     "uri": "apikeys",
     "icon": "fa-key",
-    "order": 7,
+    "order": 80,
     "sections": []
   },
   {
     "name": "Logout",
     "uri": "logout",
     "icon": "fa-sign-out",
-    "order": 8,
+    "order": 90,
     "sections": []
   }
 ]
