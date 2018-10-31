@@ -81,7 +81,7 @@ export default class twistajax {
 						if( request.$debug.getAttribute( 'class' ) === 'twist-debug-box-' ) {
 							request.$debug.classList.remove( 'twist-debug-box-' );
 							request.$debug.classList.add( 'twist-debug-box-red' );
-							let domError = document.createElement( 'p' );
+							let domError = document.createElement( 'pre' );
 							domError.innerHTML = 'Error: ' + request.error;
 							let domDetails = request.$debug.querySelector( '.details' );
 							domDetails.parentNode.replaceChild( domError, domDetails );
@@ -146,6 +146,7 @@ export default class twistajax {
 	send( location, bodydata = {}, method = 'GET' ) {
 		let fetchOptions = {
 			method: method,
+			credentials: 'same-origin',
 			headers: {
 				Accept: 'application/json, text/plain, */*',
 				'Content-Type': 'application/json; charset=utf-8',
@@ -185,11 +186,10 @@ export default class twistajax {
 										}
 									} )
 									.catch( e => {
-										throw( e );
+										throw(e);
 									} );
 						} else {
-							console.log( response );
-							throw( response.status + ' ' + response.statusText );
+							throw(response.status + ' ' + response.statusText);
 						}
 					} )
 					.then( response => {
@@ -199,7 +199,7 @@ export default class twistajax {
 
 						if( response.status !== true ) {
 							this.trigger( 'fail', request );
-							throw( response.message || 'AJAX status returned FALSE' );
+							throw(response.message || 'AJAX status returned FALSE');
 						} else {
 							this.trigger( 'success', request );
 						}

@@ -7,16 +7,17 @@
         <!--[if lt IE 9]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
 
         <!--================================ THIRD-PARTY RESOURCES ================================-->
-        {resource:unsemantic}
-        {resource:font-awesome}
-        {resource:arable}
-        {resource:jquery}
+        <!-- TEMPORARY FIX -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/unsemantic/1.2.3/unsemantic-grid-responsive-tablet-no-ie7.min.css" type="text/css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css" rel="stylesheet">
+        <link href="https://rawgit.com/ahosgood/Arable/master/dist/arable.min.css" type="text/css" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
         <!--================================ CSS ================================-->
-        <link href="{resource:core-uri}twist/manager/css/base.css" type="text/css" rel="stylesheet">
+        <link href="{resource:core-uri}manager/css/base.css" type="text/css" rel="stylesheet">
 
         <!--================================ JAVASCRIPT ================================-->
-        <!--<script src="{resource:core-uri}twist/manager/js/base.js"></script>-->
+        <!--<script src="{resource:core-uri}manager/js/base.js"></script>-->
 
         <!--================================ LINKED DOCUMENTS ================================-->
         <link rel="shortcut icon" type="image/x-icon" href="{core:logo-favicon}">

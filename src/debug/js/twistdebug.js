@@ -24,34 +24,36 @@ class twistdebug {
 	constructor() {
 		try {
 			let args = [
-				'%c %c %c TwistPHP Debug %c %c ',
-				'font-size: 15px; background: #2a5200;',
-				'font-size: 17px; background: #3f7a00;',
+				'%c %c %c TwistPHP %c %c ',
+				'font-size: 15px; background: #2A5200;',
+				'font-size: 17px; background: #3F7A00;',
 				'color: #FFF; font-size: 18px; background: #539F00;',
-				'font-size: 17px; background: #3f7a00;',
-				'font-size: 15px; background: #2a5200;'
+				'font-size: 17px; background: #3F7A00;',
+				'font-size: 15px; background: #2A5200;'
 			];
 
 			console.log.apply( console, args );
 		} catch( e ) {
 			if( console.info ) {
-				console.info( 'TwistPHP Debug' );
+				console.info( 'TwistPHP' );
 			} else {
-				console.log( 'TwistPHP Debug' );
+				console.log( 'TwistPHP' );
 			}
 		}
 
 		if( window.twist &&
 				window.twist.catches ) {
-			for( let caught of window.twist.catches ) {
-				console.log( caught );
-				switch( caught.type ) {
-					case 'error':
-						this.error.apply( this, caught.details );
-						break;
-					case 'warning':
-						this.warn.apply( this, caught.details );
-						break;
+			for( let caughtIndex in window.twist.catches ) {
+				if( window.twist.catches.hasOwnProperty( caughtIndex ) ) {
+					let caught = window.twist.catches[caughtIndex];
+					switch( caught.type ) {
+						case 'error':
+							this.error.apply( this, caught.details );
+							break;
+						case 'warning':
+							this.warn.apply( this, caught.details );
+							break;
+					}
 				}
 			}
 		}
@@ -66,51 +68,90 @@ class twistdebug {
 
 		this.setupUI();
 		this.outputExistingAJAX();
-	}
 
-	static objectLength( objIn ) {
-		return objIn ? Object.keys( objIn ).length : 0;
+		window.console.error = message => {
+			this.error( message );
+		};
+
+		window.console.warn = message => {
+			this.warn( message );
+		};
+
+		window.console.info = message => {
+			this.info( message );
+		};
+
+		window.console.log = message => {
+			this.log( message );
+		};
 	}
 
 	static wrap( query, tag, classes = '' ) {
-		document.querySelectorAll( query )
-				.forEach( elem => {
-					const wrapper = document.createElement( tag );
-					if( classes ) {
-						wrapper.className = classes;
-					}
-					elem.parentElement.insertBefore( wrapper, elem );
-					wrapper.appendChild( elem );
-				} );
+		let els = document.querySelectorAll( query );
+
+		for( let elIndex in els ) {
+			if( els.hasOwnProperty( elIndex ) ) {
+				let el = els[elIndex]
+
+				const wrapper = document.createElement( tag );
+				if( classes ) {
+					wrapper.className = classes;
+				}
+				el.parentElement.insertBefore( wrapper, el );
+				wrapper.appendChild( el );
+			}
+		}
 	}
 
 	outputExistingAJAX() {
 		if( window.twist && window.twist.ajax ) {
-			for( let instance of window.twist.ajax.instances ) {
-				for( let request of instance.requests ) {
-					this.logAJAX( request );
+			for( let instance in window.twist.ajax.instances ) {
+				if( window.twist.ajax.instances.hasOwnProperty( instance ) ) {
+					for( let request in window.twist.ajax.instances[instance].requests ) {
+						if( window.twist.ajax.instances[instance].requests.hasOwnProperty( request ) ) {
+							this.logAJAX( window.twist.ajax.instances[instance].requests[request] );
+						}
+					}
 				}
 			}
 		}
+	}
+
+	stringifyJSON( objectIn ) {
+		let seen = [];
+		let replacer = ( key, value ) => {
+			if( value !== null && typeof value === 'object' ) {
+				if( seen.indexOf( value ) >= 0 ) {
+					return;
+				}
+				seen.push( value );
+			}
+			return value;
+		};
+
+		return JSON.stringify( objectIn, replacer, 2 );
 	}
 
 	logToTwist( jqsAppendTo, strColour, mxdValue, objDetails = null, strURL = undefined, intLineNumber = undefined, intColumn = undefined ) {
 		if( mxdValue ) {
 			let strLogHTML = mxdValue || '',
 					strTitle = '',
-					strDetailsHTML = null;
+					strDetailsHTML = '';
 
 			if( typeof mxdValue === 'object' ) {
-				strLogHTML = '<pre>' + JSON.stringify( mxdValue, undefined, 2 ) + '</pre>';
+				strLogHTML = '<pre>' + this.stringifyJSON( mxdValue ) + '</pre>';
 			}
 
 			if( typeof objDetails === 'string' ) {
-				strDetailsHTML = '<p class="details">' + objDetails + '</p>';
-			} else if( twistdebug.objectLength( objDetails ) ) {
-				for( let objDetail of objDetails ) {
-					let strKey = strDetail.charAt( 0 ).toUpperCase() + strDetail.slice( 1 ).replace( '_', ' ' ),
-							strValue = ( typeof objDetail === 'object' ) ? '<pre>' + JSON.stringify( objDetail, undefined, 2 ) + '</pre>' : objDetail;
-					strDetailsHTML += '<dt>' + strKey + '</dt><dd>' + strValue + '</dd>';
+				strDetailsHTML = '<pre class="details">' + objDetails + '</pre>';
+			} else if( !!objDetails && Object.keys( objDetails ).length ) {
+				for( let strDetail in objDetails ) {
+					if( objDetails.hasOwnProperty( strDetail ) ) {
+						let objDetail = objDetails[strDetail];
+						let strKey = strDetail.charAt( 0 ).toUpperCase() + strDetail.slice( 1 ).replace( '_', ' ' ),
+								strValue = (typeof objDetail === 'object') ? '<pre>' + this.stringifyJSON( objDetail ) + '</pre>' : objDetail;
+						strDetailsHTML += '<dt>' + strKey + '</dt><dd>' + strValue + '</dd>';
+					}
 				}
 
 				strDetailsHTML = '<dl class="details">' + strDetailsHTML + '</dl>';
@@ -127,7 +168,7 @@ class twistdebug {
 					strTitle = strURL;
 				}
 			} else {
-				strTitle = 'JavaScript [' + ( new Date() ).getTime() + ']';
+				strTitle = 'JavaScript [' + (new Date()).getTime() + ']';
 			}
 
 			let domLogBox = document.createElement( 'div' );
@@ -169,41 +210,33 @@ class twistdebug {
 		}
 	}
 
-	error( mxdValue, strURL, intLineNumber, intColumn ) {
+	recordLog( countElement, strColour, mxdValue, strURL = undefined, intLineNumber = undefined, intColumn = undefined ) {
 		let objDetails = {
 			type: typeof mxdValue,
-			length: ( typeof mxdValue === 'object' ) ? this.objectLength( mxdValue ) : mxdValue.length
+			length: !!mxdValue ? (typeof mxdValue === 'object' ? Object.keys( mxdValue ).length : mxdValue.length) : 0
 		};
+		let valueToLog = typeof mxdValue === 'object' ? mxdValue : '<p>' + mxdValue + '</p>';
 
-		if( this.logToTwist( '#twist-debug-messages-list', 'red', '<p>' + mxdValue + '</p>', objDetails, strURL, intLineNumber, intColumn ) ) {
-			let domErrorCount = document.getElementById( 'twist-debug-errors' );
-			domErrorCount.setAttribute( 'data-count', ( parseInt( domErrorCount.getAttribute( 'data-count' ) ) + 1 ).toString() );
+		if( this.logToTwist( '#twist-debug-messages-list', strColour, valueToLog, objDetails, strURL, intLineNumber, intColumn ) ) {
+			let domCount = document.getElementById( countElement );
+			domCount.setAttribute( 'data-count', (parseInt( domCount.getAttribute( 'data-count' ) ) + 1).toString() );
 		}
+	}
+
+	error( mxdValue, strURL, intLineNumber, intColumn ) {
+		this.recordLog( 'twist-debug-errors', 'red', mxdValue, strURL, intLineNumber, intColumn );
 	}
 
 	warn( mxdValue, strURL, intLineNumber, intColumn ) {
-		let objDetails = {
-			type: typeof mxdValue,
-			length: ( typeof mxdValue === 'object' ) ? this.objectLength( mxdValue ) : mxdValue.length
-		};
+		this.recordLog( 'twist-debug-warnings', 'yellow', mxdValue, strURL, intLineNumber, intColumn );
+	}
 
-		if( this.logToTwist( '#twist-debug-messages-list', 'yellow', '<p>' + mxdValue + '</p>', objDetails, strURL, intLineNumber, intColumn ) ) {
-			let domErrorCount = document.getElementById( 'twist-debug-warnings' );
-			domErrorCount.setAttribute( 'data-count', ( parseInt( domErrorCount.getAttribute( 'data-count' ) ) + 1 ).toString() );
-		}
+	info( mxdValue, strURL, intLineNumber, intColumn ) {
+		this.recordLog( 'twist-debug-info', 'blue', mxdValue, strURL, intLineNumber, intColumn );
 	}
 
 	log( mxdValue, strURL, intLineNumber, intColumn ) {
-		let objDetails = {
-			type: typeof mxdValue,
-			length: ( typeof mxdValue === 'object' ) ? this.objectLength( mxdValue ) : mxdValue.length
-		};
-
-		if( this.logToTwist( '#twist-debug-messages-list', 'blue', '<p>' + mxdValue + '</p>', objDetails, strURL, intLineNumber, intColumn ) ) {
-			let domErrorCount = document.getElementById( 'twist-debug-dumps' );
-			domErrorCount.setAttribute( 'data-count', ( parseInt( domErrorCount.getAttribute( 'data-count' ) ) + 1 ).toString() );
-
-		}
+		this.recordLog( 'twist-debug-logs', 'grey', mxdValue, strURL, intLineNumber, intColumn );
 	}
 
 	logAJAX( objRequest ) {
@@ -218,21 +251,25 @@ class twistdebug {
 
 		let log = this.logToTwist( '#twist-debug-ajax-list', '', objRequestToLog, 'Waiting...', objRequest.options.method + ' ' + objRequest.url );
 
+
+		//console.debug( log )
+
+
 		if( log ) {
-			let domErrorCount = document.getElementById( 'twist-debug-ajax-count' );
-			domErrorCount.setAttribute( 'data-count', ( parseInt( domErrorCount.getAttribute( 'data-count' ) ) + 1 ).toString() );
+			let domAJAXCount = document.getElementById( 'twist-debug-ajax-count' );
+			domAJAXCount.setAttribute( 'data-count', (parseInt( domAJAXCount.getAttribute( 'data-count' ) ) + 1).toString() );
 
 			objRequest.$debug = log;
 		}
 	}
 
 	logFileUpload( resFile, objResponse ) {
-		let strPreview = ( objResponse.support && objResponse.support['thumb-128'] ) ? objResponse.support['thumb-128'] : objResponse.uri_preview,
-				strLogHTML = '<pre>' + JSON.stringify( objResponse, undefined, 2 ) + '</pre><div class="twist-debug-fileupload-preview"><img src="' + strPreview + '"></div>';
+		let strPreview = (objResponse.support && objResponse.support['thumb-128']) ? objResponse.support['thumb-128'] : objResponse.uri_preview,
+				strLogHTML = '<pre>' + this.stringifyJSON( objResponse ) + '</pre><div class="twist-debug-fileupload-preview"><img src="' + strPreview + '"></div>';
 
 		if( this.logToTwist( '#twist-debug-fileupload-list', 'green', strLogHTML, null, resFile.name ) ) {
-			let domErrorCount = document.getElementById( 'twist-debug-fileupload-count' );
-			domErrorCount.setAttribute( 'data-count', ( parseInt( domErrorCount.getAttribute( 'data-count' ) ) + 1 ).toString() );
+			let domFileUploadCount = document.getElementById( 'twist-debug-fileupload-count' );
+			domFileUploadCount.setAttribute( 'data-count', (parseInt( domFileUploadCount.getAttribute( 'data-count' ) ) + 1).toString() );
 		}
 	}
 
@@ -240,57 +277,68 @@ class twistdebug {
 		let domTwistDebugBlocks = document.getElementById( 'twist-debug-blocks' ),
 				domTwistDebugDetails = document.getElementById( 'twist-debug-details' );
 
-		for( let boxEl of document.getElementById( 'twist-debug-details' ).querySelectorAll( '.twist-debug-box, [class^="twist-debug-box-"], [class*=" twist-debug-box-"]' ) ) {
-			if( boxEl.querySelector( '.twist-debug-more-details' ) && !boxEl.querySelector( '.twist-debug-more-details-button' ) ) {
-				let domMoreDetails = boxEl.querySelector( '.twist-debug-more-details' ),
-						domMoreDetailsButton = document.createElement( 'a' );
+		for( let boxElIndex in document.getElementById( 'twist-debug-details' ).querySelectorAll( '.twist-debug-box, [class^="twist-debug-box-"], [class*=" twist-debug-box-"]' ) ) {
+			if( document.getElementById( 'twist-debug-details' ).querySelectorAll( '.twist-debug-box, [class^="twist-debug-box-"], [class*=" twist-debug-box-"]' ).hasOwnProperty( boxElIndex ) ) {
+				let boxEl = document.getElementById( 'twist-debug-details' ).querySelectorAll( '.twist-debug-box, [class^="twist-debug-box-"], [class*=" twist-debug-box-"]' )[boxElIndex];
+				if( boxEl.querySelector( '.twist-debug-more-details' ) &&
+						!boxEl.querySelector( '.twist-debug-more-details-button' ) ) {
+					let domMoreDetails = boxEl.querySelector( '.twist-debug-more-details' );
+					let domMoreDetailsButton = document.createElement( 'a' );
 
-				domMoreDetailsButton.classList.add( 'twist-debug-more-details-button' );
-				domMoreDetailsButton.innerHTML = '&ctdot;';
-				domMoreDetailsButton.setAttribute( 'href', '#twist-debug-more-details' );
-				domMoreDetailsButton.addEventListener( 'click',
-						function( e ) {
-							e.preventDefault();
+					domMoreDetailsButton.classList.add( 'twist-debug-more-details-button' );
+					domMoreDetailsButton.innerHTML = '&ctdot;';
+					domMoreDetailsButton.setAttribute( 'href', '#twist-debug-more-details' );
+					domMoreDetailsButton.addEventListener( 'click',
+							function( e ) {
+								e.preventDefault();
 
-							if( domMoreDetails.offsetWidth > 0 && domMoreDetails.offsetHeight > 0 ) {
-								domMoreDetails.style.display = 'none';
-							} else {
-								domMoreDetails.style.display = 'block';
+								if( domMoreDetails.offsetWidth > 0 && domMoreDetails.offsetHeight > 0 ) {
+									domMoreDetails.style.display = 'none';
+								} else {
+									domMoreDetails.style.display = 'block';
+								}
 							}
-						}
-				);
+					);
 
-				boxEl.appendChild( domMoreDetailsButton );
+					boxEl.appendChild( domMoreDetailsButton );
+				}
 			}
 		}
 
-		for( let el of domTwistDebugBlocks.querySelectorAll( 'button' ) ) {
-			el.addEventListener( 'click',
-					function( e ) {
-						e.preventDefault();
-						let domThisBlock = this;
+		for( let elIndex in domTwistDebugBlocks.querySelectorAll( 'button' ) ) {
+			if( domTwistDebugBlocks.querySelectorAll( 'button' ).hasOwnProperty( elIndex ) ) {
+				let el = domTwistDebugBlocks.querySelectorAll( 'button' )[elIndex];
+				el.addEventListener( 'click', function( e ) {
+					e.preventDefault();
+					let domThisBlock = this;
 
-						if( domThisBlock.classList.contains( 'current' ) ) {
-							domTwistDebugDetails.classList.remove( 'show' );
-							domThisBlock.classList.remove( 'current' );
-						} else {
-							let jqsTarget = domThisBlock.getAttribute( 'data-panel' );
+					if( domThisBlock.classList.contains( 'current' ) ) {
+						domTwistDebugDetails.classList.remove( 'show' );
+						domThisBlock.classList.remove( 'current' );
+					} else {
+						let jqsTarget = domThisBlock.getAttribute( 'data-panel' );
 
-							domTwistDebugDetails.classList.add( 'show' );
-							for( let el of domTwistDebugDetails.children ) {
+						domTwistDebugDetails.classList.add( 'show' );
+						for( let elIndex in domTwistDebugDetails.children ) {
+							if( domTwistDebugDetails.children.hasOwnProperty( elIndex ) ) {
+								let el = domTwistDebugDetails.children[elIndex];
 								if( el.tagName.toLowerCase() === 'div' ) {
 									el.style.display = 'none';
 								}
 							}
-							document.querySelector( jqsTarget ).style.display = 'block';
-
-							for( let el of domTwistDebugBlocks.querySelectorAll( 'button.current' ) ) {
-								el.classList.remove( 'current' );
-							}
-
-							domThisBlock.classList.add( 'current' );
 						}
-					} );
+						domTwistDebugDetails.querySelector( jqsTarget ).style.display = 'block';
+
+						for( let el in domTwistDebugBlocks.querySelectorAll( 'button.current' ) ) {
+							if( domTwistDebugBlocks.querySelectorAll( 'button.current' ).hasOwnProperty( el ) ) {
+								domTwistDebugBlocks.querySelectorAll( 'button.current' )[el].classList.remove( 'current' );
+							}
+						}
+
+						domThisBlock.classList.add( 'current' );
+					}
+				} );
+			}
 		}
 
 		document.getElementById( 'close-twist-debug-details' ).addEventListener( 'click',
@@ -312,3 +360,10 @@ if( !window.twist ) {
 } else {
 	window.twist.debug = new twistdebug();
 }
+
+// TODO: Remove dependency
+let fontAwesomeLink = document.createElement( 'link' );
+fontAwesomeLink.setAttribute( 'rel', 'stylesheet' );
+fontAwesomeLink.setAttribute( 'type', 'text/css' );
+fontAwesomeLink.setAttribute( 'href', 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' );
+document.getElementsByTagName( 'head' )[0].appendChild( fontAwesomeLink );

@@ -161,9 +161,9 @@
 
 			$arrAsset['type'] = $this->getType($arrAsset['type_id']);
 
-            //Replace standard type icon with the new method of detection
-            $arrMimeType = \Twist::File()->mimeTypeInfo($arrAsset['data']);
-            $arrAsset['icon'] = $arrAsset['type']['icon'] = $arrMimeType['icon'];
+			//Replace standard type icon with the new method of detection
+			$arrMimeType = \Twist::File()->mimeTypeInfo($arrAsset['data']);
+			$arrAsset['icon'] = $arrAsset['type']['icon'] = $arrMimeType['icon'];
 
 			$arrAsset['group'] = $this->getGroup($arrAsset['group_id']);
 			$arrAsset['support'] = $this->getSupportingContent($arrAsset);
@@ -391,7 +391,7 @@
 							$objImage->resizeMaxDimension($intEachSize);
 							$objImage->save(sprintf('%s/%s',$dirThumbPath,$strFileName));
 
-							$arrSupportingAssets[sprintf('thumb-%d',$intEachSize)] = str_replace(TWIST_DOCUMENT_ROOT,'',sprintf('%s/%s',$dirThumbPath,$strFileName));
+							$arrSupportingAssets[sprintf('thumb-%d',$intEachSize)] = str_replace(array(TWIST_DOCUMENT_ROOT,'//'),array('','/'),sprintf('%s/%s',$dirThumbPath,$strFileName));
 						}
 					}
 
@@ -411,7 +411,7 @@
 							$objImage->resizeCover($intEachSize);
 							$objImage->save(sprintf('%s/%s',$dirThumbPath,$strFileName));
 
-							$arrSupportingAssets[sprintf('square-thumb-%d',$intEachSize)] = str_replace(TWIST_DOCUMENT_ROOT,'',sprintf('%s/%s',$dirThumbPath,$strFileName));
+							$arrSupportingAssets[sprintf('square-thumb-%d',$intEachSize)] = str_replace(array(TWIST_DOCUMENT_ROOT,'//'),array('','/'),sprintf('%s/%s',$dirThumbPath,$strFileName));
 						}
 					}
 				}
@@ -555,12 +555,20 @@
 			if(count($arrAsset)){
 
 				//Delete if the asset is a file
-				if(file_exists($arrAsset['data'])){
-					\Twist::File()->delete($arrAsset['data']);
+				if(file_exists($arrAsset['path'])){
+					\Twist::File()->delete($arrAsset['path']);
+				}
+
+				foreach($arrAsset['support'] as $strEachFile){
+					$strSupportFile = str_replace('//','/',rtrim(TWIST_DOCUMENT_ROOT,'/').$strEachFile);
+					if(file_exists($strSupportFile)){
+						\Twist::File()->delete($strSupportFile);
+					}
 				}
 
 				//Delete the asset record
-				$blOut = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'assets')->delete($intAssetID);
+				\Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'asset_support')->delete($intAssetID,'asset_id',null);
+				$blOut = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'assets')->delete($intAssetID,'id',1);
 			}
 
 			return $blOut;

@@ -32,18 +32,26 @@ class BaseAJAX extends Base{
 
 	protected $blAjaxResponse = true;
 	protected $strAjaxResponseMessage = '';
-	private $arrPostedJSON = null;
 
 	public function _baseCalls(){
+
+		//If the method is POST and the data has been sent as JSON, extract the JSON into the global $_POST var
+		if(strtoupper($_SERVER['REQUEST_METHOD'] == 'POST') && strstr($_SERVER['CONTENT_TYPE'], 'application/json')){
+
+			$resSTDIN = (defined('STDIN')) ? STDIN : 'php://input';
+			$strSDIN = file_get_contents($resSTDIN);
+
+			$arrPostedJSON = json_decode($strSDIN, true);
+			if(json_last_error() === JSON_ERROR_NONE){
+				$_POST = $arrPostedJSON;
+			}else{
+				$this->_ajaxFail();
+				$this->_ajaxMessage(json_last_error_msg());
+			}
+		}
+
 		$this->_timeout(60);
 		return true;
-	}
-
-	protected function _posted( $strField ) {
-		if( is_null( $this -> arrPostedJSON ) ) {
-			$this -> arrPostedJSON = json_decode( file_get_contents( 'php://input' ), true );
-		}
-		return array_key_exists( $strField, $this -> arrPostedJSON ) ? $this -> arrPostedJSON[$strField] : null;
 	}
 
 	/**

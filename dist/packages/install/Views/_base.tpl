@@ -8,12 +8,13 @@
 	    <!--[if lt IE 9]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
 
 	    <!--================================ THIRD-PARTY RESOURCES ================================-->
-		{resource:unsemantic}
-		{resource:font-awesome}
-		{resource:arable}
+		<!-- TEMPORARY FIX -->
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/unsemantic/1.2.3/unsemantic-grid-responsive-tablet-no-ie7.min.css" type="text/css" rel="stylesheet">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css" rel="stylesheet">
+		<link href="https://rawgit.com/ahosgood/Arable/master/dist/arable.min.css" type="text/css" rel="stylesheet">
 
 		<!--================================ INTERFACE RESOURCES ================================-->
-		{resource:twist/setup}
+		{resource:setup}
 
 	    <!--================================ LINKED DOCUMENTS ================================-->
 	    <link rel="shortcut icon" type="image/x-icon" href="{core:logo-favicon}">
@@ -26,7 +27,7 @@
 	<body>
 	    <div class="grid-container">
 	    <div class="grid-100 tablet-grid-100 mobile-grid-100">
-	        <h1 class="no-top-margin"><img src="{resource:core-uri}twist/logos/logo.png">TwistPHP Installation Wizard</h1>
+	        <h1 class="no-top-margin"><img src="{resource:core-uri}logos/logo.png">TwistPHP Installation Wizard</h1>
 	    </div>
 	    <ul class="tabs">
 	        {view:components/tabs.php}

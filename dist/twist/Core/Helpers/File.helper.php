@@ -405,7 +405,7 @@ class File extends Base{
 			'status' => false,
 			'error' => '',
 			'file' => array(
-				'UID' => $strUID,
+				'uid' => $strUID,
 				'name' => '',
 				'size' => '',
 				'path' => '',
@@ -477,7 +477,7 @@ class File extends Base{
 			'status' => false,
 			'error' => '',
 			'file' => array(
-				'UID' => '',
+				'uid' => '',
 				'name' => '',
 				'size' => 0,
 				'path' => '',
@@ -496,7 +496,7 @@ class File extends Base{
 		if(strlen($strFileData) > 0){
 
 			if(array_key_exists('HTTP_TWIST_FILE',$_SERVER) && array_key_exists('HTTP_TWIST_UID',$_SERVER)){
-				$arrOut['file']['UID'] = $_SERVER['HTTP_TWIST_UID'];
+				$arrOut['file']['uid'] = $_SERVER['HTTP_TWIST_UID'];
 				$arrOut['file']['name'] = $_SERVER['HTTP_TWIST_FILE'];
 				$arrOut['file']['size'] = strlen($strFileData);
 				$arrOut['file']['path'] = sprintf('%s/%s',$strUploadFolder,$_SERVER['HTTP_TWIST_FILE']);
@@ -1085,6 +1085,13 @@ class File extends Base{
 					//Store a temp session for js output
 					\Twist::Cache()->write('asset-js-include',1,0);
 				}
+
+				break;
+
+			case 'upload-uri':
+			case 'asset-upload-uri':
+
+				$strOut = $arrParameters['uri'];
 
 				break;
 		}

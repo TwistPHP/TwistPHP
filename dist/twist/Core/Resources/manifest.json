@@ -1,100 +1,12 @@
 {
-	"arable": {
-		"5.5.1": {
-			"default": true,
-			"css": ["arable.min.css"],
-			"js": []
-		}
-	},
-	"arable-reset": {
-		"5.3": {
-			"default": true,
-			"css": ["arable-reset.min.css"],
-			"js": []
-		}
-	},
-	"babel": {
-		"polyfill": {
-			"default": true,
-			"css": [],
-			"js": ["polyfill.min.js"]
-		}
-	},
-	"font-awesome": {
-		"4.7.0": {
-			"default": true,
-			"css": ["css/font-awesome.min.css"],
-			"js": []
-		}
-	},
-	"jquery": {
-		"legacy": {
-			"default": false,
-			"css": [],
-			"js": ["jquery-1.12.4.min.js"]
-		},
-		"1": {
-			"default": false,
-			"css": [],
-			"js": ["jquery-1.12.4.min.js"]
-		},
-		"2": {
-			"default": false,
-			"css": [],
-			"js": ["jquery-2.2.4.min.js"]
-		},
-		"3": {
-			"default": false,
-			"css": [],
-			"js": ["jquery-3.2.1.min.js"]
-		},
-		"slim": {
-			"default": true,
-			"css": [],
-			"js": ["jquery-3.2.1.slim.min.js"]
-		}
-	},
-	"jquery-ui": {
-		"1.11.4": {
-			"default": true,
-			"css": ["jquery-ui.min.css"],
-			"js": ["jquery-ui.min.js"]
-		},
-		"themed": {
-			"default": false,
-			"css": ["jquery-ui.min.css","jquery-ui.structure.min.css","jquery-ui.theme.min.css"],
-			"js": ["jquery-ui.min.js"]
-		}
-	},
-	"modernizr": {
-		"2.8.3": {
-			"default": true,
-			"css": [],
-			"js": ["modernizr-2.8.3.min.js"]
-		}
-	},
-	"rummage": {
-		"2.10.0": {
-			"default": true,
-			"css": [],
-			"js": ["rummage.min.js"]
-		}
-	},
-	"twist/ajax": {
+	"ajax": {
 		"js": {
 			"default": true,
 			"css": [],
 			"js": ["js/twistajax.js"]
 		}
 	},
-	"twist/cssreset": {
-		"standard": {
-			"default": true,
-			"css": ["css/twistcssreset.css"],
-			"js": []
-		}
-	},
-	"twist/debug": {
+	"debug": {
 		"standard": {
 			"default": true,
 			"css": ["css/twistdebug.css"],
@@ -116,96 +28,24 @@
 			"js": ["js/twistdebugcatcher.js"]
 		}
 	},
-	"twist/fileupload": {
+	"fileupload": {
 		"standard": {
 			"default": true,
 			"css": [],
 			"js": ["js/twistfileupload.js"]
 		}
 	},
-	"twist/manager": {
+	"manager": {
 		"standard": {
 			"default": true,
 			"css": ["css/twistmanager.css"],
 			"js": []
 		}
 	},
-	"twist/setup": {
+	"setup": {
 		"standard": {
 			"default": true,
 			"css": ["css/twistsetup.css"],
-			"js": []
-		}
-	},
-	"unsemantic": {
-		"desktop": {
-			"default": false,
-			"css": [
-				"unsemantic-grid-base-no-ie7.css",
-				"unsemantic-grid-desktop-no-ie7.css"
-			],
-			"js": []
-		},
-		"tablet": {
-			"default": false,
-			"css": [
-				"unsemantic-grid-base-no-ie7.css",
-				"unsemantic-grid-tablet-no-ie7.css"
-			],
-			"js": []
-		},
-		"mobile": {
-			"default": false,
-			"css": [
-				"unsemantic-grid-base-no-ie7.css",
-				"unsemantic-grid-mobile-no-ie7.css"
-			],
-			"js": []
-		},
-		"desktop-mobile": {
-			"default": false,
-			"css": ["unsemantic-grid-responsive-no-ie7.css"],
-			"js": []
-		},
-		"desktop-tablet-mobile": {
-			"default": true,
-			"css": ["unsemantic-grid-responsive-tablet-no-ie7.css"],
-			"js": []
-		}
-	},
-	"unsemantic-rtl": {
-		"desktop": {
-			"default": false,
-			"css": [
-				"unsemantic-grid-base-no-ie7-rtl.css",
-				"unsemantic-grid-desktop-no-ie7-rtl.css"
-			],
-			"js": []
-		},
-		"tablet": {
-			"default": false,
-			"css": [
-				"unsemantic-grid-base-no-ie7-rtl.css",
-				"unsemantic-grid-tablet-no-ie7-rtl.css"
-			],
-			"js": []
-		},
-		"mobile": {
-			"default": false,
-			"css": [
-				"unsemantic-grid-base-no-ie7-rtl.css",
-				"unsemantic-grid-mobile-no-ie7-rtl.css"
-			],
-			"js": []
-		},
-		"desktop-mobile": {
-			"default": false,
-			"css": ["unsemantic-grid-responsive-no-ie7-rtl.css"],
-			"js": []
-		},
-		"desktop-tablet-mobile": {
-			"default": true,
-			"css": ["unsemantic-grid-responsive-tablet-no-ie7-rtl.css"],
 			"js": []
 		}
 	}
