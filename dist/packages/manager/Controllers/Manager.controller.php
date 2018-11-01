@@ -24,10 +24,10 @@
 
 namespace Packages\manager\Controllers;
 
+use \Twist\Core\Controllers\BaseUser;
 use Packages\install\Models\Install;
 use Twist\Core\Models\Protect\Firewall;
-use \Twist\Core\Models\Protect\CodeScanner;
-use \Twist\Core\Controllers\BaseUser;
+use Twist\Core\Models\Protect\Scanner;
 use \Twist\Core\Models\ScheduledTasks;
 
 /**
@@ -83,10 +83,26 @@ class Manager extends BaseUser{
 	 */
 	public function dashboard(){
 
+		if(array_key_exists('development-mode',$_GET)){
+			\Twist::framework()->setting('DEVELOPMENT_MODE',($_GET['development-mode'] === '1') ? '1' : '0');
+		}elseif(array_key_exists('maintenance-mode',$_GET)){
+			\Twist::framework()->setting('MAINTENANCE_MODE',($_GET['maintenance-mode'] === '1') ? '1' : '0');
+		}elseif(array_key_exists('debug-bar',$_GET)){
+			\Twist::framework()->setting('DEVELOPMENT_DEBUG_BAR',($_GET['debug-bar'] === '1') ? '1' : '0');
+		}elseif(array_key_exists('data-caching',$_GET)){
+			\Twist::framework()->setting('CACHE_ENABLED',($_GET['data-caching'] === '1') ? '1' : '0');
+		}elseif(array_key_exists('twistprotect-firewall',$_GET)){
+			\Twist::framework()->setting('TWISTPROTECT_FIREWALL',($_GET['twistprotect-firewall'] === '1') ? '1' : '0');
+		}elseif(array_key_exists('twistprotect-scanner',$_GET)){
+			\Twist::framework()->setting('TWISTPROTECT_SCANNER',($_GET['twistprotect-scanner'] === '1') ? '1' : '0');
+		}
+
 		$arrTags['development-mode'] = (\Twist::framework()->setting('DEVELOPMENT_MODE') == '1') ? 'On' : 'Off';
 		$arrTags['maintenance-mode'] = (\Twist::framework()->setting('MAINTENANCE_MODE') == '1') ? 'On' : 'Off';
 		$arrTags['debug-bar'] = (\Twist::framework()->setting('DEVELOPMENT_DEBUG_BAR') == '1') ? 'On' : 'Off';
 		$arrTags['data-caching'] = (\Twist::framework()->setting('CACHE_ENABLED') == '1') ? 'On' : 'Off';
+		$arrTags['twistprotect-firewall'] = (\Twist::framework()->setting('TWISTPROTECT_FIREWALL') == '1') ? 'On' : 'Off';
+		$arrTags['twistprotect-scanner'] = (\Twist::framework()->setting('TWISTPROTECT_SCANNER') == '1') ? 'On' : 'Off';
 
 		$arrLatestVersion = \Twist::framework()->package()->getRepository('twistphp');
 		$arrTags['version'] = \Twist::version();
@@ -97,7 +113,7 @@ class Manager extends BaseUser{
 			$arrTags['version_status'] = '<span class="tag red">Failed to retrieve version information, try again later!</span>';
 		}
 
-		$objCodeScanner = new CodeScanner();
+		$objCodeScanner = new Scanner();
 		$arrTags['scanner'] = $objCodeScanner->getLastScan(TWIST_DOCUMENT_ROOT);
 
 		$arrRoutes = \Twist::Route()->getAll();
@@ -294,19 +310,40 @@ class Manager extends BaseUser{
 	public function scanner(){
 
 		$arrTags = array();
-		$objCodeScanner = new CodeScanner();
+		$objCodeScanner = new Scanner();
 
 		if(array_key_exists('scan-now',$_GET)){
-			$objCodeScanner->scan(TWIST_DOCUMENT_ROOT);
+			$objCodeScanner->scan(TWIST_DOCUMENT_ROOT,true);
 			$arrTags['scanner'] = $objCodeScanner->summary();
 		}else{
 			$arrTags['scanner'] = $objCodeScanner->getLastScan(TWIST_DOCUMENT_ROOT);
 		}
 
 		$arrTags['infected_list'] = '';
-
 		foreach($arrTags['scanner']['infected']['files'] as $arrInfectedFile){
 			$arrTags['infected_list'] .= $this->_view('components/scanner/each-infected.tpl',$arrInfectedFile);
+		}
+
+		$arrTags['changed_list'] = '';
+		foreach($arrTags['scanner']['changed']['files'] as $strPath => $strKey){
+
+			$arrFileTags = array(
+				'file' => $strPath,
+				'code' => $strKey
+			);
+
+			$arrTags['changed_list'] .= $this->_view('components/scanner/each-infected.tpl',$arrFileTags);
+		}
+
+		$arrTags['new_list'] = '';
+		foreach($arrTags['scanner']['new']['files'] as $strPath => $strKey){
+
+			$arrFileTags = array(
+				'file' => $strPath,
+				'code' => $strKey
+			);
+
+			$arrTags['new_list'] .= $this->_view('components/scanner/each-infected.tpl',$arrFileTags);
 		}
 
 		return $this->_view('pages/scanner.tpl',$arrTags);

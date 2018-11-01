@@ -721,7 +721,7 @@
   },
   "TWISTPROTECT_FIREWALL_LOGIN_LIMIT":{
     "title":"Login Limit",
-    "description":"Failed logins before soft ban (TwistProtect Firewall)",
+    "description":"Failed logins before soft ban, set to 0 for off (TwistProtect Firewall)",
     "default":5,
     "type":"integer",
     "options":"",
@@ -729,7 +729,7 @@
   },
   "TWISTPROTECT_FIREWALL_RESET_LIMIT":{
     "title":"Reset Limit",
-    "description":"Failed password resets before soft ban (TwistProtect Firewall)",
+    "description":"Failed password resets before soft ban, set to 0 for off (TwistProtect Firewall)",
     "default":3,
     "type":"integer",
     "options":"",
@@ -773,6 +773,14 @@
     "default":"1",
     "type":"boolean",
     "options":"1,0",
+    "null":0
+  },
+  "TWISTPROTECT_SCANNER_REPORT_EMAIL":{
+    "title":"Send Scanner Report (Email)",
+    "description":"The email address to send the scanner report to, leave blank and no report is sent (TwistProtect Scanner)",
+    "default":"",
+    "type":"string",
+    "options":"",
     "null":0
   }
 }

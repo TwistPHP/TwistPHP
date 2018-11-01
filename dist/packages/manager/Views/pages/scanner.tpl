@@ -13,7 +13,15 @@
         <dd>{data:scanner/skipped}</dd>
         <dt>Infected Files</dt>
         <dd>{data:scanner/infected/count}</dd>
+        <dt>Changed Files</dt>
+        <dd>{data:scanner/changed/count}</dd>
+        <dt>New Files</dt>
+        <dd>{data:scanner/new/count}</dd>
     </dl>
     <h2>Infected Files ({data:scanner/infected/count})</h2>
     <ul>{data:infected_list}</ul>
+    <h2>Changed Files ({data:scanner/changed/count})</h2>
+    <ul>{data:changed_list}</ul>
+    <h2>New Files ({data:scanner/new/count})</h2>
+    <ul>{data:new_list}</ul>
 </div>

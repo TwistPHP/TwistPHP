@@ -26,6 +26,9 @@
 
 	final class Firewall{
 
+		//Specifies if the firewall is running or not
+		public static $blEnabled = true;
+
 		//Failed logins before soft ban
 		public static $intLoginLimit = 5;
 
@@ -62,10 +65,23 @@
 		protected static function load(){
 
 			if(self::$blLoaded  === false){
-				self::$arrFailedActions = \Twist::Cache()->read('protect/failed-actions');
-				self::$arrBannedIPs = \Twist::Cache()->read('protect/banned-ips');
-				self::$arrWhitelistIPs = \Twist::Cache()->read('protect/whitelist-ips');
-				self::$arrBanHistory = \Twist::Cache()->read('protect/ban-history');
+
+				self::$blEnabled = \Twist::framework()->setting('TWISTPROTECT_FIREWALL');
+				self::$intLoginLimit = \Twist::framework()->setting('TWISTPROTECT_FIREWALL_LOGIN_LIMIT');
+				self::$intResetLimit = \Twist::framework()->setting('TWISTPROTECT_FIREWALL_RESET_LIMIT');
+				self::$intInitialBanSeconds = \Twist::framework()->setting('TWISTPROTECT_FIREWALL_INITIAL_BAN');
+				self::$intMaxSoftBans = \Twist::framework()->setting('TWISTPROTECT_FIREWALL_FULL_BAN');
+				self::$intFullBanSeconds = \Twist::framework()->setting('TWISTPROTECT_FIREWALL_MAX_SOFTBANS');
+				self::$intResetAfterDays = \Twist::framework()->setting('TWISTPROTECT_FIREWALL_RESET_AFTER_DAYS');
+				self::$blResetAfterSuccess = \Twist::framework()->setting('TWISTPROTECT_FIREWALL_RESET_AFTER_SUCCESS');
+
+				if(self::$blEnabled){
+					self::$arrFailedActions = \Twist::Cache()->read('protect/failed-actions');
+					self::$arrBannedIPs = \Twist::Cache()->read('protect/banned-ips');
+					self::$arrWhitelistIPs = \Twist::Cache()->read('protect/whitelist-ips');
+					self::$arrBanHistory = \Twist::Cache()->read('protect/ban-history');
+				}
+
 				self::$blLoaded = true;
 			}
 		}
@@ -80,6 +96,7 @@
 
 			return array(
 				'settings' => array(
+					'enabled' => self::$blEnabled,
 					'login_limit' => self::$intLoginLimit,
 					'reset_limit' => self::$intResetLimit,
 					'soft_ban_hours' => self::$intInitialBanSeconds,
@@ -103,10 +120,14 @@
 
 			self::load();
 
-			if(array_key_exists($_SERVER['REMOTE_ADDR'],self::$arrBannedIPs) && !array_key_exists($_SERVER['REMOTE_ADDR'],self::$arrWhitelistIPs)){
-				//Users that are already banned can process the band list
-				self::processBanned();
-				\Twist::respond(403);
+			//Only run the firewall if it is enabled
+			if(self::$blEnabled){
+
+				if(array_key_exists($_SERVER['REMOTE_ADDR'],self::$arrBannedIPs) && !array_key_exists($_SERVER['REMOTE_ADDR'],self::$arrWhitelistIPs)){
+					//Users that are already banned can process the band list
+					self::processBanned();
+					\Twist::respond(403);
+				}
 			}
 		}
 
@@ -135,11 +156,16 @@
 		public static function successLogin(){
 
 			self::load();
-			$strIPAddress = $_SERVER['REMOTE_ADDR'];
 
-			if(self::$blResetAfterSuccess && array_key_exists($strIPAddress,self::$arrFailedActions)){
-				self::$arrFailedActions[$strIPAddress]['failed_logins'] = 0;
-				self::$arrFailedActions[$strIPAddress]['password_resets'] = 0;
+			if(self::$blEnabled){
+				$strIPAddress = $_SERVER['REMOTE_ADDR'];
+
+				if(self::$blResetAfterSuccess && array_key_exists($strIPAddress,self::$arrFailedActions)){
+					self::$arrFailedActions[$strIPAddress]['failed_logins'] = 0;
+					self::$arrFailedActions[$strIPAddress]['password_resets'] = 0;
+
+					\Twist::Cache()->write('protect/failed-actions',self::$arrFailedActions,86400*self::$intTwistCacheLife);
+				}
 			}
 		}
 
@@ -148,9 +174,9 @@
 		 */
 		public static function failedLogin(){
 
-			if(self::$intLoginLimit > 0){
+			self::load();
 
-				self::load();
+			if(self::$blEnabled && self::$intLoginLimit > 0){
 				$strIPAddress = $_SERVER['REMOTE_ADDR'];
 
 				if(!array_key_exists($strIPAddress,self::$arrWhitelistIPs)){
@@ -182,9 +208,9 @@
 		 */
 		public static function passwordReset(){
 
-			if(self::$intResetLimit > 0){
+			self::load();
 
-				self::load();
+			if(self::$blEnabled && self::$intResetLimit > 0){
 				$strIPAddress = $_SERVER['REMOTE_ADDR'];
 
 				if(!array_key_exists($strIPAddress,self::$arrWhitelistIPs)){
