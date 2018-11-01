@@ -22,9 +22,9 @@
 	 * @link       https://twistphp.com
 	 */
 
-	namespace Twist\Core\Models\Security;
+	namespace Twist\Core\Models\Protect;
 
-	final class Protect{
+	final class Firewall{
 
 		//Failed logins before soft ban
 		public static $intLoginLimit = 5;
@@ -103,7 +103,7 @@
 
 			self::load();
 
-			if(array_key_exists($_SERVER['REMOTE_ADDR'],self::$arrBannedIPs)){
+			if(array_key_exists($_SERVER['REMOTE_ADDR'],self::$arrBannedIPs) && !array_key_exists($_SERVER['REMOTE_ADDR'],self::$arrWhitelistIPs)){
 				//Users that are already banned can process the band list
 				self::processBanned();
 				\Twist::respond(403);
@@ -216,43 +216,52 @@
 		 * @param $strIPAddress
 		 * @param string $strReason Reason for banning the user
 		 * @param bool $blApplyFullBan Escalate a ban to be a full ban by passing true
+		 * @return bool
 		 */
 		public static function banIP($strIPAddress,$strReason = '',$blApplyFullBan = false){
 
 			self::load();
 
-			self::$arrBannedIPs[$strIPAddress] = array(
-				'reason' => $strReason,
-				'banned' => date('Y-m-d H:i:s'),
-				'length' => self::$intInitialBanSeconds,
-				'expire' => date('Y-m-d H:i:s',strtotime('+'.self::$intInitialBanSeconds.' Seconds'))
-			);
+			//Whitelist users cannot be banned
+			if(!array_key_exists($strIPAddress,self::$arrWhitelistIPs)){
 
-			if(array_key_exists($strIPAddress,self::$arrBanHistory)){
-				self::$arrBanHistory[$strIPAddress]['bans']++;
-				self::$arrBanHistory[$strIPAddress]['last_banned'] = date('Y-m-d H:i:s');
-			}else{
-				self::$arrBanHistory[$strIPAddress] = array(
-					'first_banned' => date('Y-m-d H:i:s'),
-					'last_banned' => date('Y-m-d H:i:s'),
-					'bans' => 1
+				self::$arrBannedIPs[$strIPAddress] = array(
+					'reason' => $strReason,
+					'banned' => date('Y-m-d H:i:s'),
+					'length' => self::$intInitialBanSeconds,
+					'expire' => date('Y-m-d H:i:s',strtotime('+'.self::$intInitialBanSeconds.' Seconds'))
 				);
+
+				if(array_key_exists($strIPAddress,self::$arrBanHistory)){
+					self::$arrBanHistory[$strIPAddress]['bans']++;
+					self::$arrBanHistory[$strIPAddress]['last_banned'] = date('Y-m-d H:i:s');
+				}else{
+					self::$arrBanHistory[$strIPAddress] = array(
+						'first_banned' => date('Y-m-d H:i:s'),
+						'last_banned' => date('Y-m-d H:i:s'),
+						'bans' => 1
+					);
+				}
+
+				//Force a full ban for the user
+				if($blApplyFullBan && self::$arrBanHistory[$strIPAddress]['bans'] < self::$intMaxSoftBans){
+					self::$arrBanHistory[$strIPAddress]['bans'] = self::$intMaxSoftBans;
+				}
+
+				if(self::$arrBanHistory[$strIPAddress]['bans'] >= self::$intMaxSoftBans){
+					//Upgrade ban to a full ban
+					self::$arrBannedIPs[$strIPAddress]['reason'] = 'Reached soft ban limit';
+					self::$arrBannedIPs[$strIPAddress]['length'] = self::$intFullBanSeconds;
+					self::$arrBannedIPs[$strIPAddress]['expire'] = (self::$intFullBanSeconds == 0) ? date('Y-m-d H:i:s',strtotime('+10 Years')) : date('Y-m-d H:i:s',strtotime('+'.self::$intFullBanSeconds.' Seconds'));
+				}
+
+				\Twist::Cache()->write('protect/banned-ips',self::$arrBannedIPs,86400*self::$intTwistCacheLife);
+				\Twist::Cache()->write('protect/ban-history',self::$arrBanHistory,86400*self::$intTwistCacheLife);
+
+				return true;
 			}
 
-			//Force a full ban for the user
-			if($blApplyFullBan && self::$arrBanHistory[$strIPAddress]['bans'] < self::$intMaxSoftBans){
-				self::$arrBanHistory[$strIPAddress]['bans'] = self::$intMaxSoftBans;
-			}
-
-			if(self::$arrBanHistory[$strIPAddress]['bans'] >= self::$intMaxSoftBans){
-				//Upgrade ban to a full ban
-				self::$arrBannedIPs[$strIPAddress]['reason'] = 'Reached soft ban limit';
-				self::$arrBannedIPs[$strIPAddress]['length'] = self::$intFullBanSeconds;
-				self::$arrBannedIPs[$strIPAddress]['expire'] = date('Y-m-d H:i:s',strtotime('+'.self::$intFullBanSeconds.' Seconds'));
-			}
-
-			\Twist::Cache()->write('protect/banned-ips',self::$arrBannedIPs,86400*self::$intTwistCacheLife);
-			\Twist::Cache()->write('protect/ban-history',self::$arrBanHistory,86400*self::$intTwistCacheLife);
+			return false;
 		}
 
 		/**

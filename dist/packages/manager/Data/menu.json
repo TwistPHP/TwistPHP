@@ -4,28 +4,38 @@
     "uri": "",
     "icon": "fa-tachometer",
     "order": 10,
-    "sections": []
+    "sub-sections": []
   },
   {
     "name": "Settings",
     "uri": "settings",
     "icon": "fa-cogs",
     "order": 20,
-    "sections": []
+    "sub-sections": []
   },
   {
     "name": "Cache",
     "uri": "cache",
     "icon": "fa-file-archive-o",
     "order": 30,
-    "sections": []
+    "sub-sections": []
   },
   {
     "name": "TwistProtect",
-    "uri": "firewall",
-    "icon": "fa-padlock",
+    "uri": "/",
+    "icon": "fa-lock",
     "order": 40,
-    "sections": []
+    "sub-sections": [
+      {
+        "name": "Firewall",
+        "uri": "firewall",
+        "order": 10
+      },{
+        "name": "Code Scanner",
+        "uri": "scanner",
+        "order": 20
+      }
+    ]
   },
   {
     "name": ".htaccess",
@@ -39,27 +49,27 @@
     "uri": "packages",
     "icon": "fa-puzzle-piece",
     "order": 60,
-    "sections": []
+    "sub-sections": []
   },
   {
     "name": "ScheduledTasks",
     "uri": "scheduled-tasks",
     "icon": "fa-clock-o",
     "order": 70,
-    "sections": []
+    "sub-sections": []
   },
   {
     "name": "API Keys",
     "uri": "apikeys",
     "icon": "fa-key",
     "order": 80,
-    "sections": []
+    "sub-sections": []
   },
   {
     "name": "Logout",
     "uri": "logout",
     "icon": "fa-sign-out",
     "order": 90,
-    "sections": []
+    "sub-sections": []
   }
 ]

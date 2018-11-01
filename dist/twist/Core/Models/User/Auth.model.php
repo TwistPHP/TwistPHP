@@ -24,7 +24,7 @@
 
 namespace Twist\Core\Models\User;
 
-use Twist\Core\Models\Security\Protect;
+use Twist\Core\Models\Protect\Firewall;
 
 class Auth{
 
@@ -223,9 +223,9 @@ class Auth{
 	        }
 
 			if(self::$arrCurrentSession['status']){
-				Protect::successLogin();
+				Firewall::successLogin();
 			}else{
-				Protect::failedLogin();
+				Firewall::failedLogin();
 			}
         }
 

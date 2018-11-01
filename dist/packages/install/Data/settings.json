@@ -570,7 +570,7 @@
   "RESOURCE_VERSION_OVERRIDE":{
     "title":"Resource Version Override",
     "description":"Allow calls to Resource->extendLibrary to override existing (matching) version of a file, for example jQuery v2.1.1 from the core would be over-ridden by the new jQuery v2.1.1 where as jQuery v2.1.2 would be added as a new resource.",
-    "default":1,
+    "default":"1",
     "type":"boolean",
     "options":"1,0",
     "null":0
@@ -578,7 +578,7 @@
   "RESOURCE_INCLUDE_ONCE":{
     "title":"Resource Include Once",
     "description":"When using the resource View tags, css and js resources will only be included once per page load/render.",
-    "default":1,
+    "default":"1",
     "type":"boolean",
     "options":"1,0",
     "null":0
@@ -586,7 +586,7 @@
   "ROUTE_CASE_SENSITIVE":{
     "title":"Case Sensitive URI Routing",
     "description":"Enable case sensitive URI routing in the routes module, turning this off may result in multiples of a single page being indexed by search engines. This setting dose not effect the wild card portion of URIs.",
-    "default":1,
+    "default":"1",
     "type":"boolean",
     "options":"1,0",
     "null":0
@@ -602,7 +602,7 @@
   "USER_REGISTER_PASSWORD":{
     "title":"User Register Password",
     "description":"The user must enter a password during the registration process (enables a password field on registration form)",
-    "default":1,
+    "default":"1",
     "type":"boolean",
     "options":"1,0",
     "null":0
@@ -610,7 +610,7 @@
   "USER_PASSWORD_CHANGE_EMAIL":{
     "title":"Send Password Change Email",
     "description":"Determine if an email should be send when a user changes their account password (Excludes password reset)",
-    "default":0,
+    "default":"0",
     "type":"boolean",
     "options":"1,0",
     "null":0
@@ -634,7 +634,7 @@
   "USER_AUTO_AUTHENTICATE":{
     "title":"Auto Authenticate",
     "description":"Automatically log the user in upon successful registration. This will only work if USER_EMAIL_VERIFICATION is 'off' and USER_REGISTER_PASSWORD is 'on'",
-    "default":0,
+    "default":"0",
     "type":"boolean",
     "options":"1,0",
     "null":1
@@ -650,7 +650,7 @@
   "USER_COMMON_PASSWORD_FILTER":{
     "title":"Common Password Filter",
     "description":"Stop the user from using any of the top 10,000 most common passwords",
-    "default":1,
+    "default":"1",
     "type":"boolean",
     "options":"1,0",
     "null":0
@@ -658,7 +658,7 @@
   "USER_EMAIL_VERIFICATION":{
     "title":"Verify Email",
     "description":"Verify a registered user by email before they can login to their account",
-    "default":0,
+    "default":"0",
     "type":"boolean",
     "options":"1,0",
     "null":0
@@ -666,7 +666,7 @@
   "USER_PASSWORD_CHANGE":{
     "title":"Force Temporary Password Change",
     "description":"Require a user to change there password upon login (if the password is a temporary one)",
-    "default":1,
+    "default":"1",
     "type":"boolean",
     "options":"1,0",
     "null":0
@@ -709,6 +709,70 @@
     "default":40,
     "type":"integer",
     "options":"",
+    "null":0
+  },
+  "TWISTPROTECT_FIREWALL":{
+    "title":"Enable TwistProtect Firewall",
+    "description":"Enable the firewall that will block visitors that are up to no good",
+    "default":"1",
+    "type":"boolean",
+    "options":"1,0",
+    "null":0
+  },
+  "TWISTPROTECT_FIREWALL_LOGIN_LIMIT":{
+    "title":"Login Limit",
+    "description":"Failed logins before soft ban (TwistProtect Firewall)",
+    "default":5,
+    "type":"integer",
+    "options":"",
+    "null":0
+  },
+  "TWISTPROTECT_FIREWALL_RESET_LIMIT":{
+    "title":"Reset Limit",
+    "description":"Failed password resets before soft ban (TwistProtect Firewall)",
+    "default":3,
+    "type":"integer",
+    "options":"",
+    "null":0
+  },
+  "TWISTPROTECT_FIREWALL_INITIAL_BAN":{
+    "title":"Initial Ban (Seconds)",
+    "description":"Time in seconds to soft ban a user (TwistProtect Firewall)",
+    "default":300,
+    "type":"integer",
+    "options":"",
+    "null":0
+  },
+  "TWISTPROTECT_FIREWALL_FULL_BAN":{
+    "title":"Full Ban (Seconds)",
+    "description":"Time in seconds for a full ban to last, set to 0 for permanent ban (TwistProtect Firewall)",
+    "default":0,
+    "type":"integer",
+    "options":"",
+    "null":0
+  },
+  "TWISTPROTECT_FIREWALL_MAX_SOFTBANS":{
+    "title":"Maximum SoftBans",
+    "description":"Amount of soft bans before a full ban is put in place (TwistProtect Firewall)",
+    "default":1,
+    "type":"integer",
+    "options":"",
+    "null":0
+  },
+  "TWISTPROTECT_FIREWALL_RESET_AFTER_DAYS":{
+    "title":"Reset After X Days",
+    "description":"Reset visitor ban history after X days of last ban (TwistProtect Firewall)",
+    "default":30,
+    "type":"integer",
+    "options":"",
+    "null":0
+  },
+  "TWISTPROTECT_FIREWALL_RESET_AFTER_SUCCESS":{
+    "title":"Reset After Success",
+    "description":"Reset soft ban limits after visitor's successful login",
+    "default":"1",
+    "type":"boolean",
+    "options":"1,0",
     "null":0
   }
 }

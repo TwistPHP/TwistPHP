@@ -25,10 +25,10 @@
 namespace Packages\manager\Controllers;
 
 use Packages\install\Models\Install;
-use \Twist\Core\Models\Security\CodeScanner;
+use Twist\Core\Models\Protect\Firewall;
+use \Twist\Core\Models\Protect\CodeScanner;
 use \Twist\Core\Controllers\BaseUser;
 use \Twist\Core\Models\ScheduledTasks;
-use Twist\Core\Models\Security\Protect;
 
 /**
  * The route controller for the framework manager, generates the pages of the manager tool.
@@ -319,7 +319,8 @@ class Manager extends BaseUser{
 	public function settings(){
 
 		if(array_key_exists('import',$_GET) && $_GET['import'] == 'core'){
-			Install::importSettings(sprintf('%ssettings.json',TWIST_FRAMEWORK_INSTALL));
+
+			\Twist\Core\Models\Install::importSettings(sprintf('%sData/settings.json',TWIST_PACKAGE_INSTALL));
 			\Twist::redirect('./settings');
 		}
 
@@ -525,23 +526,27 @@ class Manager extends BaseUser{
 		if(array_key_exists('list_action',$_POST) && array_key_exists('ip_address',$_POST)){
 
 			if($_POST['list_action'] == 'ban'){
-				Protect::banIP($_POST['ip_address'],'',true);
+				Firewall::banIP($_POST['ip_address'],'',true);
 				\Twist::successMessage('IP address '.$_POST['ip_address'].' has been banned!');
 			}elseif($_POST['list_action'] == 'whitelist'){
-				Protect::whitelistIP($_POST['ip_address']);
+				Firewall::whitelistIP($_POST['ip_address']);
 				\Twist::successMessage('IP address '.$_POST['ip_address'].' has been whitelisted!');
 			}
 
-		}elseif(array_key_exists('unban',$_POST)){
-			Protect::unbanIP($_POST['unban']);
-			\Twist::successMessage('IP address '.$_POST['ip_address'].' has been unbanned!');
-		}elseif(array_key_exists('unwhitelist',$_POST)){
-			Protect::unwhitelistIP($_POST['unwhitelist']);
-			\Twist::successMessage('IP address '.$_POST['ip_address'].' has been removed from the whitelisted!');
+		}elseif(array_key_exists('unban',$_GET)){
+			Firewall::unbanIP($_GET['unban']);
+			\Twist::successMessage('IP address '.$_GET['ip_address'].' has been unbanned!');
+		}elseif(array_key_exists('unwhitelist',$_GET)){
+			Firewall::unwhitelistIP($_GET['unwhitelist']);
+			\Twist::successMessage('IP address '.$_GET['ip_address'].' has been removed from the whitelisted!');
 		}
 
 		$arrTags = array();
-		$arrData = Protect::info();
+		$arrData = Firewall::info();
+
+		$arrTags['whitelist_count'] = count($arrData['whitelist_ips']);
+		$arrTags['blocked_count'] = count($arrData['banned_ips']);
+		$arrTags['watched_count'] = count($arrData['failed_actions']);
 
 		$arrTags['blocked_ips'] = '';
 		foreach($arrData['banned_ips'] as $mxdIPAddress => $arrSubData){
@@ -556,7 +561,7 @@ class Manager extends BaseUser{
 		$arrTags['whitelist_ips'] = '';
 		foreach($arrData['whitelist_ips'] as $mxdIPAddress => $arrSubData){
 			$arrSubData['ip_address'] = $mxdIPAddress;
-			$arrTags['whitelist_ips'] .= $this->_view('components/firewall/whitelist-ip.tpl',$arrSubData);
+			$arrTags['whitelist_ips'] .= $this->_view('components/firewall/whitelisted-ip.tpl',$arrSubData);
 		}
 
 		if($arrTags['whitelist_ips'] == ''){

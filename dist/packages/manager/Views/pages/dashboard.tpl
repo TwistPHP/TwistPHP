@@ -12,6 +12,8 @@
 	<p class="{data:data-caching=='Off'?'warning':'success'}"><small class="float-right">[<a href="{route:registered_uri}../../../../index.php">Turn {data:data-caching=='Off'?'On':'Off'}</a>]</small><strong>Data Caching:</strong> {data:data-caching}</p>
 	<p class="{data:development-mode=='Off'?'success':'warning'}"><small class="float-right">[<a href="{route:registered_uri}../../../../index.php">Turn {data:development-mode=='Off'?'On':'Off'}</a>]</small><strong>Development Mode:</strong> {data:development-mode}</p>
 	<p class="{data:debug-bar=='Off'?'success':'warning'}"><small class="float-right">[<a href="{route:registered_uri}../../../../index.php">Turn {data:debug-bar=='Off'?'On':'Off'}</a>]</small><strong>Debug Bar:</strong> {data:debug-bar}</p>
+	<p class="{data:debug-bar=='Off'?'success':'warning'}"><small class="float-right">[<a href="{route:registered_uri}../../../../index.php">Turn {data:debug-bar=='Off'?'On':'Off'}</a>]</small><strong>TwistProtect: Firewall</strong> {data:debug-bar}</p>
+	<p class="{data:debug-bar=='Off'?'success':'warning'}"><small class="float-right">[<a href="{route:registered_uri}../../../../index.php">Turn {data:debug-bar=='Off'?'On':'Off'}</a>]</small><strong>TwistProtect: Scanner</strong> {data:debug-bar}</p>
 </div>
 <div class="clear"></div>
 <div class="grid-100 tablet-grid-100 mobile-grid-100">

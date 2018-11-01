@@ -1,14 +1,15 @@
 <div class="grid-100 tablet-grid-100 mobile-grid-100">
     <h2 class="no-top-padding">TwistProtect: Firewall</h2>
+
     <a href="?status=enable" class="button fat blue float-right"><i class="fa fa-key"></i> Enable Firewall</a>
     <p>Visitors that have been blocked from accessing the site, these visitors will see a 403 error message for a specified period of time. Reasons for being block are too many failed login attempts, too many password resets, too many 403,404 requests or being manually blocked.</p>
 
-    <dl>
-        <dt>Watched IPs</dt><dd></dd>
-        <dt>Blocked IPs</dt>
-            <dd>Temporary</dd>
-            <dd>Permanent</dd>
-        <dt>Whitelisted IPs</dt><dd></dd>
+    {messages:all}
+
+    <dl class="inline">
+        <dt>Watched IPs</dt><dd>{data:watched_count}</dd>
+        <dt>Blocked IPs</dt><dd>{data:blocked_count}</dd>
+        <dt>Whitelisted IPs</dt><dd>{data:whitelist_count}</dd>
     </dl>
 
     <h3>Blocked IPs</h3>

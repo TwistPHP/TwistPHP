@@ -22,7 +22,7 @@
  * @link       https://twistphp.com
  */
 
-namespace Twist\Core\Models\Security;
+namespace Twist\Core\Models\Protect;
 
 set_time_limit(0);
 
