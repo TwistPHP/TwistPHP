@@ -124,12 +124,16 @@
 		 */
 		public function set($strField,$strValue){
 
+			$blOut = false;
+
 			if(array_key_exists($strField,$this->arrStructure['columns'])){
 				$this->arrRecord[$strField] = $strValue;
-				return true;
+				$blOut = true;
 			}else{
 				throw new \Exception(sprintf("Error adding data to database record, invalid field '%s' passed",$strField));
 			}
+
+			return $blOut;
 		}
 
 		/**
@@ -181,35 +185,36 @@
 		}
 
 		/**
-		 * Commit the updated record to the database table, setting the second parameter true - adds as new row (default: false). False is returned if the query fails, a successful insert returns insertID, a successful update returns numAffectedRows or true if numAffectedRows is 0.
+		 * Commit the updated record to the database table. False is returned if the query fails, a successful insert returns insertID, a successful update returns numAffectedRows or true if numAffectedRows is 0.
 		 * @param bool $blInsert
+		 * @param bool $blAsync
 		 * @return bool|int
 		 */
-		public function commit($blInsert = false){
+		public function commit($blInsert = false, $blAsync = false){
 
 			$mxdOut = true;
 
 			if(json_encode($this->arrOriginalRecord) !== json_encode($this->arrRecord)){
 
 				$strSQL = $this->sql($blInsert);
-				$resResult = \Twist::Database()->query($strSQL);
+				$resResult = \Twist::Database()->query($strSQL,$blAsync);
 
 				if($resResult->status()){
 					//Now that the record has been updated in the database the original data must equal the current data
 					$this->arrOriginalRecord = $this->arrRecord;
 
 					if(substr($strSQL,0,6) === 'INSERT'){
-						
+
 						$mxdOut = true;
 						$strAutoIncrementField = $this->detectAutoIncrement();
-						
+
 						if(!is_null($strAutoIncrementField)){
 							$mxdOut = $resResult->insertID();
-							
+
 							//Update the auto increment field in the record
 							$this->arrOriginalRecord[$strAutoIncrementField] = $this->arrRecord[$strAutoIncrementField] = $mxdOut;
 						}
-						
+
 					}else if($resResult->affectedRows() !== 0){
 						$mxdOut = $resResult->affectedRows();
 					}
