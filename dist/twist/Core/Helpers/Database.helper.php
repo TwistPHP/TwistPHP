@@ -249,7 +249,7 @@ class Database extends Base{
 	 * @return \Twist\Core\Models\Database\Result Database result model
 	 * @throws \Exception
 	 */
-	public function query($strQuery){
+	public function query($strQuery, $blAsync = false){
 
 		if(func_num_args() > 1){
 
@@ -269,11 +269,19 @@ class Database extends Base{
 		if($this->debugMode()){
 			//Time how long the query took to run
 			\Twist::Timer('database-query')->start();
-			$this->resResult = $this->resLibrary->query($strQuery);
+			if( $blAsync ) {
+				$this->resResult = $this->resLibrary->query($strQuery, MYSQLI_ASYNC);
+			} else {
+				$this->resResult = $this->resLibrary->query($strQuery);
+			}
 			$this->debug($strQuery,\Twist::Timer('database-query')->stop());
 
 		}else{
-			$this->resResult = $this->resLibrary->query($strQuery);
+			if( $blAsync ) {
+				$this->resResult = $this->resLibrary->query($strQuery, MYSQLI_ASYNC);
+			} else {
+				$this->resResult = $this->resLibrary->query($strQuery);
+			}
 		}
 
 		$blQueryStatus = (is_object($this->resResult) || $this->resResult);
