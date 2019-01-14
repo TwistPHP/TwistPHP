@@ -36,6 +36,7 @@
 		protected $arrAliasURIs = array();
 		protected $arrReplaceURIs = array();
 		protected $arrRoute = array();
+		protected static $resValidator = null;
 
         /**
          * @var \Twist\Core\Helpers\Route
@@ -364,5 +365,94 @@
 		 */
         protected function _render($dirView,$arrViewTags = null,$blRemoveUnusedTags = false){
 			return $this->_view($dirView,$arrViewTags,$blRemoveUnusedTags);
+		}
+
+		/**
+		 * Set a required parameter for the API method, if missing or type validation fails an error will be returned
+		 * @param $strName
+		 * @param string $strFormatRequired
+		 * @param bool $lbAllowBlank
+		 */
+		protected function _required($strName,$strFormatRequired = 'string',$lbAllowBlank = false){
+
+			self::$resValidator = (is_null(self::$resValidator)) ? \Twist::Validate()->createTest() : self::$resValidator;
+			$strFunction = (string) 'check'.ucfirst($strFormatRequired);
+
+			if($strFormatRequired == 'integer'){
+				self::$resValidator->$strFunction($strName,null,null,$lbAllowBlank,true);
+			}else{
+				self::$resValidator->$strFunction($strName,$lbAllowBlank,true);
+			}
+		}
+
+		/**
+		 * Set a optional parameter for the API method, if type validation fails an error will be returned
+		 * @param $strName
+		 * @param string $strFormatRequired
+		 * @param bool $lbAllowBlank
+		 */
+		protected function _optional($strName,$strFormatRequired = 'string',$lbAllowBlank = false){
+
+			self::$resValidator = (is_null(self::$resValidator)) ? \Twist::Validate()->createTest() : self::$resValidator;
+			$strFunction = (string) 'check'.ucfirst($strFormatRequired);
+
+			//Only attempt to validate if exists as this is an optional param
+			if(array_key_exists($strName,$_POST)){
+				if($strFormatRequired == 'integer'){
+					self::$resValidator->$strFunction($strName,null,null,$lbAllowBlank,false);
+				}elseif($strFormatRequired == 'array'){
+					self::$resValidator->$strFunction($strName,null,null,$lbAllowBlank,false);
+				}else{
+					self::$resValidator->$strFunction($strName,$lbAllowBlank,false);
+				}
+			}else{
+				$_POST[$strName] = null;
+			}
+		}
+
+		/**
+		 * Check to see that the required and optional _POST parameters have been met, violations will though a Twist error response
+		 * @param bool $blFirstErrorOnly
+		 * @return bool
+		 * @throws \Exception
+		 */
+		protected function _check($blFirstErrorOnly = false){
+
+			$blSuccess = true;
+			self::$resValidator = (is_null(self::$resValidator)) ? \Twist::Validate()->createTest() : self::$resValidator;
+			$arrResult = self::$resValidator->test($_POST);
+
+			if(!self::$resValidator->success()){
+
+				//Output error messages
+				foreach($arrResult['results'] as $strField => $arrEachResult){
+					if($arrEachResult['status'] == false){
+
+						if(strstr($strField,'email') && strstr($arrEachResult['message'],'incorrectly formatted data')){
+							$arrEachResult['message'] = 'Please enter a valid email address';
+						}elseif(strstr($strField,'website') && strstr($arrEachResult['message'],'incorrectly formatted data')){
+							$arrEachResult['message'] = 'Please enter the full website URL including the correct http:// or https:// prefix, for example: https://www.example.com';
+						}
+
+						//Only output one error response at a time, auto kills script
+						$this->_errorMessage($arrEachResult['message'],'controller');
+						$blSuccess = false;
+
+						if($blFirstErrorOnly){
+							break;
+						}
+					}
+				}
+			}
+
+			return $blSuccess;
+		}
+
+		/**
+		 * Returns the status of the _POST validation check
+		 * @return bool
+		 */
+		protected function _status(){
+			return (!is_null(self::$resValidator)) ? self::$resValidator->success() : false;
 		}
 	}
