@@ -46,6 +46,7 @@
 			$resFile->recursiveCreate(sprintf('%sCache',$strApplicationPath));
 			$resFile->recursiveCreate(sprintf('%sConfig',$strApplicationPath));
 			$resFile->recursiveCreate(sprintf('%sControllers',$strApplicationPath));
+			$resFile->recursiveCreate(sprintf('%sCrons',$strApplicationPath));
 			$resFile->recursiveCreate(sprintf('%sLogs',$strApplicationPath));
 			$resFile->recursiveCreate(sprintf('%sModels',$strApplicationPath));
 			$resFile->recursiveCreate(sprintf('%sResources',$strApplicationPath));
@@ -109,9 +110,6 @@
 			//Install all the default packages
 			\Twist::framework()->package()->installer('install');
 			\Twist::framework()->package()->installer('manager');
-			\Twist::framework()->package()->installer('ajax');
-			\Twist::framework()->package()->installer('resources');
-			\Twist::framework()->package()->installer('uploader');
 
 			//Add new settings to the chosen settings storage method
 			\Twist::framework()->setting('SITE_NAME',$arrConfiguration['settings']['site_name']);
