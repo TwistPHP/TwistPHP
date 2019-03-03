@@ -2,7 +2,9 @@
 
 use PHPUnit\Framework\TestCase;
 
-class Hooks extends TestCase{
+require_once dirname(__FILE__).'/../../phpunit-support.php';
+
+class Hooks extends PHPUnitSupport{
 
 	public function testGetAllHooks(){
 		$this->assertTrue(array_key_exists('TWIST_VIEW_TAG',\Twist::framework()->hooks()->getAll()));

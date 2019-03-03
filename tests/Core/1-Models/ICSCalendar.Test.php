@@ -2,7 +2,9 @@
 
 use PHPUnit\Framework\TestCase;
 
-class ICSCalendar extends TestCase{
+require_once dirname(__FILE__).'/../../phpunit-support.php';
+
+class ICSCalendar extends PHPUnitSupport{
 
 	public function testCreate(){
 

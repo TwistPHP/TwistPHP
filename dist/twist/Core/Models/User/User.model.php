@@ -519,7 +519,7 @@
 
 			if(\Twist::framework()->setting('USER_MIN_PASSWORD_LENGTH') > 0 && strlen($strPassword) < \Twist::framework()->setting('USER_MIN_PASSWORD_LENGTH')){
 				$arrOut['status'] = false;
-				$arrOut['message'] = sprintf('Your new password is to short and must be at least %s characters.',\Twist::framework()->setting('USER_MIN_PASSWORD_LENGTH'));
+				$arrOut['message'] = sprintf('Please use a password with minimum %s characters.',\Twist::framework()->setting('USER_MIN_PASSWORD_LENGTH'));
 			}
 
 			if($arrOut['status'] && \Twist::framework()->setting('USER_COMMON_PASSWORD_FILTER') && file_exists($strPasswordFile)){

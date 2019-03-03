@@ -2,7 +2,9 @@
 
 use PHPUnit\Framework\TestCase;
 
-class Settings extends TestCase{
+require_once dirname(__FILE__).'/../../phpunit-support.php';
+
+class Settings extends PHPUnitSupport{
 
 	public function testGet(){
 		$this -> assertEquals('Travis CI Test',\Twist::framework()->setting('SITE_NAME'));

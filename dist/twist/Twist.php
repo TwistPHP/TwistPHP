@@ -24,6 +24,7 @@
 
 	use Twist\Classes\Instance;
 	use Twist\Classes\Error;
+	use \Twist\Core\Models\Protect\Firewall;
 	use Twist\Core\Helpers as Helpers;
 
 	/**
@@ -152,6 +153,8 @@
 
 				self::recordEvent('Framework ready');
 				self::define('TWIST_LAUNCHED',1);
+
+				Firewall::firewall();
 			}
 		}
 

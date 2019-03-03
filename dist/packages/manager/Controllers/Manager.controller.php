@@ -24,9 +24,10 @@
 
 namespace Packages\manager\Controllers;
 
-use Packages\install\Models\Install;
-use \Twist\Core\Models\Security\CodeScanner;
 use \Twist\Core\Controllers\BaseUser;
+use Packages\install\Models\Install;
+use Twist\Core\Models\Protect\Firewall;
+use Twist\Core\Models\Protect\Scanner;
 use \Twist\Core\Models\ScheduledTasks;
 
 /**
@@ -82,10 +83,26 @@ class Manager extends BaseUser{
 	 */
 	public function dashboard(){
 
+		if(array_key_exists('development-mode',$_GET)){
+			\Twist::framework()->setting('DEVELOPMENT_MODE',($_GET['development-mode'] === '1') ? '1' : '0');
+		}elseif(array_key_exists('maintenance-mode',$_GET)){
+			\Twist::framework()->setting('MAINTENANCE_MODE',($_GET['maintenance-mode'] === '1') ? '1' : '0');
+		}elseif(array_key_exists('debug-bar',$_GET)){
+			\Twist::framework()->setting('DEVELOPMENT_DEBUG_BAR',($_GET['debug-bar'] === '1') ? '1' : '0');
+		}elseif(array_key_exists('data-caching',$_GET)){
+			\Twist::framework()->setting('CACHE_ENABLED',($_GET['data-caching'] === '1') ? '1' : '0');
+		}elseif(array_key_exists('twistprotect-firewall',$_GET)){
+			\Twist::framework()->setting('TWISTPROTECT_FIREWALL',($_GET['twistprotect-firewall'] === '1') ? '1' : '0');
+		}elseif(array_key_exists('twistprotect-scanner',$_GET)){
+			\Twist::framework()->setting('TWISTPROTECT_SCANNER',($_GET['twistprotect-scanner'] === '1') ? '1' : '0');
+		}
+
 		$arrTags['development-mode'] = (\Twist::framework()->setting('DEVELOPMENT_MODE') == '1') ? 'On' : 'Off';
 		$arrTags['maintenance-mode'] = (\Twist::framework()->setting('MAINTENANCE_MODE') == '1') ? 'On' : 'Off';
 		$arrTags['debug-bar'] = (\Twist::framework()->setting('DEVELOPMENT_DEBUG_BAR') == '1') ? 'On' : 'Off';
 		$arrTags['data-caching'] = (\Twist::framework()->setting('CACHE_ENABLED') == '1') ? 'On' : 'Off';
+		$arrTags['twistprotect-firewall'] = (\Twist::framework()->setting('TWISTPROTECT_FIREWALL') == '1') ? 'On' : 'Off';
+		$arrTags['twistprotect-scanner'] = (\Twist::framework()->setting('TWISTPROTECT_SCANNER') == '1') ? 'On' : 'Off';
 
 		$arrLatestVersion = \Twist::framework()->package()->getRepository('twistphp');
 		$arrTags['version'] = \Twist::version();
@@ -96,7 +113,7 @@ class Manager extends BaseUser{
 			$arrTags['version_status'] = '<span class="tag red">Failed to retrieve version information, try again later!</span>';
 		}
 
-		$objCodeScanner = new CodeScanner();
+		$objCodeScanner = new Scanner();
 		$arrTags['scanner'] = $objCodeScanner->getLastScan(TWIST_DOCUMENT_ROOT);
 
 		$arrRoutes = \Twist::Route()->getAll();
@@ -293,19 +310,40 @@ class Manager extends BaseUser{
 	public function scanner(){
 
 		$arrTags = array();
-		$objCodeScanner = new CodeScanner();
+		$objCodeScanner = new Scanner();
 
 		if(array_key_exists('scan-now',$_GET)){
-			$objCodeScanner->scan(TWIST_DOCUMENT_ROOT);
+			$objCodeScanner->scan(TWIST_DOCUMENT_ROOT,true);
 			$arrTags['scanner'] = $objCodeScanner->summary();
 		}else{
 			$arrTags['scanner'] = $objCodeScanner->getLastScan(TWIST_DOCUMENT_ROOT);
 		}
 
 		$arrTags['infected_list'] = '';
-
 		foreach($arrTags['scanner']['infected']['files'] as $arrInfectedFile){
 			$arrTags['infected_list'] .= $this->_view('components/scanner/each-infected.tpl',$arrInfectedFile);
+		}
+
+		$arrTags['changed_list'] = '';
+		foreach($arrTags['scanner']['changed']['files'] as $strPath => $strKey){
+
+			$arrFileTags = array(
+				'file' => $strPath,
+				'code' => $strKey
+			);
+
+			$arrTags['changed_list'] .= $this->_view('components/scanner/each-infected.tpl',$arrFileTags);
+		}
+
+		$arrTags['new_list'] = '';
+		foreach($arrTags['scanner']['new']['files'] as $strPath => $strKey){
+
+			$arrFileTags = array(
+				'file' => $strPath,
+				'code' => $strKey
+			);
+
+			$arrTags['new_list'] .= $this->_view('components/scanner/each-infected.tpl',$arrFileTags);
 		}
 
 		return $this->_view('pages/scanner.tpl',$arrTags);
@@ -318,7 +356,8 @@ class Manager extends BaseUser{
 	public function settings(){
 
 		if(array_key_exists('import',$_GET) && $_GET['import'] == 'core'){
-			Install::importSettings(sprintf('%ssettings.json',TWIST_FRAMEWORK_INSTALL));
+
+			\Twist\Core\Models\Install::importSettings(sprintf('%sData/settings.json',TWIST_PACKAGE_INSTALL));
 			\Twist::redirect('./settings');
 		}
 
@@ -514,5 +553,58 @@ class Manager extends BaseUser{
 		}
 
 		\Twist::redirect('./packages');
+	}
+
+	/**
+	 * Uninstall a package from the system, pass the package slug in the GET param 'package'.
+	 */
+	public function firewall(){
+
+		if(array_key_exists('list_action',$_POST) && array_key_exists('ip_address',$_POST)){
+
+			if($_POST['list_action'] == 'ban'){
+				Firewall::banIP($_POST['ip_address'],'',true);
+				\Twist::successMessage('IP address '.$_POST['ip_address'].' has been banned!');
+			}elseif($_POST['list_action'] == 'whitelist'){
+				Firewall::whitelistIP($_POST['ip_address']);
+				\Twist::successMessage('IP address '.$_POST['ip_address'].' has been whitelisted!');
+			}
+
+		}elseif(array_key_exists('unban',$_GET)){
+			Firewall::unbanIP($_GET['unban']);
+			\Twist::successMessage('IP address '.$_GET['ip_address'].' has been unbanned!');
+		}elseif(array_key_exists('unwhitelist',$_GET)){
+			Firewall::unwhitelistIP($_GET['unwhitelist']);
+			\Twist::successMessage('IP address '.$_GET['ip_address'].' has been removed from the whitelisted!');
+		}
+
+		$arrTags = array();
+		$arrData = Firewall::info();
+
+		$arrTags['whitelist_count'] = count($arrData['whitelist_ips']);
+		$arrTags['blocked_count'] = count($arrData['banned_ips']);
+		$arrTags['watched_count'] = count($arrData['failed_actions']);
+
+		$arrTags['blocked_ips'] = '';
+		foreach($arrData['banned_ips'] as $mxdIPAddress => $arrSubData){
+			$arrSubData['ip_address'] = $mxdIPAddress;
+			$arrTags['blocked_ips'] .= $this->_view('components/firewall/blocked-ip.tpl',$arrSubData);
+		}
+
+		if($arrTags['blocked_ips'] == ''){
+			$arrTags['blocked_ips'] = '<tr><td colspan="5">No IPs have been added to the blocklist</td></tr>';
+		}
+
+		$arrTags['whitelist_ips'] = '';
+		foreach($arrData['whitelist_ips'] as $mxdIPAddress => $arrSubData){
+			$arrSubData['ip_address'] = $mxdIPAddress;
+			$arrTags['whitelist_ips'] .= $this->_view('components/firewall/whitelisted-ip.tpl',$arrSubData);
+		}
+
+		if($arrTags['whitelist_ips'] == ''){
+			$arrTags['whitelist_ips'] = '<tr><td colspan="4">No IPs have been added to the whitelist</td></tr>';
+		}
+
+		return $this->_view('pages/firewall.tpl',$arrTags);
 	}
 }

@@ -2,7 +2,9 @@
 
 use PHPUnit\Framework\TestCase;
 
-class Views extends TestCase{
+require_once dirname(__FILE__).'/../../phpunit-support.php';
+
+class Views extends PHPUnitSupport{
 
 	public function testReplaceTag(){
 		$this -> assertEquals('pass',\Twist::View()->replace('{data:test}',array('test' => 'pass')));
@@ -40,10 +42,10 @@ class Views extends TestCase{
 		\Twist::framework()->setting('RESOURCE_INCLUDE_ONCE',true);
 
 		$strTagOutput = \Twist::View()->replace("{resource:debug}");
-		$this->assertContains('<script', $strTagOutput);
-		$this->assertContains('twist/Core/Resources/debug/js/twistdebug.js', $strTagOutput);
-		$this->assertContains('<link', $strTagOutput);
-		$this->assertContains('twist/Core/Resources/debug/css/twistdebug.css', $strTagOutput);
+		$this->assertStringContainsString('<script', $strTagOutput);
+		$this->assertStringContainsString('twist/Core/Resources/debug/js/twistdebug.js', $strTagOutput);
+		$this->assertStringContainsString('<link', $strTagOutput);
+		$this->assertStringContainsString('twist/Core/Resources/debug/css/twistdebug.css', $strTagOutput);
 
 		//A resource an only be included once per page load when RESOURCE_INCLUDE_ONCE is enabled
 		$strTagOutput = \Twist::View()->replace("{resource:debug,js=true}");
@@ -53,26 +55,26 @@ class Views extends TestCase{
 		\Twist::framework()->setting('RESOURCE_INCLUDE_ONCE',false);
 
 		$strTagOutput = \Twist::View()->replace("{resource:debug,js=true}");
-		$this->assertContains('<script', $strTagOutput);
-		$this->assertContains('twistdebug.js', $strTagOutput);
+		$this->assertStringContainsString('<script', $strTagOutput);
+		$this->assertStringContainsString('twistdebug.js', $strTagOutput);
 
 		$strTagOutput = \Twist::View()->replace("{resource:debug,css=true}");
-		$this->assertContains('<link', $strTagOutput);
-		$this->assertContains('twistdebug.css', $strTagOutput);
+		$this->assertStringContainsString('<link', $strTagOutput);
+		$this->assertStringContainsString('twistdebug.css', $strTagOutput);
 
 		$strTagOutput = \Twist::View()->replace("{resource:debug,js,async=async}");
-		$this->assertContains('<script', $strTagOutput);
-		$this->assertContains('async', $strTagOutput);
-		$this->assertContains('twistdebug.js', $strTagOutput);
+		$this->assertStringContainsString('<script', $strTagOutput);
+		$this->assertStringContainsString('async', $strTagOutput);
+		$this->assertStringContainsString('twistdebug.js', $strTagOutput);
 
 		$strTagOutput = \Twist::View()->replace("{resource:debug,js,async=defer}");
-		$this->assertContains('<script', $strTagOutput);
-		$this->assertContains('defer', $strTagOutput);
-		$this->assertContains('twistdebug.js', $strTagOutput);
+		$this->assertStringContainsString('<script', $strTagOutput);
+		$this->assertStringContainsString('defer', $strTagOutput);
+		$this->assertStringContainsString('twistdebug.js', $strTagOutput);
 
 		$strTagOutput = \Twist::View()->replace("{resource:debug,js=true,inline=true}");
-		$this->assertContains('<script', $strTagOutput);
-		$this->assertContains('twist.debug=', $strTagOutput);
+		$this->assertStringContainsString('<script', $strTagOutput);
+		$this->assertStringContainsString('twist.debug=', $strTagOutput);
 
 		\Twist::framework()->setting('RESOURCE_INCLUDE_ONCE',true);
 	}
@@ -81,8 +83,8 @@ class Views extends TestCase{
 
 		//Check the tag is being output
 		$strTagOutput = \Twist::View()->replace("{css:twist/Core/Resources/debug/css/twistdebug.css}");
-		$this->assertContains('<link', $strTagOutput);
-		$this->assertContains('twist/Core/Resources/debug/css/twistdebug.css', $strTagOutput);
+		$this->assertStringContainsString('<link', $strTagOutput);
+		$this->assertStringContainsString('twist/Core/Resources/debug/css/twistdebug.css', $strTagOutput);
 		
 		//Create an override JS file
 		mkdir(sprintf('%s/Twist/Core/Resources/debug/css',TWIST_APP),0777,true);
@@ -91,15 +93,15 @@ class Views extends TestCase{
 
 		//Check the replacement is being used
 		$strTagOutput = \Twist::View()->replace("{css:twist/Core/Resources/debug/css/twistdebug.css}");
-		$this->assertContains('<link', $strTagOutput);
-		$this->assertContains('app/Twist/Core/Resources/debug/css/twistdebug.css', $strTagOutput);
+		$this->assertStringContainsString('<link', $strTagOutput);
+		$this->assertStringContainsString('app/Twist/Core/Resources/debug/css/twistdebug.css', $strTagOutput);
 	}
 
 	public function testTagJS(){
 
 		$strTagOutput = \Twist::View()->replace("{js:twist/Core/Resources/debug/js/twistdebug.js}");
-		$this->assertContains('<script', $strTagOutput);
-		$this->assertContains('twist/Core/Resources/debug/js/twistdebug.js', $strTagOutput);
+		$this->assertStringContainsString('<script', $strTagOutput);
+		$this->assertStringContainsString('twist/Core/Resources/debug/js/twistdebug.js', $strTagOutput);
 
 		//Create an override JS file
 		mkdir(sprintf('%s/Twist/Core/Resources/debug/js',TWIST_APP),0777,true);
@@ -107,20 +109,20 @@ class Views extends TestCase{
 		$this -> assertTrue(file_exists(sprintf('%s/Twist/Core/Resources/debug/js/twistdebug.js',TWIST_APP)));
 
 		$strTagOutput = \Twist::View()->replace("{js:twist/Core/Resources/debug/js/twistdebug.js}");
-		$this->assertContains('<script', $strTagOutput);
-		$this->assertContains('app/Twist/Core/Resources/debug/js/twistdebug.js', $strTagOutput);
+		$this->assertStringContainsString('<script', $strTagOutput);
+		$this->assertStringContainsString('app/Twist/Core/Resources/debug/js/twistdebug.js', $strTagOutput);
 	}
 
 	public function testTagImg(){
 
 		$strTagOutput = \Twist::View()->replace("{img:twist/Core/Resources/logos/logo.png}");
-		$this->assertContains('<img', $strTagOutput);
-		$this->assertContains('twist/Core/Resources/logos/logo.png', $strTagOutput);
+		$this->assertStringContainsString('<img', $strTagOutput);
+		$this->assertStringContainsString('twist/Core/Resources/logos/logo.png', $strTagOutput);
 
 		$strTagOutput = \Twist::View()->replace("{img:twist/Core/Resources/logos/logo.png,id=test1}");
-		$this->assertContains('<img', $strTagOutput);
-		$this->assertContains('twist/Core/Resources/logos/logo.png', $strTagOutput);
-		$this->assertContains(' id="test1"', $strTagOutput);
+		$this->assertStringContainsString('<img', $strTagOutput);
+		$this->assertStringContainsString('twist/Core/Resources/logos/logo.png', $strTagOutput);
+		$this->assertStringContainsString(' id="test1"', $strTagOutput);
 		
 		//Create an override JS file
 		mkdir(sprintf('%s/Twist/Core/Resources/logos/',TWIST_APP),0777,true);
@@ -128,7 +130,7 @@ class Views extends TestCase{
 		$this -> assertTrue(file_exists(sprintf('%s/Twist/Core/Resources/logos/logo.png',TWIST_APP)));
 
 		$strTagOutput = \Twist::View()->replace("{img:twist/Core/Resources/logos/logo.png}");
-		$this->assertContains('<img', $strTagOutput);
-		$this->assertContains('app/Twist/Core/Resources/logos/logo.png', $strTagOutput);
+		$this->assertStringContainsString('<img', $strTagOutput);
+		$this->assertStringContainsString('app/Twist/Core/Resources/logos/logo.png', $strTagOutput);
 	}
 }

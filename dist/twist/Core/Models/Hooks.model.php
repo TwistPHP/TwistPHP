@@ -80,6 +80,9 @@
 				'resources_uri' => $strResourcesURI,
 				'uri' => ltrim(sprintf('%s/%s',rtrim(SITE_URI_REWRITE,'/'),ltrim(TWIST_FRAMEWORK_URI,'/')),'/')
 			);
+
+			//Register the Notifications Email Hook
+			$this->arrHooks['TWIST_NOTIFICATION_METHODS']['email'] = array('model' => 'Twist\Core\Models\Notifications\NotifyEmail');
 		}
 
 		/**
