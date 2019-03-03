@@ -154,7 +154,7 @@
             </thead>
             <tfoot>
 	            <tr>
-	                <td colspan="4" class="align-center"><a href="#" class="button" onclick="return addRewriteRule();">Add Rule</a></td>
+	                <td colspan="4" class="align-right"><a href="#" class="button" onclick="return addRewriteRule();">Add Rule</a></td>
 	            </tr>
             </tfoot>
             <tbody>
