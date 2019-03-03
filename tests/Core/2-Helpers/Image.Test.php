@@ -13,7 +13,7 @@
 			$strNewImageCode = self::$resImage->outputBase64();
 
 			$this->assertTrue(!empty($strNewImageCode));
-			$this->assertContains('base64', $strNewImageCode);
+			$this->assertStringContainsString('base64', $strNewImageCode);
 			$this->assertNotEquals($strNewImageCode, self::$strImageCode);
 
 			self::$strImageCode = $strNewImageCode;
@@ -31,7 +31,7 @@
 			$strNewImageCode = self::$resImage->outputBase64();
 
 			$this->assertTrue(!empty($strNewImageCode));
-			$this->assertContains('base64', $strNewImageCode);
+			$this->assertStringContainsString('base64', $strNewImageCode);
 			$this->assertNotEquals($strNewImageCode, self::$strImageCode);
 
 			self::$strImageCode = $strNewImageCode;
@@ -43,7 +43,7 @@
 			$strNewImageCode = self::$resImage->outputBase64();
 
 			$this->assertTrue(!empty($strNewImageCode));
-			$this->assertContains('base64', $strNewImageCode);
+			$this->assertStringContainsString('base64', $strNewImageCode);
 			$this->assertNotEquals($strNewImageCode, self::$strImageCode);
 
 			self::$strImageCode = $strNewImageCode;
@@ -55,7 +55,7 @@
 			$strNewImageCode = self::$resImage->outputBase64();
 
 			$this->assertTrue(!empty($strNewImageCode));
-			$this->assertContains('base64', $strNewImageCode);
+			$this->assertStringContainsString('base64', $strNewImageCode);
 			$this->assertNotEquals($strNewImageCode, self::$strImageCode);
 
 			self::$strImageCode = $strNewImageCode;
@@ -67,7 +67,7 @@
 			$strNewImageCode = self::$resImage->outputBase64();
 
 			$this->assertTrue(!empty($strNewImageCode));
-			$this->assertContains('base64', $strNewImageCode);
+			$this->assertStringContainsString('base64', $strNewImageCode);
 			$this->assertNotEquals($strNewImageCode, self::$strImageCode);
 
 			self::$strImageCode = $strNewImageCode;
@@ -79,7 +79,7 @@
 			$strNewImageCode = self::$resImage->outputBase64();
 
 			$this->assertTrue(!empty($strNewImageCode));
-			$this->assertContains('base64', $strNewImageCode);
+			$this->assertStringContainsString('base64', $strNewImageCode);
 			$this->assertNotEquals($strNewImageCode, self::$strImageCode);
 
 			self::$strImageCode = $strNewImageCode;
@@ -91,7 +91,7 @@
 			$strNewImageCode = self::$resImage->outputBase64();
 
 			$this->assertTrue(!empty($strNewImageCode));
-			$this->assertContains('base64', $strNewImageCode);
+			$this->assertStringContainsString('base64', $strNewImageCode);
 			$this->assertNotEquals($strNewImageCode, self::$strImageCode);
 
 			self::$strImageCode = $strNewImageCode;
@@ -103,7 +103,7 @@
 			$strNewImageCode = self::$resImage->outputBase64();
 
 			$this->assertTrue(!empty($strNewImageCode));
-			$this->assertContains('base64', $strNewImageCode);
+			$this->assertStringContainsString('base64', $strNewImageCode);
 			$this->assertNotEquals($strNewImageCode, self::$strImageCode);
 
 			self::$strImageCode = $strNewImageCode;
@@ -115,7 +115,7 @@
 			$strNewImageCode = self::$resImage->outputBase64();
 
 			$this->assertTrue(!empty($strNewImageCode));
-			$this->assertContains('base64', $strNewImageCode);
+			$this->assertStringContainsString('base64', $strNewImageCode);
 			$this->assertNotEquals($strNewImageCode, self::$strImageCode);
 
 			$arrInfo = self::$resImage->currentInfo();
@@ -131,7 +131,7 @@
 			$strNewImageCode = self::$resImage->outputBase64();
 
 			$this->assertTrue(!empty($strNewImageCode));
-			$this->assertContains('base64', $strNewImageCode);
+			$this->assertStringContainsString('base64', $strNewImageCode);
 			$this->assertNotEquals($strNewImageCode, self::$strImageCode);
 
 			self::$strImageCode = $strNewImageCode;
