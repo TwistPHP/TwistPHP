@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-require_once '../../phpunit-support.php';
+require_once dirname(__FILE__).'/../../phpunit-support.php';
 
 class Validate extends PHPUnitSupport{
 
