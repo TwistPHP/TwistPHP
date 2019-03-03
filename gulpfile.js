@@ -8,7 +8,7 @@ var gulp = require( 'gulp' ),
 		rollupCJS = require( 'rollup-plugin-commonjs' ),
 		sass = require( 'gulp-sass' ),
 		concat = require( 'gulp-concat' ),
-		jsdoc = require( 'gulp-jsdoc3' ),
+		//jsdoc = require( 'gulp-jsdoc3' ),
 		sourcemaps = require( 'gulp-sourcemaps' );
 
 var strTwistSource = './src/',
@@ -25,7 +25,7 @@ var strTwistSource = './src/',
 				'eqeqeq': 1,
 				'no-inner-declarations': 2,
 				'no-irregular-whitespace': 1,
-				'valid-jsdoc': 1,
+				//'valid-jsdoc': 1,
 				'no-dupe-keys': 1,
 				'valid-typeof': 2,
 				'no-unreachable': 1,
@@ -123,10 +123,10 @@ gulp.task( 'setup-css', () => {
 			.pipe( gulp.dest( strTwistDestination + 'setup/css' ) );
 } );
 
-gulp.task( 'docs', () => {
-	return gulp.src( strTwistSource + '**/*.js' )
-			.pipe( jsdoc( {opts: {destination: './docs/resources/'}} ) );
-} );
+//gulp.task( 'docs', () => {
+	//return gulp.src( strTwistSource + '**/*.js' )
+		//	.pipe( jsdoc( {opts: {destination: './docs/resources/'}} ) );
+//} );
 
 gulp.task( 'ajax', ['ajax-js'] );
 gulp.task( 'debug', ['debug-js', 'debug-css', 'debug-catch-js'] );

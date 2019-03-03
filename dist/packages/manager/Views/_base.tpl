@@ -9,7 +9,7 @@
 		<!--================================ THIRD-PARTY RESOURCES ================================-->
 		<!-- TEMPORARY FIX -->
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/unsemantic/1.2.3/unsemantic-grid-responsive-tablet-no-ie7.min.css" type="text/css" rel="stylesheet">
-		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css" rel="stylesheet">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 		<link href="https://rawgit.com/ahosgood/Arable/master/dist/arable.min.css" type="text/css" rel="stylesheet">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
@@ -25,12 +25,18 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
 	</head>
 	<body>
-	<div class="grid-container">
-		<h1 class="grid-100 tablet-grid-100 mobile-grid-100 no-vertical-margin"><img src="{resource:core-uri}logos/logo.png">TwistPHP</h1>
-        <ul id="menu" class="tabs grid-20 prefix-5 tablet-grid-25 mobile-grid-100">{view:./components/global/menu.php}</ul>
-		<div class="grid-70 prefix-5 tablet-grid-65 tablet-prefix-5 mobile-grid-90 mobile-prefix-5 grid-parent">
-			{route:response}
+		<div class="app-header">
+			<div class="logo">
+				<img src="{resource:core-uri}logos/logo.png">
+			</div>
+			<ul id="menu" class="tabs grid-20 prefix-5 tablet-grid-25 mobile-grid-100">{view:./components/global/menu.php}</ul>
 		</div>
-	</div>
+		<div class="app-content">
+			<div class="grid-container">
+				<div class="grid-70 prefix-5 tablet-grid-65 tablet-prefix-5 mobile-grid-90 mobile-prefix-5 grid-parent">
+					{route:response}
+				</div>
+			</div>
+		</div>
 	</body>
 </html>

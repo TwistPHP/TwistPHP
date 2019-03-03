@@ -24,6 +24,10 @@
  * --------------
  */
 
+$hexBlack:#212121;
+$hexGreen:#529F00;
+$hexWhite:#FFF;
+
 @import "../../common";
 
 html{
@@ -48,7 +52,92 @@ html{
 }
 
 body {
-	margin: 30px;
+	margin: 0;
+	padding:0;
+}
+
+.app-header{
+	width: 5%;
+	display: inline-block;
+	float: left;
+	height: 100vh;
+	background-color:#212121;
+
+	.logo{
+		padding: 20px;
+		height: 5vh;
+		img{
+			display: block;
+			width: 50px;
+			height: auto;
+			max-width:100%;
+			margin: 0 auto;
+		}
+	}
+	ul.tabs{
+		width: 100%;
+		margin: 0;
+		padding:0;
+		overflow: visible;
+		height: 90vh;
+		background-color:transparent;
+
+		li{
+			width: 100%;
+			display: block;
+			margin: 0;
+			border:0;
+			border-radius: 0;
+			padding: 20px 0;
+			position: relative;
+			transition: all 0.5s ease-out;
+
+			i{
+				width: 100%;
+				text-align: center;
+				color: #FFF;
+				font-size: 20px;
+			}
+
+			a{
+				color: #FFF;
+				padding: 0;
+				text-align: center;
+				white-space: normal;
+				word-wrap: break-word;
+				position: absolute;
+				right: -130px;
+				transition: all 0.5s ease-out;
+
+			}
+			&:hover{
+				background-color:$hexGreen;
+				transition: all 0.5s ease-in;
+				cursor: pointer;
+
+				a{
+					right: 0;
+					left:0;
+					transition: all 0.5s ease-in;
+				}
+			}
+			&.current{
+				background-color:$hexGreen;
+
+				a{
+					right: 0;
+					left: 0;
+				}
+			}
+		}
+	}
+}
+
+.app-content{
+	width: 95%;
+	display: inline-block;
+	float: left;
+	padding-top: 30px;
 }
 
 .grid-container {
@@ -61,106 +150,6 @@ body {
 	//border-radius: 3px;
 
 	box-shadow: 0 0.5em 1.25em rgba(0, 0, 0, 0.25);
-}
-
-h1 {
-	margin: 10px 0;
-	padding-right: 30px !important;
-	padding-left: 30px !important;
-
-	text-align: center;
-}
-
-	h1 img {
-		height: 43px;
-		margin-right: 0.5em;
-
-		display: inline-block;
-
-		vertical-align: bottom;
-	}
-
-#menu {
-	margin: 0;
-	padding: 0;
-
-	overflow: visible;
-
-	background-color: transparent;
-
-	//border: 1px #CCC solid;
-	//border-left-width: 0;
-	border-radius: 0 3px 3px 0;
-
-	//box-shadow: 0 0.5em 1.25em rgba(0, 0, 0, 0.35);
-
-	&::before,
-	&::after {
-		display: none;
-	}
-
-	li {
-		margin: 0;
-
-		display: block;
-
-		overflow: hidden;
-
-		border: none;
-		border-radius: 0;
-
-		a {
-			padding: 15px 20px 15px 15px;
-
-			display: block;
-
-			line-height: 1;
-			text-decoration: none;
-
-			i {
-				margin-left: 1em;
-
-				display: inline-block;
-
-				float: right;
-			}
-		}
-
-		&::after {
-			height: 7px;
-
-			position: absolute;
-			top: -7px;
-			right: 10px;
-			left: -10px;
-
-			border-radius: 100%;
-
-			box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-
-			content: "";
-		}
-
-		&.current {
-			&::after {
-				//top: 0;
-			}
-
-			a {
-				padding-left: 20px;
-
-				color: #0D47A1;
-
-				&:hover {
-					color: #1976D2;
-				}
-
-				&:active {
-					color: #E64A19;
-				}
-			}
-		}
-	}
 }
 
 h2,

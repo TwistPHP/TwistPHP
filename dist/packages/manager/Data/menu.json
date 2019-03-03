@@ -2,7 +2,7 @@
   {
     "name": "Dashboard",
     "uri": "",
-    "icon": "fa-tachometer",
+    "icon": "fa-tachometer-alt",
     "order": 1,
     "sections": []
   },
@@ -16,7 +16,7 @@
   {
     "name": "Cache",
     "uri": "cache",
-    "icon": "fa-file-archive-o",
+    "icon": "fa-file-archive",
     "order": 3,
     "sections": []
   },
@@ -37,7 +37,7 @@
   {
     "name": "ScheduledTasks",
     "uri": "scheduled-tasks",
-    "icon": "fa-clock-o",
+    "icon": "fa-clock",
     "order": 6,
     "sections": []
   },
@@ -51,7 +51,7 @@
   {
     "name": "Logout",
     "uri": "logout",
-    "icon": "fa-sign-out",
+    "icon": "fa-sign-out-alt",
     "order": 8,
     "sections": []
   }
