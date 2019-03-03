@@ -2,7 +2,9 @@
 
 use PHPUnit\Framework\TestCase;
 
-class Routes extends TestCase{
+require_once dirname(__FILE__).'/../../phpunit-support.php';
+
+class Routes extends PHPUnitSupport{
 
 	private function simulateRequest($strURI,$strRequestMethod = 'GET',$arrParameterData = array()){
 
@@ -129,7 +131,7 @@ class Routes extends TestCase{
 
 		//Test with API key (XML format)
 		$strResponseXML = $this->simulateAPIRequest('/test-basicapi-controller/test',$strAPIKey,'','','','GET',array('format' => 'xml'));
-		$this->assertContains('<status>success</status>', $strResponseXML);
+		$this->assertStringContainsString('<status>success</status>', $strResponseXML);
 
 		//Test before login
 		$arrRESTResponse = json_decode($this->simulateAPIRequest('/test-userapi-controller/test',$strAPIKey,'','','','GET',array('format' => 'json')),true);
@@ -181,7 +183,7 @@ class Routes extends TestCase{
 
 	public function test404Page(){
 		$strPageData = $this->simulateRequest('/random/page/uri');
-		$this->assertContains('404 Not Found', $strPageData);
+		$this->assertStringContainsString('404 Not Found', $strPageData);
 	}
 
 	public function testCaseInsensitiveRouting(){
@@ -209,9 +211,9 @@ class Routes extends TestCase{
 		$this -> assertEquals('42',$this->simulateRequest('/TEST/case/page'));
 
 		$strPageData1 = $this->simulateRequest('/test/case/page');
-		$this->assertContains('404 Not Found', $strPageData1);
+		$this->assertStringContainsString('404 Not Found', $strPageData1);
 
 		$strPageData2 = $this->simulateRequest('/TEST/CASE/PAGE');
-		$this->assertContains('404 Not Found', $strPageData2);
+		$this->assertStringContainsString('404 Not Found', $strPageData2);
 	}
 }

@@ -25,6 +25,7 @@
 namespace Twist\Core\Controllers;
 use \Twist\Core\Models\User\Auth;
 use \Twist\Core\Models\UserAgent;
+use Twist\Core\Models\Protect\Firewall;
 
 /**
  *  An User base controller that can be used instead of Base when you require login, authentication and other user pages. This controller should be used as an extension to a route controller class.
@@ -184,10 +185,12 @@ class BaseUser extends Base{
 				$resUser = $this->resUser->get($arrUserData['id']);
 				$resUser->resetPassword(true);
 				$resUser->commit();
-
-				\Twist::Session()->data('site-login_message','A temporary password has been emailed to you');
-				\Twist::redirect('./login');
 			}
+
+			Firewall::passwordReset();
+
+			\Twist::Session()->data('site-login_message','If registered a temporary password will be sent to the provided email address');
+			\Twist::redirect('./login');
 		}
 
 		\Twist::redirect('./forgotten-password');

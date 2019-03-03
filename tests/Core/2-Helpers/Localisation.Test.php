@@ -2,7 +2,9 @@
 
 use PHPUnit\Framework\TestCase;
 
-class Localisation extends TestCase{
+require_once dirname(__FILE__).'/../../phpunit-support.php';
+
+class Localisation extends PHPUnitSupport{
 
 	public function testLanguages(){
 

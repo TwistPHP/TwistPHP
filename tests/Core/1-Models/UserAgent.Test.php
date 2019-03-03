@@ -2,7 +2,9 @@
 
 use PHPUnit\Framework\TestCase;
 
-class UserAgent extends TestCase{
+require_once dirname(__FILE__).'/../../phpunit-support.php';
+
+class UserAgent extends PHPUnitSupport{
 
 	public function testGet(){
 		$_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1';

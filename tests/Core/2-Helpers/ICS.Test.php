@@ -2,7 +2,9 @@
 
 use PHPUnit\Framework\TestCase;
 
-class ICS extends TestCase{
+require_once dirname(__FILE__).'/../../phpunit-support.php';
+
+class ICS extends PHPUnitSupport{
 
 	public function testCalendar(){
 

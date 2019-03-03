@@ -147,4 +147,20 @@ class BaseREST extends Base{
         return $strOutput;
     }
 
+	protected function _check(){
+
+		if(!parent::_check(true)){
+
+			//422 for missing parameters and 400 for bad formatting of parameter data
+			//$intResponseCode = ($arrEachResult['type'] == 'missing') ? 422 : 400;
+			$intResponseCode = 200;
+
+			$strErrorMessage = \Twist::messageHandler('error',array('style' => 'plain','key' => 'controller'));
+
+			//Only output one error response at a time, auto kills script
+			echo $this->_respondError($strErrorMessage,$intResponseCode);
+			die();
+		}
+	}
+
 }

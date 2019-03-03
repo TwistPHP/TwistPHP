@@ -2,7 +2,9 @@
 
 use PHPUnit\Framework\TestCase;
 
-class UserModel extends TestCase{
+require_once dirname(__FILE__).'/../../phpunit-support.php';
+
+class UserModel extends PHPUnitSupport{
 
 	public static $intUserID = 0;
 
