@@ -2,7 +2,7 @@
 
 	use PHPUnit\Framework\TestCase;
 
-	if(phpversion('tidy') == '7.1'){
+	if(strstr(phpversion(),'7.1')){
 
 		/**
 		 * Class PHPUnitSupport
@@ -20,6 +20,9 @@
 				return $this->assertContains($strValue1,$strValue2);
 			}
 
+			public function testSupport(){
+				$this->assertTrue(true);
+			}
 		}
 
 	}else{
@@ -30,5 +33,8 @@
 		 */
 		class PHPUnitSupport extends TestCase{
 
+			public function testSupport(){
+				$this->assertTrue(true);
+			}
 		}
 	}
