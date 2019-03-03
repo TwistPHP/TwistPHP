@@ -62,6 +62,7 @@ body {
 	float: left;
 	height: 100vh;
 	background-color:#212121;
+	position: fixed;
 
 	.logo{
 		padding: 20px;
@@ -105,9 +106,15 @@ body {
 				text-align: center;
 				white-space: normal;
 				word-wrap: break-word;
-				position: absolute;
-				right: -130px;
-				transition: all 0.5s ease-out;
+
+				span.menu-text{
+					padding: 0;
+					white-space: pre-wrap;
+					position: absolute;
+					right: -150px;
+					opacity: 0;
+					transition: all 0.5s ease-out;
+				}
 
 			}
 			&:hover{
@@ -116,17 +123,31 @@ body {
 				cursor: pointer;
 
 				a{
-					right: 0;
-					left:0;
-					transition: all 0.5s ease-in;
+					span{
+						left: 0;
+						right: 0;
+						opacity: 1;
+						transition: all 0.5s ease-in;
+					}
 				}
 			}
+
 			&.current{
 				background-color:$hexGreen;
 
 				a{
-					right: 0;
-					left: 0;
+					span{
+						right: 0;
+						left: 0;
+						opacity: 1;
+					}
+				}
+			}
+		}
+		li:nth-child(6){
+			&:hover{
+				a{
+					padding: 20px 0 30px;
 				}
 			}
 		}
@@ -134,10 +155,51 @@ body {
 }
 
 .app-content{
-	width: 95%;
+	width: 100%;
 	display: inline-block;
 	float: left;
 	padding-top: 30px;
+
+	.grid-container{
+		max-width: 1200px;
+		display: flex;
+		justify-content: center;
+		-webkit-justify-content:center;
+
+	}
+}
+
+@media(max-width:1400px){
+	.app-header{
+		width: 8%;
+	}
+	.app-content{
+		width: 90%;
+		float: right;
+	}
+}
+@media(max-width:1024px){
+	.app-header{
+		.logo{
+			height: auto;
+			img{
+				width: auto;
+			}
+		}
+	}
+}
+@media(max-width:900px){
+	.app-header{
+		ul.tabs{
+			li{
+				a{
+					span{
+						display: none;
+					}
+				}
+			}
+		}
+	}
 }
 
 .grid-container {
