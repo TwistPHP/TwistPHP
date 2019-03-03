@@ -2,7 +2,9 @@
 
 use PHPUnit\Framework\TestCase;
 
-class File extends TestCase{
+require_once '../../phpunit-support.php';
+
+class File extends PHPUnitSupport{
 
 	public function testFileSize(){
 

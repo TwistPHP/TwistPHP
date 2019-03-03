@@ -2,7 +2,9 @@
 
 use PHPUnit\Framework\TestCase;
 
-class Email extends TestCase{
+require_once '../../phpunit-support.php';
+
+class Email extends PHPUnitSupport{
 
 	public static $arrSource = array();
 

@@ -2,7 +2,9 @@
 
 use PHPUnit\Framework\TestCase;
 
-class DatabaseMySQLi extends TestCase{
+require_once '../../phpunit-support.php';
+
+class DatabaseMySQLi extends PHPUnitSupport{
 
 	public function testQuery(){
 

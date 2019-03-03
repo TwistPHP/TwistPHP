@@ -2,7 +2,9 @@
 
 use PHPUnit\Framework\TestCase;
 
-class Tools extends TestCase{
+require_once '../../phpunit-support.php';
+
+class Tools extends PHPUnitSupport{
 
 	public function testTraverseURI(){
 		//Need to look at this

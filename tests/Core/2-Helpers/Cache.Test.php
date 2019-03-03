@@ -2,7 +2,9 @@
 
 use PHPUnit\Framework\TestCase;
 
-class Cache extends TestCase{
+require_once '../../phpunit-support.php';
+
+class Cache extends PHPUnitSupport{
 
 	public function testReadWrite(){
 		\Twist::Cache()->write('cache-test','pass',10);

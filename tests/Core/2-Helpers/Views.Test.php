@@ -2,7 +2,9 @@
 
 use PHPUnit\Framework\TestCase;
 
-class Views extends TestCase{
+require_once '../../phpunit-support.php';
+
+class Views extends PHPUnitSupport{
 
 	public function testReplaceTag(){
 		$this -> assertEquals('pass',\Twist::View()->replace('{data:test}',array('test' => 'pass')));

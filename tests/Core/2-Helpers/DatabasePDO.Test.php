@@ -2,7 +2,9 @@
 
 use PHPUnit\Framework\TestCase;
 
-class DatabasePDO extends TestCase{
+require_once '../../phpunit-support.php';
+
+class DatabasePDO extends PHPUnitSupport{
 
 	public function testConnect(){
 		//Create a conncetion using PDO rather than the default MySQLi

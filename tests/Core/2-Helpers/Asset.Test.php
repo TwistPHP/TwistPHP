@@ -2,7 +2,9 @@
 
 	use PHPUnit\Framework\TestCase;
 
-	class Asset extends TestCase{
+require_once '../../phpunit-support.php';
+
+	class Asset extends PHPUnitSupport{
 
 		public function testAdd(){
 			$intAssetID = \Twist::Asset()->add('https://twistphp.com',9,'TwistPHP');

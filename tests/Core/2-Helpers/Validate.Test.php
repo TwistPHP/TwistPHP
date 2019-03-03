@@ -2,7 +2,9 @@
 
 use PHPUnit\Framework\TestCase;
 
-class Validate extends TestCase{
+require_once '../../phpunit-support.php';
+
+class Validate extends PHPUnitSupport{
 
 	public function testCreateTest(){
 

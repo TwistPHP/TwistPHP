@@ -2,7 +2,9 @@
 
 	use PHPUnit\Framework\TestCase;
 
-	class Image extends TestCase{
+require_once '../../phpunit-support.php';
+
+	class Image extends PHPUnitSupport{
 
 		public static $resImage = null;
 		public static $strImageCode = '';

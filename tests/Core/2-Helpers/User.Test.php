@@ -2,7 +2,9 @@
 
 use PHPUnit\Framework\TestCase;
 
-class User extends TestCase{
+require_once '../../phpunit-support.php';
+
+class User extends PHPUnitSupport{
 
 	public static $intUserID = 0;
 

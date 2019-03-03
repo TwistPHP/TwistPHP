@@ -2,7 +2,9 @@
 
 use PHPUnit\Framework\TestCase;
 
-class Routes extends TestCase{
+require_once '../../phpunit-support.php';
+
+class Routes extends PHPUnitSupport{
 
 	private function simulateRequest($strURI,$strRequestMethod = 'GET',$arrParameterData = array()){
 

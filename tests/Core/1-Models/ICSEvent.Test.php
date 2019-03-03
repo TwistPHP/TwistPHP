@@ -2,7 +2,9 @@
 
 	use PHPUnit\Framework\TestCase;
 
-	class ICSEvent extends TestCase{
+require_once '../../phpunit-support.php';
+
+	class ICSEvent extends PHPUnitSupport{
 
 		public function testCreate(){
 

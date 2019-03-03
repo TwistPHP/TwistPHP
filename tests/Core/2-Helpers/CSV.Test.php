@@ -2,7 +2,9 @@
 
 use PHPUnit\Framework\TestCase;
 
-class CSV extends TestCase{
+require_once '../../phpunit-support.php';
+
+class CSV extends PHPUnitSupport{
 
 	public function testGenerate(){
 

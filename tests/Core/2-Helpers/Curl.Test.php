@@ -2,7 +2,9 @@
 
 use PHPUnit\Framework\TestCase;
 
-class Curl extends TestCase{
+require_once '../../phpunit-support.php';
+
+class Curl extends PHPUnitSupport{
 
 	public function testGetRequest(){
 

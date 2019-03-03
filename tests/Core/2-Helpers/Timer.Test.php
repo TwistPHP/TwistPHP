@@ -2,7 +2,9 @@
 
 use PHPUnit\Framework\TestCase;
 
-class Timer extends TestCase{
+require_once '../../phpunit-support.php';
+
+class Timer extends PHPUnitSupport{
 
 	public function testStartStop(){
 

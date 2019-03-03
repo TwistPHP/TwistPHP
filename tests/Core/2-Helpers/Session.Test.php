@@ -2,7 +2,9 @@
 
 use PHPUnit\Framework\TestCase;
 
-class Session extends TestCase{
+require_once '../../phpunit-support.php';
+
+class Session extends PHPUnitSupport{
 
 	public function testReadWrite(){
 		\Twist::Session()->data('session-test','pass');
