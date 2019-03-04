@@ -27,11 +27,13 @@
 $hexBlack:#212121;
 $hexGreen:#529F00;
 $hexWhite:#FFF;
+$hexMedium:#F3F3F3;
 
 @import "../../common";
 
 html{
 	min-width: 320px;
+	background-color: $hexMedium;
 
 	&::after {
 		width: 475px;
@@ -54,6 +56,10 @@ html{
 body {
 	margin: 0;
 	padding:0;
+}
+
+h1{
+	text-align: center;
 }
 
 .app-header{
@@ -102,17 +108,18 @@ body {
 
 			a{
 				color: #FFF;
-				padding: 0;
+				padding: 5px;
 				text-align: center;
 				white-space: normal;
 				word-wrap: break-word;
 
 				span.menu-text{
-					padding: 0;
-					white-space: pre-wrap;
+					padding: 5px;
+					white-space: nowrap;
 					position: absolute;
 					right: -150px;
 					opacity: 0;
+					visibility: hidden;
 					transition: all 0.5s ease-out;
 				}
 
@@ -127,8 +134,14 @@ body {
 						left: 0;
 						right: 0;
 						opacity: 1;
+						visibility: visible;
 						transition: all 0.5s ease-in;
 					}
+				}
+
+				> ul{
+					opacity: 1;
+					visibility: visible;
 				}
 			}
 
@@ -143,16 +156,28 @@ body {
 					}
 				}
 			}
-		}
-		li:nth-child(6){
-			&:hover{
-				a{
-					padding: 20px 0 30px;
-				}
-			}
-			&.current{
-				a{
-					padding: 20px 0 30px;
+			ul{
+				display: block;
+				padding:0;
+				margin:0;
+				position: absolute;
+				top: 0px;
+				right: -111px;
+				background-color:$hexGreen;
+				visibility: hidden;
+				opacity: 0;
+
+				li{
+					padding:23.4px 8px;
+
+					&:hover{
+						background-color:$hexWhite;
+						transition: all 0.5s ease-in;
+						a{
+							color: $hexGreen;
+							transition: all 0.5s ease-in;
+						}
+					}
 				}
 			}
 		}
@@ -171,6 +196,35 @@ body {
 		justify-content: center;
 		-webkit-justify-content:center;
 
+	}
+}
+
+footer{
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	top:auto;
+	background-color: $hexBlack;
+
+	.grid-100{
+		padding-left: 0;
+		padding-right: 0;
+	}
+
+	p{
+		padding: 10px;
+		color: $hexWhite;
+		text-align: center;
+		a{
+			color:$hexWhite!important;
+			transition: all 0.5s ease-out;
+
+			&:hover{
+				color: $hexGreen!important;
+				transition: all 0.5s ease-in;
+			}
+		}
 	}
 }
 

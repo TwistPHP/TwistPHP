@@ -27,16 +27,23 @@
 	<body>
 		<div class="app-header">
 			<div class="logo">
-				<img src="{resource:core-uri}logos/logo.png">
+				<a href="https://twistphp.com/" title="Twist PHP" target="_blank">
+					<img src="{resource:core-uri}logos/logo.png">
+				</a>
 			</div>
 			<ul id="menu" class="tabs grid-20 prefix-5 tablet-grid-25 mobile-grid-100">{view:./components/global/menu.php}</ul>
 		</div>
 		<div class="app-content">
 			<div class="grid-container">
-				<div class="grid-70 prefix-5 tablet-grid-65 tablet-prefix-5 mobile-grid-90 mobile-prefix-5 grid-parent">
+				<div class="grid-95 tablet-grid-65 tablet-prefix-5 mobile-grid-90 mobile-prefix-5 grid-parent">
 					{route:response}
 				</div>
 			</div>
 		</div>
+		<footer>
+			<div class="grid-100 mobile-grid-100">
+				<p>TwistPHP Product of <a href="https://onetwopixel.com/" title="OneTwoPixel" target="_blank">OneTwoPixel</a> | <a href="https://twistphp.com/docs/latest" title="TwistPHP Docs">docs</a></p>
+			</div>
+		</footer>
 	</body>
 </html>
