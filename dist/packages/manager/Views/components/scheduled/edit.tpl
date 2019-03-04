@@ -32,6 +32,8 @@
 			<option value="1" {data:enabled=='1'?'selected':''}>Enabled</option>
 			<option value="0" {data:enabled=='0'?'selected':''}>Disabled</option>
 		</select>
+
+		<input type="hidden" name="task" value="{get:task}">
 		<button type="submit">Save Changes</button>
 	</form>
 </div>

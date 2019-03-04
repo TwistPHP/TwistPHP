@@ -503,8 +503,21 @@ class Manager extends BaseUser{
 	}
 
 	public function POSTscheduledtasks(){
-		$arrTags = array();
-		return $this->_view('pages/scheduled-tasks.tpl',$arrTags);
+
+		if(array_key_exists('task',$_POST)){
+
+			ScheduledTasks::editTask(
+				$_POST['task'],
+				$_POST['description'],
+				$_POST['frequency'],
+				$_POST['command'],
+				$_POST['history'],
+				$_POST['email'],
+				($_POST['enabled'] == '1')
+			);
+		}
+
+		\Twist::redirect('scheduled-tasks');
 	}
 
 	/**

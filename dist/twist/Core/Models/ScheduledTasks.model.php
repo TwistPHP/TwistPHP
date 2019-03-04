@@ -324,6 +324,31 @@
 		}
 
 		/**
+		 * Edit an existing task in the system, the package name is non editable as this is an automated feature
+		 * @param $intTaskID
+		 * @param $strDescription
+		 * @param $strFrequency
+		 * @param $strCommand
+		 * @param int $intKeepHistory
+		 * @param string $strEmail
+		 * @param bool $blEnabled
+		 * @return bool|int
+		 * @throws \Exception
+		 */
+		public static function editTask($intTaskID,$strDescription, $strFrequency, $strCommand, $intKeepHistory = 0, $strEmail = '', $blEnabled = true){
+
+			$resSchedule = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'scheduled_tasks')->get($intTaskID);
+			$resSchedule->set('description',$strDescription);
+			$resSchedule->set('frequency',$strFrequency);
+			$resSchedule->set('command',$strCommand);
+			$resSchedule->set('history',$intKeepHistory);
+			$resSchedule->set('email',$strEmail);
+			$resSchedule->set('enabled',($blEnabled) ? '1' : '0');
+
+			return $resSchedule->commit();
+		}
+
+		/**
 		 * Delete a particular task by its ID
 		 * @param $intTaskID
 		 */
