@@ -462,23 +462,61 @@ class Manager extends BaseUser{
 
 	public function scheduledtasks(){
 
-		$arrTags = array('tasks' => '');
-		$arrTasks = ScheduledTasks::getAll();
+		if(array_key_exists('task',$_GET)){
 
-		foreach($arrTasks as $arrEachTask){
-			$arrTags['tasks'] .= $this->_view('components/scheduled/task-each.tpl',$arrEachTask);
+			$arrTasks = ScheduledTasks::get($_GET['task']);
+
+			return $this->_view('components/scheduled/edit.tpl',$arrTasks);
+
+		}elseif(array_key_exists('log',$_GET)){
+
+			$arrTasks = ScheduledTasks::get($_GET['log']);
+
+			$arrHistory = ScheduledTasks::history($_GET['log']);
+			if(!count($arrHistory)){
+				$arrHistory[] = ScheduledTasks::lastResult($_GET['log'])['output'];
+			}
+			$arrTasks['log'] = implode('<hr>',$arrHistory);
+
+			return $this->_view('components/scheduled/log.tpl',$arrTasks);
+
+		}else{
+			$arrTags = array('tasks' => '','pulse' => '');
+			$arrTags['pulse'] = ScheduledTasks::pulseInfo();
+			$arrTags['pulse']['date'] = date('D d M, Y \a\t H:i',$arrTags['pulse']['last_pulse']);
+
+			$arrTasks = ScheduledTasks::getAll();
+
+			foreach($arrTasks as $arrEachTask){
+				$arrTags['tasks'] .= $this->_view('components/scheduled/task-each.tpl',$arrEachTask);
+			}
+
+			if($arrTags['tasks'] == ''){
+				$arrTags['tasks'] = $this->_view('components/scheduled/task-none.tpl');
+			}
+
+			$arrTags['public_root'] = rtrim(TWIST_PUBLIC_ROOT,'/');
+
+			return $this->_view('pages/scheduled-tasks.tpl',$arrTags);
 		}
-
-		if($arrTags['tasks'] == ''){
-			$arrTags['tasks'] = $this->_view('components/scheduled/task-none.tpl');
-		}
-
-		return $this->_view('pages/scheduled-tasks.tpl',$arrTags);
 	}
 
 	public function POSTscheduledtasks(){
-		$arrTags = array();
-		return $this->_view('pages/scheduled-tasks.tpl',$arrTags);
+
+		if(array_key_exists('task',$_POST)){
+
+			ScheduledTasks::editTask(
+				$_POST['task'],
+				$_POST['description'],
+				$_POST['frequency'],
+				$_POST['command'],
+				$_POST['history'],
+				$_POST['email'],
+				($_POST['enabled'] == '1')
+			);
+		}
+
+		\Twist::redirect('scheduled-tasks');
 	}
 
 	/**

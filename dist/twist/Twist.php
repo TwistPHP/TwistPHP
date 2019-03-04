@@ -415,27 +415,27 @@
 			return $strOut;
 		}
 
-        /**
-         * Auto runs the corn jobs, example commands below:
-         * twist_cron=on php -t "/doc/root/if/required" ./index.php
-         * twist_cron=off php -t "/doc/root/if/required" ./index.php
-         *
-         */
+		/**
+		 * Auto runs the corn jobs, example commands below:
+		 * twist_cron=on php -t "/doc/root/if/required" ./index.php
+		 * twist_cron=off php -t "/doc/root/if/required" ./index.php
+		 *
+		 * Run a child TwistPHP task (The main processor calls this), child is the task ID
+		 * twist_cron_child=1 php -t "/doc/root/if/required" ./index.php
+		 */
 		public static function sheduledtasks(){
 
 			//If the code has been run by commandline and has the URI of index.php/cron
-			if(php_sapi_name() == "cli" && getenv('twist_cron') == 'on'){
+			if(php_sapi_name() == "cli" && getenv('twist_cron_child') > 0){
 
-                echo "== Starting TwistCron Manager ==\n";
-
-				$arrTasks = Twist\Core\Models\ScheduledTasks::activeTasks();
-
-				foreach($arrTasks as $arrEachTask){
-					Twist\Core\Models\ScheduledTasks::run($arrEachTask['id']);
-				}
-
-				echo "== Finished TwistCron Manager ==\n";
+				Twist\Core\Models\ScheduledTasks::runTask(getenv('twist_cron_child'));
 				die();
+
+			}elseif(php_sapi_name() == "cli" && getenv('twist_cron') == 'on'){
+
+				Twist\Core\Models\ScheduledTasks::processor();
+				die();
+
 			}
 		}
 

@@ -30,6 +30,121 @@
 	 */
 	class ScheduledTasks{
 
+		protected static $intProcessorStarted = 0;
+		protected static $intMaxRuntime = 70;
+		protected static $intPauseBetweenChecks = 1;
+
+		public static function processor(){
+
+			self::pulse();
+			self::debug("== Starting TwistCron Manager ==");
+
+			$arrRunningTasks = array();
+			$arrActiveTasks = self::activeTasks();
+
+			if(count($arrActiveTasks)){
+
+				self::debug();
+				self::debug("* ".count($arrActiveTasks)." task found");
+				self::debug();
+
+				self::$intProcessorStarted = time();
+
+				//Start all the tasks
+				foreach($arrActiveTasks as $arrEachTask){
+					$intProcessorID = self::callTask($arrEachTask['id']);
+					$arrRunningTasks[$intProcessorID] = $arrEachTask['id'];
+				}
+
+				//Monitor running processes
+				$arrChildProcesses = \Twist::Command()->childProcesses();
+				while(count($arrChildProcesses) > 0){
+
+					foreach($arrChildProcesses as $arrEachProcess){
+
+						if($arrEachProcess['running'] === false){
+							//Process a finished command
+							self::logTask($arrRunningTasks[$arrEachProcess['pid']],$arrEachProcess['pid']);
+						}
+					}
+
+					$arrChildProcesses = \Twist::Command()->childProcesses();
+
+					//Sleep, we don't want the loop to be very CPU intensive, give the crons time to complete.
+					sleep(self::$intPauseBetweenChecks);
+
+					//If the process has run for more than the alloted max runtime kill the process
+					if((time() - self::$intProcessorStarted) > self::$intMaxRuntime){
+						self::debug("# Aborted, scheduler timeout reached");
+						break;
+					}
+				}
+
+				//If there are still processes left that are un-finished do what with them?
+				if(count($arrChildProcesses)){
+					//Kill or Leave?
+					self::debug();
+					self::debug("* ".count($arrChildProcesses)." unfinished tasks, left running");
+					self::debug();
+
+					foreach($arrChildProcesses as $arrEachProcess){
+						$resTask = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'scheduled_tasks')->get($arrRunningTasks[$arrEachProcess['pid']],'id');
+						$resTask->set('status','zombie');
+						$resTask->commit();
+					}
+				}
+			}
+
+			self::debug("== Finished TwistCron Manager ==");
+		}
+
+		/**
+		 * Log a pulse and store it for 24Hours + 10 minutes, keep the last 60 records on file
+		 */
+		protected static function pulse(){
+
+			$arrPulse = \Twist::Cache('ScheduledTasks')->read('Pulse');
+
+			if(is_null($arrPulse)){
+				$arrPulse = array(time());
+			}else{
+				$arrPulse[] = time();
+			}
+
+			if(count($arrPulse) > 60){
+				array_shift($arrPulse);
+			}
+
+			\Twist::Cache('ScheduledTasks')->write('Pulse',$arrPulse,86400+600);
+		}
+
+		/**
+		 * Get the Scheduler Pulse Information
+		 * @return array
+		 */
+		public static function pulseInfo(){
+
+			$arrPulse = $arrPulseTemp = \Twist::Cache('ScheduledTasks')->read('Pulse');
+
+			$intLastPulse = array_pop($arrPulseTemp);
+			$intPrevious1Pulse = array_pop($arrPulseTemp);
+			$intPrevious2Pulse = array_pop($arrPulseTemp);
+
+			$intFreq1 = ($intLastPulse - $intPrevious1Pulse);
+			$intFreq2 = ($intPrevious1Pulse - $intPrevious2Pulse);
+
+			return array(
+				'active' => ($intFreq1 == $intFreq2 || $intFreq1 == ($intFreq2-1) || $intFreq1 == ($intFreq2+1)),
+				'last_pulse' => $intLastPulse,
+				'frequency' => $intFreq1,
+				'history' => $arrPulse
+			);
+		}
+
+		public static function get($intTaskID){
+			return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'scheduled_tasks')->get($intTaskID,'id',true);
+		}
+
 		public static function getAll(){
 			return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'scheduled_tasks')->all();
 		}
@@ -90,20 +205,162 @@
 				$arrRun[] = 1440;
 			}
 
-			return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'scheduled_tasks')->find($arrRun,'frequency');
+			$arrOut = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'scheduled_tasks')->find($arrRun,'frequency');
+
+			foreach($arrOut as $intKey => $arrEachTask){
+				if($arrEachTask['enabled'] == '0'){
+					unset($arrOut[$intKey]);
+				}
+			}
+
+			return $arrOut;
 		}
 
-		public static function run($intTaskID){
+		public static function callTask($intTaskID){
 
-			$arrTask = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'scheduled_tasks')->get($intTaskID,'id');
+			$resTask = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'scheduled_tasks')->get($intTaskID,'id');
 
+			//Store the last run of the current task in the database
+			$resTask->set('last_run',date('Y-m-d H:i:s'));
+			$resTask->set('status','running');
+			$resTask->commit();
 
+			//@TODO - Non-Twist tasks have to be built in here
+
+			self::debug("- Start: ".$resTask->get('description'));
+			$strCommand = sprintf('twist_cron_child=%d php -t "%s" '.rtrim(TWIST_PUBLIC_ROOT,'/').'/index.php',$intTaskID,rtrim(TWIST_PUBLIC_ROOT,'/'));
+
+			return \Twist::Command()->executeChild($strCommand);
 		}
 
-		public static function log($intTaskID){
+		public static function logTask($intTaskID,$intPID){
 
-			$arrTask = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'scheduled_tasks')->get($intTaskID,'id');
+			$resTask = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'scheduled_tasks')->get($intTaskID,'id');
 
+			//Get the process results
+			$arrResult = \Twist::Command()->childResult($intPID);
+
+			//Store the last run of the current task in the database
+			$resTask->set('runtime',(time() - strtotime($resTask->get('last_run'))));
+			$resTask->set('status','finished');
+			$resTask->commit();
+
+			self::debug("- End: ".$resTask->get('description')." [Runtime: ".$resTask->get('runtime')." sec]");
+
+			//Log the result, this replaces the previous result
+			\Twist::Cache('ScheduledTasks/logs')->write('task-'.$intTaskID,$arrResult,86400);
+
+			//Log a result history if required, only keep the amount stated by history
+			if($resTask->get('history') > 0){
+
+				$arrHistory = \Twist::Cache('ScheduledTasks/history')->read('task-'.$intTaskID);
+				$arrHistory[] = $arrResult['output'];
+
+				if(count($arrHistory) > $resTask->get('history')){
+					array_shift($arrHistory);
+				}
+
+				\Twist::Cache('ScheduledTasks/history')->write('task-'.$intTaskID,$arrHistory,86400);
+			}
+
+			//Send the result via email if required
+			if($resTask->get('email') != '' && trim($arrResult['output']) != ''){
+				Notifications\Queue::sendToEmail($resTask->get('email'),'Twist Scheduled Task ['.$intTaskID.']: report',$arrResult['output']);
+			}
 		}
 
+		public static function lastResult($intTaskID){
+			return \Twist::Cache('ScheduledTasks/logs')->read('task-'.$intTaskID);
+		}
+
+		public static function history($intTaskID){
+			return \Twist::Cache('ScheduledTasks/history')->read('task-'.$intTaskID);
+		}
+
+		protected static function debug($strMessage = ""){
+			echo $strMessage."\n";
+		}
+
+		/**
+		 * Called by a child twist task being run by he master twist cron
+		 * @param $intTaskID
+		 */
+		public static function runTask($intTaskID){
+
+			$arrTask = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'scheduled_tasks')->get($intTaskID,'id',true);
+
+			if(count($arrTask)){
+				require_once (string) rtrim(TWIST_PUBLIC_ROOT,'/').'/'.$arrTask['command'];
+			}else{
+				echo "Error Invalid Task";
+			}
+		}
+
+		/**
+		 * Create a new task in the system
+		 * @param $strDescription
+		 * @param $strFrequency
+		 * @param $strCommand
+		 * @param int $intKeepHistory
+		 * @param string $strEmail
+		 * @param bool $blEnabled
+		 * @param string $strPackageSlug
+		 * @return bool|int
+		 * @throws \Exception
+		 */
+		public static function createTask($strDescription, $strFrequency, $strCommand, $intKeepHistory = 0, $strEmail = '', $blEnabled = true, $strPackageSlug = ''){
+
+			$resSchedule = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'scheduled_tasks')->create();
+			$resSchedule->set('description',$strDescription);
+			$resSchedule->set('frequency',$strFrequency);
+			$resSchedule->set('command',$strCommand);
+			$resSchedule->set('history',$intKeepHistory);
+			$resSchedule->set('email',$strEmail);
+			$resSchedule->set('enabled',($blEnabled) ? '1' : '0');
+			$resSchedule->set('status','new');
+			$resSchedule->set('package_slug',$strPackageSlug);
+
+			return $resSchedule->commit();
+		}
+
+		/**
+		 * Edit an existing task in the system, the package name is non editable as this is an automated feature
+		 * @param $intTaskID
+		 * @param $strDescription
+		 * @param $strFrequency
+		 * @param $strCommand
+		 * @param int $intKeepHistory
+		 * @param string $strEmail
+		 * @param bool $blEnabled
+		 * @return bool|int
+		 * @throws \Exception
+		 */
+		public static function editTask($intTaskID,$strDescription, $strFrequency, $strCommand, $intKeepHistory = 0, $strEmail = '', $blEnabled = true){
+
+			$resSchedule = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'scheduled_tasks')->get($intTaskID);
+			$resSchedule->set('description',$strDescription);
+			$resSchedule->set('frequency',$strFrequency);
+			$resSchedule->set('command',$strCommand);
+			$resSchedule->set('history',$intKeepHistory);
+			$resSchedule->set('email',$strEmail);
+			$resSchedule->set('enabled',($blEnabled) ? '1' : '0');
+
+			return $resSchedule->commit();
+		}
+
+		/**
+		 * Delete a particular task by its ID
+		 * @param $intTaskID
+		 */
+		public static function deleteTask($intTaskID){
+			\Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'scheduled_tasks')->delete($intTaskID,'id');
+		}
+
+		/**
+		 * Remove all the scheduled tasks for a particular package
+		 * @param $strPackageSlug
+		 */
+		public static function deletePackageTasks($strPackageSlug){
+			\Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'scheduled_tasks')->delete($strPackageSlug,'package_slug',null);
+		}
 	}

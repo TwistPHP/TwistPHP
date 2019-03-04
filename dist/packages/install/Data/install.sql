@@ -91,15 +91,28 @@ CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`apikeys` (
 -- Table structure for table `scheduled_tasks`
 --
 
-CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`scheduled_tasks` (
+CREATE TABLE /*TWIST_DATABASE_TABLE_PREFIX*/`scheduled_tasks` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `description` char(64) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `package_slug` char(64) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `frequency` char(16) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1',
   `command` char(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `enabled` ENUM('1','0') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1',
+  `history` int(11) NOT NULL DEFAULT 0,
+  `email` char(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `last_run` datetime DEFAULT NULL,
+  `runtime` int(11) DEFAULT 0 COMMENT 'Run time in seconds',
+  `status` enum('running','finished','zombie','new') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'new',
+  `enabled` enum('1','0') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `twist_scheduled_tasks`
+--
+
+INSERT INTO /*TWIST_DATABASE_TABLE_PREFIX*/`scheduled_tasks` (`id`, `description`, `package_slug`, `frequency`, `command`, `history`, `email`, `last_run`, `runtime`, `status`, `enabled`) VALUES
+(NULL, 'TwistCache Cleaner', 'twist', '15', 'twist/Core/Crons/TwistCache.cron.php', 0, '', NULL, 0, 'new', '1');
+
 
 -- --------------------------------------------------------
 
@@ -333,42 +346,3 @@ INSERT INTO /*TWIST_DATABASE_TABLE_PREFIX*/`asset_types` (`id`, `name`, `data_de
 (12, 'YouTube Video', 'Video URL', 'http://www.youtube.com/watch?v=tabyvQhQSks', 'youtube', NULL, NULL, 'youtube.tpl', 'youtube.png');
 
 -- --------------------------------------------------------
-
---
--- Table structure for table `notifications`
---
-
-CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`notifications` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL DEFAULT '0',
-  `type` char(32) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `title` char(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `message` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `url` char(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `read` enum('1','0') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `created` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1 ;
-
-
--- --------------------------------------------------------
-
---
--- Table structure for table `notification_queue`
---
-
-CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`notification_queue` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `type` char(128) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `user_id` int(11) NOT NULL DEFAULT '0',
-  `title` char(254) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `message` text NOT NULL,
-  `url` char(254) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` enum('new','processing','sent','delete','failed','restricted') NOT NULL DEFAULT 'new',
-  `error` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `send_attempts` int(11) NOT NULL DEFAULT 0,
-  `started` datetime DEFAULT NULL,
-  `added` datetime NOT NULL,
-  `sent` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1 ;
