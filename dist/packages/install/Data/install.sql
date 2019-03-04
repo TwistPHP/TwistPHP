@@ -91,28 +91,6 @@ CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`apikeys` (
 -- Table structure for table `scheduled_tasks`
 --
 
-CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`scheduled_tasks` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `description` char(64) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `package_slug` char(64) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `frequency` char(16) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1',
-  `command` char(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `enabled` ENUM('1','0') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1;
-
-
---
--- Dumping data from scheduled_tasks
---
-
-INSERT INTO /*TWIST_DATABASE_TABLE_PREFIX*/`scheduled_tasks` (`id`, `description`, `package_slug`, `frequency`, `command`, `enabled`) VALUES
-(NULL, 'Twist Cache Cleaner', 'twist', '15', 'twist/Core/Crons/TwistCache.cron.php', '1');
-
---
--- Table structure for table `scheduled_tasks`
---
-
 CREATE TABLE /*TWIST_DATABASE_TABLE_PREFIX*/`scheduled_tasks` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `description` char(64) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
