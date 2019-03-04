@@ -496,6 +496,8 @@ class Manager extends BaseUser{
 				$arrTags['tasks'] = $this->_view('components/scheduled/task-none.tpl');
 			}
 
+			$arrTags['public_root'] = rtrim(TWIST_PUBLIC_ROOT,'/');
+
 			return $this->_view('pages/scheduled-tasks.tpl',$arrTags);
 		}
 	}
