@@ -16,28 +16,3 @@
 	<p class="{data:twistprotect-scanner=='Off'?'warning':'success'}"><small class="float-right">[<a href="{route:registered_uri}?twistprotect-scanner={data:twistprotect-scanner=='Off'?'1':'0'}">Turn {data:twistprotect-scanner=='Off'?'On':'Off'}</a>]</small><strong>TwistProtect: Scanner</strong> {data:twistprotect-scanner}</p>
 </div>
 <div class="clear"></div>
-<div class="grid-100 tablet-grid-100 mobile-grid-100">
-    <h3>Malicious Code Scanner</h3>
-    <p>Automatically scans your site for malicious PHP code, you can <a href="{route:registered_uri}../../../../index.php">manage the code scanner</a> for more options and to see a list of any potentially infected files.</p>
-    <dl class="inline">
-        <dt>Last Scan</dt>
-        <dd>{prettytime[data:scanner/scanned]}</dd>
-        <dt>Files Scanned</dt>
-        <dd>{data:scanner/files}</dd>
-        <dt>Infected Files</dt>
-        <dd>{data:scanner/infected/count}</dd>
-    </dl>
-</div>
-<div class="clear"></div>
-<div class="grid-100 tablet-grid-100 mobile-grid-100">
-	<h3>Application Summary</h3>
-	<dl class="inline">
-		<dt>Cache Size</dt>
-		<dd>32M (300 Files)</dd>
-		<dt>Routes</dt>
-		<dd>{data:route-data}</dd>
-		<dt>User Accounts</dt>
-		<dd>{data:user-accounts}</dd>
-	</dl>
-</div>
-<div class="clear"></div>
