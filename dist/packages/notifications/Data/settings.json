@@ -1,0 +1,58 @@
+{
+  "NOTIFICATIONS_RESTRICTED":{
+	"title":"Send Restrictions",
+	"description":"A comma separated list of email addresses and user IDs, only these users will receive notifications for testing. Default: Leave blank, no restrictions.",
+	"default":"",
+	"type":"string",
+	"options":"",
+	"null":0
+  },
+  "NOTIFICATIONS_PER_CYCLE":{
+	"title":"Process Per Cycle",
+	"description":"How many notifications to processed per cycle, cycles keep running until queue cooldown reached",
+	"default":3,
+	"type":"integer",
+	"options":"",
+	"null":0
+  },
+  "NOTIFICATIONS_COOLDOWN_AFTER":{
+	"title":"Cooldown Point",
+	"description":"How many seconds into the run will the queue stop looking of new items to send, give the queue time to finish current cycle before next start",
+	"default":50,
+	"type":"integer",
+	"options":"",
+	"null":0
+  },
+  "NOTIFICATIONS_QUEUE_WAIT":{
+	"title":"Empty Queue Wait",
+	"description":"Seconds to wait before re-checking an empty queue",
+	"default":4,
+	"type":"integer",
+	"options":"",
+	"null":0
+  },
+  "NOTIFICATIONS_DEBUG":{
+	"title":"Queue Debug Log",
+	"description":"Log debug output from the send methods",
+	"default":"0",
+	"type":"boolean",
+	"options":"1,0",
+	"null":0
+  },
+  "NOTIFICATIONS_AUTO_RETRY":{
+	"title":"Auto Retry Failed",
+	"description":"Automatically retry failed send attempts until retry limit has been reached",
+	"default":"1",
+	"type":"boolean",
+	"options":"1,0",
+	"null":0
+  },
+  "NOTIFICATIONS_RETRY_LIMIT":{
+	"title":"Send Retry Limit",
+	"description":"Automatically delete a notification after the send retry limit has been reached",
+	"default":3,
+	"type":"integer",
+	"options":"",
+	"null":0
+  }
+}
