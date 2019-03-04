@@ -35,6 +35,8 @@
 
 		public function load(){
 
+			\Twist::define('TWIST_MANAGER_PACKAGE',realpath(dirname(__FILE__).'/../'));
+
 			//Allow the manager to still be accessible even in maintenance mode
 			$this->bypassMaintenanceMode( '/%' );
 

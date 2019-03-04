@@ -37,7 +37,6 @@ use \Twist\Core\Models\ScheduledTasks;
 class Manager extends BaseUser{
 
 	public function __construct(){
-		\Twist::define('TWIST_MANAGER_PACKAGE',realpath(dirname(__FILE__).'/../'));
 		$this->_aliasURI('update-setting','GETupdatesetting');
 		$this->_aliasURI('scheduled-tasks','scheduledtasks');
 	}
