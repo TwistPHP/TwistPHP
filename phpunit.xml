@@ -24,7 +24,9 @@
         <whitelist>
             <directory>./dist/twist</directory>
             <exclude>
+                <file>./dist/twist/framework.php</file>
                 <directory>./dist/twist/Config</directory>
+                <file>./dist/twist/Core/boot.php</file>
                 <directory>./docs</directory>
                 <directory>./src</directory>
                 <directory>./tests</directory>
