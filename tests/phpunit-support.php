@@ -2,6 +2,8 @@
 
 	use PHPUnit\Framework\TestCase;
 
+	require_once dirname(__FILE__).'/index.php';
+
 	if(strstr(phpversion(),'7.1')){
 
 		/**
