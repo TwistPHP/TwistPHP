@@ -2,7 +2,9 @@
 
 	use PHPUnit\Framework\TestCase;
 
-	class Install extends TestCase{
+	require_once dirname(__FILE__).'/../phpunit-support.php';
+
+	class Install extends PHPUnitSupport{
 
 		public function testInstall(){
 
@@ -47,7 +49,5 @@
 			)));
 
 			require_once( 'dist/twist/framework.php' );
-
-			$this->assertTrue(true);
 		}
 	}
