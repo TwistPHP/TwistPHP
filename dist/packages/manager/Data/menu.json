@@ -22,7 +22,7 @@
   },
   {
     "name": "TwistProtect",
-    "uri": "protect",
+    "uri": "#",
     "icon": "fa-lock",
     "order": 40,
     "sub-sections": [

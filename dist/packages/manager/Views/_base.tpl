@@ -42,7 +42,7 @@
 		</div>
 		<footer>
 			<div class="grid-100 mobile-grid-100">
-				<p>TwistPHP Product of <a href="https://onetwopixel.com/" title="OneTwoPixel" target="_blank">OneTwoPixel</a> | <a href="https://twistphp.com/docs/latest" title="TwistPHP Docs">docs</a></p>
+				<p><a href="https://twistphp.com/" title="TwistPHP" target="_blank">TwistPHP</a> &copy; {date:Y}, Proud to be OpenSource | <a href="https://twistphp.com/docs/latest" title="TwistPHP Docs">docs</a></p>
 			</div>
 		</footer>
 	</body>

@@ -111,7 +111,9 @@ CREATE TABLE /*TWIST_DATABASE_TABLE_PREFIX*/`scheduled_tasks` (
 --
 
 INSERT INTO /*TWIST_DATABASE_TABLE_PREFIX*/`scheduled_tasks` (`id`, `description`, `package_slug`, `frequency`, `command`, `history`, `email`, `last_run`, `runtime`, `status`, `enabled`) VALUES
-(NULL, 'TwistCache Cleaner', 'twist', '15', 'twist/Core/Crons/TwistCache.cron.php', 0, '', NULL, 0, 'new', '1');
+(NULL, 'Twist: Cache Cleaner', 'twist', '15', 'twist/Core/Crons/CacheCleaner.cron.php', 0, '', NULL, 0, 'new', '1'),
+(NULL, 'TwistProtect: Scan code for changes and hacks', 'twist', '240', 'twist/Core/Crons/ProtectScanner.cron.php', 0, '', NULL, 0, 'new', '1'),
+(NULL, 'TwistProtect: Update Firewall Restrictions', 'twist', '60', 'twist/Core/Crons/ProtectFirewall.cron.php', 12, '', NULL, 0, 'new', '1');
 
 
 -- --------------------------------------------------------

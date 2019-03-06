@@ -468,6 +468,47 @@ class Manager extends BaseUser{
 
 			return $this->_view('components/scheduled/edit.tpl',$arrTasks);
 
+		}elseif(array_key_exists('add',$_GET)){
+
+			$arrTags = array(
+				'commands' => ''
+			);
+
+			$arrFiles = scandir(TWIST_APP.'/Crons/');
+			foreach($arrFiles as $strEachFile){
+				if(!in_array($strEachFile,array('.','..')) && strstr($strEachFile,'.cron.php')){
+					$strPath = ltrim(str_replace(TWIST_PUBLIC_ROOT,'',TWIST_APP.'/Crons/'.$strEachFile),'/');
+					$arrTags['commands'] .= '<option value="app,'.$strPath.'">'.$strEachFile.' [App]</option>';
+				}
+			}
+
+			$arrPackages = scandir(TWIST_PACKAGES);
+			foreach($arrPackages as $strEachPackage){
+				if(!in_array($strEachPackage,array('.','..'))){
+
+					$arrFiles = scandir(TWIST_PACKAGES.'/'.$strEachPackage.'/Crons/');
+					foreach($arrFiles as $strEachFile){
+						if(!in_array($strEachFile,array('.','..')) && strstr($strEachFile,'.cron.php')){
+
+							$strPath = ltrim(str_replace(TWIST_PUBLIC_ROOT,'',TWIST_PACKAGES.'/'.$strEachPackage.'/Crons/'.$strEachFile),'/');
+							$arrTags['commands'] .= '<option value="'.$strEachPackage.','.$strPath.'">'.$strEachFile.' [Package: '.$strEachPackage.']</option>';
+						}
+					}
+
+				}
+			}
+
+			$arrFiles = scandir(TWIST_FRAMEWORK.'Core/Crons/');
+			foreach($arrFiles as $strEachFile){
+				if(!in_array($strEachFile,array('.','..')) && strstr($strEachFile,'.cron.php')){
+					$strPath = ltrim(str_replace(TWIST_PUBLIC_ROOT,'',TWIST_FRAMEWORK.'Core/Crons/'.$strEachFile),'/');
+					$arrTags['commands'] .= '<option value="twist,'.$strPath.'">'.$strEachFile.' [TwistPHP]</option>';
+				}
+			}
+
+
+			return $this->_view('components/scheduled/add.tpl',$arrTags);
+
 		}elseif(array_key_exists('log',$_GET)){
 
 			$arrTasks = ScheduledTasks::get($_GET['log']);
@@ -514,6 +555,24 @@ class Manager extends BaseUser{
 				$_POST['email'],
 				($_POST['enabled'] == '1')
 			);
+
+		}elseif(array_key_exists('create_task',$_POST)){
+
+			if(trim($_POST['description']) == ''){
+				return $this->scheduledtasks();
+			}else{
+				list($strPackage,$strCommand) = explode(',',$_POST['command']);
+
+				ScheduledTasks::createTask(
+					$_POST['description'],
+					$_POST['frequency'],
+					$strCommand,
+					$_POST['history'],
+					$_POST['email'],
+					($_POST['enabled'] == '1'),
+					$strPackage
+				);
+			}
 		}
 
 		\Twist::redirect('scheduled-tasks');

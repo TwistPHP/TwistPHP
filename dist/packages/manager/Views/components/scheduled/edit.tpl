@@ -1,5 +1,5 @@
 <div class="grid-100 tablet-grid-100 mobile-grid-100">
-	<h2 class="no-top-padding">Scheduled Tasks Edit: {data:description} [{data:id}]</h2>
+	<h2 class="no-top-padding">Scheduled Tasks Edit</h2>
 	<form action="" method="post" class="inline foldable large">
 
 		<dl class="inline">

@@ -10,6 +10,7 @@
         <dt>Watched IPs</dt><dd>{data:watched_count}</dd>
         <dt>Blocked IPs</dt><dd>{data:blocked_count}</dd>
         <dt>Whitelisted IPs</dt><dd>{data:whitelist_count}</dd>
+        <dt>ProtectGlobal IPs</dt><dd>{data:whitelist_count}</dd><dd>Updated: 3 March 2019 as 03:00</dd><dd>Database of banned IP address that have been detected across all participating TwistPHP installations</dd>
     </dl>
 
     <h3>Blocked IPs</h3>

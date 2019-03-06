@@ -1,5 +1,5 @@
 <div class="grid-100 tablet-grid-100 mobile-grid-100">
-	<h2 class="no-top-padding">Scheduled Tasks Log: {data:description} [{data:id}]</h2>
+	<h2 class="no-top-padding">Scheduled Tasks Log</h2>
 	<dl class="inline">
 		<dt>Description</dt><dd>{data:description}</dd>
 		<dt>Frequency</dt><dd>{data:frequency}</dd>
