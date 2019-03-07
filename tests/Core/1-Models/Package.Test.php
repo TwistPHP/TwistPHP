@@ -17,7 +17,7 @@
 
 			$this->assertFalse(\Twist::framework()->package()->isInstalled('notifications'));
 
-			$this->assertTrue(\Twist::framework()->package()->installer('notifications'));
+			\Twist::framework()->package()->installer('notifications');
 
 			$this->assertTrue(\Twist::framework()->package()->isInstalled('notifications'));
 		}
@@ -29,7 +29,7 @@
 
 		public function testUninstall(){
 
-			$this->assertTrue(\Twist::framework()->package()->uninstaller('notifications'));
+			\Twist::framework()->package()->uninstaller('notifications');
 
 			$this->assertFalse(\Twist::framework()->package()->isInstalled('notifications'));
 		}

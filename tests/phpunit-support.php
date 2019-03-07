@@ -2,7 +2,26 @@
 
 	use PHPUnit\Framework\TestCase;
 
-	if(strstr(phpversion(),'7.1')){
+	class TestCaseTest extends TestCase{
+		public function testFunctions(){
+			$this->assertTrue(true);
+		}
+	}
+
+	if(method_exists(new TestCaseTest(),'assertStringContainsString')){
+
+		/**
+		 * Class PHPUnitSupport
+		 * Add forward compatible support for testing newer versions of PHP
+		 */
+		class PHPUnitSupport extends TestCase{
+
+			public function testSupport(){
+				$this->assertTrue(true);
+			}
+		}
+
+	}else{
 
 		/**
 		 * Class PHPUnitSupport
@@ -19,19 +38,6 @@
 			public function assertStringContainsString($strValue1,$strValue2){
 				return $this->assertContains($strValue1,$strValue2);
 			}
-
-			public function testSupport(){
-				$this->assertTrue(true);
-			}
-		}
-
-	}else{
-
-		/**
-		 * Class PHPUnitSupport
-		 * Add forward compatible support for testing newer versions of PHP
-		 */
-		class PHPUnitSupport extends TestCase{
 
 			public function testSupport(){
 				$this->assertTrue(true);
