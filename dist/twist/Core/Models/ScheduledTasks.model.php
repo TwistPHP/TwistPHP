@@ -126,9 +126,9 @@
 
 			$arrPulse = $arrPulseTemp = \Twist::Cache('ScheduledTasks')->read('Pulse');
 
-			$intLastPulse = array_pop($arrPulseTemp);
-			$intPrevious1Pulse = array_pop($arrPulseTemp);
-			$intPrevious2Pulse = array_pop($arrPulseTemp);
+			$intLastPulse = count($arrPulseTemp) ? array_pop($arrPulseTemp) : 0;
+			$intPrevious1Pulse = count($arrPulseTemp) ? array_pop($arrPulseTemp) : 0;
+			$intPrevious2Pulse = count($arrPulseTemp) ? array_pop($arrPulseTemp) : 0;
 
 			$intFreq1 = ($intLastPulse - $intPrevious1Pulse);
 			$intFreq2 = ($intPrevious1Pulse - $intPrevious2Pulse);

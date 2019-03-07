@@ -1,7 +1,7 @@
 {
   "name": "TwistPHP Installer",
-  "description": "Installs the framework",
-  "version": "1.0.0",
+  "description": "Installs the TwistPHP framework",
+  "version": "4.0.0",
   "author": {
 	"name": "Joe Blogs",
 	"website": "https://twistphp.com",
