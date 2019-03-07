@@ -134,7 +134,7 @@
 			$intFreq2 = ($intPrevious1Pulse - $intPrevious2Pulse);
 
 			return array(
-				'active' => ($intFreq1 == $intFreq2 || $intFreq1 == ($intFreq2-1) || $intFreq1 == ($intFreq2+1)),
+				'active' => count($arrPulse) && ($intFreq1 == $intFreq2 || $intFreq1 == ($intFreq2-1) || $intFreq1 == ($intFreq2+1)),
 				'last_pulse' => $intLastPulse,
 				'frequency' => $intFreq1,
 				'history' => $arrPulse
