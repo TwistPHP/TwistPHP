@@ -392,6 +392,8 @@ class Manager extends BaseUser{
 
 			}elseif($arrEachItem['type'] === 'integer'){
 				$arrEachItem['input'] .= sprintf('<input type="text" name="settings[%s]" value="%s">',$arrEachItem['key'],$arrEachItem['value']);
+			}elseif($arrEachItem['type'] === 'json'){
+				$arrEachItem['input'] .= sprintf('<textarea type="text" name="settings[%s]">%s</textarea>',$arrEachItem['key'],$arrEachItem['value']);
 			}else{
 				//Unknown types
 				$arrEachItem['input'] .= sprintf('<input type="text" name="settings[%s]" value="%s">',$arrEachItem['key'],$arrEachItem['value']);

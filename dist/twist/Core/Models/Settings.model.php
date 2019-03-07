@@ -104,7 +104,9 @@
 	                        settype( $arrEachSetting['value'] , 'float' );
 	                    }elseif($arrEachSetting['type'] === 'integer' && is_numeric($arrEachSetting['value'])){
 	                        settype( $arrEachSetting['value'] , 'integer' );
-	                    }
+	                    }elseif($arrEachSetting['type'] === 'json' && is_array($arrEachSetting['value'])){
+							$arrEachSetting['value'] = json_encode($arrEachSetting['value']);
+						}
 
 	                    $this->arrSettings[$arrEachSetting['key']] = $arrEachSetting['value'];
 	                }
@@ -129,6 +131,12 @@
 
 			foreach($this->arrSettingsInfo as $strKey => $arrSettings){
 				$arrSettings['key'] = $strKey;
+
+				//Fix JSON encoded data
+				if($arrSettings['type'] === 'json' && is_array($arrSettings['default'])){
+					$arrSettings['default'] = json_encode($arrSettings['default']);
+				}
+
 				$arrSettings['value'] = $arrSettings['default'];
 				$this->arrSettingsInfo[$strKey] = $arrSettings;
 			}
@@ -262,6 +270,14 @@
 		 * @throws \Exception
 		 */
 		public function install($strPackage,$strGroup,$strKey,$mxdValue,$strTitle,$strDescription,$strDefault,$strType,$strOptions,$blNull = false){
+
+			if($strType === 'json' && is_array($strDefault)){
+				$strDefault = json_encode($strDefault);
+			}
+
+			if($strType === 'json' && is_array($mxdValue)){
+				$mxdValue = json_encode($mxdValue);
+			}
 
 			if(TWIST_DATABASE_PROTOCOL === 'none'){
 

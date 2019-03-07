@@ -29,11 +29,8 @@
 		//Specifies if the firewall is running or not
 		public static $blEnabled = true;
 
-		//Failed logins before soft ban
-		public static $intLoginLimit = 5;
-
-		//Failed password resets before soft ban
-		public static $intResetLimit = 3;
+		//All the registered fail types used for soft bans
+		public static $arrFailTypes = array();
 
 		//Time in seconds to soft ban a user
 		public static $intInitialBanSeconds = 300;
@@ -67,8 +64,7 @@
 			if(self::$blLoaded  === false){
 
 				self::$blEnabled = \Twist::framework()->setting('TWISTPROTECT_FIREWALL');
-				self::$intLoginLimit = \Twist::framework()->setting('TWISTPROTECT_FIREWALL_LOGIN_LIMIT');
-				self::$intResetLimit = \Twist::framework()->setting('TWISTPROTECT_FIREWALL_RESET_LIMIT');
+				self::$arrFailTypes = json_decode(\Twist::framework()->setting('TWISTPROTECT_FIREWALL_FAILTYPES'),true);
 				self::$intInitialBanSeconds = \Twist::framework()->setting('TWISTPROTECT_FIREWALL_INITIAL_BAN');
 				self::$intMaxSoftBans = \Twist::framework()->setting('TWISTPROTECT_FIREWALL_FULL_BAN');
 				self::$intFullBanSeconds = \Twist::framework()->setting('TWISTPROTECT_FIREWALL_MAX_SOFTBANS');
@@ -97,8 +93,7 @@
 			return array(
 				'settings' => array(
 					'enabled' => self::$blEnabled,
-					'login_limit' => self::$intLoginLimit,
-					'reset_limit' => self::$intResetLimit,
+					'fail_types' => self::$arrFailTypes,
 					'soft_ban_hours' => self::$intInitialBanSeconds,
 					'max_soft_bans' => self::$intMaxSoftBans,
 					'full_ban_hours' => self::$intFullBanSeconds,
@@ -161,80 +156,95 @@
 				$strIPAddress = $_SERVER['REMOTE_ADDR'];
 
 				if(self::$blResetAfterSuccess && array_key_exists($strIPAddress,self::$arrFailedActions)){
-					self::$arrFailedActions[$strIPAddress]['failed_logins'] = 0;
-					self::$arrFailedActions[$strIPAddress]['password_resets'] = 0;
-
+					unset(self::$arrFailedActions[$strIPAddress]);
 					\Twist::Cache()->write('protect/failed-actions',self::$arrFailedActions,86400*self::$intTwistCacheLife);
 				}
 			}
 		}
 
 		/**
-		 * Log a failed login attempt by an IP address, multiple login attempts without a success will trigger a soft ban
+		 * Register or update a fail types, setting the soft limit to 0 will disable the type
+		 * @param $strAttemptType
+		 * @param $strBanMessage
+		 * @param $intSoftLimit
 		 */
-		public static function failedLogin(){
+		public static function setFailedAttemptType($strAttemptType,$strBanMessage,$intSoftLimit){
+
+			self::$arrFailTypes[$strAttemptType] = array(
+				'ban_message' => $strBanMessage,
+				'soft_limit' => $intSoftLimit
+			);
+
+			\Twist::framework()->setting('TWISTPROTECT_FIREWALL_FAILTYPES',json_encode(self::$arrFailTypes));
+		}
+
+		/**
+		 * Return the array of registered Failed Attempt (Soft Ban) types
+		 * @return array
+		 */
+		public static function getFailedAttemptTypes(){
+			return self::$arrFailTypes;
+		}
+
+		/**
+		 * Log a failed attempt at doing something, the attempt type must be pre-registered in order to work
+		 * Each type has a soft limit that when reached will ban the user for a short period of time
+		 * @param $strAttemptType
+		 */
+		public static function logFailedAttempt($strAttemptType){
 
 			self::load();
 
-			if(self::$blEnabled && self::$intLoginLimit > 0){
-				$strIPAddress = $_SERVER['REMOTE_ADDR'];
+			if(array_key_exists($strAttemptType,self::$arrFailTypes)){
 
-				if(!array_key_exists($strIPAddress,self::$arrWhitelistIPs)){
+				if(self::$blEnabled && self::$arrFailTypes[$strAttemptType]['soft_limit'] > 0){
+					$strIPAddress = $_SERVER['REMOTE_ADDR'];
 
-					if(array_key_exists($strIPAddress,self::$arrFailedActions)){
-						self::$arrFailedActions[$strIPAddress]['failed_logins']++;
-						self::$arrFailedActions[$strIPAddress]['last_attempt'] = date('Y-m-d H:i:s');
-					}else{
-						self::$arrFailedActions[$strIPAddress] = array(
-							'first_attempt' => date('Y-m-d H:i:s'),
-							'last_attempt' => date('Y-m-d H:i:s'),
-							'failed_logins' => 1,
-							'password_resets' => 0
-						);
+					if(!array_key_exists($strIPAddress,self::$arrWhitelistIPs)){
+
+						if(array_key_exists($strIPAddress,self::$arrFailedActions)){
+
+							//If this is the first failure of its type then set a new row
+							if(!array_key_exists($strAttemptType,self::$arrFailedActions[$strIPAddress])){
+								self::$arrFailedActions[$strIPAddress][$strAttemptType] = 0;
+							}
+
+							self::$arrFailedActions[$strIPAddress][$strAttemptType]++;
+							self::$arrFailedActions[$strIPAddress]['last_attempt'] = date('Y-m-d H:i:s');
+						}else{
+							self::$arrFailedActions[$strIPAddress] = array(
+								'first_attempt' => date('Y-m-d H:i:s'),
+								'last_attempt' => date('Y-m-d H:i:s'),
+								$strAttemptType => 1
+							);
+						}
+
+						if(self::$arrFailedActions[$strIPAddress][$strAttemptType] >= self::$arrFailTypes[$strAttemptType]['soft_limit']){
+							unset(self::$arrFailedActions[$strIPAddress]);
+							self::banIP($strIPAddress,self::$arrFailTypes[$strAttemptType]['ban_message']);
+						}
+
+						\Twist::Cache()->write('protect/failed-actions',self::$arrFailedActions,86400*self::$intTwistCacheLife);
 					}
-
-					if(self::$arrFailedActions[$strIPAddress]['failed_logins'] >= self::$intLoginLimit){
-						unset(self::$arrFailedActions[$strIPAddress]);
-						self::banIP($strIPAddress,'To many failed logins');
-					}
-
-					\Twist::Cache()->write('protect/failed-actions',self::$arrFailedActions,86400*self::$intTwistCacheLife);
 				}
+			}else{
+				//@todo Throw an error message here
 			}
+		}
+
+
+		/**
+		 * Log a failed login attempt by an IP address, multiple login attempts without a success will trigger a soft ban
+		 */
+		public static function failedLogin(){
+			self::logFailedAttempt('failed_logins');
 		}
 
 		/**
 		 * Login a password reset attempt by an IP address, multiple reset attempts without a login will trigger a soft ban
 		 */
 		public static function passwordReset(){
-
-			self::load();
-
-			if(self::$blEnabled && self::$intResetLimit > 0){
-				$strIPAddress = $_SERVER['REMOTE_ADDR'];
-
-				if(!array_key_exists($strIPAddress,self::$arrWhitelistIPs)){
-
-					if(array_key_exists($strIPAddress,self::$arrFailedActions)){
-						self::$arrFailedActions[$strIPAddress]['password_resets']++;
-						self::$arrFailedActions[$strIPAddress]['last_attempt'] = date('Y-m-d H:i:s');
-					}else{
-						self::$arrFailedActions[$strIPAddress] = array(
-							'first_attempt' => date('Y-m-d H:i:s'),
-							'last_attempt' => date('Y-m-d H:i:s'),
-							'failed_logins' => 0,
-							'password_resets' => 1
-						);
-					}
-
-					if(self::$arrFailedActions[$strIPAddress]['password_resets'] >= self::$intResetLimit){
-						unset(self::$arrFailedActions[$strIPAddress]);
-						self::banIP($strIPAddress,'To many password resets');
-					}
-
-					\Twist::Cache()->write('protect/failed-actions',self::$arrFailedActions,86400*self::$intTwistCacheLife);
-				}
-			}
+			self::logFailedAttempt('password_resets');
 		}
 
 		/**
@@ -276,7 +286,7 @@
 
 				if(self::$arrBanHistory[$strIPAddress]['bans'] >= self::$intMaxSoftBans){
 					//Upgrade ban to a full ban
-					self::$arrBannedIPs[$strIPAddress]['reason'] = 'Reached soft ban limit';
+					self::$arrBannedIPs[$strIPAddress]['reason'] = 'Reached soft ban limit (Full Ban Applied)';
 					self::$arrBannedIPs[$strIPAddress]['length'] = self::$intFullBanSeconds;
 					self::$arrBannedIPs[$strIPAddress]['expire'] = (self::$intFullBanSeconds == 0) ? date('Y-m-d H:i:s',strtotime('+10 Years')) : date('Y-m-d H:i:s',strtotime('+'.self::$intFullBanSeconds.' Seconds'));
 				}

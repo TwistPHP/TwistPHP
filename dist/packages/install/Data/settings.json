@@ -719,19 +719,20 @@
     "options":"1,0",
     "null":0
   },
-  "TWISTPROTECT_FIREWALL_LOGIN_LIMIT":{
-    "title":"Login Limit",
-    "description":"Failed logins before soft ban, set to 0 for off (TwistProtect Firewall)",
-    "default":5,
-    "type":"integer",
-    "options":"",
-    "null":0
-  },
-  "TWISTPROTECT_FIREWALL_RESET_LIMIT":{
-    "title":"Reset Limit",
-    "description":"Failed password resets before soft ban, set to 0 for off (TwistProtect Firewall)",
-    "default":3,
-    "type":"integer",
+  "TWISTPROTECT_FIREWALL_FAILTYPES":{
+    "title":"Fail Types",
+    "description":"Registered fail attempt types, set a soft limit to 0 will disable the type",
+    "default":{
+      "failed_logins": {
+        "ban_message":"To many failed logins",
+        "soft_limit":5
+      },
+      "password_resets": {
+        "ban_message":"To many password resets",
+        "soft_limit":3
+      }
+    },
+    "type":"json",
     "options":"",
     "null":0
   },
