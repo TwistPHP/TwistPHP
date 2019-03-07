@@ -10,7 +10,7 @@
 
 			//Test a single process
 			$arrResult = \Twist::Command()->execute('ls',TWIST_PUBLIC_ROOT);
-			$this -> assertEquals('ls',$arrResult['result']);
+			$this -> assertEquals('ls',$arrResult['command']);
 			$this -> assertTrue($arrResult['status']);
 			$this -> assertContains('index.php',$arrResult['output']);
 		}
@@ -34,8 +34,8 @@
 
 			//Sleep for another second and check the results of both processes
 			sleep(1);
-			$this -> assertContains('index.php',\Twist::Command()->childResult($intPID_1));
-			$this -> assertContains('Command.Test.php',\Twist::Command()->childResult($intPID_2));
+			$this -> assertContains('index.php',\Twist::Command()->childResult($intPID_1)['output']);
+			$this -> assertContains('Command.Test.php',\Twist::Command()->childResult($intPID_2)['output']);
 
 			//Check that there are no running processes left to collect
 			$arrProcesses = \Twist::Command()->childProcesses();
