@@ -347,7 +347,7 @@
 
 			return $resSchedule->commit();
 		}
-		
+
 		/**
 		 * Delete a particular task by its ID
 		 * @param $intTaskID

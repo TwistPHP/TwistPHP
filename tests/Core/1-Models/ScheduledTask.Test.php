@@ -39,7 +39,7 @@
 			$arrTask = Twist\Core\Models\ScheduledTasks::get($intTaskID);
 			$this->assertStringContainsString($arrTask['status'],'finished');
 
-			$this->assertTrue(Twist\Core\Models\ScheduledTasks::editTask(
+			$this->assertEquals(1,Twist\Core\Models\ScheduledTasks::editTask(
 				$intTaskID,
 				'Travis Test',
 				1,
@@ -49,7 +49,7 @@
 				false
 			));
 
-			$this->assertTrue(Twist\Core\Models\ScheduledTasks::deleteTask(
+			$this->assertEquals(1,Twist\Core\Models\ScheduledTasks::deleteTask(
 				$intTaskID
 			));
 
