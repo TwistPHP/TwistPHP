@@ -46,7 +46,7 @@ class File extends PHPUnitSupport{
 
 	public function testDownload(){
 
-		$arrResult = \Twist::File()->download('https://api.github.com/repos/TwistPHP/TwistPHP/zipball/v3.1.1',TWIST_PUBLIC_ROOT.'/twistphp.zip',10);
+		$arrResult = \Twist::File()->download('https://github.com/TwistPHP/TwistPHP/archive/v3.1.1.zip',TWIST_PUBLIC_ROOT.'/twistphp.zip',10);
 		$this->assertTrue($arrResult['status']);
 	}
 
