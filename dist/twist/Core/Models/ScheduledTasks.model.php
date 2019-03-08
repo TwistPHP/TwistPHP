@@ -347,20 +347,22 @@
 
 			return $resSchedule->commit();
 		}
-
+		
 		/**
 		 * Delete a particular task by its ID
 		 * @param $intTaskID
+		 * @return bool
 		 */
 		public static function deleteTask($intTaskID){
-			\Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'scheduled_tasks')->delete($intTaskID,'id');
+			return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'scheduled_tasks')->delete($intTaskID,'id');
 		}
 
 		/**
 		 * Remove all the scheduled tasks for a particular package
 		 * @param $strPackageSlug
+		 * @return bool
 		 */
 		public static function deletePackageTasks($strPackageSlug){
-			\Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'scheduled_tasks')->delete($strPackageSlug,'package_slug',null);
+			return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'scheduled_tasks')->delete($strPackageSlug,'package_slug',null);
 		}
 	}
