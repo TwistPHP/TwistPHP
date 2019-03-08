@@ -53,7 +53,7 @@ class File extends PHPUnitSupport{
 	public function testHash(){
 
 		$this->assertEquals('b6d68cf97891c60252db96bf61ce6309',\Twist::File()->hash(TWIST_PUBLIC_ROOT.'/app/hashtest/hashtest.php','md5'));
-		$this->assertEquals('image/png',\Twist::File()->directoryHash(TWIST_PUBLIC_ROOT.'/app/hashtest','md5'));
+		$this->assertEquals('5e926875f1e8b3200b2403dd3f8946fc',\Twist::File()->directoryHash(TWIST_PUBLIC_ROOT.'/app/hashtest','md5'));
 
 		$this->assertEquals('image/png',\Twist::File()->hash(TWIST_PUBLIC_ROOT.'/app/hashtest/hashtest.php','sha1'));
 		$this->assertEquals('image/png',\Twist::File()->directoryHash(TWIST_PUBLIC_ROOT.'/app/hashtest','sha1'));
