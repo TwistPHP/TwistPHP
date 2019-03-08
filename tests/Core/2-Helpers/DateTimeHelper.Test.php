@@ -24,7 +24,7 @@
 			$this -> assertStringContainsString('month',\Twist::DateTime()->getAge(time()+(86400*33)));
 			$this -> assertStringContainsString('months',\Twist::DateTime()->getAge(time()+(86400*90)));
 			$this -> assertStringContainsString('year',\Twist::DateTime()->getAge(time()+(86400*364)));
-			$this -> assertStringContainsString('years',\Twist::DateTime()->getAge(time()+(86400*700)));
+			$this -> assertStringContainsString('years',\Twist::DateTime()->getAge(time()+(86400*740)));
 
 		}
 
@@ -39,11 +39,11 @@
 
 		public function testPersonAge(){
 
-			$this -> assertEquals(33,\Twist::DateTime()->getPersonAge('1985-01-01'));
+			$this -> assertEquals(34,\Twist::DateTime()->getPersonAge((date('Y')-34).'-01-01'));
 		}
 
 		public function testBetween(){
 
-			$this -> assertEquals(10,count(\Twist::DateTime()->getDayBetweenDates('2013-01-01','2013-01-10',1)));
+			$this -> assertEquals('2019-03-15',\Twist::DateTime()->getDayBetweenDates('2019-03-08','2019-03-16',5)[0]);
 		}
 	}
