@@ -532,7 +532,16 @@ class File extends Base{
 
 		//Break the request URL up into usable parts
 		$arrURLParts = parse_url($strRemoteFile);
-		$resRemoteHandle = fsockopen($arrURLParts['host'], 80, $intErrorCode, $strError, 5);
+
+		if($arrURLParts['scheme'] == 'https'){
+			$strSocketHost = 'ssl://'.$arrURLParts['host'];
+			$arrURLParts['port'] = (isset($arrURLParts['port'])) ? $arrURLParts['port'] : 443;
+		}else{
+			$strSocketHost = $arrURLParts['host'];
+			$arrURLParts['port'] = (isset($arrURLParts['port'])) ? $arrURLParts['port'] : 80;
+		}
+
+		$resRemoteHandle = fsockopen($strSocketHost, $arrURLParts['port'], $intErrorCode, $strError, 5);
 		$resLocalHandle = fopen($strLocalFile, 'wb');
 
 		if($resRemoteHandle == false || $resLocalHandle == false){

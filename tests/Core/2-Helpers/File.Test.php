@@ -55,8 +55,8 @@ class File extends PHPUnitSupport{
 		$this->assertEquals('b6d68cf97891c60252db96bf61ce6309',\Twist::File()->hash(TWIST_PUBLIC_ROOT.'/app/hashtest/hashtest.php','md5'));
 		$this->assertEquals('5e926875f1e8b3200b2403dd3f8946fc',\Twist::File()->directoryHash(TWIST_PUBLIC_ROOT.'/app/hashtest','md5'));
 
-		$this->assertEquals('image/png',\Twist::File()->hash(TWIST_PUBLIC_ROOT.'/app/hashtest/hashtest.php','sha1'));
-		$this->assertEquals('image/png',\Twist::File()->directoryHash(TWIST_PUBLIC_ROOT.'/app/hashtest','sha1'));
+		$this->assertEquals('afd89cab0949bfbd55d5a0087ad24225451b70cf',\Twist::File()->hash(TWIST_PUBLIC_ROOT.'/app/hashtest/hashtest.php','sha1'));
+		$this->assertEquals('045d457c2e241bb32e28d5e6e9b38c946faab6d6',\Twist::File()->directoryHash(TWIST_PUBLIC_ROOT.'/app/hashtest','sha1'));
 	}
 
 	public function testDirSize(){
