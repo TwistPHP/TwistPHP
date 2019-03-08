@@ -52,7 +52,7 @@ class File extends PHPUnitSupport{
 
 	public function testHash(){
 
-		$this->assertEquals('image/png',\Twist::File()->hash(TWIST_PUBLIC_ROOT.'/app/hashtest/hashtest.php','md5'));
+		$this->assertEquals('b6d68cf97891c60252db96bf61ce6309',\Twist::File()->hash(TWIST_PUBLIC_ROOT.'/app/hashtest/hashtest.php','md5'));
 		$this->assertEquals('image/png',\Twist::File()->directoryHash(TWIST_PUBLIC_ROOT.'/app/hashtest','md5'));
 
 		$this->assertEquals('image/png',\Twist::File()->hash(TWIST_PUBLIC_ROOT.'/app/hashtest/hashtest.php','sha1'));
@@ -61,8 +61,8 @@ class File extends PHPUnitSupport{
 
 	public function testDirSize(){
 
-		$this->assertEquals('image/png',\Twist::File()->directorySize(TWIST_PUBLIC_ROOT.'/app/hashtest'));
-		$this->assertEquals('image/png',\Twist::File()->directorySize(TWIST_PUBLIC_ROOT.'/app/hashtest',true));
+		$this->assertEquals('244',\Twist::File()->directorySize(TWIST_PUBLIC_ROOT.'/app/hashtest'));
+		$this->assertEquals('244B',\Twist::File()->directorySize(TWIST_PUBLIC_ROOT.'/app/hashtest',true));
 	}
 
 	public function testExists(){
@@ -77,7 +77,8 @@ class File extends PHPUnitSupport{
 		$this->assertTrue(\Twist::File()->exists(TWIST_PUBLIC_ROOT.'test-write.log'));
 
 		\Twist::File()->write(TWIST_PUBLIC_ROOT.'test-write-delayed.log','some-test-data',null,true);
-		$this->assertFalse(\Twist::File()->exists(TWIST_PUBLIC_ROOT.'test-write-delayed.log'));
+		$this->assertTrue(\Twist::File()->exists(TWIST_PUBLIC_ROOT.'test-write-delayed.log',true));
+		$this->assertFalse(\Twist::File()->exists(TWIST_PUBLIC_ROOT.'test-write-delayed.log',false));
 
 		\Twist::File()->writeDelayedFiles();
 		$this->assertTrue(\Twist::File()->exists(TWIST_PUBLIC_ROOT.'test-write-delayed.log'));

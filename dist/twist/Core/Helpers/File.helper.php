@@ -740,7 +740,7 @@ class File extends Base{
 			if(($intBytesStart === 0 && is_null($intBytesEnd)) || (is_null($intBytesStart) && is_null($intBytesEnd))){
 				return $this->arrDelayedFileStorage[$dirFilePath];
 			}else{
-				return substr($this->arrDelayedFileStorage[$dirFilePath], $intBytesStart, $intBytesEnd);
+				return substr($this->arrDelayedFileStorage[$dirFilePath], $intBytesStart, ($intBytesEnd-$intBytesStart));
 			}
 		}else{
 
