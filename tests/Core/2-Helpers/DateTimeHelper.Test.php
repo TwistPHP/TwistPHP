@@ -43,7 +43,7 @@
 		}
 
 		public function testBetween(){
-
-			$this -> assertEquals('2019-03-15',\Twist::DateTime()->getDayBetweenDates('2019-03-08','2019-03-16',5)[0]);
+			//Sat -> Sat looking for day5 a friday
+			$this -> assertEquals('2019-03-15',\Twist::DateTime()->getDayBetweenDates('2019-03-09','2019-03-16',5)[0]);
 		}
 	}
