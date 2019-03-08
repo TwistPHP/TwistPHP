@@ -88,7 +88,7 @@ class File extends PHPUnitSupport{
 
 		$this->assertEquals('some-test-data',\Twist::File()->read(TWIST_PUBLIC_ROOT.'/test-write.log'));
 
-		\Twist::File()->write(TWIST_PUBLIC_ROOT.'test-write-delayed2.log','/some-test-data',null,true);
+		\Twist::File()->write(TWIST_PUBLIC_ROOT.'/test-write-delayed2.log','/some-test-data',null,true);
 		$this->assertEquals('some-test-data',\Twist::File()->read(TWIST_PUBLIC_ROOT.'/test-write-delayed2.log'));
 
 		$this->assertEquals('test',\Twist::File()->read(TWIST_PUBLIC_ROOT.'/test-write.log',5,9));
