@@ -50,7 +50,7 @@
 				$arrTags['no-fly-list'] = '<p class="error"><strong>Notification Lockdown</strong>: Only listed users will receive notifications:<br><br>'.str_replace(',',', ',\Twist::framework()->setting('NOTIFICATIONS_RESTRICTED')).'</p>';
 			}
 
-			return $this->_view('manager/queue.tpl',$arrTags);
+			return $this->_view('manager/users.tpl',$arrTags);
 		}
 
 		/**

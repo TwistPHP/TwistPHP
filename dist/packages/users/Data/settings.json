@@ -1,0 +1,10 @@
+{
+  "USERS_SOMETHING":{
+	"title":"Users Something",
+	"description":"Users Something Example",
+	"default":"1",
+	"type":"string",
+	"options":"",
+	"null":0
+  }
+}
