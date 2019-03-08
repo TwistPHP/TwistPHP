@@ -1,7 +1,7 @@
 <?php
 
 	use PHPUnit\Framework\TestCase;
-	
+
 	/**
 	 * Class PHPUnitSupport
 	 * Add backwards compatible support for testing older versions of PHP
@@ -16,7 +16,7 @@
 		 */
 		public function assertStringContainsString($strValue1,$strValue2){
 
-			if(method_exists(parent,'assertStringContainsString')){
+			if(method_exists($this,'assertStringContainsString')){
 				return parent::assertStringContainsString($strValue1,$strValue2);
 			}else{
 				return $this->assertContains($strValue1,$strValue2);
