@@ -38,6 +38,21 @@
 
 			$arrTask = Twist\Core\Models\ScheduledTasks::get($intTaskID);
 			$this->assertStringContainsString($arrTask['status'],'finished');
+			
+			$this->assertTrue(Twist\Core\Models\ScheduledTasks::editTask(
+				$intTaskID,
+				'Travis Test',
+				1,
+				'twist/Core/Crons/ProtectFirewall.cron.php',
+				0,
+				'',
+				false,
+				'travis'
+			));
+
+			$this->assertTrue(Twist\Core\Models\ScheduledTasks::deleteTask(
+				$intTaskID,
+			));
 
 		}
 	}
