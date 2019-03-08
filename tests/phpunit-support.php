@@ -14,12 +14,12 @@
 		 * @param $strValue2
 		 * @return mixed
 		 */
-		public function assertStringContainsString($strValue1,$strValue2){
+		public static function assertStringContainsString($strValue1,$strValue2){
 
-			if(method_exists($this,'assertStringContainsString')){
+			if(method_exists(parent,'assertStringContainsString')){
 				return parent::assertStringContainsString($strValue1,$strValue2);
 			}else{
-				return $this->assertContains($strValue1,$strValue2);
+				return self::assertContains($strValue1,$strValue2);
 			}
 		}
 
