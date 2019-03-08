@@ -73,26 +73,26 @@ class File extends PHPUnitSupport{
 
 	public function testWrite(){
 
-		\Twist::File()->write(TWIST_PUBLIC_ROOT.'test-write.log','some-test-data',null,false);
-		$this->assertTrue(\Twist::File()->exists(TWIST_PUBLIC_ROOT.'test-write.log'));
+		\Twist::File()->write(TWIST_PUBLIC_ROOT.'/test-write.log','some-test-data',null,false);
+		$this->assertTrue(\Twist::File()->exists(TWIST_PUBLIC_ROOT.'/test-write.log'));
 
-		\Twist::File()->write(TWIST_PUBLIC_ROOT.'test-write-delayed.log','some-test-data',null,true);
-		$this->assertTrue(\Twist::File()->exists(TWIST_PUBLIC_ROOT.'test-write-delayed.log',true));
-		$this->assertFalse(\Twist::File()->exists(TWIST_PUBLIC_ROOT.'test-write-delayed.log',false));
+		\Twist::File()->write(TWIST_PUBLIC_ROOT.'/test-write-delayed.log','some-test-data',null,true);
+		$this->assertTrue(\Twist::File()->exists(TWIST_PUBLIC_ROOT.'/test-write-delayed.log',true));
+		$this->assertFalse(\Twist::File()->exists(TWIST_PUBLIC_ROOT.'/test-write-delayed.log',false));
 
 		\Twist::File()->writeDelayedFiles();
-		$this->assertTrue(\Twist::File()->exists(TWIST_PUBLIC_ROOT.'test-write-delayed.log'));
+		$this->assertTrue(\Twist::File()->exists(TWIST_PUBLIC_ROOT.'/test-write-delayed.log'));
 	}
 
 	public function testRead(){
 
-		$this->assertEquals('some-test-data',\Twist::File()->read(TWIST_PUBLIC_ROOT.'test-write.log'));
+		$this->assertEquals('some-test-data',\Twist::File()->read(TWIST_PUBLIC_ROOT.'/test-write.log'));
 
-		\Twist::File()->write(TWIST_PUBLIC_ROOT.'test-write-delayed2.log','some-test-data',null,true);
-		$this->assertEquals('some-test-data',\Twist::File()->read(TWIST_PUBLIC_ROOT.'test-write-delayed2.log'));
+		\Twist::File()->write(TWIST_PUBLIC_ROOT.'test-write-delayed2.log','/some-test-data',null,true);
+		$this->assertEquals('some-test-data',\Twist::File()->read(TWIST_PUBLIC_ROOT.'/test-write-delayed2.log'));
 
-		$this->assertEquals('test',\Twist::File()->read(TWIST_PUBLIC_ROOT.'test-write.log',5,9));
-		$this->assertEquals('-',\Twist::File()->read(TWIST_PUBLIC_ROOT.'test-write-delayed2.log',4,5));
+		$this->assertEquals('test',\Twist::File()->read(TWIST_PUBLIC_ROOT.'/test-write.log',5,9));
+		$this->assertEquals('-',\Twist::File()->read(TWIST_PUBLIC_ROOT.'/test-write-delayed2.log',4,5));
 	}
 
 	public function testMoveCopy(){
