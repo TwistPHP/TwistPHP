@@ -4,7 +4,7 @@
 
 	require_once dirname(__FILE__).'/../../phpunit-support.php';
 
-	class DateTime extends PHPUnitSupport{
+	class DateTimeHelper extends PHPUnitSupport{
 
 		public function testPastFuture(){
 
