@@ -88,7 +88,7 @@ class File extends PHPUnitSupport{
 
 		$this->assertEquals('some-test-data',\Twist::File()->read(TWIST_PUBLIC_ROOT.'/test-write.log'));
 
-		\Twist::File()->write(TWIST_PUBLIC_ROOT.'/test-write-delayed2.log','/some-test-data',null,true);
+		\Twist::File()->write(TWIST_PUBLIC_ROOT.'/test-write-delayed2.log','some-test-data',null,true);
 		$this->assertEquals('some-test-data',\Twist::File()->read(TWIST_PUBLIC_ROOT.'/test-write-delayed2.log'));
 
 		$this->assertEquals('test',\Twist::File()->read(TWIST_PUBLIC_ROOT.'/test-write.log',5,9));
@@ -117,7 +117,7 @@ class File extends PHPUnitSupport{
 		$this->assertFalse(\Twist::File()->exists(TWIST_PUBLIC_ROOT.'/copy-test/test-write-delayed.log'));
 
 		//Now remove the delayed file 'test-write-delayed2.log' from the read test
-		\Twist::File()->remove(TWIST_PUBLIC_ROOT.'test-write-delayed2.log');
+		\Twist::File()->remove(TWIST_PUBLIC_ROOT.'/test-write-delayed2.log');
 
 		$this->assertFalse(\Twist::File()->exists(TWIST_PUBLIC_ROOT.'/test-write-delayed2.log'));
 	}
