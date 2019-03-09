@@ -2,9 +2,7 @@
 
 	use PHPUnit\Framework\TestCase;
 
-	require_once dirname(__FILE__).'/../../phpunit-support.php';
-
-	class Boot extends PHPUnitSupport{
+	class Boot extends TestCase{
 
 		public function testLaunchFramework(){
 
