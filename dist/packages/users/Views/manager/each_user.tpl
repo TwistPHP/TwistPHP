@@ -5,5 +5,5 @@
     <td>{data:last_active}</td>
     <td>{data:level}</td>
     <td>{data:last_login_ip}</td>
-    <td><a class="button" href="/manager/users/edit">Edit</a> <a class="button red delete-user" href="/manager/users?delete-user={data:id}">Delete</a></td>
+    <td><a href="/manager/users/edit" title="Edit user"><span class="fas fa-user-cog"></span></a> <a class="red delete-user" href="/manager/users?delete-user={data:id}" title="delete user"><span class="fas fa-user-times"></span></a></td>
 </tr>
