@@ -15,11 +15,11 @@
 		 * @param string $message
 		 * @return mixed
 		 */
-		public static function assertStringContainsString(string $needle, string $haystack, string $message = ''): void
+		public static function _assertStringContainsString(string $needle, string $haystack, string $message = ''): void
 		{
 
 			if(method_exists(get_called_class(),'assertStringContainsString')){
-				parent::assertStringContainsString($needle, $haystack, $message);
+				self::assertStringContainsString($needle, $haystack, $message);
 			}else{
 				self::assertContains($needle,$haystack,$message,false);
 			}
@@ -32,11 +32,11 @@
 		 * @param string $message
 		 * @return mixed
 		 */
-		public static function assertStringContainsStringIgnoringCase(string $needle, string $haystack, string $message = ''): void
+		public static function _assertStringContainsStringIgnoringCase(string $needle, string $haystack, string $message = ''): void
 		{
 
 			if(method_exists(get_called_class(),'assertStringContainsStringIgnoringCase')){
-				parent::assertStringContainsStringIgnoringCase($needle, $haystack, $message);
+				self::assertStringContainsStringIgnoringCase($needle, $haystack, $message);
 			}else{
 				self::assertContains($needle,$haystack,$message,true);
 			}

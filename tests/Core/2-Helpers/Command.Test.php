@@ -12,7 +12,7 @@
 			$arrResult = \Twist::Command()->execute('ls',TWIST_PUBLIC_ROOT);
 			$this -> assertEquals('ls',$arrResult['command']);
 			$this -> assertTrue($arrResult['status']);
-			$this -> assertStringContainsString('index.php',$arrResult['output']);
+			$this -> _assertStringContainsString('index.php',$arrResult['output']);
 		}
 
 		public function testMultiCall(){
@@ -34,8 +34,8 @@
 
 			//Sleep for another second and check the results of both processes
 			sleep(1);
-			$this -> assertStringContainsString('index.php',\Twist::Command()->childResult($intPID_1)['output']);
-			$this -> assertStringContainsString('Command.Test.php',\Twist::Command()->childResult($intPID_2)['output']);
+			$this -> _assertStringContainsString('index.php',\Twist::Command()->childResult($intPID_1)['output']);
+			$this -> _assertStringContainsString('Command.Test.php',\Twist::Command()->childResult($intPID_2)['output']);
 
 			//Check that there are no running processes left to collect
 			$arrProcesses = \Twist::Command()->childProcesses();

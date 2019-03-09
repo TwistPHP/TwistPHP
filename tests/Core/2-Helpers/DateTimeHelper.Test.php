@@ -14,17 +14,17 @@
 
 		public function testAge(){
 
-			$this -> assertStringContainsString('moment',\Twist::DateTime()->getAge(time()+59));
-			$this -> assertStringContainsString('minute',\Twist::DateTime()->getAge(time()+119));
-			$this -> assertStringContainsString('minutes',\Twist::DateTime()->getAge(time()+3599));
-			$this -> assertStringContainsString('hour',\Twist::DateTime()->getAge(time()+7199));
-			$this -> assertStringContainsString('hours',\Twist::DateTime()->getAge(time()+86399));
-			$this -> assertStringContainsString('Tomorrow',\Twist::DateTime()->getAge(time()+172799));
-			$this -> assertStringContainsString('days',\Twist::DateTime()->getAge(time()+(86400*28)));
-			$this -> assertStringContainsString('month',\Twist::DateTime()->getAge(time()+(86400*33)));
-			$this -> assertStringContainsString('months',\Twist::DateTime()->getAge(time()+(86400*90)));
-			$this -> assertStringContainsString('year',\Twist::DateTime()->getAge(time()+(86400*364)));
-			$this -> assertStringContainsString('years',\Twist::DateTime()->getAge(time()+(86400*740)));
+			$this -> _assertStringContainsString('moment',\Twist::DateTime()->getAge(time()+59));
+			$this -> _assertStringContainsString('minute',\Twist::DateTime()->getAge(time()+119));
+			$this -> _assertStringContainsString('minutes',\Twist::DateTime()->getAge(time()+3599));
+			$this -> _assertStringContainsString('hour',\Twist::DateTime()->getAge(time()+7199));
+			$this -> _assertStringContainsString('hours',\Twist::DateTime()->getAge(time()+86399));
+			$this -> _assertStringContainsString('Tomorrow',\Twist::DateTime()->getAge(time()+172799));
+			$this -> _assertStringContainsString('days',\Twist::DateTime()->getAge(time()+(86400*28)));
+			$this -> _assertStringContainsString('month',\Twist::DateTime()->getAge(time()+(86400*33)));
+			$this -> _assertStringContainsString('months',\Twist::DateTime()->getAge(time()+(86400*90)));
+			$this -> _assertStringContainsString('year',\Twist::DateTime()->getAge(time()+(86400*364)));
+			$this -> _assertStringContainsString('years',\Twist::DateTime()->getAge(time()+(86400*740)));
 
 		}
 
@@ -32,9 +32,9 @@
 
 			$strPrettyTime = \Twist::DateTime()->prettyTime(time()+(86400+3600+120));
 
-			$this -> assertStringContainsString('day',$strPrettyTime);
-			$this -> assertStringContainsString('hour',$strPrettyTime);
-			$this -> assertStringContainsString('minute',$strPrettyTime);
+			$this -> _assertStringContainsString('day',$strPrettyTime);
+			$this -> _assertStringContainsString('hour',$strPrettyTime);
+			$this -> _assertStringContainsString('minute',$strPrettyTime);
 		}
 
 		public function testPersonAge(){

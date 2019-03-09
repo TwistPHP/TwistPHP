@@ -37,7 +37,7 @@
 			$this->assertTrue($arrPulse['active']);
 
 			$arrTask = Twist\Core\Models\ScheduledTasks::get($intTaskID);
-			$this->assertStringContainsString($arrTask['status'],'finished');
+			$this->_assertStringContainsString($arrTask['status'],'finished');
 
 			$this->assertEquals(1,Twist\Core\Models\ScheduledTasks::editTask(
 				$intTaskID,

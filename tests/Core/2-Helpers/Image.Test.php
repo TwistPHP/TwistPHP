@@ -15,7 +15,7 @@ require_once dirname(__FILE__).'/../../phpunit-support.php';
 			$strNewImageCode = self::$resImage->outputBase64();
 
 			$this->assertTrue(!empty($strNewImageCode));
-			$this->assertStringContainsString('base64', $strNewImageCode);
+			$this->_assertStringContainsString('base64', $strNewImageCode);
 			$this->assertNotEquals($strNewImageCode, self::$strImageCode);
 
 			self::$strImageCode = $strNewImageCode;
@@ -33,7 +33,7 @@ require_once dirname(__FILE__).'/../../phpunit-support.php';
 			$strNewImageCode = self::$resImage->outputBase64();
 
 			$this->assertTrue(!empty($strNewImageCode));
-			$this->assertStringContainsString('base64', $strNewImageCode);
+			$this->_assertStringContainsString('base64', $strNewImageCode);
 			$this->assertNotEquals($strNewImageCode, self::$strImageCode);
 
 			self::$strImageCode = $strNewImageCode;
@@ -45,7 +45,7 @@ require_once dirname(__FILE__).'/../../phpunit-support.php';
 			$strNewImageCode = self::$resImage->outputBase64();
 
 			$this->assertTrue(!empty($strNewImageCode));
-			$this->assertStringContainsString('base64', $strNewImageCode);
+			$this->_assertStringContainsString('base64', $strNewImageCode);
 			$this->assertNotEquals($strNewImageCode, self::$strImageCode);
 
 			self::$strImageCode = $strNewImageCode;
@@ -57,7 +57,7 @@ require_once dirname(__FILE__).'/../../phpunit-support.php';
 			$strNewImageCode = self::$resImage->outputBase64();
 
 			$this->assertTrue(!empty($strNewImageCode));
-			$this->assertStringContainsString('base64', $strNewImageCode);
+			$this->_assertStringContainsString('base64', $strNewImageCode);
 			$this->assertNotEquals($strNewImageCode, self::$strImageCode);
 
 			self::$strImageCode = $strNewImageCode;
@@ -69,7 +69,7 @@ require_once dirname(__FILE__).'/../../phpunit-support.php';
 			$strNewImageCode = self::$resImage->outputBase64();
 
 			$this->assertTrue(!empty($strNewImageCode));
-			$this->assertStringContainsString('base64', $strNewImageCode);
+			$this->_assertStringContainsString('base64', $strNewImageCode);
 			$this->assertNotEquals($strNewImageCode, self::$strImageCode);
 
 			self::$strImageCode = $strNewImageCode;
@@ -81,7 +81,7 @@ require_once dirname(__FILE__).'/../../phpunit-support.php';
 			$strNewImageCode = self::$resImage->outputBase64();
 
 			$this->assertTrue(!empty($strNewImageCode));
-			$this->assertStringContainsString('base64', $strNewImageCode);
+			$this->_assertStringContainsString('base64', $strNewImageCode);
 			$this->assertNotEquals($strNewImageCode, self::$strImageCode);
 
 			self::$strImageCode = $strNewImageCode;
@@ -93,7 +93,7 @@ require_once dirname(__FILE__).'/../../phpunit-support.php';
 			$strNewImageCode = self::$resImage->outputBase64();
 
 			$this->assertTrue(!empty($strNewImageCode));
-			$this->assertStringContainsString('base64', $strNewImageCode);
+			$this->_assertStringContainsString('base64', $strNewImageCode);
 			$this->assertNotEquals($strNewImageCode, self::$strImageCode);
 
 			self::$strImageCode = $strNewImageCode;
@@ -105,7 +105,7 @@ require_once dirname(__FILE__).'/../../phpunit-support.php';
 			$strNewImageCode = self::$resImage->outputBase64();
 
 			$this->assertTrue(!empty($strNewImageCode));
-			$this->assertStringContainsString('base64', $strNewImageCode);
+			$this->_assertStringContainsString('base64', $strNewImageCode);
 			$this->assertNotEquals($strNewImageCode, self::$strImageCode);
 
 			self::$strImageCode = $strNewImageCode;
@@ -117,7 +117,7 @@ require_once dirname(__FILE__).'/../../phpunit-support.php';
 			$strNewImageCode = self::$resImage->outputBase64();
 
 			$this->assertTrue(!empty($strNewImageCode));
-			$this->assertStringContainsString('base64', $strNewImageCode);
+			$this->_assertStringContainsString('base64', $strNewImageCode);
 			$this->assertNotEquals($strNewImageCode, self::$strImageCode);
 
 			$arrInfo = self::$resImage->currentInfo();
@@ -133,7 +133,7 @@ require_once dirname(__FILE__).'/../../phpunit-support.php';
 			$strNewImageCode = self::$resImage->outputBase64();
 
 			$this->assertTrue(!empty($strNewImageCode));
-			$this->assertStringContainsString('base64', $strNewImageCode);
+			$this->_assertStringContainsString('base64', $strNewImageCode);
 			$this->assertNotEquals($strNewImageCode, self::$strImageCode);
 
 			self::$strImageCode = $strNewImageCode;
