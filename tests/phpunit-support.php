@@ -9,7 +9,7 @@
 	class PHPUnitSupport extends TestCase{
 
 		public function __construct(){
-			
+
 			if(!defined('TWIST_LAUNCHED')){
 				require_once dirname(__FILE__).'/../dist/twist/framework.php';
 				\Twist::Route()->manager('/manager');
@@ -52,9 +52,5 @@
 			}else{
 				self::assertContains($needle,$haystack,$message,true);
 			}
-		}
-
-		public function testSupport(){
-			$this->assertTrue(true);
 		}
 	}
