@@ -18,7 +18,7 @@
 		public static function assertStringContainsString(string $needle, string $haystack, string $message = ''): void
 		{
 
-			if(method_exists(parent,'assertStringContainsString')){
+			if(method_exists(new TestCase(),'assertStringContainsString')){
 				parent::assertStringContainsString($needle, $haystack, $message);
 			}else{
 				self::assertContains($needle,$haystack,$message,false);
@@ -35,7 +35,7 @@
 		public static function assertStringContainsStringIgnoringCase(string $needle, string $haystack, string $message = ''): void
 		{
 
-			if(method_exists(parent,'assertStringContainsStringIgnoringCase')){
+			if(method_exists(new TestCase(),'assertStringContainsStringIgnoringCase')){
 				parent::assertStringContainsStringIgnoringCase($needle, $haystack, $message);
 			}else{
 				self::assertContains($needle,$haystack,$message,true);
