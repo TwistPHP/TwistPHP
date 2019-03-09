@@ -9,7 +9,7 @@
 	 * ================================================================================
 	 */
 
-	define('TWIST_PUBLIC_ROOT','{data:public_path}');
-	define('TWIST_APP','{data:app_path}');
-	define('TWIST_PACKAGES','{data:packages_path}');
-	define('TWIST_UPLOADS','{data:uploads_path}');
+	define('TWIST_PUBLIC_ROOT',dirname(__FILE__));
+	define('TWIST_APP',dirname(__FILE__).'/app');
+	define('TWIST_PACKAGES',dirname(__FILE__).'/packages');
+	define('TWIST_UPLOADS',dirname(__FILE__).'/uploads');
