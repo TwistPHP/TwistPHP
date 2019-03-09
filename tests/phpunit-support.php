@@ -10,16 +10,33 @@
 
 		/**
 		 * Add support for a new function as assertContains was deprecated in old PHPUnit
-		 * @param $strValue1
-		 * @param $strValue2
+		 * @param $needle
+		 * @param $haystack
+		 * @param string $message
 		 * @return mixed
 		 */
-		public static function assertStringContainsString($strValue1,$strValue2){
+		public static function assertStringContainsString($needle, $haystack, $message = ''){
 
 			if(method_exists(parent,'assertStringContainsString')){
-				return parent::assertStringContainsString($strValue1,$strValue2);
+				return parent::assertStringContainsString($needle, $haystack, $message);
 			}else{
-				return self::assertContains($strValue1,$strValue2);
+				return self::assertContains($needle,$haystack,$message,false);
+			}
+		}
+
+		/**
+		 * Add support for a new function as assertContains was deprecated in old PHPUnit
+		 * @param $needle
+		 * @param $haystack
+		 * @param string $message
+		 * @return mixed
+		 */
+		public static function assertStringContainsStringIgnoringCase($needle, $haystack, $message = ''){
+
+			if(method_exists(parent,'assertStringContainsStringIgnoringCase')){
+				return parent::assertStringContainsStringIgnoringCase($needle, $haystack, $message);
+			}else{
+				return self::assertContains($needle,$haystack,$message,true);
 			}
 		}
 
