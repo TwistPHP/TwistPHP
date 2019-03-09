@@ -8,8 +8,16 @@
 	 */
 	class PHPUnitSupport extends TestCase{
 
+		public function __construct(){
+			if(!defined('TWIST_LAUNCHED')){
+				require_once dirname(__FILE__).'/../dist/twist/framework.php';
+				Twist::Route()->manager('/manager');
+			}
+		}
+
 		/**
-		 * Add support for a new function as assertContains was deprecated in old PHPUnit
+		 * Allow support for pre v7 of PHPUnit used by the PHP7.1 travis server test
+		 * If someone can make a fix for this please replace all "_assert" to "assert"
 		 * @param $needle
 		 * @param $haystack
 		 * @param string $message
@@ -26,7 +34,8 @@
 		}
 
 		/**
-		 * Add support for a new function as assertContains was deprecated in old PHPUnit
+		 * Allow support for pre v7 of PHPUnit used by the PHP7.1 travis server test
+		 * If someone can make a fix for this please replace all "_assert" to "assert"
 		 * @param $needle
 		 * @param $haystack
 		 * @param string $message
