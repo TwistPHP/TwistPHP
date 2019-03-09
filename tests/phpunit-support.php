@@ -53,4 +53,8 @@
 				self::assertContains($needle,$haystack,$message,true);
 			}
 		}
+
+		public function testSupport(){
+			$this->assertTrue(true);
+		}
 	}
