@@ -19,9 +19,9 @@
 		{
 
 			if(method_exists(parent,'assertStringContainsString')){
-				return parent::assertStringContainsString($needle, $haystack, $message);
+				parent::assertStringContainsString($needle, $haystack, $message);
 			}else{
-				return self::assertContains($needle,$haystack,$message,false);
+				self::assertContains($needle,$haystack,$message,false);
 			}
 		}
 
@@ -36,9 +36,9 @@
 		{
 
 			if(method_exists(parent,'assertStringContainsStringIgnoringCase')){
-				return parent::assertStringContainsStringIgnoringCase($needle, $haystack, $message);
+				parent::assertStringContainsStringIgnoringCase($needle, $haystack, $message);
 			}else{
-				return self::assertContains($needle,$haystack,$message,true);
+				self::assertContains($needle,$haystack,$message,true);
 			}
 		}
 
