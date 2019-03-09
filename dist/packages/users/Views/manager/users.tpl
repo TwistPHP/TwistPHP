@@ -19,11 +19,17 @@
             <td>Last active</td>
             <td>User permissions</td>
             <td>User IP</td>
+            <td></td>
         </tr>
         </thead>
         <tbody>
             {data:users}
         </tbody>
     </table>
+    <script>
+        $(document).on('click','.delete-user',function(){
+           return confirm("Are you sure you want to delete this user?");
+        });
+    </script>
 
 </div>

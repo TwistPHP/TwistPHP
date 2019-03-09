@@ -9,12 +9,17 @@
 	class Manager extends \Twist\Core\Controllers\Base{
 
 		public function _index(){
-		    $arrTags = array('users' => '');
-		    $arrUsers = \Twist::User()->getAll();
+		    $arrTags = array('users');
+		    $arrUsers = \Twist::Database()->records('twist_users')->find(null,null,'id');
 		    //$arrTags['users'] = \Twist::User()->getAll();
 
+            if(array_key_exists('delete-user', $_GET)){
+                \Twist::Database()->records('twist_users')->delete($_GET['delete-user'],'id');
+                \Twist::redirect('/manager/users');
+            }
+
 		    foreach ($arrUsers as $arrEachUser){
-		        $arrTags['users'] = $this->_view('manager/each_user.tpl',$arrEachUser);
+		        $arrTags['users'] .= $this->_view('manager/each_user.tpl',$arrEachUser);
             }
 
 		    return $this->_view('manager/users.tpl',$arrTags);
