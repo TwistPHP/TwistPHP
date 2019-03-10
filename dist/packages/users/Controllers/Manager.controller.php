@@ -42,6 +42,21 @@
 
 		    \Twist::redirect('/manager/users');
         }
+        public function edit(){
+		    return $this->_view('manager/edit_user.tpl');
+        }
+
+        public function POSTedit(){
+		    $resUser = \Twist::User()->current();
+		    $resUser->firstname($_POST['firstname']);
+		    $resUser->surname($_POST['surname']);
+		    $resUser->email($_POST['email']);
+		    $resUser->level($_POST['level']);
+		    $resUser->password($_POST['password']);
+		    $updateRecord = $resUser->commit();
+
+		    \Twist::redirect('/manager/users');
+		}
 
 		/**
 		 * Override the default view function to append the web sockets view path when required
