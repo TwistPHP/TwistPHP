@@ -39,8 +39,16 @@
 		    $resRecord->set('level',$_POST['level']);
 		    $addRecordID = $resRecord->commit();
 
+            $resUserEmail = \Twist::Email()->create();
+            $resUserEmail->addTo($_POST['email']);
+            $resUserEmail->setSubject("Account Created");
+            $resUserEmail->setFrom("noreply@twist.com");
+            $resUserEmail->setBodyHTML("<h3>Account has been created!</h3>");
+            $resUserEmail->send();
+
 
 		    \Twist::redirect('/manager/users');
+		    echo $resUserEmail;
         }
         public function edit(){
 		    return $this->_view('manager/edit_user.tpl');
@@ -55,7 +63,15 @@
 		    $resUser->password($_POST['password']);
 		    $updateRecord = $resUser->commit();
 
+		    $resEmail = \Twist::Email()->create();
+		    $resEmail->addTo($_POST['email']);
+		    $resEmail->setSubject("Account Updates");
+		    $resEmail->setFrom("noreply@twist.com");
+		    $resEmail->setBodyHTML("<h3>Account details have been updated:</h3><p>if you didn't request these changes please contact support</p>");
+		    $resEmail->send();
+
 		    \Twist::redirect('/manager/users');
+		    echo $resEmail;
 		}
 
 		/**
