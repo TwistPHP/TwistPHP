@@ -16,6 +16,7 @@
             if(array_key_exists('delete-user', $_GET)){
                 \Twist::Database()->records('twist_users')->delete($_GET['delete-user'],'id');
                 \Twist::redirect('/manager/users');
+                //\Twist::noticeMessage('user deleted successfully');
             }
 
 		    foreach ($arrUsers as $arrEachUser){
@@ -24,6 +25,23 @@
 
 		    return $this->_view('manager/users.tpl',$arrTags);
 		}
+		public function create(){
+		    return $this->_view('manager/create_user.tpl');
+        }
+        public function POSTcreate(){
+		    $resUser = \Twist::User()->current();
+		    $resRecord = \Twist::Database()->records('twist_users')->create();
+            $resRecord->set('id',$resUser);
+		    $resRecord->set('email',$_POST['email']);
+		    $resRecord->set('firstname',$_POST['firstname']);
+		    $resRecord->set('surname',$_POST['surname']);
+		    $resRecord->set('password',$_POST['password']);
+		    $resRecord->set('level',$_POST['level']);
+		    $addRecordID = $resRecord->commit();
+
+
+		    \Twist::redirect('/manager/users');
+        }
 
 		/**
 		 * Override the default view function to append the web sockets view path when required

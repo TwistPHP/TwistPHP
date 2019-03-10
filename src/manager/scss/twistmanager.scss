@@ -298,6 +298,36 @@ table {
 	}
 }
 
+form{
+	label,select,input:not([type="submit"]){
+		font-size: 15px;
+		width:100%;
+		display: inline-block;
+		margin-bottom: 7px;
+	}
+	select,input:not([type="submit"]){
+		padding: 10px;
+	}
+	button[type="submit"]{
+		margin-top: 10px;
+		font-size: 15px;
+		text-align: center;
+		background-color: $hexGreen;
+		border: 2px solid $hexGreen;
+		color: $hexWhite;
+		min-width:150px;
+		padding: 10px 20px;
+		transition: all 0.5s ease-out;
+
+		&:hover{
+			background-color:$hexBlack;
+			border: 2px solid $hexBlack;
+			transition: all 0.5s ease-in;
+			cursor: pointer;
+		}
+	}
+}
+
 #twist-manager-repolist {
 	ul {
 		li {
