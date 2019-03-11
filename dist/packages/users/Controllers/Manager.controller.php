@@ -30,25 +30,16 @@
         }
         public function POSTcreate(){
 		    $resUser = \Twist::User()->current();
-		    $resRecord = \Twist::Database()->records('twist_users')->create();
-            $resRecord->set('id',$resUser);
-		    $resRecord->set('email',$_POST['email']);
-		    $resRecord->set('firstname',$_POST['firstname']);
-		    $resRecord->set('surname',$_POST['surname']);
-		    $resRecord->set('password',$_POST['password']);
-		    $resRecord->set('level',$_POST['level']);
+		    $resRecord = \Twist::User()->create();
+            $resRecord->id($resUser);
+		    $resRecord->email($_POST['email']);
+		    $resRecord->firstname($_POST['firstname']);
+		    $resRecord->surname($_POST['surname']);
+		    $resRecord->password($_POST['password']);
+		    $resRecord->level($_POST['level']);
 		    $addRecordID = $resRecord->commit();
-
-            $resUserEmail = \Twist::Email()->create();
-            $resUserEmail->addTo($_POST['email']);
-            $resUserEmail->setSubject("Account Created");
-            $resUserEmail->setFrom("noreply@twist.com");
-            $resUserEmail->setBodyHTML("<h3>Account has been created!</h3>");
-            $resUserEmail->send();
-
-
+		    
 		    \Twist::redirect('/manager/users');
-		    echo $resUserEmail;
         }
         public function edit(){
 		    return $this->_view('manager/edit_user.tpl');
