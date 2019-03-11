@@ -29,7 +29,8 @@
 		    return $this->_view('manager/create_user.tpl');
         }
         public function POSTcreate(){
-
+            $resUser = \Twist::User()->current();
+            $resRecord = \Twist::User()->create();
 		    $this->_required('email','email');
 		    $this->_required('firstname','string');
 		    $this->_required('surname','string');
@@ -37,8 +38,6 @@
 		    $this->_required('level','integer');
 
             if($this->_check()){
-                $resUser = \Twist::User()->current();
-                $resRecord = \Twist::User()->create();
                 $resRecord->id($resUser);
                 $resRecord->email($_POST['email']);
                 $resRecord->firstname($_POST['firstname']);
@@ -58,12 +57,12 @@
         }
 
         public function POSTedit(){
+            $resUser = \Twist::User()->current();
             $this->_required('firstname', 'string');
             $this->_required('surname', 'string');
             $this->_required('email', 'email');
 
             if($this->_check()){
-                $resUser = \Twist::User()->current();
                 $resUser->firstname($_POST['firstname']);
                 $resUser->surname($_POST['surname']);
                 $resUser->email($_POST['email']);
