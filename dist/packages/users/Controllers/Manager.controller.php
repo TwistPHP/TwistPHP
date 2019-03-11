@@ -29,40 +29,62 @@
 		    return $this->_view('manager/create_user.tpl');
         }
         public function POSTcreate(){
-		    $resUser = \Twist::User()->current();
-		    $resRecord = \Twist::User()->create();
-            $resRecord->id($resUser);
-		    $resRecord->email($_POST['email']);
-		    $resRecord->firstname($_POST['firstname']);
-		    $resRecord->surname($_POST['surname']);
-		    $resRecord->password($_POST['password']);
-		    $resRecord->level($_POST['level']);
-		    $addRecordID = $resRecord->commit();
-		    
-		    \Twist::redirect('/manager/users');
+
+		    $this->_required('email','email');
+		    $this->_required('firstname','string');
+		    $this->_required('surname','string');
+		    $this->_required('password','string');
+		    $this->_required('level','integer');
+
+            if($this->_check()){
+                $resUser = \Twist::User()->current();
+                $resRecord = \Twist::User()->create();
+                $resRecord->id($resUser);
+                $resRecord->email($_POST['email']);
+                $resRecord->firstname($_POST['firstname']);
+                $resRecord->surname($_POST['surname']);
+                $resRecord->password($_POST['password']);
+                $resRecord->level($_POST['level']);
+                $addRecordID = $resRecord->commit();
+
+                \Twist::redirect('/manager/users');
+            } else {
+                return $this->edit();
+            }
+
         }
         public function edit(){
 		    return $this->_view('manager/edit_user.tpl');
         }
 
         public function POSTedit(){
-		    $resUser = \Twist::User()->current();
-		    $resUser->firstname($_POST['firstname']);
-		    $resUser->surname($_POST['surname']);
-		    $resUser->email($_POST['email']);
-		    $resUser->level($_POST['level']);
-		    $resUser->password($_POST['password']);
-		    $updateRecord = $resUser->commit();
+            $this->_required('firstname', 'string');
+            $this->_required('surname', 'string');
+            $this->_required('email', 'email');
 
-		    $resEmail = \Twist::Email()->create();
-		    $resEmail->addTo($_POST['email']);
-		    $resEmail->setSubject("Account Updates");
-		    $resEmail->setFrom("noreply@twist.com");
-		    $resEmail->setBodyHTML("<h3>Account details have been updated:</h3><p>if you didn't request these changes please contact support</p>");
-		    $resEmail->send();
+            if($this->_check()){
+                $resUser = \Twist::User()->current();
+                $resUser->firstname($_POST['firstname']);
+                $resUser->surname($_POST['surname']);
+                $resUser->email($_POST['email']);
+                $resUser->level($_POST['level']);
+                $resUser->password($_POST['password']);
+                $updateRecord = $resUser->commit();
 
-		    \Twist::redirect('/manager/users');
-		    echo $resEmail;
+                $resEmail = \Twist::Email()->create();
+                $resEmail->addTo($_POST['email']);
+                $resEmail->setSubject("Account Updates");
+                $resEmail->setFrom("noreply@twist.com");
+                $resEmail->setBodyHTML("<h3>Account details have been updated:</h3><p>if you didn't request these changes please contact support</p>");
+                $resEmail->send();
+
+                \Twist::redirect('/manager/users');
+                echo $resEmail;
+            } else {
+                return $this->edit();
+            }
+
+
 		}
 
 		/**

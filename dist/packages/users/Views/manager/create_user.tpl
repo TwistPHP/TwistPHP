@@ -2,13 +2,14 @@
 <div class="grid-100">
     <h2>Create User</h2>
     <p>This is where you can create users which will be automatically added to the database to reuse within your app.</p>
+    {messages:error}
     <form action="/manager/users/create" method="post">
         <label>First Name<sup>*</sup></label>
-        <input type="text" name="firstname" required>
+        <input type="text" name="firstname">
         <label>Surname<sup>*</sup></label>
-        <input type="text" name="surname" required>
+        <input type="text" name="surname">
         <label>Email<sup>*</sup></label>
-        <input type="email" name="email" required>
+        <input type="email" name="email">
         <label>User level<sup>*</sup></label>
         <select name="level" id="levels">
             <option value="0">Root user</option>
