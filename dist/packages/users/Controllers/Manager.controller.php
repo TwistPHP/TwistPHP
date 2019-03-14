@@ -29,8 +29,7 @@
 		    return $this->_view('manager/create_user.tpl');
         }
         public function POSTcreate(){
-            $resUser = \Twist::User()->current();
-            $resRecord = \Twist::User()->create();
+            
 		    $this->_required('email','email');
 		    $this->_required('firstname','string');
 		    $this->_required('surname','string');
@@ -38,6 +37,8 @@
 		    $this->_required('level','integer');
 
             if($this->_check()){
+
+                $resRecord = \Twist::User()->create();
                 $resRecord->id($resUser);
                 $resRecord->email($_POST['email']);
                 $resRecord->firstname($_POST['firstname']);
@@ -53,39 +54,54 @@
 
         }
         public function edit(){
-		    return $this->_view('manager/edit_user.tpl');
+            $arrRoute = $this->_route();
+            $intUserID = $arrRoute['parts']['1'];
+            $arrTags = \Twist::User()->getData($intUserID);
+
+            //Check to see that the userID is bigger than 0 and that we have user data
+            if($intUserID > 0 && count(arrTags)){
+                return $this->_view('manager/edit_user.tpl',$arrTags);
+            }
+
+            //If not then redirect the user back to the usesrs page
+            \Twist::redirect('/manager/users');
         }
 
         public function POSTedit(){
-            $resUser = \Twist::User()->current();
+            $arrRoute = $this->_route();
+            $intUserID = $arrRoute['parts']['1'];
+
             $this->_required('firstname', 'string');
             $this->_required('surname', 'string');
             $this->_required('email', 'email');
 
+            //Check the required fields
             if($this->_check()){
+                $resUser= \Twist::User()->get($intUserID);
                 $resUser->firstname($_POST['firstname']);
                 $resUser->surname($_POST['surname']);
                 $resUser->email($_POST['email']);
                 $resUser->level($_POST['level']);
                 $resUser->password($_POST['password']);
-                $updateRecord = $resUser->commit();
 
-                $resEmail = \Twist::Email()->create();
-                $resEmail->addTo($_POST['email']);
-                $resEmail->setSubject("Account Updates");
-                $resEmail->setFrom("noreply@twist.com");
-                $resEmail->setBodyHTML("<h3>Account details have been updated:</h3><p>if you didn't request these changes please contact support</p>");
-                $resEmail->send();
+                //If the update was successful send an email
+                if($resUser->commit()){
 
+                    $resEmail = \Twist::Email()->create();
+                    $resEmail->addTo($_POST['email']);
+                    $resEmail->setSubject("Account Updates");
+                    $resEmail->setFrom("noreply@twist.com");
+                    $resEmail->setBodyHTML("<h3>Account details have been updated:</h3><p>if you didn't request these changes please contact support</p>");
+                    $resEmail->send();
+                }
+
+                //Redirect back to the users page
                 \Twist::redirect('/manager/users');
-                echo $resEmail;
-            } else {
-                return $this->edit();
             }
 
-
+            //If field validation fails output edit page, wont get here if gets into above IF
+            return $this->edit();
 		}
-
 		/**
 		 * Override the default view function to append the web sockets view path when required
 		 * We do this rather than reset the view path as it has to work alongside the Manager which already has a view path set

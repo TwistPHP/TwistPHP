@@ -32,9 +32,3 @@
 -- ------------------------------------------------------
 
 -- --------------------------------------------------------
-
-/*SELECT * FROM /*TWIST_DATABASE_TABLE_PREFIX*/`notifications`;
-
-DROP TABLE IF EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`notifications`;
-
-DROP TABLE IF EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`notification_queue`; */

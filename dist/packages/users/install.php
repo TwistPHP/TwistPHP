@@ -15,4 +15,3 @@
 	 */
 	\Twist::framework()->hooks()->register('TWIST_MANAGER_ROUTE','users-manager',dirname(__FILE__).'/Hooks/manager.php',true);
 	\Twist::framework()->hooks()->register('TWIST_MANAGER_MENU','users-manager-menu',file_get_contents(dirname(__FILE__).'/Data/manager-menu.json'),true);
-	//\Twist::framework()->hooks()->register('TWIST_NOTIFICATION_METHODS','notifications-method-email','Packages\notifications\Models\NotifyEmail',true);
