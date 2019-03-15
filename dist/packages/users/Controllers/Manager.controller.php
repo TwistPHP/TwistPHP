@@ -4,14 +4,17 @@
 
 	/**
 	 * Class Manager Controller
-	 * @package Packages\WebSockets\Controllers
+	 * @package Packages\users\Controllers
 	 */
 	class Manager extends \Twist\Core\Controllers\Base{
 
+		/**
+		 * Display a list of all the registered users in the system
+		 * @return bool|string
+		 */
 		public function _index(){
 		    $arrTags = array('users');
-		    $arrUsers = \Twist::Database()->records('twist_users')->find(null,null,'id');
-		    //$arrTags['users'] = \Twist::User()->getAll();
+			$arrUsers = \Twist::User()->getAll();
 
             if(array_key_exists('delete-user', $_GET)){
                 \Twist::Database()->records('twist_users')->delete($_GET['delete-user'],'id');
@@ -25,9 +28,20 @@
 
 		    return $this->_view('manager/users.tpl',$arrTags);
 		}
+
+		/**
+		 * Create new user page
+		 * @return string
+		 */
 		public function create(){
 		    return $this->_view('manager/create_user.tpl');
         }
+
+		/**
+		 * Process the create new user POST request
+		 * @return string
+		 * @throws \Exception
+		 */
         public function POSTcreate(){
             
 		    $this->_required('email','email');
@@ -39,7 +53,6 @@
             if($this->_check()){
 
                 $resRecord = \Twist::User()->create();
-                $resRecord->id($resUser);
                 $resRecord->email($_POST['email']);
                 $resRecord->firstname($_POST['firstname']);
                 $resRecord->surname($_POST['surname']);
@@ -49,11 +62,17 @@
 
                 \Twist::redirect('/manager/users');
             } else {
-                return $this->edit();
+                return $this->create();
             }
 
         }
+
+		/**
+		 * Edit existing user page
+		 * @return string
+		 */
         public function edit(){
+
             $arrRoute = $this->_route();
             $intUserID = $arrRoute['parts']['1'];
             $arrTags = \Twist::User()->getData($intUserID);
@@ -67,7 +86,13 @@
             \Twist::redirect('/manager/users');
         }
 
+		/**
+		 * Edit existing user POST request
+		 * @return string
+		 * @throws \Exception
+		 */
         public function POSTedit(){
+
             $arrRoute = $this->_route();
             $intUserID = $arrRoute['parts']['1'];
 
@@ -102,8 +127,9 @@
             //If field validation fails output edit page, wont get here if gets into above IF
             return $this->edit();
 		}
+
 		/**
-		 * Override the default view function to append the web sockets view path when required
+		 * Override the default view function to append the users view path when required
 		 * We do this rather than reset the view path as it has to work alongside the Manager which already has a view path set
 		 * @param $dirView
 		 * @param null $arrViewTags
