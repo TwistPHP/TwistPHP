@@ -8,7 +8,7 @@
 	//Optional Line: Add this line if you are adding framework settings
 	Twist::framework()->package()->importSettings(sprintf('%s/Data/settings.json',dirname(__FILE__)));
 
-	\Twist\Core\Models\ScheduledTasks::createTask('Notification Queue','1','packages/notifications/Crons/NotificationQueue.cron.php',0,'',true,'notifications-queue');
+	\Twist\Core\Models\ScheduledTasks::createTask('Notification Queue','1','packages/notifications/Crons/Users.cron.php',0,'',true,'notifications-queue');
 
 	/**
 	 * Setup the page and menu items in the manager
