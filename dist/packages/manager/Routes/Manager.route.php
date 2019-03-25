@@ -49,11 +49,6 @@
 			$this->baseView('_base.tpl');
 			$this->controller('/%','Packages\manager\Controllers\Manager');
 
-			$this->restrictSuperAdmin('/%','/login');
-			$this->unrestrict('/authenticate');
-			$this->unrestrict('/cookies');
-			$this->unrestrict('/forgotten-password');
-
 			//Load in all any hooks registered to extend the Twist Manager
 			$arrRoutes = \Twist::framework()->hooks()->getAll('TWIST_MANAGER_ROUTE');
 
@@ -82,5 +77,11 @@
 					$this->meta()->js($strJSFile);
 				}
 			}
+
+			//Load in all manager access restrictions
+			$this->restrictAdmin('/%','/login');
+			$this->unrestrict('/authenticate');
+			$this->unrestrict('/cookies');
+			$this->unrestrict('/forgotten-password');
 		}
 	}
