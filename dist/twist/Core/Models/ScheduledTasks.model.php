@@ -126,15 +126,15 @@
 
 			$arrPulse = $arrPulseTemp = \Twist::Cache('ScheduledTasks')->read('Pulse');
 
-			$intLastPulse = array_pop($arrPulseTemp);
-			$intPrevious1Pulse = array_pop($arrPulseTemp);
-			$intPrevious2Pulse = array_pop($arrPulseTemp);
+			$intLastPulse = count($arrPulseTemp) ? array_pop($arrPulseTemp) : 0;
+			$intPrevious1Pulse = count($arrPulseTemp) ? array_pop($arrPulseTemp) : 0;
+			$intPrevious2Pulse = count($arrPulseTemp) ? array_pop($arrPulseTemp) : 0;
 
 			$intFreq1 = ($intLastPulse - $intPrevious1Pulse);
 			$intFreq2 = ($intPrevious1Pulse - $intPrevious2Pulse);
 
 			return array(
-				'active' => ($intFreq1 == $intFreq2 || $intFreq1 == ($intFreq2-1) || $intFreq1 == ($intFreq2+1)),
+				'active' => count($arrPulse) && ($intFreq1 == $intFreq2 || $intFreq1 == ($intFreq2-1) || $intFreq1 == ($intFreq2+1)),
 				'last_pulse' => $intLastPulse,
 				'frequency' => $intFreq1,
 				'history' => $arrPulse
@@ -351,16 +351,18 @@
 		/**
 		 * Delete a particular task by its ID
 		 * @param $intTaskID
+		 * @return bool
 		 */
 		public static function deleteTask($intTaskID){
-			\Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'scheduled_tasks')->delete($intTaskID,'id');
+			return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'scheduled_tasks')->delete($intTaskID,'id');
 		}
 
 		/**
 		 * Remove all the scheduled tasks for a particular package
 		 * @param $strPackageSlug
+		 * @return bool
 		 */
 		public static function deletePackageTasks($strPackageSlug){
-			\Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'scheduled_tasks')->delete($strPackageSlug,'package_slug',null);
+			return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'scheduled_tasks')->delete($strPackageSlug,'package_slug',null);
 		}
 	}

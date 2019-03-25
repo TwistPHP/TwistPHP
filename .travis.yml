@@ -31,6 +31,7 @@ before_install:
 install:
   - if [[ ${COVERALLS} == "true" ]]; then composer require satooshi/php-coveralls '~1.0'; fi;
   - php ./tests/install.php
+  - rm -fR ./tests/packages && cp -R ./dist/packages ./tests
 
 before_script:
   - mkdir -p ./build/logs
