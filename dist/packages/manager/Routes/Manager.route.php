@@ -24,6 +24,7 @@
 
 	namespace Packages\manager\Routes;
 
+	use Twist\Core\Models\Route\Meta;
 	use Twist\Core\Routes\Base;
 
 	/**
@@ -51,13 +52,31 @@
 			$this->unrestrict('/forgotten-password');
 
 			//Load in all any hooks registered to extend the Twist Manager
-			$arrRoutes = \Twist::framework() -> hooks() -> getAll( 'TWIST_MANAGER_ROUTE' );
+			$arrRoutes = \Twist::framework()->hooks()->getAll('TWIST_MANAGER_ROUTE');
 
-			if( count( $arrRoutes ) ) {
-				foreach( $arrRoutes as $strEachHook ) {
-					if( file_exists( $strEachHook ) ) {
+			if(count($arrRoutes)){
+				foreach($arrRoutes as $strEachHook){
+					if(file_exists($strEachHook)){
 						include $strEachHook;
 					}
+				}
+			}
+
+			//Load in all any hooks registered to extend the Twist Manager
+			$arrCSSFiles = \Twist::framework()->hooks()->getAll('TWIST_MANAGER_CSS');
+
+			if(count($arrCSSFiles)){
+				foreach($arrCSSFiles as $strCSSFile){
+					$this->meta()->css($strCSSFile);
+				}
+			}
+
+			//Load in all any hooks registered to extend the Twist Manager
+			$arrJSFiles = \Twist::framework()->hooks()->getAll('TWIST_MANAGER_JS');
+
+			if(count($arrJSFiles)){
+				foreach($arrJSFiles as $strJSFile){
+					$this->meta()->js($strJSFile);
 				}
 			}
 		}

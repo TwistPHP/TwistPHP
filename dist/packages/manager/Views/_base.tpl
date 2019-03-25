@@ -15,6 +15,7 @@
 
 		<!--================================ INTERFACE RESOURCES ================================-->
 		{resource:manager}
+		{resource:manager}
 
 		<!--================================ LINKED DOCUMENTS ================================-->
 		<link rel="shortcut icon" type="image/x-icon" href="{core:logo-favicon}">

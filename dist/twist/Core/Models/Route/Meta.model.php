@@ -276,6 +276,14 @@
 			$this->add('og',$strKey,$strContent);
 		}
 
+		public function css($strFile,$strRel = 'stylesheet'){
+			$this->add('link',$strFile,$strRel);
+		}
+
+		public function js($strFile){
+			$this->add('script',$strFile,'');
+		}
+
 		public function generate(){
 
 			$strOut = '';
@@ -311,6 +319,14 @@
 
 				case'og':
 					$strOut = sprintf('<meta property="og:%s" content="%s">', $arrData['name'], $arrData['value']);
+					break;
+
+				case'script':
+					$strOut = sprintf('<script src="%s"></script>', $arrData['name']);
+					break;
+
+				case'link':
+					$strOut = sprintf('<link href="%s" type="text/css" rel="%s"/>', $arrData['name'], $arrData['value']);
 					break;
 			}
 
