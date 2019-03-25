@@ -18,7 +18,7 @@
         <!--<a href="#" class="button blue"><strong>Update All</strong></a>-->
         <div class="clear"></div>
     </form>
-    <!--<h2>Available Packages</h2>
+    <h2>Available Packages</h2>
     <p>Search the TwistPHP package repository for packages that have been written by TwistPHP developers and other 3rd parties. All packages come with a one click install option as well as an manual install if required.</p>
     <div>
 	    <form action="{uri:./packages}" method="get" class="linear">
@@ -33,5 +33,5 @@
     </div>
     <div id="twist-manager-repolist">
         <ul>{data:repository-packages}</ul>
-    </div>-->
+    </div>
 </div>

@@ -627,11 +627,9 @@ class Manager extends BaseUser{
 	 */
 	public function install(){
 
-		if(array_key_exists('package-key',$_GET)){
+		if(array_key_exists('download',$_GET)){
 			//Run the package download and installer
-			$arrPackageDetails = \Twist::framework()->package()->download($_GET['package-key']);
-			\Twist::framework()->package()->installer($arrPackageDetails['slug']);
-
+			\Twist::framework()->package()->download($_GET['download']);
 		}elseif(array_key_exists('package',$_GET)){
 			//Run the package installer
 			\Twist::framework()->package()->installer($_GET['package']);
