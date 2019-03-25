@@ -45,6 +45,10 @@
 			);
 		}
 
+		public function get($strType,$strName){
+			return (array_key_exists(sprintf('%s-%s',$strType,$strName),$this->arrTags)) ? [sprintf('%s-%s',$strType,$strName)] : null;
+		}
+
 		public function getTags(){
 
 			$arrOut = array();
@@ -100,6 +104,14 @@
 
 		public function custom($strKey,$strValue){
 			$this->add('meta',$strKey,$strValue);
+		}
+
+		public function css($strFile,$strRel = 'stylesheet'){
+			$this->add('link',$strFile,$strRel);
+		}
+
+		public function js($strFile){
+			$this->add('script',$strFile,'');
 		}
 
 		public function ogTitle($strContent){
@@ -274,14 +286,6 @@
 
 		public function ogCustom($strKey,$strContent){
 			$this->add('og',$strKey,$strContent);
-		}
-
-		public function css($strFile,$strRel = 'stylesheet'){
-			$this->add('link',$strFile,$strRel);
-		}
-
-		public function js($strFile){
-			$this->add('script',$strFile,'');
 		}
 
 		public function generate(){

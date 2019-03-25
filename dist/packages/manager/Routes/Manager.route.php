@@ -38,6 +38,9 @@
 
 			\Twist::define('TWIST_MANAGER_PACKAGE',realpath(dirname(__FILE__).'/../'));
 
+			$this->meta()->title('TwistPHP Manager');
+			$this->meta()->robots('noindex,nofollow');
+
 			//Allow the manager to still be accessible even in maintenance mode
 			$this->bypassMaintenanceMode( '/%' );
 
