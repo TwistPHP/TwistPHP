@@ -10,6 +10,19 @@
 
 			$arrPackages = \Twist::framework()->package()->getAll();
 			$this->assertArrayHasKey('manager',$arrPackages);
+		}
+
+		public function testDownload(){
+
+			$arrPackages = \Twist::framework()->package()->getAll();
+			$this->assertArrayNotHasKey('notifications',$arrPackages);
+
+			$arrPackages = \Twist::framework()->package()->getRepository();
+			$this->assertArrayHasKey('notifications',$arrPackages);
+
+			\Twist::framework()->package()->download('notifications');
+
+			$arrPackages = \Twist::framework()->package()->getAll();
 			$this->assertArrayHasKey('notifications',$arrPackages);
 		}
 
