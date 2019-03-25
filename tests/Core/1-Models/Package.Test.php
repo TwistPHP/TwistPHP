@@ -20,7 +20,7 @@
 			$arrPackages = \Twist::framework()->package()->getRepository();
 			$this->assertArrayHasKey('notifications',$arrPackages);
 
-			\Twist::framework()->package()->download('notifications');
+			\Twist::framework()->package()->download($arrPackages['notifications']['key']);
 
 			$arrPackages = \Twist::framework()->package()->getAll();
 			$this->assertArrayHasKey('notifications',$arrPackages);

@@ -146,7 +146,7 @@
 			$arrPackages = array();
 			$strLocalPackage = sprintf('%s/%s.zip',TWIST_PACKAGES,$strPackageKey);
 
-			$arrResult = \Twist::File()->download(sprintf('https://twistphp.com/packages/api/download?key=%s',$strPackageKey),$strLocalPackage);
+			$arrResult = \Twist::File()->download(sprintf('https://twistphp.com/packages/api/download/%s',$strPackageKey),$strLocalPackage);
 
 			if($arrResult['status'] && $arrResult['content-length'] > 0){
 
