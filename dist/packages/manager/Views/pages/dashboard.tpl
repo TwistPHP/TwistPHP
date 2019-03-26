@@ -6,13 +6,19 @@
 	</div>
 	<div class="boxContent">
 		<dl class="inline">
-			<dt>TwistPHP Version</dt><dd>{data:version}</dd>
-			<dt>Status</dt><dd>{data:version_status}</dd>
+			<dt>TwistProtect</dt><dd>Firewall Enabled</dd><dd>Scanner Enabled</dd>
+			<dt>TwistPulse</dt><dd>Detected (1bpm)</dd>
+			<dt></dt><dd></dd>
+			<dt>Server</dt><dd>{data:server}</dd>
+			<dt>PHP Version</dt><dd>{data:php_version}</dd>
+			<dt>Memory Limit</dt><dd>{bytestosize[data:php_memory]}</dd>
+			<dt>Max Upload</dt><dd>{bytestosize[data:php_upload_max]}</dd>
+			<dt>Execution Time</dt><dd>{data:php_max_execution}s</dd>
 		</dl>
 		<div class="clear"></div>
 	</div>
 	<div class="boxFooter">
-
+		TwistPHP v{data:version}
 	</div>
 </div>
 

@@ -112,27 +112,31 @@ class Manager extends BaseUser{
 			$arrTags['version_status'] = '<span class="tag red">Failed to retrieve version information, try again later!</span>';
 		}
 
-		$objCodeScanner = new Scanner();
-		$arrTags['scanner'] = $objCodeScanner->getLastScan(TWIST_DOCUMENT_ROOT);
-
-		$arrRoutes = \Twist::Route()->getAll();
-		$arrTags['route-data'] = sprintf('<strong>%d</strong> ANY<br><strong>%d</strong> GET<br><strong>%d</strong> POST<br><strong>%d</strong> PUT<br><strong>%d</strong> DELETE',
-			count($arrRoutes['ANY']),
-			count($arrRoutes['GET']),
-			count($arrRoutes['POST']),
-			count($arrRoutes['PUT']),
-			count($arrRoutes['DELETE']));
-
-		$strUsersTable = sprintf('%susers',TWIST_DATABASE_TABLE_PREFIX);
-
-		$arrTags['user-accounts'] = sprintf('<strong>%d</strong> Superadmin<br><strong>%d</strong> Admin<br><strong>%d</strong> Advanced<br><strong>%d</strong> Member',
-			\Twist::Database()->records($strUsersTable)->count(\Twist::framework()->setting('USER_LEVEL_SUPERADMIN'),'level'),
-			\Twist::Database()->records($strUsersTable)->count(\Twist::framework()->setting('USER_LEVEL_ADMIN'),'level'),
-			\Twist::Database()->records($strUsersTable)->count(\Twist::framework()->setting('USER_LEVEL_ADVANCED'),'level'),
-			\Twist::Database()->records($strUsersTable)->count(\Twist::framework()->setting('USER_LEVEL_MEMBER'),'level')
-		);
+		$arrTags['server'] = $_SERVER["SERVER_SOFTWARE"];
+		$arrTags['php_version'] = phpversion();
+		$arrTags['php_memory'] = $this->setting_to_bytes(ini_get('memory_limit'));
+		$arrTags['php_upload_max'] = $this->setting_to_bytes(ini_get('upload_max_filesize'));
+		$arrTags['php_max_execution'] = ini_get('max_execution_time');
 
 		return $this->_view('pages/dashboard.tpl',$arrTags);
+	}
+
+	/**
+	 * @param string $setting
+	 *
+	 * @return NULL|number
+	 */
+	protected function setting_to_bytes($setting){
+		static $short = array('k' => 0x400,
+			'm' => 0x100000,
+			'g' => 0x40000000);
+
+		$setting = (string)$setting;
+		if (!($len = strlen($setting))) return NULL;
+		$last    = strtolower($setting[$len - 1]);
+		$numeric = (int) $setting;
+		$numeric *= isset($short[$last]) ? $short[$last] : 1;
+		return $numeric;
 	}
 
 }

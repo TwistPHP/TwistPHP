@@ -23,6 +23,7 @@
  * TwistPHP Manager
  * --------------
  */
+@import url("https://fonts.googleapis.com/css?family=Open+Sans");
 *, ::after, ::before {
   box-sizing: border-box; }
 
@@ -196,6 +197,11 @@ header {
     padding: 20px 20px 0 20px;
     overflow: auto;
     flex-grow: 1; }
+    .window .container section.page {
+      display: flex;
+      flex-wrap: wrap;
+      align-content: space-between;
+      margin-bottom: 50px; }
     .window .container footer {
       position: fixed;
       bottom: 0;
@@ -212,25 +218,36 @@ header {
         .window .container footer p a {
           color: #FFF; }
 
+form {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-between; }
+
 h1 {
-  max-width: 1260px;
+  width: 98%;
   margin: 30px auto;
   text-align: left; }
 
+p {
+  width: 98%;
+  margin: 30px auto; }
+
 table {
-  width: 100%;
-  max-width: 1260px;
+  width: 98%;
   margin: 30px auto;
   border-spacing: 0;
   border-collapse: collapse; }
   table thead {
-    background-color: #424242; }
+    background-color: transparent; }
     table thead tr th, table thead tr td {
       font-size: 14px;
       line-height: 18px;
       padding: 8px 8px;
-      color: #FFF;
-      font-weight: normal; }
+      color: #424242;
+      font-weight: bold; }
       table thead tr th:first-child, table thead tr td:first-child {
         border-radius: 2px 0 0 0; }
       table thead tr th:last-child, table thead tr td:last-child {
@@ -238,19 +255,77 @@ table {
   table tbody {
     background-color: #FFFFFF; }
     table tbody tr th, table tbody tr td {
+      border-top: 1px solid #BDBDBD;
       font-size: 14px;
       line-height: 16px;
-      padding: 4px 8px;
-      vertical-align: top;
+      padding: 15px 10px;
+      vertical-align: middle;
       font-weight: normal; }
-    table tbody tr:nth-child(even) {
-      background: #EEEEEE; }
-    table tbody tr:nth-child(odd) {
-      background: #FFF; }
+      table tbody tr th:first-child, table tbody tr td:first-child {
+        border-left: 1px solid #BDBDBD; }
+      table tbody tr th:last-child, table tbody tr td:last-child {
+        border-right: 1px solid #BDBDBD; }
     table tbody tr th {
-      vertical-align: top;
-      text-align: left;
       font-weight: bold; }
+    table tbody tr + tr th, table tbody tr + tr td {
+      border-top: 1px solid #BDBDBD;
+      border-bottom: 1px solid #BDBDBD; }
+
+.buttonBar {
+  width: 98%;
+  margin: 30px auto;
+  padding: 0;
+  text-align: right; }
+
+.box {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 98%;
+  margin: 30px auto;
+  background-color: #FFF;
+  padding: 0;
+  border: 1px solid #BDBDBD; }
+  .box.box50 {
+    width: 48%; }
+  .box.box33 {
+    width: 31%; }
+  .box.box66 {
+    width: 64%; }
+  .box .boxTitle {
+    width: 100%;
+    background-color: #FFF;
+    padding: 10px;
+    border-bottom: 1px solid #BDBDBD;
+    flex-grow: 0;
+    flex-shrink: 0; }
+    .box .boxTitle h3 {
+      padding: 0;
+      margin: 0;
+      font-weight: bold;
+      font-size: 18px;
+      line-height: 20px; }
+  .box .boxContent {
+    width: 100%;
+    flex-grow: 1;
+    flex-shrink: 1; }
+    .box .boxContent table tbody tr th, .box .boxContent table tbody tr td {
+      border: 0; }
+    .box .boxContent table tbody tr:nth-child(even) {
+      background: #EEEEEE; }
+    .box .boxContent table tbody tr:nth-child(odd) {
+      background: #FFF; }
+    .box .boxContent table tbody tr + tr th, .box .boxContent table tbody tr + tr td {
+      border: 0; }
+  .box .boxFooter {
+    width: 100%;
+    min-height: 30px;
+    background-color: #EEE;
+    padding: 10px;
+    border-top: 1px solid #BDBDBD;
+    text-align: right;
+    flex-grow: 0;
+    flex-shrink: 0; }
 
 h1 + p,
 h2 + p,
@@ -303,56 +378,86 @@ p + table {
       line-height: 16px;
       padding-top: calc(50% - 7px); }
 
-.box {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  word-wrap: break-word;
-  border: 0.0625rem solid rgba(0, 0, 0, 0.05);
-  border-radius: .25rem;
-  background-color: #fff;
-  background-clip: border-box;
-  box-shadow: 0 15px 35px rgba(50, 50, 93, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07) !important;
-  padding: 20px;
-  max-width: 1260px;
-  margin: 30px auto; }
-  .box.half {
-    max-width: 630px; }
-  .box > span {
-    display: block;
-    width: 100%;
-    text-align: left; }
-    .box > span span {
-      width: auto;
-      display: inline; }
-  .box span.bold {
-    font-weight: bold; }
-  .box span.small {
-    font-size: 12px; }
-  .box span.center {
-    text-align: center; }
-  .box.profile, .box.project {
-    margin: 100px auto 30px; }
-    .box.profile .avatar, .box.project .avatar {
-      margin: -70px auto 0; }
-    .box.profile .info, .box.project .info {
-      margin-top: -32px;
-      text-align: right; }
-  .box.ticket, .box.reply {
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: auto;
-    flex-direction: row; }
-    .box.ticket aside, .box.reply aside {
-      min-width: 200px; }
-      .box.ticket aside .avatar, .box.reply aside .avatar {
-        width: 50px;
-        height: 50px;
-        margin-bottom: 20px; }
-    .box.ticket article, .box.reply article {
-      flex-grow: 1;
-      flex-shrink: 1; }
+/**.box{
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	word-wrap: break-word;
+	border: .0625rem solid rgba(0,0,0,.05);
+	border-radius: .25rem;
+	background-color: #fff;
+	background-clip: border-box;
+	box-shadow: 0 15px 35px rgba(50,50,93,.1),0 5px 15px rgba(0,0,0,.07)!important;
 
+	padding:20px;
+
+	max-width:1260px;
+	margin:30px auto;
+
+	&.half{
+		max-width:630px;
+	}
+
+	>span{
+		display: block;
+		width:100%;
+		text-align: left;
+
+		span{
+			width: auto;
+			display: inline;
+		}
+	}
+
+	span{
+		&.bold{
+			font-weight:bold;
+		}
+
+		&.small{
+			font-size:12px;
+		}
+
+		&.center{
+			text-align: center;
+		}
+	}
+
+	&.profile,&.project{
+		margin: 100px auto 30px;
+
+		.avatar{
+			margin:-70px auto 0;
+		}
+
+		.info{
+			margin-top: -32px;
+			text-align: right;
+		}
+	}
+
+	&.ticket,&.reply{
+		flex-grow: 1;
+		flex-shrink: 1;
+		flex-basis: auto;
+		flex-direction: row;
+
+		aside{
+			min-width:200px;
+
+			.avatar{
+				width:50px;
+				height:50px;
+				margin-bottom:20px;
+			}
+		}
+
+		article{
+			flex-grow: 1;
+			flex-shrink: 1;
+		}
+	}
+}*/
 .projectProgress {
   position: relative;
   width: 100%;
@@ -646,44 +751,40 @@ a {
   margin-top: .5rem;
   margin-bottom: .5rem; }
 
-form {
-  display: block; }
-  form label {
-    display: block;
-    width: 33%;
-    float: left;
-    margin: 5px 0 5px 0;
-    padding: .625rem .75rem; }
-  form input:not([type="hidden"]), form select, form textarea {
-    display: block;
-    width: 66%;
-    float: left;
-    margin: 5px 0 5px 0; }
-  form.inline {
-    display: inline-block; }
-  form.hideLabel label {
-    display: none; }
-  form.hideLabel input, form.hideLabel select, form.hideLabel textarea {
-    display: block;
-    width: 100%;
-    float: left; }
-  form.hideLabel button {
-    width: 100%; }
-  form input:not([type="hidden"]), form select, form textarea {
-    font-size: 1rem;
-    line-height: 1.5;
-    display: inline-block;
-    height: calc(2.75rem + 2px);
-    padding: .625rem .75rem;
-    transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    color: #8898aa;
-    border: 1px solid #cad1d7;
-    border-radius: .25rem;
-    background-color: #fff;
-    background-clip: padding-box;
-    box-shadow: none; }
-  form button {
-    display: inline-block; }
+form label {
+  display: block;
+  width: 33%;
+  float: left;
+  margin: 5px 0 5px 0;
+  padding: .625rem .75rem; }
+form input:not([type="hidden"]), form select, form textarea {
+  display: block;
+  width: 66%;
+  float: left;
+  margin: 5px 0 5px 0; }
+form.hideLabel label {
+  display: none; }
+form.hideLabel input, form.hideLabel select, form.hideLabel textarea {
+  display: block;
+  width: 100%;
+  float: left; }
+form.hideLabel button {
+  width: 100%; }
+form input:not([type="hidden"]), form select, form textarea {
+  font-size: 1rem;
+  line-height: 1.5;
+  display: inline-block;
+  height: calc(2.75rem + 2px);
+  padding: .625rem .75rem;
+  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  color: #8898aa;
+  border: 1px solid #cad1d7;
+  border-radius: .25rem;
+  background-color: #fff;
+  background-clip: padding-box;
+  box-shadow: none; }
+form button {
+  display: inline-block; }
 
 dl {
   width: 100%;

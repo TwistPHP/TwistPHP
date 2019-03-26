@@ -91,7 +91,7 @@
 				\Twist::framework()->package()->installer($_GET['package']);
 			}
 
-			\Twist::redirect('./packages');
+			\Twist::redirect('./');
 		}
 
 		/**
@@ -104,7 +104,7 @@
 				\Twist::framework()->package()->uninstaller($_GET['package']);
 			}
 
-			\Twist::redirect('./packages');
+			\Twist::redirect('./');
 		}
 
 		public function download(){

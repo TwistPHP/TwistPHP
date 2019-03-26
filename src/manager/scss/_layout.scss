@@ -292,7 +292,7 @@ table{
 				line-height: 18px;
 				padding:8px 8px;
 				color: $twistphp-dark-grey;
-				font-weight: normal;
+				font-weight: bold;
 
 				&:first-child{
 					border-radius: 2px 0 0 0 ;
@@ -316,7 +316,7 @@ table{
 				font-size: 14px;
 				line-height: 16px;
 				padding: 15px 10px;
-				vertical-align: top;
+				vertical-align: middle;
 				font-weight: normal;
 
 				&:first-child{
@@ -337,8 +337,6 @@ table{
 			}
 
 			th{
-				vertical-align: top;
-				text-align: left;
 				font-weight: bold;
 			}
 
