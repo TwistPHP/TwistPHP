@@ -1,7 +1,9 @@
 <h1>TwistProtect: Code Scanner</h1>
+<p>Automatically scans your site for malicious PHP code, adjust the settings to get better results. You can also enable as a cron job to help protect your site on a daily basis.</p>
+
 <div class="box">
 	<a href="?scan-now=1" class="button fat blue float-right"><i class="fa fa-play"></i> Scan Now</a>
-	<p>Automatically scans your site for malicious PHP code, adjust the settings to get better results. You can also enable as a cron job to help protect your site on a daily basis.</p>
+
     <dl class="inline">
         <dt>Last Scan</dt>
         <dd>{prettytime[data:scanner/scanned]}</dd>

@@ -11,7 +11,17 @@
     "uri": "/packages",
     "icon": "fa-puzzle-piece",
     "order": 20,
-    "sub-sections": []
+    "sub-sections": [
+      {
+        "name": "Installed",
+        "uri": "/packages",
+        "order": 10
+      },{
+        "name": "Add New",
+        "uri": "/packages/download",
+        "order": 20
+      }
+    ]
   },
   {
     "name": "TwistProtect",

@@ -228,7 +228,10 @@ header{
 		flex-grow: 1;
 
 		section.page{
-
+			display: flex;
+			flex-wrap: wrap;
+			align-content: space-between;
+			margin-bottom:50px;
 		}
 
 		footer{
@@ -254,29 +257,41 @@ header{
 	}
 }
 
+form{
+	width:100%;
+	margin:0;
+	padding:0;
+	display: flex;
+	flex-wrap: wrap;
+	align-content: space-between;
+}
+
 h1{
-	max-width:1260px;
+	width: 98%;
 	margin:30px auto;
 	text-align: left;
 }
 
+p{
+	width: 98%;
+	margin:30px auto;
+}
+
 table{
-	width: 100%;
-	max-width:1260px;
+	width: 98%;
 	margin:30px auto;
 	border-spacing: 0;
 	border-collapse: collapse;
-	//box-shadow: 2px 2px 20px #888888;
 
 	thead{
-		background-color: $twistphp-dark-grey;
+		background-color: transparent;
 
 		tr{
 			th,td{
 				font-size: 14px;
 				line-height: 18px;
 				padding:8px 8px;
-				color:#FFF;
+				color: $twistphp-dark-grey;
 				font-weight: normal;
 
 				&:first-child{
@@ -294,20 +309,31 @@ table{
 		background-color: #FFFFFF;
 
 		tr{
+
+
 			th,td{
+				border-top:1px solid $twistphp-light-grey;
 				font-size: 14px;
 				line-height: 16px;
-				padding:4px 8px;
+				padding: 15px 10px;
 				vertical-align: top;
 				font-weight: normal;
+
+				&:first-child{
+					border-left:1px solid $twistphp-light-grey;
+				}
+
+				&:last-child{
+					border-right:1px solid $twistphp-light-grey;
+				}
 			}
 
 			&:nth-child(even){
-				background: #EEEEEE
+				//background: #EEEEEE
 			}
 
 			&:nth-child(odd){
-				background: #FFF
+				//background: #FFF
 			}
 
 			th{
@@ -315,7 +341,103 @@ table{
 				text-align: left;
 				font-weight: bold;
 			}
+
+			+tr{
+				th,td{
+					border-top:1px solid $twistphp-light-grey;
+					border-bottom:1px solid $twistphp-light-grey;
+				}
+			}
 		}
+	}
+}
+
+.buttonBar{
+	width: 98%;
+	margin:30px auto;
+	padding:0;
+	text-align: right;
+}
+
+.box{
+	display: flex;
+	flex-direction: column;
+	align-items:stretch;
+	width: 98%;
+	margin:30px auto;
+	background-color: #FFF;
+	padding:0;
+	border:1px solid $twistphp-light-grey;
+
+	&.box50{
+		width:48%;
+	}
+
+	&.box33{
+		width:31%;
+	}
+
+	&.box66{
+		width:64%;
+	}
+
+	.boxTitle{
+		width:100%;
+		background-color: #FFF;
+		padding:10px;
+		border-bottom:1px solid $twistphp-light-grey;
+		flex-grow: 0;
+		flex-shrink: 0;
+
+		h3{
+			padding:0;
+			margin:0;
+			font-weight: bold;
+			font-size: 18px;
+			line-height: 20px;
+		}
+	}
+
+	.boxContent{
+		width:100%;
+		flex-grow: 1;
+		flex-shrink: 1;
+
+		table{
+			tbody{
+				tr{
+					th,td{
+						border:0;
+					}
+
+					&:nth-child(even){
+						background: #EEEEEE
+					}
+
+					&:nth-child(odd){
+						background: #FFF
+					}
+
+					+tr{
+						th,td{
+							border:0;
+						}
+					}
+				}
+			}
+		}
+
+	}
+
+	.boxFooter{
+		width:100%;
+		min-height: 30px;
+		background-color: $twistphp-really-light-grey;
+		padding:10px;
+		border-top:1px solid $twistphp-light-grey;
+		text-align: right;
+		flex-grow: 0;
+		flex-shrink: 0;
 	}
 }
 
@@ -387,7 +509,7 @@ p + table{
 	}
 }
 
-.box{
+/**.box{
 	display: flex;
 	flex-direction: column;
 	min-width: 0;
@@ -466,7 +588,7 @@ p + table{
 			flex-shrink: 1;
 		}
 	}
-}
+}*/
 
 .projectProgress{
 	position: relative;

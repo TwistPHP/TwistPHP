@@ -67,20 +67,24 @@
 			}
 
 			//Load in all any hooks registered to extend the Twist Manager
-			$arrCSSFiles = \Twist::framework()->hooks()->getAll('TWIST_MANAGER_CSS');
+			$arrCSSHooks = \Twist::framework()->hooks()->getAll('TWIST_MANAGER_CSS');
 
-			if(count($arrCSSFiles)){
-				foreach($arrCSSFiles as $strCSSFile){
-					$this->meta()->css($strCSSFile);
+			if(count($arrCSSHooks)){
+				foreach($arrCSSHooks as $arrCSSFiles){
+					foreach($arrCSSFiles as $strCSSFile){
+						$this->meta()->css($strCSSFile);
+					}
 				}
 			}
 
 			//Load in all any hooks registered to extend the Twist Manager
-			$arrJSFiles = \Twist::framework()->hooks()->getAll('TWIST_MANAGER_JS');
+			$arrJSHooks = \Twist::framework()->hooks()->getAll('TWIST_MANAGER_JS');
 
-			if(count($arrJSFiles)){
-				foreach($arrJSFiles as $strJSFile){
-					$this->meta()->js($strJSFile);
+			if(count($arrJSHooks)){
+				foreach($arrJSHooks as $arrJSFiles){
+					foreach($arrJSFiles as $strJSFile){
+						$this->meta()->js($strJSFile);
+					}
 				}
 			}
 

@@ -106,4 +106,21 @@
 
 			\Twist::redirect('./packages');
 		}
+
+		public function download(){
+
+			$arrTags = array();
+			$arrModules = \Twist::framework()->package()->getAll();
+
+			$arrTags['repository-packages'] = '';
+			$arrPackages = \Twist::framework()->package()->getRepository(array_key_exists('filter',$_GET) ? $_GET['filter'] : 'featured');
+
+			if(count($arrPackages)){
+				foreach($arrPackages as $arrEachPackage){
+					$arrTags['repository-packages'] .= $this->_view('components/packages/each-repo-package.tpl',$arrEachPackage);
+				}
+			}
+
+			return $this->_view('pages/packages-download.tpl',$arrTags);
+		}
 	}
