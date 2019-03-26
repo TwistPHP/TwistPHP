@@ -380,7 +380,9 @@ table{
 	&.box66{
 		width:64%;
 	}
-
+	&.inner{
+		padding: 20px;
+	}
 	.boxTitle{
 		width:100%;
 		background-color: #FFF;
