@@ -1,6 +1,6 @@
-<div class="grid-100 tablet-grid-100 mobile-grid-100">
+<h1>.htaccess Manager</h1>
+<div class="box">
     <form class="inline foldable large" action="{uri:}" method="post">
-        <h2 class="no-top-padding">.htaccess Manager</h2>
         <p>Manage the editing of browser cache settings, rewrite rules and default host name redirects such as using www. or not and forcing https. Saving changes will re-generate your .htaccess file, if you require any custom rules please place them in the custom rules box at the bottom of this page.</p>
         <h3>Domain Preferences</h3>
 

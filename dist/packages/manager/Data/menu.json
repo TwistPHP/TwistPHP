@@ -8,7 +8,7 @@
   },
   {
     "name": "Packages",
-    "uri": "packages",
+    "uri": "/packages",
     "icon": "fa-puzzle-piece",
     "order": 20,
     "sub-sections": []
@@ -21,39 +21,39 @@
     "sub-sections": [
       {
         "name": "Firewall",
-        "uri": "firewall",
+        "uri": "/protect/firewall",
         "order": 10
       },{
         "name": "Code Scanner",
-        "uri": "scanner",
+        "uri": "/protect/scanner",
         "order": 20
       }
     ]
   },
   {
     "name": "Settings",
-    "uri": "settings",
+    "uri": "/settings",
     "icon": "fa-cogs",
     "order": 40,
     "sub-sections": [
       {
         "name": "Cache",
-        "uri": "/cache",
+        "uri": "/settings/cache",
         "order": 10
       },
       {
         "name": ".htaccess",
-        "uri": "/htaccess",
+        "uri": "/settings/htaccess",
         "order": 20
       },
       {
         "name": "Scheduleder",
-        "uri": "scheduled-tasks",
+        "uri": "/settings/scheduled-tasks",
         "order": 30
       },
       {
         "name": "API Keys",
-        "uri": "/apikeys",
+        "uri": "/settings/apikeys",
         "order": 40
       }
     ]

@@ -1,5 +1,5 @@
-<div class="grid-100 tablet-grid-100 mobile-grid-100">
-    <h2 class="no-top-padding">TwistProtect: Code Scanner</h2>
+<h1>TwistProtect: Code Scanner</h1>
+<div class="box">
 	<a href="?scan-now=1" class="button fat blue float-right"><i class="fa fa-play"></i> Scan Now</a>
 	<p>Automatically scans your site for malicious PHP code, adjust the settings to get better results. You can also enable as a cron job to help protect your site on a daily basis.</p>
     <dl class="inline">

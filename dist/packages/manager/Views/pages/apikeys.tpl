@@ -1,5 +1,5 @@
-<div class="grid-100 tablet-grid-100 mobile-grid-100">
-    <h2 class="no-top-padding">API Keys</h2>
+<h1>API Keys</h1>
+<div class="box">
     <a href="?generate=1" class="button fat blue float-right"><i class="fa fa-key"></i> Generate New Key</a>
     <table>
         <thead>

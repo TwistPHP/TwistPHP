@@ -18,49 +18,16 @@
  * @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
  * @license    https://www.gnu.org/licenses/gpl.html GPL License
  * @link       https://twistphp.com
- *
- * --------------
- * TwistPHP Manager
- * --------------
  */
 
-$twistphp-green: #539F00;
-$twistphp-black: #212121;
-$twistphp-dark-grey: #424242;
-$twistphp-grey: #727272;
-$twistphp-light-grey: #BDBDBD;
-$twistphp-really-light-grey: #EEE;
+$(document).ready(function(){
 
-*, ::after, ::before {
-	box-sizing: border-box;
-}
+	$('.tabButtons li').removeClass('current').first().addClass('current');
+	$('.tabs .tab').removeClass('current').first().addClass('current');
 
-html {
-	font-family: sans-serif;
-	line-height: 1.15;
-	-webkit-text-size-adjust: 100%;
-	-ms-text-size-adjust: 100%;
-	-ms-overflow-style: scrollbar;
-	-webkit-tap-highlight-color: transparent;
-}
-
-body {
-	font-family: 'Open Sans',sans-serif;
-	font-size: 1rem;
-	font-weight: 400;
-	line-height: 1.5;
-	margin: 0;
-	text-align: left;
-	color: $twistphp-black;
-}
-
-.clear{
-	clear:both;
-}
-
-@import "layout";
-@import "buttons";
-@import "forms";
-@import "lists";
-@import "progress";
-@import "tabs";
+	$('.tabButtons li').on('click',function(){
+		var clickedIndex = $(this).index();
+		$('.tabButtons li').removeClass('current').eq(clickedIndex).addClass('current');
+		$('.tabs .tab').removeClass('current').eq(clickedIndex).addClass('current');
+	});
+});

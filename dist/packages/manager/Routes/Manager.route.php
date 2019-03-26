@@ -40,6 +40,8 @@
 
 			$this->meta()->title('TwistPHP Manager');
 			$this->meta()->robots('noindex,nofollow');
+			$this->meta()->css('/packages/manager/Resources/css/twistmanager.css');
+			$this->meta()->js('/packages/manager/Resources/js/twistmanager.js');
 
 			//Allow the manager to still be accessible even in maintenance mode
 			$this->bypassMaintenanceMode( '/%' );
@@ -48,6 +50,10 @@
 
 			$this->baseView('_base.tpl');
 			$this->controller('/%','Packages\manager\Controllers\Manager');
+			$this->controller('/packages/%','Packages\manager\Controllers\Packages');
+			$this->controller('/protect/%','Packages\manager\Controllers\Protect');
+			$this->controller('/settings/%','Packages\manager\Controllers\Settings');
+			$this->controller('/settings/scheduled-tasks/%','Packages\manager\Controllers\Scheduler');
 
 			//Load in all any hooks registered to extend the Twist Manager
 			$arrRoutes = \Twist::framework()->hooks()->getAll('TWIST_MANAGER_ROUTE');

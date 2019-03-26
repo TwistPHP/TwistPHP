@@ -1,0 +1,70 @@
+
+.tabContainer{
+	border: 1px solid $twistphp-black;
+	border-radius:5px;
+	display: inline-flex;
+	width: 100%;
+}
+
+.tabs{
+	width: calc(100% - 180px);
+	display: inline-block;
+	float: left;
+	padding-left: 10px;
+
+	.tab{
+		display: none;
+
+		&.current{
+			display: block;
+		}
+	}
+}
+
+.tabButtons{
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	width: 180px;
+	display: inline-block;
+	float: left;
+
+	li{
+		padding: 20px 10px;
+		font-size: 16px;
+		line-height: 20px;
+		text-align:center;
+		transition: all 0.5s ease-out;
+		word-break: break-word;
+		color: #FFF;
+
+		span{
+			width: 100%;
+		}
+
+		&.current{
+			background-color:$twistphp-green;
+			color: #FFF;
+		}
+		&:hover{
+			cursor: pointer;
+			background-color:$twistphp-green;
+			color: #FFF;
+			transition:all 0.5s ease-in;
+		}
+	}
+
+	&.textOnly{
+		width:160px;
+		background-color: $twistphp-black;
+
+		li{
+			padding: 8px 10px;
+			text-align: left;
+		}
+
+		+.tabs{
+			width: calc(100% - 160px);
+		}
+	}
+}

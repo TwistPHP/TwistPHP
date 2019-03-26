@@ -1,6 +1,6 @@
-<div class="grid-100 tablet-grid-100 mobile-grid-100">
+<h1>Packages</h1>
+<div class="box">
     <form class="inline foldable">
-        <h2 class="no-top-padding">Local Packages</h2>
         <p>All the packages that are in your local <strong>/packages</strong> folder can be seen below. Install the packages in order for them to become active. Uninstalling a package will remove all associated data, ensure you have taken a backup first.</p>
         <table>
             <thead>

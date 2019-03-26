@@ -14,7 +14,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
         <!--================================ INTERFACE RESOURCES ================================-->
-        {resource:manager}
+        {meta:tags}
 
         <!--================================ LINKED DOCUMENTS ================================-->
         <link rel="shortcut icon" type="image/x-icon" href="{core:logo-favicon}">

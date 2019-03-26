@@ -1,5 +1,5 @@
-<div class="grid-100 tablet-grid-100 mobile-grid-100">
-	<h2 class="no-top-padding">Scheduled Tasks</h2>
+<h1>Scheduled Tasks</h1>
+<div class="box">
 	<a href="?add=1" class="button fat float-right"><i class="fas fa-plus"></i> Add Task</a>
 	<div class="clear"></div>
 	<p>All scheduled tasks setup through TwistPHP are listed below. An indication of when the scheduler was last run can be found below.</p>

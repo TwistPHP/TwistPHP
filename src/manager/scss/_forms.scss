@@ -1,0 +1,61 @@
+
+form{
+	display: block;
+
+	label{
+		display: block;
+		width:33%;
+		float:left;
+		margin:5px 0 5px 0;
+		padding: .625rem .75rem;
+	}
+
+
+	input:not([type="hidden"]),select,textarea{
+		display: block;
+		width:66%;
+		float:left;
+		margin:5px 0 5px 0;
+
+	}
+
+	&.inline{
+		display: inline-block;
+	}
+
+	&.hideLabel{
+
+		label{
+			display: none;
+		}
+
+		input,select,textarea{
+			display: block;
+			width:100%;
+			float:left;
+		}
+
+		button{
+			width:100%;
+		}
+	}
+
+	input:not([type="hidden"]),select,textarea{
+		font-size: 1rem;
+		line-height: 1.5;
+		display: inline-block;
+		height: calc(2.75rem + 2px);
+		padding: .625rem .75rem;
+		transition: all .2s cubic-bezier(.68,-.55,.265,1.55);
+		color: #8898aa;
+		border: 1px solid #cad1d7;
+		border-radius: .25rem;
+		background-color: #fff;
+		background-clip: padding-box;
+		box-shadow: none;
+	}
+
+	button{
+		display: inline-block;
+	}
+}

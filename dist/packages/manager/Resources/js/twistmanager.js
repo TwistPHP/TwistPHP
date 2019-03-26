@@ -1,0 +1,2 @@
+!function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e():"function"==typeof define&&define.amd?define(e):e()}(0,function(){"use strict";$(document).ready(function(){$(".tabButtons li").removeClass("current").first().addClass("current"),$(".tabs .tab").removeClass("current").first().addClass("current"),$(".tabButtons li").on("click",function(){var t=$(this).index();$(".tabButtons li").removeClass("current").eq(t).addClass("current"),$(".tabs .tab").removeClass("current").eq(t).addClass("current")})})});
+//# sourceMappingURL=twistmanager.js.map

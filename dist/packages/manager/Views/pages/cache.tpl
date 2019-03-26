@@ -1,5 +1,5 @@
-<div class="grid-100 tablet-grid-100 mobile-grid-100">
-    <h2 class="no-top-padding">Cache</h2>
+<h1>Cache</h1>
+<div class="box">
     <table>
         <thead>
         <tr>

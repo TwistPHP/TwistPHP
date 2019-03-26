@@ -107,11 +107,11 @@
 		}
 
 		public function css($strFile,$strRel = 'stylesheet'){
-			$this->add('link',$strFile,$strRel);
+			$this->add('link',$strFile,array('href' => $strFile,'rel' => $strRel));
 		}
 
 		public function js($strFile){
-			$this->add('script',$strFile,'');
+			$this->add('script',$strFile,array('src' => $strFile));
 		}
 
 		public function ogTitle($strContent){
@@ -326,11 +326,11 @@
 					break;
 
 				case'script':
-					$strOut = sprintf('<script src="%s"></script>', $arrData['name']);
+					$strOut = sprintf('<script src="%s"></script>', $arrData['value']['src']);
 					break;
 
 				case'link':
-					$strOut = sprintf('<link href="%s" type="text/css" rel="%s"/>', $arrData['name'], $arrData['value']);
+					$strOut = sprintf('<link href="%s" type="text/css" rel="%s"/>', $arrData['value']['href'], $arrData['value']['rel']);
 					break;
 			}
 
