@@ -232,6 +232,8 @@
 			//Rebuild the htaccess file
 			\Packages\manager\Models\htaccess::rebuild();
 
+			\Twist::successMessage('Redirects have been stores and are now live');
+
 			return $this->redirects();
 		}
 

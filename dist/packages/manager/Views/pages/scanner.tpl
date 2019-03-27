@@ -1,6 +1,6 @@
 <h1>TwistProtect: Code Scanner</h1>
 <p>Automatically scans your site for malicious PHP code, adjust the settings to get better results. You can also enable as a cron job to help protect your site on a daily basis.</p>
-
+{messages:all}
 <div class="box">
     <div class="boxTitle">
         <h3>Scan Statistics</h3>

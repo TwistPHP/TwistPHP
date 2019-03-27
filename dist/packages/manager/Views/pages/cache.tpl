@@ -1,4 +1,5 @@
 <h1>Cache</h1>
+{messages:all}
 <table>
     <thead>
     <tr>

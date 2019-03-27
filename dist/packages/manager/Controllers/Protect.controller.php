@@ -101,6 +101,7 @@
 			if(array_key_exists('scan-now',$_GET)){
 				$objCodeScanner->scan(TWIST_DOCUMENT_ROOT,true);
 				$arrTags['scanner'] = $objCodeScanner->summary();
+				\Twist::successMessage('Scan has been complete, results can be seen below');
 			}else{
 				$arrTags['scanner'] = $objCodeScanner->getLastScan(TWIST_DOCUMENT_ROOT);
 			}
@@ -161,6 +162,8 @@
 
 			//Rebuild the htaccess file
 			\Packages\manager\Models\htaccess::rebuild();
+
+			\Twist::successMessage('Security settings have been applied');
 
 			return $this->security();
 		}

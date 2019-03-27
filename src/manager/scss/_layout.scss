@@ -268,18 +268,18 @@ form{
 
 h1{
 	width: 98%;
-	margin:30px auto;
+	margin:0 auto 25px;
 	text-align: left;
 }
 
 p{
 	width: 98%;
-	margin:30px auto;
+	margin:10px auto;
 }
 
 table{
 	width: 98%;
-	margin:30px auto;
+	margin:10px auto;
 	border-spacing: 0;
 	border-collapse: collapse;
 
@@ -352,7 +352,7 @@ table{
 
 .buttonBar{
 	position:absolute;
-	top:35px;
+	top:20px;
 	right:2%;
 	text-align: right;
 }
@@ -468,6 +468,10 @@ p + table{
 	margin-top:0;
 }
 
+p + p{
+	margin-top:0;
+}
+
 .avatar{
 	width: 100px;
 	height: 100px;
@@ -520,87 +524,6 @@ p + table{
 		}
 	}
 }
-
-/**.box{
-	display: flex;
-	flex-direction: column;
-	min-width: 0;
-	word-wrap: break-word;
-	border: .0625rem solid rgba(0,0,0,.05);
-	border-radius: .25rem;
-	background-color: #fff;
-	background-clip: border-box;
-	box-shadow: 0 15px 35px rgba(50,50,93,.1),0 5px 15px rgba(0,0,0,.07)!important;
-
-	padding:20px;
-
-	max-width:1260px;
-	margin:30px auto;
-
-	&.half{
-		max-width:630px;
-	}
-
-	>span{
-		display: block;
-		width:100%;
-		text-align: left;
-
-		span{
-			width: auto;
-			display: inline;
-		}
-	}
-
-	span{
-		&.bold{
-			font-weight:bold;
-		}
-
-		&.small{
-			font-size:12px;
-		}
-
-		&.center{
-			text-align: center;
-		}
-	}
-
-	&.profile,&.project{
-		margin: 100px auto 30px;
-
-		.avatar{
-			margin:-70px auto 0;
-		}
-
-		.info{
-			margin-top: -32px;
-			text-align: right;
-		}
-	}
-
-	&.ticket,&.reply{
-		flex-grow: 1;
-		flex-shrink: 1;
-		flex-basis: auto;
-		flex-direction: row;
-
-		aside{
-			min-width:200px;
-
-			.avatar{
-				width:50px;
-				height:50px;
-				margin-bottom:20px;
-			}
-		}
-
-		article{
-			flex-grow: 1;
-			flex-shrink: 1;
-		}
-	}
-}*/
 
 .projectProgress{
 	position: relative;
@@ -768,9 +691,9 @@ p + table{
 }
 
 .notification{
-	width:100%;
+	width:98%;
 	max-width:1260px;
-	margin:30px auto;
+	margin:10px auto;
 	text-align: left;
 	padding:6px;
 
