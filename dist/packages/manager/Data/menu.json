@@ -33,10 +33,16 @@
         "name": "Firewall",
         "uri": "/protect/firewall",
         "order": 10
-      },{
-        "name": "Code Scanner",
+      },
+      {
+        "name": "Scanner",
         "uri": "/protect/scanner",
         "order": 20
+      },
+      {
+        "name": "Security",
+        "uri": "/protect/security",
+        "order": 30
       }
     ]
   },
@@ -52,12 +58,17 @@
         "order": 10
       },
       {
-        "name": ".htaccess",
-        "uri": "/settings/htaccess",
+        "name": "Performance",
+        "uri": "/settings/performance",
         "order": 20
       },
       {
-        "name": "Scheduleder",
+        "name": "Redirects",
+        "uri": "/settings/redirects",
+        "order": 20
+      },
+      {
+        "name": "Scheduler",
         "uri": "/settings/scheduled-tasks",
         "order": 30
       },

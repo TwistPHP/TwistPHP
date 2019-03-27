@@ -84,9 +84,6 @@ a {
 	background-color: transparent;
 }
 
-
-
-
 .button-white {
 	color: #212529;
 	border-color: #fff;
@@ -195,6 +192,16 @@ a {
 	color: #f5365c!important;
 }
 
+.button-3d{
+	box-shadow: 0 0.5rem 0 #ccc;
+	transition: all 0.5s ease-out;
+
+	&:hover{
+		transform: translateY(0.5rem);
+		box-shadow: none;
+		transition: all 0.5s ease-in;
+	}
+}
 
 
 

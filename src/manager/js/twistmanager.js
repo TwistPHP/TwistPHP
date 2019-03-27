@@ -20,8 +20,73 @@
  * @link       https://twistphp.com
  */
 
-$(document).ready(function(){
+//import {CustomSelect} from './CustomSelect';
+import {CustomCheckbox} from './CustomCheckbox';
+import {AjaxRequest} from './AjaxRequest';
 
+$( () => {
+
+	let AJAX = new AjaxRequest();
+
+
+	//Customised the select boxes
+	//new CustomSelect();
+
+	//Customised the checkboxes boxes
+	new CustomCheckbox();
+
+	/**
+	 * Button confirmation classes
+	 */
+	$(document).on('click','.delete',function(e){
+		var item = 'item';
+		if($(this).attr('rel')){
+			item = $(this).attr('rel');
+		}
+		//return confirm('Are you sure you want to delete this '+item+'?');
+	});
+
+	$(document).on('click','.cancel:not(.modalLink)',function(e){
+		var item = 'item';
+		if($(this).attr('rel')){
+			item = $(this).attr('rel');
+		}
+		//return confirm('Are you sure you want to cancel '+item+'?');
+	});
+
+	$(document).on('click','.confirm:not(.modalLink)',function(e){
+		var item = 'do this';
+		if($(this).attr('rel')){
+			item = $(this).attr('rel');
+		}
+		//return confirm('Are you sure you want to '+item+'?');
+	});
+
+	$(document).on('click','.logout',function(e){
+		//return confirm('Are you sure you want to log out of the Web Portal?');
+	});
+
+	$(document).on('click','.modalLink',function(e){
+		e.preventDefault();
+
+		var item = 'item';
+		if($(this).attr('data-title')){
+			item = $(this).attr('data-title');
+		}
+
+		//if(!$(this).hasClass('cancel') || confirm('Are you sure you want to cancel '+item+'?')){
+			AJAX.openModal($(this).attr('href'),{id: $(this).attr('rel')},$(this),1200);
+		//}
+	});
+
+	$(document).on('submit','.ajaxFrom',function(e){
+		e.preventDefault();
+		AJAX.openModalForm($(this).attr('action'),'#'+$(this).attr('id'),$(this),1200);
+	});
+
+	/**
+	 * Tab System JS
+	 */
 	$('.tabButtons li').removeClass('current').first().addClass('current');
 	$('.tabs .tab').removeClass('current').first().addClass('current');
 

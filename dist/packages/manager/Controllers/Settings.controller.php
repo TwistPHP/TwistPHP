@@ -159,34 +159,19 @@
 		 * HTaccess manager to all the editing of browser cache settings, rewrite rules and default host name redirects such as using www. or not and forcing https.
 		 * @return string
 		 */
-		public function htaccess(){
+		public function performance(){
 
-			$arrTags = array('rewrite_rules' => '');
+			$arrTags = array();
 
-			$arrRewrites = json_decode(\Twist::framework()->setting('HTACCESS_REWRITES'),true);
-
-			if(count($arrRewrites)){
-				foreach($arrRewrites as $arrEachRewrite){
-					$arrTags['rewrite_rules'] .= $this->_view('components/htaccess/rewrite-rule.tpl',$arrEachRewrite);
-				}
-			}
-
-			return $this->_view('pages/htaccess.tpl',$arrTags);
+			return $this->_view('pages/performance.tpl',$arrTags);
 		}
 
-		public function POSThtaccess(){
+		public function POSTperformance(){
 
 			\Twist::framework()->setting('SITE_WWW',$_POST['SITE_WWW']);
 			\Twist::framework()->setting('SITE_PROTOCOL',$_POST['SITE_PROTOCOL']);
 			\Twist::framework()->setting('SITE_PROTOCOL_FORCE',$_POST['SITE_PROTOCOL_FORCE']);
 			\Twist::framework()->setting('SITE_DIRECTORY_INDEX',$_POST['SITE_DIRECTORY_INDEX']);
-
-			\Twist::framework()->setting('HTACCESS_DISABLE_DIRBROWSING',(array_key_exists('HTACCESS_DISABLE_DIRBROWSING',$_POST)) ? '1' : '0');
-			\Twist::framework()->setting('HTACCESS_DISABLE_HTACCESS',(array_key_exists('HTACCESS_DISABLE_HTACCESS',$_POST)) ? '1' : '0');
-			\Twist::framework()->setting('HTACCESS_DISABLE_UPLOADEDPHP',(array_key_exists('HTACCESS_DISABLE_UPLOADEDPHP',$_POST)) ? '1' : '0');
-			\Twist::framework()->setting('HTACCESS_DISABLE_QUERYSTRINGS',(array_key_exists('HTACCESS_DISABLE_QUERYSTRINGS',$_POST)) ? '1' : '0');
-			\Twist::framework()->setting('HTACCESS_DISABLE_HOTLINKS',(array_key_exists('HTACCESS_DISABLE_HOTLINKS',$_POST)) ? '1' : '0');
-			\Twist::framework()->setting('HTACCESS_DISABLE_EXTENSIONS',$_POST['HTACCESS_DISABLE_EXTENSIONS']);
 
 			\Twist::framework()->setting('HTACCESS_CACHE_HTML',$_POST['HTACCESS_CACHE_HTML']);
 			\Twist::framework()->setting('HTACCESS_REVALIDATE_HTML',(array_key_exists('HTACCESS_REVALIDATE_HTML',$_POST)) ? '1' : '0');
@@ -207,27 +192,47 @@
 			\Twist::framework()->setting('HTACCESS_DEFLATE_JS',(array_key_exists('HTACCESS_DEFLATE_JS',$_POST)) ? '1' : '0');
 			\Twist::framework()->setting('HTACCESS_DEFLATE_IMAGES',(array_key_exists('HTACCESS_DEFLATE_IMAGES',$_POST)) ? '1' : '0');
 
-			$arrTags = array('rewrite_rules' => '');
-			$arrRewriteRules = array();
+			//Rebuild the htaccess file
+			\Packages\manager\Models\htaccess::rebuild();
 
+			return $this->performance();
+		}
+
+		/**
+		 * HTaccess manager to all the editing of browser cache settings, rewrite rules and default host name redirects such as using www. or not and forcing https.
+		 * @return string
+		 */
+		public function redirects(){
+
+			$arrTags = array('rewrite_rules' => '');
+
+			$arrRewrites = json_decode(\Twist::framework()->setting('HTACCESS_REWRITES'),true);
+
+			if(count($arrRewrites)){
+				foreach($arrRewrites as $arrEachRewrite){
+					$arrTags['rewrite_rules'] .= $this->_view('components/htaccess/rewrite-rule.tpl',$arrEachRewrite);
+				}
+			}
+
+			return $this->_view('pages/redirects.tpl',$arrTags);
+		}
+
+		public function POSTredirects(){
+
+			$arrRewriteRules = array();
 			foreach($_POST['rewrite'] as $intKey => $strRewriteURI){
 				if(array_key_exists($intKey,$_POST['rewrite-redirect']) && array_key_exists($intKey,$_POST['rewrite-options']) && $strRewriteURI != '' && $_POST['rewrite-redirect'][$intKey] != ''){
-
 					$arrRewriteRules[] = array('rule' => $strRewriteURI,'redirect' => $_POST['rewrite-redirect'][$intKey],'options' => $_POST['rewrite-options'][$intKey]);
-					$arrTags['rewrite_rules'] .= sprintf("\tRewriteRule %s %s [%s]\n",$strRewriteURI,$_POST['rewrite-redirect'][$intKey],$_POST['rewrite-options'][$intKey]);
 				}
 			}
 
 			\Twist::framework()->setting('HTACCESS_REWRITES',json_encode($arrRewriteRules));
 			\Twist::framework()->setting('HTACCESS_CUSTOM',$_POST['HTACCESS_CUSTOM']);
 
-			/**
-			 * Update the .htaccess file to be a TwistPHP htaccess file
-			 */
-			$dirHTaccessFile = sprintf('%s/.htaccess',TWIST_PUBLIC_ROOT);
-			file_put_contents($dirHTaccessFile,$this->_view(sprintf('%s/default-htaccess.tpl',TWIST_FRAMEWORK_VIEWS),$arrTags));
+			//Rebuild the htaccess file
+			\Packages\manager\Models\htaccess::rebuild();
 
-			return $this->htaccess();
+			return $this->redirects();
 		}
 
 		/**

@@ -1,0 +1,121 @@
+
+body{
+	&.modal-is-open{
+		overflow: hidden;
+	}
+}
+
+#modalWindow{
+	position: fixed;
+	top:0;
+	bottom:0;
+	left:0;
+	right:0;
+	background: rgba(0,0,0,0.4);
+	-ms-flex-align: center;/* IE10 SUPPORT */
+	-webkit-align-items: center;/* IPAD SUPPORT */
+	align-items: center;
+	-ms-flex-pack: center;/* IE10 SUPPORT */
+	-webkit-justify-content: center;/* IPAD SUPPORT */
+	justify-content: center;
+	display: none;
+
+	&.open{
+		display: -ms-flexbox;/* IE10 SUPPORT */
+		display: -webkit-flex;/* IPAD SUPPORT */
+		display: flex;
+	}
+
+	.modalBoxOuter{
+		position: relative;
+		width:100%;
+		max-width:1280px;
+		margin: 0 auto;
+		display: -ms-flexbox;/* IE10 SUPPORT */
+		display: -webkit-flex;/* IPAD SUPPORT */
+		display: flex;
+		background-color: #FFF;
+		height:100%;
+		border-top: 46px solid $twistphp-green;
+		border-bottom: 6px solid $twistphp-green;
+		box-sizing: border-box;
+
+		.modalBox{
+			width: 100%;
+			overflow-y:auto;
+			overflow-x:hidden;
+			-ms-flex-item-align: stretch;/* IE10 SUPPORT */
+			-webkit-align-self: stretch;/* IPAD SUPPORT */
+			align-self: stretch;
+
+			a.printButton{
+				position: absolute;
+				top: 16px;
+				right: 28px;
+				font-size: 16px;
+				line-height: 16px;
+				color:$twistphp-light-grey;
+				text-decoration: none;
+				z-index: 90000;
+			}
+
+			a.close{
+				position: absolute;
+				top: -40px;
+				right: 5px;
+				background-color: $twistphp-green;
+				color:#FFF;
+				font-size: 21px;
+				line-height: 21px;
+				font-weight: 700;
+				padding:6px 8px;
+				border-radius: 50%;
+				text-decoration: none;
+				z-index: 90000;
+			}
+
+			.modalContent{
+				display: block;
+				width: 100%;
+				height: auto;
+				padding: 4%;
+				box-sizing: border-box;
+				border:1px solid transparent;
+			}
+		}
+	}
+}
+
+@include breakpoint(tablet-and-up){
+
+	#modalWindow{
+
+		.modalBoxOuter{
+			height: auto;
+			max-height:88%;
+			border-top: none;
+			border-bottom: none;
+			margin: 0 4%;
+
+			.modalBox{
+
+				a.close{
+					top:-10px;
+					right:-10px;
+					font-size: 16px;
+					line-height: 16px;
+				}
+			}
+		}
+	}
+}
+
+@include breakpoint(mobile-only){
+	body{
+		&.modal-is-open{
+			:not(.modalContent) form{
+				//display: none;
+			}
+		}
+	}
+}

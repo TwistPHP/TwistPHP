@@ -31,6 +31,10 @@ $twistphp-grey: #727272;
 $twistphp-light-grey: #BDBDBD;
 $twistphp-really-light-grey: #EEE;
 
+$tablet: 640px;
+$desktop: 1000px;
+$widescreen: 1280px;
+
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
 
 *, ::after, ::before {
@@ -60,9 +64,12 @@ body {
 	clear:both;
 }
 
+@import "mixins";
 @import "layout";
 @import "buttons";
 @import "forms";
 @import "lists";
 @import "progress";
 @import "tabs";
+@import "modal";
+@import "print";

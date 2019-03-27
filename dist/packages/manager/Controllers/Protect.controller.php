@@ -134,4 +134,34 @@
 
 			return $this->_view('pages/scanner.tpl',$arrTags);
 		}
+
+		/**
+		 * Malicious Code Scanner page, shows the results of a code scan.
+		 * @return string
+		 */
+		public function security(){
+
+			$arrTags = array();
+
+			return $this->_view('pages/security.tpl',$arrTags);
+		}
+
+		/**
+		 * Malicious Code Scanner page, shows the results of a code scan.
+		 * @return string
+		 */
+		public function POSTsecurity(){
+
+			\Twist::framework()->setting('HTACCESS_DISABLE_DIRBROWSING',(array_key_exists('HTACCESS_DISABLE_DIRBROWSING',$_POST)) ? '1' : '0');
+			\Twist::framework()->setting('HTACCESS_DISABLE_HTACCESS',(array_key_exists('HTACCESS_DISABLE_HTACCESS',$_POST)) ? '1' : '0');
+			\Twist::framework()->setting('HTACCESS_DISABLE_UPLOADEDPHP',(array_key_exists('HTACCESS_DISABLE_UPLOADEDPHP',$_POST)) ? '1' : '0');
+			\Twist::framework()->setting('HTACCESS_DISABLE_QUERYSTRINGS',(array_key_exists('HTACCESS_DISABLE_QUERYSTRINGS',$_POST)) ? '1' : '0');
+			\Twist::framework()->setting('HTACCESS_DISABLE_HOTLINKS',(array_key_exists('HTACCESS_DISABLE_HOTLINKS',$_POST)) ? '1' : '0');
+			\Twist::framework()->setting('HTACCESS_DISABLE_EXTENSIONS',$_POST['HTACCESS_DISABLE_EXTENSIONS']);
+
+			//Rebuild the htaccess file
+			\Packages\manager\Models\htaccess::rebuild();
+
+			return $this->security();
+		}
 	}
