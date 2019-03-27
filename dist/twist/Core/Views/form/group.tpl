@@ -1,1 +1,0 @@
-<fieldset title="{data:title}">{data:fields}</fieldset>
