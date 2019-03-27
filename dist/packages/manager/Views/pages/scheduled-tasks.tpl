@@ -5,6 +5,20 @@
 	<a href="?add=1" class="button button-primary"><i class="fas fa-plus"></i> Add Task</a>
 </div>
 
+<table>
+	<thead>
+	<tr>
+		<th>Task</th>
+		<th>Frequency</th>
+		<th>Command</th>
+		<th>Tools</th>
+	</tr>
+	</thead>
+	<tbody>
+	{data:tasks}
+	</tbody>
+</table>
+
 <div class="box box50">
 	<div class="boxTitle">
 		<h3>Stats</h3>
@@ -35,16 +49,3 @@
 	</div>
 </div>
 
-<table>
-	<thead>
-	<tr>
-		<th>Task</th>
-		<th>Frequency</th>
-		<th>Command</th>
-		<th>Tools</th>
-	</tr>
-	</thead>
-	<tbody>
-	{data:tasks}
-	</tbody>
-</table>
