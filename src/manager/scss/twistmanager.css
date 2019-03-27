@@ -23,7 +23,7 @@
  * TwistPHP Manager
  * --------------
  */
-@import url("https://fonts.googleapis.com/css?family=Open+Sans");
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,700");
 *, ::after, ::before {
   box-sizing: border-box; }
 
@@ -309,6 +309,14 @@ table {
     width: 100%;
     flex-grow: 1;
     flex-shrink: 1; }
+    .box .boxContent.center {
+      text-align: center; }
+    .box .boxContent h1, .box .boxContent h2, .box .boxContent h3, .box .boxContent h4, .box .boxContent h5, .box .boxContent h6 {
+      margin: 10px;
+      padding: 0; }
+    .box .boxContent p {
+      margin: 10px;
+      padding: 0; }
     .box .boxContent table tbody tr th, .box .boxContent table tbody tr td {
       border: 0; }
     .box .boxContent table tbody tr:nth-child(even) {
@@ -796,25 +804,28 @@ dl {
     clear: both; }
   dl dt, dl dd {
     display: inline-block;
-    width: 120px; }
+    width: 180px;
+    border-bottom: 1px solid #EBEBEB; }
   dl dt {
     text-align: right;
     font-weight: bold;
     clear: left;
-    float: left; }
+    float: left;
+    border-bottom: 1px solid #EBEBEB; }
     dl dt:first-child {
-      padding-top: .1em; }
+      padding-top: .1em;
+      padding-bottom: .1em; }
     dl dt + dt {
       width: 100%;
       float: none;
-      padding: 0 calc(100% - 120px) 0 0; }
+      padding: 0 calc(100% - 180px) 0 0; }
       dl dt + dt + dd {
         margin-top: -2em; }
         dl dt + dt + dd + dt {
           margin-top: 2em; }
   dl dd {
     padding: .1em 0 .1em 1em;
-    width: calc(100% - 120px);
+    width: calc(100% - 180px);
     clear: right;
     margin: 0; }
     dl dd + dd {
@@ -822,25 +833,20 @@ dl {
       clear: both; }
     dl dd + dt {
       clear: both;
-      padding-top: .1em; }
+      padding-top: .1em;
+      padding-bottom: .1em; }
   dl.small dt, dl.small dd {
     width: 100px; }
-  dl.small dt:first-child {
-    padding-top: .4em; }
   dl.small dt + dt {
     padding: 0 calc(100% - 100px) 0 0; }
   dl.small dd {
-    width: calc(100% - 100px);
-    padding: .4em 0 .4em 1em; }
+    width: calc(100% - 100px); }
   dl.smaller dt, dl.smaller dd {
     width: 70px; }
-  dl.smaller dt:first-child {
-    padding-top: .3em; }
   dl.smaller dt + dt {
     padding: 0 calc(100% - 70px) 0 0; }
   dl.smaller dd {
-    width: calc(100% - 70px);
-    padding: .3em 0 .3em 1em; }
+    width: calc(100% - 70px); }
 
 .proC {
   font-size: 20px;
@@ -1372,8 +1378,6 @@ dl {
   transform: rotate(360deg); }
 
 .tabContainer {
-  border: 1px solid #212121;
-  border-radius: 5px;
   display: inline-flex;
   width: 100%; }
 

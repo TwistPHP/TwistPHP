@@ -12,7 +12,8 @@ dl{
 
 	dt, dd{
 		display:inline-block;
-		width:120px;
+		width:180px;
+		border-bottom:1px solid #EBEBEB;
 	}
 
 	dt{
@@ -20,15 +21,17 @@ dl{
 		font-weight:bold;
 		clear:left;
 		float:left;
+		border-bottom:1px solid #EBEBEB;
 
 		&:first-child{
 			padding-top:.1em;
+			padding-bottom:.1em;
 		}
 
 		+dt{
 			width: 100%;
 			float: none;
-			padding: 0 calc(100% - 120px) 0 0;
+			padding: 0 calc(100% - 180px) 0 0;
 
 			+dd{
 				margin-top: -2em;
@@ -42,7 +45,7 @@ dl{
 
 	dd{
 		padding:.1em 0 .1em 1em;
-		width: calc(100% - 120px);
+		width: calc(100% - 180px);
 		clear:right;
 		margin:0;
 
@@ -54,6 +57,7 @@ dl{
 		+dt{
 			clear:both;
 			padding-top:.1em;
+			padding-bottom:.1em;
 		}
 	}
 
@@ -64,7 +68,8 @@ dl{
 
 		dt{
 			&:first-child{
-				padding-top:.4em;
+				//padding-top:.4em;
+				//padding-bottom:.4em;
 			}
 
 			+dt{
@@ -74,7 +79,7 @@ dl{
 
 		dd{
 			width: calc(100% - 100px);
-			padding:.4em 0 .4em 1em;
+			//padding:.4em 0 .4em 1em;
 		}
 	}
 
@@ -85,7 +90,8 @@ dl{
 
 		dt{
 			&:first-child{
-				padding-top:.3em;
+				//padding-top:.3em;
+				//padding-bottom:.3em;
 			}
 
 			+dt{
@@ -95,7 +101,7 @@ dl{
 
 		dd{
 			width: calc(100% - 70px);
-			padding:.3em 0 .3em 1em;
+			//padding:.3em 0 .3em 1em;
 		}
 	}
 }

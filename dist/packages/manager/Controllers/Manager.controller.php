@@ -112,6 +112,10 @@ class Manager extends BaseUser{
 			$arrTags['version_status'] = '<span class="tag red">Failed to retrieve version information, try again later!</span>';
 		}
 
+		$objCodeScanner = new Scanner();
+		$arrTags['scanner'] = $objCodeScanner->getLastScan(TWIST_DOCUMENT_ROOT);
+
+		$arrTags['pulse'] = ScheduledTasks::pulseInfo();
 		$arrTags['server'] = $_SERVER["SERVER_SOFTWARE"];
 		$arrTags['php_version'] = phpversion();
 		$arrTags['php_memory'] = $this->setting_to_bytes(ini_get('memory_limit'));

@@ -1,6 +1,6 @@
 <tr>
-    <th>{data:key}</th>
-    <th>{data:files}</th>
-    <th>{bytestosize[data:size]}</th>
-    <th><a class="button" href="?clear={data:key}">Clear</a></th>
+    <td>{data:key}</td>
+    <td>{data:files}</td>
+    <td>{bytestosize[data:size]}</td>
+    <td><a class="button button-primary" href="?clear={data:key}">Clear</a></td>
 </tr>

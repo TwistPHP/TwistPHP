@@ -135,6 +135,7 @@
 
 			return array(
 				'active' => count($arrPulse) && ($intFreq1 == $intFreq2 || $intFreq1 == ($intFreq2-1) || $intFreq1 == ($intFreq2+1)),
+				'status' => (count($arrPulse)) ? (($intFreq1 == $intFreq2 || $intFreq1 == ($intFreq2-1) || $intFreq1 == ($intFreq2+1)) ? 'Active' : 'Detecting...') : 'Inactive',
 				'last_pulse' => $intLastPulse,
 				'frequency' => $intFreq1,
 				'history' => $arrPulse

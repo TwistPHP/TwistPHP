@@ -6,14 +6,14 @@
 	</div>
 	<div class="boxContent">
 		<dl class="inline">
-			<dt>TwistProtect</dt><dd>Firewall Enabled</dd><dd>Scanner Enabled</dd>
-			<dt>TwistPulse</dt><dd>Detected (1bpm)</dd>
-			<dt></dt><dd></dd>
+			<dt>Maintenance Mode</dt><dd>{data:maintenance-mode}<small class="float-right">[<a href="{route:registered_uri}?maintenance-mode={data:maintenance-mode=='Off'?'1':'0'}">Turn {data:maintenance-mode=='Off'?'On':'Off'}</a>]&nbsp;</small></dd>
+			<dt>Development Mode</dt><dd>{data:development-mode}<small class="float-right">[<a href="{route:registered_uri}?development-mode={data:development-mode=='Off'?'1':'0'}">Turn {data:development-mode=='Off'?'On':'Off'}</a>]&nbsp;</small></dd>
+			<dt>Debug Bar</dt><dd>{data:debug-bar}<small class="float-right">[<a href="{route:registered_uri}?debug-bar={data:debug-bar=='Off'?'1':'0'}">Turn {data:debug-bar=='Off'?'On':'Off'}</a>]&nbsp;</small></dd>
 			<dt>Server</dt><dd>{data:server}</dd>
 			<dt>PHP Version</dt><dd>{data:php_version}</dd>
 			<dt>Memory Limit</dt><dd>{bytestosize[data:php_memory]}</dd>
 			<dt>Max Upload</dt><dd>{bytestosize[data:php_upload_max]}</dd>
-			<dt>Execution Time</dt><dd>{data:php_max_execution}s</dd>
+			<dt>Max Execution Time</dt><dd>{data:php_max_execution}s</dd>
 		</dl>
 		<div class="clear"></div>
 	</div>
@@ -23,6 +23,36 @@
 </div>
 
 <div class="box box33">
+	<div class="boxTitle">
+		<h3>Security</h3>
+	</div>
+	<div class="boxContent">
+
+			<div class="proC p76" style="margin:20px auto;">
+				<span>76% A+</span>
+				<div class="lhClip">
+					<div class="f50Bar"></div>
+					<div class="vBar"></div>
+				</div>
+			</div>
+
+			<dl class="small">
+				<dt>Pulse</dt><dd>{data:pulse/status} ({data:pulse/frequency})</dd>
+				<dt>Firewall</dt><dd>{data:twistprotect-firewall=='Off'?'Disabled':'Enabled'}</dd>
+				<dt>Scanner</dt><dd>{data:twistprotect-scanner=='Off'?'Disabled':'Enabled'}</dd>
+				<dt>Last Scan</dt><dd>{prettytime[data:scanner/scanned]} [Pass]</dd>
+				<dt>Security</dt><dd>High</dd>
+				<dt>Core</dt><dd>Up-to-date</dd>
+				<dt>Packages</dt><dd>Up-to-date</dd>
+			</dl>
+
+	</div>
+	<div class="boxFooter">
+		TwistProtect
+	</div>
+</div>
+
+<!--<div class="box box33">
 	<div class="boxTitle">
 		<h3>Quick Tools</h3>
 	</div>
@@ -38,14 +68,15 @@
 	<div class="boxFooter">
 
 	</div>
-</div>
+</div>-->
 
 <div class="box box33">
 	<div class="boxTitle">
 		<h3>Updates</h3>
 	</div>
-	<div class="boxContent">
-		<p>Latest package and framework updates</p>
+	<div class="boxContent center">
+		<i class="fas fa-check" style="font-size:60px; color:#84AF5D; margin:20px;"></i>
+		<p>Everything is ship shape!</p>
 		<div class="clear"></div>
 	</div>
 	<div class="boxFooter">
