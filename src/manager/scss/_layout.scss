@@ -366,7 +366,7 @@ table{
 	flex-direction: column;
 	align-items:stretch;
 	width: 98%;
-	margin:30px auto;
+	margin:10px auto;
 	background-color: #FFF;
 	padding:0;
 	border:1px solid $twistphp-light-grey;
@@ -454,6 +454,11 @@ table{
 		text-align: right;
 		flex-grow: 0;
 		flex-shrink: 0;
+
+		.button{
+			font-weight: 300;
+			padding: .1rem 1.25rem;
+		}
 	}
 }
 
@@ -572,7 +577,7 @@ p + p{
 	}
 }
 
-.resource{
+.twistupload-file-list-item{
 	display: flex;
 	flex-basis: auto;
 	flex-direction: row;

@@ -87,12 +87,12 @@ $( () => {
 	/**
 	 * Tab System JS
 	 */
-	$('.tabButtons li').removeClass('current').first().addClass('current');
-	$('.tabs .tab').removeClass('current').first().addClass('current');
+	$('.tabContainer .tabButtons li').removeClass('current').first().addClass('current');
+	$('.tabContainer .tab').removeClass('current').first().addClass('current');
 
 	$('.tabButtons li').on('click',function(){
 		var clickedIndex = $(this).index();
-		$('.tabButtons li').removeClass('current').eq(clickedIndex).addClass('current');
-		$('.tabs .tab').removeClass('current').eq(clickedIndex).addClass('current');
+		$(this).parent().find('li').removeClass('current').eq(clickedIndex).addClass('current');
+		$(this).parents('.tabContainer').find('.tab').removeClass('current').eq(clickedIndex).addClass('current');
 	});
 });

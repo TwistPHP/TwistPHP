@@ -1,1 +1,1 @@
-<li class="tabButton1">{data:title}</li>
+<li>{data:title}</li>

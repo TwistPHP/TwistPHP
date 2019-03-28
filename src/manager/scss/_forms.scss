@@ -214,25 +214,27 @@
 	}
 }
 
-
-
 form{
-	//display: block;
 
-	label{
-		display: block;
-		width:33%;
-		float:left;
-		margin:5px 0 5px 0;
+	input:not([type="hidden"]),select,textarea{
+		width:98%;
+		margin:5px 1%;
+		font-size: 1rem;
+		line-height: 1.5;
+		display: inline-block;
+		height: 46px;
 		padding: .625rem .75rem;
+		transition: all .2s cubic-bezier(.68,-.55,.265,1.55);
+		color: $twistphp-dark-grey;
+		border: 1px solid $twistphp-light-grey;
+		border-radius: 0;
+		background-color: #fff;
+		background-clip: padding-box;
+		box-shadow: none;
 	}
 
-
-	input:not([type="hidden"]),select,textarea,.switch{
-		display: block;
-		width:66%;
-		float:left;
-		margin:5px 0 5px 0;
+	textarea{
+		min-height: 100px;
 	}
 
 	.switch{
@@ -241,8 +243,20 @@ form{
 		display: inline-block;
 	}
 
-	&.inline{
-		//display: inline-block;
+	label{
+		display: block;
+		width:33%;
+		float:left;
+		margin:5px 0;
+		padding: .625rem .75rem;
+
+		+input:not([type="hidden"]),
+		+select,
+		+textarea{
+			float:left;
+			width:66%;
+			margin:5px 0;
+		}
 	}
 
 	&.hideLabel{
@@ -256,28 +270,5 @@ form{
 			width:100%;
 			float:left;
 		}
-
-		button{
-			width:100%;
-		}
-	}
-
-	input:not([type="hidden"]),select,textarea{
-		font-size: 1rem;
-		line-height: 1.5;
-		display: inline-block;
-		height: calc(2.75rem + 2px);
-		padding: .625rem .75rem;
-		transition: all .2s cubic-bezier(.68,-.55,.265,1.55);
-		color: $twistphp-dark-grey;
-		border: 1px solid $twistphp-light-grey;
-		border-radius: 0;
-		background-color: #fff;
-		background-clip: padding-box;
-		box-shadow: none;
-	}
-
-	button{
-		display: inline-block;
 	}
 }
