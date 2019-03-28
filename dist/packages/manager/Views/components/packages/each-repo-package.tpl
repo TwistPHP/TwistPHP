@@ -3,6 +3,6 @@
     <div class="package-details">
         <h4 class="no-top-padding no-bottom-padding">{data:name}</h4>
         <p>{data:description}<br><strong>{data:author}</strong></p>
-        <a href="{uri:./packages/install}?download={data:key}" class="button">Download</a>
+        <a href="{uri:./install}?download={data:key}" class="button">Download</a>
     </div>
 </li>

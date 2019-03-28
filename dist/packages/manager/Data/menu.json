@@ -17,7 +17,7 @@
         "uri": "/packages",
         "order": 10
       },{
-        "name": "Add New",
+        "name": "Search & Download",
         "uri": "/packages/download",
         "order": 20
       }

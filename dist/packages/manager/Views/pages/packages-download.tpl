@@ -6,7 +6,7 @@
 		<h3>Search & Filter</h3>
 	</div>
 	<div class="boxContent">
-		<form action="{uri:./packages}" method="get" class="linear">
+		<form action="{uri:./download}" method="get" class="linear">
 			<input type="text" name="search" placeholder="Search...">
 			<label>Show</label>
 			<select name="filter">
