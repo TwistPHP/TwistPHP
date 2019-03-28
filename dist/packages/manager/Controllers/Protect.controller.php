@@ -24,7 +24,7 @@
 
 	namespace Packages\manager\Controllers;
 
-	use \Twist\Core\Controllers\BaseUser;
+	use \Twist\Core\Controllers\Base;
 	use Packages\install\Models\Install;
 	use Twist\Core\Models\Protect\Firewall;
 	use Twist\Core\Models\Protect\Scanner;
@@ -34,7 +34,11 @@
 	 * The route controller for the framework manager, generates the pages of the manager tool.
 	 * @package Twist\Core\Controllers
 	 */
-	class Protect extends BaseUser{
+	class Protect extends Base{
+
+		public function _index(){
+			\Twist::redirect('firewall');
+		}
 
 		/**
 		 * Uninstall a package from the system, pass the package slug in the GET param 'package'.

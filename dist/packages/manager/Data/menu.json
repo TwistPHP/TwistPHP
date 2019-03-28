@@ -3,14 +3,14 @@
     "name": "Dashboard",
     "uri": "",
     "icon": "fa-tachometer-alt",
-    "order": 10,
+    "order": 1,
     "sub-sections": []
   },
   {
     "name": "Packages",
     "uri": "/packages",
     "icon": "fa-puzzle-piece",
-    "order": 20,
+    "order": 100,
     "sub-sections": [
       {
         "name": "Installed",
@@ -25,9 +25,9 @@
   },
   {
     "name": "TwistProtect",
-    "uri": "#",
+    "uri": "/protect",
     "icon": "fa-lock",
-    "order": 30,
+    "order": 120,
     "sub-sections": [
       {
         "name": "Firewall",
@@ -50,7 +50,7 @@
     "name": "Settings",
     "uri": "/settings",
     "icon": "fa-cogs",
-    "order": 40,
+    "order": 150,
     "sub-sections": [
       {
         "name": "Cache",

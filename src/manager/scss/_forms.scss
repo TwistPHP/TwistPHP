@@ -214,6 +214,32 @@
 	}
 }
 
+small{
+	.switch{
+		width: 50px !important;
+		height: 19px;
+
+		.slider:before{
+			height: 13px;
+			width: 13px;
+			left: 4px;
+			bottom: 3px;
+		}
+
+		input:checked+.slider:before{
+			-webkit-transform: translateX(30px);
+			-ms-transform: translateX(30px);
+			transform: translateX(30px);
+			height: 13px;
+			width: 13px;
+			left: 4px;
+			bottom: 3px;
+			font-size: 8px;
+			line-height: 15px;
+		}
+	}
+}
+
 form{
 
 	input:not([type="hidden"]),select,textarea{
