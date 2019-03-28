@@ -289,8 +289,14 @@ table {
   background-color: #FFF;
   padding: 0;
   border: 1px solid #BDBDBD; }
+  .box.box25 {
+    width: 23%; }
   .box.box50 {
     width: 48%; }
+  .box.box75 {
+    width: 73%; }
+  .box.box100 {
+    width: 98%; }
   .box.box33 {
     width: 31%; }
   .box.box66 {
@@ -357,113 +363,23 @@ p + table {
 p + p {
   margin-top: 0; }
 
-.avatar {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  background-position: center;
-  background-size: contain;
-  background-repeat: no-repeat;
-  box-shadow: 0 15px 35px rgba(50, 50, 93, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07) !important;
-  background-color: #FFF;
-  position: relative; }
-  .avatar.mini {
-    width: 36px;
-    height: 36px; }
-  .avatar.stack {
-    display: inline-block;
-    margin: 0 !important; }
-    .avatar.stack + .avatar.stack {
-      margin: 0 0 0 -10px !important; }
-  .avatar:not(.image) {
-    background-image: none !important; }
-    .avatar:not(.image):after {
-      content: attr(rel);
-      display: inline-block;
-      position: absolute;
-      font-size: 32px;
-      line-height: 32px;
-      font-weight: bold;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      right: 0;
-      text-align: center;
-      padding-top: calc(50% - 16px); }
-    .avatar:not(.image).mini:after {
-      font-size: 16px;
-      line-height: 16px;
-      padding-top: calc(50% - 7px); }
-
-.projectProgress {
-  position: relative;
-  width: 100%;
-  padding: 6px;
-  background-color: #F2E9E1;
-  color: #84AF5D;
-  margin: 10px 0; }
-  .projectProgress .proC {
-    position: absolute;
-    right: -31px;
-    top: -2.7em; }
-  .projectProgress .taskCount {
-    float: right; }
-
-.hostingDetails {
-  border-bottom: 1px solid #EEEEEE; }
-  .hostingDetails div {
-    width: calc(50% - 20px);
-    float: left;
-    margin: 10px 20px 10px 0;
-    padding: 10px; }
-    .hostingDetails div + div {
-      margin: 10px 0 10px 20px;
-      padding: 10px;
-      background-color: #EEEEEE;
-      border-radius: 5px; }
-    .hostingDetails div img {
-      max-width: 240px;
-      display: block;
-      margin: 0 auto 20px; }
-
-.twistupload-file-list-item {
+.twistupload-file-list {
   display: flex;
   flex-basis: auto;
-  flex-direction: row;
-  border-top: 1px solid #262626;
-  padding: 6px 0; }
-  .twistupload-file-list-item div.preview {
-    width: 160px;
+  flex-direction: column; }
+  .twistupload-file-list .twistupload-file-list-item {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center; }
-    .twistupload-file-list-item div.preview img {
+    flex-basis: auto;
+    flex-direction: row;
+    align-items: flex-start;
+    border-top: 1px solid #262626;
+    padding: 6px 0; }
+    .twistupload-file-list .twistupload-file-list-item img {
       display: inline-block;
-      max-width: 80%; }
-    .twistupload-file-list-item div.preview i {
-      font-size: 40px;
-      line-height: 40px; }
-  .twistupload-file-list-item div:not(.preview) {
-    flex-grow: 1;
-    flex-shrink: 1; }
-    .twistupload-file-list-item div:not(.preview) span.name {
-      font-weight: bold; }
-  .twistupload-file-list-item.small {
-    border-top: 0;
-    background-color: #EEEEEE;
-    border-radius: 5px;
-    margin-bottom: 4px; }
-    .twistupload-file-list-item.small div.preview {
-      width: 60px; }
-      .twistupload-file-list-item.small div.preview i {
-        font-size: 20px;
-        line-height: 20px; }
-    .twistupload-file-list-item.small div:not(.preview) {
-      flex-grow: 1;
-      flex-shrink: 1; }
-      .twistupload-file-list-item.small div:not(.preview) span.added {
-        display: none; }
+      width: 160px; }
+    .twistupload-file-list .twistupload-file-list-item ul {
+      width: calc(100% - 160px);
+      list-style: none; }
 
 #twist-manager-repolist ul li {
   display: inline-block;
