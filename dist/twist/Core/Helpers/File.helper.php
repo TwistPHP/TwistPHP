@@ -987,7 +987,8 @@ class File extends Base{
 			'id' => uniqid(),
 			'multiple' => 0,
 			'accept' => '',
-			'value' => ''
+			'value' => '',
+			'preload' => '[]'
 		);
 
 		if(array_key_exists('multiple', $arrParameters) && $arrParameters['multiple'] !== false) {
@@ -1040,7 +1041,8 @@ class File extends Base{
 					'accept' => $strAccept,
 					'acceptTypes' => json_encode($strAcceptTypes),
 					'acceptExtensions' => json_encode($strAcceptExtensions),
-					'value' => $arrParameters['value']
+					'value' => $arrParameters['value'],
+					'preload' => $arrParameters['preload']
 				);
 
 				//Store a temp session for js output

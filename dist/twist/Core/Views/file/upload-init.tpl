@@ -3,5 +3,6 @@
         acceptTypes: {data:acceptTypes!==undefined?data:acceptTypes:'[]'},
         acceptExtensions: {data:acceptExtensions!==undefined?data:acceptExtensions:'[]'},
         multiple: {data:multiple==1?'true':'false'}
-    } );
+    },
+	{data:preload!==undefined?data:preload:'[]'});
 </script>

@@ -1,68 +1,82 @@
 
 .tabContainer{
-	display: inline-flex;
-	width: 100%;
-}
-
-.tabs{
-	width: calc(100% - 180px);
-	display: inline-block;
-	float: left;
-	padding-left: 10px;
+	display: flex;
+	flex-direction: row;
+	align-items: stretch;
+	width: 98%;
+	margin:10px auto;
 
 	.tab{
+		width: calc(100% - 160px);
+		align-self: stretch;
 		display: none;
 
-		&.current{
-			display: block;
-		}
-	}
-}
-
-.tabButtons{
-	margin: 0;
-	padding: 0;
-	list-style: none;
-	width: 180px;
-	display: inline-block;
-	float: left;
-
-	li{
-		padding: 20px 10px;
-		font-size: 16px;
-		line-height: 20px;
-		text-align:center;
-		transition: all 0.5s ease-out;
-		word-break: break-word;
-		color: #FFF;
-
-		span{
-			width: 100%;
+		.box{
+			width:100%;
+			margin:0;
 		}
 
 		&.current{
-			background-color:$twistphp-green;
-			color: #FFF;
-		}
-		&:hover{
-			cursor: pointer;
-			background-color:$twistphp-green;
-			color: #FFF;
-			transition:all 0.5s ease-in;
+			display: flex;
 		}
 	}
 
-	&.textOnly{
+	.tabButtons{
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		//width: 180px;
+		display: inline-block;
+		float: left;
 		width:160px;
-		background-color: $twistphp-black;
+		background-color: $twistphp-really-light-grey;
+		border:1px solid $twistphp-light-grey;
+		border-right:0;
 
 		li{
-			padding: 8px 10px;
+			//padding: 20px 10px;
+			font-size: 16px;
+			line-height: 20px;
+			//text-align:center;
+			transition: all 0.5s ease-out;
+			word-break: break-word;
+			//color: #FFF;
+			padding: 10px 10px;
 			text-align: left;
-		}
+			color:$twistphp-black;
+			border-bottom:1px solid $twistphp-light-grey;
 
-		+.tabs{
-			width: calc(100% - 160px);
+			i{
+				display: inline-block;
+				margin-right:6px;
+			}
+
+			&.current,&:hover{
+				background-color:$twistphp-green;
+				color: #FFF;
+			}
+
+			&:hover{
+				cursor: pointer;
+				transition:all 0.3s ease-in;
+			}
+		}
+	}
+
+	&.large{
+		.tabButtons{
+			li{
+				padding: 12px 10px;
+				text-align: center;
+
+				i{
+					text-align: center;
+					width: 100%;
+					font-size: 20px;
+					line-height: 24px;
+					margin-right:0;
+				}
+			}
 		}
 	}
 }

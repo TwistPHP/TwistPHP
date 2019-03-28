@@ -3,14 +3,12 @@
 
 <form class="inline" method="post">
 	<div class="buttonBar">
-		<button type="submit" class="button button-primary float-right"><i class="fa fa-save"></i> Save</button><a href="?import=core" class="button button-warning float-right"><i class="fa fa-download"></i> Import New Settings</a>
+		<button type="submit" class="button button-primary"><i class="fa fa-save"></i> Save</button><a href="?import=core" class="button button-warning"><i class="fa fa-download"></i> Import New Settings</a>
 	</div>
 	<div class="tabContainer">
-		<ul class="tabButtons textOnly">
+		<ul class="tabButtons">
 			{data:tabs}
 		</ul>
-		<div class="tabs">
-			{data:tob_content}
-		</div>
+		{data:tob_content}
 	</div>
 </form>

@@ -193,13 +193,13 @@ a {
 }
 
 .button-3d{
-	box-shadow: 0 0.5rem 0 #ccc;
-	transition: all 0.5s ease-out;
+	box-shadow: 0 0.3rem 0 #ccc;
+	transition: all 0.3s ease-out;
 
 	&:hover{
-		transform: translateY(0.5rem);
+		transform: translateY(0.3rem);
 		box-shadow: none;
-		transition: all 0.5s ease-in;
+		transition: all 0.3s ease-in;
 	}
 }
 

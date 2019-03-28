@@ -56,6 +56,7 @@
 			$this->controller('/settings/scheduled-tasks/%','Packages\manager\Controllers\Scheduler');
 
 			$this->ajax('/ajax/%','Packages\manager\Controllers\AJAX');
+			$this->upload('/upload/{function}/{asset_group}');
 
 			//Load in all any hooks registered to extend the Twist Manager
 			$arrRoutes = \Twist::framework()->hooks()->getAll('TWIST_MANAGER_ROUTE');

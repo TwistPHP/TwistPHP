@@ -24,7 +24,7 @@
 
 	namespace Packages\manager\Controllers;
 
-	use \Twist\Core\Controllers\BaseUser;
+	use \Twist\Core\Controllers\Base;
 	use Packages\install\Models\Install;
 	use Twist\Core\Models\Protect\Firewall;
 	use Twist\Core\Models\Protect\Scanner;
@@ -34,7 +34,7 @@
 	 * The route controller for the framework manager, generates the pages of the manager tool.
 	 * @package Twist\Core\Controllers
 	 */
-	class Settings extends BaseUser{
+	class Settings extends Base{
 
 		/**
 		 * An overview of all the settings in the TwistPHP Settings table, from here all settings can be updated as necessary.

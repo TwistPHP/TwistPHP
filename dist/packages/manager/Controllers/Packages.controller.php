@@ -24,7 +24,7 @@
 
 	namespace Packages\manager\Controllers;
 
-	use \Twist\Core\Controllers\BaseUser;
+	use \Twist\Core\Controllers\Base;
 	use Packages\install\Models\Install;
 	use Twist\Core\Models\Protect\Firewall;
 	use Twist\Core\Models\Protect\Scanner;
@@ -34,7 +34,7 @@
 	 * The route controller for the framework manager, generates the pages of the manager tool.
 	 * @package Twist\Core\Controllers
 	 */
-	class Packages extends BaseUser{
+	class Packages extends Base{
 
 		/**
 		 * Display all the installed and un-installed packages that are currently in your packages folder. The page does not currently have an APP store feature.

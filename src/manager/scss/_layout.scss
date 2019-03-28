@@ -55,7 +55,7 @@ header{
 	nav{
 		background-color: $twistphp-black;
 		//border:1px solid $twistphp-black;
-		min-width: 90px;
+		min-width: 200px;
 
 		-webkit-transition: width 1s,min-width 1s; /* For Safari 3.1 to 6.0 */
 		transition: width 1s,min-width 1s;
@@ -75,113 +75,101 @@ header{
 			}
 		}
 
-		ul{
-			width: 100%;
-			margin: 0;
+		> ul{
+			display: block;
+			list-style: none;
+			//We animare the menu to controll the size of the left bar
+			transition: width 1s;
+			margin:20px 0 0 0;
 			padding:0;
-			overflow: visible;
-			//height: 90vh;
-			background-color:transparent;
 
 			li{
-				width: 100%;
-				display: block;
-				margin: 0;
-				border:0;
-				border-radius: 0;
-				padding: 0;
 				position: relative;
-				transition: all 0.5s ease-out;
-
-				i{
-					width: 100%;
-					text-align: center;
-					color: #FFF;
-					font-size: 20px;
-				}
+				margin:0;
+				padding:0;
 
 				a{
-					display: inline-block;
-					color: #FFF;
-					padding: 20px 30px;
-					text-align: center;
-					white-space: normal;
-					word-wrap: break-word;
+					display: block;
+					padding: 10px 20px;
 					text-decoration: none;
+					color:#FFF;
 
-					span.menu-text{
-						padding: 5px;
-						white-space: pre-wrap;
-						position: absolute;
-						right: -150px;
-						opacity: 0;
-						visibility: hidden;
-						transition: all 0.5s ease-out;
-						font-size:14px;
-						bottom:0;
+					+a{
+						border-top:1px solid #CCCCCC;
 					}
 
+					span{
+						display: inline-block;
+						padding-left:10px;
+					}
 				}
-				&:hover{
-					background-color:$twistphp-green;
-					transition: all 0.5s ease-in;
-					cursor: pointer;
 
-					a{
-						span{
-							left: 0;
-							right: 0;
-							opacity: 1;
-							visibility: visible;
-							transition: all 0.5s ease-in;
+				> ul{
+					display: none;
+					position: absolute;
+					list-style: none;
+					top: 0;
+					left: 100%;
+					//background-color: $twistphp-green;
+					background-color: #96CB52;
+					margin:0;
+					padding:0;
+
+					li{
+						&:hover{
+							a{
+								background-color: $twistphp-green;
+								color:#FFF;
+							}
 						}
-					}
-
-					> ul{
-						opacity: 1;
-						visibility: visible;
 					}
 				}
 
 				&.current{
-					background-color:$twistphp-green;
+					> a{
+						position: relative;
+						background-color: $twistphp-green;
+						color:#FFF;
 
-					a{
-						span{
-							right: 0;
-							left: 0;
-							opacity: 1;
+						&:after{
+							content:'';
+							position: absolute;
+							top: calc(50% - 10px);
+							//right:0;
+							right:-12px;
+							display: block;
+							width: 0;
+							height: 0;
+							border-top: 10px solid transparent;
+							border-bottom: 10px solid transparent;
+							//border-righ: 12px solid #F3F3F3;
+							border-left: 12px solid $twistphp-green;
+							z-index:200;
 						}
 					}
 				}
-				ul{
-					display: block;
-					padding:0;
-					margin:0;
-					position: absolute;
-					top: 0px;
-					right: auto;
-					left: 100%;
-					background-color:$twistphp-green;
-					visibility: hidden;
-					opacity: 0;
-					width: 140px;
 
-					li{
-						padding:0px;
+				&:hover{
+					> a{
+						background-color: $twistphp-green;
+						color:#FFF;
+					}
 
-						&:hover{
-							background-color:#FFF;
-							transition: all 0.5s ease-in;
-							a{
-								color: $twistphp-green;
-								transition: all 0.5s ease-in;
-								font-size: 14px;
-							}
-						}
-						a{
-							padding: 20px 30px;
-							font-size: 14px;
+					> ul{
+						display: block;
+						z-index:400;
+
+						&:before{
+							content:'';
+							position: absolute;
+							top: 10px;
+							left:-12px;
+							display: block;
+							width: 0;
+							height: 0;
+							border-top: 10px solid transparent;
+							border-bottom: 10px solid transparent;
+							border-right: 12px solid #96CB52;
 						}
 					}
 				}
@@ -366,13 +354,25 @@ table{
 	flex-direction: column;
 	align-items:stretch;
 	width: 98%;
-	margin:30px auto;
+	margin:10px auto;
 	background-color: #FFF;
 	padding:0;
 	border:1px solid $twistphp-light-grey;
 
+	&.box25{
+		width:23%;
+	}
+
 	&.box50{
 		width:48%;
+	}
+
+	&.box75{
+		width:73%;
+	}
+
+	&.box100{
+		width:98%;
 	}
 
 	&.box33{
@@ -454,6 +454,11 @@ table{
 		text-align: right;
 		flex-grow: 0;
 		flex-shrink: 0;
+
+		.button{
+			font-weight: 300;
+			padding: .1rem 1.25rem;
+		}
 	}
 }
 
@@ -476,185 +481,30 @@ p + p{
 	margin-top:0;
 }
 
-.avatar{
-	width: 100px;
-	height: 100px;
-	border-radius: 50%;
-	background-position: center;
-	background-size: contain;
-	background-repeat: no-repeat;
-	box-shadow: 0 15px 35px rgba(50,50,93,.1),0 5px 15px rgba(0,0,0,.07)!important;
-	background-color: #FFF;
-	position: relative;
-
-	&.mini{
-		width: 36px;
-		height: 36px;
-	}
-
-	&.stack{
-		display: inline-block;
-		margin:0!important;
-
-		+.avatar.stack{
-			margin: 0 0 0 -10px !important;
-		}
-	}
-
-	&:not(.image){
-		background-image: none !important;
-
-		&:after{
-			content:attr(rel);
-			display: inline-block;
-			position: absolute;
-			font-size:32px;
-			line-height: 32px;
-			font-weight: bold;
-			top:0;
-			left:0;
-			bottom:0;
-			right:0;
-			text-align: center;
-			padding-top: calc(50% - 16px);
-		}
-
-		&.mini{
-			&:after{
-				font-size:16px;
-				line-height: 16px;
-				padding-top: calc(50% - 7px);
-			}
-		}
-	}
-}
-
-.projectProgress{
-	position: relative;
-	width:100%;
-	padding:6px;
-	background-color: #F2E9E1;
-	color:#84AF5D;
-	margin: 10px 0;
-
-	.proC{
-		position: absolute;
-		right: -31px;
-		top: -2.7em;
-	}
-
-	.taskCount{
-		float: right;
-	}
-}
-
-.hostingDetails{
-	border-bottom: 1px solid #EEEEEE;
-
-	div{
-		width:calc(50% - 20px);
-		float:left;
-		margin:10px 20px 10px 0;
-		padding:10px;
-
-		+div{
-			margin:10px 0 10px 20px;
-			padding:10px;
-			background-color: #EEEEEE;
-			border-radius: 5px;
-		}
-
-		img{
-			max-width: 240px;
-			display: block;
-			margin:0 auto 20px;
-		}
-	}
-}
-
-.resource{
+.twistupload-file-list{
 	display: flex;
 	flex-basis: auto;
-	flex-direction: row;
-	border-top:1px solid #262626;
-	padding:6px 0;
+	flex-direction: column;
 
-	div.preview{
-		width:160px;
+	.twistupload-file-list-item{
 		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
+		flex-basis: auto;
+		flex-direction: row;
+		align-items: flex-start;
+		border-top: 1px solid #262626;
+		padding: 6px 0;
 
 		img{
 			display: inline-block;
-			max-width: 80%;
+			width: 160px;
 		}
 
-		i{
-			font-size:40px;
-			line-height: 40px;
-		}
-	}
+		ul{
+			width: calc(100% - 160px);
+			list-style: none;
 
-	div:not(.preview){
-		flex-grow: 1;
-		flex-shrink: 1;
+			li{
 
-		span{
-			&.name{
-				font-weight: bold;
-			}
-
-			&.size{
-
-			}
-
-			&.url{
-
-			}
-
-			&.added{
-
-			}
-		}
-	}
-
-	&.small{
-		border-top:0;
-		background-color: #EEEEEE;
-		border-radius: 5px;
-		margin-bottom:4px;
-
-		div.preview{
-			width:60px;
-
-			i{
-				font-size:20px;
-				line-height: 20px;
-			}
-		}
-
-		div:not(.preview){
-			flex-grow: 1;
-			flex-shrink: 1;
-
-			span{
-				&.name{
-
-				}
-
-				&.size{
-
-				}
-
-				&.url{
-
-				}
-
-				&.added{
-					display: none;
-				}
 			}
 		}
 	}
@@ -671,16 +521,19 @@ p + p{
 			margin-right:1%;
 			border:1px solid #CCC;
 			font-size: 0.8em;
+
 			.package-logo{
 				vertical-align: top;
 				text-align: left;
 				display: inline-block;
 				width:30%;
+
 				img{
 					display: inline-block;
 					width:90%;
 				}
 			}
+
 			.package-details{
 				vertical-align: top;
 				display: inline-block;
