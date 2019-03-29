@@ -383,6 +383,19 @@ table{
 		width:64%;
 	}
 
+	&.no-background{
+		background-color:transparent;
+		border: 0;
+
+		.tabContainer{
+			width: 100%;
+		}
+
+		> .box{
+			width: 100%;
+		}
+	}
+
 	.boxTitle{
 		width:100%;
 		background-color: #FFF;
