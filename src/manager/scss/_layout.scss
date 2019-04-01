@@ -5,9 +5,8 @@ html{
 }
 
 body{
-
-	display: flex;
-	flex-direction: column;
+	@include flexbox();
+	@include flex-direction(column);
 	height: 100%;
 
 	background-color: #F3F3F3;
@@ -18,8 +17,8 @@ header{
 	min-height:58px;
 	background-color: $twistphp-black;
 	box-shadow: 0 4px 2px -2px gray;
-	display: flex;
-	align-items: center;
+	@include flexbox();
+	@include align-items(center);
 	z-index: 100;
 
 	.logo{
@@ -45,12 +44,12 @@ header{
 }
 
 .window{
-	display: flex;
+	@include flexbox();
+	@include flex-grow(1);
+	@include flex-shrink(1);
+	@include flex-basis(auto);
+	@include flex-direction(row);
 	width:100%;
-	flex-grow: 1;
-	flex-shrink: 1;
-	flex-basis: auto;
-	flex-direction: row;
 
 	nav{
 		background-color: $twistphp-black;
@@ -213,12 +212,12 @@ header{
 	.container{
 		padding:20px 20px 0 20px;
 		overflow: auto;
-		flex-grow: 1;
+		@include flex-grow(1);
 
 		section.page{
-			display: flex;
-			flex-wrap: wrap;
-			align-content: space-between;
+			@include flexbox();
+			@include flex-wrap(wrap);
+			@include align-content(space-between);
 			margin-bottom:50px;
 		}
 
@@ -249,9 +248,9 @@ form{
 	width:100%;
 	margin:0;
 	padding:0;
-	display: flex;
-	flex-wrap: wrap;
-	align-content: space-between;
+	@include flexbox();
+	@include flex-wrap(wrap);
+	@include align-content(space-between);
 }
 
 h1{
@@ -350,9 +349,9 @@ table{
 }
 
 .box{
-	display: flex;
-	flex-direction: column;
-	align-items:stretch;
+	@include flexbox();
+	@include flex-direction(column);
+	@include align-items(stretch);
 	width: 98%;
 	margin:10px auto;
 	background-color: #FFF;
@@ -408,8 +407,8 @@ table{
 		background-color: #FFF;
 		padding:10px;
 		border-bottom:1px solid $twistphp-light-grey;
-		flex-grow: 0;
-		flex-shrink: 0;
+		@include flex-grow(0);
+		@include flex-shrink(0);
 
 		h3{
 			padding:0;
@@ -422,8 +421,8 @@ table{
 
 	.boxContent{
 		width:100%;
-		flex-grow: 1;
-		flex-shrink: 1;
+		@include flex-grow(1);
+		@include flex-shrink(1);
 
 		&.center{
 			text-align: center;
@@ -472,8 +471,8 @@ table{
 		padding:10px;
 		border-top:1px solid $twistphp-light-grey;
 		text-align: right;
-		flex-grow: 0;
-		flex-shrink: 0;
+		@include flex-grow(0);
+		@include flex-shrink(0);
 
 		.button{
 			font-weight: 300;
@@ -502,15 +501,15 @@ p + p{
 }
 
 .twistupload-file-list{
-	display: flex;
-	flex-basis: auto;
-	flex-direction: column;
+	@include flexbox();
+	@include flex-basis(auto);
+	@include flex-direction(column);
 
 	.twistupload-file-list-item{
-		display: flex;
-		flex-basis: auto;
-		flex-direction: row;
-		align-items: flex-start;
+		@include flexbox();
+		@include flex-basis(auto);
+		@include flex-direction(row);
+		@include align-items(flex-start);
 		border-top: 1px solid #262626;
 		padding: 6px 0;
 

@@ -1,14 +1,14 @@
 
 .tabContainer{
-	display: flex;
-	flex-direction: row;
-	align-items: stretch;
+	@include flexbox();
+	@include flex-direction(row);
+	@include align-items(stretch);
 	width: 98%;
 	margin:10px auto;
 
 	.tab{
 		width: calc(100% - 160px);
-		align-self: stretch;
+		@include align-self(stretch);
 		display: none;
 
 		.box{
@@ -17,7 +17,7 @@
 		}
 
 		&.current{
-			display: flex;
+			@include flexbox();
 		}
 	}
 

@@ -12,18 +12,12 @@ body{
 	left:0;
 	right:0;
 	background: rgba(0,0,0,0.4);
-	-ms-flex-align: center;/* IE10 SUPPORT */
-	-webkit-align-items: center;/* IPAD SUPPORT */
-	align-items: center;
-	-ms-flex-pack: center;/* IE10 SUPPORT */
-	-webkit-justify-content: center;/* IPAD SUPPORT */
-	justify-content: center;
+	@include align-items(center);
+	@include justify-content(center);
 	display: none;
 
 	&.open{
-		display: -ms-flexbox;/* IE10 SUPPORT */
-		display: -webkit-flex;/* IPAD SUPPORT */
-		display: flex;
+		@include flexbox();
 	}
 
 	.modalBoxOuter{
@@ -31,9 +25,7 @@ body{
 		width:100%;
 		max-width:1280px;
 		margin: 0 auto;
-		display: -ms-flexbox;/* IE10 SUPPORT */
-		display: -webkit-flex;/* IPAD SUPPORT */
-		display: flex;
+		@include flexbox();
 		background-color: #FFF;
 		height:100%;
 		border-top: 46px solid $twistphp-green;
@@ -44,9 +36,7 @@ body{
 			width: 100%;
 			overflow-y:auto;
 			overflow-x:hidden;
-			-ms-flex-item-align: stretch;/* IE10 SUPPORT */
-			-webkit-align-self: stretch;/* IPAD SUPPORT */
-			align-self: stretch;
+			@include align-self(stretch);
 
 			a.printButton{
 				position: absolute;
