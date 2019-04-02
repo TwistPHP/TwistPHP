@@ -1,9 +1,9 @@
-const CustomSelectBox = '<div data-name="{{{name}}}" class="customSelectBox select-{{{name}}} {{{required}}}"{{{tabindex}}}>'+
-	'<div class="selectedOption">{{{selectedtext}}}</div>'+
-	'<div class="selectOptionsContainer" title="Searching"><div class="mobileSearch"><input type="text" name="dummy" value=""></div><div class="selectOptions">{{{options}}}</div></div>'+
-	'<input type="hidden" name="{{{name}}}" value="{{{selectedvalue}}}">'+
+const CustomSelectBox = '<div data-name="{{name}}" class="customSelectBox select-{{name}} {{required}}"{{tabindex}}>'+
+	'<div class="selectedOption">{{selectedtext}}</div>'+
+	'<div class="selectOptionsContainer" title="Searching"><div class="mobileSearch"><input type="text" name="dummy" value=""></div><div class="selectOptions">{{options}}</div></div>'+
+	'<input type="hidden" name="{{name}}" value="{{selectedvalue}}">'+
 	'</div>',
-	CustomSelectBoxOption = '<div data-value="{{{value}}}" class="{{{selected}}} {{{disabled}}}">{{{text}}}</div>';
+	CustomSelectBoxOption = '<div data-value="{{value}}" class="{{selected}} {{disabled}}">{{text}}</div>';
 
 import {Placeholders} from './Placeholders';
 let blListnersStarted = false;
