@@ -277,8 +277,9 @@
 		/**
 		 * Ban an IP address from loading pages within the system, soft bans will be auto escalated to a full ban
 		 * @param $strIPAddress
-		 * @param string $strReason Reason for banning the user
-		 * @param bool $blApplyFullBan Escalate a ban to be a full ban by passing true
+		 * @param string $strReason
+		 * @param bool $blApplyFullBan
+		 * @param bool $blAutoEscalate
 		 * @return bool
 		 */
 		public static function banIP($strIPAddress,$strReason = '',$blApplyFullBan = false){
@@ -307,15 +308,16 @@
 					);
 				}
 
-				//Force a full ban for the user
-				if($blApplyFullBan && self::$arrBanHistory[$strIPAddress]['bans'] < self::$intMaxSoftBans){
-					self::$arrBanHistory[$strIPAddress]['bans'] = self::$intMaxSoftBans;
+				//If a soft ban has been applied and the user is over the soft ban limit upgrade to a full-ban
+				if(!$blApplyFullBan && self::$arrBanHistory[$strIPAddress]['bans'] >= self::$intMaxSoftBans){
+					$blApplyFullBan = true;
+					$strReason = 'Reached soft ban limit, full ban applied. '.$strReason;
 				}
 
-				if(self::$arrBanHistory[$strIPAddress]['bans'] >= self::$intMaxSoftBans){
+				if($blApplyFullBan){
 					//Upgrade ban to a full ban
 					self::$arrBannedIPs[$strIPAddress]['type'] = 'full';
-					self::$arrBannedIPs[$strIPAddress]['reason'] = 'Reached soft ban limit (Full Ban Applied)';
+					self::$arrBannedIPs[$strIPAddress]['reason'] = $strReason;
 					self::$arrBannedIPs[$strIPAddress]['length'] = self::$intFullBanSeconds;
 					self::$arrBannedIPs[$strIPAddress]['expire'] = (self::$intFullBanSeconds == 0) ? date('Y-m-d H:i:s',strtotime('+10 Years')) : date('Y-m-d H:i:s',strtotime('+'.self::$intFullBanSeconds.' Seconds'));
 				}

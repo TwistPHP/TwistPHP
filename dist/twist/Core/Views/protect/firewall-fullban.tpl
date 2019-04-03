@@ -27,16 +27,12 @@
 </head>
 <body>
 <h1 class="no-bottom-padding align-center">Access Denied (Permanent)</h1>
-<h2 class="no-top-padding lightweight align-center">Access from your IP Address has been permanently blocked by our security policy</h2>
+<h2 class="no-top-padding lightweight align-center">Your IP Address has been permanently blocked by our security policy</h2>
 <table>
 	<tbody>
 	<tr>
 		<th>IP Address</th>
 		<td>{data:ip_address}</td>
-	</tr>
-	<tr>
-		<th>Restriction</th>
-		<td>Soft Ban</td>
 	</tr>
 	<tr>
 		<th>Reason</th>

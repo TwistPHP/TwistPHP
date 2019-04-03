@@ -25,10 +25,22 @@
 	namespace Packages\manager\Controllers;
 
 	use Twist\Core\Controllers\BaseAJAX;
+	use Twist\Core\Models\Protect\Firewall;
 
 	class AJAX extends BaseAJAX{
 
 		public function firewallBlockIP(){
+
+			if(count($_POST)){
+				$this->_required('ip_address','ip');
+				$this->_required('reason','string',true);
+				$this->_required('full_ban','integer');
+
+				if($this->_check()){
+					Firewall::banIP($_POST['ip_address'],$_POST['reason'],($_POST['full_ban'] == '1') ? true : false);
+					\Twist::successMessage('IP Address has been banned from the system');
+				}
+			}
 
 			$arrOut = array(
 				'html' => $this->_view('components/firewall/modal-block-ip.tpl')
@@ -39,11 +51,20 @@
 
 		public function firewallWhitelistIP(){
 
+			if(count($_POST)){
+				$this->_required('ip_address','ip');
+				$this->_required('reason','string',true);
+
+				if($this->_check()){
+					Firewall::whitelistIP($_POST['ip_address'],$_POST['reason']);
+					\Twist::successMessage('IP Address has been whitelisted in the system');
+				}
+			}
+
 			$arrOut = array(
 				'html' => $this->_view('components/firewall/modal-whitelist-ip.tpl')
 			);
 
 			return $this->_ajaxRespond($arrOut);
 		}
-
 	}
