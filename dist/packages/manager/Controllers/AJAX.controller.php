@@ -41,7 +41,7 @@
 
 			$arrOut = array(
 				'html' => $this->_view('components/firewall/modal-whitelist-ip.tpl')
-		);
+			);
 
 			return $this->_ajaxRespond($arrOut);
 		}

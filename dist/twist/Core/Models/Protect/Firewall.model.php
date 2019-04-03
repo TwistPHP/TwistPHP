@@ -24,6 +24,8 @@
 
 	namespace Twist\Core\Models\Protect;
 
+	use Twist\Classes\Error;
+
 	final class Firewall{
 
 		//Specifies if the firewall is running or not
@@ -119,9 +121,34 @@
 			if(self::$blEnabled){
 
 				if(array_key_exists($_SERVER['REMOTE_ADDR'],self::$arrBannedIPs) && !array_key_exists($_SERVER['REMOTE_ADDR'],self::$arrWhitelistIPs)){
+
+					$arrCurrentBan = self::$arrBannedIPs[$_SERVER['REMOTE_ADDR']];
+
 					//Users that are already banned can process the band list
 					self::processBanned();
-					\Twist::respond(403);
+
+					$arrResponse = Error::responseInfo(403);
+
+					//Output the correct
+					$strHttpProtocol = ("HTTP/1.1" === $_SERVER["SERVER_PROTOCOL"]) ? 'HTTP/1.1' : 'HTTP/1.0';
+					header(sprintf('%s %d %s',$strHttpProtocol,403,$arrResponse['return']),true,403);
+
+					//Clean the screen output ready for an exception
+					ob_clean();
+
+					$arrTags = array(
+						'code' => 403,
+						'title' => $arrResponse['return'],
+						'name' => \Twist::framework() -> setting('SITE_NAME'),
+						'domain' => \Twist::framework() -> setting('SITE_HOST'),
+						'ip_address' => $_SERVER['REMOTE_ADDR'],
+						'reason' => $arrCurrentBan['reason'],
+						'length' => \Twist::DateTime()->prettyTime($arrCurrentBan['length'])
+					);
+
+					$strTemplate = sprintf("%s/protect/firewall-".$arrCurrentBan['type']."ban.tpl",TWIST_FRAMEWORK_VIEWS);
+
+					die(\Twist::View('Exception')->build($strTemplate,$arrTags));
 				}
 			}
 		}
@@ -262,6 +289,7 @@
 			if(!array_key_exists($strIPAddress,self::$arrWhitelistIPs)){
 
 				self::$arrBannedIPs[$strIPAddress] = array(
+					'type' => 'soft',
 					'reason' => $strReason,
 					'banned' => date('Y-m-d H:i:s'),
 					'length' => self::$intInitialBanSeconds,
@@ -286,6 +314,7 @@
 
 				if(self::$arrBanHistory[$strIPAddress]['bans'] >= self::$intMaxSoftBans){
 					//Upgrade ban to a full ban
+					self::$arrBannedIPs[$strIPAddress]['type'] = 'full';
 					self::$arrBannedIPs[$strIPAddress]['reason'] = 'Reached soft ban limit (Full Ban Applied)';
 					self::$arrBannedIPs[$strIPAddress]['length'] = self::$intFullBanSeconds;
 					self::$arrBannedIPs[$strIPAddress]['expire'] = (self::$intFullBanSeconds == 0) ? date('Y-m-d H:i:s',strtotime('+10 Years')) : date('Y-m-d H:i:s',strtotime('+'.self::$intFullBanSeconds.' Seconds'));
