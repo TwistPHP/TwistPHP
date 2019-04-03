@@ -600,36 +600,42 @@
 			$strOut = '';
 			$arrAsset = $arrParams = array();
 
-			if(array_key_exists('asset-id',$arrParameters) && (is_array($arrParameters['asset-id']) || $arrParameters['asset-id'] !== '')){
+			//Make sure the asset ID is a number or array and it bigger than 0
+			if(array_key_exists('asset-id',$arrParameters) && (is_array($arrParameters['asset-id']) || ($arrParameters['asset-id'] !== '' && !is_null($arrParameters['asset-id']) && $arrParameters['asset-id'] !== 'null' && $arrParameters['asset-id'] !== '0' && $arrParameters['asset-id'] !== 0))){
 
 				$arrParameters['value'] = implode(',',$arrParameters['asset-id']);
 				$arrParameters['asset-id'] = (is_array($arrParameters['asset-id'])) ? $arrParameters['asset-id'] : array($arrParameters['asset-id']);
 
 				foreach($arrParameters['asset-id'] as $intAssetID){
 
-					$arrAsset = $this->get($intAssetID);
-					$arrInfo = \Twist::File()->mimeTypeInfo($arrAsset['file']['path']);
+					if($intAssetID > 0){
 
-					$arrParameters['preload'][] = array(
-						'status' => true,
-						'error' => '',
-						'file' => array(
-							'uid' => 'preload-'.uniqid(),
-							'name' => $arrAsset['original_filename'],
-							'size' => $arrAsset['size'],
-							'path' => $arrAsset['path']
-						),
-						'uri' => $arrAsset['uri'],
-						'uri_preview' => $arrInfo['icon'],
-						'uri_icon' => $arrInfo['icon'],
-						'file_type' => $arrInfo['name'],
-						'form_value' => $arrAsset['id'],
-						'support' => $arrAsset['support'],
-						'asset_id' => $arrAsset['id']
-					);
+						$arrAsset = $this->get($intAssetID);
+						$arrInfo = \Twist::File()->mimeTypeInfo($arrAsset['file']['path']);
+
+						$arrParameters['preload'][] = array(
+							'status' => true,
+							'error' => '',
+							'file' => array(
+								'uid' => 'preload-'.uniqid(),
+								'name' => $arrAsset['original_filename'],
+								'size' => $arrAsset['size'],
+								'path' => $arrAsset['path']
+							),
+							'uri' => $arrAsset['uri'],
+							'uri_preview' => $arrInfo['icon'],
+							'uri_icon' => $arrInfo['icon'],
+							'file_type' => $arrInfo['name'],
+							'form_value' => $arrAsset['id'],
+							'support' => $arrAsset['support'],
+							'asset_id' => $arrAsset['id']
+						);
+					}
 				}
 
 				$arrParameters['preload'] = json_encode($arrParameters['preload']);
+			}else{
+				unset($arrParameters['asset-id']);
 			}
 
 			if(array_key_exists('group',$arrParameters) && !array_key_exists('uri',$arrParameters)){
