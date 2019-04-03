@@ -54,7 +54,14 @@ html {
   padding: 0; }
 
 body {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
   display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
   flex-direction: column;
   height: 100%;
   background-color: #F3F3F3; }
@@ -64,7 +71,14 @@ header {
   min-height: 58px;
   background-color: #212121;
   box-shadow: 0 4px 2px -2px gray;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
   display: flex;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
   align-items: center;
   z-index: 100; }
   header .logo {
@@ -80,12 +94,28 @@ header {
       margin: 0; }
 
 .window {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
   display: flex;
-  width: 100%;
+  -webkit-flex-grow: 1;
+  -moz-flex-grow: 1;
+  -ms-flex-grow: 1;
   flex-grow: 1;
+  -webkit-flex-shrink: 1;
+  -moz-flex-shrink: 1;
+  -ms-flex-shrink: 1;
   flex-shrink: 1;
+  -webkit-flex-basis: auto;
+  -moz-flex-basis: auto;
+  -ms-flex-basis: auto;
   flex-basis: auto;
-  flex-direction: row; }
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  width: 100%; }
   .window nav {
     background-color: #212121;
     min-width: 200px;
@@ -181,10 +211,23 @@ header {
   .window .container {
     padding: 20px 20px 0 20px;
     overflow: auto;
+    -webkit-flex-grow: 1;
+    -moz-flex-grow: 1;
+    -ms-flex-grow: 1;
     flex-grow: 1; }
     .window .container section.page {
+      display: -webkit-box;
+      display: -moz-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;
       display: flex;
+      -webkit-flex-wrap: wrap;
+      -moz-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
       flex-wrap: wrap;
+      -webkit-align-content: space-between;
+      -moz-align-content: space-between;
+      -ms-align-content: space-between;
       align-content: space-between;
       margin-bottom: 50px; }
     .window .container footer {
@@ -207,8 +250,18 @@ form {
   width: 100%;
   margin: 0;
   padding: 0;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
   display: flex;
+  -webkit-flex-wrap: wrap;
+  -moz-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
   flex-wrap: wrap;
+  -webkit-align-content: space-between;
+  -moz-align-content: space-between;
+  -ms-align-content: space-between;
   align-content: space-between; }
 
 h1 {
@@ -265,8 +318,18 @@ table {
   text-align: right; }
 
 .box {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
   display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
   flex-direction: column;
+  -webkit-align-items: stretch;
+  -moz-align-items: stretch;
+  -ms-align-items: stretch;
   align-items: stretch;
   width: 98%;
   margin: 10px auto;
@@ -285,12 +348,31 @@ table {
     width: 31%; }
   .box.box66 {
     width: 64%; }
+  .box.no-background {
+    background-color: transparent;
+    border: 0; }
+    .box.no-background .tabContainer {
+      width: 100%; }
+    .box.no-background > .box {
+      width: 100%; }
+    .box.no-background .boxContent {
+      background-color: #FFF;
+      border: 1px solid #BDBDBD; }
+    .box.no-background .boxFooter {
+      border-top: 0 !important;
+      border: 1px solid #BDBDBD; }
   .box .boxTitle {
     width: 100%;
     background-color: #FFF;
     padding: 10px;
     border-bottom: 1px solid #BDBDBD;
+    -webkit-flex-grow: 0;
+    -moz-flex-grow: 0;
+    -ms-flex-grow: 0;
     flex-grow: 0;
+    -webkit-flex-shrink: 0;
+    -moz-flex-shrink: 0;
+    -ms-flex-shrink: 0;
     flex-shrink: 0; }
     .box .boxTitle h3 {
       padding: 0;
@@ -300,7 +382,13 @@ table {
       line-height: 20px; }
   .box .boxContent {
     width: 100%;
+    -webkit-flex-grow: 1;
+    -moz-flex-grow: 1;
+    -ms-flex-grow: 1;
     flex-grow: 1;
+    -webkit-flex-shrink: 1;
+    -moz-flex-shrink: 1;
+    -ms-flex-shrink: 1;
     flex-shrink: 1; }
     .box .boxContent.center {
       text-align: center; }
@@ -325,7 +413,13 @@ table {
     padding: 10px;
     border-top: 1px solid #BDBDBD;
     text-align: right;
+    -webkit-flex-grow: 0;
+    -moz-flex-grow: 0;
+    -ms-flex-grow: 0;
     flex-grow: 0;
+    -webkit-flex-shrink: 0;
+    -moz-flex-shrink: 0;
+    -ms-flex-shrink: 0;
     flex-shrink: 0; }
     .box .boxFooter .button {
       font-weight: 300;
@@ -348,13 +442,36 @@ p + p {
   margin-top: 0; }
 
 .twistupload-file-list {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
   display: flex;
+  -webkit-flex-basis: auto;
+  -moz-flex-basis: auto;
+  -ms-flex-basis: auto;
   flex-basis: auto;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
   flex-direction: column; }
   .twistupload-file-list .twistupload-file-list-item {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
     display: flex;
+    -webkit-flex-basis: auto;
+    -moz-flex-basis: auto;
+    -ms-flex-basis: auto;
     flex-basis: auto;
+    -webkit-flex-direction: row;
+    -moz-flex-direction: row;
+    -ms-flex-direction: row;
     flex-direction: row;
+    -webkit-align-items: flex-start;
+    -moz-align-items: flex-start;
+    -ms-align-items: flex-start;
     align-items: flex-start;
     border-top: 1px solid #262626;
     padding: 6px 0; }
@@ -780,7 +897,7 @@ small .switch {
     font-size: 8px;
     line-height: 15px; }
 
-form input:not([type="hidden"]), form select, form textarea {
+form input:not([type="hidden"]), form select, form textarea, form div.customSelectBox {
   width: 98%;
   margin: 5px 1%;
   font-size: 1rem;
@@ -809,13 +926,14 @@ form label {
   padding: .625rem .75rem; }
   form label + input:not([type="hidden"]),
   form label + select,
-  form label + textarea {
+  form label + textarea,
+  form label + div.customSelectBox {
     float: left;
     width: 66%;
     margin: 5px 0; }
 form.hideLabel label {
   display: none; }
-form.hideLabel input, form.hideLabel select, form.hideLabel textarea, form.hideLabel .switch {
+form.hideLabel input, form.hideLabel select, form.hideLabel textarea, form.hideLabel div.switch, form.hideLabel .customSelectBox {
   display: block;
   width: 100%;
   float: left; }
@@ -1403,19 +1521,36 @@ dl {
   transform: rotate(360deg); }
 
 .tabContainer {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
   display: flex;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  -ms-flex-direction: row;
   flex-direction: row;
+  -webkit-align-items: stretch;
+  -moz-align-items: stretch;
+  -ms-align-items: stretch;
   align-items: stretch;
   width: 98%;
   margin: 10px auto; }
   .tabContainer .tab {
     width: calc(100% - 160px);
+    -webkit-align-self: stretch;
+    -moz-align-self: stretch;
+    -ms-align-self: stretch;
     align-self: stretch;
     display: none; }
     .tabContainer .tab .box {
       width: 100%;
       margin: 0; }
     .tabContainer .tab.current {
+      display: -webkit-box;
+      display: -moz-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;
       display: flex; }
   .tabContainer .tabButtons {
     margin: 0;
@@ -1465,32 +1600,31 @@ body.modal-is-open {
   left: 0;
   right: 0;
   background: rgba(0, 0, 0, 0.4);
-  -ms-flex-align: center;
-  /* IE10 SUPPORT */
   -webkit-align-items: center;
-  /* IPAD SUPPORT */
+  -moz-align-items: center;
+  -ms-align-items: center;
   align-items: center;
-  -ms-flex-pack: center;
-  /* IE10 SUPPORT */
   -webkit-justify-content: center;
-  /* IPAD SUPPORT */
+  -moz-justify-content: center;
+  -ms-justify-content: center;
   justify-content: center;
+  -ms-flex-pack: center;
   display: none; }
   #modalWindow.open {
+    display: -webkit-box;
+    display: -moz-box;
     display: -ms-flexbox;
-    /* IE10 SUPPORT */
     display: -webkit-flex;
-    /* IPAD SUPPORT */
     display: flex; }
   #modalWindow .modalBoxOuter {
     position: relative;
     width: 100%;
     max-width: 1280px;
     margin: 0 auto;
+    display: -webkit-box;
+    display: -moz-box;
     display: -ms-flexbox;
-    /* IE10 SUPPORT */
     display: -webkit-flex;
-    /* IPAD SUPPORT */
     display: flex;
     background-color: #FFF;
     height: 100%;
@@ -1501,10 +1635,9 @@ body.modal-is-open {
       width: 100%;
       overflow-y: auto;
       overflow-x: hidden;
-      -ms-flex-item-align: stretch;
-      /* IE10 SUPPORT */
       -webkit-align-self: stretch;
-      /* IPAD SUPPORT */
+      -moz-align-self: stretch;
+      -ms-align-self: stretch;
       align-self: stretch; }
       #modalWindow .modalBoxOuter .modalBox a.printButton {
         position: absolute;

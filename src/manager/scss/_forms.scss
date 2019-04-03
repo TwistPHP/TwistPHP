@@ -242,7 +242,7 @@ small{
 
 form{
 
-	input:not([type="hidden"]),select,textarea{
+	input:not([type="hidden"]),select,textarea,div.customSelectBox{
 		width:98%;
 		margin:5px 1%;
 		font-size: 1rem;
@@ -278,7 +278,8 @@ form{
 
 		+input:not([type="hidden"]),
 		+select,
-		+textarea{
+		+textarea,
+		+div.customSelectBox{
 			float:left;
 			width:66%;
 			margin:5px 0;
@@ -291,7 +292,7 @@ form{
 			display: none;
 		}
 
-		input,select,textarea,.switch{
+		input,select,textarea,div.switch,.customSelectBox{
 			display: block;
 			width:100%;
 			float:left;

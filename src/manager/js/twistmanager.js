@@ -20,7 +20,7 @@
  * @link       https://twistphp.com
  */
 
-//import {CustomSelect} from './CustomSelect';
+import {CustomSelect} from './CustomSelect';
 import {CustomCheckbox} from './CustomCheckbox';
 import {AjaxRequest} from './AjaxRequest';
 
@@ -30,7 +30,7 @@ $( () => {
 
 
 	//Customised the select boxes
-	//new CustomSelect();
+	new CustomSelect();
 
 	//Customised the checkboxes boxes
 	new CustomCheckbox();
