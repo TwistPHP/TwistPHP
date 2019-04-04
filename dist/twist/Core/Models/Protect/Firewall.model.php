@@ -100,7 +100,7 @@
 					'max_soft_bans' => self::$intMaxSoftBans,
 					'full_ban_hours' => self::$intFullBanSeconds,
 					'reset_history_days' => self::$intResetAfterDays,
-					'reset_after_success' => self::$blResetAfterSuccess,
+					'reset_after_success' => self::$blResetAfterSuccess
 				),
 				'failed_actions' => self::$arrFailedActions,
 				'banned_ips' => self::$arrBannedIPs,
@@ -121,6 +121,9 @@
 			if(self::$blEnabled){
 
 				if(array_key_exists($_SERVER['REMOTE_ADDR'],self::$arrBannedIPs) && !array_key_exists($_SERVER['REMOTE_ADDR'],self::$arrWhitelistIPs)){
+
+					//Log the user out and clear all session data
+					\Twist::User()->logout();
 
 					$arrCurrentBan = self::$arrBannedIPs[$_SERVER['REMOTE_ADDR']];
 
@@ -217,9 +220,11 @@
 		 * Log a failed attempt at doing something, the attempt type must be pre-registered in order to work
 		 * Each type has a soft limit that when reached will ban the user for a short period of time
 		 * @param $strAttemptType
+		 * @return bool|mixed
 		 */
 		public static function logFailedAttempt($strAttemptType){
 
+			$blBanned = false;
 			self::load();
 
 			if(array_key_exists($strAttemptType,self::$arrFailTypes)){
@@ -249,29 +254,39 @@
 						if(self::$arrFailedActions[$strIPAddress][$strAttemptType] >= self::$arrFailTypes[$strAttemptType]['soft_limit']){
 							unset(self::$arrFailedActions[$strIPAddress]);
 							self::banIP($strIPAddress,self::$arrFailTypes[$strAttemptType]['ban_message']);
+							$blBanned = true;
 						}
 
 						\Twist::Cache()->write('protect/failed-actions',self::$arrFailedActions,86400*self::$intTwistCacheLife);
 					}
+
+					return array(
+						'attempt' => ($blBanned) ? self::$arrFailTypes[$strAttemptType]['soft_limit'] : self::$arrFailedActions[$strIPAddress][$strAttemptType],
+						'limit' => self::$arrFailTypes[$strAttemptType]['soft_limit'],
+						'banned' => $blBanned
+					);
 				}
 			}else{
 				//@todo Throw an error message here
 			}
-		}
 
+			return false;
+		}
 
 		/**
 		 * Log a failed login attempt by an IP address, multiple login attempts without a success will trigger a soft ban
+		 * @return bool|mixed
 		 */
 		public static function failedLogin(){
-			self::logFailedAttempt('failed_logins');
+			return self::logFailedAttempt('failed_logins');
 		}
 
 		/**
 		 * Login a password reset attempt by an IP address, multiple reset attempts without a login will trigger a soft ban
+		 * @return bool|mixed
 		 */
 		public static function passwordReset(){
-			self::logFailedAttempt('password_resets');
+			return self::logFailedAttempt('password_resets');
 		}
 
 		/**
@@ -279,7 +294,6 @@
 		 * @param $strIPAddress
 		 * @param string $strReason
 		 * @param bool $blApplyFullBan
-		 * @param bool $blAutoEscalate
 		 * @return bool
 		 */
 		public static function banIP($strIPAddress,$strReason = '',$blApplyFullBan = false){

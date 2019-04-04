@@ -96,7 +96,7 @@ class BaseUser extends Base{
 
 	/**
 	 * Authentication script, upon login the post request will be sent to this script. If the login is successful the user will be redirected to the entry page or './'.
-	 * if hte login request has failed the user will be forwarded on to the relevan page i.e Change Password, Verify Account or the login page with an error message.
+	 * if hte login request has failed the user will be forwarded on to the relevant page i.e Change Password, Verify Account or the login page with an error message.
 	 */
 	public function authenticate(){
 
