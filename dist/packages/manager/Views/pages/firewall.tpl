@@ -28,7 +28,7 @@
             <thead>
             <tr>
                 <th>IP Address</th>
-                <th>Length</th>
+                <th>Type</th>
                 <th>Reason</th>
                 <th>Expires</th>
                 <th></th>

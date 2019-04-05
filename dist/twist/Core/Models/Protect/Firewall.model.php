@@ -68,8 +68,8 @@
 				self::$blEnabled = \Twist::framework()->setting('TWISTPROTECT_FIREWALL');
 				self::$arrFailTypes = json_decode(\Twist::framework()->setting('TWISTPROTECT_FIREWALL_FAILTYPES'),true);
 				self::$intInitialBanSeconds = \Twist::framework()->setting('TWISTPROTECT_FIREWALL_INITIAL_BAN');
-				self::$intMaxSoftBans = \Twist::framework()->setting('TWISTPROTECT_FIREWALL_FULL_BAN');
-				self::$intFullBanSeconds = \Twist::framework()->setting('TWISTPROTECT_FIREWALL_MAX_SOFTBANS');
+				self::$intMaxSoftBans = \Twist::framework()->setting('TWISTPROTECT_FIREWALL_MAX_SOFTBANS');
+				self::$intFullBanSeconds = \Twist::framework()->setting('TWISTPROTECT_FIREWALL_FULL_BAN');
 				self::$intResetAfterDays = \Twist::framework()->setting('TWISTPROTECT_FIREWALL_RESET_AFTER_DAYS');
 				self::$blResetAfterSuccess = \Twist::framework()->setting('TWISTPROTECT_FIREWALL_RESET_AFTER_SUCCESS');
 
@@ -96,9 +96,9 @@
 				'settings' => array(
 					'enabled' => self::$blEnabled,
 					'fail_types' => self::$arrFailTypes,
-					'soft_ban_hours' => self::$intInitialBanSeconds,
+					'soft_ban_seconds' => self::$intInitialBanSeconds,
 					'max_soft_bans' => self::$intMaxSoftBans,
-					'full_ban_hours' => self::$intFullBanSeconds,
+					'full_ban_seconds' => self::$intFullBanSeconds,
 					'reset_history_days' => self::$intResetAfterDays,
 					'reset_after_success' => self::$blResetAfterSuccess
 				),
@@ -146,7 +146,9 @@
 						'domain' => \Twist::framework() -> setting('SITE_HOST'),
 						'ip_address' => $_SERVER['REMOTE_ADDR'],
 						'reason' => $arrCurrentBan['reason'],
-						'length' => \Twist::DateTime()->prettyTime($arrCurrentBan['length'])
+						'length' => \Twist::DateTime()->prettyTime($arrCurrentBan['length']),
+						'remain' => \Twist::DateTime()->prettyTime($arrCurrentBan['expire']),
+						'expire' => $arrCurrentBan['expire']
 					);
 
 					$strTemplate = sprintf("%s/protect/firewall-".$arrCurrentBan['type']."ban.tpl",TWIST_FRAMEWORK_VIEWS);
