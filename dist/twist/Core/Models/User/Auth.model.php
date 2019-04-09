@@ -265,10 +265,17 @@ class Auth{
 				self::$arrCurrentSession['diagnosis'] = 'Email address not registered to a user';
 			}
 
-			if(self::$arrCurrentSession['status']){
+			//Disabled accounts and temporary passwords are not login failures, however unverified accounts are. If you are
+			//repeatedly asked to verify your email address and you dont maybe a fake email has been used
+			if(in_array(self::$arrCurrentSession['issue'],array('temporary','disabled')) || self::$arrCurrentSession['status']){
 				Firewall::successLogin();
 			}else{
-				Firewall::failedLogin();
+				$arrWatchStats = Firewall::failedLogin();
+
+				if(is_array($arrWatchStats)){
+					self::$arrCurrentSession['message'] .= '. You have '.($arrWatchStats['limit'] - $arrWatchStats['attempt']).' attempts remaining';
+					self::$arrCurrentSession['diagnosis'] .= '. '.($arrWatchStats['limit'] - $arrWatchStats['attempt']).' login attempts remaining until ban';
+				}
 			}
 		}
 

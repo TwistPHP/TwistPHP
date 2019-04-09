@@ -986,6 +986,7 @@ class File extends Base{
 			'name' => 'file',
 			'id' => uniqid(),
 			'multiple' => 0,
+			'dragdrop' => 'null',
 			'accept' => '',
 			'value' => '',
 			'preload' => '[]'
@@ -1038,6 +1039,7 @@ class File extends Base{
 					'uri' => $arrParameters['uri'],
 					'include-js' => (is_null(\Twist::Cache()->read('asset-js-include'))) ? 1 : 0,
 					'multiple' => (array_key_exists('multiple', $arrParameters) && $arrParameters['multiple'] != '0') ? 1 : 0,
+					'dragdrop' => $arrParameters['dragdrop'],
 					'accept' => $strAccept,
 					'acceptTypes' => json_encode($strAcceptTypes),
 					'acceptExtensions' => json_encode($strAcceptExtensions),
@@ -1060,10 +1062,12 @@ class File extends Base{
 					'uri' => $arrParameters['uri'],
 					'include-js' => (is_null(\Twist::Cache()->read('asset-js-include'))) ? 1 : 0,
 					'multiple' => (array_key_exists('multiple', $arrParameters) && $arrParameters['multiple'] != '0') ? 1 : 0,
+					'dragdrop' => $arrParameters['dragdrop'],
 					'accept' => $strAccept,
 					'acceptTypes' => json_encode($strAcceptTypes),
 					'acceptExtensions' => json_encode($strAcceptExtensions),
-					'value' => $arrParameters['value']
+					'value' => $arrParameters['value'],
+					'preload' => $arrParameters['preload']
 				);
 
 				//Store a temp session for js output
