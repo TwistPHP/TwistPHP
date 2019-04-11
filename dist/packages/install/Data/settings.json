@@ -289,40 +289,8 @@
   },
   "EMAIL_PROTOCOL":{
     "title":"Email Send Protocol",
-    "description":"Select the protocol to use when sending all emails",
+    "description":"Select the protocol to use when sending all emails, hook: TWIST_EMAIL_PROTOCOLS",
     "default":"native",
-    "type":"options",
-    "options":"native,smtp",
-    "null":0
-  },
-  "EMAIL_SMTP_HOST":{
-    "title":"SMTP Host",
-    "description":"Set the SMTP Host needed to login to the SMTP email server",
-    "default":"localhost",
-    "type":"string",
-    "options":"",
-    "null":0
-  },
-  "EMAIL_SMTP_PORT":{
-    "title":"SMTP Port",
-    "description":"Set the SMTP Port (Default: 25) needed to login to the SMTP email server",
-    "default":25,
-    "type":"integer",
-    "options":"",
-    "null":0
-  },
-  "EMAIL_SMTP_USERNAME":{
-    "title":"SMTP Username",
-    "description":"Set the SMTP Username (usually an email address) needed to login to the SMTP email server",
-    "default":"",
-    "type":"string",
-    "options":"",
-    "null":0
-  },
-  "EMAIL_SMTP_PASSWORD":{
-    "title":"SMTP Password",
-    "description":"Set the SMTP Password needed to login to the SMTP email server",
-    "default":"",
     "type":"string",
     "options":"",
     "null":0
