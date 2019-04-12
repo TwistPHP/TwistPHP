@@ -14,12 +14,13 @@
 		 */
 		public static function protocolSend($resEmail){
 
-			$strEmailSource = $resEmail->source();
+			$arrData = $resEmail->emailData();
+			$arrSource = $resEmail->source();
 
-			$strEmailSource = preg_replace('/\r\nTo\: .*\r\n/im', "\r\n", $strEmailSource);
-			$strEmailSource = preg_replace('/\r\nSubject\: .*\r\n/im', "\r\n", $strEmailSource);
+			$arrSource['raw'] = preg_replace('/\r\nTo\: .*\r\n/im', "\r\n", $arrSource['raw']);
+			$arrSource['raw'] = preg_replace('/\r\nSubject\: .*\r\n/im', "\r\n", $arrSource['raw']);
 
-			$blStatus = mail($resEmail->strTo,$resEmail->strSubject,$resEmail->strBody,$strEmailSource);
+			$blStatus = mail($arrSource['to'],$arrSource['subject'],$arrData['body_plain'],$arrSource['raw']);
 
 			return $blStatus;
 		}

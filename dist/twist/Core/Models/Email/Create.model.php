@@ -287,6 +287,10 @@ class Create{
 		}
 	}
 
+	public function emailData(){
+		return $this->arrEmailData;
+	}
+
 	/**
 	 * Process and return all the source components that make up the Raw email
 	 * @return array
@@ -380,14 +384,15 @@ class Create{
 	 */
 	public function send($blClearCache = true){
 
-		$strProtocol = \Twist::framework()->setting('EMAIL_PROTOCOL');
+		$blStatus = false;
 
+		$strProtocol = \Twist::framework()->setting('EMAIL_PROTOCOL');
 		$arrHooks = \Twist::framework()->hooks()->getAll('TWIST_EMAIL_PROTOCOLS');
 
 		foreach($arrHooks as $strKey => $arrModel){
 			if($strKey == $strProtocol){
 				$strEmailModel = (string) $arrModel['model'];
-				$blStatus = $strEmailModel::send($this);
+				$blStatus = $strEmailModel::protocolSend($this);
 				break;
 			}
 		}
