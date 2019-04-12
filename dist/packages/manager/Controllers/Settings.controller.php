@@ -43,9 +43,14 @@
 		public function _index(){
 
 			if(array_key_exists('import',$_GET) && $_GET['import'] == 'core'){
-
 				\Twist\Core\Models\Install::importSettings(sprintf('%sData/settings.json',TWIST_PACKAGE_INSTALL));
-				\Twist::redirect('./settings');
+				\Twist::redirect('./settings?t=imported');
+			}
+
+			if(array_key_exists('t',$_GET) && $_GET['t'] == 'imported'){
+				\Twist::successMessage("Default settings have been imported");
+			}elseif(array_key_exists('t',$_GET) && $_GET['t'] == 'saved'){
+				\Twist::successMessage("You new module settings were saved successfully");
 			}
 
 			$arrSettings = \Twist::framework() -> settings() -> arrSettingsInfo;
@@ -132,7 +137,7 @@
 		/**
 		 * Store all the setting changes POST'ed  form the settings page.
 		 */
-		public function POST_index(){
+		public function _POSTindex(){
 
 			$arrSettingsInfo = \Twist::framework()->settings()->arrSettingsInfo;
 
@@ -148,8 +153,9 @@
 						}
 					}
 				}
-				$arrTags['message'] = '<p class="success">You new module settings were saved successfully</p>';
+
 				//$arrSettings = \Twist::framework() -> settings() -> cache();
+				\Twist::redirect('./settings?t=saved');
 			}
 
 			\Twist::redirect('./settings');

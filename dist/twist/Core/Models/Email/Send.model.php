@@ -5,7 +5,7 @@
 	class Send{
 
 		public static function protocolName(){
-			return 'Native';
+			return 'native';
 		}
 
 		/**
@@ -17,10 +17,10 @@
 			$arrSource = $resEmail->source();
 			$arrData = $resEmail->data();
 
-			$arrSource['raw'] = preg_replace('/\r\nTo\: .*\r\n/im', "\r\n", $arrSource['raw']);
-			$arrSource['raw'] = preg_replace('/\r\nSubject\: .*\r\n/im', "\r\n", $arrSource['raw']);
+			$arrSource['headers'] = preg_replace('/\r\nTo\: .*\r\n/im', "\r\n", $arrSource['headers']);
+			$arrSource['headers'] = preg_replace('/\r\nSubject\: .*\r\n/im', "\r\n", $arrSource['headers']);
 
-			$blStatus = mail($arrSource['to'],$arrSource['subject'],$arrData['body_plain'],$arrSource['raw']);
+			$blStatus = mail($arrSource['to'],$arrSource['subject'],$arrSource['body'],$arrSource['headers']);
 
 			return $blStatus;
 		}

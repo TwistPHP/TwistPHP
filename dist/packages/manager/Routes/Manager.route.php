@@ -24,6 +24,7 @@
 
 	namespace Packages\manager\Routes;
 
+	use Twist;
 	use Twist\Core\Models\Route\Meta;
 	use Twist\Core\Routes\Base;
 
@@ -40,8 +41,8 @@
 
 			$this->meta()->title('TwistPHP Manager');
 			$this->meta()->robots('noindex,nofollow');
-			$this->meta()->css('/packages/manager/Resources/css/twistmanager.css');
-			$this->meta()->js('/packages/manager/Resources/js/twistmanager.js');
+			$this->meta()->css(rtrim(\Twist::Route()->baseURI(),'/').'/packages/manager/Resources/css/twistmanager.css');
+			$this->meta()->js(rtrim(\Twist::Route()->baseURI(),'/').'/packages/manager/Resources/js/twistmanager.js');
 
 			//Allow the manager to still be accessible even in maintenance mode
 			$this->bypassMaintenanceMode( '/%' );

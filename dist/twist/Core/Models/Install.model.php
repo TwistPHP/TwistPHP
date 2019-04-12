@@ -127,6 +127,14 @@
 				$arrSettings = json_decode(file_get_contents($dirSettingsJSON),true);
 				if(count($arrSettings)){
 
+					$arrCoreSettings = array();
+					$arrAllSettings = \Twist::framework()->settings()->arrSettingsInfo;
+					foreach($arrAllSettings as $arrEachSetting){
+						if($arrEachSetting['package'] == 'core'){
+							$arrCoreSettings[$arrEachSetting['key']] = $arrEachSetting;
+						}
+					}
+
 					foreach($arrSettings as $strKey => $arrOptions){
 
 						\Twist::framework()->settings()->install(
@@ -141,6 +149,13 @@
 							$arrOptions['options'],
 							$arrOptions['null']
 						);
+
+						unset($arrCoreSettings[$strKey]);
+					}
+
+					//Remove the old settings
+					foreach($arrCoreSettings as $arrEachSettings){
+						self::removeSettings($arrEachSettings['package'],$arrEachSettings['group'],$arrEachSettings['key']);
 					}
 				}
 			}
