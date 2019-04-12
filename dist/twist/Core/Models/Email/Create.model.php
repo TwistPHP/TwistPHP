@@ -287,7 +287,7 @@ class Create{
 		}
 	}
 
-	public function emailData(){
+	public function data(){
 		return $this->arrEmailData;
 	}
 

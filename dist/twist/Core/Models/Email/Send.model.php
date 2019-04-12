@@ -14,7 +14,7 @@
 		 */
 		public static function protocolSend($resEmail){
 
-			$arrData = $resEmail->emailData();
+			$arrData = $resEmail->data();
 			$arrSource = $resEmail->source();
 
 			$arrSource['raw'] = preg_replace('/\r\nTo\: .*\r\n/im', "\r\n", $arrSource['raw']);
