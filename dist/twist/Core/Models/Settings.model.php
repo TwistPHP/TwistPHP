@@ -138,6 +138,8 @@
 				}
 
 				$arrSettings['value'] = $arrSettings['default'];
+				$arrSettings['package'] = 'core';
+
 				$this->arrSettingsInfo[$strKey] = $arrSettings;
 			}
 		}
@@ -206,10 +208,9 @@
 		/**
 		 * Remove/Uninstall a particular setting or group of settings form the Database or File depending on how TwistPHP has been configured.
 		 * @param string $strPackage
-		 * @param string $strGroup
 		 * @param null $strKey
 		 */
-		public function uninstall($strPackage,$strGroup,$strKey = null){
+		public function uninstall($strPackage,$strKey = null){
 
 			if($this->blFileConfig){
 
@@ -224,7 +225,7 @@
 				}else{
 					foreach($this->arrSettingsInfo as $strKey => $arrInfo){
 
-						if($arrInfo['package'] == $strPackage && $arrInfo['group'] == $strGroup){
+						if($arrInfo['package'] == $strPackage){
 							unset($this->arrSettingsInfo[$strKey]);
 							unset($this->arrSettings[$strKey]);
 						}
@@ -236,18 +237,16 @@
 
 			}else{
 				if(is_null($strKey)){
-					\Twist::Database()->query("DELETE FROM `%s`.`%ssettings` WHERE `package` = '%s' AND `group` = '%s'",
+					\Twist::Database()->query("DELETE FROM `%s`.`%ssettings` WHERE `package` = '%s'",
 						TWIST_DATABASE_NAME,
 						TWIST_DATABASE_TABLE_PREFIX,
-						$strPackage,
-						$strGroup
+						$strPackage
 					);
 				}else{
-					\Twist::Database()->query("DELETE FROM `%s`.`%ssettings` WHERE `package` = '%s' AND `group` = '%s' AND `key` = '%s'",
+					\Twist::Database()->query("DELETE FROM `%s`.`%ssettings` WHERE `package` = '%s' AND `key` = '%s'",
 						TWIST_DATABASE_NAME,
 						TWIST_DATABASE_TABLE_PREFIX,
 						$strPackage,
-						$strGroup,
 						$strKey
 					);
 				}
@@ -297,6 +296,7 @@
 				if(array_key_exists($strKey,$arrSettings)){
 
 					$arrSettings[$strKey] = array(
+						'group' => $strGroup,
 						'title' => $strTitle,
 						'description' => $strDescription,
 						'default' => $strDefault,
@@ -309,7 +309,7 @@
 
 					$arrSettings[$strKey] = array(
 						'package' => $strPackage,
-						'group' => strtolower($strGroup),
+						'group' => $strGroup,
 						'key' => $strKey,
 						'value' => $mxdValue,
 						'title' => $strTitle,
@@ -339,6 +339,7 @@
 										`null` = '%s',
 										`deprecated` = '0'
 								ON DUPLICATE KEY UPDATE
+										`group` = '%s',
 										`title` = '%s',
 										`description` = '%s',
 										`default` = '%s',
@@ -349,7 +350,7 @@
 					TWIST_DATABASE_NAME,
 					TWIST_DATABASE_TABLE_PREFIX,
 					$strPackage,
-					strtolower($strGroup),
+					$strGroup,
 					strtoupper($strKey),
 					$mxdValue,
 					$strTitle,
@@ -358,6 +359,7 @@
 					$strType,
 					$strOptions,
 					($blNull) ? '1' : '0',
+					$strGroup,
 					$strTitle,
 					$strDescription,
 					$strDefault,

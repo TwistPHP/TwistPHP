@@ -229,7 +229,7 @@
 			//@TODO - Non-Twist tasks have to be built in here
 
 			self::debug("- Start: ".$resTask->get('description'));
-			$strCommand = sprintf('twist_cron_child=%d php -t "%s" '.rtrim(TWIST_PUBLIC_ROOT,'/').'/index.php',$intTaskID,rtrim(TWIST_PUBLIC_ROOT,'/'));
+			$strCommand = sprintf('twist_cron_child=%d php '.rtrim(TWIST_PUBLIC_ROOT,'/').'/index.php',$intTaskID);
 
 			return \Twist::Command()->executeChild($strCommand);
 		}

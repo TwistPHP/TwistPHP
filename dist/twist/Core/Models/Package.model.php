@@ -302,7 +302,7 @@
 				//Install the SQL tables when required
 				$dirSettingsJSON = (!file_exists($dirSettingsJSON)) ? sprintf('%s/%s', $dirPackage, $dirSettingsJSON) : $dirSettingsJSON;
 
-				Install::importSettings($dirSettingsJSON,$strPackage,'package');
+				Install::importSettings($dirSettingsJSON,$strPackage);
 			}
 		}
 
@@ -318,7 +318,7 @@
 				$dirPackage = dirname($dirInstallFile);
 				$strPackage = strtolower(basename($dirPackage));
 
-				Install::removeSettings($strPackage,'package');
+				Install::removeSettings($strPackage);
 			}
 		}
 
