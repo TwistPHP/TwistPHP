@@ -18,7 +18,7 @@ ALTER DATABASE /*TWIST_DATABASE_NAME*/ CHARACTER SET utf8mb4 COLLATE utf8mb4_uni
 
 CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`settings` (
   `package` char(64) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `group` enum('core','package') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `group` char(64) COLLATE utf8mb4_unicode_ci NOT NULL,
   `key` char(64) COLLATE utf8mb4_unicode_ci NOT NULL,
   `value` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `title` char(128) COLLATE utf8mb4_unicode_ci NOT NULL,

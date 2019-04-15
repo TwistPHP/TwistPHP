@@ -129,7 +129,7 @@
 					$arrCoreSettings = array();
 					$arrAllSettings = \Twist::framework()->settings()->arrSettingsInfo;
 					foreach($arrAllSettings as $arrEachSetting){
-						if(array_key_exists('package',$arrEachSetting) && $arrEachSetting['package'] == 'core'){
+						if(array_key_exists('package',$arrEachSetting) && $arrEachSetting['package'] == $strPackage){
 							$arrCoreSettings[$arrEachSetting['key']] = $arrEachSetting;
 						}
 					}

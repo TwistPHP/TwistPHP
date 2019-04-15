@@ -668,7 +668,7 @@
   "USER_AUTH_LEGACY_HASH":{
     "title":"Legacy Password Hash",
     "description":"The hash algorthum used for users passwords before the user of PASSWORD_BCRYPT introduced in TWISTPHP 3.1.0. Passwords will be converet to a new hash upon successful login.",
-    "group":"",
+    "group":"User",
 	"default":"sha1",
     "type":"options",
     "options":"md5,sha1,sha256,sha512",

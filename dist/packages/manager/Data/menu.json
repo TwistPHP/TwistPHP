@@ -54,7 +54,7 @@
     "sub-sections": [
       {
         "name": "Settings",
-        "uri": "/settings/cache",
+        "uri": "/settings",
         "order": 10
       },
       {

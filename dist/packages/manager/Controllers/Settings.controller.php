@@ -103,12 +103,12 @@
 				}
 
 				//Fix any undefined index's
-				if(!array_key_exists($strPackage,$arrOption)){
-					$arrOption[$strPackage] = array('count' => 0,'html' => '');
+				if(!array_key_exists($arrEachItem['group'],$arrOption)){
+					$arrOption[$arrEachItem['group']] = array('count' => 0,'html' => '');
 				}
 
-				$arrOption[$strPackage]['count']++;
-				$arrOption[$strPackage]['html'] .= $this->_view('components/settings/each-setting.tpl', $arrEachItem );
+				$arrOption[$arrEachItem['group']]['count']++;
+				$arrOption[$arrEachItem['group']]['html'] .= $this->_view('components/settings/each-setting.tpl', $arrEachItem );
 			}
 
 			$strGeneral = '';
