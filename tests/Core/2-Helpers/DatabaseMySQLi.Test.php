@@ -121,7 +121,7 @@ class DatabaseMySQLi extends PHPUnitSupport{
 
 	public function testIncrementDecrement(){
 
-		$resNewRecord = \Twist::Database()->records('twist_settings')->get('EMAIL_SMTP_PORT','key');
+		$resNewRecord = \Twist::Database()->records('twist_settings')->get('RANDOM_STRING_LENGTH','key');
 		$intOldValue = $resNewRecord->get('default');
 
 		$intNewValue = $resNewRecord->increment('default');
