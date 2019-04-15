@@ -53,9 +53,14 @@
     "order": 150,
     "sub-sections": [
       {
-        "name": "Cache",
+        "name": "Settings",
         "uri": "/settings/cache",
         "order": 10
+      },
+      {
+        "name": "Cache",
+        "uri": "/settings/cache",
+        "order": 20
       },
       {
         "name": "Performance",
@@ -65,17 +70,17 @@
       {
         "name": "Redirects",
         "uri": "/settings/redirects",
-        "order": 20
+        "order": 30
       },
       {
         "name": "Scheduler",
         "uri": "/settings/scheduled-tasks",
-        "order": 30
+        "order": 40
       },
       {
         "name": "API Keys",
         "uri": "/settings/apikeys",
-        "order": 40
+        "order": 50
       }
     ]
   },
