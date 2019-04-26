@@ -26,7 +26,11 @@ import {AjaxRequest} from './AjaxRequest';
 
 $( () => {
 
-	let AJAX = new AjaxRequest();
+	if (!window.TwistManagerAjaxURL){
+		window.TwistManagerAjaxURL = '/manager/ajax';
+	}
+
+	let AJAX = new AjaxRequest(window.TwistManagerAjaxURL);
 
 
 	//Customised the select boxes

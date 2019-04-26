@@ -3,9 +3,9 @@ import {CustomSelect} from "./CustomSelect";
 
 export class AjaxRequest{
 
-	constructor(){
+	constructor(strTwistAjaxURL){
 
-		this.API = new twistajax( '/manager/ajax' );
+		this.API = new twistajax( strTwistAjaxURL );
 		this.ajaxLoader = null;
 		this.ajaxTimeout = null;
 
