@@ -47,7 +47,7 @@ class Image{
 		return (is_resource($this->resImage)) ? imagedestroy($this->resImage) : null;
 	}
 
-	protected function load($mxdImage){
+	protected function load($mxdImage,$blAlphaBlending = true){
 
 		if(preg_match('#^data:image/[^;]+;base64,(.*)$#',$mxdImage,$arrMatches)){
 
@@ -98,8 +98,10 @@ class Image{
 			'mime' => $arrImageInfo['mime']
 		);
 
-		imagealphablending($this->resImage, false);
-		imagesavealpha($this->resImage, true);
+		if($blAlphaBlending){
+			imagealphablending($this->resImage, $blAlphaBlending);
+			imagesavealpha($this->resImage, true);
+		}
 	}
 
 	protected function create($intWidth,$intHeight,$strFillColour = null){
@@ -1002,11 +1004,12 @@ class Image{
 	 * @param null|integer $intHeight Output height of the watermark image
 	 * @param null|integer $intAlphaTransparency Set the alpha transparency of the watermark
 	 * @return Image
+	 * @throws \Exception
 	 */
 	public function watermark($strFilename,$intMarginRight = 30,$intMarginBottom = 30,$intWidth = null,$intHeight = null,$intAlphaTransparency = 0){
 
 		$resWatermark = new self();
-		$resWatermark->load($strFilename);
+		$resWatermark->load($strFilename,true);
 
 		//Resize the image if required
 		if(!is_null($intWidth) && !is_null($intHeight)){
