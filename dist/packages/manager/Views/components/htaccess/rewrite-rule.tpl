@@ -9,5 +9,5 @@
             <option value="NC,R,L"{data:option=='NC,R,L'?' selected':''}>[NC,R,L]</option>
             <option value="NC,R=301,L"{data:option=='NC,R=301,L'?' selected':''}>[NC,R=301,L]</option>
         </select></td>
-    <td><a href="#" class="button red fa fa-times" title="Remove Rule" onclick="return removeRewriteRule(this);"></a></td>
+    <td class="align-right"><a href="#" class="button red" title="Remove Rule" onclick="return removeRewriteRule(this);">x</a></td>
 </tr>

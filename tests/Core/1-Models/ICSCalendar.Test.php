@@ -29,5 +29,6 @@ class ICSCalendar extends PHPUnitSupport{
 		$resCalendar->color(120,121,122);
 		$this->assertTrue(strstr($resCalendar->getRaw(), 'COLOR') && strstr($resCalendar->getRaw(), '120:121:122'));
 
+		\Twist::File()->write(TWIST_PUBLIC_ROOT.'/app/calendar.ics',$resCalendar->getRaw(),null,false);
 	}
 }

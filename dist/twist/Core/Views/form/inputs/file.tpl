@@ -1,1 +1,0 @@
-<input type="file" name="{data:name}" value="{data:value}"{data:arttributes}>

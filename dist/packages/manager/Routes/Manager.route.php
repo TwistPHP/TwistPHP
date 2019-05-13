@@ -24,6 +24,8 @@
 
 	namespace Packages\manager\Routes;
 
+	use Twist;
+	use Twist\Core\Models\Route\Meta;
 	use Twist\Core\Routes\Base;
 
 	/**
@@ -35,6 +37,13 @@
 
 		public function load(){
 
+			\Twist::define('TWIST_MANAGER_PACKAGE',realpath(dirname(__FILE__).'/../'));
+
+			$this->meta()->title('TwistPHP Manager');
+			$this->meta()->robots('noindex,nofollow');
+			$this->meta()->css(rtrim(\Twist::Route()->baseURI(),'/').'/packages/manager/Resources/css/twistmanager.css');
+			$this->meta()->js(rtrim(\Twist::Route()->baseURI(),'/').'/packages/manager/Resources/js/twistmanager.js');
+
 			//Allow the manager to still be accessible even in maintenance mode
 			$this->bypassMaintenanceMode( '/%' );
 
@@ -42,21 +51,51 @@
 
 			$this->baseView('_base.tpl');
 			$this->controller('/%','Packages\manager\Controllers\Manager');
+			$this->controller('/packages/%','Packages\manager\Controllers\Packages');
+			$this->controller('/protect/%','Packages\manager\Controllers\Protect');
+			$this->controller('/settings/%','Packages\manager\Controllers\Settings');
+			$this->controller('/settings/scheduled-tasks/%','Packages\manager\Controllers\Scheduler');
 
-			$this->restrictSuperAdmin('/%','/login');
-			$this->unrestrict('/authenticate');
-			$this->unrestrict('/cookies');
-			$this->unrestrict('/forgotten-password');
+			$this->ajax('/ajax/%','Packages\manager\Controllers\AJAX');
+			$this->upload('/upload/{function}/{asset_group}');
 
 			//Load in all any hooks registered to extend the Twist Manager
-			$arrRoutes = \Twist::framework() -> hooks() -> getAll( 'TWIST_MANAGER_ROUTE' );
+			$arrRoutes = \Twist::framework()->hooks()->getAll('TWIST_MANAGER_ROUTE');
 
-			if( count( $arrRoutes ) ) {
-				foreach( $arrRoutes as $strEachHook ) {
-					if( file_exists( $strEachHook ) ) {
+			if(count($arrRoutes)){
+				foreach($arrRoutes as $strEachHook){
+					if(file_exists($strEachHook)){
 						include $strEachHook;
 					}
 				}
 			}
+
+			//Load in all any hooks registered to extend the Twist Manager
+			$arrCSSHooks = \Twist::framework()->hooks()->getAll('TWIST_MANAGER_CSS');
+
+			if(count($arrCSSHooks)){
+				foreach($arrCSSHooks as $arrCSSFiles){
+					foreach($arrCSSFiles as $strCSSFile){
+						$this->meta()->css($strCSSFile);
+					}
+				}
+			}
+
+			//Load in all any hooks registered to extend the Twist Manager
+			$arrJSHooks = \Twist::framework()->hooks()->getAll('TWIST_MANAGER_JS');
+
+			if(count($arrJSHooks)){
+				foreach($arrJSHooks as $arrJSFiles){
+					foreach($arrJSFiles as $strJSFile){
+						$this->meta()->js($strJSFile);
+					}
+				}
+			}
+
+			//Load in all manager access restrictions
+			$this->restrictAdmin('/%','/login');
+			$this->unrestrict('/authenticate');
+			$this->unrestrict('/cookies');
+			$this->unrestrict('/forgotten-password');
 		}
 	}

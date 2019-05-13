@@ -2,39 +2,59 @@
 
 	use PHPUnit\Framework\TestCase;
 
-	if(strstr(phpversion(),'7.1')){
+	/**
+	 * Class PHPUnitSupport
+	 * Add backwards compatible support for testing older versions of PHP
+	 */
+	class PHPUnitSupport extends TestCase{
 
-		/**
-		 * Class PHPUnitSupport
-		 * Add backwards compatible support for testing older versions of PHP
-		 */
-		class PHPUnitSupport extends TestCase{
+		public function __construct(){
 
-			/**
-			 * Add support for a new function as assertContains was deprecated in old PHPUnit
-			 * @param $strValue1
-			 * @param $strValue2
-			 * @return mixed
-			 */
-			public function assertStringContainsString($strValue1,$strValue2){
-				return $this->assertContains($strValue1,$strValue2);
+			if(!defined('TWIST_LAUNCHED')){
+				require_once dirname(__FILE__).'/../dist/twist/framework.php';
+				\Twist::Route()->manager('/manager');
 			}
 
-			public function testSupport(){
-				$this->assertTrue(true);
+			parent::__construct();
+		}
+
+		/**
+		 * Allow support for pre v7 of PHPUnit used by the PHP7.1 travis server test
+		 * If someone can make a fix for this please replace all "_assert" to "assert"
+		 * @param $needle
+		 * @param $haystack
+		 * @param string $message
+		 * @return mixed
+		 */
+		public static function _assertStringContainsString(string $needle, string $haystack, string $message = ''): void
+		{
+
+			if(method_exists(get_called_class(),'assertStringContainsString')){
+				self::assertStringContainsString($needle, $haystack, $message);
+			}else{
+				self::assertContains($needle,$haystack,$message,false);
 			}
 		}
 
-	}else{
-
 		/**
-		 * Class PHPUnitSupport
-		 * Add forward compatible support for testing newer versions of PHP
+		 * Allow support for pre v7 of PHPUnit used by the PHP7.1 travis server test
+		 * If someone can make a fix for this please replace all "_assert" to "assert"
+		 * @param $needle
+		 * @param $haystack
+		 * @param string $message
+		 * @return mixed
 		 */
-		class PHPUnitSupport extends TestCase{
+		public static function _assertStringContainsStringIgnoringCase(string $needle, string $haystack, string $message = ''): void
+		{
 
-			public function testSupport(){
-				$this->assertTrue(true);
+			if(method_exists(get_called_class(),'assertStringContainsStringIgnoringCase')){
+				self::assertStringContainsStringIgnoringCase($needle, $haystack, $message);
+			}else{
+				self::assertContains($needle,$haystack,$message,true);
 			}
+		}
+
+		public function testSupport(){
+			$this->assertTrue(true);
 		}
 	}

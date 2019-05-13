@@ -35,53 +35,9 @@ class Create{
 	protected $strCharEncoding = 'ISO-8859-1';
 	protected $intSenderLevel = 0;
 	protected $arrEmailData = array();
-	protected $strProtocol = 'native';
-	protected $resProtocol = null;
-	protected $arrSettingsSMTP = array();
-	protected $blUseFromParameter = true;
 
 	public function __construct(){
-
-		$this->strProtocol = \Twist::framework()->setting('EMAIL_PROTOCOL');
-
-		switch($this->strProtocol){
-
-			case'smtp';
-				$this->resProtocol = new ProtocolSMTP();
-
-				$this->arrSettingsSMTP = array(
-					'host' => \Twist::framework()->setting('EMAIL_SMTP_HOST'),
-					'port' => \Twist::framework()->setting('EMAIL_SMTP_PORT'),
-					'username' => \Twist::framework()->setting('EMAIL_SMTP_USERNAME'),
-					'password' => \Twist::framework()->setting('EMAIL_SMTP_PASSWORD')
-				);
-
-				break;
-
-			case'native';
-			default:
-				$this->resProtocol = new ProtocolNative();
-				break;
-		}
-
 		$this->reset();
-	}
-
-	public function useSMTP($strHost,$intPort,$strUsername,$strPassword){
-
-		$this->strProtocol = 'smtp';
-		$this->resProtocol = new ProtocolSMTP();
-
-		$this->arrSettingsSMTP = array(
-			'host' => $strHost,
-			'port' => $intPort,
-			'username' => $strUsername,
-			'password' => $strPassword
-		);
-	}
-
-	public function useFromParam($blStatus = true){
-		$this->blUseFromParameter = $blStatus;
 	}
 
 	protected function reset(){
@@ -331,6 +287,10 @@ class Create{
 		}
 	}
 
+	public function data(){
+		return $this->arrEmailData;
+	}
+
 	/**
 	 * Process and return all the source components that make up the Raw email
 	 * @return array
@@ -424,37 +384,25 @@ class Create{
 	 */
 	public function send($blClearCache = true){
 
-		$arrSource = $this->source();
+		$blStatus = false;
 
-		//If no connected then reconnect (Used only for SMTP)
-		if(!$this->resProtocol->connected()){
+		$strProtocol = \Twist::framework()->setting('EMAIL_PROTOCOL');
+		$arrHooks = \Twist::framework()->hooks()->getAll('TWIST_EMAIL_PROTOCOLS');
 
-			if(!$this->resProtocol->connect($this->arrSettingsSMTP['host'],$this->arrSettingsSMTP['port'])){
-				$arrError = $this->resProtocol->getError();
-				throw new \Exception($arrError['message'],$arrError['code']);
-			}
-
-			if(!$this->resProtocol->login($this->arrSettingsSMTP['username'],$this->arrSettingsSMTP['password'])){
-				$arrError = $this->resProtocol->getError();
-				throw new \Exception($arrError['message'],$arrError['code']);
+		foreach($arrHooks as $strKey => $arrModel){
+			if($strKey == $strProtocol){
+				$strEmailModel = (string) $arrModel['model'];
+				$blStatus = $strEmailModel::protocolSend($this);
+				break;
 			}
 		}
-
-		$this->resProtocol->useFromParam($this->blUseFromParameter);
-
-		$this->resProtocol->from($this->arrEmailData['from_email']);
-		$this->resProtocol->to($arrSource['to']);
-		$this->resProtocol->subject($this->arrEmailData['subject']);
-		$this->resProtocol->body($this->arrEmailData['body']);
-
-		$blResult = $this->resProtocol->send(($this->strProtocol == 'smtp') ? $this->arrEmailData['raw'] : $this->arrEmailData['headers']);
 
 		if($blClearCache == true){
 			//Clear the email data ready for the next email
 			$this->reset();
 		}
 
-		return $blResult;
+		return $blStatus;
 	}
 
 	/**

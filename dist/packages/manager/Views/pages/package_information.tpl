@@ -1,4 +1,4 @@
-<h2 class="no-top-padding">Package Information</h2>
+<h1>Package Information</h1>
 <p>View all information relating any particular package that is installed or available through the TwistPHP Manager.</p>
 <dl class="inline">
 	<dt>Name</dt>

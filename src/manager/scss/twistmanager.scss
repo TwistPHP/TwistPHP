@@ -24,255 +24,52 @@
  * --------------
  */
 
-@import "../../common";
+$twistphp-green: #539F00;
+$twistphp-black: #212121;
+$twistphp-dark-grey: #424242;
+$twistphp-grey: #727272;
+$twistphp-light-grey: #BDBDBD;
+$twistphp-really-light-grey: #EEE;
 
-html{
-	min-width: 320px;
+$tablet: 640px;
+$desktop: 1000px;
+$widescreen: 1280px;
 
-	&::after {
-		width: 475px;
-		height: 500px;
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
 
-		display: block;
+*, ::after, ::before {
+	box-sizing: border-box;
+}
 
-		position: fixed;
-		right: -50px;
-		bottom: -50px;
-
-		background: url("../images/background.png") left no-repeat;
-
-		content: "";
-
-		z-index: -1;
-	}
+html {
+	font-family: sans-serif;
+	line-height: 1.15;
+	-webkit-text-size-adjust: 100%;
+	-ms-text-size-adjust: 100%;
+	-ms-overflow-style: scrollbar;
+	-webkit-tap-highlight-color: transparent;
 }
 
 body {
-	margin: 30px;
-}
-
-.grid-container {
-	padding: 0 0 50px;
-
-	background: rgba(255, 255, 255, 0.85);
-	//background: #FFF;
-
-	//border: 1px #CCC solid;
-	//border-radius: 3px;
-
-	box-shadow: 0 0.5em 1.25em rgba(0, 0, 0, 0.25);
-}
-
-h1 {
-	margin: 10px 0;
-	padding-right: 30px !important;
-	padding-left: 30px !important;
-
-	text-align: center;
-}
-
-	h1 img {
-		height: 43px;
-		margin-right: 0.5em;
-
-		display: inline-block;
-
-		vertical-align: bottom;
-	}
-
-#menu {
+	font-family: 'Open Sans',sans-serif;
+	font-size: 1rem;
+	font-weight: 400;
+	line-height: 1.5;
 	margin: 0;
-	padding: 0;
-
-	overflow: visible;
-
-	background-color: transparent;
-
-	//border: 1px #CCC solid;
-	//border-left-width: 0;
-	border-radius: 0 3px 3px 0;
-
-	//box-shadow: 0 0.5em 1.25em rgba(0, 0, 0, 0.35);
-
-	&::before,
-	&::after {
-		display: none;
-	}
-
-	li {
-		margin: 0;
-
-		display: block;
-
-		overflow: hidden;
-
-		border: none;
-		border-radius: 0;
-
-		a {
-			padding: 15px 20px 15px 15px;
-
-			display: block;
-
-			line-height: 1;
-			text-decoration: none;
-
-			i {
-				margin-left: 1em;
-
-				display: inline-block;
-
-				float: right;
-			}
-		}
-
-		&::after {
-			height: 7px;
-
-			position: absolute;
-			top: -7px;
-			right: 10px;
-			left: -10px;
-
-			border-radius: 100%;
-
-			box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-
-			content: "";
-		}
-
-		&.current {
-			&::after {
-				//top: 0;
-			}
-
-			a {
-				padding-left: 20px;
-
-				color: #0D47A1;
-
-				&:hover {
-					color: #1976D2;
-				}
-
-				&:active {
-					color: #E64A19;
-				}
-			}
-		}
-	}
+	text-align: left;
+	color: $twistphp-black;
 }
 
-h2,
-h3 {
-	margin-top: 0.5em;
+.clear{
+	clear:both;
 }
 
-dl {
-	margin-bottom: 0;
-}
-
-.button {
-	margin-left: 10px;
-}
-
-table {
-	.button,
-	input,
-	select {
-		margin-top: 0 !important;
-
-		float: none !important;
-
-		font-size: 1em !important;
-	}
-}
-
-#twist-manager-repolist {
-	ul {
-		li {
-			display: inline-block;
-			width:44%;
-			padding:2%;
-			height:130px;
-			margin-bottom:1%;
-			margin-right:1%;
-			border:1px solid #CCC;
-			font-size: 0.8em;
-			.package-logo{
-				vertical-align: top;
-				text-align: left;
-				display: inline-block;
-				width:30%;
-				img{
-					display: inline-block;
-					width:90%;
-				}
-			}
-			.package-details{
-				vertical-align: top;
-				display: inline-block;
-				width:60%;
-			}
-		}
-	}
-}
-
-#progress-percentage-wrapper {
-	margin: 10px 10px 0;
-}
-
-	#progress-percentage {
-		width: 0;
-		height: 3px;
-
-		background: #0E0;
-
-		-webkit-transition: width 400ms ease, opacity 750ms ease;
-		-moz-transition: width 400ms ease, opacity 750ms ease;
-		-ms-transition: width 400ms ease, opacity 750ms ease;
-		-o-transition: width 400ms ease, opacity 750ms ease;
-		transition: width 400ms ease, opacity 750ms ease;
-	}
-
-#progress {
-	height: 450px;
-	margin: 0 10px;
-	padding: 20px 20px 0;
-
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	-ms-box-sizing: border-box;
-	-o-box-sizing: border-box;
-	box-sizing: border-box;
-
-	overflow: hidden;
-
-	color: #FFF;
-	font-size: 1.3em;
-	font-family: Monaco, "Courier New", Courier, monospace, mono;
-
-	background: #000;
-
-	border-bottom: 20px #000 solid;
-	border-radius: 0 0 3px 3px;
-}
-
-#complete-actions {
-	display: none;
-
-	text-align: right;
-
-	.button {
-		margin: 10px 10px 0 0;
-	}
-}
-
-#init-update {
-	width: 0;
-	height: 0;
-	margin: 0;
-	padding: 0;
-
-	border: none;
-}
+@import "mixins";
+@import "layout";
+@import "buttons";
+@import "forms";
+@import "lists";
+@import "progress";
+@import "tabs";
+@import "modal";
+@import "print";

@@ -93,7 +93,7 @@ class Element {
 }
 
 export default class twistfileupload {
-	constructor( id, uri, name, settings = {} ) {
+	constructor( id, uri, name, settings = {}, preload = [] ) {
 		let uploadSupported = ( typeof new XMLHttpRequest().responseType === 'string' && 'withCredentials' in new XMLHttpRequest() );
 
 		if( uploadSupported ) {
@@ -132,15 +132,9 @@ export default class twistfileupload {
 		//this.settings = Object.assign( {}, defaultSettings, settings );
 		this.settings = {};
 
-
 		for( let setting in defaultSettings ) {
 			this.settings[setting] = settings[setting] || defaultSettings[setting];
 		}
-
-
-
-
-
 
 		this.id = id;
 		this.elements = {
@@ -170,7 +164,7 @@ export default class twistfileupload {
 			})() ),
 
 			// The list of uploaded files element
-			List: Element.create( 'ul' ),
+			List: Element.create( 'ul','twistupload-file-list' ),
 
 			// The upload progress element
 			Progress: Element.create( 'progress', '', {
@@ -185,7 +179,7 @@ export default class twistfileupload {
 			Pseudo: Element.create( 'input', '', {
 				type: 'hidden',
 				name: name,
-				value: ''
+				value: this.settings.value
 			} ),
 
 			Wrapper: document.getElementById( id )
@@ -197,7 +191,7 @@ export default class twistfileupload {
 		this.queueUploadedCount = 0;
 		this.queueUploadedSize = 0;
 		this.request = new XMLHttpRequest();
-		this.uploaded = [];
+		this.uploaded = preload;
 		this.uri = '/' + uri.replace( /^\//, '' ).replace( /\/$/, '' );
 
 		this.addMarkup();
@@ -207,6 +201,7 @@ export default class twistfileupload {
 			this.elements.Input.addEventListener( 'change', ( e, files ) => {
 				this.upload( e, files );
 			} );
+			this.updateUploadedList();
 		} else {
 			this.hideProgress();
 
@@ -570,7 +565,7 @@ export default class twistfileupload {
 
 		this.elements.List.innerHTML = '';
 
-		//console.log( this.uploaded );
+		console.log( this.uploaded );
 
 		for( let objUploadedFileIndex in this.uploaded ) {
 			let objUploadedFile = this.uploaded[objUploadedFileIndex];
@@ -612,12 +607,13 @@ export default class twistfileupload {
 				}
 
 				strFileDetails += '<li data-key="' + strFileDetail + '"><span>' + strFileDetail.replace( /[\/_]/g, ' ' ) + ' :</span>' + strProperty + '</li>';
+				//strFileDetails += '<dt data-key="'+strFileDetail+'">'+strFileDetail.replace( /[\/_]/g, ' ' )+'</dt><dd>' + strProperty + '</dd>';
 			}
 
 			let listItem = Element.create( 'li', 'twistupload-file-list-item' );
 			let listItemPreview = Element.create( 'img', '', {src: strFilePreview} );
 			let listItemInfo = Element.create( 'ul', 'twistupload-file-list-item-info', {}, strFileDetails );
-			let listItemRemoveButton = Element.create( 'button', '', {}, 'Remove' );
+			let listItemRemoveButton = Element.create( 'button', 'button', {}, 'Remove' );
 
 			listItemRemoveButton.addEventListener( 'click', (fileToRemove => {
 				return () => {

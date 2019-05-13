@@ -532,7 +532,16 @@ class File extends Base{
 
 		//Break the request URL up into usable parts
 		$arrURLParts = parse_url($strRemoteFile);
-		$resRemoteHandle = fsockopen($arrURLParts['host'], 80, $intErrorCode, $strError, 5);
+
+		if($arrURLParts['scheme'] == 'https'){
+			$strSocketHost = 'ssl://'.$arrURLParts['host'];
+			$arrURLParts['port'] = (isset($arrURLParts['port'])) ? $arrURLParts['port'] : 443;
+		}else{
+			$strSocketHost = $arrURLParts['host'];
+			$arrURLParts['port'] = (isset($arrURLParts['port'])) ? $arrURLParts['port'] : 80;
+		}
+
+		$resRemoteHandle = fsockopen($strSocketHost, $arrURLParts['port'], $intErrorCode, $strError, 5);
 		$resLocalHandle = fopen($strLocalFile, 'wb');
 
 		if($resRemoteHandle == false || $resLocalHandle == false){
@@ -740,7 +749,7 @@ class File extends Base{
 			if(($intBytesStart === 0 && is_null($intBytesEnd)) || (is_null($intBytesStart) && is_null($intBytesEnd))){
 				return $this->arrDelayedFileStorage[$dirFilePath];
 			}else{
-				return substr($this->arrDelayedFileStorage[$dirFilePath], $intBytesStart, $intBytesEnd);
+				return substr($this->arrDelayedFileStorage[$dirFilePath], $intBytesStart, ($intBytesEnd-$intBytesStart));
 			}
 		}else{
 
@@ -977,8 +986,10 @@ class File extends Base{
 			'name' => 'file',
 			'id' => uniqid(),
 			'multiple' => 0,
+			'dragdrop' => 'null',
 			'accept' => '',
-			'value' => ''
+			'value' => '',
+			'preload' => '[]'
 		);
 
 		if(array_key_exists('multiple', $arrParameters) && $arrParameters['multiple'] !== false) {
@@ -1028,10 +1039,12 @@ class File extends Base{
 					'uri' => $arrParameters['uri'],
 					'include-js' => (is_null(\Twist::Cache()->read('asset-js-include'))) ? 1 : 0,
 					'multiple' => (array_key_exists('multiple', $arrParameters) && $arrParameters['multiple'] != '0') ? 1 : 0,
+					'dragdrop' => $arrParameters['dragdrop'],
 					'accept' => $strAccept,
 					'acceptTypes' => json_encode($strAcceptTypes),
 					'acceptExtensions' => json_encode($strAcceptExtensions),
-					'value' => $arrParameters['value']
+					'value' => $arrParameters['value'],
+					'preload' => $arrParameters['preload']
 				);
 
 				//Store a temp session for js output
@@ -1049,10 +1062,12 @@ class File extends Base{
 					'uri' => $arrParameters['uri'],
 					'include-js' => (is_null(\Twist::Cache()->read('asset-js-include'))) ? 1 : 0,
 					'multiple' => (array_key_exists('multiple', $arrParameters) && $arrParameters['multiple'] != '0') ? 1 : 0,
+					'dragdrop' => $arrParameters['dragdrop'],
 					'accept' => $strAccept,
 					'acceptTypes' => json_encode($strAcceptTypes),
 					'acceptExtensions' => json_encode($strAcceptExtensions),
-					'value' => $arrParameters['value']
+					'value' => $arrParameters['value'],
+					'preload' => $arrParameters['preload']
 				);
 
 				//Store a temp session for js output

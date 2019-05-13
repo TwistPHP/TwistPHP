@@ -18,8 +18,18 @@ class ICS extends PHPUnitSupport{
 		$resEvent = \Twist::ICS()->createEvent();
 
 		$this->assertTrue(is_resource($resEvent) || is_object($resEvent));
+	}
 
+	public function testLoad(){
 
+		$resCalendarICS = \Twist::ICS()->loadFile(TWIST_PUBLIC_ROOT.'/app/calendar.ics');
 
+		$this->assertTrue(is_resource($resCalendarICS) || is_object($resCalendarICS));
+		$this->_assertStringContainsString('BEGIN:VCALENDAR',$resCalendarICS->getRaw());
+
+		$resEventICS = \Twist::ICS()->loadFile(TWIST_PUBLIC_ROOT.'/app/event.ics');
+
+		$this->assertTrue(is_resource($resEventICS) || is_object($resEventICS));
+		$this->_assertStringContainsString('BEGIN:VEVENT',$resEventICS->getRaw());
 	}
 }

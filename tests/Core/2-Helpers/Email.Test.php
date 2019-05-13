@@ -24,17 +24,17 @@ class Email extends PHPUnitSupport{
 
 		self::$arrSource = $resEmail->source();
 
-		$this->assertStringContainsString('travisci2@unit-test-twistphp.com',self::$arrSource['to']);
+		$this->_assertStringContainsString('travisci2@unit-test-twistphp.com',self::$arrSource['to']);
 		$this->assertEquals('A test email',self::$arrSource['subject']);
-		$this->assertStringContainsString('Body of a test email', self::$arrSource['body']);
-		$this->assertStringContainsString('From: Travis CI <travisci@unit-test-twistphp.com>', self::$arrSource['raw']);
+		$this->_assertStringContainsString('Body of a test email', self::$arrSource['body']);
+		$this->_assertStringContainsString('From: Travis CI <travisci@unit-test-twistphp.com>', self::$arrSource['raw']);
 
 		//Adding an attachment will force encoding to be base64
 		$resEmail->addAttachment(TWIST_APP.'/Data/test.json');
 		self::$arrSource = $resEmail->source();
 
-		$this->assertStringContainsString('Qm9keSBvZiBhIHRlc3QgZW1haWwKRnJvbSBUd2lzdFBIUA==', self::$arrSource['body']);
-		$this->assertStringContainsString('Content-Description: test.json', self::$arrSource['body']);
+		$this->_assertStringContainsString('Qm9keSBvZiBhIHRlc3QgZW1haWwKRnJvbSBUd2lzdFBIUA==', self::$arrSource['body']);
+		$this->_assertStringContainsString('Content-Description: test.json', self::$arrSource['body']);
 	}
 
 	public function testParser(){

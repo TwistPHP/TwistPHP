@@ -1,2 +1,2 @@
-<div id="twistupload-{data:uniqid}"></div>
+<div id="twistupload-{data:uniqid}" class="twistupload-wrapper"></div>
 {view:./upload-js.tpl}

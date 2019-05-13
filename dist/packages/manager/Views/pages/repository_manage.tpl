@@ -1,4 +1,4 @@
-<h2 class="no-top-padding">Repository Manager</h2>
+<h1>Repository Manager</h1>
 <form class="inline foldable" method="post">
     <dl class="inline">
         <dt>Repository</dt>

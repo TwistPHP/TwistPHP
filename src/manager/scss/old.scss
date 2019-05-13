@@ -1,0 +1,489 @@
+/*!
+ * TwistPHP - An open source PHP MVC framework built from the ground up.
+ * Shadow Technologies Ltd.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
+ * @license    https://www.gnu.org/licenses/gpl.html GPL License
+ * @link       https://twistphp.com
+ *
+ * --------------
+ * TwistPHP Manager
+ * --------------
+ */
+
+$hexBlack:#212121;
+$hexGreen:#529F00;
+$hexWhite:#FFF;
+$hexMedium:#F3F3F3;
+
+@import "../../common";
+
+html{
+	min-width: 320px;
+	background-color: $hexMedium;
+
+	&::after {
+		width: 475px;
+		height: 500px;
+
+		display: block;
+
+		position: fixed;
+		right: -50px;
+		bottom: -50px;
+
+		background: url("../images/background.png") left no-repeat;
+
+		content: "";
+
+		z-index: -1;
+	}
+}
+
+body {
+	margin: 0;
+	padding:0;
+}
+
+h1{
+	text-align: center;
+}
+
+.app-header{
+	width: 5%;
+	display: inline-block;
+	float: left;
+	height: 100vh;
+	background-color:#212121;
+	position: fixed;
+
+	.logo{
+		padding: 20px;
+		height: 5vh;
+		img{
+			display: block;
+			width: 50px;
+			height: auto;
+			max-width:100%;
+			margin: 0 auto;
+		}
+	}
+	ul.tabs{
+		width: 100%;
+		margin: 0;
+		padding:0;
+		overflow: visible;
+		height: 90vh;
+		background-color:transparent;
+
+		li{
+			width: 100%;
+			display: block;
+			margin: 0;
+			border:0;
+			border-radius: 0;
+			padding: 0;
+			position: relative;
+			transition: all 0.5s ease-out;
+
+			i{
+				width: 100%;
+				text-align: center;
+				color: #FFF;
+				font-size: 20px;
+			}
+
+			a{
+				color: #FFF;
+				padding: 30px;
+				text-align: center;
+				white-space: normal;
+				word-wrap: break-word;
+
+				span.menu-text{
+					padding: 5px;
+					white-space: pre-wrap;
+					position: absolute;
+					right: -150px;
+					opacity: 0;
+					visibility: hidden;
+					transition: all 0.5s ease-out;
+				}
+
+			}
+			&:hover{
+				background-color:$hexGreen;
+				transition: all 0.5s ease-in;
+				cursor: pointer;
+
+				a{
+					span{
+						left: 0;
+						right: 0;
+						opacity: 1;
+						visibility: visible;
+						transition: all 0.5s ease-in;
+					}
+				}
+
+				> ul{
+					opacity: 1;
+					visibility: visible;
+				}
+			}
+
+			&.current{
+				background-color:$hexGreen;
+
+				a{
+					span{
+						right: 0;
+						left: 0;
+						opacity: 1;
+					}
+				}
+			}
+			ul{
+				display: block;
+				padding:0;
+				margin:0;
+				position: absolute;
+				top: 0px;
+				right: auto;
+				left: 100%;
+				background-color:$hexGreen;
+				visibility: hidden;
+				opacity: 0;
+
+				li{
+					padding:0px;
+
+					&:hover{
+						background-color:$hexWhite;
+						transition: all 0.5s ease-in;
+						a{
+							color: $hexGreen;
+							transition: all 0.5s ease-in;
+						}
+					}
+					a{
+						padding: 30px;
+					}
+				}
+			}
+		}
+	}
+}
+
+.app-content{
+	width: 100%;
+	display: inline-block;
+	float: left;
+	padding-top: 30px;
+
+	.grid-container{
+		max-width: 1200px;
+		display: flex;
+		justify-content: center;
+		-webkit-justify-content:center;
+
+	}
+}
+
+.tabs{
+	width: calc(100% - 180px);
+	display: inline-block;
+	float: left;
+	padding-left: 10px;
+
+	.tab{
+		display: none;
+
+		&.current{
+			display: block;
+		}
+	}
+}
+
+.tabButtons{
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	width: 180px;
+	display: inline-block;
+	float: left;
+
+	li{
+		padding: 20px 10px;
+		font-size: 16px;
+		line-height: 20px;
+		text-align:center;
+		transition: all 0.5s ease-out;
+		word-break: break-word;
+
+		span{
+			width: 100%;
+		}
+
+		&.current{
+			background-color:$hexGreen;
+			color: $hexWhite;
+		}
+		&:hover{
+			cursor: pointer;
+			background-color:$hexGreen;
+			color: $hexWhite;
+			transition:all 0.5s ease-in;
+		}
+	}
+
+	&.textOnly{
+		width:260px;
+		background-color: $twistphp-grey;
+
+		li{
+			padding: 8px 10px;
+		}
+
+		+.tabs{
+			width: calc(100% - 260px);
+		}
+	}
+}
+
+footer{
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	top:auto;
+	background-color: $hexBlack;
+
+	.grid-100{
+		padding-left: 0;
+		padding-right: 0;
+	}
+
+	p{
+		padding: 10px;
+		color: $hexWhite;
+		text-align: center;
+		a{
+			color:$hexWhite!important;
+			transition: all 0.5s ease-out;
+
+			&:hover{
+				color: $hexGreen!important;
+				transition: all 0.5s ease-in;
+			}
+		}
+	}
+}
+
+@media(max-width:1400px){
+	.app-header{
+		width: 8%;
+	}
+	.app-content{
+		width: 90%;
+		float: right;
+	}
+}
+@media(max-width:1024px){
+	.app-header{
+		.logo{
+			height: auto;
+			img{
+				width: auto;
+			}
+		}
+	}
+}
+@media(max-width:900px){
+	.app-header{
+		min-width: 70px;
+		ul.tabs{
+			li{
+				a{
+					span{
+						display: none;
+					}
+				}
+			}
+		}
+	}
+}
+@media (max-width:600px){
+	.app-content{
+		width: 83%;
+	}
+}
+
+.grid-container {
+	padding: 0 0 50px;
+
+	background: rgba(255, 255, 255, 0.85);
+	//background: #FFF;
+
+	//border: 1px #CCC solid;
+	//border-radius: 3px;
+
+	box-shadow: 0 0.5em 1.25em rgba(0, 0, 0, 0.25);
+}
+
+h2,
+h3 {
+	margin-top: 0.5em;
+}
+
+dl {
+	margin-bottom: 0;
+}
+
+.button {
+	margin-left: 10px;
+}
+
+table {
+	.button,
+	input,
+	select {
+		margin-top: 0 !important;
+
+		float: none !important;
+
+		font-size: 1em !important;
+	}
+}
+
+form{
+	label,select,input:not([type="submit"]){
+		font-size: 15px;
+		width:100%;
+		display: inline-block;
+		margin-bottom: 7px;
+	}
+	select,input:not([type="submit"]){
+		padding: 10px;
+	}
+	button[type="submit"]{
+		margin-top: 10px;
+		font-size: 15px;
+		text-align: center;
+		background-color: $hexGreen;
+		border: 2px solid $hexGreen;
+		color: $hexWhite;
+		min-width:150px;
+		padding: 10px 20px;
+		transition: all 0.5s ease-out;
+
+		&:hover{
+			background-color:$hexBlack;
+			border: 2px solid $hexBlack;
+			transition: all 0.5s ease-in;
+			cursor: pointer;
+		}
+	}
+}
+
+#twist-manager-repolist {
+	ul {
+		li {
+			display: inline-block;
+			width:44%;
+			padding:2%;
+			height:130px;
+			margin-bottom:1%;
+			margin-right:1%;
+			border:1px solid #CCC;
+			font-size: 0.8em;
+			.package-logo{
+				vertical-align: top;
+				text-align: left;
+				display: inline-block;
+				width:30%;
+				img{
+					display: inline-block;
+					width:90%;
+				}
+			}
+			.package-details{
+				vertical-align: top;
+				display: inline-block;
+				width:60%;
+			}
+		}
+	}
+}
+
+#progress-percentage-wrapper {
+	margin: 10px 10px 0;
+}
+
+#progress-percentage {
+	width: 0;
+	height: 3px;
+
+	background: #0E0;
+
+	-webkit-transition: width 400ms ease, opacity 750ms ease;
+	-moz-transition: width 400ms ease, opacity 750ms ease;
+	-ms-transition: width 400ms ease, opacity 750ms ease;
+	-o-transition: width 400ms ease, opacity 750ms ease;
+	transition: width 400ms ease, opacity 750ms ease;
+}
+
+#progress {
+	height: 450px;
+	margin: 0 10px;
+	padding: 20px 20px 0;
+
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	-o-box-sizing: border-box;
+	box-sizing: border-box;
+
+	overflow: hidden;
+
+	color: #FFF;
+	font-size: 1.3em;
+	font-family: Monaco, "Courier New", Courier, monospace, mono;
+
+	background: #000;
+
+	border-bottom: 20px #000 solid;
+	border-radius: 0 0 3px 3px;
+}
+
+#complete-actions {
+	display: none;
+
+	text-align: right;
+
+	.button {
+		margin: 10px 10px 0 0;
+	}
+}
+
+#init-update {
+	width: 0;
+	height: 0;
+	margin: 0;
+	padding: 0;
+
+	border: none;
+}

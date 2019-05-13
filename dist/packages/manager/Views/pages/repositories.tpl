@@ -1,4 +1,4 @@
-<h2 class="no-top-padding">Repositories</h2>
+<h1 class="no-top-padding">Repositories</h1>
 <form class="inline foldable" method="post">
 	<table>
 		<thead>

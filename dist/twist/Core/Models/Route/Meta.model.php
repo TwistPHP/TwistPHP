@@ -45,6 +45,10 @@
 			);
 		}
 
+		public function get($strType,$strName){
+			return (array_key_exists(sprintf('%s-%s',$strType,$strName),$this->arrTags)) ? [sprintf('%s-%s',$strType,$strName)] : null;
+		}
+
 		public function getTags(){
 
 			$arrOut = array();
@@ -100,6 +104,14 @@
 
 		public function custom($strKey,$strValue){
 			$this->add('meta',$strKey,$strValue);
+		}
+
+		public function css($strFile,$strRel = 'stylesheet'){
+			$this->add('link',$strFile,array('href' => $strFile,'rel' => $strRel));
+		}
+
+		public function js($strFile){
+			$this->add('script',$strFile,array('src' => $strFile));
 		}
 
 		public function ogTitle($strContent){
@@ -311,6 +323,14 @@
 
 				case'og':
 					$strOut = sprintf('<meta property="og:%s" content="%s">', $arrData['name'], $arrData['value']);
+					break;
+
+				case'script':
+					$strOut = sprintf('<script src="%s"></script>', $arrData['value']['src']);
+					break;
+
+				case'link':
+					$strOut = sprintf('<link href="%s" type="text/css" rel="%s"/>', $arrData['value']['href'], $arrData['value']['rel']);
 					break;
 			}
 

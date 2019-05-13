@@ -1,0 +1,1 @@
+This is a Hash Test File, do not change the name of contents!

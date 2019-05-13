@@ -13,6 +13,7 @@ var gulp = require( 'gulp' ),
 
 var strTwistSource = './src/',
 		strTwistDestination = './dist/twist/Core/Resources/',
+		strPackagesDestination = './dist/packages/',
 		esOptions = {
 			parserOptions: {
 				ecmaVersion: 6,
@@ -107,12 +108,17 @@ gulp.task( 'fileupload-js', () => {
 			.then( bundle => rollupExport( bundle, strTwistDestination + 'fileupload/js/twistfileupload.js', 'twistfileupload' ) );
 } );
 
+gulp.task( 'manager-js', () => {
+	return rollup.rollup( rollupConfig( strTwistSource + 'manager/js/twistmanager.js' ) )
+		.then( bundle => rollupExport( bundle, strPackagesDestination + 'manager/Resources/js/twistmanager.js', 'twistmanager' ) );
+} );
+
 gulp.task( 'manager-css', () => {
 	return gulp.src( strTwistSource + 'manager/scss/twistmanager.scss' )
 			.pipe( sourcemaps.init() )
 			.pipe( sass( {errLogToConsole: true, outputStyle: 'compressed'} ) )
 			.pipe( sourcemaps.write( './' ) )
-			.pipe( gulp.dest( strTwistDestination + 'manager/css' ) );
+			.pipe( gulp.dest( strPackagesDestination + 'manager/Resources/css' ) );
 } );
 
 gulp.task( 'setup-css', () => {
@@ -131,7 +137,7 @@ gulp.task( 'docs', () => {
 gulp.task( 'ajax', ['ajax-js'] );
 gulp.task( 'debug', ['debug-js', 'debug-css', 'debug-catch-js'] );
 gulp.task( 'fileupload', ['fileupload-js'] );
-gulp.task( 'manager', ['manager-css'] );
+gulp.task( 'manager', ['manager-js','manager-css'] );
 gulp.task( 'setup', ['setup-css'] );
 gulp.task( 'css', ['debug-css', 'manager-css', 'setup-css'] );
 
@@ -147,6 +153,7 @@ gulp.task( 'watch', () => {
 	gulp.watch( strTwistSource + 'debug/js/twistdebug.js', ['debug-js'] );
 	gulp.watch( strTwistSource + 'debug/js/twistdebugcatcher.js', ['debug-catch-js'] );
 	gulp.watch( strTwistSource + 'fileupload/js/twistfileupload.js', ['fileupload-js'] );
+	gulp.watch( strTwistSource + 'manager/js/twistmanager.js', ['manager-js'] );
 	gulp.watch( strTwistSource + 'debug/scss/**/*.scss', ['debug-css'] );
 	gulp.watch( strTwistSource + 'manager/scss/**/*.scss', ['manager-css'] );
 	gulp.watch( strTwistSource + 'setup/scss/**/*.scss', ['setup-css'] );

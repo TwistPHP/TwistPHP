@@ -1342,10 +1342,21 @@ class Route extends Base{
 					\Twist::respond(403,null,$blExitOnComplete);
 				}else{
 
-					$this->meta()->title(\Twist::framework()->setting('SITE_NAME'));
-					$this->meta()->description(\Twist::framework()->setting('SITE_DESCRIPTION'));
-					$this->meta()->author(\Twist::framework()->setting('SITE_AUTHOR'));
-					$this->meta()->keywords(\Twist::framework()->setting('SITE_KEYWORDS'));
+					if(is_null($this->meta()->get('title','title'))){
+						$this->meta()->title(\Twist::framework()->setting('SITE_NAME'));
+					}
+
+					if(is_null($this->meta()->get('meta','description'))){
+						$this->meta()->description(\Twist::framework()->setting('SITE_DESCRIPTION'));
+					}
+
+					if(is_null($this->meta()->get('meta','author'))){
+						$this->meta()->author(\Twist::framework()->setting('SITE_AUTHOR'));
+					}
+
+					if(is_null($this->meta()->get('meta','keywords'))){
+						$this->meta()->keywords(\Twist::framework()->setting('SITE_KEYWORDS'));
+					}
 
 					//Load the page from cache
 					$this->loadPageCache($arrRoute['cache_key']);

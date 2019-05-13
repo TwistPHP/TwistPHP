@@ -117,21 +117,28 @@
 		 * Install any framework settings that are required by the core.
 		 * @param string $dirSettingsJSON
 		 * @param string $strPackage
-		 * @param string $strGroup
 		 * @throws \Exception
 		 */
-		public static function importSettings($dirSettingsJSON,$strPackage = 'core',$strGroup = 'core'){
+		public static function importSettings($dirSettingsJSON,$strPackage = 'core'){
 
 			if(file_exists($dirSettingsJSON)){
 
 				$arrSettings = json_decode(file_get_contents($dirSettingsJSON),true);
 				if(count($arrSettings)){
 
+					$arrCoreSettings = array();
+					$arrAllSettings = \Twist::framework()->settings()->arrSettingsInfo;
+					foreach($arrAllSettings as $arrEachSetting){
+						if(array_key_exists('package',$arrEachSetting) && $arrEachSetting['package'] == $strPackage){
+							$arrCoreSettings[$arrEachSetting['key']] = $arrEachSetting;
+						}
+					}
+
 					foreach($arrSettings as $strKey => $arrOptions){
 
 						\Twist::framework()->settings()->install(
 							$strPackage,
-							$strGroup,
+							$arrOptions['group'],
 							$strKey,
 							$arrOptions['default'],
 							$arrOptions['title'],
@@ -141,6 +148,13 @@
 							$arrOptions['options'],
 							$arrOptions['null']
 						);
+
+						unset($arrCoreSettings[$strKey]);
+					}
+
+					//Remove the old settings
+					foreach($arrCoreSettings as $arrEachSettings){
+						self::removeSettings($arrEachSettings['package'],$arrEachSettings['key']);
 					}
 				}
 			}
@@ -149,10 +163,9 @@
 		/**
 		 * Remove settings from the framework, these settings can be package or code settings
 		 * @param string $strPackage
-		 * @param string $strGroup
 		 * @param null $strKey to remove a single settings only pass its key
 		 */
-		public static function removeSettings($strPackage,$strGroup,$strKey = null){
-			\Twist::framework()->settings()->uninstall($strPackage,$strGroup,$strKey);
+		public static function removeSettings($strPackage,$strKey = null){
+			\Twist::framework()->settings()->uninstall($strPackage,$strKey);
 		}
 	}

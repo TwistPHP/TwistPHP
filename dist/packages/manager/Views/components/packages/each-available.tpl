@@ -9,6 +9,6 @@
         <input type="hidden" name="{data:key}[package]" value="{data:name}">
         <input type="hidden" name="{data:key}[package-type]" value="modules">
         <input type="hidden" name="{data:key}[package-version]" value="{data:available/version}">-->
-		<a href="{uri:./install}?package={data:slug}" class="button blue"><strong>Install</strong></a>
+		<a href="{route:base_uri}/packages/install?package={data:slug}" class="button button-primary"><strong>Install</strong></a>
     </td>
 </tr>

@@ -14,7 +14,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
         <!--================================ CSS ================================-->
-        <link href="{resource:core-uri}manager/css/base.css" type="text/css" rel="stylesheet">
+        {meta:tags}
 
         <!--================================ JAVASCRIPT ================================-->
         <!--<script src="{resource:core-uri}manager/js/base.js"></script>-->

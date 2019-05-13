@@ -46,5 +46,7 @@ require_once dirname(__FILE__).'/../../phpunit-support.php';
 
 			//Now check the output without bypassing validation
 			$this->assertTrue(strstr($resEvent->getRaw(), 'BEGIN:VEVENT') !== false);
+
+			\Twist::File()->write(TWIST_PUBLIC_ROOT.'/app/event.ics',$resEvent->getRaw(),null,false);
 		}
 	}

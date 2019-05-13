@@ -146,7 +146,7 @@
 			$arrPackages = array();
 			$strLocalPackage = sprintf('%s/%s.zip',TWIST_PACKAGES,$strPackageKey);
 
-			$arrResult = \Twist::File()->download(sprintf('https://twistphp.com/packages/download?key=%s',$strPackageKey),$strLocalPackage);
+			$arrResult = \Twist::File()->download(sprintf('https://twistphp.com/packages/api/download/%s',$strPackageKey),$strLocalPackage);
 
 			if($arrResult['status'] && $arrResult['content-length'] > 0){
 
@@ -302,7 +302,7 @@
 				//Install the SQL tables when required
 				$dirSettingsJSON = (!file_exists($dirSettingsJSON)) ? sprintf('%s/%s', $dirPackage, $dirSettingsJSON) : $dirSettingsJSON;
 
-				Install::importSettings($dirSettingsJSON,$strPackage,'package');
+				Install::importSettings($dirSettingsJSON,$strPackage);
 			}
 		}
 
@@ -318,7 +318,7 @@
 				$dirPackage = dirname($dirInstallFile);
 				$strPackage = strtolower(basename($dirPackage));
 
-				Install::removeSettings($strPackage,'package');
+				Install::removeSettings($strPackage);
 			}
 		}
 

@@ -2,74 +2,93 @@
   {
     "name": "Dashboard",
     "uri": "",
-    "icon": "fa-tachometer",
-    "order": 10,
+    "icon": "fa-tachometer-alt",
+    "order": 1,
     "sub-sections": []
   },
   {
-    "name": "Settings",
-    "uri": "settings",
-    "icon": "fa-cogs",
-    "order": 20,
-    "sub-sections": []
-  },
-  {
-    "name": "Cache",
-    "uri": "cache",
-    "icon": "fa-file-archive-o",
-    "order": 30,
-    "sub-sections": []
-  },
-  {
-    "name": "TwistProtect",
-    "uri": "/",
-    "icon": "fa-lock",
-    "order": 40,
+    "name": "Packages",
+    "uri": "/packages",
+    "icon": "fa-puzzle-piece",
+    "order": 100,
     "sub-sections": [
       {
-        "name": "Firewall",
-        "uri": "firewall",
+        "name": "Installed",
+        "uri": "/packages",
         "order": 10
       },{
-        "name": "Code Scanner",
-        "uri": "scanner",
+        "name": "Search & Download",
+        "uri": "/packages/download",
         "order": 20
       }
     ]
   },
   {
-    "name": ".htaccess",
-    "uri": "htaccess",
-    "icon": "fa-map-signs",
-    "order": 50,
-    "sub-sections": []
+    "name": "TwistProtect",
+    "uri": "/protect",
+    "icon": "fa-lock",
+    "order": 120,
+    "sub-sections": [
+      {
+        "name": "Firewall",
+        "uri": "/protect/firewall",
+        "order": 10
+      },
+      {
+        "name": "Scanner",
+        "uri": "/protect/scanner",
+        "order": 20
+      },
+      {
+        "name": "Security",
+        "uri": "/protect/security",
+        "order": 30
+      }
+    ]
   },
   {
-    "name": "Packages",
-    "uri": "packages",
-    "icon": "fa-puzzle-piece",
-    "order": 60,
-    "sub-sections": []
-  },
-  {
-    "name": "ScheduledTasks",
-    "uri": "scheduled-tasks",
-    "icon": "fa-clock-o",
-    "order": 70,
-    "sub-sections": []
-  },
-  {
-    "name": "API Keys",
-    "uri": "apikeys",
-    "icon": "fa-key",
-    "order": 80,
-    "sub-sections": []
+    "name": "Settings",
+    "uri": "/settings",
+    "icon": "fa-cogs",
+    "order": 150,
+    "sub-sections": [
+      {
+        "name": "Settings",
+        "uri": "/settings",
+        "order": 10
+      },
+      {
+        "name": "Cache",
+        "uri": "/settings/cache",
+        "order": 20
+      },
+      {
+        "name": "Performance",
+        "uri": "/settings/performance",
+        "order": 20
+      },
+      {
+        "name": "Redirects",
+        "uri": "/settings/redirects",
+        "order": 30
+      },
+      {
+        "name": "Scheduler",
+        "uri": "/settings/scheduled-tasks",
+        "order": 40
+      },
+      {
+        "name": "API Keys",
+        "uri": "/settings/apikeys",
+        "order": 50
+      }
+    ]
   },
   {
     "name": "Logout",
     "uri": "logout",
-    "icon": "fa-sign-out",
-    "order": 90,
+    "icon": "fa-sign-out-alt",
+    "order": 200,
     "sub-sections": []
   }
 ]

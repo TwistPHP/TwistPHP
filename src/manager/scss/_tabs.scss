@@ -1,0 +1,82 @@
+
+.tabContainer{
+	@include flexbox();
+	@include flex-direction(row);
+	@include align-items(stretch);
+	width: 98%;
+	margin:10px auto;
+
+	.tab{
+		width: calc(100% - 160px);
+		@include align-self(stretch);
+		display: none;
+
+		.box{
+			width:100%;
+			margin:0;
+		}
+
+		&.current{
+			@include flexbox();
+		}
+	}
+
+	.tabButtons{
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		//width: 180px;
+		display: inline-block;
+		float: left;
+		width:160px;
+		background-color: $twistphp-really-light-grey;
+		border:1px solid $twistphp-light-grey;
+		border-right:0;
+
+		li{
+			//padding: 20px 10px;
+			font-size: 16px;
+			line-height: 20px;
+			//text-align:center;
+			transition: all 0.5s ease-out;
+			word-break: break-word;
+			//color: #FFF;
+			padding: 10px 10px;
+			text-align: left;
+			color:$twistphp-black;
+			border-bottom:1px solid $twistphp-light-grey;
+
+			i{
+				display: inline-block;
+				margin-right:6px;
+			}
+
+			&.current,&:hover{
+				background-color:$twistphp-green;
+				color: #FFF;
+			}
+
+			&:hover{
+				cursor: pointer;
+				transition:all 0.3s ease-in;
+			}
+		}
+	}
+
+	&.large{
+		.tabButtons{
+			li{
+				padding: 12px 10px;
+				text-align: center;
+
+				i{
+					text-align: center;
+					width: 100%;
+					font-size: 20px;
+					line-height: 24px;
+					margin-right:0;
+				}
+			}
+		}
+	}
+}

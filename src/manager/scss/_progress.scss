@@ -1,0 +1,283 @@
+.proC {
+   font-size: 20px;
+   margin: 20px;
+   position: relative; /* so that children can be absolutely positioned */
+   padding: 0;
+   width: 5em;
+   height: 5em;
+   background-color: #F2E9E1; 
+   border-radius: 50%;
+   line-height: 5em;
+}
+
+.proC:after{
+    border: none;
+    position: absolute;
+    top: 0.35em;
+    left: 0.35em;
+    text-align: center;
+    display: block;
+    border-radius: 50%;
+    width: 4.3em;
+    height: 4.3em;
+    background-color: white;
+    content: " ";
+}
+/* Text inside the control */
+.proC span {
+    position: absolute;
+    line-height: 5em;
+    width: 5em;
+    text-align: center;
+    display: block;
+    color: #84AF5D;
+    z-index: 2;
+}
+.lhClip { 
+   /* a round circle */
+   border-radius: 50%;
+   width: 5em;
+   height: 5em;
+   position: absolute; /* needed for clipping */
+   clip: rect(0, 5em, 5em, 2.5em); /* clips the whole left half*/ 
+}
+
+.proC.p51,
+.proC.p52,
+.proC.p53,
+.proC.p54,
+.proC.p55,
+.proC.p56,
+.proC.p57,
+.proC.p58,
+.proC.p59,
+.proC.p60,
+.proC.p61,
+.proC.p62,
+.proC.p63,
+.proC.p64,
+.proC.p65,
+.proC.p66,
+.proC.p67,
+.proC.p68,
+.proC.p69,
+.proC.p70,
+.proC.p71,
+.proC.p72,
+.proC.p73,
+.proC.p74,
+.proC.p75,
+.proC.p76,
+.proC.p77,
+.proC.p78,
+.proC.p79,
+.proC.p80,
+.proC.p81,
+.proC.p82,
+.proC.p83,
+.proC.p84,
+.proC.p85,
+.proC.p86,
+.proC.p87,
+.proC.p88,
+.proC.p89,
+.proC.p90,
+.proC.p91,
+.proC.p92,
+.proC.p93,
+.proC.p94,
+.proC.p95,
+.proC.p96,
+.proC.p97,
+.proC.p98,
+.proC.p99,
+.proC.p100{
+
+    .lhClip {
+        clip: rect(auto,auto,auto,auto);
+    }
+    
+    .f50Bar {
+        /*Progress bar for the first 50%, filling the whole right half*/
+        position: absolute; /*needed for clipping*/
+        clip: rect(0, 5em, 5em, 2.5em);
+        background-color: #84AF5D;
+        border-radius: 50%;
+        width: 5em;
+        height: 5em;
+    }
+}
+
+
+.vBar {
+   /*This is an overlayed square, that is made round with the border radius,
+   then it is cut to display only the left half, then rotated clockwise
+   to escape the outer clipping path.*/ 
+   position: absolute; /*needed for clipping*/
+   clip: rect(0, 2.5em, 5em, 0);
+   width: 5em;
+   height: 5em;
+   border-radius: 50%;
+   border: 0.45em solid #84AF5D; /*The border is 0.35 but making it larger removes visual artifacts */
+   /*background-color: #4D642D;*/ /* for debug */
+   box-sizing: border-box;
+  
+}
+
+/* Progress bar rotation position */
+.proC.p0,
+.proC.p1,
+.proC.p2,
+.proC.p3,
+.proC.p4,
+.proC.p5,
+.proC.p6,
+.proC.p7,
+.proC.p8,
+.proC.p9,
+.proC.p10,
+.proC.p11,
+.proC.p12,
+.proC.p13,
+.proC.p14,
+.proC.p15,
+.proC.p16,
+.proC.p17,
+.proC.p18,
+.proC.p19,
+.proC.p20,
+.proC.p21,
+.proC.p22,
+.proC.p23,
+.proC.p24,
+.proC.p25,
+.proC.p26,
+.proC.p27,
+.proC.p28,
+.proC.p29,
+.proC.p30,
+.proC.p31,
+.proC.p32,
+.proC.p33,
+.proC.p34,
+.proC.p35,
+.proC.p36,
+.proC.p37,
+.proC.p38,
+.proC.p39,
+.proC.p40,
+.proC.p41,
+.proC.p42,
+.proC.p43,
+.proC.p44,
+.proC.p45,
+.proC.p46,
+.proC.p47,
+.proC.p48,
+.proC.p49,
+.proC.p50{
+    .f50Bar{ display: none; }
+}
+
+/* Progress bar rotation position */
+.proC.p0 .vBar { display: none; }
+.proC.p1 .vBar { transform: rotate(4deg); }
+.proC.p2 .vBar { transform: rotate(7deg); }
+.proC.p3 .vBar { transform: rotate(11deg); }
+.proC.p4 .vBar { transform: rotate(14deg); }
+.proC.p5 .vBar { transform: rotate(18deg); }
+.proC.p6 .vBar { transform: rotate(22deg); }
+.proC.p7 .vBar { transform: rotate(25deg); }
+.proC.p8 .vBar { transform: rotate(29deg); }
+.proC.p9 .vBar { transform: rotate(32deg); }
+.proC.p10 .vBar { transform: rotate(36deg); }
+.proC.p11 .vBar { transform: rotate(40deg); }
+.proC.p12 .vBar { transform: rotate(43deg); }
+.proC.p13 .vBar { transform: rotate(47deg); }
+.proC.p14 .vBar { transform: rotate(50deg); }
+.proC.p15 .vBar { transform: rotate(54deg); }
+.proC.p16 .vBar { transform: rotate(58deg); }
+.proC.p17 .vBar { transform: rotate(61deg); }
+.proC.p18 .vBar { transform: rotate(65deg); }
+.proC.p19 .vBar { transform: rotate(68deg); }
+.proC.p20 .vBar { transform: rotate(72deg); }
+.proC.p21 .vBar { transform: rotate(76deg); }
+.proC.p22 .vBar { transform: rotate(79deg); }
+.proC.p23 .vBar { transform: rotate(83deg); }
+.proC.p24 .vBar { transform: rotate(86deg); }
+.proC.p25 .vBar { transform: rotate(90deg); }
+.proC.p26 .vBar { transform: rotate(94deg); }
+.proC.p27 .vBar { transform: rotate(97deg); }
+.proC.p28 .vBar { transform: rotate(101deg); }
+.proC.p29 .vBar { transform: rotate(104deg); }
+.proC.p30 .vBar { transform: rotate(108deg); }
+.proC.p31 .vBar { transform: rotate(112deg); }
+.proC.p32 .vBar { transform: rotate(115deg); }
+.proC.p33 .vBar { transform: rotate(119deg); }
+.proC.p34 .vBar { transform: rotate(122deg); }
+.proC.p35 .vBar { transform: rotate(126deg); }
+.proC.p36 .vBar { transform: rotate(130deg); }
+.proC.p37 .vBar { transform: rotate(133deg); }
+.proC.p38 .vBar { transform: rotate(137deg); }
+.proC.p39 .vBar { transform: rotate(140deg); }
+.proC.p40 .vBar { transform: rotate(144deg); }
+.proC.p41 .vBar { transform: rotate(148deg); }
+.proC.p42 .vBar { transform: rotate(151deg); }
+.proC.p43 .vBar { transform: rotate(155deg); }
+.proC.p44 .vBar { transform: rotate(158deg); }
+.proC.p45 .vBar { transform: rotate(162deg); }
+.proC.p46 .vBar { transform: rotate(166deg); }
+.proC.p47 .vBar { transform: rotate(169deg); }
+.proC.p48 .vBar { transform: rotate(173deg); }
+.proC.p49 .vBar { transform: rotate(176deg); }
+.proC.p50 .vBar { transform: rotate(180deg); }
+.proC.p51 .vBar { transform: rotate(184deg); }
+.proC.p52 .vBar { transform: rotate(187deg); }
+.proC.p53 .vBar { transform: rotate(191deg); }
+.proC.p54 .vBar { transform: rotate(194deg); }
+.proC.p55 .vBar { transform: rotate(198deg); }
+.proC.p56 .vBar { transform: rotate(202deg); }
+.proC.p57 .vBar { transform: rotate(205deg); }
+.proC.p58 .vBar { transform: rotate(209deg); }
+.proC.p59 .vBar { transform: rotate(212deg); }
+.proC.p60 .vBar { transform: rotate(216deg); }
+.proC.p61 .vBar { transform: rotate(220deg); }
+.proC.p62 .vBar { transform: rotate(223deg); }
+.proC.p63 .vBar { transform: rotate(227deg); }
+.proC.p64 .vBar { transform: rotate(230deg); }
+.proC.p65 .vBar { transform: rotate(234deg); }
+.proC.p66 .vBar { transform: rotate(238deg); }
+.proC.p67 .vBar { transform: rotate(241deg); }
+.proC.p68 .vBar { transform: rotate(245deg); }
+.proC.p69 .vBar { transform: rotate(248deg); }
+.proC.p70 .vBar { transform: rotate(252deg); }
+.proC.p71 .vBar { transform: rotate(256deg); }
+.proC.p72 .vBar { transform: rotate(259deg); }
+.proC.p73 .vBar { transform: rotate(263deg); }
+.proC.p74 .vBar { transform: rotate(266deg); }
+.proC.p75 .vBar { transform: rotate(270deg); }
+.proC.p76 .vBar { transform: rotate(274deg); }
+.proC.p77 .vBar { transform: rotate(277deg); }
+.proC.p78 .vBar { transform: rotate(281deg); }
+.proC.p79 .vBar { transform: rotate(284deg); }
+.proC.p80 .vBar { transform: rotate(288deg); }
+.proC.p81 .vBar { transform: rotate(292deg); }
+.proC.p82 .vBar { transform: rotate(295deg); }
+.proC.p83 .vBar { transform: rotate(299deg); }
+.proC.p84 .vBar { transform: rotate(302deg); }
+.proC.p85 .vBar { transform: rotate(306deg); }
+.proC.p86 .vBar { transform: rotate(310deg); }
+.proC.p87 .vBar { transform: rotate(313deg); }
+.proC.p88 .vBar { transform: rotate(317deg); }
+.proC.p89 .vBar { transform: rotate(320deg); }
+.proC.p90 .vBar { transform: rotate(324deg); }
+.proC.p91 .vBar { transform: rotate(328deg); }
+.proC.p92 .vBar { transform: rotate(331deg); }
+.proC.p93 .vBar { transform: rotate(335deg); }
+.proC.p94 .vBar { transform: rotate(338deg); }
+.proC.p95 .vBar { transform: rotate(342deg); }
+.proC.p96 .vBar { transform: rotate(346deg); }
+.proC.p97 .vBar { transform: rotate(349deg); }
+.proC.p98 .vBar { transform: rotate(353deg); }
+.proC.p99 .vBar { transform: rotate(356deg); }
+.proC.p100 .vBar { transform: rotate(360deg); }
