@@ -187,17 +187,16 @@
 		/**
 		 * Commit the updated record to the database table. False is returned if the query fails, a successful insert returns insertID, a successful update returns numAffectedRows or true if numAffectedRows is 0.
 		 * @param bool $blInsert
-		 * @param bool $blAsync
 		 * @return bool|int
 		 */
-		public function commit($blInsert = false, $blAsync = false){
+		public function commit($blInsert = false){
 
 			$mxdOut = true;
 
 			if(json_encode($this->arrOriginalRecord) !== json_encode($this->arrRecord)){
 
 				$strSQL = $this->sql($blInsert);
-				$resResult = \Twist::Database()->query($strSQL,$blAsync);
+				$resResult = \Twist::Database()->query($strSQL);
 
 				if($resResult->status()){
 					//Now that the record has been updated in the database the original data must equal the current data

@@ -115,6 +115,15 @@
 		}
 
 		/**
+		 * Get the current users user groups
+		 * @return null|int
+		 */
+		public function currentGroups(){
+			$arrAuthData = Auth::current();
+			return ($arrAuthData['status']) ? $arrAuthData['user_data']['groups'] : null;
+		}
+
+		/**
 		 * Manual authentication if you are not using BaseControllerUser to handle the login and authentication for you
 		 * @param null $strEmailAddress
 		 * @param null $strPassword
@@ -246,9 +255,14 @@
 		 * Get the user as an object
 		 * @param integer $intUserID
 		 * @return \Twist\Core\Models\User\User
+		 * @throws \Twist\Classes\Exception
 		 */
 		public function get($intUserID){
-			return new UserObject(\Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->get($intUserID),$this);
+			$resUserRecord = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->get($intUserID);
+			if(is_null($resUserRecord)){
+				throw new \Twist\Classes\Exception('Error: Failed to get an instance of user "'.$intUserID.'", user ID doesnt exist!');
+			}
+			return new UserObject($resUserRecord,$this);
 		}
 
 		/**

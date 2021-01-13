@@ -287,7 +287,17 @@ class Create{
 		}
 	}
 
-	public function data(){
+	/**
+	 * Get all the processed Email Data, Pass in a previously exported array of data
+	 * @param null $arrEmailData
+	 * @return array|null
+	 */
+	public function data($arrEmailData = null){
+
+		if(!is_null($arrEmailData)){
+			$this->arrEmailData = $arrEmailData;
+		}
+
 		return $this->arrEmailData;
 	}
 
@@ -385,15 +395,31 @@ class Create{
 	public function send($blClearCache = true){
 
 		$blStatus = false;
+		$blSend = true;
 
-		$strProtocol = \Twist::framework()->setting('EMAIL_PROTOCOL');
-		$arrHooks = \Twist::framework()->hooks()->getAll('TWIST_EMAIL_PROTOCOLS');
+		$arrPreProcessHooks = \Twist::framework()->hooks()->getAll('TWIST_EMAIL_PREPROCESS');
 
-		foreach($arrHooks as $strKey => $arrModel){
-			if($strKey == $strProtocol){
-				$strEmailModel = (string) $arrModel['model'];
-				$blStatus = $strEmailModel::protocolSend($this);
+		foreach($arrPreProcessHooks as $strKey => $arrModel){
+			$strEmailPreProcessModel = (string) $arrModel['model'];
+			$blSend = $strEmailPreProcessModel::emailPreProcess($this);
+
+			if(!$blSend){
+				//A hook as requested the send not to happen, cancel the send
 				break;
+			}
+		}
+
+		if($blSend){
+			//Get the send protocol and send out the email
+			$strProtocol = \Twist::framework()->setting('EMAIL_PROTOCOL');
+			$arrHooks = \Twist::framework()->hooks()->getAll('TWIST_EMAIL_PROTOCOLS');
+
+			foreach($arrHooks as $strKey => $arrModel){
+				if($strKey == $strProtocol){
+					$strEmailModel = (string) $arrModel['model'];
+					$blStatus = $strEmailModel::protocolSend($this);
+					break;
+				}
 			}
 		}
 

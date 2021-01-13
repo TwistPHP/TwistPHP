@@ -226,28 +226,36 @@ class BaseUser extends Base{
 							$strNewPassword = $_POST['password'];
 
 							//Change the users password and re-log them in (Only for none-temp password users)
-							$this->resUser->changePassword(\Twist::Session()->data('user-id'),$strNewPassword,$_POST['current_password'],false);
+							$blStats = $this->resUser->changePassword(\Twist::Session()->data('user-id'),$strNewPassword,$_POST['current_password'],false);
 
-							//Remove the two posted password vars
-							unset($_POST['password']);
-							unset($_POST['current_password']);
+							if($blStats){
+								//Remove the two posted password vars
+								unset($_POST['password']);
+								unset($_POST['current_password']);
 
-							Auth::login(\Twist::Session()->data('user-email'),$strNewPassword);
-							\Twist::redirect('./');
+								Auth::login(\Twist::Session()->data('user-email'),$strNewPassword);
+								\Twist::redirect('./');
+							}
+
+							\Twist::redirect('./change-password');
 						}
 					}else{
 
 						$strNewPassword = $_POST['password'];
 
 						//Change the users password and re-log them in
-						$this->resUser->updatePassword(\Twist::Session()->data('user-id'),$strNewPassword);
+						$blStats = $this->resUser->updatePassword(\Twist::Session()->data('user-id'),$strNewPassword);
 
-						//Remove the posted password and reset the session var
-						unset($_POST['password']);
-						\Twist::Session()->data('user-temp_password','0');
+						if($blStats){
+							//Remove the posted password and reset the session var
+							unset($_POST['password']);
+							\Twist::Session()->data('user-temp_password','0');
 
-						Auth::login(\Twist::Session()->data('user-email'),$strNewPassword);
-						\Twist::redirect('./');
+							Auth::login(\Twist::Session()->data('user-email'),$strNewPassword);
+							\Twist::redirect('./');
+						}
+
+						\Twist::redirect('./change-password');
 					}
 
 				}else{

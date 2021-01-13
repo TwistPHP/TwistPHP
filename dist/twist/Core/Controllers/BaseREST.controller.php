@@ -41,10 +41,15 @@ class BaseREST extends Base{
     public function _baseCalls(){
 
         header("Access-Control-Allow-Orgin: *");
-        header("Access-Control-Allow-Methods: *");
+		header("Access-Control-Allow-Methods: ".\Twist::framework()->setting('API_ALLOWED_REQUEST_METHODS'));
 
         $this->_timeout(60);
         $this->_ignoreUserAbort(true);
+
+        $strAllowedMethods = explode(',',str_replace(" ","",\Twist::framework()->setting('API_ALLOWED_REQUEST_METHODS')));
+		if(!in_array('*',$strAllowedMethods) && !in_array($_SERVER['REQUEST_METHOD'],$strAllowedMethods)){
+			return $this->_respondError("Unsupported/Restricted request method used",405);
+		}
 
 		//If the method is POST and the data has been sent as JSON, extract the JSON into the global $_POST var
 		if(strtoupper($_SERVER['REQUEST_METHOD'] == 'POST') && strstr($_SERVER['CONTENT_TYPE'], 'application/json')){

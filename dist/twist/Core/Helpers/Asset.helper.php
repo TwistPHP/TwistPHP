@@ -162,8 +162,8 @@
 			$arrAsset['type'] = $this->getType($arrAsset['type_id']);
 
 			//Replace standard type icon with the new method of detection
-			$arrMimeType = \Twist::File()->mimeTypeInfo($arrAsset['data']);
-			$arrAsset['icon'] = $arrAsset['type']['icon'] = $arrMimeType['icon'];
+			$arrAsset['mime'] = \Twist::File()->mimeTypeInfo($arrAsset['data']);
+			$arrAsset['icon'] = $arrAsset['type']['icon'] = $arrAsset['mime']['icon'];
 
 			$arrAsset['group'] = $this->getGroup($arrAsset['group_id']);
 			$arrAsset['support'] = $this->getSupportingContent($arrAsset);

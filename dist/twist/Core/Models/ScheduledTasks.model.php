@@ -40,6 +40,7 @@
 			self::debug("== Starting TwistCron Manager ==");
 
 			$arrRunningTasks = array();
+			self::checkZombies();
 			$arrActiveTasks = self::activeTasks();
 
 			if(count($arrActiveTasks)){
@@ -126,16 +127,16 @@
 
 			$arrPulse = $arrPulseTemp = \Twist::Cache('ScheduledTasks')->read('Pulse');
 
-			$intLastPulse = count($arrPulseTemp) ? array_pop($arrPulseTemp) : 0;
-			$intPrevious1Pulse = count($arrPulseTemp) ? array_pop($arrPulseTemp) : 0;
-			$intPrevious2Pulse = count($arrPulseTemp) ? array_pop($arrPulseTemp) : 0;
+			$intLastPulse = is_array($arrPulseTemp) && count($arrPulseTemp) ? array_pop($arrPulseTemp) : 0;
+			$intPrevious1Pulse = is_array($arrPulseTemp) && count($arrPulseTemp) ? array_pop($arrPulseTemp) : 0;
+			$intPrevious2Pulse = is_array($arrPulseTemp) && count($arrPulseTemp) ? array_pop($arrPulseTemp) : 0;
 
 			$intFreq1 = ($intLastPulse - $intPrevious1Pulse);
 			$intFreq2 = ($intPrevious1Pulse - $intPrevious2Pulse);
 
 			return array(
-				'active' => count($arrPulse) && ($intFreq1 == $intFreq2 || $intFreq1 == ($intFreq2-1) || $intFreq1 == ($intFreq2+1)),
-				'status' => (count($arrPulse)) ? (($intFreq1 == $intFreq2 || $intFreq1 == ($intFreq2-1) || $intFreq1 == ($intFreq2+1)) ? 'Active' : 'Detecting...') : 'Inactive',
+				'active' => is_array($arrPulse) && count($arrPulse) && ($intFreq1 == $intFreq2 || $intFreq1 == ($intFreq2-1) || $intFreq1 == ($intFreq2+1)),
+				'status' => (is_array($arrPulse) && count($arrPulse)) ? (($intFreq1 == $intFreq2 || $intFreq1 == ($intFreq2-1) || $intFreq1 == ($intFreq2+1)) ? 'Active' : 'Detecting...') : 'Inactive',
 				'last_pulse' => $intLastPulse,
 				'frequency' => $intFreq1,
 				'history' => $arrPulse
@@ -150,13 +151,29 @@
 			return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'scheduled_tasks')->all();
 		}
 
+		public static function checkZombies(){
+
+			foreach(\Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'scheduled_tasks')->find('zombie','status') as $arrEachTask){
+
+				//Check to see if a Zombie task is still alive
+				if(posix_getsid($arrEachTask['pid']) === false){
+
+					//Mark the Zombie task as finished, dont log a runtime (for now)
+					$resTask = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'scheduled_tasks')->get($arrEachTask['id'],'id');
+					$resTask->set('status','finished');
+					$resTask->set('pid',0);
+					$resTask->commit();
+				}
+			}
+		}
+
 		public static function activeTasks(){
 
 			$arrRun = array();
 			$arrRun[] = 1;
 
-			$intMinute = date('m');
-			$intHour = date('h');
+			$intMinute = (int) date('i');
+			$intHour = (int) date('H');
 
 			if($intMinute == 0 || !($intMinute&1)){
 				$arrRun[] = 2;
@@ -206,10 +223,14 @@
 				$arrRun[] = 1440;
 			}
 
+			//Add the current time for those that run at a specific time, remove leading 0 to support both variations of time format
+			$arrRun[] = date('H:i');
+			$arrRun[] = ltrim(date('H:i'),'0');
+
 			$arrOut = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'scheduled_tasks')->find($arrRun,'frequency');
 
 			foreach($arrOut as $intKey => $arrEachTask){
-				if($arrEachTask['enabled'] == '0'){
+				if($arrEachTask['enabled'] == '0' || $arrEachTask['status'] == 'zombie' || $arrEachTask['status'] == 'running'){
 					unset($arrOut[$intKey]);
 				}
 			}
@@ -221,17 +242,21 @@
 
 			$resTask = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'scheduled_tasks')->get($intTaskID,'id');
 
+			//@TODO - Non-Twist tasks have to be built in here
+			$strPHPBin = (!empty(\Twist::framework()->setting('PHP_BIN'))) ? \Twist::framework()->setting('PHP_BIN') : 'php';
+
+			self::debug("- Start: ".$resTask->get('description'));
+			$strCommand = sprintf('twist_cron_child=%d %s '.rtrim(TWIST_PUBLIC_ROOT,'/').'/index.php',$intTaskID,$strPHPBin);
+
+			$intPID = \Twist::Command()->executeChild($strCommand);
+
 			//Store the last run of the current task in the database
 			$resTask->set('last_run',date('Y-m-d H:i:s'));
 			$resTask->set('status','running');
+			$resTask->set('pid',$intPID);
 			$resTask->commit();
 
-			//@TODO - Non-Twist tasks have to be built in here
-
-			self::debug("- Start: ".$resTask->get('description'));
-			$strCommand = sprintf('twist_cron_child=%d php '.rtrim(TWIST_PUBLIC_ROOT,'/').'/index.php',$intTaskID);
-
-			return \Twist::Command()->executeChild($strCommand);
+			return $intPID;
 		}
 
 		public static function logTask($intTaskID,$intPID){
@@ -244,6 +269,7 @@
 			//Store the last run of the current task in the database
 			$resTask->set('runtime',(time() - strtotime($resTask->get('last_run'))));
 			$resTask->set('status','finished');
+			$resTask->set('pid',0);
 			$resTask->commit();
 
 			self::debug("- End: ".$resTask->get('description')." [Runtime: ".$resTask->get('runtime')." sec]");
@@ -266,7 +292,14 @@
 
 			//Send the result via email if required
 			if($resTask->get('email') != '' && trim($arrResult['output']) != ''){
-				Notifications\Queue::sendToEmail($resTask->get('email'),'Twist Scheduled Task ['.$intTaskID.']: report',$arrResult['output']);
+
+				\Twist::Email()->send(
+					$resTask->get('email'),
+					'Twist Scheduled Task ['.$intTaskID.']: Report',
+					"Debug report for Twist Scheduled Task [{$intTaskID}]\n\n".$arrResult['output'],
+					'report@'.\Twist::framework()->setting('SITE_HOST'),
+					false
+				);
 			}
 		}
 
@@ -289,6 +322,10 @@
 		public static function runTask($intTaskID){
 
 			$arrTask = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'scheduled_tasks')->get($intTaskID,'id',true);
+
+			ini_set('max_execution_time',0);
+			ignore_user_abort(true);
+			set_time_limit(0);
 
 			if(count($arrTask)){
 				require_once (string) rtrim(TWIST_PUBLIC_ROOT,'/').'/'.$arrTask['command'];

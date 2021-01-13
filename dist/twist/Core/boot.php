@@ -22,7 +22,7 @@
 	 * @link       https://twistphp.com
 	 */
 
-	if(!headers_sent()){
+	if(!headers_sent() && (empty(getenv('twist_cron_child')) && empty(getenv('twist_cron')))){
 		//IE8 Session Fix
 		header('P3P: CP="NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM"');
 		header('X-Frame-Options: SAMEORIGIN');
@@ -35,7 +35,7 @@
 	}
 
 	error_reporting(E_ALL);
- 	ini_set("display_errors", 1);
+	ini_set("display_errors", 1);
 
 	//Preset the timezone, once framework is up and running set from the settings table
 	date_default_timezone_set('Europe/London');
@@ -48,14 +48,25 @@
 		}
 	}
 
+	//Fix DOCUMENT_ROOT when running as Cron on some servers
+	if(!array_key_exists('DOCUMENT_ROOT',$_SERVER)){
+		$_SERVER['DOCUMENT_ROOT'] = TWIST_PUBLIC_ROOT;
+	}
+
+	//Fix SCRIPT_FILENAME when running as Cron on some servers
+	if(!array_key_exists('SCRIPT_FILENAME',$_SERVER)){
+		$_SERVER['SCRIPT_FILENAME'] = __FILE__;
+	}
+
 	//If the SITE_URI_REWRITE is not already defined then it will be defined here
 	TwistDefine('SITE_URI_REWRITE','/');
 
 	//TWIST_PUBLIC_ROOT - Can be defined in your index file
 	TwistDefine('TWIST_PUBLIC_ROOT',$_SERVER['DOCUMENT_ROOT']);
+	TwistDefine('TWIST_FRAMEWORK_ROOT',realpath(sprintf('%s/../../',dirname(__FILE__))).'/');
 
 	//TWIST_APP - Can be defined in your index file
-	TwistDefine('TWIST_APP',sprintf('%s/app/',rtrim(TWIST_PUBLIC_ROOT,'/')));
+	TwistDefine('TWIST_APP',sprintf('%s/app/',rtrim(TWIST_FRAMEWORK_ROOT,'/')));
 
 	require_once sprintf('%s/../Classes/Autoload.class.php',dirname(__FILE__));
 	use \Twist\Classes\Autoload;
@@ -80,11 +91,11 @@
 	TwistDefine('TWIST_APP_VIEWS',sprintf('%s/Views/',rtrim(TWIST_APP,'/')));
 
 	//TWIST_PACKAGES - Can be defined in your index file
-	TwistDefine('TWIST_PACKAGES',sprintf('%s/packages/',rtrim(TWIST_PUBLIC_ROOT,'/')));
-	TwistDefine('TWIST_PACKAGE_INSTALL',sprintf('%s/packages/install/',rtrim(TWIST_PUBLIC_ROOT,'/')));
+	TwistDefine('TWIST_PACKAGES',sprintf('%s/packages/',rtrim(TWIST_FRAMEWORK_ROOT,'/')));
+	TwistDefine('TWIST_PACKAGE_INSTALL',sprintf('%s/packages/install/',rtrim(TWIST_FRAMEWORK_ROOT,'/')));
 
 	//TWIST_UPLOADS - Can be defined in your index file
-	TwistDefine('TWIST_UPLOADS',sprintf('%s/uploads/',rtrim(TWIST_PUBLIC_ROOT,'/')));
+	TwistDefine('TWIST_UPLOADS',sprintf('%s/uploads/',rtrim(TWIST_FRAMEWORK_ROOT,'/')));
 
 	/** From this point onwards you now have to use Twist::define() rather than TwistDefine */
 	require_once sprintf('%sTwist.php',TWIST_FRAMEWORK);

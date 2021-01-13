@@ -277,7 +277,7 @@
 			$strXML = $this->fixAmp($strXML);
 
 			//Process the response into a usable array
-			$objXML = simplexml_load_string($strXML);
+			$objXML = simplexml_load_string($strXML, null, LIBXML_NOCDATA);
 
 			if ($objXML === false) {
 				echo "Failed loading XML\n";

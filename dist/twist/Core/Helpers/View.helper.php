@@ -43,16 +43,16 @@ class View extends Base{
 	protected $arrCacheData = array();
 
 	public function __construct($strInstanceKey){
-	    $this->strInstanceKey = $strInstanceKey;
-	    $this->setDirectory();
-	    $this->blDebugMode = (\Twist::framework()->setting('DEVELOPMENT_MODE') && \Twist::framework()->setting('DEVELOPMENT_DEBUG_BAR'));
+		$this->strInstanceKey = $strInstanceKey;
+		$this->setDirectory();
+		$this->blDebugMode = (\Twist::framework()->setting('DEVELOPMENT_MODE') && \Twist::framework()->setting('DEVELOPMENT_DEBUG_BAR'));
 	}
 
 	/**
 	 * Kills the current instance of the View class, help to keep your RAM free
 	 */
 	public function kill(){
-	    Instance::removeObject(($this->strInstanceKey == 'twist') ? 'pkgView' : sprintf('pkgView-%s',$this->strInstanceKey));
+		Instance::removeObject(($this->strInstanceKey == 'twist') ? 'pkgView' : sprintf('pkgView-%s',$this->strInstanceKey));
 	}
 
 	/**
@@ -60,8 +60,8 @@ class View extends Base{
 	 * @param string $dirCustomViews Path to a custom View directory
 	 */
 	public function setDirectory($dirCustomViews = null){
-	    $this->dirViews = (is_null($dirCustomViews)) ? TWIST_APP_VIEWS : $dirCustomViews;
-	    $this->dirElements =  $this->dirViews;
+		$this->dirViews = (is_null($dirCustomViews)) ? TWIST_APP_VIEWS : $dirCustomViews;
+		$this->dirElements =  $this->dirViews;
 	}
 
 	/**
@@ -158,8 +158,8 @@ class View extends Base{
 	 */
 	public function build($dirView,$arrViewTags = null,$blRemoveUnusedTags = false,$blProcessTags = true) {
 
-	    $strViewDataOut = null;
-	    $this->validDataTags($arrViewTags);
+		$strViewDataOut = null;
+		$this->validDataTags($arrViewTags);
 
 		//Backup current view path
 		$strTempCurrentView = $this->dirCurrentView;
@@ -209,14 +209,14 @@ class View extends Base{
 			}
 		}
 
-	    if($this->blDebugMode){
-	        \Twist::framework()->debug()->log('View','usage',array('instance' => $this->strInstanceKey,'file' => $dirView,'tags' => (array_key_exists('tags',$arrViewData)) ? $arrViewData['tags'] : array()));
-	    }
+		if($this->blDebugMode){
+			\Twist::framework()->debug()->log('View','usage',array('instance' => $this->strInstanceKey,'file' => $dirView,'tags' => (array_key_exists('tags',$arrViewData)) ? $arrViewData['tags'] : array()));
+		}
 
 		//Restore the current view path
 		$this->dirCurrentView = $strTempCurrentView;
 
-	    return $arrViewData['html_raw'];
+		return $arrViewData['html_raw'];
 	}
 
 	/**
@@ -230,37 +230,37 @@ class View extends Base{
 	 */
 	public function replace($strRawViewData,$arrViewTags = null,$blRemoveUnusedTags = false) {
 
-	    $strViewDataOut = null;
-	    $this->validDataTags($arrViewTags);
+		$strViewDataOut = null;
+		$this->validDataTags($arrViewTags);
 
 		//Backup current view path
 		$strTempCurrentView = $this->dirCurrentView;
-	    $this->dirCurrentView = null;
+		$this->dirCurrentView = null;
 
-	    //Check that the raw View data is not null or blank
-	    if(!is_null($strRawViewData) && $strRawViewData != ''){
+		//Check that the raw View data is not null or blank
+		if(!is_null($strRawViewData) && $strRawViewData != ''){
 
-	        $arrLiveTags = $this->getTags($strRawViewData,false);
+			$arrLiveTags = $this->getTags($strRawViewData,false);
 
-	        foreach($arrLiveTags as $strEachTag){
-	            $strRawViewData = $this->processTag($strRawViewData,$strEachTag,$arrViewTags);
-	        }
+			foreach($arrLiveTags as $strEachTag){
+				$strRawViewData = $this->processTag($strRawViewData,$strEachTag,$arrViewTags);
+			}
 
-	        //No tags found, return raw View data
-	        $strViewDataOut = $strRawViewData;
+			//No tags found, return raw View data
+			$strViewDataOut = $strRawViewData;
 
-	        //Remove all un-used View tags
-	        if($blRemoveUnusedTags){
-	            $strViewDataOut = $this->removeUnusedTags($strViewDataOut);
-	        }
-	    }else{
-	        throw new \Exception('Raw View data is empty.');
-	    }
+			//Remove all un-used View tags
+			if($blRemoveUnusedTags){
+				$strViewDataOut = $this->removeUnusedTags($strViewDataOut);
+			}
+		}else{
+			throw new \Exception('Raw View data is empty.');
+		}
 
 		//Restore the current view path
 		$this->dirCurrentView = $strTempCurrentView;
 
-	    return $strViewDataOut;
+		return $strViewDataOut;
 	}
 
 	/**
@@ -310,7 +310,7 @@ class View extends Base{
 	 */
 	public function getTags($mxdView,$blIsFile = true,$blDiscover = false){
 
-	    $arrOut = array();
+		$arrOut = array();
 
 		//Get the raw View data
 		if($blIsFile){
@@ -320,37 +320,37 @@ class View extends Base{
 			$strRawViewData = $mxdView;
 		}
 
-	    //Grab all the tags out of the View
-	    preg_match_all("#\{([^\{\}\n]+)\}#i",$strRawViewData,$arrViewTags);
+		//Grab all the tags out of the View
+		preg_match_all("#\{([^\{\}\n]+)\}#i",$strRawViewData,$arrViewTags);
 
-	    //Check their is an array of tags before returning them
-	    if(is_array($arrViewTags) && count($arrViewTags) > 0){
-	        $arrOut = $arrViewTags[1];
-	    }
+		//Check their is an array of tags before returning them
+		if(is_array($arrViewTags) && count($arrViewTags) > 0){
+			$arrOut = $arrViewTags[1];
+		}
 
-	    //If Discovery mode is enabled, we can run through the conditional tags and pick out more tags
-	    if($blDiscover){
+		//If Discovery mode is enabled, we can run through the conditional tags and pick out more tags
+		if($blDiscover){
 
-	        foreach($arrOut as $strEachTag){
-	            if(preg_match("#^([^?]+)\?([\w\W]+\:[\w\W]+)$#",$strEachTag,$arrItems)){
+			foreach($arrOut as $strEachTag){
+				if(preg_match("#^([^?]+)\?([\w\W]+\:[\w\W]+)$#",$strEachTag,$arrItems)){
 
-	                //For the time being only match tags used in the results as ones in the condition are not displayed on the page
-	                preg_match_all("#(\'([^\']*)\'|\"([^\"]*)\"|([\d]+)|([\w\.\-\_\/]+:[\w\.\_\-\/]+)):?#",$arrItems[2],$arrResults);
+					//For the time being only match tags used in the results as ones in the condition are not displayed on the page
+					preg_match_all("#(\'([^\']*)\'|\"([^\"]*)\"|([\d]+)|([\w\.\-\_\/]+:[\w\.\_\-\/]+)):?#",$arrItems[2],$arrResults);
 
-	                //Check result 'true'
-	                if($arrResults[5][0] != ''){
-	                    $arrOut[] = $arrResults[5][0];
-	                }
+					//Check result 'true'
+					if($arrResults[5][0] != ''){
+						$arrOut[] = $arrResults[5][0];
+					}
 
-	                //Check result 'false'
-	                if($arrResults[5][1] != ''){
-	                    $arrOut[] = $arrResults[5][1];
-	                }
-	            }
-	        }
-	    }
+					//Check result 'false'
+					if($arrResults[5][1] != ''){
+						$arrOut[] = $arrResults[5][1];
+					}
+				}
+			}
+		}
 
-	    return $arrOut;
+		return $arrOut;
 	}
 
 	/**
@@ -361,16 +361,16 @@ class View extends Base{
 	 */
 	public function removeUnusedTags($strViewData){
 
-	    $arrViewTags = $this->getTags($strViewData,false);
+		$arrViewTags = $this->getTags($strViewData,false);
 
-	    if(is_array($arrViewTags) && count($arrViewTags) > 0){
+		if(is_array($arrViewTags) && count($arrViewTags) > 0){
 
-	        foreach($arrViewTags as $strTag){
-	            $strViewData = $this->replaceTag($strViewData,$strTag,'');
-	        }
-	    }
+			foreach($arrViewTags as $strTag){
+				$strViewData = $this->replaceTag($strViewData,$strTag,'');
+			}
+		}
 
-	    return $strViewData;
+		return $strViewData;
 	}
 
 	protected function parseViewPath($dirView){
@@ -436,23 +436,23 @@ class View extends Base{
 	 */
 	protected function get($strView){
 
-	    $strRawViewDataOut = null;
+		$strRawViewDataOut = null;
 
-	    //Check to see if the View file exists
-	    if(is_file($strView)){
+		//Check to see if the View file exists
+		if(is_file($strView)){
 
-	        if(filesize($strView)){
-		        $strRawViewDataOut = file_get_contents($strView);
-	        }else{
-	            $strRawViewDataOut = '';
-	            trigger_error(sprintf("Twist [11101]: View file '%s' contains no data.",$strView), E_USER_NOTICE);
-	            //throw new \Exception(sprintf("View file '%s' contains no data.",$strView),11101);
-	        }
-	    }else{
-	        throw new \Exception(sprintf("View file '%s' was not found or does not exist.",$strView),11102);
-	    }
+			if(filesize($strView)){
+				$strRawViewDataOut = file_get_contents($strView);
+			}else{
+				$strRawViewDataOut = '';
+				trigger_error(sprintf("Twist [11101]: View file '%s' contains no data.",$strView), E_USER_NOTICE);
+				//throw new \Exception(sprintf("View file '%s' contains no data.",$strView),11101);
+			}
+		}else{
+			throw new \Exception(sprintf("View file '%s' was not found or does not exist.",$strView),11102);
+		}
 
-	    return $strRawViewDataOut;
+		return $strRawViewDataOut;
 	}
 
 	/**
@@ -485,18 +485,18 @@ class View extends Base{
 	 */
 	protected function validDataTags($arrViewTags){
 
-	    //Check to see if the tags are set to null
-	    if(is_null($arrViewTags)){
-	        return true;
-	    }else{
+		//Check to see if the tags are set to null
+		if(is_null($arrViewTags)){
+			return true;
+		}else{
 
-	        //If the tags contain an array then they can be used
-	        if(is_array($arrViewTags)){
-	            return true;
-	        }else{
-	            throw new \Exception('View tags are an invalid format, must be and array or null.',11103);
-	        }
-	    }
+			//If the tags contain an array then they can be used
+			if(is_array($arrViewTags)){
+				return true;
+			}else{
+				throw new \Exception('View tags are an invalid format, must be and array or null.',11103);
+			}
+		}
 	}
 
 	/**
@@ -509,148 +509,148 @@ class View extends Base{
 	 */
 	protected function processTag($strRawView,$strTag,$arrData = array()){
 
-	    if(strstr($strTag,':')){
+		if(strstr($strTag,':')){
 
-	        //Step 1 - Check to see if this is a conditional tag
-	        $blCondition = preg_match("#^([^?]+)\?([\w\W]+\:[\w\W]+)$#",$strTag,$arrItems);
+			//Step 1 - Check to see if this is a conditional tag
+			$blCondition = preg_match("#^([^?]+)\?([\w\W]+\:[\w\W]+)$#",$strTag,$arrItems);
 
-	        if($blCondition){
+			if($blCondition){
 
-	            //Step 2 - Match the Conditions with parenthesis and option type matching
-	            preg_match_all("#(\)|\()?([\w\d\:\-\_\.\'\"\[\]\/]+)([\=\!]{3}|[=\>\<\*\^\!\$]{2}|[\<\>\*]{1})([\w\d\:\-\_\.\'\"\/]+)(\)|\()?(&&|\|\|)?#",$arrItems[1],$arrConditions);
+				//Step 2 - Match the Conditions with parenthesis and option type matching
+				preg_match_all("#(\)|\()?([\w\d\:\-\_\.\'\"\[\]\/]+)([\=\!]{3}|[=\>\<\*\^\!\$]{2}|[\<\>\*]{1})([\w\d\s\:\-\_\.\'\"\/]+)(\)|\()?(&&|\|\|)?#",$arrItems[1],$arrConditions);
 
-	            $arrResults = array();
-	            $strParenthesisOpen = $strParenthesisClose = false;
-	            $blParenthesisResult = true;
-	            $intResultPointer = 0;
-	            $strPreviousConditions = $strPreviousParenthesisConditions = '';
+				$arrResults = array();
+				$strParenthesisOpen = $strParenthesisClose = false;
+				$blParenthesisResult = true;
+				$intResultPointer = 0;
+				$strPreviousConditions = $strPreviousParenthesisConditions = '';
 
-	            $strTempTag1 = '';
-	            $strTempTag2 = '';
+				$strTempTag1 = '';
+				$strTempTag2 = '';
 
-	            //Go through each condition one by one
-	            foreach($arrConditions[1] as $intKey => $strValue){
+				//Go through each condition one by one
+				foreach($arrConditions[1] as $intKey => $strValue){
 
-	                //Detect opening parenthesis
-	                $strParenthesisOpen = (!$strParenthesisOpen && $strValue == '(') ? true : $strParenthesisOpen;
+					//Detect opening parenthesis
+					$strParenthesisOpen = (!$strParenthesisOpen && $strValue == '(') ? true : $strParenthesisOpen;
 
-	                //Get the two values to be compared
-	                //This functionality could be made much more efficient in a future release
-	                $arrValue1Parts = (strstr($arrConditions[2][$intKey],':')) ? explode(':',$arrConditions[2][$intKey]) : null;
-	                $arrValue2Parts = (strstr($arrConditions[4][$intKey],':')) ? explode(':',$arrConditions[4][$intKey]) : null;
+					//Get the two values to be compared
+					//This functionality could be made much more efficient in a future release
+					$arrValue1Parts = (strstr($arrConditions[2][$intKey],':')) ? explode(':',$arrConditions[2][$intKey]) : null;
+					$arrValue2Parts = (strstr($arrConditions[4][$intKey],':')) ? explode(':',$arrConditions[4][$intKey]) : null;
 
-		            $strTempReplace1 = $strTempReplace2 = '';
+					$strTempReplace1 = $strTempReplace2 = '';
 
-	                //Build the data to correctly decode each tag in condition 1
-	                if(!is_null($arrValue1Parts)){
-	                    $strTempTag1 = sprintf('{%s}',$arrConditions[2][$intKey]);
-	                    $strTempReplace1 = $arrConditions[2][$intKey];
+					//Build the data to correctly decode each tag in condition 1
+					if(!is_null($arrValue1Parts)){
+						$strTempTag1 = sprintf('{%s}',$arrConditions[2][$intKey]);
+						$strTempReplace1 = $arrConditions[2][$intKey];
 
-	                }
+					}
 
-	                //Build the data to correctly decode each tag in condition 2
-	                if(!is_null($arrValue2Parts)){
-	                    $strTempTag2 = sprintf('{%s}',$arrConditions[4][$intKey]);
-	                    $strTempReplace2 = $arrConditions[4][$intKey];
-	                }
+					//Build the data to correctly decode each tag in condition 2
+					if(!is_null($arrValue2Parts)){
+						$strTempTag2 = sprintf('{%s}',$arrConditions[4][$intKey]);
+						$strTempReplace2 = $arrConditions[4][$intKey];
+					}
 
-	                $mxdValue1 = (!is_null($arrValue1Parts)) ? $this->runTags($strTempTag1,$strTempReplace1,$arrValue1Parts[0],$arrValue1Parts[1],$arrData,true) : $arrConditions[2][$intKey];
-	                $mxdValue2 = (!is_null($arrValue2Parts)) ? $this->runTags($strTempTag2,$strTempReplace2,$arrValue2Parts[0],$arrValue2Parts[1],$arrData,true) : $arrConditions[4][$intKey];
+					$mxdValue1 = (!is_null($arrValue1Parts)) ? $this->runTags($strTempTag1,$strTempReplace1,$arrValue1Parts[0],$arrValue1Parts[1],$arrData,true) : $arrConditions[2][$intKey];
+					$mxdValue2 = (!is_null($arrValue2Parts)) ? $this->runTags($strTempTag2,$strTempReplace2,$arrValue2Parts[0],$arrValue2Parts[1],$arrData,true) : $arrConditions[4][$intKey];
 
-	                //Detect undefined parameters and match against 'undefined'
-	                $mxdValue1 = ($mxdValue1 === $strTempTag1) ? 'twst-undefined-variable' : $mxdValue1;
-	                $mxdValue2 = ($mxdValue2 === $strTempTag2) ? 'twst-undefined-variable' : $mxdValue2;
+					//Detect undefined parameters and match against 'undefined'
+					$mxdValue1 = ($mxdValue1 === $strTempTag1) ? 'twst-undefined-variable' : $mxdValue1;
+					$mxdValue2 = ($mxdValue2 === $strTempTag2) ? 'twst-undefined-variable' : $mxdValue2;
 
-	                //Test the values with the condition
-	                $blResult = $this->condition($mxdValue1,$arrConditions[3][$intKey],$mxdValue2);
+					//Test the values with the condition
+					$blResult = $this->condition($mxdValue1,$arrConditions[3][$intKey],$mxdValue2);
 
-	                //Detect closing parenthesis
-	                $strParenthesisClose = ($arrConditions[5][$intKey] == ')');
+					//Detect closing parenthesis
+					$strParenthesisClose = ($arrConditions[5][$intKey] == ')');
 
-	                //If the current parenthesis result is true and previous parenthesis condition is && or ''
-	                //or If the current parenthesis result is false and the previous condition is OR Log Results
-	                //or If not in parenthesis send result through
-	                if(( in_array($strPreviousParenthesisConditions,array('&&','')) && $blParenthesisResult )
-	                    || ( $strPreviousParenthesisConditions == '||' && !$blParenthesisResult )
-	                    || ( $strParenthesisOpen == false && $blParenthesisResult )){
+					//If the current parenthesis result is true and previous parenthesis condition is && or ''
+					//or If the current parenthesis result is false and the previous condition is OR Log Results
+					//or If not in parenthesis send result through
+					if(( in_array($strPreviousParenthesisConditions,array('&&','')) && $blParenthesisResult )
+						|| ( $strPreviousParenthesisConditions == '||' && !$blParenthesisResult )
+						|| ( $strParenthesisOpen == false && $blParenthesisResult )){
 
-	                    $blParenthesisResult = $blResult;
-	                }
+						$blParenthesisResult = $blResult;
+					}
 
-	                //If the parenthesis is not open or has opened and closed then log the result and rest vars
-	                if($strParenthesisOpen == false || ($strParenthesisOpen && $strParenthesisClose)){
+					//If the parenthesis is not open or has opened and closed then log the result and rest vars
+					if($strParenthesisOpen == false || ($strParenthesisOpen && $strParenthesisClose)){
 
-	                    if(in_array($strPreviousConditions,array('&&','')) && (!array_key_exists($intResultPointer,$arrResults) || $arrResults[$intResultPointer] == true)){
-	                        $arrResults[$intResultPointer] = $blParenthesisResult;
-	                    }elseif($strPreviousConditions == '||'){
-	                        $intResultPointer++;
-	                        $arrResults[$intResultPointer] = $blParenthesisResult;
-	                    }
+						if(in_array($strPreviousConditions,array('&&','')) && (!array_key_exists($intResultPointer,$arrResults) || $arrResults[$intResultPointer] == true)){
+							$arrResults[$intResultPointer] = $blParenthesisResult;
+						}elseif($strPreviousConditions == '||'){
+							$intResultPointer++;
+							$arrResults[$intResultPointer] = $blParenthesisResult;
+						}
 
-	                    $strParenthesisOpen = $strParenthesisClose = false;
-	                    $blParenthesisResult = true;
-	                    $strPreviousParenthesisConditions = '';
-	                }
+						$strParenthesisOpen = $strParenthesisClose = false;
+						$blParenthesisResult = true;
+						$strPreviousParenthesisConditions = '';
+					}
 
-	                //Set the previous condition
-	                if($strParenthesisOpen){
-	                    $strPreviousParenthesisConditions = $arrConditions[6][$intKey];
-	                }else{
-	                    $strPreviousConditions = $arrConditions[6][$intKey];
-	                }
-	            }
+					//Set the previous condition
+					if($strParenthesisOpen){
+						$strPreviousParenthesisConditions = $arrConditions[6][$intKey];
+					}else{
+						$strPreviousConditions = $arrConditions[6][$intKey];
+					}
+				}
 
-	            //Run through the results and see if conditions have been met
-	            $blOut = false;
-	            foreach($arrResults as $blStatus){
-	                $blOut = ($blStatus) ? true : $blOut;
-	            }
+				//Run through the results and see if conditions have been met
+				$blOut = false;
+				foreach($arrResults as $blStatus){
+					$blOut = ($blStatus) ? true : $blOut;
+				}
 
-	            //Step 4 - Grab the result parameters
-	            preg_match_all("#(\'([^\']*)\'|\"([^\"]*)\"|([\d]+)|([\w\.\-\_\/]+:[\w\.\_\-\/]+)):?#",$arrItems[2],$arrResults);
+				//Step 4 - Grab the result parameters
+				preg_match_all("#(\'([^\']*)\'|\"([^\"]*)\"|([\d]+)|([\w\.\-\_\/\[]+:[\w\.\_\-\/\]]+)):?#",$arrItems[2],$arrResults);
 
-	            if($arrResults[5][($blOut)?0:1] != ''){
-	                $arrTagParts = explode(':',$arrResults[5][($blOut)?0:1]);
+				if($arrResults[5][($blOut)?0:1] != ''){
+					$arrTagParts = explode(':',$arrResults[5][($blOut)?0:1]);
 
-		            //Would crc32() be faster?
-		            $strHash = md5($strRawView);
-	                $strRawView = $this->runTags($strRawView,$strTag,$arrTagParts[0],$arrTagParts[1],$arrData);
+					//Would crc32() be faster?
+					$strHash = md5($strRawView);
+					$strRawView = $this->runTags($strRawView,$strTag,$arrTagParts[0],$arrTagParts[1],$arrData);
 
-		            if($strHash === md5($strRawView)){
-			            //Remove un-used tag as the statement has been matched
-			            $strRawView = $this->replaceTag($strRawView,$strTag,'');
-		            }
-	            }else{
-	                $intConditionResult = ($blOut)?0:1;
+					if($strHash === md5($strRawView)){
+						//Remove un-used tag as the statement has been matched
+						$strRawView = $this->replaceTag($strRawView,$strTag,'');
+					}
+				}else{
+					$intConditionResult = ($blOut)?0:1;
 
-	                if(!is_null($arrResults[2][$intConditionResult])){
-	                    $strOut = $arrResults[2][$intConditionResult];
-	                }elseif(!is_null($arrResults[3][$intConditionResult])){
-	                    $strOut = $arrResults[3][$intConditionResult];
-	                }elseif(!is_null($arrResults[4][$intConditionResult])){
-	                    $strOut = $arrResults[4][$intConditionResult];
-	                }else{
-	                    $strOut = '';
-	                }
+					if(!is_null($arrResults[2][$intConditionResult])){
+						$strOut = $arrResults[2][$intConditionResult];
+					}elseif(!is_null($arrResults[3][$intConditionResult])){
+						$strOut = $arrResults[3][$intConditionResult];
+					}elseif(!is_null($arrResults[4][$intConditionResult])){
+						$strOut = $arrResults[4][$intConditionResult];
+					}else{
+						$strOut = '';
+					}
 
-	                $strRawView = $this->replaceTag($strRawView,$strTag,$strOut);
-	            }
+					$strRawView = $this->replaceTag($strRawView,$strTag,$strOut);
+				}
 
-	        }else{
+			}else{
 
-	            //Grab the tag data and precess
-	            $arrTagParts = explode(':',$strTag);
+				//Grab the tag data and precess
+				$arrTagParts = explode(':',$strTag);
 
-	            //Grab the parts and rebuild the string
-	            $strType = $arrTagParts[0];
-	            unset($arrTagParts[0]);
-	            $strReference = implode(':',$arrTagParts);
+				//Grab the parts and rebuild the string
+				$strType = $arrTagParts[0];
+				unset($arrTagParts[0]);
+				$strReference = implode(':',$arrTagParts);
 
-	            $strRawView = $this->runTags($strRawView,$strTag,$strType,$strReference,$arrData);
-	        }
-	    }
+				$strRawView = $this->runTags($strRawView,$strTag,$strType,$strReference,$arrData);
+			}
+		}
 
-	    return $strRawView;
+		return $strRawView;
 	}
 
 	/**
@@ -661,34 +661,34 @@ class View extends Base{
 	 */
 	protected function detectType($mxdValue){
 
-	    if(!is_bool($mxdValue) && !is_array($mxdValue)){
+		if(!is_bool($mxdValue) && !is_array($mxdValue)){
 
-	        //Get the length of the original string and strip containing quote marks
-	        $intLength = strlen($mxdValue);
+			//Get the length of the original string and strip containing quote marks
+			$intLength = strlen($mxdValue);
 
-	        //Clean the string up
-	        $mxdValue = ($mxdValue == "''" || $mxdValue == '""') ? '' : $mxdValue;
-	        $mxdValue = preg_replace('/^([\'|\"]{1})([\W\w]+)([\'|\"]{1})$/', '$2', $mxdValue);
+			//Clean the string up
+			$mxdValue = ($mxdValue == "''" || $mxdValue == '""') ? '' : $mxdValue;
+			$mxdValue = preg_replace('/^([\'|\"]{1})([\W\w]+)([\'|\"]{1})$/', '$2', $mxdValue);
 
-	        //If the length has stayed the same it is not a string and type needs correcting
-	        $blDetect = ($intLength == strlen($mxdValue));
+			//If the length has stayed the same it is not a string and type needs correcting
+			$blDetect = ($intLength == strlen($mxdValue));
 
-	        if($blDetect && $mxdValue == 'null'){
-	            $mxdValue = null;
-	        }elseif($blDetect && $mxdValue == 'undefined'){
-	            $mxdValue = 'twst-undefined-variable';
-	        }elseif($blDetect && $mxdValue == 'true'){
-	            $mxdValue = true;
-	        }elseif($blDetect && $mxdValue == 'false'){
-	            $mxdValue = false;
-	        }elseif($blDetect && preg_match('#^[0-9]+\.[0-9]+$#',$mxdValue)){
-	            settype( $mxdValue , 'float' );
-	        }elseif($blDetect && is_numeric($mxdValue)){
-	            settype( $mxdValue , 'integer' );
-	        }
-	    }
+			if($blDetect && $mxdValue == 'null'){
+				$mxdValue = null;
+			}elseif($blDetect && $mxdValue == 'undefined'){
+				$mxdValue = 'twst-undefined-variable';
+			}elseif($blDetect && $mxdValue == 'true'){
+				$mxdValue = true;
+			}elseif($blDetect && $mxdValue == 'false'){
+				$mxdValue = false;
+			}elseif($blDetect && preg_match('#^[0-9]+\.[0-9]+$#',$mxdValue)){
+				settype( $mxdValue , 'float' );
+			}elseif($blDetect && is_numeric($mxdValue)){
+				settype( $mxdValue , 'integer' );
+			}
+		}
 
-	    return $mxdValue;
+		return $mxdValue;
 	}
 
 	/**
@@ -701,52 +701,52 @@ class View extends Base{
 	 */
 	protected function condition($mxdValue1,$strCondition,$mxdValue2){
 
-	    $blOut = false;
+		$blOut = false;
 
-	    //Sanitise and detect type of each variable
-	    $mxdValue1 = $this->detectType($mxdValue1);
-	    $mxdValue2 = $this->detectType($mxdValue2);
+		//Sanitise and detect type of each variable
+		$mxdValue1 = $this->detectType($mxdValue1);
+		$mxdValue2 = $this->detectType($mxdValue2);
 
-	    switch($strCondition){
-	        case'===':
-	            $blOut = ($mxdValue1 === $mxdValue2);
-	            break;
-	        case'!==':
-	            $blOut = ($mxdValue1 !== $mxdValue2);
-	            break;
-	        case'==':
-	            $blOut = ($mxdValue1 == $mxdValue2 || ($mxdValue1 == '' && $mxdValue2 === 'twst-undefined-variable') || ($mxdValue2 == '' && $mxdValue1 === 'twst-undefined-variable'));
-	            break;
-	        case'<':
-	            $blOut = ($mxdValue1 < $mxdValue2);
-	            break;
-	        case'>':
-	            $blOut = ($mxdValue1 > $mxdValue2);
-	            break;
-	        case'<=':
-	            $blOut = ($mxdValue1 <= $mxdValue2);
-	            break;
-	        case'>=':
-	            $blOut = ($mxdValue1 >= $mxdValue2);
-	            break;
-	        case'!=':
-	            $blOut = ($mxdValue1 != $mxdValue2);
-	            break;
-	        case'*':
-	            $blOut = in_array($mxdValue2,$mxdValue1);
-	            break;
-	        case'^=':
-	            $blOut = (substr($mxdValue1,0,strlen($mxdValue2)) == $mxdValue2);
-	            break;
-	        case'*=':
-	            $blOut = (strpos($mxdValue1,$mxdValue2) !== false);
-	            break;
-	        case'$=':
-	            $blOut = (substr($mxdValue1,strlen($mxdValue1)-strlen($mxdValue2),strlen($mxdValue2)) == $mxdValue2);
-	            break;
-	    }
+		switch($strCondition){
+			case'===':
+				$blOut = ($mxdValue1 === $mxdValue2);
+				break;
+			case'!==':
+				$blOut = ($mxdValue1 !== $mxdValue2);
+				break;
+			case'==':
+				$blOut = ($mxdValue1 == $mxdValue2 || ($mxdValue1 == '' && $mxdValue2 === 'twst-undefined-variable') || ($mxdValue2 == '' && $mxdValue1 === 'twst-undefined-variable'));
+				break;
+			case'<':
+				$blOut = ($mxdValue1 < $mxdValue2);
+				break;
+			case'>':
+				$blOut = ($mxdValue1 > $mxdValue2);
+				break;
+			case'<=':
+				$blOut = ($mxdValue1 <= $mxdValue2);
+				break;
+			case'>=':
+				$blOut = ($mxdValue1 >= $mxdValue2);
+				break;
+			case'!=':
+				$blOut = ($mxdValue1 != $mxdValue2);
+				break;
+			case'*':
+				$blOut = in_array($mxdValue2,$mxdValue1);
+				break;
+			case'^=':
+				$blOut = (substr($mxdValue1,0,strlen($mxdValue2)) == $mxdValue2);
+				break;
+			case'*=':
+				$blOut = (strpos($mxdValue1,$mxdValue2) !== false);
+				break;
+			case'$=':
+				$blOut = (substr($mxdValue1,strlen($mxdValue1)-strlen($mxdValue2),strlen($mxdValue2)) == $mxdValue2);
+				break;
+		}
 
-	    return $blOut;
+		return $blOut;
 	}
 
 	/**
@@ -877,6 +877,18 @@ class View extends Base{
 			case'raw-post':
 
 				$arrResult = $this->processArrayItem($strReference,$_POST,$blReturnArray);
+
+				if($arrResult['status'] == true){
+					//Protect against XSS attacks
+					$arrResult['return'] = ($strType == 'raw-post') ? $arrResult['return'] : htmlspecialchars($arrResult['return']);
+					$strRawView = $this->replaceTag($strRawView,$strTag,$arrResult['return'],$strFunction,$arrResult['return_raw'],$arrParameters);
+				}
+				break;
+
+			case'request':
+			case'raw-request':
+
+				$arrResult = $this->processArrayItem($strReference,$_REQUEST,$blReturnArray);
 
 				if($arrResult['status'] == true){
 					//Protect against XSS attacks
@@ -1067,77 +1079,77 @@ class View extends Base{
 	 */
 	protected function replaceTag($strRawView,$strTag,$strData,$strFunction = null,$mxdRawData = array(),$arrParameters = array()){
 
-	    if(!is_null($strFunction)){
+		if(!is_null($strFunction)){
 
-	        $arrAllowedFunctions = array(
-	            'sha1','md5',
-	            'urlencode','urldecode',
-	            'base64_encode','base64_decode',
-	            'htmlentities','htmlspecialchars',
-	            'json_encode','json_decode',
-	            'strip_tags','nl2br',
-	            'addslashes','stripslashes',
-	            'count','round','ceil','floor','decimalise',
-	            'strlen','strtolower','strtoupper',
-	            'ucfirst','ucwords',
-	            'prettytime','bytestosize',
-	            'date',
-		        'syntaxhighlight'
-	        );
+			$arrAllowedFunctions = array(
+				'sha1','md5',
+				'urlencode','urldecode',
+				'base64_encode','base64_decode',
+				'htmlentities','htmlspecialchars',
+				'json_encode','json_decode',
+				'strip_tags','nl2br',
+				'addslashes','stripslashes',
+				'count','round','ceil','floor','decimalise',
+				'strlen','strtolower','strtoupper',
+				'ucfirst','ucwords',
+				'prettytime','bytestosize',
+				'date',
+				'syntaxhighlight'
+			);
 
-	        if(in_array($strFunction,$arrAllowedFunctions) || $strFunction == 'escape'){
+			if(in_array($strFunction,$arrAllowedFunctions) || $strFunction == 'escape'){
 
-	            if(in_array($strFunction,array('count','json_encode'))){
-	                //This is used when processing arrays
-	                $strData = call_user_func($strFunction,$mxdRawData);
-	            }elseif($strFunction == 'date'){
+				if(in_array($strFunction,array('count','json_encode'))){
+					//This is used when processing arrays
+					$strData = call_user_func($strFunction,$mxdRawData);
+				}elseif($strFunction == 'date'){
 
-	                $strDateFormat = 'Y-m-d H:i:s';
+					$strDateFormat = 'Y-m-d H:i:s';
 
-		            if(array_key_exists('format',$arrParameters)){
-			            $strDateFormat = $arrParameters['format'];
-		            }elseif(array_key_exists(0,$arrParameters)){
-			            $strDateFormat = $arrParameters[0];
-		            }elseif(count($arrParameters) == 1){
+					if(array_key_exists('format',$arrParameters)){
+						$strDateFormat = $arrParameters['format'];
+					}elseif(array_key_exists(0,$arrParameters)){
+						$strDateFormat = $arrParameters[0];
+					}elseif(count($arrParameters) == 1){
 						$strDateFormat = array_pop(array_keys($arrParameters));
 					}
 
-	                $strData = date($strDateFormat,strtotime($strData));
+					$strData = date($strDateFormat,strtotime($strData));
 
-	            }elseif($strFunction == 'decimalise'){
-		            $strData = number_format($strData,2,'.','');
-	            }elseif(function_exists($strFunction)){
-	                $strData = call_user_func($strFunction,$strData);
-	            }elseif($strFunction == 'escape'){
-	                $strData = htmlspecialchars($strData);
-	            }elseif($strFunction == 'prettytime'){
-	                $strData = \Twist::DateTime() -> getAge($strData);
-	            }elseif($strFunction == 'bytestosize'){
-	                $strData = \Twist::File() -> bytesToSize($strData);
-	            }elseif($strFunction == 'syntaxhighlight'){
+				}elseif($strFunction == 'decimalise'){
+					$strData = number_format($strData,2,'.','');
+				}elseif(function_exists($strFunction)){
+					$strData = call_user_func($strFunction,$strData);
+				}elseif($strFunction == 'escape'){
+					$strData = htmlspecialchars($strData);
+				}elseif($strFunction == 'prettytime'){
+					$strData = \Twist::DateTime() -> getAge($strData);
+				}elseif($strFunction == 'bytestosize'){
+					$strData = \Twist::File() -> bytesToSize($strData);
+				}elseif($strFunction == 'syntaxhighlight'){
 
-		            //Only allow raw code to be passed in to SyntaxHighlight::code (allowing a file path using SyntaxHighlight::file would be a potential security hole!)
-			        $strType = (array_key_exists('type',$arrParameters)) ? $arrParameters['type'] : 'plain';
-			        $strFocusLine = (array_key_exists('focus',$arrParameters)) ? $arrParameters['focus'] : null;
-			        $strFocusRange = (array_key_exists('range',$arrParameters)) ?$arrParameters['range'] : 3;
+					//Only allow raw code to be passed in to SyntaxHighlight::code (allowing a file path using SyntaxHighlight::file would be a potential security hole!)
+					$strType = (array_key_exists('type',$arrParameters)) ? $arrParameters['type'] : 'plain';
+					$strFocusLine = (array_key_exists('focus',$arrParameters)) ? $arrParameters['focus'] : null;
+					$strFocusRange = (array_key_exists('range',$arrParameters)) ?$arrParameters['range'] : 3;
 
-	                $strData = \Twist\Core\Models\String\SyntaxHighlight::code($strData,$strType,$strFocusLine,$strFocusRange);
-	            }
-	        }else{
-	            trigger_error(sprintf("Twist View: function '%s' is disabled",$strFunction),E_USER_NOTICE);
-	        }
-	    }
+					$strData = \Twist\Core\Models\String\SyntaxHighlight::code($strData,$strType,$strFocusLine,$strFocusRange);
+				}
+			}else{
+				trigger_error(sprintf("Twist View: function '%s' is disabled",$strFunction),E_USER_NOTICE);
+			}
+		}
 
-	    //Build the tag replace expression
-	    $strExpression = sprintf("{%s}",$strTag);
+		//Build the tag replace expression
+		$strExpression = sprintf("{%s}",$strTag);
 
-	    //If the expression is equal to the raw View return the data as is otherwise replace the tag with the value
-	    if($strExpression == $strRawView){
-	        $strRawView = $strData;
-	    }else{
-	        $strRawView = str_replace($strExpression,$strData,$strRawView);
-	    }
+		//If the expression is equal to the raw View return the data as is otherwise replace the tag with the value
+		if($strExpression == $strRawView){
+			$strRawView = $strData;
+		}else{
+			$strRawView = str_replace($strExpression,$strData,$strRawView);
+		}
 
-	    return $strRawView;
+		return $strRawView;
 	}
 }

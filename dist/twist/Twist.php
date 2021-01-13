@@ -26,6 +26,7 @@
 	use Twist\Classes\Error;
 	use \Twist\Core\Models\Protect\Firewall;
 	use Twist\Core\Helpers as Helpers;
+	use Twist\Core\Models\ScheduledTasks;
 
 	/**
 	 * Main functionality for the Framework, this main class is that gateway to makes it all possible to use the framework in a simple yet powerful way.
@@ -426,12 +427,12 @@
 		public static function sheduledtasks(){
 
 			//If the code has been run by commandline and has the URI of index.php/cron
-			if(php_sapi_name() == "cli" && getenv('twist_cron_child') > 0){
+			if(getenv('twist_cron_child') > 0){
 
 				Twist\Core\Models\ScheduledTasks::runTask(getenv('twist_cron_child'));
 				die();
 
-			}elseif(php_sapi_name() == "cli" && getenv('twist_cron') == 'on'){
+			}elseif(getenv('twist_cron') == 'on'){
 
 				Twist\Core\Models\ScheduledTasks::processor();
 				die();

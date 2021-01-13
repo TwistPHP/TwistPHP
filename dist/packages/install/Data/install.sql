@@ -102,6 +102,7 @@ CREATE TABLE /*TWIST_DATABASE_TABLE_PREFIX*/`scheduled_tasks` (
   `last_run` datetime DEFAULT NULL,
   `runtime` int(11) DEFAULT 0 COMMENT 'Run time in seconds',
   `status` enum('running','finished','zombie','new') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'new',
+  `pid` int(11) NOT NULL DEFAULT 0,
   `enabled` enum('1','0') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1 ;
@@ -110,10 +111,10 @@ CREATE TABLE /*TWIST_DATABASE_TABLE_PREFIX*/`scheduled_tasks` (
 -- Dumping data for table `twist_scheduled_tasks`
 --
 
-INSERT INTO /*TWIST_DATABASE_TABLE_PREFIX*/`scheduled_tasks` (`id`, `description`, `package_slug`, `frequency`, `command`, `history`, `email`, `last_run`, `runtime`, `status`, `enabled`) VALUES
-(NULL, 'Twist: Cache Cleaner', 'twist', '15', 'twist/Core/Crons/CacheCleaner.cron.php', 0, '', NULL, 0, 'new', '1'),
-(NULL, 'TwistProtect: Scan code for changes and hacks', 'twist', '240', 'twist/Core/Crons/ProtectScanner.cron.php', 0, '', NULL, 0, 'new', '1'),
-(NULL, 'TwistProtect: Update Firewall Restrictions', 'twist', '60', 'twist/Core/Crons/ProtectFirewall.cron.php', 12, '', NULL, 0, 'new', '1');
+INSERT INTO /*TWIST_DATABASE_TABLE_PREFIX*/`scheduled_tasks` (`id`, `description`, `package_slug`, `frequency`, `command`, `history`, `email`, `last_run`, `runtime`, `status`, `pid`, `enabled`) VALUES
+(NULL, 'Twist: Cache Cleaner', 'twist', '15', 'twist/Core/Crons/CacheCleaner.cron.php', 0, '', NULL, 0, 'new', 0, '1'),
+(NULL, 'TwistProtect: Scan code for changes and hacks', 'twist', '240', 'twist/Core/Crons/ProtectScanner.cron.php', 0, '', NULL, 0, 'new', 0, '1'),
+(NULL, 'TwistProtect: Update Firewall Restrictions', 'twist', '60', 'twist/Core/Crons/ProtectFirewall.cron.php', 12, '', NULL, 0, 'new', 0, '1');
 
 
 -- --------------------------------------------------------
@@ -215,8 +216,9 @@ CREATE TABLE IF NOT EXISTS /*TWIST_DATABASE_TABLE_PREFIX*/`user_groups` (
   `slug` char(64) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` text COLLATE utf8mb4_unicode_ci COMMENT 'Description of user groups',
   `min_level` int(11) NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Groupd for users' AUTO_INCREMENT=1 ;
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `slug` (`slug`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Groups for users' AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 

@@ -229,13 +229,13 @@
 		 * @alias find
 		 * @return array Multi-dimensional array of database records/rows
 		 */
-		public function all(){
-			return $this->find();
+		public function all($strOrderBy = null,$strDirection = 'ASC'){
+			return $this->find(null,null, $strOrderBy,$strDirection);
 		}
 
 		/**
 		 * Dynamically build a where clause that will be used to get, search and delete records form the database.
-		 * The where clause contains a single parameter and can be a IS, LIKE, Equals or an IN statement.
+		 * The where clause contains a single parameter and can be a LIKE, Equals or an IN statement.
 		 * @param null|string|array $mxdValue Value(s) to filter by
 		 * @param null|string $strField Field to be filtered
 		 * @return string Formatted where clause that can be used from the query methods in this model
@@ -244,7 +244,7 @@
 
 			$strWhereClause = '';
 
-			if(!is_null($mxdValue) || (is_null($mxdValue) && !is_null($strField))){
+			if(!is_null($mxdValue)){
 
 				if(is_array($mxdValue)){
 
@@ -257,17 +257,11 @@
 
 				}else{
 
-					if(is_null($mxdValue)){
-						$strWhereClause = sprintf(" WHERE `%s` IS NULL",
-							\Twist::Database()->escapeString($strField)
-						);
-					}else{
-						$strWhereClause = sprintf(" WHERE `%s` %s '%s'",
-							\Twist::Database()->escapeString($strField),
-							(strstr($mxdValue,'%')) ? 'LIKE' : '=',
-							\Twist::Database()->escapeString($mxdValue)
-						);
-					}
+					$strWhereClause = sprintf(" WHERE `%s` %s '%s'",
+						\Twist::Database()->escapeString($strField),
+						(strstr($mxdValue,'%')) ? 'LIKE' : '=',
+						\Twist::Database()->escapeString($mxdValue)
+					);
 				}
 			}
 

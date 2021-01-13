@@ -29,12 +29,43 @@ namespace Twist\Core\Helpers;
  */
 class Email extends Base{
 
+	/**
+	 * Get an email object to custom create an outgoing email, add attachments, parse HTML bodies, base64 encode etc
+	 * @return \Twist\Core\Models\Email\Create
+	 */
 	public function create(){
 		return new \Twist\Core\Models\Email\Create();
 	}
 
-	public function parseSource($strEmailSource){
+	/**
+	 * Quick send, use this option to send an email with the basic 4 parameters to, subject, body, form. By default a HTML body is expected
+	 * @param $strToAddress
+	 * @param $strSubject
+	 * @param $strBody
+	 * @param $strFromAddress
+	 * @param bool $blBodyIsHTML
+	 * @return bool
+	 * @throws \Exception
+	 */
+	public function send($strToAddress, $strSubject, $strBody, $strFromAddress,$blBodyIsHTML = true){
+
+		$resEmail = self::create();
+
+		$resEmail->addTo($strToAddress);
+		$resEmail->setFrom($strFromAddress);
+		$resEmail->setSubject($strSubject);
+
+		if($blBodyIsHTML){
+			$resEmail->setBodyHTML($strBody);
+		}else{
+			$resEmail->setBodyPlain($strBody);
+		}
+
+		return $resEmail->send(true);
+	}
+
+	public function parseSource($strEmailSource,$blShowHeaders = false){
 		$resSourceParser = new \Twist\Core\Models\Email\SourceParser();
-		return $resSourceParser->processEmailSource($strEmailSource);
+		return $resSourceParser->processEmailSource($strEmailSource,$blShowHeaders);
 	}
 }

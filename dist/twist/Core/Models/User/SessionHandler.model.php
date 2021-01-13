@@ -30,6 +30,7 @@ class SessionHandler{
 	protected $intSessionLife = 604800;
 	protected $intDeviceLife = 31536000;
 	protected $blNewDeviceCreated = false;
+	protected $strDebugLog = '';
 
 	/**
 	 * Set the device cookie life in seconds (Default: 31536000 == 1 year)
@@ -327,8 +328,12 @@ class SessionHandler{
 		return $this->validateSessionKey($strSessionKey,false,$blUpdateKey);
 	}
 
-	public function debug($strMessage){
-		//file_put_contents(sprintf('%s/user.log',TWIST_DOCUMENT_ROOT),$strMessage."\n",FILE_APPEND);
+	public function debug($strMessage = null){
+		if(!is_null($strMessage)){
+			//$this->strDebugLog .= $strMessage;
+			//file_put_contents(sprintf('%s/user.log',TWIST_DOCUMENT_ROOT),$strMessage."\n",FILE_APPEND);
+		}
+		return $this->strDebugLog;
 	}
 
 	protected function validateSessionKey($strSessionKey,$blRemember = false,$blUpdateKey = true){

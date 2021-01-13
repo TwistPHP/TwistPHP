@@ -16,6 +16,7 @@
     DirectoryIndex {setting:HTACCESS_DIRECTORY_INDEX}
 
     RewriteEngine on
+    RewriteBase {setting:SITE_BASE_URI==''?'/':setting:SITE_BASE_URI}
 
     # Custom HTAccess rules that have been setup in the manager
     {setting:HTACCESS_CUSTOM}

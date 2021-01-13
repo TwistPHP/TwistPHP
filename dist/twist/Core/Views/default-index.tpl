@@ -16,6 +16,9 @@
 
 	require_once '{data:framework_path}framework.php';
 
+	//Set the base URI for the framework install
+    Twist::Route()->baseURI(\Twist::framework()->setting('SITE_BASE_URI'));
+
     //Register the framework manager
     Twist::Route()->manager('/manager');
 

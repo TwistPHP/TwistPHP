@@ -112,7 +112,7 @@
 			}
 
 			$strGeneral = '';
-			$arrTags = array('settings' => '');
+			$arrTags = array('settings' => '','tabs' => '','tob_content' => '');
 			foreach($arrOption as $strKey => $arrList){
 
 				if($arrList['count'] == 1){

@@ -41,8 +41,8 @@
 
 			$this->meta()->title('TwistPHP Manager');
 			$this->meta()->robots('noindex,nofollow');
-			$this->meta()->css(rtrim(\Twist::Route()->baseURI(),'/').'/packages/manager/Resources/css/twistmanager.css');
-			$this->meta()->js(rtrim(\Twist::Route()->baseURI(),'/').'/packages/manager/Resources/js/twistmanager.js');
+			$this->meta()->css(rtrim(\Twist::Route()->baseURI(),'/').'/packages/manager/Resources/css/twistmanager.css',5);
+			$this->meta()->js(rtrim(\Twist::Route()->baseURI(),'/').'/packages/manager/Resources/js/twistmanager.js',5);
 
 			//Allow the manager to still be accessible even in maintenance mode
 			$this->bypassMaintenanceMode( '/%' );
@@ -75,8 +75,19 @@
 
 			if(count($arrCSSHooks)){
 				foreach($arrCSSHooks as $arrCSSFiles){
-					foreach($arrCSSFiles as $strCSSFile){
-						$this->meta()->css($strCSSFile);
+
+					$intOrder = null;
+					if(array_key_exists('files',$arrCSSFiles)){
+
+						if(array_key_exists('order',$arrCSSFiles)){
+							$intOrder = $arrCSSFiles['order'];
+						}
+
+						$arrCSSFiles = $arrCSSFiles['files'];
+					}
+
+					foreach($arrCSSFiles as $mxdCSSFile){
+						$this->meta()->css($mxdCSSFile,$intOrder);
 					}
 				}
 			}
@@ -86,8 +97,19 @@
 
 			if(count($arrJSHooks)){
 				foreach($arrJSHooks as $arrJSFiles){
-					foreach($arrJSFiles as $strJSFile){
-						$this->meta()->js($strJSFile);
+
+					$intOrder = null;
+					if(array_key_exists('files',$arrJSFiles)){
+
+						if(array_key_exists('order',$arrJSFiles)){
+							$intOrder = $arrJSFiles['order'];
+						}
+
+						$arrJSFiles = $arrJSFiles['files'];
+					}
+
+					foreach($arrJSFiles as $mxdJSFile){
+						$this->meta()->js($mxdJSFile,$intOrder);
 					}
 				}
 			}

@@ -44,6 +44,15 @@
     "options":"",
     "null":0
   },
+  "SITE_BASE_URI":{
+    "title":"Site Base URI",
+    "description":"Enter the base URI for the site, if you install twist in a folder you might want /admin e.g http://www.example.com/admin/index.php would be your main index",
+    "group":"Site",
+	"default":"/",
+    "type":"string",
+    "options":"",
+    "null":0
+  },
   "SITE_WWW":{
     "title":"Site Use WWW",
     "description":"Redirect the user to WWW. if they are not already on that sub-domain. Also used when building the full site URL",
@@ -123,6 +132,15 @@
 	"default":"YahooAPIs",
     "type":"options",
     "options":"WebserviceX.net,YahooAPIs",
+    "null":0
+  },
+  "PHP_BIN":{
+    "title":"PHP Bin",
+    "description":"Set the bin for PHP, normally this is just PHP but some systems have paths and options",
+    "group":"System",
+    "default":"php",
+    "type":"string",
+    "options":"",
     "null":0
   },
   "ERROR_LOG":{

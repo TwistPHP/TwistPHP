@@ -274,7 +274,7 @@
 		 * @param string $strChildrenKey
 		 * @return array
 		 */
-		public function arrayRelationalTree( $arrStructure, $strIDField = 'id', $strParentIDField = 'parent_id', $strChildrenKey = 'children' ) {
+		public function arrayRelationalTree( $arrStructure, $strIDField = 'id', $strParentIDField = 'parent_id', $strChildrenKey = 'children') {
 
 			$arrTree = array();
 
@@ -361,7 +361,7 @@
 			}
 
 			//Start processing the traversal
-			$urlCurrentURI = trim( $urlCurrentURI, '/' );
+			$urlCurrentURI = ltrim( $urlCurrentURI, '/' );
 			$urlOut = rtrim( $urlRelativePath, '/' );
 
 			if( substr( $urlRelativePath, 0, 2 ) === './' ) {

@@ -5,15 +5,12 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
 	<script>
 		window.TwistManagerAjaxURL = '{route:base_uri}/ajax';
 	</script>
 
-	{resource:ajax}
 	{meta:tags}
+	{resource:ajax}
 
 	<!--================================ LINKED DOCUMENTS ================================-->
 	<link rel="shortcut icon" type="image/x-icon" href="{core:logo-favicon}">

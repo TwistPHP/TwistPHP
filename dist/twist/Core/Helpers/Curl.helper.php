@@ -31,6 +31,7 @@
 
 		protected $blResponseJSON = false;
 		protected $blDisableUrlEncoding = false;
+		protected $strAcceptEncoding = null;
 		protected $blVerifySSLRequest = false;
         protected $blNoBody = false;
         protected $blFollowRedirects = false;
@@ -65,6 +66,15 @@
 		 */
 		public function disableUrlEncoding($blEnable = true){
 			$this->blDisableUrlEncoding = $blEnable;
+		}
+
+		/**
+		 * Determine if CURL is going to accept encoded requests
+		 *
+		 * @param $strAcceptEncoding Leave blank for all, otherwise pass in "identity", "deflate", and "gzip", null to disable
+		 */
+		public function acceptEncoding($strAcceptEncoding = ''){
+			$this->strAcceptEncoding = $strAcceptEncoding;
 		}
 
 		/**
@@ -354,7 +364,12 @@
 
             curl_setopt($resCurl, CURLOPT_NOBODY, ($this->blNoBody) ? 1 : 0);
             curl_setopt($resCurl, CURLOPT_FOLLOWLOCATION, ($this->blFollowRedirects) ? 1 : 0);
+            curl_setopt($resCurl, CURLOPT_MAXREDIRS, 10);
 			curl_setopt($resCurl, CURLOPT_FAILONERROR, ($this->blFailOnError) ? 1 : 0);
+
+			if(!is_null($this->strAcceptEncoding)){
+				curl_setopt($resCurl, CURLOPT_ENCODING, $this->strAcceptEncoding);
+			}
 
 			//Set the other data
 			curl_setopt($resCurl, CURLOPT_RETURNTRANSFER, 1);

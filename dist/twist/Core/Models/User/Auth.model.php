@@ -101,6 +101,10 @@ class Auth{
 					$objSession->data('user-surname',$arrUserData['surname']);
 				}
 
+				$resResult = \Twist::Database()->query("SELECT * FROM `%suser_groups` WHERE `id` IN (SELECT `group_id` FROM `%suser_group_members` WHERE `user_id` = %d)",TWIST_DATABASE_TABLE_PREFIX,TWIST_DATABASE_TABLE_PREFIX,$intUserID);
+				$arrUserGroups = $resResult->rows();
+				$objSession->data('user-groups',$arrUserGroups);
+
 				self::$arrCurrentSession['status'] = true;
 				self::$arrCurrentSession['session_key'] = $strSessionKey;
 				self::$arrCurrentSession['user_id'] = $intUserID;
@@ -111,6 +115,7 @@ class Auth{
 					'enabled' => $objSession->data('user-id'),
 					'verified' => $objSession->data('user-id'),
 					'level' => $objSession->data('user-level'),
+					'groups' => $objSession->data('user-groups'),
 					'temp_password' => $objSession->data('user-temp_password'),
 					'firstname' => $objSession->data('user-firstname'),
 					'surname' => $objSession->data('user-surname'),
@@ -165,6 +170,7 @@ class Auth{
 			$objSession->data('user-id',self::$arrCurrentSession['user_id']);
 			$objSession->data('user-uid',self::$arrCurrentSession['user_uid']);
 			$objSession->data('user-level',self::$arrCurrentSession['user_data']['level']);
+			$objSession->data('user-groups',self::$arrCurrentSession['user_data']['groups']);
 			$objSession->data('user-email',self::$arrCurrentSession['user_data']['email']);
 			$objSession->data('user-enabled',self::$arrCurrentSession['user_data']['enabled']);
 			$objSession->data('user-verified',self::$arrCurrentSession['user_data']['verified']);
@@ -227,6 +233,9 @@ class Auth{
 
 								//But we do want to save the email address (don't return it in the SQL as it is more secure not to return both email and password in at together)
 								$arrUserData['email'] = $strEmail;
+
+								$resResult = \Twist::Database()->query("SELECT * FROM `%suser_groups` WHERE `id` IN (SELECT `group_id` FROM `%suser_group_members` WHERE `user_id` = %d)",TWIST_DATABASE_TABLE_PREFIX,TWIST_DATABASE_TABLE_PREFIX,$arrUserData['id']);
+								$arrUserData['groups'] = $resResult->rows();
 
 								self::$arrCurrentSession['status'] = true;
 								self::$arrCurrentSession['user_id'] = $arrUserData['id'];

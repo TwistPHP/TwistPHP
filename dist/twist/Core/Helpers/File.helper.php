@@ -199,7 +199,9 @@ class File extends Base{
 
 				$arrOut = $mxdData['extensions'][$strFileExtension];
 				$arrOut['icon'] = sprintf('/%sCore/Resources/%s',ltrim(TWIST_FRAMEWORK_URI,'/'),$mxdData['icon']);
-				$arrOut['name'] = $mxdData['name'];
+				$arrOut['extensions'] = $strFileExtension;
+				$arrOut['type'] = $mxdData['name'];
+				$arrOut['group'] = $strType;
 				break;
 			}
 		}
@@ -207,6 +209,30 @@ class File extends Base{
 		return $arrOut;
 	}
 
+	/**
+	 * Get the Mime Type info by Mime Type
+	 * @param $strMimeType
+	 * @return array|mixed
+	 */
+	public function mimeTypeInfoByMime($strMimeType){
+
+		$arrOut = array();
+		foreach($this->arrContentTypes as $strType => $mxdData){
+			foreach($mxdData as $strFileExtension => $mxdMimeData){
+				if($mxdMimeData['mine'] === $strMimeType){
+
+					$arrOut = $mxdMimeData;
+					$arrOut['icon'] = sprintf('/%sCore/Resources/%s',ltrim(TWIST_FRAMEWORK_URI,'/'),$mxdData['icon']);
+					$arrOut['extensions'] = $strFileExtension;
+					$arrOut['type'] = $mxdData['name'];
+					$arrOut['group'] = $strType;
+					break;
+				}
+			}
+		}
+
+		return $arrOut;
+	}
 	/**
 	 * Get all mime type information or mime type for a selected type i.e document, spreadsheet, archive
 	 * @param null $strType
@@ -306,14 +332,14 @@ class File extends Base{
 					$strFileBase = $this->sanitizeName($strFileBase);
 				}
 
-                if(is_null($strMimeType)){
-                    //Only set these headers if we are forcing a download
-                    header("Content-Transfer-Encoding: binary");
-                    header('Content-Description: File Transfer');
-                    header('Content-Disposition: attachment; filename='.$strFileBase);
-                }else{
-                    header('Content-Disposition: inline; filename='.$strFileBase);
-                }
+				if(is_null($strMimeType)){
+					//Only set these headers if we are forcing a download
+					header("Content-Transfer-Encoding: binary");
+					header('Content-Description: File Transfer');
+					header('Content-Disposition: attachment; filename='.$strFileBase);
+				}else{
+					header('Content-Disposition: inline; filename='.$strFileBase);
+				}
 
 				header("Content-Length: ".filesize($strFile));
 
@@ -989,7 +1015,8 @@ class File extends Base{
 			'dragdrop' => 'null',
 			'accept' => '',
 			'value' => '',
-			'preload' => '[]'
+			'preload' => '[]',
+			'oncompletefile' => 'null'
 		);
 
 		if(array_key_exists('multiple', $arrParameters) && $arrParameters['multiple'] !== false) {
@@ -997,6 +1024,10 @@ class File extends Base{
 		}
 
 		$arrParameters = \Twist::framework()->tools()->arrayMergeRecursive($arrDefaultParams,$arrParameters);
+
+		if(!is_null($arrParameters['dragdrop'])){
+			$arrParameters['dragdrop'] = '"'.$arrParameters['dragdrop'].'"';
+		}
 
 		//Now update the URI if only relative is passed in
 		if(substr($arrParameters['uri'],0,1) != '/'){
@@ -1028,6 +1059,13 @@ class File extends Base{
 			}
 		}
 
+		if(array_key_exists('oncompletefile',$arrParameters) && $arrParameters['oncompletefile'] !== 'null'){
+			$strFunction = $arrParameters['oncompletefile'];
+			$arrParameters['oncompletefile'] = ",\n\t\toncompletefile:function(event,file){ {$strFunction}(event,file); }";
+		}else{
+			$arrParameters['oncompletefile'] = '';
+		}
+
 		switch($strReference){
 
 			case 'upload':
@@ -1044,7 +1082,8 @@ class File extends Base{
 					'acceptTypes' => json_encode($strAcceptTypes),
 					'acceptExtensions' => json_encode($strAcceptExtensions),
 					'value' => $arrParameters['value'],
-					'preload' => $arrParameters['preload']
+					'preload' => $arrParameters['preload'],
+					'oncompletefile' => $arrParameters['oncompletefile']
 				);
 
 				//Store a temp session for js output
@@ -1067,7 +1106,8 @@ class File extends Base{
 					'acceptTypes' => json_encode($strAcceptTypes),
 					'acceptExtensions' => json_encode($strAcceptExtensions),
 					'value' => $arrParameters['value'],
-					'preload' => $arrParameters['preload']
+					'preload' => $arrParameters['preload'],
+					'oncompletefile' => $arrParameters['oncompletefile']
 				);
 
 				//Store a temp session for js output
