@@ -41,8 +41,8 @@ class Email extends PHPUnitSupport{
 
 		$arrEmailData = \Twist::Email()->parseSource(self::$arrSource['raw']);
 
-		$this->assertEquals('travisci2@unit-test-twistphp.com',$arrEmailData['to']);
-		$this->assertEquals('travisci@unit-test-twistphp.com',$arrEmailData['from']);
+		$this->assertEquals('travisci2@unit-test-twistphp.com',$arrEmailData['to'][0]['email']);
+		$this->assertEquals('travisci@unit-test-twistphp.com',$arrEmailData['from']['email']);
 		$this->assertEquals('A test email',$arrEmailData['subject']);
 		
 		$this->assertTrue(count($arrEmailData['attachments']) > 0);
