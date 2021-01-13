@@ -1,0 +1,75 @@
+/*!
+ * TwistPHP - An open source PHP MVC framework built from the ground up.
+ * Shadow Technologies Ltd.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
+ * @license    https://www.gnu.org/licenses/gpl.html GPL License
+ * @link       https://twistphp.com
+ *
+ * --------------
+ * TwistPHP Manager
+ * --------------
+ */
+
+$twistphp-green: #539F00;
+$twistphp-black: #212121;
+$twistphp-dark-grey: #424242;
+$twistphp-grey: #727272;
+$twistphp-light-grey: #BDBDBD;
+$twistphp-really-light-grey: #EEE;
+
+$tablet: 640px;
+$desktop: 1000px;
+$widescreen: 1280px;
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
+
+*, ::after, ::before {
+	box-sizing: border-box;
+}
+
+html {
+	font-family: sans-serif;
+	line-height: 1.15;
+	-webkit-text-size-adjust: 100%;
+	-ms-text-size-adjust: 100%;
+	-ms-overflow-style: scrollbar;
+	-webkit-tap-highlight-color: transparent;
+}
+
+body {
+	font-family: 'Open Sans',sans-serif;
+	font-size: 1rem;
+	font-weight: 400;
+	line-height: 1.5;
+	margin: 0;
+	text-align: left;
+	color: $twistphp-black;
+}
+
+.clear{
+	clear:both;
+}
+
+@import "mixins";
+@import "layout";
+@import "buttons";
+@import "forms";
+@import "lists";
+@import "progress";
+@import "tabs";
+@import "modal";
+@import "print";

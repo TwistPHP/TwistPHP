@@ -2,7 +2,7 @@
 
 	/**
 	 * TwistPHP - An open source PHP MVC framework built from the ground up.
-	 * Copyright (C) 2016  Shadow Technologies Ltd.
+	 * Shadow Technologies Ltd.
 	 *
 	 * This program is free software: you can redistribute it and/or modify
 	 * it under the terms of the GNU General Public License as published by
@@ -21,156 +21,13 @@
 	 * @license    https://www.gnu.org/licenses/gpl.html GPL License
 	 * @link       https://twistphp.com
 	 */
-	
+
 	namespace Twist\Core\Models;
-	
+
 	/**
 	 * Handle all package/package related enquiries, for instance if you want to know if a package is installed or what version it is.
 	 */
 	class Install{
-		
-		/**
-		 * Install/Configure the framework, this is required before the framework will function
-		 * @param array $arrConfiguration
-		 * @return string
-		 */
-		public static function framework($arrConfiguration){
-
-			//Create all the required folders for twist
-			$strApplicationPath = sprintf('%s%s/',$arrConfiguration['settings']['relative_path'],$arrConfiguration['settings']['app_path']);
-
-			$resFile = \Twist::File();
-			$resFile->recursiveCreate(sprintf('%s%s',$arrConfiguration['settings']['relative_path'],$arrConfiguration['settings']['packages_path']));
-			$resFile->recursiveCreate(sprintf('%s%s',$arrConfiguration['settings']['relative_path'],$arrConfiguration['settings']['uploads_path']));
-			$resFile->recursiveCreate(sprintf('%sAssets',$strApplicationPath));
-			$resFile->recursiveCreate(sprintf('%sCache',$strApplicationPath));
-			$resFile->recursiveCreate(sprintf('%sConfig',$strApplicationPath));
-			$resFile->recursiveCreate(sprintf('%sControllers',$strApplicationPath));
-			$resFile->recursiveCreate(sprintf('%sLogs',$strApplicationPath));
-			$resFile->recursiveCreate(sprintf('%sModels',$strApplicationPath));
-			$resFile->recursiveCreate(sprintf('%sResources',$strApplicationPath));
-			$resFile->recursiveCreate(sprintf('%sResources/css',$strApplicationPath));
-			$resFile->recursiveCreate(sprintf('%sResources/fonts',$strApplicationPath));
-			$resFile->recursiveCreate(sprintf('%sResources/images',$strApplicationPath));
-			$resFile->recursiveCreate(sprintf('%sResources/js',$strApplicationPath));
-			$resFile->recursiveCreate(sprintf('%sViews',$strApplicationPath));
-			$resFile->recursiveCreate(sprintf('%sTwist',$strApplicationPath));
-			$resFile->recursiveCreate(sprintf('%sPackages',$strApplicationPath));
-
-			self::secureAppFolder($strApplicationPath);
-
-			//Create the config in the apps/config folder
-			$arrConfigTags = array(
-				'account_token' => '',
-				'licence_key' => '',
-				'database_protocol' => $arrConfiguration['database']['protocol'],
-				'database_server' => $arrConfiguration['database']['host'],
-				'database_username' => $arrConfiguration['database']['username'],
-				'database_password' => $arrConfiguration['database']['password'],
-				'database_name' => $arrConfiguration['database']['name'],
-				'database_table_prefix' => $arrConfiguration['database']['table_prefix'],
-			);
-
-			file_put_contents(sprintf('%sConfig/config.php',$strApplicationPath),\Twist::View()->build(sprintf('%s/default-config.tpl',TWIST_FRAMEWORK_VIEWS),$arrConfigTags));
-
-			\Twist::define('_TWIST_PUBLIC_ROOT',TWIST_DOCUMENT_ROOT.'/'.$arrConfiguration['settings']['site_root']);
-
-			\Twist::define('_TWIST_APP',TWIST_DOCUMENT_ROOT.'/'.$arrConfiguration['settings']['app_path']);
-			\Twist::define('_TWIST_APP_CONFIG',_TWIST_APP.'/Config/');
-			\Twist::define('_TWIST_PACKAGES',TWIST_DOCUMENT_ROOT.'/'.$arrConfiguration['settings']['packages_path']);
-			\Twist::define('_TWIST_UPLOADS',TWIST_DOCUMENT_ROOT.'/'.$arrConfiguration['settings']['uploads_path']);
-
-			if($arrConfiguration['database']['type'] === 'database'){
-
-				\Twist::Database()->connect(
-					$arrConfiguration['database']['host'],
-					$arrConfiguration['database']['username'],
-					$arrConfiguration['database']['password'],
-					$arrConfiguration['database']['name'],
-					$arrConfiguration['database']['protocol']
-				);
-
-				\Twist::define('TWIST_DATABASE_PROTOCOL',$arrConfiguration['database']['protocol']);
-				\Twist::define('TWIST_DATABASE_NAME',$arrConfiguration['database']['name']);
-				\Twist::define('TWIST_DATABASE_HOST',$arrConfiguration['database']['host']);
-				\Twist::define('TWIST_DATABASE_USERNAME',$arrConfiguration['database']['username']);
-				\Twist::define('TWIST_DATABASE_PASSWORD',$arrConfiguration['database']['password']);
-				\Twist::define('TWIST_DATABASE_TABLE_PREFIX',$arrConfiguration['database']['table_prefix']);
-
-				//Disable file config as we are using database
-				\Twist::framework()->settings()->fileConfigOverride(false);
-
-				self::importSQL(sprintf('%sinstall.sql',TWIST_FRAMEWORK_INSTALL));
-			}
-
-			//Update all the core settings, add to a file when no Database is being used
-			self::importSettings(sprintf('%ssettings.json',TWIST_FRAMEWORK_INSTALL));
-
-			//Add new settings to the chosen settings storage method
-			\Twist::framework()->setting('SITE_NAME',$arrConfiguration['settings']['site_name']);
-			\Twist::framework()->setting('SITE_HOST',$arrConfiguration['settings']['site_host']);
-			\Twist::framework()->setting('SITE_WWW',$arrConfiguration['settings']['site_www']);
-			\Twist::framework()->setting('SITE_PROTOCOL',$arrConfiguration['settings']['http_protocol']);
-			\Twist::framework()->setting('SITE_PROTOCOL_FORCE',$arrConfiguration['settings']['http_protocol_force']);
-			\Twist::framework()->setting('TIMEZONE',$arrConfiguration['settings']['timezone']);
-
-			//Create the level 0 user into the system - this will only occur is a database connection is present
-			if(array_key_exists('user',$arrConfiguration) && $arrConfiguration['database']['protocol'] != 'none'){
-
-				$objUser = \Twist::User()->create();
-
-				$objUser->firstname($arrConfiguration['user']['firstname']);
-				$objUser->surname($arrConfiguration['user']['lastname']);
-				$objUser->email($arrConfiguration['user']['email']);
-				$objUser->password($arrConfiguration['user']['password']);
-				$objUser->level(0);
-				$intUserID = $objUser->commit();
-			}
-
-			/**
-			 * Update the index.php file to be a TwistPHP index file
-			 */
-			$dirIndexFile = sprintf('%s/index.php',_TWIST_PUBLIC_ROOT);
-
-			if(file_exists($dirIndexFile)){
-				\Twist::File()->move($dirIndexFile,sprintf('%s/old-index.php',_TWIST_PUBLIC_ROOT));
-			}
-
-			//Later on we can add in example templates etc if required
-			$arrIndexTags = array(
-				'public_path' => rtrim(_TWIST_PUBLIC_ROOT,'/'),
-				'app_path' => _TWIST_APP,
-				'packages_path' => _TWIST_PACKAGES,
-				'uploads_path' => _TWIST_UPLOADS,
-				'framework_path' => TWIST_FRAMEWORK
-			);
-
-			file_put_contents($dirIndexFile,\Twist::View()->build(sprintf('%s/default-index.tpl',TWIST_FRAMEWORK_VIEWS),$arrIndexTags));
-
-			/**
-			 * Update the .htaccess file to be a TwistPHP htaccess file
-			 */
-			$dirHTaccessFile = sprintf('%s/.htaccess',_TWIST_PUBLIC_ROOT);
-			file_put_contents($dirHTaccessFile,\Twist::View()->build(sprintf('%s/default-htaccess.tpl',TWIST_FRAMEWORK_VIEWS),array('rewrite_rules' => '')));
-
-			return true;
-		}
-
-		/**
-		 * Secure the APP folder by placing .htaccess files in the correct locations. These files will block access to all apart from Resources and Assets.
-		 * @param string $dirAppFolder Path to the app folder
-		 */
-		public static function secureAppFolder($dirAppFolder){
-
-			$dirAppFolder = rtrim($dirAppFolder,'/');
-
-			//Deny access form all in the apps folder (two specific overrides are below)
-			file_put_contents(sprintf('%s/.htaccess',$dirAppFolder),"# Refuse direct access to all files and folders\nOrder deny,allow\nDeny from all\nAllow from 127.0.0.1");
-
-			//Allow access to the Assets and Resources folder
-			file_put_contents(sprintf('%s/Assets/.htaccess',$dirAppFolder),"# Allow direct access to Assets\nAllow from all");
-			file_put_contents(sprintf('%s/Resources/.htaccess',$dirAppFolder),"# Allow direct access to Resources\nAllow from all");
-		}
 
 		/**
 		 * Install a package, this is required before a package can be run by the framework
@@ -259,20 +116,29 @@
 		/**
 		 * Install any framework settings that are required by the core.
 		 * @param string $dirSettingsJSON
+		 * @param string $strPackage
 		 * @throws \Exception
 		 */
-		public static function importSettings($dirSettingsJSON){
+		public static function importSettings($dirSettingsJSON,$strPackage = 'core'){
 
 			if(file_exists($dirSettingsJSON)){
 
 				$arrSettings = json_decode(file_get_contents($dirSettingsJSON),true);
 				if(count($arrSettings)){
 
+					$arrCoreSettings = array();
+					$arrAllSettings = \Twist::framework()->settings()->arrSettingsInfo;
+					foreach($arrAllSettings as $arrEachSetting){
+						if(array_key_exists('package',$arrEachSetting) && $arrEachSetting['package'] == $strPackage){
+							$arrCoreSettings[$arrEachSetting['key']] = $arrEachSetting;
+						}
+					}
+
 					foreach($arrSettings as $strKey => $arrOptions){
 
 						\Twist::framework()->settings()->install(
-							'core',
-							'core',
+							$strPackage,
+							$arrOptions['group'],
 							$strKey,
 							$arrOptions['default'],
 							$arrOptions['title'],
@@ -282,6 +148,13 @@
 							$arrOptions['options'],
 							$arrOptions['null']
 						);
+
+						unset($arrCoreSettings[$strKey]);
+					}
+
+					//Remove the old settings
+					foreach($arrCoreSettings as $arrEachSettings){
+						self::removeSettings($arrEachSettings['package'],$arrEachSettings['key']);
 					}
 				}
 			}
@@ -289,11 +162,10 @@
 
 		/**
 		 * Remove settings from the framework, these settings can be package or code settings
-		 * @param string $strSlug
-		 * @param string $strType
+		 * @param string $strPackage
 		 * @param null $strKey to remove a single settings only pass its key
 		 */
-		public static function removeSettings($strSlug,$strType,$strKey = null){
-			\Twist::framework()->settings()->uninstall($strSlug,$strType,$strKey);
+		public static function removeSettings($strPackage,$strKey = null){
+			\Twist::framework()->settings()->uninstall($strPackage,$strKey);
 		}
 	}

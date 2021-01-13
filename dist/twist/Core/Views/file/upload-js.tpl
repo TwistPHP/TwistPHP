@@ -1,1 +1,1 @@
-{data:include-js==1?resource:twist/fileupload:''}
+{data:include-js==1?resource:fileupload:''}

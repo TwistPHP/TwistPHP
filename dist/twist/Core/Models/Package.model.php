@@ -2,7 +2,7 @@
 
 	/**
 	 * TwistPHP - An open source PHP MVC framework built from the ground up.
-	 * Copyright (C) 2016  Shadow Technologies Ltd.
+	 * Shadow Technologies Ltd.
 	 *
 	 * This program is free software: you can redistribute it and/or modify
 	 * it under the terms of the GNU General Public License as published by
@@ -85,7 +85,7 @@
 									'slug' => $strPackageSlug,
 									'name' => $arrDetails['name'],
 									'version' => $arrDetails['version'],
-									'key' => $arrDetails['key'],
+									'key' => (array_key_exists('key',$arrDetails)) ? $arrDetails['key'] : '',
 									'folder' => basename($dirPackage),
 									'package' => 1,
 									'details' => $arrDetails
@@ -146,7 +146,7 @@
 			$arrPackages = array();
 			$strLocalPackage = sprintf('%s/%s.zip',TWIST_PACKAGES,$strPackageKey);
 
-			$arrResult = \Twist::File()->download(sprintf('https://twistphp.com/packages/download?key=%s',$strPackageKey),$strLocalPackage);
+			$arrResult = \Twist::File()->download(sprintf('https://twistphp.com/packages/api/download/%s',$strPackageKey),$strLocalPackage);
 
 			if($arrResult['status'] && $arrResult['content-length'] > 0){
 
@@ -297,12 +297,12 @@
 
 				$dirInstallFile = $arrBacktrace[0]['file'];
 				$dirPackage = dirname($dirInstallFile);
-				$strSlug = strtolower(basename($dirPackage)); //TODO: Remove?
+				$strPackage = strtolower(basename($dirPackage));
 
 				//Install the SQL tables when required
 				$dirSettingsJSON = (!file_exists($dirSettingsJSON)) ? sprintf('%s/%s', $dirPackage, $dirSettingsJSON) : $dirSettingsJSON;
 
-				Install::importSettings($dirSettingsJSON);
+				Install::importSettings($dirSettingsJSON,$strPackage);
 			}
 		}
 
@@ -316,9 +316,9 @@
 
 				$dirInstallFile = $arrBacktrace[0]['file'];
 				$dirPackage = dirname($dirInstallFile);
-				$strSlug = strtolower(basename($dirPackage));
+				$strPackage = strtolower(basename($dirPackage));
 
-				Install::removeSettings($strSlug,'package');
+				Install::removeSettings($strPackage);
 			}
 		}
 
@@ -370,7 +370,7 @@
 		}
 
 		/**
-		 * Check to see that a package is installed and usable, optional throw an exception of the package dosnt exist
+		 * Check to see that a package is installed and usable, optional throw an exception of the package doesn't exist
 		 * @param string $strPackageSlug
 		 * @param bool $blThrowException
 		 * @return bool

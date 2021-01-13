@@ -2,7 +2,7 @@
 
 	/**
 	 * TwistPHP - An open source PHP MVC framework built from the ground up.
-	 * Copyright (C) 2016  Shadow Technologies Ltd.
+	 * Shadow Technologies Ltd.
 	 *
 	 * This program is free software: you can redistribute it and/or modify
 	 * it under the terms of the GNU General Public License as published by
@@ -81,7 +81,7 @@
 
 			$mxdOut = array();
 
-			//Custom built as dosnt appear to be a natively supported command
+			//Custom built as doesn't appear to be a natively supported command
 			$strResponse = ftp_raw($this->resConnection,"FEAT");
 
 			if(preg_match('#^([0-9]{3})\s#',$strResponse,$arrMatches) && $arrMatches[0] == 211){

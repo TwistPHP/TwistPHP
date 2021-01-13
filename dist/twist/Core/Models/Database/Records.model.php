@@ -2,7 +2,7 @@
 
 	/**
 	 * TwistPHP - An open source PHP MVC framework built from the ground up.
-	 * Copyright (C) 2016  Shadow Technologies Ltd.
+	 * Shadow Technologies Ltd.
 	 *
 	 * This program is free software: you can redistribute it and/or modify
 	 * it under the terms of the GNU General Public License as published by
@@ -229,8 +229,8 @@
 		 * @alias find
 		 * @return array Multi-dimensional array of database records/rows
 		 */
-		public function all(){
-			return $this->find();
+		public function all($strOrderBy = null,$strDirection = 'ASC'){
+			return $this->find(null,null, $strOrderBy,$strDirection);
 		}
 
 		/**
@@ -250,9 +250,9 @@
 
 					array_walk( $mxdValue, array( \Twist::Database(), 'escapeString' ) );
 
-					$strWhereClause = sprintf(" WHERE `%s` IN (%s)",
+					$strWhereClause = sprintf(" WHERE `%s` IN ('%s')",
 						\Twist::Database()->escapeString($strField),
-						implode(',',$mxdValue)
+						implode("','",$mxdValue)
 					);
 
 				}else{

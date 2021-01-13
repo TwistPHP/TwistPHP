@@ -1,1 +1,0 @@
-<input type="color" name="{data:name}" value="{data:value}"{data:arttributes}>

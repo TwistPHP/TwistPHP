@@ -7,8 +7,8 @@
 	<label>Password</label>
 	<input type="password" name="password" placeholder="Password" tabindex="2">
 	<p><a href="{uri:./forgotten-password}">Forgotten your password?</a></p>
-	<label>Keep me logged in</label>
-	<input type="checkbox" name="remember" value="1" tabindex="3">
+	<label for="twist-login-form-remember">Keep me logged in</label>
+	<input id="twist-login-form-remember" type="checkbox" name="remember" value="1" tabindex="3">
 	<button type="submit" tabindex="4">Log In</button>
 	<div class="clear"></div>
 </form>

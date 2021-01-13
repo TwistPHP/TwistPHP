@@ -2,7 +2,7 @@
 
 	/**
 	 * TwistPHP - An open source PHP MVC framework built from the ground up.
-	 * Copyright (C) 2016  Shadow Technologies Ltd.
+	 * Shadow Technologies Ltd.
 	 *
 	 * This program is free software: you can redistribute it and/or modify
 	 * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 	namespace Twist\Core\Models\Database;
 
 	/**
-	 * Object containing the results of a query run by the TwistPHP database utility. The object contains all the information from the query run including SQL the query itself.
+	 * Object containing the results of a query run by the TwistPHP database helper. The object contains all the information from the query run including SQL the query itself.
 	 */
 	class Result{
 

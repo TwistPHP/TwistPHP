@@ -2,7 +2,7 @@
 
 /**
  * TwistPHP - An open source PHP MVC framework built from the ground up.
- * Copyright (C) 2016  Shadow Technologies Ltd.
+ * Shadow Technologies Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,8 +66,8 @@ class Autoload{
 				$strFile .= '.controller.php';
 			}elseif(strstr($strRequest,'\\Models\\')){
 				$strFile .= '.model.php';
-			}elseif(strstr($strRequest,'\\Utilities\\')){
-				$strFile .= '.utility.php';
+			}elseif(strstr($strRequest,'\\Helpers\\')){
+				$strFile .= '.helper.php';
 			}else{
 				$strFile .= '.php';
 			}

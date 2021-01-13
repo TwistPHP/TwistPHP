@@ -2,7 +2,7 @@
 
 	/**
 	 * TwistPHP - An open source PHP MVC framework built from the ground up.
-	 * Copyright (C) 2016  Shadow Technologies Ltd.
+	 * Shadow Technologies Ltd.
 	 *
 	 * This program is free software: you can redistribute it and/or modify
 	 * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,6 @@
 	 */
 
 	namespace Twist\Core\Models\User;
-	use Twist\Core\Models\User\Auth;
 	use Twist\Core\Models\Database\Record;
 
 	class User{
@@ -41,7 +40,14 @@
 		protected $blOverrideSendPasswordEmail = false;
 
 		private $strTempPassword = null;
+		private $blPreventEmail = false;
 
+		/**
+		 * User constructor.
+		 *
+		 * @param Record $resDatabaseRecord
+		 * @param        $resParentClass
+		 */
 		public function __construct(Record $resDatabaseRecord,$resParentClass){
 			$this->resParentClass = $resParentClass;
 			$this->resDatabaseRecord = $resDatabaseRecord;
@@ -263,6 +269,27 @@
 			return (is_null($intLevel)) ? $this->resDatabaseRecord->get('level') : $this->resDatabaseRecord->set('level',$intLevel);
 		}
 
+		/**
+		 * Get array of all the groups the user is a member of
+		 * @return array
+		 * @throws \Exception
+		 */
+		public function groups(){
+			$resResult = \Twist::Database()->query("SELECT * FROM `%suser_groups` WHERE `id` IN (SELECT `group_id` FROM `%suser_group_members` WHERE `user_id` = %d)",TWIST_DATABASE_TABLE_PREFIX,TWIST_DATABASE_TABLE_PREFIX,$this->id());
+			return $resResult->rows();
+		}
+
+		public function joinGroup($intGroupID){
+			$resGroup = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'user_group_members')->create();
+			$resGroup->set('user_id',$this->id());
+			$resGroup->set('group_id',$intGroupID);
+			$resGroup->commit();
+		}
+
+		public function leaveGroup($intGroupID){
+			return \Twist::Database()->query("DELETE FROM `%suser_group_members` WHERE `group_id` = %d AND `user_id` = %d",TWIST_DATABASE_TABLE_PREFIX,$intGroupID,$this->id());
+		}
+
 		public function enabled(){
 			return (bool) $this->resDatabaseRecord->get('enabled');
 		}
@@ -356,126 +383,62 @@
 			return $strPassword;
 		}
 
+		public function preventEmail($blPreventEmail = true){
+			$this->blPreventEmail = $blPreventEmail;
+		}
+
 		protected function sendPasswordEmail(){
 
-			$arrTags = array();
-			$strSiteName = \Twist::framework()->setting('SITE_NAME');
-			$strSiteHost = \Twist::framework()->setting('SITE_HOST');
-			$strLoginURL = $this->resParentClass->strLoginUrl;
+			if(!$this->blPreventEmail){
 
-			$strEmailSubject = (is_null($this->strTempPassword)) ? sprintf('%s: Password Updated',$strSiteName) : sprintf('%s: Password Reset',$strSiteName);
+				$arrTags = array();
+				$strSiteName = \Twist::framework()->setting('SITE_NAME');
+				$strSiteHost = \Twist::framework()->setting('SITE_HOST');
+				$strLoginURL = $this->resParentClass->strLoginUrl;
 
-			$resEmail = \Twist::Email()->create();
-			$resEmail->setSubject($strEmailSubject);
-			$resEmail->setFrom(sprintf('no-reply@%s',str_replace('www.','',$strSiteHost)));
-			$resEmail->setReplyTo(sprintf('no-reply@%s',str_replace('www.','',$strSiteHost)));
-			$resEmail->addTo($this->arrOriginalData['email']);
+				$strEmailSubject = (is_null($this->strTempPassword)) ? sprintf('%s: Password Updated',$strSiteName) : sprintf('%s: Password Reset',$strSiteName);
 
-			$arrTags['subject'] = $strEmailSubject;
-			$arrTags['firstname'] = $this->arrOriginalData['firstname'];
-			$arrTags['surname'] = $this->arrOriginalData['surname'];
-			$arrTags['email'] = $this->arrOriginalData['email'];
-			$arrTags['url'] = sprintf('%s://%s/%s',\Twist::framework()->setting('SITE_PROTOCOL'),$strSiteHost,ltrim($strLoginURL,'/'));
-			$arrTags['host'] = $strSiteHost;
-			$arrTags['password'] = $this->strTempPassword;
-			$arrTags['site_name'] = $strSiteName;
+				$resEmail = \Twist::Email()->create();
+				$resEmail->setSubject($strEmailSubject);
+				$resEmail->setFrom(sprintf('no-reply@%s',str_replace('www.','',$strSiteHost)));
+				$resEmail->setReplyTo(sprintf('no-reply@%s',str_replace('www.','',$strSiteHost)));
+				$resEmail->addTo($this->arrOriginalData['email']);
 
-			$strTemplate = (is_null($this->strTempPassword)) ? 'change-password-email.tpl' : 'forgotten-password-email.tpl';
+				$arrTags['subject'] = $strEmailSubject;
+				$arrTags['firstname'] = $this->arrOriginalData['firstname'];
+				$arrTags['surname'] = $this->arrOriginalData['surname'];
+				$arrTags['email'] = $this->arrOriginalData['email'];
+				$arrTags['url'] = sprintf('%s://%s/%s',\Twist::framework()->setting('SITE_PROTOCOL'),$strSiteHost,ltrim($strLoginURL,'/'));
+				$arrTags['host'] = $strSiteHost;
+				$arrTags['password'] = $this->strTempPassword;
+				$arrTags['site_name'] = $strSiteName;
 
-			$strData = \Twist::View()->build(sprintf('%suser/%s',TWIST_FRAMEWORK_VIEWS,$strTemplate),$arrTags);
+				$strTemplate = (is_null($this->strTempPassword)) ? 'change-password-email.tpl' : 'forgotten-password-email.tpl';
 
-			//Reset the temp password holder
-			$this->strTempPassword = null;
+				$strData = \Twist::View()->build(sprintf('%suser/%s',TWIST_FRAMEWORK_VIEWS,$strTemplate),$arrTags);
 
-			$resEmail->setBodyHTML($strData);
-			$resEmail->send();
+				//Reset the temp password holder
+				$this->strTempPassword = null;
+
+				$resEmail->setBodyHTML($strData);
+				$resEmail->send();
+			}
 		}
 
 		protected function sendWelcomeEmail(){
 
-			$strLoginURL = $this->resParentClass->strLoginUrl;
-
-			$strTempPass = (is_null($this->strTempPassword)) ? '[specified on registration]' : $this->strTempPassword;
-
-			$strSiteName = \Twist::framework()->setting('SITE_NAME');
-			$strSiteHost = \Twist::framework()->setting('SITE_HOST');
-
-			$resEmail = \Twist::Email()->create();
-
-			$strEmailSubject = sprintf('Welcome to %s',$strSiteName);
-
-			$resEmail->setSubject($strEmailSubject);
-			$resEmail->setFrom(sprintf('no-reply@%s',str_replace('www.','',$strSiteHost)));
-			$resEmail->setReplyTo(sprintf('no-reply@%s',str_replace('www.','',$strSiteHost)));
-			$resEmail->addTo($this->arrOriginalData['email']);
-
-			$arrTags = array();
-			$arrTags['subject'] = $strEmailSubject;
-			$arrTags['firstname'] = $this->arrOriginalData['firstname'];
-			$arrTags['surname'] = $this->arrOriginalData['surname'];
-			$arrTags['email'] = $this->arrOriginalData['email'];
-			$arrTags['url'] = sprintf('%s://%s/%s',\Twist::framework()->setting('SITE_PROTOCOL'),$strSiteHost,ltrim($strLoginURL,'/'));
-			$arrTags['host'] = $strSiteHost;
-			$arrTags['password'] = $strTempPass;
-			$arrTags['site_name'] = $strSiteName;
-
-			$arrTags['verification'] = '';
-
-			if(\Twist::framework()->setting('USER_EMAIL_VERIFICATION')){
-
-				if($this->resDatabaseRecord->get('verification_code') == ''){
-					$strVerificationCode = $this->requireVerification();
-					$this->resDatabaseRecord->commit();
-				}else{
-					$strVerificationCode = $this->resDatabaseRecord->get('verification_code');
-				}
-
-				$strVerificationString = $this->base64url_encode(sprintf("%s|%s",$this->arrOriginalData['email'],$strVerificationCode));
-				$strVerificationLink = sprintf('%s://%s/%s?verify=%s',\Twist::framework()->setting('SITE_PROTOCOL'),$strSiteHost,ltrim($strLoginURL,'/'),$strVerificationString);
-				$arrTags['verification_link'] = $strVerificationLink;
-				$arrTags['verification_code'] = $strVerificationCode;
-				$arrTags['verification_string'] = $strVerificationString;
-
-				$arrTags['verification'] = sprintf('<p><strong>Your account must be verified before you can login.</strong><br />To verify your account, <a href="%s">click here</a>.</p><p>If you have a problem with this link, please copy and paste the below link into your browser and proceed to login:<br /><a href="%s">%s</a></p>',
-					$strVerificationLink,
-					$strVerificationLink,
-					$strVerificationLink
-				);
-			}
-
-			$strHTML = \Twist::View()->build(sprintf('%suser/welcome-email.tpl',TWIST_FRAMEWORK_VIEWS),$arrTags);
-
-			//Reset the temp password holder
-			$this->strTempPassword = null;
-
-			$resEmail->setBodyHTML($strHTML);
-			$resEmail->send();
-		}
-
-		protected function sendVerificationEmail(){
-
-			$blOut = false;
-
-			//Send out the email verification
-			if(\Twist::framework()->setting('USER_EMAIL_VERIFICATION')){
+			if(!$this->blPreventEmail){
 
 				$strLoginURL = $this->resParentClass->strLoginUrl;
+
+				$strTempPass = (is_null($this->strTempPassword)) ? '[specified on registration]' : $this->strTempPassword;
+
 				$strSiteName = \Twist::framework()->setting('SITE_NAME');
 				$strSiteHost = \Twist::framework()->setting('SITE_HOST');
 
-				if($this->resDatabaseRecord->get('verification_code') == ''){
-					$strVerificationCode = $this->requireVerification();
-					$this->resDatabaseRecord->commit();
-				}else{
-					$strVerificationCode = $this->resDatabaseRecord->get('verification_code');
-				}
-
-				$strVerificationString = $this->base64url_encode(sprintf("%s|%s",$this->arrOriginalData['email'],$strVerificationCode));
-				$strVerificationLink = sprintf('%s://%s/%s?verify=%s',\Twist::framework()->setting('SITE_PROTOCOL'),$strSiteHost,ltrim($strLoginURL,'/'),$strVerificationString);
-
 				$resEmail = \Twist::Email()->create();
 
-				$strEmailSubject = sprintf('%s: Verify your Account',$strSiteName);
+				$strEmailSubject = sprintf('Welcome to %s',$strSiteName);
 
 				$resEmail->setSubject($strEmailSubject);
 				$resEmail->setFrom(sprintf('no-reply@%s',str_replace('www.','',$strSiteHost)));
@@ -487,18 +450,95 @@
 				$arrTags['firstname'] = $this->arrOriginalData['firstname'];
 				$arrTags['surname'] = $this->arrOriginalData['surname'];
 				$arrTags['email'] = $this->arrOriginalData['email'];
-				$arrTags['url'] = sprintf('http://%s/%s',$strSiteHost,ltrim($strLoginURL,'/'));
+				$arrTags['url'] = sprintf('%s://%s/%s',\Twist::framework()->setting('SITE_PROTOCOL'),$strSiteHost,ltrim($strLoginURL,'/'));
 				$arrTags['host'] = $strSiteHost;
+				$arrTags['password'] = $strTempPass;
 				$arrTags['site_name'] = $strSiteName;
-				$arrTags['verification_link'] = $strVerificationLink;
-				$arrTags['verification_code'] = $strVerificationCode;
-				$arrTags['verification_string'] = $strVerificationString;
 
-				$strHTML = \Twist::View()->build(sprintf('%suser/account-verification-email.tpl',TWIST_FRAMEWORK_VIEWS),$arrTags);
+				$arrTags['verification'] = '';
+
+				if(\Twist::framework()->setting('USER_EMAIL_VERIFICATION')){
+
+					if($this->resDatabaseRecord->get('verification_code') == ''){
+						$strVerificationCode = $this->requireVerification();
+						$this->resDatabaseRecord->commit();
+					}else{
+						$strVerificationCode = $this->resDatabaseRecord->get('verification_code');
+					}
+
+					$strVerificationString = $this->base64url_encode(sprintf("%s|%s",$this->arrOriginalData['email'],$strVerificationCode));
+					$strVerificationLink = sprintf('%s://%s/%s?verify=%s',\Twist::framework()->setting('SITE_PROTOCOL'),$strSiteHost,ltrim($strLoginURL,'/'),$strVerificationString);
+					$arrTags['verification_link'] = $strVerificationLink;
+					$arrTags['verification_code'] = $strVerificationCode;
+					$arrTags['verification_string'] = $strVerificationString;
+
+					$arrTags['verification'] = sprintf('<p><strong>Your account must be verified before you can login.</strong><br />To verify your account, <a href="%s">click here</a>.</p><p>If you have a problem with this link, please copy and paste the below link into your browser and proceed to login:<br /><a href="%s">%s</a></p>',
+						$strVerificationLink,
+						$strVerificationLink,
+						$strVerificationLink
+					);
+				}
+
+				$strHTML = \Twist::View()->build(sprintf('%suser/welcome-email.tpl',TWIST_FRAMEWORK_VIEWS),$arrTags);
+
+				//Reset the temp password holder
+				$this->strTempPassword = null;
 
 				$resEmail->setBodyHTML($strHTML);
 				$resEmail->send();
-				$blOut = true;
+			}
+		}
+
+		protected function sendVerificationEmail(){
+
+			if(!$this->blPreventEmail){
+
+				$blOut = false;
+
+				//Send out the email verification
+				if(\Twist::framework()->setting('USER_EMAIL_VERIFICATION')){
+
+					$strLoginURL = $this->resParentClass->strLoginUrl;
+					$strSiteName = \Twist::framework()->setting('SITE_NAME');
+					$strSiteHost = \Twist::framework()->setting('SITE_HOST');
+
+					if($this->resDatabaseRecord->get('verification_code') == ''){
+						$strVerificationCode = $this->requireVerification();
+						$this->resDatabaseRecord->commit();
+					}else{
+						$strVerificationCode = $this->resDatabaseRecord->get('verification_code');
+					}
+
+					$strVerificationString = $this->base64url_encode(sprintf("%s|%s", $this->arrOriginalData['email'], $strVerificationCode));
+					$strVerificationLink = sprintf('%s://%s/%s?verify=%s', \Twist::framework()->setting('SITE_PROTOCOL'), $strSiteHost, ltrim($strLoginURL, '/'), $strVerificationString);
+
+					$resEmail = \Twist::Email()->create();
+
+					$strEmailSubject = sprintf('%s: Verify your Account', $strSiteName);
+
+					$resEmail->setSubject($strEmailSubject);
+					$resEmail->setFrom(sprintf('no-reply@%s', str_replace('www.', '', $strSiteHost)));
+					$resEmail->setReplyTo(sprintf('no-reply@%s', str_replace('www.', '', $strSiteHost)));
+					$resEmail->addTo($this->arrOriginalData['email']);
+
+					$arrTags = array();
+					$arrTags['subject'] = $strEmailSubject;
+					$arrTags['firstname'] = $this->arrOriginalData['firstname'];
+					$arrTags['surname'] = $this->arrOriginalData['surname'];
+					$arrTags['email'] = $this->arrOriginalData['email'];
+					$arrTags['url'] = sprintf('http://%s/%s', $strSiteHost, ltrim($strLoginURL, '/'));
+					$arrTags['host'] = $strSiteHost;
+					$arrTags['site_name'] = $strSiteName;
+					$arrTags['verification_link'] = $strVerificationLink;
+					$arrTags['verification_code'] = $strVerificationCode;
+					$arrTags['verification_string'] = $strVerificationString;
+
+					$strHTML = \Twist::View()->build(sprintf('%suser/account-verification-email.tpl', TWIST_FRAMEWORK_VIEWS), $arrTags);
+
+					$resEmail->setBodyHTML($strHTML);
+					$resEmail->send();
+					$blOut = true;
+				}
 			}
 
 			return $blOut;
@@ -514,7 +554,7 @@
 
 			if(\Twist::framework()->setting('USER_MIN_PASSWORD_LENGTH') > 0 && strlen($strPassword) < \Twist::framework()->setting('USER_MIN_PASSWORD_LENGTH')){
 				$arrOut['status'] = false;
-				$arrOut['message'] = sprintf('Your new password is to short and must be at least %s characters.',\Twist::framework()->setting('USER_MIN_PASSWORD_LENGTH'));
+				$arrOut['message'] = sprintf('Please use a password with minimum %s characters.',\Twist::framework()->setting('USER_MIN_PASSWORD_LENGTH'));
 			}
 
 			if($arrOut['status'] && \Twist::framework()->setting('USER_COMMON_PASSWORD_FILTER') && file_exists($strPasswordFile)){

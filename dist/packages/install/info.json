@@ -1,0 +1,16 @@
+{
+  "name": "TwistPHP Installer",
+  "description": "Installs the TwistPHP framework",
+  "version": "4.0.0",
+  "author": {
+	"name": "Joe Blogs",
+	"website": "https://twistphp.com",
+	"email": "contact@twistphp.com",
+	"git": "",
+	"bugs": ""
+  },
+  "thirdparty": {
+	"info": "Thanks to twitter for the API example code used in this package",
+	"website": "https://twitter.com"
+  }
+}

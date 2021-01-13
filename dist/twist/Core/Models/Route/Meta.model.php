@@ -2,7 +2,7 @@
 
 	/**
 	 * TwistPHP - An open source PHP MVC framework built from the ground up.
-	 * Copyright (C) 2016  Shadow Technologies Ltd.
+	 * Shadow Technologies Ltd.
 	 *
 	 * This program is free software: you can redistribute it and/or modify
 	 * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@
 
 		protected $arrTags = array();
 
-		protected function add($strType,$strName,$strValue){
+		protected function add($strType,$strName,$strValue,$intOrder = 10){
 
 			$strType = strtolower($strType);
 			$strName = strtolower($strName);
@@ -41,8 +41,13 @@
 			$this->arrTags[sprintf('%s-%s',$strType,$strName)] = array(
 				'type' => $strType,
 				'name' => $strName,
-				'value' => $strValue
+				'value' => $strValue,
+				'order' => $intOrder
 			);
+		}
+
+		public function get($strType,$strName){
+			return (array_key_exists(sprintf('%s-%s',$strType,$strName),$this->arrTags)) ? [sprintf('%s-%s',$strType,$strName)] : null;
 		}
 
 		public function getTags(){
@@ -100,6 +105,51 @@
 
 		public function custom($strKey,$strValue){
 			$this->add('meta',$strKey,$strValue);
+		}
+
+		/**
+		 * Add a CSS file to the meta data
+		 * @param mixed $mxdAttributes Can either be a file/URL or an array of attributes (must contain 'href')
+		 * @param int|null $intOrder
+		 */
+		public function css($mxdAttributes,$intOrder = 10){
+
+			if(is_null($intOrder)){
+				$intOrder = 10;
+			}
+
+			if(is_array($mxdAttributes)){
+				if(array_key_exists('href',$mxdAttributes)){
+
+					if(!array_key_exists('rel',$mxdAttributes)){
+						$mxdAttributes['rel'] = 'stylesheet';
+					}
+
+					$this->add('link',$mxdAttributes['href'],$mxdAttributes,$intOrder);
+				}
+			}else{
+				$this->add('link',$mxdAttributes,array('href' => $mxdAttributes,'rel' => 'stylesheet'),$intOrder);
+			}
+		}
+
+		/**
+		 * Add a JS file to the meta data
+		 * @param mixed $mxdAttributes Can either be a file/URL or an array of attributes (must contain 'src')
+		 * @param int|null $intOrder
+		 */
+		public function js($mxdAttributes,$intOrder = 10){
+
+			if(is_null($intOrder)){
+				$intOrder = 10;
+			}
+
+			if(is_array($mxdAttributes)){
+				if(array_key_exists('src',$mxdAttributes)){
+					$this->add('script',$mxdAttributes['src'],$mxdAttributes,$intOrder);
+				}
+			}else{
+				$this->add('script',$mxdAttributes,array('src' => $mxdAttributes),$intOrder);
+			}
 		}
 
 		public function ogTitle($strContent){
@@ -279,12 +329,31 @@
 		public function generate(){
 
 			$strOut = '';
+			$arrTagOrder = array();
 
 			foreach($this->arrTags as $arrEachTag) {
 				//Do not output blank SEO tags, ignore them
 				if($arrEachTag['value'] != ''){
-					$strOut .= $this->createTag($arrEachTag) . "\n";
+
+					//Items in this group are orderable 0 = highest
+					if(in_array($arrEachTag['type'],array('script','link'))){
+
+						if(!array_key_exists($arrEachTag['order'],$arrTagOrder[$arrEachTag['type']])){
+							$arrTagOrder[$arrEachTag['type']][$arrEachTag['order']] = '';
+						}
+
+						$arrTagOrder[$arrEachTag['type']][$arrEachTag['order']] .= $this->createTag($arrEachTag) . "\n";
+					}else{
+						$strOut .= $this->createTag($arrEachTag) . "\n";
+					}
 				}
+			}
+
+			//ksort so that CSS is First
+			ksort($arrTagOrder);
+			foreach($arrTagOrder as $strType => $arrUnorderedItems){
+				ksort($arrUnorderedItems);
+				$strOut .= implode("",$arrUnorderedItems);
 			}
 
 			return $strOut;
@@ -311,6 +380,26 @@
 
 				case'og':
 					$strOut = sprintf('<meta property="og:%s" content="%s">', $arrData['name'], $arrData['value']);
+					break;
+
+				case'script':
+
+					$strAttributes = '';
+					foreach($arrData['value'] as $strAttributeName => $strAttributeValue){
+						$strAttributes .= sprintf(' %s="%s"',trim($strAttributeName),$strAttributeValue);
+					}
+
+					$strOut = sprintf('<script %s></script>', ltrim($strAttributes));
+					break;
+
+				case'link':
+
+					$strAttributes = '';
+					foreach($arrData['value'] as $strAttributeName => $strAttributeValue){
+						$strAttributes .= sprintf(' %s="%s"',trim($strAttributeName),$strAttributeValue);
+					}
+
+					$strOut = sprintf('<link %s>', ltrim($strAttributes));
 					break;
 			}
 

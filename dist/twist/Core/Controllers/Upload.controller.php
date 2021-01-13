@@ -2,7 +2,7 @@
 
 /**
  * TwistPHP - An open source PHP MVC framework built from the ground up.
- * Copyright (C) 2016  Shadow Technologies Ltd.
+ * Shadow Technologies Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,13 +38,12 @@ class Upload extends Base{
 	/**
 	 * Upload a file to the site and place in the uploads directory
 	 * @param null $strFileKey
-	 * @param null $intIndex
 	 * @return string
 	 */
-	public function file($strFileKey = null,$intIndex = null){
+	public function file($strFileKey = null){
 
 		$this->resRoute->debugMode(false);
-		$arrOut = $this->storeFile($strFileKey,$intIndex);
+		$arrOut = $this->storeFile($strFileKey);
 
 		//Now if the file upload was successful process the asset (if required)
 		if($arrOut['status']){
@@ -69,13 +68,12 @@ class Upload extends Base{
 	/**
 	 * Upload an asset to the system and create relevant thumbnails of images.
 	 * @param null $strFileKey
-	 * @param null $intIndex
 	 * @return string
 	 */
-	public function asset($strFileKey = null,$intIndex = null){
+	public function asset($strFileKey = null){
 
 		$this->resRoute->debugMode(false);
-		$arrOut = $this->storeFile($strFileKey,$intIndex);
+		$arrOut = $this->storeFile($strFileKey);
 
 		//Now if the file upload was successful process the asset (if required)
 		if($arrOut['status']){
@@ -128,10 +126,10 @@ class Upload extends Base{
 		return json_encode($arrOut);
 	}
 
-	protected function storeFile($strFileKey = null,$intIndex = null){
+	protected function storeFile($strFileKey = null){
 
 		if(is_array($_FILES) && count($_FILES)){
-			$arrOut = \Twist::File()->upload($strFileKey,null,$intIndex); //TODO: Is $intIndex used?
+			$arrOut = \Twist::File()->upload($strFileKey,null);
 		}else{
 			$arrOut = \Twist::File()->uploadPUT();
 		}

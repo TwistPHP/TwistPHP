@@ -1,211 +1,51 @@
 {
-	"arable": {
-		"5.5.1": {
-			"default": true,
-			"css": ["arable.min.css"],
-			"js": []
-		}
-	},
-	"arable-reset": {
-		"5.3": {
-			"default": true,
-			"css": ["arable-reset.min.css"],
-			"js": []
-		}
-	},
-	"firebug-lite": {
-		"1.4.0": {
+	"ajax": {
+		"js": {
 			"default": true,
 			"css": [],
-			"js": ["firebug-lite.js"]
+			"js": ["js/twistajax.js"]
 		}
 	},
-	"font-awesome": {
-		"4.5.0": {
+	"debug": {
+		"standard": {
 			"default": true,
-			"css": ["css/font-awesome.min.css"],
-			"js": []
-		}
-	},
-	"jquery": {
-		"legacy": {
-			"default": false,
-			"css": [],
-			"js": ["jquery-1.12.0.min.js"]
-		},
-		"1.12.0": {
-			"default": false,
-			"css": [],
-			"js": ["jquery-1.12.0.min.js"]
-		},
-		"2.2.0": {
-			"default": true,
-			"css": [],
-			"js": ["jquery-2.2.0.min.js"]
-		}
-	},
-	"jquery-ui": {
-		"1.11.4": {
-			"default": true,
-			"css": ["jquery-ui.min.css"],
-			"js": ["jquery-ui.min.js"]
-		},
-		"themed": {
-			"default": false,
-			"css": ["jquery-ui.min.css","jquery-ui.structure.min.css","jquery-ui.theme.min.css"],
-			"js": ["jquery-ui.min.js"]
-		}
-	},
-	"modernizr": {
-		"2.8.3": {
-			"default": true,
-			"css": [],
-			"js": ["modernizr-2.8.3.min.js"]
-		}
-	},
-	"rummage": {
-		"2.10.0": {
-			"default": true,
-			"css": [],
-			"js": ["rummage.min.js"]
-		}
-	},
-	"twist/ajax": {
-		"all": {
-			"default": true,
-			"css": ["css/twistajax.min.css"],
-			"js": ["js/twistajax.min.js"]
+			"css": ["css/twistdebug.css"],
+			"js": ["js/twistdebug.js"]
 		},
 		"css": {
 			"default": false,
-			"css": ["css/twistajax.min.css"],
+			"css": ["css/twistdebug.css"],
 			"js": []
 		},
 		"js": {
 			"default": false,
 			"css": [],
-			"js": ["js/twistajax.min.js"]
-		}
-	},
-	"twist/cssreset": {
-		"standard": {
-			"default": true,
-			"css": ["css/twistcssreset.min.css"],
-			"js": []
-		}
-	},
-	"twist/debug": {
-		"standard": {
-			"default": true,
-			"css": ["css/twistdebug.min.css"],
-			"js": ["js/twistdebug.min.js"]
+			"js": ["js/twistdebug.js"]
 		},
-		"css": {
-			"default": false,
-			"css": ["css/twistdebug.min.css"],
-			"js": []
-		},
-		"js": {
+		"catcher": {
 			"default": false,
 			"css": [],
-			"js": ["js/twistdebug.min.js"]
+			"js": ["js/twistdebugcatcher.js"]
 		}
 	},
-	"twist/fileupload": {
+	"fileupload": {
 		"standard": {
 			"default": true,
-			"css": [],
-			"js": ["js/twistfileupload.min.js"]
-		},
-		"development": {
-			"default": false,
 			"css": [],
 			"js": ["js/twistfileupload.js"]
 		}
 	},
-	"twist/manager": {
+	"manager": {
 		"standard": {
 			"default": true,
-			"css": ["css/twistmanager.min.css"],
+			"css": ["css/twistmanager.css"],
 			"js": []
 		}
 	},
-	"twist/setup": {
+	"setup": {
 		"standard": {
 			"default": true,
-			"css": ["css/twistsetup.min.css"],
-			"js": []
-		}
-	},
-	"unsemantic": {
-		"desktop": {
-			"default": false,
-			"css": [
-				"unsemantic-grid-base-no-ie7.css",
-				"unsemantic-grid-desktop-no-ie7.css"
-			],
-			"js": []
-		},
-		"tablet": {
-			"default": false,
-			"css": [
-				"unsemantic-grid-base-no-ie7.css",
-				"unsemantic-grid-tablet-no-ie7.css"
-			],
-			"js": []
-		},
-		"mobile": {
-			"default": false,
-			"css": [
-				"unsemantic-grid-base-no-ie7.css",
-				"unsemantic-grid-mobile-no-ie7.css"
-			],
-			"js": []
-		},
-		"desktop-mobile": {
-			"default": false,
-			"css": ["unsemantic-grid-responsive-no-ie7.css"],
-			"js": []
-		},
-		"desktop-tablet-mobile": {
-			"default": true,
-			"css": ["unsemantic-grid-responsive-tablet-no-ie7.css"],
-			"js": []
-		}
-	},
-	"unsemantic-rtl": {
-		"desktop": {
-			"default": false,
-			"css": [
-				"unsemantic-grid-base-no-ie7-rtl.css",
-				"unsemantic-grid-desktop-no-ie7-rtl.css"
-			],
-			"js": []
-		},
-		"tablet": {
-			"default": false,
-			"css": [
-				"unsemantic-grid-base-no-ie7-rtl.css",
-				"unsemantic-grid-tablet-no-ie7-rtl.css"
-			],
-			"js": []
-		},
-		"mobile": {
-			"default": false,
-			"css": [
-				"unsemantic-grid-base-no-ie7-rtl.css",
-				"unsemantic-grid-mobile-no-ie7-rtl.css"
-			],
-			"js": []
-		},
-		"desktop-mobile": {
-			"default": false,
-			"css": ["unsemantic-grid-responsive-no-ie7-rtl.css"],
-			"js": []
-		},
-		"desktop-tablet-mobile": {
-			"default": true,
-			"css": ["unsemantic-grid-responsive-tablet-no-ie7-rtl.css"],
+			"css": ["css/twistsetup.css"],
 			"js": []
 		}
 	}

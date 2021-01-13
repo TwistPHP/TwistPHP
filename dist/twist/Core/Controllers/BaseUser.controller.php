@@ -2,7 +2,7 @@
 
 /**
  * TwistPHP - An open source PHP MVC framework built from the ground up.
- * Copyright (C) 2016  Shadow Technologies Ltd.
+ * Shadow Technologies Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 namespace Twist\Core\Controllers;
 use \Twist\Core\Models\User\Auth;
 use \Twist\Core\Models\UserAgent;
+use Twist\Core\Models\Protect\Firewall;
 
 /**
  *  An User base controller that can be used instead of Base when you require login, authentication and other user pages. This controller should be used as an extension to a route controller class.
@@ -33,11 +34,12 @@ use \Twist\Core\Models\UserAgent;
 class BaseUser extends Base{
 
 	/**
-	 * @var \Twist\Core\Utilities\User
+	 * @var \Twist\Core\Helpers\User
 	 */
 	protected $resUser = null;
 
 	protected $strEntryPageURI = null;
+	protected $arrAdditionalRegistrationFields = array();
 
 	public function _baseCalls(){
 
@@ -94,7 +96,7 @@ class BaseUser extends Base{
 
 	/**
 	 * Authentication script, upon login the post request will be sent to this script. If the login is successful the user will be redirected to the entry page or './'.
-	 * if hte login request has failed the user will be forwarded on to the relevan page i.e Change Password, Verify Account or the login page with an error message.
+	 * if hte login request has failed the user will be forwarded on to the relevant page i.e Change Password, Verify Account or the login page with an error message.
 	 */
 	public function authenticate(){
 
@@ -183,10 +185,12 @@ class BaseUser extends Base{
 				$resUser = $this->resUser->get($arrUserData['id']);
 				$resUser->resetPassword(true);
 				$resUser->commit();
-
-				\Twist::Session()->data('site-login_message','A temporary password has been emailed to you');
-				\Twist::redirect('./login');
 			}
+
+			Firewall::passwordReset();
+
+			\Twist::Session()->data('site-login_message','If registered a temporary password will be sent to the provided email address');
+			\Twist::redirect('./login');
 		}
 
 		\Twist::redirect('./forgotten-password');
@@ -222,28 +226,36 @@ class BaseUser extends Base{
 							$strNewPassword = $_POST['password'];
 
 							//Change the users password and re-log them in (Only for none-temp password users)
-							$this->resUser->changePassword(\Twist::Session()->data('user-id'),$strNewPassword,$_POST['current_password'],false);
+							$blStats = $this->resUser->changePassword(\Twist::Session()->data('user-id'),$strNewPassword,$_POST['current_password'],false);
 
-							//Remove the two posted password vars
-							unset($_POST['password']);
-							unset($_POST['current_password']);
+							if($blStats){
+								//Remove the two posted password vars
+								unset($_POST['password']);
+								unset($_POST['current_password']);
 
-							Auth::login(\Twist::Session()->data('user-email'),$strNewPassword);
-							\Twist::redirect('./');
+								Auth::login(\Twist::Session()->data('user-email'),$strNewPassword);
+								\Twist::redirect('./');
+							}
+
+							\Twist::redirect('./change-password');
 						}
 					}else{
 
 						$strNewPassword = $_POST['password'];
 
 						//Change the users password and re-log them in
-						$this->resUser->updatePassword(\Twist::Session()->data('user-id'),$strNewPassword);
+						$blStats = $this->resUser->updatePassword(\Twist::Session()->data('user-id'),$strNewPassword);
 
-						//Remove the posted password and reset the session var
-						unset($_POST['password']);
-						\Twist::Session()->data('user-temp_password','0');
+						if($blStats){
+							//Remove the posted password and reset the session var
+							unset($_POST['password']);
+							\Twist::Session()->data('user-temp_password','0');
 
-						Auth::login(\Twist::Session()->data('user-email'),$strNewPassword);
-						\Twist::redirect('./');
+							Auth::login(\Twist::Session()->data('user-email'),$strNewPassword);
+							\Twist::redirect('./');
+						}
+
+						\Twist::redirect('./change-password');
 					}
 
 				}else{
@@ -355,6 +367,14 @@ class BaseUser extends Base{
 	}
 
 	/**
+	 * Add additional feilds that will be collected upon registration, these fields must be added as inputs on the register page
+	 * @param $strFieldID
+	 */
+	public function _addRegistrationField($strFieldID){
+		$this->arrAdditionalRegistrationFields[$strFieldID] = $strFieldID;
+	}
+
+	/**
 	 * Registration form to allow a user to register for an account within the system. The registration form can be disabled within the frameworks settings for closed/invite only systems.
 	 * @return string
 	 */
@@ -414,6 +434,15 @@ class BaseUser extends Base{
 					$intUserID = $resUser->commit();
 
 					if($intUserID > 0){
+
+						if(count($this->arrAdditionalRegistrationFields)){
+
+							foreach($this->arrAdditionalRegistrationFields as $strEachField){
+								$resUser->data($strEachField,(array_key_exists($strEachField,$_POST)) ? $_POST[$strEachField] : '');
+							}
+
+							$resUser->commit();
+						}
 
 						if(\Twist::framework()->setting('USER_REGISTER_PASSWORD')){
 

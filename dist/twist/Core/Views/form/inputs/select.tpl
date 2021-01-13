@@ -1,1 +1,0 @@
-<select name="{data:name}"{data:attributes}>{data:options}</select>

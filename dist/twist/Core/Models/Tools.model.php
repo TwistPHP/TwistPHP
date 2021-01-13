@@ -2,7 +2,7 @@
 
 	/**
 	 * TwistPHP - An open source PHP MVC framework built from the ground up.
-	 * Copyright (C) 2016  Shadow Technologies Ltd.
+	 * Shadow Technologies Ltd.
 	 *
 	 * This program is free software: you can redistribute it and/or modify
 	 * it under the terms of the GNU General Public License as published by
@@ -88,7 +88,7 @@
 		 * Remove an item from a multi-dimensional array using a key, the split char indicates a change in array level
 		 *
 		 * @param string $strKey
-		 * @param string $arrData
+		 * @param array $arrData
 		 * @param string $strSplitChar
 		 * @return array Returns either the original array or the array with the item removed
 		 */
@@ -176,7 +176,7 @@
 
 				if( is_array($arrPrimary) && array_key_exists( $strKey, $arrPrimary ) ) {
 
-					if( is_array( $mxdValue ) ) {
+					if( is_array($arrPrimary[$strKey]) && is_array( $mxdValue ) ) {
 
 						//Only time anything is different is when we process a sub-array
 						$arrPrimary[$strKey] = $this -> arrayMergeRecursive( $arrPrimary[$strKey], $mxdValue );
@@ -274,7 +274,7 @@
 		 * @param string $strChildrenKey
 		 * @return array
 		 */
-		public function arrayRelationalTree( $arrStructure, $strIDField = 'id', $strParentIDField = 'parent_id', $strChildrenKey = 'children' ) {
+		public function arrayRelationalTree( $arrStructure, $strIDField = 'id', $strParentIDField = 'parent_id', $strChildrenKey = 'children') {
 
 			$arrTree = array();
 
@@ -361,7 +361,7 @@
 			}
 
 			//Start processing the traversal
-			$urlCurrentURI = trim( $urlCurrentURI, '/' );
+			$urlCurrentURI = ltrim( $urlCurrentURI, '/' );
 			$urlOut = rtrim( $urlRelativePath, '/' );
 
 			if( substr( $urlRelativePath, 0, 2 ) === './' ) {

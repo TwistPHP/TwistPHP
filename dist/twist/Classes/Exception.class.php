@@ -2,7 +2,7 @@
 
 	/**
 	 * TwistPHP - An open source PHP MVC framework built from the ground up.
-	 * Copyright (C) 2016  Shadow Technologies Ltd.
+	 * Shadow Technologies Ltd.
 	 *
 	 * This program is free software: you can redistribute it and/or modify
 	 * it under the terms of the GNU General Public License as published by
@@ -36,10 +36,10 @@
 		public function getFile();                    // Source filename
 		public function getLine();                    // Source line
 		public function getTrace();                   // An array of the backtrace()
-		public function getTraceAsString();           // Formated string of trace
+		public function getTraceAsString();           // Formatted string of trace
 
 		/* Overrideable methods inherited from Exception class */
-		public function __toString();                 // formated string for display
+		public function __toString();                 // Formatted string for display
 		public function __construct($message = null, $code = 0);
 	}
 

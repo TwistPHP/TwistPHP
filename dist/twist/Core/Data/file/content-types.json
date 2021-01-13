@@ -90,7 +90,7 @@
 				"mine": "application\/zip"
 			}
 		},
-		"icon": "twist\/file-icons\/archive.png",
+		"icon": "file-icons\/archive.png",
 		"name": "Archive"
 	},
 	"audio": {
@@ -200,7 +200,7 @@
 				"mine": "audio\/x-ms-wma"
 			}
 		},
-		"icon": "twist\/file-icons\/audio.png",
+		"icon": "file-icons\/audio.png",
 		"name": "Audio"
 	},
 	"document": {
@@ -410,7 +410,7 @@
 				"mine": "application\/x-mswrite"
 			}
 		},
-		"icon": "twist\/file-icons\/document.png",
+		"icon": "file-icons\/document.png",
 		"name": "Document"
 	},
 	"email": {
@@ -424,7 +424,7 @@
 				"mine": "application\/mbox"
 			}
 		},
-		"icon": "twist\/file-icons\/email.png",
+		"icon": "file-icons\/email.png",
 		"name": "Email"
 	},
 	"font": {
@@ -478,7 +478,7 @@
 				"mine": "application\/x-font-woff"
 			}
 		},
-		"icon": "twist\/file-icons\/font.png",
+		"icon": "file-icons\/font.png",
 		"name": "Font"
 	},
 	"image": {
@@ -652,7 +652,7 @@
 				"mine": "image\/x-xwindowdump"
 			}
 		},
-		"icon": "twist\/file-icons\/image.png",
+		"icon": "file-icons\/image.png",
 		"name": "Image"
 	},
 	"other": {
@@ -2362,7 +2362,7 @@
 				"mine": "application\/vnd.lotus-1-2-3"
 			}
 		},
-		"icon": "twist\/file-icons\/other.png",
+		"icon": "file-icons\/other.png",
 		"name": "Other"
 	},
 	"pdf": {
@@ -2372,7 +2372,7 @@
 				"mine": "application\/pdf"
 			}
 		},
-		"icon": "twist\/file-icons\/pdf.png",
+		"icon": "file-icons\/pdf.png",
 		"name": "Pdf"
 	},
 	"presentation": {
@@ -2438,7 +2438,7 @@
 				"mine": "application\/vnd.sun.xml.impress"
 			}
 		},
-		"icon": "twist\/file-icons\/presentation.png",
+		"icon": "file-icons\/presentation.png",
 		"name": "Presentation"
 	},
 	"spreadsheet": {
@@ -2492,7 +2492,7 @@
 				"mine": "application\/vnd.openxmlformats-officedocument.spreadsheetml.template"
 			}
 		},
-		"icon": "twist\/file-icons\/spreadsheet.png",
+		"icon": "file-icons\/spreadsheet.png",
 		"name": "Spreadsheet"
 	},
 	"text": {
@@ -2630,7 +2630,7 @@
 				"mine": "text\/yaml"
 			}
 		},
-		"icon": "twist\/file-icons\/text.png",
+		"icon": "file-icons\/text.png",
 		"name": "Text"
 	},
 	"video": {
@@ -2772,7 +2772,7 @@
 				"mine": "video\/x-ms-wvx"
 			}
 		},
-		"icon": "twist\/file-icons\/video.png",
+		"icon": "file-icons\/video.png",
 		"name": "Video"
 	},
 	"web": {
@@ -2838,7 +2838,7 @@
 				"mine": "application\/xml"
 			}
 		},
-		"icon": "twist\/file-icons\/web.png",
+		"icon": "file-icons\/web.png",
 		"name": "Web"
 	}
 }

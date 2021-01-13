@@ -2,7 +2,7 @@
 
 /**
  * TwistPHP - An open source PHP MVC framework built from the ground up.
- * Copyright (C) 2016  Shadow Technologies Ltd.
+ * Shadow Technologies Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,6 @@
  */
 
 namespace Twist\Core\Models\Image;
-use Twist\Classes\Exception;
 
 /**
  * Image object that allow the manipulation of images, adding text, inserting watermarks, applying effects, resizing and altering output quality.
@@ -48,7 +47,7 @@ class Image{
 		return (is_resource($this->resImage)) ? imagedestroy($this->resImage) : null;
 	}
 
-	protected function load($mxdImage){
+	protected function load($mxdImage,$blAlphaBlending = true){
 
 		if(preg_match('#^data:image/[^;]+;base64,(.*)$#',$mxdImage,$arrMatches)){
 
@@ -99,8 +98,10 @@ class Image{
 			'mime' => $arrImageInfo['mime']
 		);
 
-		imagealphablending($this->resImage, false);
-		imagesavealpha($this->resImage, true);
+		if($blAlphaBlending){
+			imagealphablending($this->resImage, $blAlphaBlending);
+			imagesavealpha($this->resImage, true);
+		}
 	}
 
 	protected function create($intWidth,$intHeight,$strFillColour = null){
@@ -595,10 +596,11 @@ class Image{
 	 * @param resource|string Twist Image Object or File Path
 	 * @param integer $intX X position of the overlay image
 	 * @param integer $intY Y position of the overlay image
+	 * @param integer $intAlphaTransparency Alpha transparency of the merge
 	 * @return $this
 	 * @throws \Exception
 	 */
-	public function copy($mxdImage,$intX,$intY){
+	public function copy($mxdImage, $intX, $intY, $intAlphaTransparency = 0){
 
 		$blRemoveImage = false;
 
@@ -622,8 +624,12 @@ class Image{
 		$arrInfo = $resResource->currentInfo();
 
 		//Copy the watermark image onto the main image
-		imagecopy($this->resImage, $resResource->resource(), $intX, $intY, 0, 0, $arrInfo['width'], $arrInfo['height']);
-		//imagecopymerge($this->resImage, $resResource->resource(), $intX, $intY, 0, 0, $arrInfo['width'], $arrInfo['height'],50);
+
+		if(is_null($intAlphaTransparency) || $intAlphaTransparency == 0){
+			imagecopy($this->resImage, $resResource->resource(), $intX, $intY, 0, 0, $arrInfo['width'], $arrInfo['height']);
+		}else{
+			imagecopymerge($this->resImage, $resResource->resource(), $intX, $intY, 0, 0, $arrInfo['width'], $arrInfo['height'],$intAlphaTransparency);
+		}
 
 		if($blRemoveImage){
 			$resResource->__destruct();
@@ -996,12 +1002,14 @@ class Image{
 	 * @param int $intMarginBottom Pixel margin between the right of the main image and the right of the watermark
 	 * @param null|integer $intWidth Output width of the watermark image
 	 * @param null|integer $intHeight Output height of the watermark image
+	 * @param null|integer $intAlphaTransparency Set the alpha transparency of the watermark
 	 * @return Image
+	 * @throws \Exception
 	 */
-	public function watermark($strFilename,$intMarginRight = 30,$intMarginBottom = 30,$intWidth = null,$intHeight = null){
+	public function watermark($strFilename,$intMarginRight = 30,$intMarginBottom = 30,$intWidth = null,$intHeight = null,$intAlphaTransparency = 0){
 
 		$resWatermark = new self();
-		$resWatermark->load($strFilename);
+		$resWatermark->load($strFilename,true);
 
 		//Resize the image if required
 		if(!is_null($intWidth) && !is_null($intHeight)){
@@ -1017,6 +1025,6 @@ class Image{
 		$intPositionX = ($this->intWidth - $arrInfo['width']) - $intMarginRight;
 		$intPositionY = ($this->intHeight - $arrInfo['height']) - $intMarginBottom;
 
-		return $this->copy($resWatermark,$intPositionX,$intPositionY);
+		return $this->copy($resWatermark,$intPositionX,$intPositionY,$intAlphaTransparency);
 	}
 }
