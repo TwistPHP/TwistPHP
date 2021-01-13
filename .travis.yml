@@ -9,8 +9,6 @@ php:
     env COVERALLS=true
     env GULP=true
   - 7.3
-  - 7.4
-  - 8.0
 
 services:
   - mysql
