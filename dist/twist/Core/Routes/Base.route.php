@@ -2,7 +2,7 @@
 
 	/**
 	 * TwistPHP - An open source PHP MVC framework built from the ground up.
-	 * Copyright (C) 2016  Shadow Technologies Ltd.
+	 * Shadow Technologies Ltd.
 	 *
 	 * This program is free software: you can redistribute it and/or modify
 	 * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 	 */
 
 	namespace Twist\Core\Routes;
-	use Twist\Core\Utilities\Route;
+	use Twist\Core\Helpers\Route;
 
 	/**
 	 * The base route that all route files must extend in order for Twist to be able to process them correctly. This base class added some core features required to initialise a route file.

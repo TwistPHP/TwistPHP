@@ -2,7 +2,7 @@
 
 	/**
 	 * TwistPHP - An open source PHP MVC framework built from the ground up.
-	 * Copyright (C) 2016  Shadow Technologies Ltd.
+	 * Shadow Technologies Ltd.
 	 *
 	 * This program is free software: you can redistribute it and/or modify
 	 * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@
 
 			//If no creation date is set then set one
 			if(!array_key_exists('DTSTAMP',$this->arrData)){
-				$this->creationDate(\Twist::DateTime()->date('Y-m-d H:i:s'));
+				$this->creationDate(strtotime(\Twist::DateTime()->date('Y-m-d H:i:s')));
 			}
 		}
 
@@ -139,9 +139,9 @@
 			$this->arrData['LAST-MODIFIED'] = gmstrftime("%Y%m%dT%H%M00Z", strtotime(\Twist::DateTime()->date('Y-m-d H:i:s')));
 		}
 
-		public function getRaw(){
+		public function getRaw($blBypassValidation = false){
 
-			if($this->validateEvent()){
+			if($blBypassValidation || $this->validateEvent()){
 
 				$strOut = sprintf("BEGIN:VEVENT%s",$this->strReturnCode);
 
@@ -183,11 +183,11 @@
 				$blValidEvent = false;
 			}
 
-			if(!array_key_exists('DTSTART;TZID=ALLDAY;VALUE=DATE',$this->arrData) && (!array_key_exists('DTSTART',$this->arrData) || $this->arrData['DTSTART'] == '')){
+			if(!(array_key_exists('DTSTART;TZID=ALLDAY;VALUE=DATE',$this->arrData) || (array_key_exists('DTSTART',$this->arrData) && $this->arrData['DTSTART'] != ''))){
 				$blValidEvent = false;
 			}
 
-			if(!array_key_exists('DTEND;TZID=ALLDAY;VALUE=DATE',$this->arrData) && (!array_key_exists('DTEND',$this->arrData) || $this->arrData['DTEND'] == '')){
+			if(!(array_key_exists('DTEND;TZID=ALLDAY;VALUE=DATE',$this->arrData) || (array_key_exists('DTEND',$this->arrData) && $this->arrData['DTEND'] != ''))){
 				$blValidEvent = false;
 			}
 

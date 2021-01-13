@@ -2,7 +2,7 @@
 
 	/**
 	 * TwistPHP - An open source PHP MVC framework built from the ground up.
-	 * Copyright (C) 2016  Shadow Technologies Ltd.
+	 * Shadow Technologies Ltd.
 	 *
 	 * This program is free software: you can redistribute it and/or modify
 	 * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 	 */
 
 	namespace Twist\Core\Models\ICS;
+	use Twist\Core\Models\ICS\Event;
 
 	class Calendar{
 
@@ -131,7 +132,7 @@
 			}
 
 			if(is_null($intUID)){
-				$resEvent = new \Twist\Core\Models\ICS\Event();
+				$resEvent = new Event();
 				$this->arrEvents[$resEvent->uid()] = $resEvent;
 			}else{
 				$resEvent = $this->arrEvents[$intUID];

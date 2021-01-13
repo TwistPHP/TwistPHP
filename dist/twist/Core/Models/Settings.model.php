@@ -2,7 +2,7 @@
 
 	/**
 	 * TwistPHP - An open source PHP MVC framework built from the ground up.
-	 * Copyright (C) 2016  Shadow Technologies Ltd.
+	 * Shadow Technologies Ltd.
 	 *
 	 * This program is free software: you can redistribute it and/or modify
 	 * it under the terms of the GNU General Public License as published by
@@ -104,7 +104,9 @@
 	                        settype( $arrEachSetting['value'] , 'float' );
 	                    }elseif($arrEachSetting['type'] === 'integer' && is_numeric($arrEachSetting['value'])){
 	                        settype( $arrEachSetting['value'] , 'integer' );
-	                    }
+	                    }elseif($arrEachSetting['type'] === 'json' && is_array($arrEachSetting['value'])){
+							$arrEachSetting['value'] = json_encode($arrEachSetting['value']);
+						}
 
 	                    $this->arrSettings[$arrEachSetting['key']] = $arrEachSetting['value'];
 	                }
@@ -122,14 +124,22 @@
 		protected function loadTempSettings(){
 
 			//Process the core settings of the framework
-			$strCoreJSON = sprintf('%ssettings.json',TWIST_FRAMEWORK_INSTALL);
+			$strCoreJSON = sprintf('%sData/settings.json',TWIST_PACKAGE_INSTALL);
 
 			$jsonData = file_get_contents($strCoreJSON);
 			$this->arrSettingsInfo = json_decode($jsonData,true);
 
 			foreach($this->arrSettingsInfo as $strKey => $arrSettings){
 				$arrSettings['key'] = $strKey;
+
+				//Fix JSON encoded data
+				if($arrSettings['type'] === 'json' && is_array($arrSettings['default'])){
+					$arrSettings['default'] = json_encode($arrSettings['default']);
+				}
+
 				$arrSettings['value'] = $arrSettings['default'];
+				$arrSettings['package'] = 'core';
+
 				$this->arrSettingsInfo[$strKey] = $arrSettings;
 			}
 		}
@@ -198,10 +208,9 @@
 		/**
 		 * Remove/Uninstall a particular setting or group of settings form the Database or File depending on how TwistPHP has been configured.
 		 * @param string $strPackage
-		 * @param string $strGroup
 		 * @param null $strKey
 		 */
-		public function uninstall($strPackage,$strGroup,$strKey = null){
+		public function uninstall($strPackage,$strKey = null){
 
 			if($this->blFileConfig){
 
@@ -216,7 +225,7 @@
 				}else{
 					foreach($this->arrSettingsInfo as $strKey => $arrInfo){
 
-						if($arrInfo['package'] == $strPackage && $arrInfo['group'] == $strGroup){
+						if($arrInfo['package'] == $strPackage){
 							unset($this->arrSettingsInfo[$strKey]);
 							unset($this->arrSettings[$strKey]);
 						}
@@ -228,18 +237,16 @@
 
 			}else{
 				if(is_null($strKey)){
-					\Twist::Database()->query("DELETE FROM `%s`.`%ssettings` WHERE `package` = '%s' AND `group` = '%s'",
+					\Twist::Database()->query("DELETE FROM `%s`.`%ssettings` WHERE `package` = '%s'",
 						TWIST_DATABASE_NAME,
 						TWIST_DATABASE_TABLE_PREFIX,
-						$strPackage,
-						$strGroup
+						$strPackage
 					);
 				}else{
-					\Twist::Database()->query("DELETE FROM `%s`.`%ssettings` WHERE `package` = '%s' AND `group` = '%s' AND `key` = '%s'",
+					\Twist::Database()->query("DELETE FROM `%s`.`%ssettings` WHERE `package` = '%s' AND `key` = '%s'",
 						TWIST_DATABASE_NAME,
 						TWIST_DATABASE_TABLE_PREFIX,
 						$strPackage,
-						$strGroup,
 						$strKey
 					);
 				}
@@ -263,6 +270,14 @@
 		 */
 		public function install($strPackage,$strGroup,$strKey,$mxdValue,$strTitle,$strDescription,$strDefault,$strType,$strOptions,$blNull = false){
 
+			if($strType === 'json' && is_array($strDefault)){
+				$strDefault = json_encode($strDefault);
+			}
+
+			if($strType === 'json' && is_array($mxdValue)){
+				$mxdValue = json_encode($mxdValue);
+			}
+
 			if(TWIST_DATABASE_PROTOCOL === 'none'){
 
 				$strSettingsJSON = sprintf('%ssettings.json',TWIST_APP_CONFIG);
@@ -281,19 +296,20 @@
 				if(array_key_exists($strKey,$arrSettings)){
 
 					$arrSettings[$strKey] = array(
+						'group' => $strGroup,
 						'title' => $strTitle,
 						'description' => $strDescription,
 						'default' => $strDefault,
 						'type' => $strType,
 						'options' => $strOptions,
 						'null' => ($blNull) ? 1 : 0,
-						`deprecated` => 0
+						'deprecated' => 0
 					);
 				}else{
 
 					$arrSettings[$strKey] = array(
 						'package' => $strPackage,
-						'group' => strtolower($strGroup),
+						'group' => $strGroup,
 						'key' => $strKey,
 						'value' => $mxdValue,
 						'title' => $strTitle,
@@ -302,7 +318,7 @@
 						'type' => $strType,
 						'options' => $strOptions,
 						'null' => ($blNull) ? 1 : 0,
-						`deprecated` => 0
+						'deprecated' => 0
 					);
 				}
 
@@ -323,6 +339,7 @@
 										`null` = '%s',
 										`deprecated` = '0'
 								ON DUPLICATE KEY UPDATE
+										`group` = '%s',
 										`title` = '%s',
 										`description` = '%s',
 										`default` = '%s',
@@ -333,7 +350,7 @@
 					TWIST_DATABASE_NAME,
 					TWIST_DATABASE_TABLE_PREFIX,
 					$strPackage,
-					strtolower($strGroup),
+					$strGroup,
 					strtoupper($strKey),
 					$mxdValue,
 					$strTitle,
@@ -342,6 +359,7 @@
 					$strType,
 					$strOptions,
 					($blNull) ? '1' : '0',
+					$strGroup,
 					$strTitle,
 					$strDescription,
 					$strDefault,

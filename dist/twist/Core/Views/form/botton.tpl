@@ -1,1 +1,0 @@
-<button name="{data:name}" type="{data:type}"{data:attributes}>{data:title}</button>

@@ -2,7 +2,7 @@
 
 	/**
 	 * TwistPHP - An open source PHP MVC framework built from the ground up.
-	 * Copyright (C) 2016  Shadow Technologies Ltd.
+	 * Shadow Technologies Ltd.
 	 *
 	 * This program is free software: you can redistribute it and/or modify
 	 * it under the terms of the GNU General Public License as published by
@@ -196,10 +196,11 @@
 
 		/**
 		 * Update a record in a table
-		 * @param string $strTable
+		 * @param       $strTable
 		 * @param array $arrData
 		 * @param array $arrWhere
 		 * @param array $arrLimit
+		 * @return bool
 		 */
 		public function updateRow($strTable,$arrData = array(),$arrWhere = array(),$arrLimit = array()){ //TODO: $arrLimit isn't used
 
@@ -229,9 +230,10 @@
 
 		/**
 		 * Delete a record from a table
-		 * @param string $strTable
+		 * @param       $strTable
 		 * @param array $arrWhere
 		 * @param array $arrLimit
+		 * @return int
 		 */
 		public function deleteRow($strTable,$arrWhere = array(),$arrLimit = array()){
 
@@ -449,44 +451,44 @@
 		function query($strQuery){
 
 			$arrKeys = array('full','type');
-			$strExpresion = "([a-z]+)";
+			$strExpression = "([a-z]+)";
 
 			if(strstr($strQuery,'DELETE ')){
-				$strExpresion .= "\sFROM\s([a-z0-9\-\_\.\`]+)";
+				$strExpression .= "\sFROM\s([a-z0-9\-\_\.\`]+)";
 				$arrKeys[] = 'table';
 			}elseif(strstr($strQuery,' FROM ')){
-				$strExpresion .= "([a-z0-9\*\-\_\.\,\s\`]+)\sFROM\s([a-z0-9\-\_\.\`]+)";
+				$strExpression .= "([a-z0-9\*\-\_\.\,\s\`]+)\sFROM\s([a-z0-9\-\_\.\`]+)";
 				$arrKeys[] = 'options';
 				$arrKeys[] = 'table';
 			}elseif(strstr($strQuery,' INTO ')){
-				$strExpresion .= "\sINTO\s([a-z0-9\-\_\.\`]+)(\sSET\s[\w\W]+)";
+				$strExpression .= "\sINTO\s([a-z0-9\-\_\.\`]+)(\sSET\s[\w\W]+)";
 				$arrKeys[] = 'table';
 				$arrKeys[] = 'data';
 			}elseif(strstr($strQuery,'UPDATE ')){
-				$strExpresion .= "\s([a-z0-9\-\_\.\`]+)(\sSET\s[\w\W]+)";
+				$strExpression .= "\s([a-z0-9\-\_\.\`]+)(\sSET\s[\w\W]+)";
 				$arrKeys[] = 'table';
 				$arrKeys[] = 'data';
 			}
 
 			if(strstr($strQuery,' WHERE ')){
-				$strExpresion .= "(\sWHERE\s[a-z0-9\-\_\.\s\=\<\>\`\']+)";
+				$strExpression .= "(\sWHERE\s[a-z0-9\-\_\.\s\=\<\>\`\']+)";
 				$arrKeys[] = 'where';
 			}
 
 			if(strstr($strQuery,' ORDER BY ')){
-				$strExpresion .= "(\sORDER\sBY\s[a-z0-9\-\_\.\`]+ [a-z]{3,4})";
+				$strExpression .= "(\sORDER\sBY\s[a-z0-9\-\_\.\`]+ [a-z]{3,4})";
 				$arrKeys[] = 'order';
 			}
 
 			if(strstr($strQuery,' LIMIT ')){
-				$strExpresion .= "(\sLIMIT\s[0-9\,]+)";
+				$strExpression .= "(\sLIMIT\s[0-9\,]+)";
 				$arrKeys[] = 'limit';
 			}
 
-			//echo $strExpresion."<br />";
+			//echo $strExpression."<br />";
 			//echo $strQuery."<br />";
 
-			preg_match(sprintf("#^%s$#i",$strExpresion),$strQuery,$arrMatches);
+			preg_match(sprintf("#^%s$#i",$strExpression),$strQuery,$arrMatches);
 			$arrMatches = array_combine($arrKeys,$arrMatches);
 
 			$strTable = $this->processQueryTable($arrMatches);

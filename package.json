@@ -1,6 +1,6 @@
 {
   "name": "twistphp",
-  "version": "3.1.1",
+  "version": "4.0.0",
   "description": "The PHP MVC framework with a TWIST",
   "main": "",
   "scripts": {
@@ -17,21 +17,24 @@
   },
   "homepage": "https://twistphp.com",
   "dependencies": {
+    "babel-core": "^6.26.3",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "form-serialize": "^0.7.1",
     "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.1",
     "gulp-concat": "^2.6.0",
-    "gulp-jshint": "^2.0.1",
-    "gulp-rename": "^1.2.2",
-    "gulp-sass": "^3.1.0",
-    "gulp-sourcemaps": "^2.6.0",
-    "gulp-uglify": "^2.1.2",
-    "gulp-using": "^0.1.1",
-    "gulp-watch": "^4.3.10",
-    "jsdoc": "^3.4.2",
-    "jshint": "^2.9.3"
+    "gulp-eslint": "^4.0.2",
+    "gulp-sass": "^3.2.1",
+    "gulp-sourcemaps": "^1.12.1",
+    "rollup": "^0.55.5",
+    "rollup-plugin-babel": "^3.0.7",
+    "rollup-plugin-commonjs": "^8.4.1",
+    "rollup-plugin-eslint": "^4.0.0",
+    "rollup-plugin-uglify": "^3.0.0"
   },
   "devDependencies": {
     "gulp-jsdoc3": "^1.0.1",
-    "gulp-watch": "^4.3.5",
-    "jsdoc": "^3.4.0"
+    "jsdoc": "^3.5.5"
   }
 }

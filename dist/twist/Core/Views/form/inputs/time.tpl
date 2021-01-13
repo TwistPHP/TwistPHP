@@ -1,1 +1,0 @@
-<input type="time" name="{data:name}" value="{data:value}"{data:arttributes}>

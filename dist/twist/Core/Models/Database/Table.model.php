@@ -2,7 +2,7 @@
 
 	/**
 	 * TwistPHP - An open source PHP MVC framework built from the ground up.
-	 * Copyright (C) 2016  Shadow Technologies Ltd.
+	 * Shadow Technologies Ltd.
 	 *
 	 * This program is free software: you can redistribute it and/or modify
 	 * it under the terms of the GNU General Public License as published by
@@ -102,7 +102,7 @@
 			$strTable = $this->strTable;
 			$strDatabaseName = $this->strDatabase;
 
-			$arrStructure = \Twist::Cache('twist/utility/database')->read(sprintf('dbStructure-%s+%s',$strDatabaseName,$strTable));
+			$arrStructure = \Twist::Cache('twist/helper/database')->read(sprintf('dbStructure-%s+%s',$strDatabaseName,$strTable));
 
 			if(is_null($arrStructure)){
 
@@ -201,7 +201,7 @@
 					}
 
 					//PHP session cache only expire when page is loaded
-					\Twist::Cache('twist/utility/database')->write(sprintf('dbStructure-%s+%s',$strDatabaseName,$strTable),$arrStructure,0);
+					\Twist::Cache('twist/helper/database')->write(sprintf('dbStructure-%s+%s',$strDatabaseName,$strTable),$arrStructure,0);
 				}
 			}
 
@@ -212,7 +212,7 @@
 		 * Remove the database table structure cache file, this is used when alterning a table or can be caled manualy if required
 		 */
 		public function clearStructureCache(){
-			\Twist::Cache('twist/utility/database')->remove(sprintf('dbStructure-%s+%s',$this->strDatabase,$this->strTable));
+			\Twist::Cache('twist/helper/database')->remove(sprintf('dbStructure-%s+%s',$this->strDatabase,$this->strTable));
 		}
 
 		/**

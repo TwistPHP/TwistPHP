@@ -1,1 +1,0 @@
-<label for="{data:filed_name}">{data:title}</label>

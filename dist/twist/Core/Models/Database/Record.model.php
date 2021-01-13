@@ -2,7 +2,7 @@
 
 	/**
 	 * TwistPHP - An open source PHP MVC framework built from the ground up.
-	 * Copyright (C) 2016  Shadow Technologies Ltd.
+	 * Shadow Technologies Ltd.
 	 *
 	 * This program is free software: you can redistribute it and/or modify
 	 * it under the terms of the GNU General Public License as published by
@@ -124,12 +124,16 @@
 		 */
 		public function set($strField,$strValue){
 
+			$blOut = false;
+
 			if(array_key_exists($strField,$this->arrStructure['columns'])){
 				$this->arrRecord[$strField] = $strValue;
-				return true;
+				$blOut = true;
 			}else{
 				throw new \Exception(sprintf("Error adding data to database record, invalid field '%s' passed",$strField));
 			}
+
+			return $blOut;
 		}
 
 		/**
@@ -162,9 +166,9 @@
 		 */
 		public function increment($strField,$intStep = 1){
 			$intValue = $this->get($strField);
-			$intNewValue = $intValue+$intStep;
-			$this->set($strField,$intNewValue);
-			return $intNewValue;
+			$intValue += $intStep;
+			$this->set($strField,$intValue);
+			return $intValue;
 		}
 
 		/**
@@ -175,13 +179,13 @@
 		 */
 		public function decrement($strField,$intStep = 1){
 			$intValue = $this->get($strField);
-			$intNewValue = $intValue-$intStep;
-			$this->set($strField,$intValue-$intIncrementStep);
-			return $intNewValue;
+			$intValue -= $intStep;
+			$this->set($strField,$intValue);
+			return $intValue;
 		}
 
 		/**
-		 * Commit the updated record to the database table, setting the second parameter true - adds as new row (default: false). False is returned if the query fails, a successful insert returns insertID, a successful update returns numAffectedRows or true if numAffectedRows is 0.
+		 * Commit the updated record to the database table. False is returned if the query fails, a successful insert returns insertID, a successful update returns numAffectedRows or true if numAffectedRows is 0.
 		 * @param bool $blInsert
 		 * @return bool|int
 		 */
@@ -199,17 +203,17 @@
 					$this->arrOriginalRecord = $this->arrRecord;
 
 					if(substr($strSQL,0,6) === 'INSERT'){
-						
+
 						$mxdOut = true;
 						$strAutoIncrementField = $this->detectAutoIncrement();
-						
+
 						if(!is_null($strAutoIncrementField)){
 							$mxdOut = $resResult->insertID();
-							
+
 							//Update the auto increment field in the record
 							$this->arrOriginalRecord[$strAutoIncrementField] = $this->arrRecord[$strAutoIncrementField] = $mxdOut;
 						}
-						
+
 					}else if($resResult->affectedRows() !== 0){
 						$mxdOut = $resResult->affectedRows();
 					}

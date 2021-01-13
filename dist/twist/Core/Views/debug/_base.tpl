@@ -1,12 +1,12 @@
 <div id="twist-debug">
-	<a href="https://twistphp.com/docs" target="_blank" id="twist-debug-icon" title="TwistPHP documentation"><img src="{resource:core-uri}twist/logos/logo-64.png" alt="TwistPHP documentation"></a>
+	<a href="https://twistphp.com/docs" target="_blank" id="twist-debug-icon" title="TwistPHP documentation"><img src="{resource:core-uri}logos/logo-64.png" alt="TwistPHP documentation"></a>
 	<ul id="twist-debug-blocks">
-		<li><a href="#twist-debug-messages"><span id="twist-debug-errors" data-count="{data:warning_count}"><i class="fa fa-exclamation-circle"></i></span><span id="twist-debug-warnings" data-count="{data:notice_count}"><i class="fa fa-exclamation-triangle"></i></span><span id="twist-debug-dumps" data-count="{data:other_count}"><i class="fa fa-comment"></i></span></a></li><!--
-		--><li><a href="#twist-debug-timeline"><i class="fa fa-fw fa-lg fa-clock-o"></i>{data:execution_time_formatted}<i class="fa fa-fw fa-lg fa-line-chart"></i>{bytestosize[data:memory/peak]}</a></li><!--
-		--><li><a href="#twist-debug-database"><i class="fa fa-fw fa-lg fa-database"></i>{data:database_query_count}</a></li><!--
-		--><li><a href="#twist-debug-ajax" id="twist-debug-ajax-count" data-count="0"><i class="fa fa-fw fa-lg fa-cloud"></i></a></li><!--
-		--><li><a href="#twist-debug-fileupload" id="twist-debug-fileupload-count" data-count="0"><i class="fa fa-fw fa-lg fa-upload"></i></a></li><!--
-		--><li><a href="#twist-debug-route"><strong>{server:REQUEST_METHOD}</strong> {route:uri}</a></li>
+		<li><button data-panel="#twist-debug-messages"><span id="twist-debug-errors" data-count="{data:warning_count}"><i class="fa fa-exclamation-circle"></i></span><span id="twist-debug-warnings" data-count="{data:notice_count}"><i class="fa fa-exclamation-triangle"></i></span><span id="twist-debug-info" data-count="{data:other_count}"><i class="fa fa-info-circle"></i></span><span id="twist-debug-logs" data-count="0"><i class="fa fa-comment"></i></span></button></li><!--
+		--><li><button data-panel="#twist-debug-timeline"><i class="fa fa-fw fa-lg fa-clock-o"></i>{data:execution_time_formatted}<i class="fa fa-fw fa-lg fa-line-chart"></i>{bytestosize[data:memory/peak]}</button></li><!--
+		--><li><button data-panel="#twist-debug-database"><i class="fa fa-fw fa-lg fa-database"></i>{data:database_query_count}</button></li><!--
+		--><li><button data-panel="#twist-debug-ajax" id="twist-debug-ajax-count" data-count="0"><i class="fa fa-fw fa-lg fa-cloud"></i></button></li><!--
+		--><li><button data-panel="#twist-debug-fileupload" id="twist-debug-fileupload-count" data-count="0"><i class="fa fa-fw fa-lg fa-upload"></i></button></li><!--
+		--><li><button data-panel="#twist-debug-route"><strong>{server:REQUEST_METHOD}</strong> {route:uri}</button></li>
 	</ul>
 </div>
 <div id="twist-debug-details">
@@ -28,9 +28,7 @@
                         <tr>
                             <th>Event</th>
                             <th>Time</th>
-                            <!--<th>Timecode</th>-->
                             <th>Memory</th>
-                            <!--<th>Memory (bytes)</th>-->
                             <th>Description</th>
                         </tr>
                     </thead>
@@ -114,10 +112,12 @@
 				<h6>Current Route</h6>
                 <table>
                     <thead>
-                        <th>Key</th>
-                        <th>Value</th>
-                        <th>Type</th>
-                        <th>Length</th>
+                        <tr>
+                            <th>Key</th>
+                            <th>Value</th>
+                            <th>Type</th>
+                            <th>Length</th>
+                        </tr>
                     </thead>
                     <tbody>
                         {data:current_route}
@@ -127,10 +127,12 @@
 					<h6>$_GET Params</h6>
                     <table>
                         <thead>
-                            <th>Key</th>
-                            <th>Value</th>
-                            <th>Type</th>
-                            <th>Length</th>
+                            <tr>
+                                <th>Key</th>
+                                <th>Value</th>
+                                <th>Type</th>
+                                <th>Length</th>
+                            </tr>
                         </thead>
                         <tbody>
                             {data:get}
@@ -141,10 +143,12 @@
 					<h6>$_POST Params</h6>
                     <table>
                         <thead>
-                            <th>Key</th>
-                            <th>Value</th>
-                            <th>Type</th>
-                            <th>Length</th>
+                            <tr>
+                                <th>Key</th>
+                                <th>Value</th>
+                                <th>Type</th>
+                                <th>Length</th>
+                            </tr>
                         </thead>
                         <tbody>
                             {data:post}
@@ -155,10 +159,12 @@
 					<h6>PHP $_SESSION</h6>
                     <table>
                         <thead>
-                            <th>Key</th>
-                            <th>Value</th>
-                            <th>Type</th>
-                            <th>Length</th>
+                            <tr>
+                                <th>Key</th>
+                                <th>Value</th>
+                                <th>Type</th>
+                                <th>Length</th>
+                            </tr>
                         </thead>
                         <tbody>
                             {data:php_session}
@@ -169,10 +175,12 @@
 					<h6>Twist $_SESSION</h6>
                     <table>
                         <thead>
-                            <th>Key</th>
-                            <th>Value</th>
-                            <th>Type</th>
-                            <th>Length</th>
+                            <tr>
+                                <th>Key</th>
+                                <th>Value</th>
+                                <th>Type</th>
+                                <th>Length</th>
+                            </tr>
                         </thead>
                         <tbody>
                             {data:twist_session}
@@ -183,10 +191,12 @@
 					<h6>Cookies</h6>
                     <table>
                         <thead>
-                            <th>Key</th>
-                            <th>Value</th>
-                            <th>Type</th>
-                            <th>Length</th>
+                            <tr>
+                                <th>Key</th>
+                                <th>Value</th>
+                                <th>Type</th>
+                                <th>Length</th>
+                            </tr>
                         </thead>
                         <tbody>
                             {data:cookie}
@@ -196,10 +206,12 @@
 				<h6>Request Headers</h6>
                 <table>
                     <thead>
-                        <th>Key</th>
-                        <th>Value</th>
-                        <th>Type</th>
-                        <th>Length</th>
+                        <tr>
+                            <th>Key</th>
+                            <th>Value</th>
+                            <th>Type</th>
+                            <th>Length</th>
+                        </tr>
                     </thead>
                     <tbody>
                         {data:request_headers}
@@ -208,10 +220,12 @@
 				<h6>Server Information</h6>
                 <table>
                     <thead>
-                        <th>Key</th>
-                        <th>Value</th>
-                        <th>Type</th>
-                        <th>Length</th>
+                        <tr>
+                            <th>Key</th>
+                            <th>Value</th>
+                            <th>Type</th>
+                            <th>Length</th>
+                        </tr>
                     </thead>
                     <tbody>
                         {data:server}
@@ -221,5 +235,4 @@
 		</div>
 	</div>
 </div>
-{resource:font-awesome}
-{resource:twist/debug}
+{resource:debug}

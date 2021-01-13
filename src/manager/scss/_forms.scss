@@ -1,0 +1,301 @@
+
+
+.customSelectBox{
+	color: #000;
+	font-family: "Source Sans Pro", sans-serif;
+	font-size: 18px;
+	font-weight: 300;
+	line-height: 25px;
+	background-color: #FFF;
+	border: 0 solid #000;
+	padding: 10px 10px;
+	margin-bottom: 10px;
+	width: 100%;
+	border-radius: 2px;
+	position: relative;
+	text-align: left;
+	cursor: pointer;
+
+	&:after{
+		content: "\25b2\A\25bc";
+		white-space: pre;
+		color:$twistphp-green;
+		display: inline-block;
+		position: absolute;
+		top: calc(50% - 12px);
+		right:10px;
+		font-size: 12px;
+		line-height: 14px;
+	}
+
+	.selectedOption{
+		display: inline-block;
+		width: 100%;
+	}
+
+	.selectOptionsContainer{
+		display:none;
+
+		&:before{
+			display: none;
+			position: absolute;
+			top: -45px;
+			left: 5px;
+			content: attr(title);
+			background: #ededed;
+			border: 1px solid #CCC;
+			padding: 6px;
+			width: calc(100% - 24px);
+			border-radius: 5px 5px 0 0;
+			z-index: 1;
+		}
+
+		.mobileSearch{
+			display: none;
+			position: absolute;
+			top: -45px;
+			left: 5px;
+			content: attr(title);
+			background: #ededed;
+			border: 1px solid #CCC;
+			padding: 6px;
+			width: calc(100% - 10px);
+			border-radius: 5px 5px 0 0;
+			z-index: 1;
+		}
+
+		&.searching:before{
+			display: block;
+		}
+
+		&.mobile .mobileSearch{
+			display: block;
+		}
+
+		.selectOptions{
+			position: absolute;
+			background-color: #FFF;
+			border:1px solid $twistphp-dark-grey;
+			padding:14px 4px;
+			width: calc(100% - 10px);
+			top: -10px;
+			left: 5px;
+			border-radius: 4px;
+			right:0;
+			overflow: auto;
+			max-height: 220px;
+			text-align: left;
+			z-index:12000;
+
+			>div{
+				display:block;
+				background-color: transparent;
+				width: calc(100% - 22px);
+				margin-left: 22px;
+				position: relative;
+				padding:4px;
+				cursor:pointer;
+
+				&:not(.disabled):hover,&.predictiveHover{
+					display:block;
+					background-color: rgba(178,210,234,0.7);
+					width: calc(100% - 22px);
+					margin-left: 22px;
+					cursor: pointer;
+				}
+
+				&.disabled{
+					cursor: no-drop;
+					color:#BBBBBB;
+				}
+
+				&.selected:before{
+					content:"✓";
+					color:$twistphp-green;
+					display: inline-block;
+					position: absolute;
+					top: calc(50% - 11px);
+					left: -18px;
+					font-size:16px;
+				}
+			}
+		}
+	}
+
+	&.active .selectOptionsContainer{
+		display:block;
+	}
+}
+
+
+/** Toggle Switch Styles */
+/* The switch - the box around the slider */
+.switch {
+	position: relative;
+	display: inline-block;
+	width: 60px !important;
+	height: 34px;
+
+	/* Hide default HTML checkbox */
+	input {
+		display: none !important;
+	}
+
+	/* The slider */
+	.slider {
+		position: absolute;
+		cursor: pointer;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: $twistphp-dark-grey;
+		-webkit-transition: .4s;
+		transition: .4s;
+
+		&:before {
+			position: absolute;
+			content: "";
+			height: 26px;
+			width: 26px;
+			left: 4px;
+			bottom: 4px;
+			background-color: white;
+			-webkit-transition: .4s;
+			transition: .4s;
+			font-weight: 600;
+		}
+	}
+
+	input:checked + .slider {
+		background-color: $twistphp-green;
+	}
+
+	input:focus + .slider {
+		box-shadow: 0 0 1px $twistphp-green;
+	}
+
+	input:checked + .slider:before {
+		-webkit-transform: translateX(26px);
+		-ms-transform: translateX(26px);
+		transform: translateX(26px);
+		content: "\f00C";
+		font-family: "Font Awesome 5 Free";
+		font-size: 14px;
+		//font-size: 9px;
+		//content: "ON";
+		line-height: 28px;
+		padding-left: 1px;
+		padding-right: 0;
+		text-align: center;
+		color: $twistphp-green;
+		width: 25px;
+	}
+
+	input:disabled + .slider:before {
+		content: "\f023" !important;
+		font-family: "Font Awesome 5 Free";
+		font-size: 14px;
+		line-height: 28px;
+		padding-left: 1px;
+		padding-right: 0;
+		text-align: center;
+		color: $twistphp-dark-grey !important;
+		width: 25px;
+	}
+
+	/* Rounded sliders */
+	.slider.round {
+		border-radius: 34px;
+	}
+
+	.slider.round:before {
+		border-radius: 50%;
+	}
+}
+
+small{
+	.switch{
+		width: 50px !important;
+		height: 19px;
+
+		.slider:before{
+			height: 13px;
+			width: 13px;
+			left: 4px;
+			bottom: 3px;
+		}
+
+		input:checked+.slider:before{
+			-webkit-transform: translateX(30px);
+			-ms-transform: translateX(30px);
+			transform: translateX(30px);
+			height: 13px;
+			width: 13px;
+			left: 4px;
+			bottom: 3px;
+			font-size: 8px;
+			line-height: 15px;
+		}
+	}
+}
+
+form{
+
+	input:not([type="hidden"]),select,textarea,div.customSelectBox{
+		width:98%;
+		margin:5px 1%;
+		font-size: 1rem;
+		line-height: 1.5;
+		display: inline-block;
+		height: 46px;
+		padding: .625rem .75rem;
+		transition: all .2s cubic-bezier(.68,-.55,.265,1.55);
+		color: $twistphp-dark-grey;
+		border: 1px solid $twistphp-light-grey;
+		border-radius: 0;
+		background-color: #fff;
+		background-clip: padding-box;
+		box-shadow: none;
+	}
+
+	textarea{
+		min-height: 100px;
+	}
+
+	.switch{
+		margin:10px calc(66% - 60px) 10px 0;
+		padding: .625rem 0;
+		display: inline-block;
+	}
+
+	label{
+		display: block;
+		width:33%;
+		float:left;
+		margin:5px 0;
+		padding: .625rem .75rem;
+
+		+input:not([type="hidden"]),
+		+select,
+		+textarea,
+		+div.customSelectBox{
+			float:left;
+			width:66%;
+			margin:5px 0;
+		}
+	}
+
+	&.hideLabel{
+
+		label{
+			display: none;
+		}
+
+		input,select,textarea,div.switch,.customSelectBox{
+			display: block;
+			width:100%;
+			float:left;
+		}
+	}
+}

@@ -2,7 +2,7 @@
 
 /**
  * TwistPHP - An open source PHP MVC framework built from the ground up.
- * Copyright (C) 2016  Shadow Technologies Ltd.
+ * Shadow Technologies Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ class Placeholder extends Base{
 	 * line - Line color as a Hex code
 	 *
 	 * To register this functionality look at Twist::Route()->placeholder()
-	 * @related \Twist\Core\Utilities\Route
+	 * @related \Twist\Core\Helpers\Route
 	 */
 	public function _index(){
 

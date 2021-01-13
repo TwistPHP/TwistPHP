@@ -1,1 +1,1 @@
-<p class="{data:type}">{data:message}</p>
+<p class="notification {data:type}">{data:message}</p>

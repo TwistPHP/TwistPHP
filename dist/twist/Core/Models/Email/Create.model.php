@@ -2,7 +2,7 @@
 
 /**
  * TwistPHP - An open source PHP MVC framework built from the ground up.
- * Copyright (C) 2016  Shadow Technologies Ltd.
+ * Shadow Technologies Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,53 +35,9 @@ class Create{
 	protected $strCharEncoding = 'ISO-8859-1';
 	protected $intSenderLevel = 0;
 	protected $arrEmailData = array();
-	protected $strProtocol = 'native';
-	protected $resProtocol = null;
-	protected $arrSettingsSMTP = array();
-	protected $blUseFromParameter = true;
 
 	public function __construct(){
-
-		$this->strProtocol = \Twist::framework()->setting('EMAIL_PROTOCOL');
-
-		switch($this->strProtocol){
-
-			case'smtp';
-				$this->resProtocol = new ProtocolSMTP();
-
-				$this->arrSettingsSMTP = array(
-					'host' => \Twist::framework()->setting('EMAIL_SMTP_HOST'),
-					'port' => \Twist::framework()->setting('EMAIL_SMTP_PORT'),
-					'username' => \Twist::framework()->setting('EMAIL_SMTP_USERNAME'),
-					'password' => \Twist::framework()->setting('EMAIL_SMTP_PASSWORD')
-				);
-
-				break;
-
-			case'native';
-			default:
-				$this->resProtocol = new ProtocolNative();
-				break;
-		}
-
 		$this->reset();
-	}
-
-	public function useSMTP($strHost,$intPort,$strUsername,$strPassword){
-
-		$this->strProtocol = 'smtp';
-		$this->resProtocol = new ProtocolSMTP();
-
-		$this->arrSettingsSMTP = array(
-			'host' => $strHost,
-			'port' => $intPort,
-			'username' => $strUsername,
-			'password' => $strPassword
-		);
-	}
-
-	public function useFromParam($blStatus = true){
-		$this->blUseFromParameter = $blStatus;
 	}
 
 	protected function reset(){
@@ -332,6 +288,20 @@ class Create{
 	}
 
 	/**
+	 * Get all the processed Email Data, Pass in a previously exported array of data
+	 * @param null $arrEmailData
+	 * @return array|null
+	 */
+	public function data($arrEmailData = null){
+
+		if(!is_null($arrEmailData)){
+			$this->arrEmailData = $arrEmailData;
+		}
+
+		return $this->arrEmailData;
+	}
+
+	/**
 	 * Process and return all the source components that make up the Raw email
 	 * @return array
 	 */
@@ -395,10 +365,8 @@ class Create{
 		$this->arrEmailData['headers'] .= ($this->arrEmailData['from_name'] != '') ? sprintf("From: %s <%s>\r\n",$this->convertEncodingHeader($this->arrEmailData['from_name']),$this->arrEmailData['from_email']) : sprintf("From: %s\r\n",$this->arrEmailData['from_email']);
 
 		if(array_key_exists('reply_to',$this->arrEmailData) && $this->arrEmailData['reply_to'] != ''){
-			if($this->arrEmailData['reply_to'] != ''){
-				$this->arrEmailData['headers'] .= sprintf("Reply-To: %s\r\n",$this->arrEmailData['reply_to']);
-				$this->arrEmailData['headers'] .= sprintf("Return-Path: %s\r\n",$this->arrEmailData['reply_to']);
-			}
+			$this->arrEmailData['headers'] .= sprintf("Reply-To: %s\r\n",$this->arrEmailData['reply_to']);
+			$this->arrEmailData['headers'] .= sprintf("Return-Path: %s\r\n",$this->arrEmailData['reply_to']);
 		}
 
 		//Encode the subject
@@ -426,37 +394,41 @@ class Create{
 	 */
 	public function send($blClearCache = true){
 
-		$arrSource = $this->source();
+		$blStatus = false;
+		$blSend = true;
 
-		//If no connected then reconnect (Used only for SMTP)
-		if(!$this->resProtocol->connected()){
+		$arrPreProcessHooks = \Twist::framework()->hooks()->getAll('TWIST_EMAIL_PREPROCESS');
 
-			if(!$this->resProtocol->connect($this->arrSettingsSMTP['host'],$this->arrSettingsSMTP['port'])){
-				$arrError = $this->resProtocol->getError();
-				throw new \Exception($arrError['message'],$arrError['code']);
-			}
+		foreach($arrPreProcessHooks as $strKey => $arrModel){
+			$strEmailPreProcessModel = (string) $arrModel['model'];
+			$blSend = $strEmailPreProcessModel::emailPreProcess($this);
 
-			if(!$this->resProtocol->login($this->arrSettingsSMTP['username'],$this->arrSettingsSMTP['password'])){
-				$arrError = $this->resProtocol->getError();
-				throw new \Exception($arrError['message'],$arrError['code']);
+			if(!$blSend){
+				//A hook as requested the send not to happen, cancel the send
+				break;
 			}
 		}
 
-		$this->resProtocol->useFromParam($this->blUseFromParameter);
+		if($blSend){
+			//Get the send protocol and send out the email
+			$strProtocol = \Twist::framework()->setting('EMAIL_PROTOCOL');
+			$arrHooks = \Twist::framework()->hooks()->getAll('TWIST_EMAIL_PROTOCOLS');
 
-		$this->resProtocol->from($this->arrEmailData['from_email']);
-		$this->resProtocol->to($arrSource['to']);
-		$this->resProtocol->subject($this->arrEmailData['subject']);
-		$this->resProtocol->body($this->arrEmailData['body']);
-
-		$blResult = $this->resProtocol->send(($this->strProtocol == 'smtp') ? $this->arrEmailData['raw'] : $this->arrEmailData['headers']);
+			foreach($arrHooks as $strKey => $arrModel){
+				if($strKey == $strProtocol){
+					$strEmailModel = (string) $arrModel['model'];
+					$blStatus = $strEmailModel::protocolSend($this);
+					break;
+				}
+			}
+		}
 
 		if($blClearCache == true){
 			//Clear the email data ready for the next email
 			$this->reset();
 		}
 
-		return $blResult;
+		return $blStatus;
 	}
 
 	/**

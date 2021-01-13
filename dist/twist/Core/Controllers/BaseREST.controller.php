@@ -2,7 +2,7 @@
 
 /**
  * TwistPHP - An open source PHP MVC framework built from the ground up.
- * Copyright (C) 2016  Shadow Technologies Ltd.
+ * Shadow Technologies Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,10 +41,27 @@ class BaseREST extends Base{
     public function _baseCalls(){
 
         header("Access-Control-Allow-Orgin: *");
-        header("Access-Control-Allow-Methods: *");
+		header("Access-Control-Allow-Methods: ".\Twist::framework()->setting('API_ALLOWED_REQUEST_METHODS'));
 
         $this->_timeout(60);
         $this->_ignoreUserAbort(true);
+
+        $strAllowedMethods = explode(',',str_replace(" ","",\Twist::framework()->setting('API_ALLOWED_REQUEST_METHODS')));
+		if(!in_array('*',$strAllowedMethods) && !in_array($_SERVER['REQUEST_METHOD'],$strAllowedMethods)){
+			return $this->_respondError("Unsupported/Restricted request method used",405);
+		}
+
+		//If the method is POST and the data has been sent as JSON, extract the JSON into the global $_POST var
+		if(strtoupper($_SERVER['REQUEST_METHOD'] == 'POST') && strstr($_SERVER['CONTENT_TYPE'], 'application/json')){
+
+			$resSTDIN = (defined('STDIN')) ? STDIN : 'php://input';
+			$strSDIN = file_get_contents($resSTDIN);
+
+			$arrPostedJSON = json_decode($strSDIN, true);
+			if(json_last_error() === JSON_ERROR_NONE){
+				$_POST = $arrPostedJSON;
+			}
+		}
 
         //Determine the format in which to return the data, default is JSON
         self::$srtFormat = (array_key_exists('format',$_REQUEST)) ?  $_REQUEST['format'] : strtolower(self::$srtFormat);
@@ -53,7 +70,7 @@ class BaseREST extends Base{
     }
 
     /**
-     * Open REST dosnt require any auth but this function is needed for RESTKey and RESTUser
+     * Open REST does not require any auth but this function is needed for RESTKey and RESTUser
      * @return bool
      */
     public function _auth(){
@@ -79,7 +96,8 @@ class BaseREST extends Base{
      * @param mixed $mxdResults Results of the function call to be returned to the user
      * @param int $intCount Number of results returned by the function call
      * @param int $intResponseCode HTTP response code for the call
-     */
+	 * @return string Response to serve to the client
+	 */
     public function _respond($mxdResults,$intCount = 1,$intResponseCode = 200){
 
 		$arrResponse = Error::responseInfo($intResponseCode);
@@ -108,7 +126,8 @@ class BaseREST extends Base{
      * Error response to an API call should be used to return a standardised RESTful error response
      * @param string $strErrorMessage Error message to indicate what when wrong
      * @param int $intResponseCode HTTP response code for the call
-     */
+	 * @return string Response to the client with an error
+	 */
     public function _respondError($strErrorMessage,$intResponseCode = 404){
 
 		$arrResponse = Error::responseInfo($intResponseCode);
@@ -132,5 +151,21 @@ class BaseREST extends Base{
 
         return $strOutput;
     }
+
+	protected function _check(){
+
+		if(!parent::_check(true)){
+
+			//422 for missing parameters and 400 for bad formatting of parameter data
+			//$intResponseCode = ($arrEachResult['type'] == 'missing') ? 422 : 400;
+			$intResponseCode = 200;
+
+			$strErrorMessage = \Twist::messageHandler('error',array('style' => 'plain','key' => 'controller'));
+
+			//Only output one error response at a time, auto kills script
+			echo $this->_respondError($strErrorMessage,$intResponseCode);
+			die();
+		}
+	}
 
 }

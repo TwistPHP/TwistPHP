@@ -1,0 +1,94 @@
+[
+  {
+    "name": "Dashboard",
+    "uri": "",
+    "icon": "fa-tachometer-alt",
+    "order": 1,
+    "sub-sections": []
+  },
+  {
+    "name": "Packages",
+    "uri": "/packages",
+    "icon": "fa-puzzle-piece",
+    "order": 100,
+    "sub-sections": [
+      {
+        "name": "Installed",
+        "uri": "/packages",
+        "order": 10
+      },{
+        "name": "Search & Download",
+        "uri": "/packages/download",
+        "order": 20
+      }
+    ]
+  },
+  {
+    "name": "TwistProtect",
+    "uri": "/protect",
+    "icon": "fa-lock",
+    "order": 120,
+    "sub-sections": [
+      {
+        "name": "Firewall",
+        "uri": "/protect/firewall",
+        "order": 10
+      },
+      {
+        "name": "Scanner",
+        "uri": "/protect/scanner",
+        "order": 20
+      },
+      {
+        "name": "Security",
+        "uri": "/protect/security",
+        "order": 30
+      }
+    ]
+  },
+  {
+    "name": "Settings",
+    "uri": "/settings",
+    "icon": "fa-cogs",
+    "order": 150,
+    "sub-sections": [
+      {
+        "name": "Settings",
+        "uri": "/settings",
+        "order": 10
+      },
+      {
+        "name": "Cache",
+        "uri": "/settings/cache",
+        "order": 20
+      },
+      {
+        "name": "Performance",
+        "uri": "/settings/performance",
+        "order": 20
+      },
+      {
+        "name": "Redirects",
+        "uri": "/settings/redirects",
+        "order": 30
+      },
+      {
+        "name": "Scheduler",
+        "uri": "/settings/scheduled-tasks",
+        "order": 40
+      },
+      {
+        "name": "API Keys",
+        "uri": "/settings/apikeys",
+        "order": 50
+      }
+    ]
+  },
+  {
+    "name": "Logout",
+    "uri": "logout",
+    "icon": "fa-sign-out-alt",
+    "order": 200,
+    "sub-sections": []
+  }
+]

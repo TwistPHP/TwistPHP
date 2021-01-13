@@ -2,7 +2,7 @@
 
 /**
  * TwistPHP - An open source PHP MVC framework built from the ground up.
- * Copyright (C) 2016  Shadow Technologies Ltd.
+ * Shadow Technologies Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,6 +43,11 @@ class Validator{
 
 	/**
 	 * @alias checkCompare
+	 * @param      $strKey
+	 * @param      $strKey2
+	 * @param bool $blAllowBlank
+	 * @param bool $blRequired
+	 * @param bool $blTrim
 	 */
 	public function checkComparison($strKey,$strKey2,$blAllowBlank = false,$blRequired = true,$blTrim = true){
 		$this->checkCompare($strKey,$strKey2,$blAllowBlank,$blRequired,$blTrim);
@@ -179,6 +184,7 @@ class Validator{
 	 *
 	 * @param array $arrData
 	 * @return array
+	 * @throws \Exception
 	 */
 	public function test(&$arrData){
 
@@ -192,7 +198,6 @@ class Validator{
 		foreach($arrChecks as $strKey => $arrEachCheck){
 
 			$mxdTestValue = $mxdTestValue2 = null;
-			$mxdTestResult = false;
 
 			if(array_key_exists($strKey,$arrData)){
 				$mxdTestValue = $arrData[$strKey];
@@ -216,16 +221,18 @@ class Validator{
 					if(trim($mxdTestValue) == '' && array_key_exists('blank',$arrEachCheck) && $arrEachCheck['blank'] == 1){
 						$mxdTestResult = $mxdTestValue;
 					}else{
+						$strFunctionType = (string) trim($arrEachCheck['type']);
+
 						//Call the test function and get the result
 						switch($arrEachCheck['type']){
 							case'integer':
-								$mxdTestResult = \Twist::Validate()->$arrEachCheck['type']($mxdTestValue,$arrEachCheck['min_range'],$arrEachCheck['max_range']);
+								$mxdTestResult = \Twist::Validate()->$strFunctionType($mxdTestValue,$arrEachCheck['min_range'],$arrEachCheck['max_range']);
 								break;
 							case'ip':
-								$mxdTestResult = \Twist::Validate()->$arrEachCheck['type']($mxdTestValue,$arrEachCheck['ipv6']);
+								$mxdTestResult = \Twist::Validate()->$strFunctionType($mxdTestValue,$arrEachCheck['ipv6']);
 								break;
 							case'regx':
-								$mxdTestResult = \Twist::Validate()->$arrEachCheck['type']($mxdTestValue,$arrEachCheck['expression']);
+								$mxdTestResult = \Twist::Validate()->$strFunctionType($mxdTestValue,$arrEachCheck['expression']);
 								break;
 							case'compare':
 
@@ -243,10 +250,10 @@ class Validator{
 									$mxdTestValue2 = trim($mxdTestValue2);
 								}
 
-								$mxdTestResult = \Twist::Validate()->$arrEachCheck['type']($mxdTestValue,$mxdTestValue2);
+								$mxdTestResult = \Twist::Validate()->$strFunctionType($mxdTestValue,$mxdTestValue2);
 								break;
 							default:
-								$mxdTestResult = \Twist::Validate()->$arrEachCheck['type']($mxdTestValue);
+								$mxdTestResult = \Twist::Validate()->$strFunctionType($mxdTestValue);
 								break;
 						}
 					}

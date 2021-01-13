@@ -2,7 +2,7 @@
 
 /**
  * TwistPHP - An open source PHP MVC framework built from the ground up.
- * Copyright (C) 2016  Shadow Technologies Ltd.
+ * Shadow Technologies Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 
 namespace Twist\Core\Models;
 use Twist\Classes\Error;
+use Twist\Core\Models\Resources;
 
 /**
  * Debugging the framework and its modules, functionality to access debug data can be found here. Data will only be present if Debugging is enabled in your settings.
@@ -235,5 +236,16 @@ final class Debug{
 		$arrTags['execution_time_formatted'] = ($arrTimer['total'] < 1) ? round($arrTimer['total']*1000).'ms' : round($arrTimer['total'],3).'s';
 
 		return $this->resTemplate->build('_base.tpl',$arrTags);
+	}
+
+	/**
+	 * Return the JS catcher script for errors and warnings
+	 * @return string
+	 */
+	public function catcher() {
+
+		$resResource = new Resources();
+		$resResource -> viewResource( 'core-uri' );
+		return sprintf('<script>%s</script>',file_get_contents(sprintf('%sCore/Resources/debug/js/twistdebugcatcher.js',TWIST_FRAMEWORK)));
 	}
 }
