@@ -15,36 +15,36 @@
 		public function testDownload(){
 
 			$arrPackages = \Twist::framework()->package()->getAll();
-			$this->assertArrayNotHasKey('notifications',$arrPackages);
+			$this->assertArrayNotHasKey('mailqueue',$arrPackages);
 
 			$arrPackages = \Twist::framework()->package()->getRepository();
-			$this->assertArrayHasKey('notifications',$arrPackages);
+			$this->assertArrayHasKey('mailqueue',$arrPackages);
 
-			\Twist::framework()->package()->download($arrPackages['notifications']['key']);
+			\Twist::framework()->package()->download($arrPackages['mailqueue']['key']);
 
 			$arrPackages = \Twist::framework()->package()->getAll();
-			$this->assertArrayHasKey('notifications',$arrPackages);
+			$this->assertArrayHasKey('mailqueue',$arrPackages);
 		}
 
 		public function testInstall(){
 
-			$this->assertFalse(\Twist::framework()->package()->isInstalled('notifications'));
+			$this->assertFalse(\Twist::framework()->package()->isInstalled('mailqueue'));
 
-			\Twist::framework()->package()->installer('notifications');
+			\Twist::framework()->package()->installer('mailqueue');
 
-			$this->assertTrue(\Twist::framework()->package()->isInstalled('notifications'));
+			$this->assertTrue(\Twist::framework()->package()->isInstalled('mailqueue'));
 		}
 
 		public function testInformation(){
 
-			$this->assertArrayHasKey('slug',\Twist::framework()->package()->information('notifications'));
+			$this->assertArrayHasKey('slug',\Twist::framework()->package()->information('mailqueue'));
 		}
 
 		public function testUninstall(){
 
-			\Twist::framework()->package()->uninstaller('notifications');
+			\Twist::framework()->package()->uninstaller('mailqueue');
 
-			$this->assertFalse(\Twist::framework()->package()->isInstalled('notifications'));
+			$this->assertFalse(\Twist::framework()->package()->isInstalled('mailqueue'));
 		}
 
 	}

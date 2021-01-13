@@ -31,7 +31,7 @@ class File extends PHPUnitSupport{
 		$this->assertEquals('image/png',\Twist::File()->mimeType('/some/file/name.png'));
 
 		$arrInfo = \Twist::File()->mimeTypeInfo('/some/file/name.png');
-		$this->assertEquals('Image',$arrInfo['name']);
+		$this->assertEquals('Image',$arrInfo['type']);
 
 		$arrTypes = \Twist::File()->mimeTypes();
 		$this->assertTrue(count($arrTypes) > 1);

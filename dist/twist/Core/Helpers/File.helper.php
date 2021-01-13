@@ -181,7 +181,7 @@ class File extends Base{
 			$mxdOut = explode(',',$mxdOut[0]);
 		}
 
-		return (is_null($mxdOut)) ? 'application/octet-stream' : ($blReturnDefaultOnly) ? $mxdOut[0] : $mxdOut;
+		return (is_null($mxdOut)) ? 'application/octet-stream' : (($blReturnDefaultOnly) ? $mxdOut[0] : $mxdOut);
 	}
 
 	/**

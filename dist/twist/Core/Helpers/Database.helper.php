@@ -361,7 +361,7 @@ class Database extends Base{
 	 */
 	public function escapeString($strRawString){
 		$strOut = strval($strRawString);
-		$strOut = (get_magic_quotes_gpc()) ? stripslashes($strOut) : $strOut;
+		//$strOut = (get_magic_quotes_gpc()) ? stripslashes($strOut) : $strOut;//PHP7.4 deprecated
 		return (!is_numeric($strOut) && $this->connected()) ? $this->resLibrary->escapeString($strOut) : $strOut;
 	}
 
