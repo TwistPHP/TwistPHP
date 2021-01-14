@@ -1,5 +1,5 @@
 {
-    "name": "twistphp/twistphp",
+    "name": "twistphp/framework",
     "type": "library",
     "description": "TwistPHP is an open source PHP MVC framework built from the ground up",
     "keywords": [
