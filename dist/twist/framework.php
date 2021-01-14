@@ -29,3 +29,9 @@
 	Twist::launch();
 
 	Twist::sheduledtasks();
+
+	class Framework {
+        public static function boot() {
+	        Twist::launch();
+        }
+	}

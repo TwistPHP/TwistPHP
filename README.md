@@ -20,7 +20,8 @@ require_once( 'twist/framework.php' );
 ...or with Composer
 
 ```php
-use Twist\framework;
+require __DIR__ . '/vendor/autoload.php';
+Twist\Framework::boot();
 ```
 
 ## Vagrant
