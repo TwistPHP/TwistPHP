@@ -17,6 +17,12 @@ One line is all it takes:
 require_once( 'twist/framework.php' );
 ```
 
+...or with Composer
+
+```php
+use Twist\framework;
+```
+
 ## Vagrant
 
 To get started with a Vagrant machine:
