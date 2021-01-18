@@ -400,7 +400,7 @@ class Image{
 	 * @return mixed
 	 */
 	protected function keepWithinRange($intInteger,$intMinValue,$intMaxValue){
-		return ($intInteger < $intMinValue) ? $intMinValue : ($intInteger > $intMaxValue) ? $intMaxValue : $intInteger;
+		return ($intInteger < $intMinValue) ? $intMinValue : (($intInteger > $intMaxValue) ? $intMaxValue : $intInteger);
 	}
 
 	/**
@@ -572,7 +572,7 @@ class Image{
 	 */
 	public function rotate($mxdAngle, $mxdBackgroundColour = '#000000'){
 
-		$mxdAngle = ($mxdAngle == 'left') ? 270 : ($mxdAngle == 'right') ? 90 : $mxdAngle;
+		$mxdAngle = ($mxdAngle == 'left') ? 270 : (($mxdAngle == 'right') ? 90 : $mxdAngle);
 
 		// Perform the rotation
 		$arrRGBA = $this->normalizeColor($mxdBackgroundColour);

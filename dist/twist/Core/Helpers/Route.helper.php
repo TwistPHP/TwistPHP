@@ -683,7 +683,7 @@ class Route extends Base{
 			'wildcard' => $blWildCard,
 			'cache' => ( $blCache === false) ? false : true,
 			'cache_key' => null,
-			'cache_life' => ( $blCache === true) ? $this->intCacheTime : ( $blCache !== false) ? $blCache : 0
+			'cache_life' => ( $blCache === true) ? $this->intCacheTime : (( $blCache !== false) ? $blCache : 0)
 		);
 
 		if(!\Twist::framework()->setting('ROUTE_CASE_SENSITIVE')){

@@ -102,7 +102,9 @@
             $strExceptionTemplate = sprintf("%s/system/exception-user.tpl",TWIST_FRAMEWORK_VIEWS);
 
             //Clean the screen output ready for an exception
-            ob_clean();
+			if(in_array('ob_gzhandler', ob_list_handlers())){
+				ob_clean();
+			}
 
             try{
                 $strName = \Twist::framework() -> setting('SITE_NAME');

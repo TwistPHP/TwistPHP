@@ -1,0 +1,127 @@
+<?php
+
+	/**
+	 * TwistPHP - An open source PHP MVC framework built from the ground up.
+	 * Shadow Technologies Ltd.
+	 *
+	 * This program is free software: you can redistribute it and/or modify
+	 * it under the terms of the GNU General Public License as published by
+	 * the Free Software Foundation, either version 3 of the License, or
+	 * (at your option) any later version.
+	 *
+	 * This program is distributed in the hope that it will be useful,
+	 * but WITHOUT ANY WARRANTY; without even the implied warranty of
+	 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	 * GNU General Public License for more details.
+	 *
+	 * You should have received a copy of the GNU General Public License
+	 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+	 *
+	 * @author     Shadow Technologies Ltd. <contact@shadow-technologies.co.uk>
+	 * @license    https://www.gnu.org/licenses/gpl.html GPL License
+	 * @link       https://twistphp.com
+	 */
+
+	namespace Twist\Classes;
+
+	class Framework{
+
+		/**
+		 * Temp function to allow the easy definition of core defines in preparation for Twist to be included
+		 * @param $strKey
+		 * @param $mxdValue
+		 */
+		protected static function define($strKey,$mxdValue){
+			if(!defined($strKey)){
+				define($strKey,$mxdValue);
+			}
+		}
+
+        public static function boot() {
+
+			if(!headers_sent() && (empty(getenv('twist_cron_child')) && empty(getenv('twist_cron')))){
+				//IE8 Session Fix
+				header('P3P: CP="NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM"');
+				header('X-Frame-Options: SAMEORIGIN');
+
+				//Set the Twist Identifier
+				header('X-Powered-By: TwistPHP');
+
+				//Set twist session cookie
+				setcookie('twist_session',sha1(time().rand(1,9999)),time()+3600,'/');
+			}
+
+			error_reporting(E_ALL);
+			ini_set("display_errors", 1);
+
+			//Preset the timezone, once framework is up and running set from the settings table
+			date_default_timezone_set('Europe/London');
+			$_SERVER['TWIST_BOOT'] = microtime();
+
+			//Fix DOCUMENT_ROOT when running as Cron on some servers
+			if(!array_key_exists('DOCUMENT_ROOT',$_SERVER)){
+				$_SERVER['DOCUMENT_ROOT'] = TWIST_PUBLIC_ROOT;
+			}
+
+			//Fix SCRIPT_FILENAME when running as Cron on some servers
+			if(!array_key_exists('SCRIPT_FILENAME',$_SERVER)){
+				$_SERVER['SCRIPT_FILENAME'] = __FILE__;
+			}
+
+			//If the SITE_URI_REWRITE is not already defined then it will be defined here
+			self::define('SITE_URI_REWRITE','/');
+
+			//TWIST_PUBLIC_ROOT - Can be defined in your index file
+			self::define('TWIST_PUBLIC_ROOT',$_SERVER['DOCUMENT_ROOT']);
+			self::define('TWIST_FRAMEWORK_ROOT',realpath(sprintf('%s/../../',dirname(__FILE__))).'/');
+
+			//TWIST_APP - Can be defined in your index file
+			self::define('TWIST_APP',sprintf('%s/app/',rtrim(TWIST_FRAMEWORK_ROOT,'/')));
+
+			require_once sprintf('%s/Autoload.class.php',dirname(__FILE__));
+			Autoload::init(realpath(sprintf('%s/../../',dirname(__FILE__))));
+
+			//Get the base location of the site, based on this config file (should be in the doc_root)
+			self::define('TWIST_FRAMEWORK',realpath(sprintf('%s/../',dirname(__FILE__))).'/');
+			self::define('TWIST_FRAMEWORK_CONFIG',sprintf('%sConfig/',TWIST_FRAMEWORK));
+			self::define('TWIST_FRAMEWORK_CLASSES',sprintf('%sClasses/',TWIST_FRAMEWORK));
+			self::define('TWIST_FRAMEWORK_DATA',sprintf('%sCore/Data/',TWIST_FRAMEWORK));
+			self::define('TWIST_FRAMEWORK_MODELS',sprintf('%sCore/Models/',TWIST_FRAMEWORK));
+			self::define('TWIST_FRAMEWORK_HELPERS',sprintf('%sCore/Helpers/',TWIST_FRAMEWORK));
+			self::define('TWIST_FRAMEWORK_VIEWS',sprintf('%sCore/Views/',TWIST_FRAMEWORK));
+			self::define('TWIST_FRAMEWORK_RESOURCES',sprintf('%sCore/Resources/',TWIST_FRAMEWORK));
+
+			self::define('TWIST_APP_AJAX',sprintf('%s/Ajax/',rtrim(TWIST_APP,'/')));
+			self::define('TWIST_APP_ASSETS',sprintf('%s/Assets/',rtrim(TWIST_APP,'/')));
+			self::define('TWIST_APP_CACHE',sprintf('%s/Cache/',rtrim(TWIST_APP,'/')));
+			self::define('TWIST_APP_CONFIG',sprintf('%s/Config/',rtrim(TWIST_APP,'/')));
+			self::define('TWIST_APP_CONTROLLERS',sprintf('%s/Controllers/',rtrim(TWIST_APP,'/')));
+			self::define('TWIST_APP_MODELS',sprintf('%s/Models/',rtrim(TWIST_APP,'/')));
+			self::define('TWIST_APP_VIEWS',sprintf('%s/Views/',rtrim(TWIST_APP,'/')));
+
+			//TWIST_PACKAGES - Can be defined in your index file
+			self::define('TWIST_PACKAGES',sprintf('%s/packages/',rtrim(TWIST_FRAMEWORK_ROOT,'/')));
+			self::define('TWIST_PACKAGE_INSTALL',sprintf('%s/packages/install/',rtrim(TWIST_FRAMEWORK_ROOT,'/')));
+
+			//TWIST_UPLOADS - Can be defined in your index file
+			self::define('TWIST_UPLOADS',sprintf('%s/uploads/',rtrim(TWIST_FRAMEWORK_ROOT,'/')));
+
+			/** From this point onwards you now have to use Twist::define() rather than self::define */
+			require_once sprintf('%sTwist.php',TWIST_FRAMEWORK);
+
+			//Define the version number of the TwistPHP installation
+			self::define('TWIST_VERSION',\Twist::version());
+
+			if(defined('TWIST_APP_CONFIG') && file_exists(sprintf('%sconfig.php',TWIST_APP_CONFIG))){
+				require_once sprintf('%sconfig.php',TWIST_APP_CONFIG);
+			}
+
+			//Include the config file
+			if(file_exists(sprintf('%s/../Config/default.php',dirname(__FILE__)))){
+				require_once sprintf('%s/../Config/default.php',dirname(__FILE__));
+			}
+
+	        \Twist::launch();
+			\Twist::sheduledtasks();
+        }
+	}
