@@ -21,7 +21,7 @@ require_once( 'twist/framework.php' );
 
 ```php
 require __DIR__ . '/vendor/autoload.php';
-Twist\Framework::boot();
+\Twist\Classes\Framework::boot();
 ```
 
 ## Vagrant
