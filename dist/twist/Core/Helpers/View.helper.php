@@ -1111,7 +1111,8 @@ class View extends Base{
 					}elseif(array_key_exists(0,$arrParameters)){
 						$strDateFormat = $arrParameters[0];
 					}elseif(count($arrParameters) == 1){
-						$strDateFormat = array_pop(array_keys($arrParameters));
+						$arrParamKey = array_keys($arrParameters);
+						$strDateFormat = array_pop($arrParamKey);
 					}
 
 					$strData = date($strDateFormat,strtotime($strData));

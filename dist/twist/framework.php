@@ -22,10 +22,7 @@
 	 * @link       https://twistphp.com
 	 */
 
-	//Include the boot file
-	require_once sprintf('%s/Core/boot.php',dirname(__FILE__));
+	namespace Twist;
 
-	//Launch the framework ready for use
-	Twist::launch();
-
-	Twist::sheduledtasks();
+	require_once sprintf('%s/Classes/Framework.class.php',dirname(__FILE__));
+	\Twist\Classes\Framework::boot();
