@@ -15,7 +15,7 @@
         "source": "https://github.com/TwistPHP/TwistPHP"
     },
     "require": {
-        "php": ">=5.6.0"
+        "php": ">=7.2.0"
     },
 	"autoload": {
 		"psr-4": {

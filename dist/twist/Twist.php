@@ -35,6 +35,7 @@
 
 		protected static $blLaunched = false;
 		protected static $blRecordEvents = false;
+		protected static $strUserDatabase = 'twist';
 
 		public function __construct(){
 			throw new Exception("Twist Framework can only be called statically, please refer to documentation for more details");
@@ -60,9 +61,9 @@
 		public static function version($strVersionPart = null){
 
 			$arrVersion = array(
-				'major' => 4,
+				'major' => 5,
 				'minor' => 0,
-				'patch' => 3,
+				'patch' => 0,
 				'pre-release' => ''//pre-release can be set to 'dev'
 			);
 
@@ -96,6 +97,8 @@
 
 			if(self::$blLaunched === false){
 				self::$blLaunched = true;
+
+                self::processRequestPayload();
 
 				//Get the base location of the site, based on apaches report fo the document root minus a trailing slash
 				self::define('TWIST_DOCUMENT_ROOT',rtrim($_SERVER['DOCUMENT_ROOT'],'/'));
@@ -147,7 +150,7 @@
 				 * Override the error handlers and exception handlers and turn on AJAX debugging
 				 * Note: In the future we could use this to enable the log handler instead
 				 */
-				self::define('TWIST_AJAX_REQUEST',array_key_exists('HTTP_X_REQUESTED_WITH',$_SERVER) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest');
+				self::define('TWIST_AJAX_REQUEST',((array_key_exists('HTTP_X_REQUESTED_WITH',$_SERVER) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') || strstr($_SERVER['CONTENT_TYPE'], 'application/json')));
 
 				self::showInstallWizard();
 				self::phpSettings();
@@ -158,6 +161,24 @@
 				Firewall::firewall();
 			}
 		}
+
+        /**
+         * If the method is POST and the data has been sent as JSON, extract the JSON into the global $_POST var
+         */
+        protected static function processRequestPayload(){
+
+            if(array_key_exists('REQUEST_METHOD',$_SERVER) && strtoupper($_SERVER['REQUEST_METHOD']) == 'POST' && array_key_exists('CONTENT_TYPE',$_SERVER) && strstr($_SERVER['CONTENT_TYPE'], 'application/json')){
+
+                $resSTDIN = (defined('STDIN')) ? STDIN : 'php://input';
+                $strSDIN = file_get_contents($resSTDIN);
+
+                $arrPostedJSON = json_decode($strSDIN, true);
+                if(json_last_error() === JSON_ERROR_NONE){
+                    $_POST = $arrPostedJSON;
+                    $_REQUEST = array_merge($_REQUEST,$_POST);
+                }
+            }
+        }
 
 		/**
 		 * Show the install wizard, if the wizard is required to be output all existing routes will be cleared and the wizard will be served.
@@ -282,6 +303,18 @@
 		public static function respond($intResponseCode,$strCustomDescription = null,$blExitOnComplete = true){
 			Error::response($intResponseCode,$strCustomDescription,$blExitOnComplete);
 		}
+
+        public static function userDatabaseSet($strDatabase = 'twist'){
+            if($strDatabase !== 'twist'){
+                \Twist::Database($strDatabase)->connect();
+                \Twist::Database($strDatabase)->setDatabase($strDatabase);
+            }
+            self::$strUserDatabase = $strDatabase;
+        }
+
+		public static function userDatabase(){
+            return self::$strUserDatabase;
+        }
 
 		/**
 		 * Dump data to the screen in a nice format with other key debug information

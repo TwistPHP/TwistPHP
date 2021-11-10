@@ -74,9 +74,9 @@
 					//Sleep, we don't want the loop to be very CPU intensive, give the crons time to complete.
 					sleep(self::$intPauseBetweenChecks);
 
-					//If the process has run for more than the alloted max runtime kill the process
+					//If the process has run for more than the allotted max runtime kill the process
 					if((time() - self::$intProcessorStarted) > self::$intMaxRuntime){
-						self::debug("# Aborted, scheduler timeout reached");
+						self::debug("# Aborted, scheduler timeout ".(time() - self::$intProcessorStarted)."s reached");
 						break;
 					}
 				}
@@ -207,15 +207,15 @@
 				$arrRun[] = 120;
 			}
 
-			if(in_array($intHour,array(0,4,8,12,16,20))){
+			if(in_array($intHour,array(0,4,8,12,16,20)) && in_array($intMinute,array(0))){
 				$arrRun[] = 240;
 			}
 
-			if(in_array($intHour,array(0,6,12,18))){
+			if(in_array($intHour,array(0,6,12,18)) && in_array($intMinute,array(0))){
 				$arrRun[] = 360;
 			}
 
-			if(in_array($intHour,array(0,12))){
+			if(in_array($intHour,array(0,12)) && in_array($intMinute,array(0))){
 				$arrRun[] = 720;
 			}
 
@@ -243,7 +243,7 @@
 			$resTask = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'scheduled_tasks')->get($intTaskID,'id');
 
 			//@TODO - Non-Twist tasks have to be built in here
-			$strPHPBin = (!empty(\Twist::framework()->setting('PHP_BIN'))) ? \Twist::framework()->setting('PHP_BIN') : 'php';
+            $strPHPBin = (!empty(\Twist::framework()->setting('PHP_BIN'))) ? \Twist::framework()->setting('PHP_BIN') : 'php';
 
 			self::debug("- Start: ".$resTask->get('description'));
 			$strCommand = sprintf('twist_cron_child=%d %s '.rtrim(TWIST_PUBLIC_ROOT,'/').'/index.php',$intTaskID,$strPHPBin);

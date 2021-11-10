@@ -56,7 +56,9 @@
 					'pid' => $intPID,
 					'command' => $arrProcessInfo['command'],
 					'started' => $arrProcessInfo['started'],
-					'running' => $this->childRunning($intPID)
+					'running' => $this->childRunning($intPID),
+					'log_output' => $arrProcessInfo['log_output'],
+					'log_error' => $arrProcessInfo['log_error']
 				);
 			}
 
@@ -70,25 +72,24 @@
 		 * @param string $dirCurrentWorkingDirectory Override of your current working directory
 		 * @return int PID (Process ID) to be used with resultChild
 		 */
-		public function executeChild($strCommand,$dirCurrentWorkingDirectory = null){
+		public function executeChild($strCommand,$dirCurrentWorkingDirectory = null,$blOutputToFile = false,$blErrorToFile = false){
+
+			$strLogPath = rtrim(sys_get_temp_dir(),'/');
+			\Twist::File()->recursiveCreate($strLogPath);
+
+			$strRunKey = time().'-'.strtolower(substr(sha1(microtime(true).rand(0,1000)),0,6));
+			$strLogFile = $strLogPath.'/twist_exec-'.$strRunKey.'-output.log';
+			$strErrorFile = $strLogPath.'/twist_exec-'.$strRunKey.'-error.log';
 
 			$arrDescriptorSpec = array(
 				0 => array("pipe", "r"),//Input Pipe
-				1 => array("pipe", "w"),//Output to a Pipe
-				//2 => array("file", "/tmp/error-output.txt", "a"),//Output to a file
-				2 => array("pipe", "w")//Output to a Pipe
+				1 => (!$blOutputToFile) ? array("pipe", "w") : array("file", $strLogFile, "a"),//Output to a Pipe/File
+				2 => (!$blErrorToFile) ? array("pipe", "w") : array("file", $strErrorFile, "a")//Output to a Pipe/File
 			);
 
 			$dirCurrentWorkingDirectory = (is_null($dirCurrentWorkingDirectory) || !is_dir($dirCurrentWorkingDirectory)) ? TWIST_DOCUMENT_ROOT : $dirCurrentWorkingDirectory;
 			$mxdEnvironmentsVars = null;
 			$strAdditionalInput = '';
-
-			//$this->arrProcesses[$this->intProcessID]['resource'] = proc_open($strCommand, $arrDescriptorSpec, $this->arrProcesses[$this->intProcessID]['pipes'], $dirCurrentWorkingDirectory, $mxdEnvironmentsVars);
-
-			//if(is_resource($this->arrProcesses[$this->intProcessID]['resource'])){
-			//	fwrite($this->arrProcesses[$this->intProcessID]['pipes'][0], $strAdditionalInput);
-			//	fclose($this->arrProcesses[$this->intProcessID]['pipes'][0]);
-			//}
 
 			$resProcess = proc_open($strCommand, $arrDescriptorSpec, $arrPipes, $dirCurrentWorkingDirectory, $mxdEnvironmentsVars);
 
@@ -103,7 +104,9 @@
 					'command' => $strCommand,
 					'pipes' => $arrPipes,
 					'resource' => $resProcess,
-					'started' => date('Y-m-d H:i:s')
+					'started' => date('Y-m-d H:i:s'),
+					'log_output' => (!$blOutputToFile) ? null : $strLogFile,
+					'log_error' => (!$blErrorToFile) ? null : $strErrorFile,
 				);
 
 				return $arrStats['pid'];
@@ -124,6 +127,32 @@
 			}
 
 			return false;
+		}
+
+		/**
+		 * Get info about a particular twist PHP child process
+		 * @return array
+		 */
+		public function childInfo($intPID){
+			$arrProcesses = $this->childProcesses();
+			return (array_key_exists($intPID,$arrProcesses)) ? $arrProcesses[$intPID] : array();
+		}
+
+		/**
+		 * Export a previously running session
+		 * @param $intPID
+		 */
+		public function exportChildProcess($intPID){
+			return $this->arrProcesses[$intPID];
+		}
+
+		/**
+		 * Import a previously running session
+		 * @param $intPID
+		 * @param $arrProcess
+		 */
+		public function importChildProcess($intPID,$arrProcess){
+			$this->arrProcesses[$intPID] = $arrProcess;
 		}
 
 		/**
@@ -158,11 +187,17 @@
 
 				if(is_resource($this->arrProcesses[$intPID]['resource'])){
 
-					$arrOut['output'] = stream_get_contents($this->arrProcesses[$intPID]['pipes'][1]);
-					fclose($this->arrProcesses[$intPID]['pipes'][1]);
+					$arrOut['output'] = $this->arrProcesses[$intPID]['log_output'];
+					if(empty($this->arrProcesses[$intPID]['log_output'])){
+						$arrOut['output'] = stream_get_contents($this->arrProcesses[$intPID]['pipes'][1]);
+						fclose($this->arrProcesses[$intPID]['pipes'][1]);
+					}
 
-					$arrOut['errors'] = stream_get_contents($this->arrProcesses[$intPID]['pipes'][2]);
-					fclose($this->arrProcesses[$intPID]['pipes'][2]);
+					$arrOut['errors'] = $this->arrProcesses[$intPID]['log_error'];
+					if(empty($this->arrProcesses[$intPID]['log_error'])){
+						$arrOut['errors'] = stream_get_contents($this->arrProcesses[$intPID]['pipes'][2]);
+						fclose($this->arrProcesses[$intPID]['pipes'][2]);
+					}
 
 					$arrOut['return'] = (int) proc_close($this->arrProcesses[$intPID]['resource']);
 				}

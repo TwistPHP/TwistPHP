@@ -27,7 +27,7 @@ namespace Twist\Core\Models\Validate;
 class Validator{
 
 	protected $arrChecks = array();
-	protected $arrTypes = array('compare','email','domain','url','ip','boolean','float','integer','string','telephone','postcode');
+	protected $arrTypes = array('compare','email','domain','url','ip','boolean','float','integer','string','array','telephone','postcode');
 	protected $arrTestResults = array();
 
 	public function checkCompare($strKey,$strKey2,$blAllowBlank = false,$blRequired = true,$blTrim = true){
@@ -136,6 +136,16 @@ class Validator{
 		);
 	}
 
+	public function checkArray($strKey,$blAllowBlank = false,$blRequired = true,$blTrim = true){
+
+		$this->arrChecks[$strKey] = array(
+			'type' => 'array',
+			'blank' => ($blAllowBlank == true || $blAllowBlank == 1) ? 1 : 0,
+			'required' => ($blRequired == true || $blRequired == 1) ? 1 : 0,
+			'trim' => ($blTrim == true || $blTrim == 1) ? 1 : 0
+		);
+	}
+
 	public function checkTelephone($strKey,$blAllowBlank = false,$blRequired = true,$blTrim = true){
 
 		$this->arrChecks[$strKey] = array(
@@ -209,11 +219,11 @@ class Validator{
 			if(!is_null($mxdTestValue)){
 
 				//Trim the spaces from either side of the input before testing
-				if(array_key_exists('trim',$arrEachCheck) && $arrEachCheck['trim'] == 1){
+				if(!is_array($mxdTestValue) && array_key_exists('trim',$arrEachCheck) && $arrEachCheck['trim'] == 1){
 					$mxdTestValue = trim($mxdTestValue);
 				}
 
-				if(trim($mxdTestValue) == '' && array_key_exists('blank',$arrEachCheck) && $arrEachCheck['blank'] == 0){
+				if(((is_array($mxdTestValue) && count($mxdTestValue) === 0) || (!is_array($mxdTestValue) && trim($mxdTestValue) == '')) && array_key_exists('blank',$arrEachCheck) && $arrEachCheck['blank'] == 0){
 					$this->testResult($strKey,false,sprintf("%s cannot be blank",$this->keyToText($strKey)),'blank');
 				}elseif(array_key_exists('type',$arrEachCheck) && in_array($arrEachCheck['type'],$this->arrTypes)){
 

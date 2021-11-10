@@ -69,12 +69,11 @@ class SessionHandler{
 			$_COOKIE['device'] = $strDeviceID;
 			$arrDevice = \Twist::Device()->get();
 
-			\Twist::Database()->query("INSERT INTO `%s`.`%suser_sessions`
+			\Twist::Database(\Twist::userDatabase())->query("INSERT INTO `%suser_sessions`
 									SET `user_id` = %d,
 										`device` = '%s',
 										`os` = '%s',
 										`browser` = '%s'",
-				TWIST_DATABASE_NAME,
 				TWIST_DATABASE_TABLE_PREFIX,
 				$intUserID,
 				$strDeviceID,
@@ -92,12 +91,11 @@ class SessionHandler{
 
 				$arrDevice = \Twist::Device()->get();
 
-				\Twist::Database()->query("INSERT INTO `%s`.`%suser_sessions`
+				\Twist::Database(\Twist::userDatabase())->query("INSERT INTO `%suser_sessions`
 										SET `user_id` = %d,
 											`device` = '%s',
 											`os` = '%s',
 											`browser` = '%s'",
-					TWIST_DATABASE_NAME,
 					TWIST_DATABASE_TABLE_PREFIX,
 					$intUserID,
 					$strDeviceID,
@@ -159,7 +157,7 @@ class SessionHandler{
 	 * @return bool
 	 */
 	public function deleteDeviceID($strDeviceID){
-		return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'user_sessions')->delete($strDeviceID,'device');
+		return \Twist::Database(\Twist::userDatabase())->records(TWIST_DATABASE_TABLE_PREFIX.'user_sessions')->delete($strDeviceID,'device');
 	}
 
 	/**
@@ -167,7 +165,7 @@ class SessionHandler{
 	 * @return array
 	 */
 	public function getDeviceList($intUserID){
-		return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'user_sessions')->find($intUserID,'user_id','last_validated','DESC');
+		return \Twist::Database(\Twist::userDatabase())->records(TWIST_DATABASE_TABLE_PREFIX.'user_sessions')->find($intUserID,'user_id','last_validated','DESC');
 	}
 
 	/**
@@ -180,11 +178,10 @@ class SessionHandler{
 
 		if(count($_COOKIE) && array_key_exists('device',$_COOKIE)){
 
-			$resResult = \Twist::Database()->query("SELECT `id`,`device`,`device_name`,`os`,`browser`,`last_validated`
-									FROM `%s`.`%suser_sessions`
+			$resResult = \Twist::Database(\Twist::userDatabase())->query("SELECT `id`,`device`,`device_name`,`os`,`browser`,`last_validated`
+									FROM `%suser_sessions`
 									WHERE `user_id` = %d
 									AND `device` = '%s'",
-				TWIST_DATABASE_NAME,
 				TWIST_DATABASE_TABLE_PREFIX,
 				$intUserID,
 				$_COOKIE['device']
@@ -207,11 +204,10 @@ class SessionHandler{
 	 */
 	public function editDevice($intUserID,$mxdDevice,$strDeviceName){
 
-		return \Twist::Database()->query("UPDATE `%s`.`%suser_sessions`
+		return \Twist::Database(\Twist::userDatabase())->query("UPDATE `%suser_sessions`
 							SET `device_name` = '%s'
 							WHERE `device` = '%s'
 							AND `user_id` = %d",
-			TWIST_DATABASE_NAME,
 			TWIST_DATABASE_TABLE_PREFIX,
 			$strDeviceName,
 			$mxdDevice,
@@ -228,10 +224,9 @@ class SessionHandler{
 
 		$arrCurrent = $this->getCurrentDevice($intUserID);
 
-		$resResult = \Twist::Database()->query("DELETE FROM `%s`.`%suser_sessions`
+		$resResult = \Twist::Database(\Twist::userDatabase())->query("DELETE FROM `%suser_sessions`
 							WHERE `device` = '%s'
 							AND `user_id` = %d",
-			TWIST_DATABASE_NAME,
 			TWIST_DATABASE_TABLE_PREFIX,
 			$mxdDevice,
 			$intUserID
@@ -346,38 +341,35 @@ class SessionHandler{
 		$this->debug("Key Parts: ".print_r($arrMatches,true));
 
 		$strSQL = sprintf("SELECT `user_sessions`.`user_id`
-								FROM `%s`.`%suser_sessions` AS `user_sessions`
-								JOIN `%s`.`%susers` AS `users` ON `user_sessions`.`user_id` = `users`.`id`
+								FROM `%suser_sessions` AS `user_sessions`
+								JOIN `%susers` AS `users` ON `user_sessions`.`user_id` = `users`.`id`
 								WHERE sha1(`user_sessions`.`device`) = '%s'
 								AND `user_sessions`.`token` = '%s'
 								AND md5(concat(`user_sessions`.`user_id`,'%s')) = '%s'
 								AND `users`.`enabled` = '1'",
-			TWIST_DATABASE_NAME,
 			TWIST_DATABASE_TABLE_PREFIX,
-			TWIST_DATABASE_NAME,
 			TWIST_DATABASE_TABLE_PREFIX,
-			\Twist::Database()->escapeString($arrMatches[1]),
-			\Twist::Database()->escapeString($arrMatches[2]),
-			\Twist::Database()->escapeString($this->strSecretKey),
-			\Twist::Database()->escapeString($arrMatches[3])
+			\Twist::Database(\Twist::userDatabase())->escapeString($arrMatches[1]),
+			\Twist::Database(\Twist::userDatabase())->escapeString($arrMatches[2]),
+			\Twist::Database(\Twist::userDatabase())->escapeString($this->strSecretKey),
+			\Twist::Database(\Twist::userDatabase())->escapeString($arrMatches[3])
 		);
 
 		$this->debug("SQL: {$strSQL}");
 
 		$strAttackSQL = sprintf("SELECT `user_id`
-									FROM `%s`.`%suser_sessions`
+									FROM %suser_sessions`
 									WHERE sha1(`device`) = '%s'
 									AND md5(concat(`user_id`,'%s')) = '%s'",
-			TWIST_DATABASE_NAME,
 			TWIST_DATABASE_TABLE_PREFIX,
-			\Twist::Database()->escapeString($arrMatches[1]),
-			\Twist::Database()->escapeString($this->strSecretKey),
-			\Twist::Database()->escapeString($arrMatches[2])
+			\Twist::Database(\Twist::userDatabase())->escapeString($arrMatches[1]),
+			\Twist::Database(\Twist::userDatabase())->escapeString($this->strSecretKey),
+			\Twist::Database(\Twist::userDatabase())->escapeString($arrMatches[2])
 		);
 
 		$this->debug("SQL Attack: {$strAttackSQL}");
 
-		$resResult = \Twist::Database()->query($strSQL);
+		$resResult = \Twist::Database(\Twist::userDatabase())->query($strSQL);
 
 		//If their is only one session key
 		if($resResult->status() && $resResult->numberRows() == 1){
@@ -392,7 +384,7 @@ class SessionHandler{
 
 			$intOut = $arrUserData['user_id'];
 
-		}elseif(\Twist::Database()->query($strAttackSQL)->numberRows() == 1){
+		}elseif(\Twist::Database(\Twist::userDatabase())->query($strAttackSQL)->numberRows() == 1){
 
 			$this->debug("Query Attack");
 
@@ -422,13 +414,12 @@ class SessionHandler{
 		$strNewToken = md5(uniqid(rand(), true));
 
 		//Delete all session data for this key
-		$resResult = \Twist::Database()->query("UPDATE `%s`.`%suser_sessions`
+		$resResult = \Twist::Database(\Twist::userDatabase())->query("UPDATE `%suser_sessions`
 								SET `token` = '%s',
 									`remote_addr` = '%s',
 									`last_validated` = NOW()
 								WHERE sha1(`device`) = '%s'
 								AND md5(concat(`user_id`,'%s')) = '%s'",
-			TWIST_DATABASE_NAME,
 			TWIST_DATABASE_TABLE_PREFIX,
 			$strNewToken,
 			$_SERVER['REMOTE_ADDR'],
@@ -468,11 +459,10 @@ class SessionHandler{
 	 */
 	protected function wipeSession($strDevice,$strHash){
 
-		return \Twist::Database()->query("UPDATE `%s`.`%suser_sessions`
+		return \Twist::Database(\Twist::userDatabase())->query("UPDATE `%suser_sessions`
 								SET `token` = ''
 								WHERE md5(`device`) = '%s'
 								AND md5(concat(`user_id`,'%s')) = '%s'",
-			TWIST_DATABASE_NAME,
 			TWIST_DATABASE_TABLE_PREFIX,
 			$strDevice,
 			$this->strSecretKey,

@@ -319,7 +319,7 @@ class Database extends Base{
 	public function records($strTable,$strDatabase = null){
 
 		if(is_null($this->resRecords)){
-			$this->resRecords = new \Twist\Core\Models\Database\Records();
+			$this->resRecords = new \Twist\Core\Models\Database\Records($this->strConnectionKey);
 		}
 
 		$this->resRecords->__setTable($strTable);
@@ -337,11 +337,11 @@ class Database extends Base{
 	public function table($strTable,$strDatabase = null){
 
 		if(is_null($this->resTables)){
-			$this->resTables = new \Twist\Core\Models\Database\Table();
+			$this->resTables = new \Twist\Core\Models\Database\Table($this->strConnectionKey);
 		}
 
 		$this->resTables->__setTable($strTable);
-		$this->resRecords->__setDatabase((is_null($strDatabase)) ? $this->arrConnectionDetails['database'] : $strDatabase);
+		$this->resTables->__setDatabase((is_null($strDatabase)) ? $this->arrConnectionDetails['database'] : $strDatabase);
 
 		return $this->resTables;
 	}
@@ -361,7 +361,6 @@ class Database extends Base{
 	 */
 	public function escapeString($strRawString){
 		$strOut = strval($strRawString);
-		//$strOut = (get_magic_quotes_gpc()) ? stripslashes($strOut) : $strOut;//PHP7.4 deprecated
 		return (!is_numeric($strOut) && $this->connected()) ? $this->resLibrary->escapeString($strOut) : $strOut;
 	}
 

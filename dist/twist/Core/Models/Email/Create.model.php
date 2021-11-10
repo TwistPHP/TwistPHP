@@ -397,35 +397,66 @@ class Create{
 		$blStatus = false;
 		$blSend = true;
 
-		$arrPreProcessHooks = \Twist::framework()->hooks()->getAll('TWIST_EMAIL_PREPROCESS');
+		if(\Twist::framework()->setting('EMAIL_PREVENT_SUSPENDED_USERS')){
 
-		foreach($arrPreProcessHooks as $strKey => $arrModel){
-			$strEmailPreProcessModel = (string) $arrModel['model'];
-			$blSend = $strEmailPreProcessModel::emailPreProcess($this);
-
-			if(!$blSend){
-				//A hook as requested the send not to happen, cancel the send
-				break;
+			//Remove any suspended users from the email TO
+			foreach($this->arrEmailData['to'] as $strEmail => $strName){
+				$arrUser = \Twist::User()->getByEmail($strEmail);
+				if(is_array($arrUser) && count($arrUser) && $arrUser['enabled'] == '0'){
+					unset($this->arrEmailData['to'][$strEmail]);
+				}
 			}
-		}
 
-		if($blSend){
-			//Get the send protocol and send out the email
-			$strProtocol = \Twist::framework()->setting('EMAIL_PROTOCOL');
-			$arrHooks = \Twist::framework()->hooks()->getAll('TWIST_EMAIL_PROTOCOLS');
+			//Remove any suspended users from the email CC
+			foreach($this->arrEmailData['cc'] as $strEmail => $strName){
+				$arrUser = \Twist::User()->getByEmail($strEmail);
+				if(is_array($arrUser) && count($arrUser) && $arrUser['enabled'] == '0'){
+					unset($this->arrEmailData['cc'][$strEmail]);
+				}
+			}
 
-			foreach($arrHooks as $strKey => $arrModel){
-				if($strKey == $strProtocol){
-					$strEmailModel = (string) $arrModel['model'];
-					$blStatus = $strEmailModel::protocolSend($this);
-					break;
+			//Remove any suspended users from the email BCC
+			foreach($this->arrEmailData['bcc'] as $strEmail => $strName){
+				$arrUser = \Twist::User()->getByEmail($strEmail);
+				if(is_array($arrUser) && count($arrUser) && $arrUser['enabled'] == '0'){
+					unset($this->arrEmailData['bcc'][$strEmail]);
 				}
 			}
 		}
 
-		if($blClearCache == true){
-			//Clear the email data ready for the next email
-			$this->reset();
+		//Only send out the email if that is at-least one email in the To field
+		if(count($this->arrEmailData['to'])){
+
+			$arrPreProcessHooks = \Twist::framework()->hooks()->getAll('TWIST_EMAIL_PREPROCESS');
+
+			foreach($arrPreProcessHooks as $strKey => $arrModel){
+				$strEmailPreProcessModel = (string) $arrModel['model'];
+				$blSend = $strEmailPreProcessModel::emailPreProcess($this);
+
+				if(!$blSend){
+					//A hook as requested the send not to happen, cancel the send
+					break;
+				}
+			}
+
+			if($blSend){
+				//Get the send protocol and send out the email
+				$strProtocol = \Twist::framework()->setting('EMAIL_PROTOCOL');
+				$arrHooks = \Twist::framework()->hooks()->getAll('TWIST_EMAIL_PROTOCOLS');
+
+				foreach($arrHooks as $strKey => $arrModel){
+					if($strKey == $strProtocol){
+						$strEmailModel = (string) $arrModel['model'];
+						$blStatus = $strEmailModel::protocolSend($this);
+						break;
+					}
+				}
+			}
+
+			if($blClearCache == true){
+				//Clear the email data ready for the next email
+				$this->reset();
+			}
 		}
 
 		return $blStatus;

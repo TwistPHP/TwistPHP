@@ -356,8 +356,12 @@ class Image{
 		if(is_string($mxdColour)){
 
 			$mxdColour = trim($mxdColour,'#');
+			$intAlpha = 127;
 
-			if(strlen($mxdColour) == 6){
+			if(strlen($mxdColour) == 8){
+				list($intRed, $intGreen, $intBlue,$intAlpha) = array( $mxdColour[0].$mxdColour[1], $mxdColour[2].$mxdColour[3], $mxdColour[4].$mxdColour[5], $mxdColour[6].$mxdColour[7]);
+				$intAlpha = (hexdec($intAlpha) > 0) ? floor(hexdec($intAlpha)/2) : 0;
+			}elseif(strlen($mxdColour) == 6){
 				list($intRed, $intGreen, $intBlue) = array( $mxdColour[0].$mxdColour[1], $mxdColour[2].$mxdColour[3], $mxdColour[4].$mxdColour[5] );
 			}elseif(strlen($mxdColour) == 3){
 				list($intRed, $intGreen, $intBlue) = array( $mxdColour[0].$mxdColour[0], $mxdColour[1].$mxdColour[1], $mxdColour[2].$mxdColour[2] );
@@ -365,7 +369,7 @@ class Image{
 				return false;
 			}
 
-			return array( 'r' => hexdec($intRed), 'g' => hexdec($intGreen), 'b' => hexdec($intBlue), 'a' => 0 );
+			return array( 'r' => hexdec($intRed), 'g' => hexdec($intGreen), 'b' => hexdec($intBlue), 'a' => $intAlpha );
 
 		}elseif(is_array($mxdColour) && (count($mxdColour) == 3 || count($mxdColour) == 4)){
 
@@ -793,6 +797,8 @@ class Image{
 	 */
 	public function resizeContain($intContainerWidth, $intContainerHeight,$strFillColour = '#000000'){
 
+		$blImageIsSmaller = false;
+
 		//If it already fits, there's nothing to do
 		if($this->intWidth <= $intContainerWidth && $this->intHeight <= $intContainerHeight){
 			return $this;
@@ -808,6 +814,7 @@ class Image{
 		}else{
 			$intWidth = $this->intWidth;
 			$intHeight = $this->intHeight;
+			$blImageIsSmaller = true;
 		}
 
 		// Make height fit into new dimensions

@@ -1,2844 +1,2844 @@
 {
-	"archive": {
-		"extensions": {
-			"7z": {
-				"name": "7-Zip",
-				"mine": "application\/x-7z-compressed"
-			},
-			"ace": {
-				"name": "Ace Archive",
-				"mine": "application\/x-ace-compressed"
-			},
-			"apk": {
-				"name": "Android Package Archive",
-				"mine": "application\/vnd.android.package-archive"
-			},
-			"azf": {
-				"name": "AirZip FileSECURE",
-				"mine": "application\/vnd.airzip.filesecure.azf"
-			},
-			"azs": {
-				"name": "AirZip FileSECURE",
-				"mine": "application\/vnd.airzip.filesecure.azs"
-			},
-			"bcpio": {
-				"name": "Binary CPIO Archive",
-				"mine": "application\/x-bcpio"
-			},
-			"box": {
-				"name": "Preview Systems ZipLock\/VBox",
-				"mine": "application\/vnd.previewsystems.box"
-			},
-			"bz": {
-				"name": "Bzip Archive",
-				"mine": "application\/x-bzip"
-			},
-			"bz2": {
-				"name": "Bzip2 Archive",
-				"mine": "application\/x-bzip2"
-			},
-			"cpio": {
-				"name": "CPIO Archive",
-				"mine": "application\/x-cpio"
-			},
-			"daf": {
-				"name": "Mobius Management Systems - UniversalArchive",
-				"mine": "application\/vnd.mobius.daf"
-			},
-			"jar": {
-				"name": "Java Archive",
-				"mine": "application\/java-archive"
-			},
-			"joda": {
-				"name": "Joda Archive",
-				"mine": "application\/vnd.joost.joda-archive"
-			},
-			"kmz": {
-				"name": "Google Earth - Zipped KML",
-				"mine": "application\/vnd.google-earth.kmz"
-			},
-			"rar": {
-				"name": "RAR Archive",
-				"mine": "application\/x-rar-compressed"
-			},
-			"shar": {
-				"name": "Shell Archive",
-				"mine": "application\/x-shar"
-			},
-			"sit": {
-				"name": "Stuffit Archive",
-				"mine": "application\/x-stuffit"
-			},
-			"sitx": {
-				"name": "Stuffit Archive",
-				"mine": "application\/x-stuffitx"
-			},
-			"sv4cpio": {
-				"name": "System V Release 4 CPIO Archive",
-				"mine": "application\/x-sv4cpio"
-			},
-			"tar": {
-				"name": "Tar File (Tape Archive)",
-				"mine": "application\/x-tar"
-			},
-			"ustar": {
-				"name": "Ustar (Uniform Standard Tape Archive)",
-				"mine": "application\/x-ustar"
-			},
-			"zip": {
-				"name": "Zip Archive",
-				"mine": "application\/zip"
-			}
-		},
-		"icon": "file-icons\/archive.png",
-		"name": "Archive"
+  "archive": {
+	"extensions": {
+	  "7z": {
+		"name": "7-Zip",
+		"mine": "application\/x-7z-compressed"
+	  },
+	  "ace": {
+		"name": "Ace Archive",
+		"mine": "application\/x-ace-compressed"
+	  },
+	  "apk": {
+		"name": "Android Package Archive",
+		"mine": "application\/vnd.android.package-archive"
+	  },
+	  "azf": {
+		"name": "AirZip FileSECURE",
+		"mine": "application\/vnd.airzip.filesecure.azf"
+	  },
+	  "azs": {
+		"name": "AirZip FileSECURE",
+		"mine": "application\/vnd.airzip.filesecure.azs"
+	  },
+	  "bcpio": {
+		"name": "Binary CPIO Archive",
+		"mine": "application\/x-bcpio"
+	  },
+	  "box": {
+		"name": "Preview Systems ZipLock\/VBox",
+		"mine": "application\/vnd.previewsystems.box"
+	  },
+	  "bz": {
+		"name": "Bzip Archive",
+		"mine": "application\/x-bzip"
+	  },
+	  "bz2": {
+		"name": "Bzip2 Archive",
+		"mine": "application\/x-bzip2"
+	  },
+	  "cpio": {
+		"name": "CPIO Archive",
+		"mine": "application\/x-cpio"
+	  },
+	  "daf": {
+		"name": "Mobius Management Systems - UniversalArchive",
+		"mine": "application\/vnd.mobius.daf"
+	  },
+	  "jar": {
+		"name": "Java Archive",
+		"mine": "application\/java-archive"
+	  },
+	  "joda": {
+		"name": "Joda Archive",
+		"mine": "application\/vnd.joost.joda-archive"
+	  },
+	  "kmz": {
+		"name": "Google Earth - Zipped KML",
+		"mine": "application\/vnd.google-earth.kmz"
+	  },
+	  "rar": {
+		"name": "RAR Archive",
+		"mine": "application\/x-rar-compressed"
+	  },
+	  "shar": {
+		"name": "Shell Archive",
+		"mine": "application\/x-shar"
+	  },
+	  "sit": {
+		"name": "Stuffit Archive",
+		"mine": "application\/x-stuffit"
+	  },
+	  "sitx": {
+		"name": "Stuffit Archive",
+		"mine": "application\/x-stuffitx"
+	  },
+	  "sv4cpio": {
+		"name": "System V Release 4 CPIO Archive",
+		"mine": "application\/x-sv4cpio"
+	  },
+	  "tar": {
+		"name": "Tar File (Tape Archive)",
+		"mine": "application\/x-tar"
+	  },
+	  "ustar": {
+		"name": "Ustar (Uniform Standard Tape Archive)",
+		"mine": "application\/x-ustar"
+	  },
+	  "zip": {
+		"name": "Zip Archive",
+		"mine": "application\/zip"
+	  }
 	},
-	"audio": {
-		"extensions": {
-			"aac": {
-				"name": "Advanced Audio Coding (AAC)",
-				"mine": "audio\/x-aac"
-			},
-			"adp": {
-				"name": "Adaptive differential pulse-code modulation",
-				"mine": "audio\/adpcm"
-			},
-			"aif": {
-				"name": "Audio Interchange File Format",
-				"mine": "audio\/x-aiff"
-			},
-			"au": {
-				"name": "Sun Audio - Au file format",
-				"mine": "audio\/basic"
-			},
-			"dra": {
-				"name": "DRA Audio",
-				"mine": "audio\/vnd.dra"
-			},
-			"dts": {
-				"name": "DTS Audio",
-				"mine": "audio\/vnd.dts"
-			},
-			"dtshd": {
-				"name": "DTS High Definition Audio",
-				"mine": "audio\/vnd.dts.hd"
-			},
-			"ecelp4800": {
-				"name": "Nuera ECELP 4800",
-				"mine": "audio\/vnd.nuera.ecelp4800"
-			},
-			"ecelp7470": {
-				"name": "Nuera ECELP 7470",
-				"mine": "audio\/vnd.nuera.ecelp7470"
-			},
-			"ecelp9600": {
-				"name": "Nuera ECELP 9600",
-				"mine": "audio\/vnd.nuera.ecelp9600"
-			},
-			"eol": {
-				"name": "Digital Winds Music",
-				"mine": "audio\/vnd.digital-winds"
-			},
-			"lvp": {
-				"name": "Lucent Voice",
-				"mine": "audio\/vnd.lucent.voice"
-			},
-			"m3u": {
-				"name": "M3U (Multimedia Playlist)",
-				"mine": "audio\/x-mpegurl"
-			},
-			"mid": {
-				"name": "MIDI - Musical Instrument Digital Interface",
-				"mine": "audio\/midi"
-			},
-			"mp4a": {
-				"name": "MPEG-4 Audio",
-				"mine": "audio\/mp4"
-			},
-			"mpga": {
-				"name": "MPEG Audio",
-				"mine": "audio\/mpeg"
-			},
-			"oga": {
-				"name": "Ogg Audio",
-				"mine": "audio\/ogg"
-			},
-			"pya": {
-				"name": "Microsoft PlayReady Ecosystem",
-				"mine": "audio\/vnd.ms-playready.media.pya"
-			},
-			"ram": {
-				"name": "Real Audio Sound",
-				"mine": "audio\/x-pn-realaudio"
-			},
-			"rip": {
-				"name": "Hit'n'Mix",
-				"mine": "audio\/vnd.rip"
-			},
-			"rmp": {
-				"name": "Real Audio Sound",
-				"mine": "audio\/x-pn-realaudio-plugin"
-			},
-			"uva": {
-				"name": "DECE Audio",
-				"mine": "audio\/vnd.dece.audio"
-			},
-			"wav": {
-				"name": "Waveform Audio File Format (WAV)",
-				"mine": "audio\/x-wav"
-			},
-			"wax": {
-				"name": "Microsoft Windows Media Audio Redirector",
-				"mine": "audio\/x-ms-wax"
-			},
-			"weba": {
-				"name": "Open Web Media Project - Audio",
-				"mine": "audio\/webm"
-			},
-			"wma": {
-				"name": "Microsoft Windows Media Audio",
-				"mine": "audio\/x-ms-wma"
-			}
-		},
-		"icon": "file-icons\/audio.png",
-		"name": "Audio"
+	"icon": "file-icons\/archive.png",
+	"name": "Archive"
+  },
+  "audio": {
+	"extensions": {
+	  "aac": {
+		"name": "Advanced Audio Coding (AAC)",
+		"mine": "audio\/x-aac"
+	  },
+	  "adp": {
+		"name": "Adaptive differential pulse-code modulation",
+		"mine": "audio\/adpcm"
+	  },
+	  "aif": {
+		"name": "Audio Interchange File Format",
+		"mine": "audio\/x-aiff"
+	  },
+	  "au": {
+		"name": "Sun Audio - Au file format",
+		"mine": "audio\/basic"
+	  },
+	  "dra": {
+		"name": "DRA Audio",
+		"mine": "audio\/vnd.dra"
+	  },
+	  "dts": {
+		"name": "DTS Audio",
+		"mine": "audio\/vnd.dts"
+	  },
+	  "dtshd": {
+		"name": "DTS High Definition Audio",
+		"mine": "audio\/vnd.dts.hd"
+	  },
+	  "ecelp4800": {
+		"name": "Nuera ECELP 4800",
+		"mine": "audio\/vnd.nuera.ecelp4800"
+	  },
+	  "ecelp7470": {
+		"name": "Nuera ECELP 7470",
+		"mine": "audio\/vnd.nuera.ecelp7470"
+	  },
+	  "ecelp9600": {
+		"name": "Nuera ECELP 9600",
+		"mine": "audio\/vnd.nuera.ecelp9600"
+	  },
+	  "eol": {
+		"name": "Digital Winds Music",
+		"mine": "audio\/vnd.digital-winds"
+	  },
+	  "lvp": {
+		"name": "Lucent Voice",
+		"mine": "audio\/vnd.lucent.voice"
+	  },
+	  "m3u": {
+		"name": "M3U (Multimedia Playlist)",
+		"mine": "audio\/x-mpegurl"
+	  },
+	  "mid": {
+		"name": "MIDI - Musical Instrument Digital Interface",
+		"mine": "audio\/midi"
+	  },
+	  "mp3": {
+		"name": "MPEG-3 Audio",
+		"mine": "audio\/mp3"
+	  },
+	  "mp4a": {
+		"name": "MPEG-4 Audio",
+		"mine": "audio\/mp4"
+	  },
+	  "mpga": {
+		"name": "MPEG Audio",
+		"mine": "audio\/mpeg"
+	  },
+	  "oga": {
+		"name": "Ogg Audio",
+		"mine": "audio\/ogg"
+	  },
+	  "pya": {
+		"name": "Microsoft PlayReady Ecosystem",
+		"mine": "audio\/vnd.ms-playready.media.pya"
+	  },
+	  "ram": {
+		"name": "Real Audio Sound",
+		"mine": "audio\/x-pn-realaudio"
+	  },
+	  "rip": {
+		"name": "Hit'n'Mix",
+		"mine": "audio\/vnd.rip"
+	  },
+	  "rmp": {
+		"name": "Real Audio Sound",
+		"mine": "audio\/x-pn-realaudio-plugin"
+	  },
+	  "uva": {
+		"name": "DECE Audio",
+		"mine": "audio\/vnd.dece.audio"
+	  },
+	  "wav": {
+		"name": "Waveform Audio File Format (WAV)",
+		"mine": "audio\/x-wav"
+	  },
+	  "wax": {
+		"name": "Microsoft Windows Media Audio Redirector",
+		"mine": "audio\/x-ms-wax"
+	  },
+	  "weba": {
+		"name": "Open Web Media Project - Audio",
+		"mine": "audio\/webm"
+	  },
+	  "wma": {
+		"name": "Microsoft Windows Media Audio",
+		"mine": "audio\/x-ms-wma"
+	  }
 	},
-	"document": {
-		"extensions": {
-			"abw": {
-				"name": "AbiWord",
-				"mine": "application\/x-abiword"
-			},
-			"atomsvc": {
-				"name": "Atom Publishing Protocol Service Document",
-				"mine": "application\/atomsvc+xml"
-			},
-			"chrt": {
-				"name": "KDE KOffice Office Suite - KChart",
-				"mine": "application\/vnd.kde.kchart"
-			},
-			"clkw": {
-				"name": "CrickSoftware - Clicker - Wordbank",
-				"mine": "application\/vnd.crick.clicker.wordbank"
-			},
-			"doc": {
-				"name": "Microsoft Word",
-				"mine": "application\/msword"
-			},
-			"docm": {
-				"name": "Microsoft Word - Macro-Enabled Document",
-				"mine": "application\/vnd.ms-word.document.macroenabled.12"
-			},
-			"docx": {
-				"name": "Microsoft Office - OOXML - Word Document",
-				"mine": "application\/vnd.openxmlformats-officedocument.wordprocessingml.document"
-			},
-			"dotm": {
-				"name": "Microsoft Word - Macro-Enabled Template",
-				"mine": "application\/vnd.ms-word.template.macroenabled.12"
-			},
-			"dotx": {
-				"name": "Microsoft Office - OOXML - Word Document Template",
-				"mine": "application\/vnd.openxmlformats-officedocument.wordprocessingml.template"
-			},
-			"dtd": {
-				"name": "Document Type Definition",
-				"mine": "application\/xml-dtd"
-			},
-			"flw": {
-				"name": "KDE KOffice Office Suite - Kivio",
-				"mine": "application\/vnd.kde.kivio"
-			},
-			"karbon": {
-				"name": "KDE KOffice Office Suite - Karbon",
-				"mine": "application\/vnd.kde.karbon"
-			},
-			"kfo": {
-				"name": "KDE KOffice Office Suite - Kformula",
-				"mine": "application\/vnd.kde.kformula"
-			},
-			"kon": {
-				"name": "KDE KOffice Office Suite - Kontour",
-				"mine": "application\/vnd.kde.kontour"
-			},
-			"kpr": {
-				"name": "KDE KOffice Office Suite - Kpresenter",
-				"mine": "application\/vnd.kde.kpresenter"
-			},
-			"ksp": {
-				"name": "KDE KOffice Office Suite - Kspread",
-				"mine": "application\/vnd.kde.kspread"
-			},
-			"kwd": {
-				"name": "KDE KOffice Office Suite - Kword",
-				"mine": "application\/vnd.kde.kword"
-			},
-			"lwp": {
-				"name": "Lotus Wordpro",
-				"mine": "application\/vnd.lotus-wordpro"
-			},
-			"obd": {
-				"name": "Microsoft Office Binder",
-				"mine": "application\/x-msbinder"
-			},
-			"oda": {
-				"name": "Office Document Architecture",
-				"mine": "application\/oda"
-			},
-			"odb": {
-				"name": "OpenDocument Database",
-				"mine": "application\/vnd.oasis.opendocument.database"
-			},
-			"odc": {
-				"name": "OpenDocument Chart",
-				"mine": "application\/vnd.oasis.opendocument.chart"
-			},
-			"odf": {
-				"name": "OpenDocument Formula",
-				"mine": "application\/vnd.oasis.opendocument.formula"
-			},
-			"odft": {
-				"name": "OpenDocument Formula Template",
-				"mine": "application\/vnd.oasis.opendocument.formula-template"
-			},
-			"odg": {
-				"name": "OpenDocument Graphics",
-				"mine": "application\/vnd.oasis.opendocument.graphics"
-			},
-			"odi": {
-				"name": "OpenDocument Image",
-				"mine": "application\/vnd.oasis.opendocument.image"
-			},
-			"odm": {
-				"name": "OpenDocument Text Master",
-				"mine": "application\/vnd.oasis.opendocument.text-master"
-			},
-			"odt": {
-				"name": "OpenDocument Text",
-				"mine": "application\/vnd.oasis.opendocument.text"
-			},
-			"otc": {
-				"name": "OpenDocument Chart Template",
-				"mine": "application\/vnd.oasis.opendocument.chart-template"
-			},
-			"otg": {
-				"name": "OpenDocument Graphics Template",
-				"mine": "application\/vnd.oasis.opendocument.graphics-template"
-			},
-			"oth": {
-				"name": "Open Document Text Web",
-				"mine": "application\/vnd.oasis.opendocument.text-web"
-			},
-			"oti": {
-				"name": "OpenDocument Image Template",
-				"mine": "application\/vnd.oasis.opendocument.image-template"
-			},
-			"ott": {
-				"name": "OpenDocument Text Template",
-				"mine": "application\/vnd.oasis.opendocument.text-template"
-			},
-			"oxt": {
-				"name": "Open Office Extension",
-				"mine": "application\/vnd.openofficeorg.extension"
-			},
-			"sda": {
-				"name": "StarOffice - Draw",
-				"mine": "application\/vnd.stardivision.draw"
-			},
-			"sdc": {
-				"name": "StarOffice - Calc",
-				"mine": "application\/vnd.stardivision.calc"
-			},
-			"sdd": {
-				"name": "StarOffice - Impress",
-				"mine": "application\/vnd.stardivision.impress"
-			},
-			"sdw": {
-				"name": "StarOffice - Writer",
-				"mine": "application\/vnd.stardivision.writer"
-			},
-			"sgl": {
-				"name": "StarOffice - Writer  (Global)",
-				"mine": "application\/vnd.stardivision.writer-global"
-			},
-			"smf": {
-				"name": "StarOffice - Math",
-				"mine": "application\/vnd.stardivision.math"
-			},
-			"std": {
-				"name": "OpenOffice - Draw Template (Graphics)",
-				"mine": "application\/vnd.sun.xml.draw.template"
-			},
-			"stw": {
-				"name": "OpenOffice - Writer Template (Text - HTML)",
-				"mine": "application\/vnd.sun.xml.writer.template"
-			},
-			"svd": {
-				"name": "SourceView Document",
-				"mine": "application\/vnd.svd"
-			},
-			"sxd": {
-				"name": "OpenOffice - Draw (Graphics)",
-				"mine": "application\/vnd.sun.xml.draw"
-			},
-			"sxg": {
-				"name": "OpenOffice - Writer (Text - HTML)",
-				"mine": "application\/vnd.sun.xml.writer.global"
-			},
-			"sxm": {
-				"name": "OpenOffice - Math (Formula)",
-				"mine": "application\/vnd.sun.xml.math"
-			},
-			"sxw": {
-				"name": "OpenOffice - Writer (Text - HTML)",
-				"mine": "application\/vnd.sun.xml.writer"
-			},
-			"texinfo": {
-				"name": "GNU Texinfo Document",
-				"mine": "application\/x-texinfo"
-			},
-			"thmx": {
-				"name": "Microsoft Office System Release Theme",
-				"mine": "application\/vnd.ms-officetheme"
-			},
-			"wpd": {
-				"name": "Wordperfect",
-				"mine": "application\/vnd.wordperfect"
-			},
-			"wri": {
-				"name": "Microsoft Wordpad",
-				"mine": "application\/x-mswrite"
-			}
-		},
-		"icon": "file-icons\/document.png",
-		"name": "Document"
+	"icon": "file-icons\/audio.png",
+	"name": "Audio"
+  },
+  "document": {
+	"extensions": {
+	  "abw": {
+		"name": "AbiWord",
+		"mine": "application\/x-abiword"
+	  },
+	  "atomsvc": {
+		"name": "Atom Publishing Protocol Service Document",
+		"mine": "application\/atomsvc+xml"
+	  },
+	  "chrt": {
+		"name": "KDE KOffice Office Suite - KChart",
+		"mine": "application\/vnd.kde.kchart"
+	  },
+	  "clkw": {
+		"name": "CrickSoftware - Clicker - Wordbank",
+		"mine": "application\/vnd.crick.clicker.wordbank"
+	  },
+	  "doc": {
+		"name": "Microsoft Word",
+		"mine": "application\/msword"
+	  },
+	  "docm": {
+		"name": "Microsoft Word - Macro-Enabled Document",
+		"mine": "application\/vnd.ms-word.document.macroenabled.12"
+	  },
+	  "docx": {
+		"name": "Microsoft Office - OOXML - Word Document",
+		"mine": "application\/vnd.openxmlformats-officedocument.wordprocessingml.document"
+	  },
+	  "dotm": {
+		"name": "Microsoft Word - Macro-Enabled Template",
+		"mine": "application\/vnd.ms-word.template.macroenabled.12"
+	  },
+	  "dotx": {
+		"name": "Microsoft Office - OOXML - Word Document Template",
+		"mine": "application\/vnd.openxmlformats-officedocument.wordprocessingml.template"
+	  },
+	  "dtd": {
+		"name": "Document Type Definition",
+		"mine": "application\/xml-dtd"
+	  },
+	  "flw": {
+		"name": "KDE KOffice Office Suite - Kivio",
+		"mine": "application\/vnd.kde.kivio"
+	  },
+	  "karbon": {
+		"name": "KDE KOffice Office Suite - Karbon",
+		"mine": "application\/vnd.kde.karbon"
+	  },
+	  "kfo": {
+		"name": "KDE KOffice Office Suite - Kformula",
+		"mine": "application\/vnd.kde.kformula"
+	  },
+	  "kon": {
+		"name": "KDE KOffice Office Suite - Kontour",
+		"mine": "application\/vnd.kde.kontour"
+	  },
+	  "kpr": {
+		"name": "KDE KOffice Office Suite - Kpresenter",
+		"mine": "application\/vnd.kde.kpresenter"
+	  },
+	  "ksp": {
+		"name": "KDE KOffice Office Suite - Kspread",
+		"mine": "application\/vnd.kde.kspread"
+	  },
+	  "kwd": {
+		"name": "KDE KOffice Office Suite - Kword",
+		"mine": "application\/vnd.kde.kword"
+	  },
+	  "lwp": {
+		"name": "Lotus Wordpro",
+		"mine": "application\/vnd.lotus-wordpro"
+	  },
+	  "obd": {
+		"name": "Microsoft Office Binder",
+		"mine": "application\/x-msbinder"
+	  },
+	  "oda": {
+		"name": "Office Document Architecture",
+		"mine": "application\/oda"
+	  },
+	  "odb": {
+		"name": "OpenDocument Database",
+		"mine": "application\/vnd.oasis.opendocument.database"
+	  },
+	  "odc": {
+		"name": "OpenDocument Chart",
+		"mine": "application\/vnd.oasis.opendocument.chart"
+	  },
+	  "odf": {
+		"name": "OpenDocument Formula",
+		"mine": "application\/vnd.oasis.opendocument.formula"
+	  },
+	  "odft": {
+		"name": "OpenDocument Formula Template",
+		"mine": "application\/vnd.oasis.opendocument.formula-template"
+	  },
+	  "odg": {
+		"name": "OpenDocument Graphics",
+		"mine": "application\/vnd.oasis.opendocument.graphics"
+	  },
+	  "odi": {
+		"name": "OpenDocument Image",
+		"mine": "application\/vnd.oasis.opendocument.image"
+	  },
+	  "odm": {
+		"name": "OpenDocument Text Master",
+		"mine": "application\/vnd.oasis.opendocument.text-master"
+	  },
+	  "odt": {
+		"name": "OpenDocument Text",
+		"mine": "application\/vnd.oasis.opendocument.text"
+	  },
+	  "otc": {
+		"name": "OpenDocument Chart Template",
+		"mine": "application\/vnd.oasis.opendocument.chart-template"
+	  },
+	  "otg": {
+		"name": "OpenDocument Graphics Template",
+		"mine": "application\/vnd.oasis.opendocument.graphics-template"
+	  },
+	  "oth": {
+		"name": "Open Document Text Web",
+		"mine": "application\/vnd.oasis.opendocument.text-web"
+	  },
+	  "oti": {
+		"name": "OpenDocument Image Template",
+		"mine": "application\/vnd.oasis.opendocument.image-template"
+	  },
+	  "ott": {
+		"name": "OpenDocument Text Template",
+		"mine": "application\/vnd.oasis.opendocument.text-template"
+	  },
+	  "oxt": {
+		"name": "Open Office Extension",
+		"mine": "application\/vnd.openofficeorg.extension"
+	  },
+	  "sda": {
+		"name": "StarOffice - Draw",
+		"mine": "application\/vnd.stardivision.draw"
+	  },
+	  "sdc": {
+		"name": "StarOffice - Calc",
+		"mine": "application\/vnd.stardivision.calc"
+	  },
+	  "sdd": {
+		"name": "StarOffice - Impress",
+		"mine": "application\/vnd.stardivision.impress"
+	  },
+	  "sdw": {
+		"name": "StarOffice - Writer",
+		"mine": "application\/vnd.stardivision.writer"
+	  },
+	  "sgl": {
+		"name": "StarOffice - Writer  (Global)",
+		"mine": "application\/vnd.stardivision.writer-global"
+	  },
+	  "smf": {
+		"name": "StarOffice - Math",
+		"mine": "application\/vnd.stardivision.math"
+	  },
+	  "std": {
+		"name": "OpenOffice - Draw Template (Graphics)",
+		"mine": "application\/vnd.sun.xml.draw.template"
+	  },
+	  "stw": {
+		"name": "OpenOffice - Writer Template (Text - HTML)",
+		"mine": "application\/vnd.sun.xml.writer.template"
+	  },
+	  "svd": {
+		"name": "SourceView Document",
+		"mine": "application\/vnd.svd"
+	  },
+	  "sxd": {
+		"name": "OpenOffice - Draw (Graphics)",
+		"mine": "application\/vnd.sun.xml.draw"
+	  },
+	  "sxg": {
+		"name": "OpenOffice - Writer (Text - HTML)",
+		"mine": "application\/vnd.sun.xml.writer.global"
+	  },
+	  "sxm": {
+		"name": "OpenOffice - Math (Formula)",
+		"mine": "application\/vnd.sun.xml.math"
+	  },
+	  "sxw": {
+		"name": "OpenOffice - Writer (Text - HTML)",
+		"mine": "application\/vnd.sun.xml.writer"
+	  },
+	  "texinfo": {
+		"name": "GNU Texinfo Document",
+		"mine": "application\/x-texinfo"
+	  },
+	  "thmx": {
+		"name": "Microsoft Office System Release Theme",
+		"mine": "application\/vnd.ms-officetheme"
+	  },
+	  "wpd": {
+		"name": "Wordperfect",
+		"mine": "application\/vnd.wordperfect"
+	  },
+	  "wri": {
+		"name": "Microsoft Wordpad",
+		"mine": "application\/x-mswrite"
+	  }
 	},
-	"email": {
-		"extensions": {
-			"eml": {
-				"name": "Email Message",
-				"mine": "message\/rfc822"
-			},
-			"mbox": {
-				"name": "Mbox database files",
-				"mine": "application\/mbox"
-			}
-		},
-		"icon": "file-icons\/email.png",
-		"name": "Email"
+	"icon": "file-icons\/document.png",
+	"name": "Document"
+  },
+  "email": {
+	"extensions": {
+	  "eml": {
+		"name": "Email Message",
+		"mine": "message\/rfc822"
+	  },
+	  "mbox": {
+		"name": "Mbox database files",
+		"mine": "application\/mbox"
+	  }
 	},
-	"font": {
-		"extensions": {
-			"bdf": {
-				"name": "Glyph Bitmap Distribution Format",
-				"mine": "application\/x-font-bdf"
-			},
-			"eot": {
-				"name": "Microsoft Embedded OpenType",
-				"mine": "application\/vnd.ms-fontobject"
-			},
-			"gsf": {
-				"name": "Ghostscript Font",
-				"mine": "application\/x-font-ghostscript"
-			},
-			"otf": {
-				"name": "OpenType Font File",
-				"mine": "application\/x-font-otf"
-			},
-			"pcf": {
-				"name": "Portable Compiled Format",
-				"mine": "application\/x-font-pcf"
-			},
-			"pfa": {
-				"name": "PostScript Fonts",
-				"mine": "application\/x-font-type1"
-			},
-			"pfr": {
-				"name": "Portable Font Resource",
-				"mine": "application\/font-tdpfr"
-			},
-			"psf": {
-				"name": "PSF Fonts",
-				"mine": "application\/x-font-linux-psf"
-			},
-			"snf": {
-				"name": "Server Normal Format",
-				"mine": "application\/x-font-snf"
-			},
-			"tfm": {
-				"name": "TeX Font Metric",
-				"mine": "application\/x-tex-tfm"
-			},
-			"ttf": {
-				"name": "TrueType Font",
-				"mine": "application\/x-font-ttf"
-			},
-			"woff": {
-				"name": "Web Open Font Format",
-				"mine": "application\/x-font-woff"
-			}
-		},
-		"icon": "file-icons\/font.png",
-		"name": "Font"
+	"icon": "file-icons\/email.png",
+	"name": "Email"
+  },
+  "font": {
+	"extensions": {
+	  "bdf": {
+		"name": "Glyph Bitmap Distribution Format",
+		"mine": "application\/x-font-bdf"
+	  },
+	  "eot": {
+		"name": "Microsoft Embedded OpenType",
+		"mine": "application\/vnd.ms-fontobject"
+	  },
+	  "gsf": {
+		"name": "Ghostscript Font",
+		"mine": "application\/x-font-ghostscript"
+	  },
+	  "otf": {
+		"name": "OpenType Font File",
+		"mine": "application\/x-font-otf"
+	  },
+	  "pcf": {
+		"name": "Portable Compiled Format",
+		"mine": "application\/x-font-pcf"
+	  },
+	  "pfa": {
+		"name": "PostScript Fonts",
+		"mine": "application\/x-font-type1"
+	  },
+	  "pfr": {
+		"name": "Portable Font Resource",
+		"mine": "application\/font-tdpfr"
+	  },
+	  "psf": {
+		"name": "PSF Fonts",
+		"mine": "application\/x-font-linux-psf"
+	  },
+	  "snf": {
+		"name": "Server Normal Format",
+		"mine": "application\/x-font-snf"
+	  },
+	  "tfm": {
+		"name": "TeX Font Metric",
+		"mine": "application\/x-tex-tfm"
+	  },
+	  "ttf": {
+		"name": "TrueType Font",
+		"mine": "application\/x-font-ttf"
+	  },
+	  "woff": {
+		"name": "Web Open Font Format",
+		"mine": "application\/x-font-woff"
+	  }
 	},
-	"image": {
-		"extensions": {
-			"bmp": {
-				"name": "Bitmap Image File",
-				"mine": "image\/bmp"
-			},
-			"btif": {
-				"name": "BTIF",
-				"mine": "image\/prs.btif"
-			},
-			"cgm": {
-				"name": "Computer Graphics Metafile",
-				"mine": "image\/cgm"
-			},
-			"cmx": {
-				"name": "Corel Metafile Exchange (CMX)",
-				"mine": "image\/x-cmx"
-			},
-			"djvu": {
-				"name": "DjVu",
-				"mine": "image\/vnd.djvu"
-			},
-			"dwg": {
-				"name": "DWG Drawing",
-				"mine": "image\/vnd.dwg"
-			},
-			"dxf": {
-				"name": "AutoCAD DXF",
-				"mine": "image\/vnd.dxf"
-			},
-			"fbs": {
-				"name": "FastBid Sheet",
-				"mine": "image\/vnd.fastbidsheet"
-			},
-			"fh": {
-				"name": "FreeHand MX",
-				"mine": "image\/x-freehand"
-			},
-			"fpx": {
-				"name": "FlashPix",
-				"mine": "image\/vnd.fpx"
-			},
-			"fst": {
-				"name": "FAST Search & Transfer ASA",
-				"mine": "image\/vnd.fst"
-			},
-			"g3": {
-				"name": "G3 Fax Image",
-				"mine": "image\/g3fax"
-			},
-			"gif": {
-				"name": "Graphics Interchange Format",
-				"mine": "image\/gif"
-			},
-			"ico": {
-				"name": "Icon Image",
-				"mine": "image\/x-icon"
-			},
-			"ief": {
-				"name": "Image Exchange Format",
-				"mine": "image\/ief"
-			},
-			"jpeg": {
-				"name": "JPEG Image",
-				"mine": "image\/jpeg"
-			},
-			"jpg": {
-				"name": "JPEG Image",
-				"mine": "image\/jpeg"
-			},
-			"ktx": {
-				"name": "OpenGL Textures (KTX)",
-				"mine": "image\/ktx"
-			},
-			"mdi": {
-				"name": "Microsoft Document Imaging Format",
-				"mine": "image\/vnd.ms-modi"
-			},
-			"mmr": {
-				"name": "EDMICS 2000",
-				"mine": "image\/vnd.fujixerox.edmics-mmr"
-			},
-			"npx": {
-				"name": "FlashPix",
-				"mine": "image\/vnd.net-fpx"
-			},
-			"pbm": {
-				"name": "Portable Bitmap Format",
-				"mine": "image\/x-portable-bitmap"
-			},
-			"pcx": {
-				"name": "PCX Image",
-				"mine": "image\/x-pcx"
-			},
-			"pgm": {
-				"name": "Portable Graymap Format",
-				"mine": "image\/x-portable-graymap"
-			},
-			"pic": {
-				"name": "PICT Image",
-				"mine": "image\/x-pict"
-			},
-			"png": {
-				"name": "Portable Network Graphics (PNG)",
-				"mine": "image\/png"
-			},
-			"pnm": {
-				"name": "Portable Anymap Image",
-				"mine": "image\/x-portable-anymap"
-			},
-			"ppm": {
-				"name": "Portable Pixmap Format",
-				"mine": "image\/x-portable-pixmap"
-			},
-			"psd": {
-				"name": "Photoshop Document",
-				"mine": "image\/vnd.adobe.photoshop"
-			},
-			"ras": {
-				"name": "CMU Image",
-				"mine": "image\/x-cmu-raster"
-			},
-			"rgb": {
-				"name": "Silicon Graphics RGB Bitmap",
-				"mine": "image\/x-rgb"
-			},
-			"rlc": {
-				"name": "EDMICS 2000",
-				"mine": "image\/vnd.fujixerox.edmics-rlc"
-			},
-			"sub": {
-				"name": "Close Captioning - Subtitle",
-				"mine": "image\/vnd.dvb.subtitle"
-			},
-			"svg": {
-				"name": "Scalable Vector Graphics (SVG)",
-				"mine": "image\/svg+xml"
-			},
-			"tiff": {
-				"name": "Tagged Image File Format",
-				"mine": "image\/tiff"
-			},
-			"uvi": {
-				"name": "DECE Graphic",
-				"mine": "image\/vnd.dece.graphic"
-			},
-			"wbmp": {
-				"name": "WAP Bitamp (WBMP)",
-				"mine": "image\/vnd.wap.wbmp"
-			},
-			"webp": {
-				"name": "WebP Image",
-				"mine": "image\/webp"
-			},
-			"xbm": {
-				"name": "X BitMap",
-				"mine": "image\/x-xbitmap"
-			},
-			"xif": {
-				"name": "eXtended Image File Format (XIFF)",
-				"mine": "image\/vnd.xiff"
-			},
-			"xpm": {
-				"name": "X PixMap",
-				"mine": "image\/x-xpixmap"
-			},
-			"xwd": {
-				"name": "X Window Dump",
-				"mine": "image\/x-xwindowdump"
-			}
-		},
-		"icon": "file-icons\/image.png",
-		"name": "Image"
+	"icon": "file-icons\/font.png",
+	"name": "Font"
+  },
+  "image": {
+	"extensions": {
+	  "bmp": {
+		"name": "Bitmap Image File",
+		"mine": "image\/bmp"
+	  },
+	  "btif": {
+		"name": "BTIF",
+		"mine": "image\/prs.btif"
+	  },
+	  "cgm": {
+		"name": "Computer Graphics Metafile",
+		"mine": "image\/cgm"
+	  },
+	  "cmx": {
+		"name": "Corel Metafile Exchange (CMX)",
+		"mine": "image\/x-cmx"
+	  },
+	  "djvu": {
+		"name": "DjVu",
+		"mine": "image\/vnd.djvu"
+	  },
+	  "dwg": {
+		"name": "DWG Drawing",
+		"mine": "image\/vnd.dwg"
+	  },
+	  "dxf": {
+		"name": "AutoCAD DXF",
+		"mine": "image\/vnd.dxf"
+	  },
+	  "fbs": {
+		"name": "FastBid Sheet",
+		"mine": "image\/vnd.fastbidsheet"
+	  },
+	  "fh": {
+		"name": "FreeHand MX",
+		"mine": "image\/x-freehand"
+	  },
+	  "fpx": {
+		"name": "FlashPix",
+		"mine": "image\/vnd.fpx"
+	  },
+	  "fst": {
+		"name": "FAST Search & Transfer ASA",
+		"mine": "image\/vnd.fst"
+	  },
+	  "g3": {
+		"name": "G3 Fax Image",
+		"mine": "image\/g3fax"
+	  },
+	  "gif": {
+		"name": "Graphics Interchange Format",
+		"mine": "image\/gif"
+	  },
+	  "ico": {
+		"name": "Icon Image",
+		"mine": "image\/x-icon"
+	  },
+	  "ief": {
+		"name": "Image Exchange Format",
+		"mine": "image\/ief"
+	  },
+	  "jpeg": {
+		"name": "JPEG Image",
+		"mine": "image\/jpeg"
+	  },
+	  "jpg": {
+		"name": "JPEG Image",
+		"mine": "image\/jpeg"
+	  },
+	  "ktx": {
+		"name": "OpenGL Textures (KTX)",
+		"mine": "image\/ktx"
+	  },
+	  "mdi": {
+		"name": "Microsoft Document Imaging Format",
+		"mine": "image\/vnd.ms-modi"
+	  },
+	  "mmr": {
+		"name": "EDMICS 2000",
+		"mine": "image\/vnd.fujixerox.edmics-mmr"
+	  },
+	  "npx": {
+		"name": "FlashPix",
+		"mine": "image\/vnd.net-fpx"
+	  },
+	  "pbm": {
+		"name": "Portable Bitmap Format",
+		"mine": "image\/x-portable-bitmap"
+	  },
+	  "pcx": {
+		"name": "PCX Image",
+		"mine": "image\/x-pcx"
+	  },
+	  "pgm": {
+		"name": "Portable Graymap Format",
+		"mine": "image\/x-portable-graymap"
+	  },
+	  "pic": {
+		"name": "PICT Image",
+		"mine": "image\/x-pict"
+	  },
+	  "png": {
+		"name": "Portable Network Graphics (PNG)",
+		"mine": "image\/png"
+	  },
+	  "pnm": {
+		"name": "Portable Anymap Image",
+		"mine": "image\/x-portable-anymap"
+	  },
+	  "ppm": {
+		"name": "Portable Pixmap Format",
+		"mine": "image\/x-portable-pixmap"
+	  },
+	  "psd": {
+		"name": "Photoshop Document",
+		"mine": "image\/vnd.adobe.photoshop"
+	  },
+	  "ras": {
+		"name": "CMU Image",
+		"mine": "image\/x-cmu-raster"
+	  },
+	  "rgb": {
+		"name": "Silicon Graphics RGB Bitmap",
+		"mine": "image\/x-rgb"
+	  },
+	  "rlc": {
+		"name": "EDMICS 2000",
+		"mine": "image\/vnd.fujixerox.edmics-rlc"
+	  },
+	  "sub": {
+		"name": "Close Captioning - Subtitle",
+		"mine": "image\/vnd.dvb.subtitle"
+	  },
+	  "svg": {
+		"name": "Scalable Vector Graphics (SVG)",
+		"mine": "image\/svg+xml"
+	  },
+	  "tiff": {
+		"name": "Tagged Image File Format",
+		"mine": "image\/tiff"
+	  },
+	  "uvi": {
+		"name": "DECE Graphic",
+		"mine": "image\/vnd.dece.graphic"
+	  },
+	  "wbmp": {
+		"name": "WAP Bitamp (WBMP)",
+		"mine": "image\/vnd.wap.wbmp"
+	  },
+	  "webp": {
+		"name": "WebP Image",
+		"mine": "image\/webp"
+	  },
+	  "xbm": {
+		"name": "X BitMap",
+		"mine": "image\/x-xbitmap"
+	  },
+	  "xif": {
+		"name": "eXtended Image File Format (XIFF)",
+		"mine": "image\/vnd.xiff"
+	  },
+	  "xpm": {
+		"name": "X PixMap",
+		"mine": "image\/x-xpixmap"
+	  },
+	  "xwd": {
+		"name": "X Window Dump",
+		"mine": "image\/x-xwindowdump"
+	  }
 	},
-	"other": {
-		"extensions": {
-			"aab": {
-				"name": "Adobe (Macropedia) Authorware - Binary File",
-				"mine": "application\/x-authorware-bin"
-			},
-			"aam": {
-				"name": "Adobe (Macropedia) Authorware - Map",
-				"mine": "application\/x-authorware-map"
-			},
-			"aas": {
-				"name": "Adobe (Macropedia) Authorware - Segment File",
-				"mine": "application\/x-authorware-seg"
-			},
-			"ac": {
-				"name": "Attribute Certificate",
-				"mine": "application\/pkix-attr-cert"
-			},
-			"acc": {
-				"name": "Active Content Compression",
-				"mine": "application\/vnd.americandynamics.acc"
-			},
-			"acu": {
-				"name": "ACU Cobol",
-				"mine": "application\/vnd.acucobol"
-			},
-			"aep": {
-				"name": "Audiograph",
-				"mine": "application\/vnd.audiograph"
-			},
-			"afp": {
-				"name": "MO:DCA-P",
-				"mine": "application\/vnd.ibm.modcap"
-			},
-			"ahead": {
-				"name": "Ahead AIR Application",
-				"mine": "application\/vnd.ahead.space"
-			},
-			"ai": {
-				"name": "PostScript",
-				"mine": "application\/postscript"
-			},
-			"air": {
-				"name": "Adobe AIR Application",
-				"mine": "application\/vnd.adobe.air-application-installer-package+zip"
-			},
-			"ait": {
-				"name": "Digital Video Broadcasting",
-				"mine": "application\/vnd.dvb.ait"
-			},
-			"ami": {
-				"name": "AmigaDE",
-				"mine": "application\/vnd.amiga.ami"
-			},
-			"application": {
-				"name": "Microsoft ClickOnce",
-				"mine": "application\/x-ms-application"
-			},
-			"apr": {
-				"name": "Lotus Approach",
-				"mine": "application\/vnd.lotus-approach"
-			},
-			"aso": {
-				"name": "Simply Accounting",
-				"mine": "application\/vnd.accpac.simply.aso"
-			},
-			"atc": {
-				"name": "ACU Cobol",
-				"mine": "application\/vnd.acucorp"
-			},
-			"atomcat": {
-				"name": "Atom Publishing Protocol",
-				"mine": "application\/atomcat+xml"
-			},
-			"atx": {
-				"name": "Antix Game Player",
-				"mine": "application\/vnd.antix.game-component"
-			},
-			"aw": {
-				"name": "Applixware",
-				"mine": "application\/applixware"
-			},
-			"azw": {
-				"name": "Amazon Kindle eBook format",
-				"mine": "application\/vnd.amazon.ebook"
-			},
-			"bdm": {
-				"name": "SyncML - Device Management",
-				"mine": "application\/vnd.syncml.dm+wbxml"
-			},
-			"bed": {
-				"name": "RealVNC",
-				"mine": "application\/vnd.realvnc.bed"
-			},
-			"bh2": {
-				"name": "Fujitsu Oasys",
-				"mine": "application\/vnd.fujitsu.oasysprs"
-			},
-			"bin": {
-				"name": "Binary Data",
-				"mine": "application\/octet-stream"
-			},
-			"bmi": {
-				"name": "BMI Drawing Data Interchange",
-				"mine": "application\/vnd.bmi"
-			},
-			"c11amc": {
-				"name": "ClueTrust CartoMobile - Config",
-				"mine": "application\/vnd.cluetrust.cartomobile-config"
-			},
-			"c11amz": {
-				"name": "ClueTrust CartoMobile - Config Package",
-				"mine": "application\/vnd.cluetrust.cartomobile-config-pkg"
-			},
-			"c4g": {
-				"name": "Clonk Game",
-				"mine": "application\/vnd.clonk.c4group"
-			},
-			"cab": {
-				"name": "Microsoft Cabinet File",
-				"mine": "application\/vnd.ms-cab-compressed"
-			},
-			"car": {
-				"name": "CURL Applet",
-				"mine": "application\/vnd.curl.car"
-			},
-			"cat": {
-				"name": "Microsoft Trust UI Provider - Security Catalog",
-				"mine": "application\/vnd.ms-pki.seccat"
-			},
-			"ccxml": {
-				"name": "Voice Browser Call Control",
-				"mine": "application\/ccxml+xml,"
-			},
-			"cdbcmsg": {
-				"name": "CIM Database",
-				"mine": "application\/vnd.contact.cmsg"
-			},
-			"cdkey": {
-				"name": "MediaRemote",
-				"mine": "application\/vnd.mediastation.cdkey"
-			},
-			"cdmia": {
-				"name": "Cloud Data Management Interface (CDMI) - Capability",
-				"mine": "application\/cdmi-capability"
-			},
-			"cdmic": {
-				"name": "Cloud Data Management Interface (CDMI) - Contaimer",
-				"mine": "application\/cdmi-container"
-			},
-			"cdmid": {
-				"name": "Cloud Data Management Interface (CDMI) - Domain",
-				"mine": "application\/cdmi-domain"
-			},
-			"cdmio": {
-				"name": "Cloud Data Management Interface (CDMI) - Object",
-				"mine": "application\/cdmi-object"
-			},
-			"cdmiq": {
-				"name": "Cloud Data Management Interface (CDMI) - Queue",
-				"mine": "application\/cdmi-queue"
-			},
-			"cdx": {
-				"name": "ChemDraw eXchange file",
-				"mine": "chemical\/x-cdx"
-			},
-			"cdxml": {
-				"name": "CambridgeSoft Chem Draw",
-				"mine": "application\/vnd.chemdraw+xml"
-			},
-			"cdy": {
-				"name": "Interactive Geometry Software Cinderella",
-				"mine": "application\/vnd.cinderella"
-			},
-			"cer": {
-				"name": "Internet Public Key Infrastructure - Certificate",
-				"mine": "application\/pkix-cert"
-			},
-			"chat": {
-				"name": "pIRCh",
-				"mine": "application\/x-chat"
-			},
-			"chm": {
-				"name": "Microsoft Html Help File",
-				"mine": "application\/vnd.ms-htmlhelp"
-			},
-			"cif": {
-				"name": "Crystallographic Interchange Format",
-				"mine": "chemical\/x-cif"
-			},
-			"cii": {
-				"name": "ANSER-WEB Terminal Client - Certificate Issue",
-				"mine": "application\/vnd.anser-web-certificate-issue-initiation"
-			},
-			"cil": {
-				"name": "Microsoft Artgalry",
-				"mine": "application\/vnd.ms-artgalry"
-			},
-			"cla": {
-				"name": "Claymore Data Files",
-				"mine": "application\/vnd.claymore"
-			},
-			"class": {
-				"name": "Java Bytecode File",
-				"mine": "application\/java-vm"
-			},
-			"clkk": {
-				"name": "CrickSoftware - Clicker - Keyboard",
-				"mine": "application\/vnd.crick.clicker.keyboard"
-			},
-			"clkp": {
-				"name": "CrickSoftware - Clicker - Palette",
-				"mine": "application\/vnd.crick.clicker.palette"
-			},
-			"clkt": {
-				"name": "CrickSoftware - Clicker - Template",
-				"mine": "application\/vnd.crick.clicker.template"
-			},
-			"clkx": {
-				"name": "CrickSoftware - Clicker",
-				"mine": "application\/vnd.crick.clicker"
-			},
-			"clp": {
-				"name": "Microsoft Clipboard Clip",
-				"mine": "application\/x-msclip"
-			},
-			"cmc": {
-				"name": "CosmoCaller",
-				"mine": "application\/vnd.cosmocaller"
-			},
-			"cmdf": {
-				"name": "CrystalMaker Data Format",
-				"mine": "chemical\/x-cmdf"
-			},
-			"cml": {
-				"name": "Chemical Markup Language",
-				"mine": "chemical\/x-cml"
-			},
-			"cmp": {
-				"name": "CustomMenu",
-				"mine": "application\/vnd.yellowriver-custom-menu"
-			},
-			"cod": {
-				"name": "Blackberry COD File",
-				"mine": "application\/vnd.rim.cod"
-			},
-			"cpt": {
-				"name": "Compact Pro",
-				"mine": "application\/mac-compactpro"
-			},
-			"crd": {
-				"name": "Microsoft Information Card",
-				"mine": "application\/x-mscardfile"
-			},
-			"crl": {
-				"name": "Internet Public Key Infrastructure - Certificate Revocation Lists",
-				"mine": "application\/pkix-crl"
-			},
-			"cryptonote": {
-				"name": "CryptoNote",
-				"mine": "application\/vnd.rig.cryptonote"
-			},
-			"csh": {
-				"name": "C Shell Script",
-				"mine": "application\/x-csh"
-			},
-			"csml": {
-				"name": "Chemical Style Markup Language",
-				"mine": "chemical\/x-csml"
-			},
-			"csp": {
-				"name": "Sixth Floor Media - CommonSpace",
-				"mine": "application\/vnd.commonspace"
-			},
-			"cu": {
-				"name": "CU-SeeMe",
-				"mine": "application\/cu-seeme"
-			},
-			"cww": {
-				"name": "CU-Writer",
-				"mine": "application\/prs.cww"
-			},
-			"dae": {
-				"name": "COLLADA",
-				"mine": "model\/vnd.collada+xml"
-			},
-			"davmount": {
-				"name": "Web Distributed Authoring and Versioning",
-				"mine": "application\/davmount+xml"
-			},
-			"dd2": {
-				"name": "OMA Download Agents",
-				"mine": "application\/vnd.oma.dd2+xml"
-			},
-			"ddd": {
-				"name": "Fujitsu - Xerox 2D CAD Data",
-				"mine": "application\/vnd.fujixerox.ddd"
-			},
-			"deb": {
-				"name": "Debian Package",
-				"mine": "application\/x-debian-package"
-			},
-			"der": {
-				"name": "X.509 Certificate",
-				"mine": "application\/x-x509-ca-cert"
-			},
-			"dfac": {
-				"name": "DreamFactory",
-				"mine": "application\/vnd.dreamfactory"
-			},
-			"dir": {
-				"name": "Adobe Shockwave Player",
-				"mine": "application\/x-director"
-			},
-			"dis": {
-				"name": "Mobius Management Systems - Distribution Database",
-				"mine": "application\/vnd.mobius.dis"
-			},
-			"dna": {
-				"name": "New Moon Liftoff\/DNA",
-				"mine": "application\/vnd.dna"
-			},
-			"dp": {
-				"name": "OSGi Deployment Package",
-				"mine": "application\/vnd.osgi.dp"
-			},
-			"dpg": {
-				"name": "DPGraph",
-				"mine": "application\/vnd.dpgraph"
-			},
-			"dssc": {
-				"name": "Data Structure for the Security Suitability of Cryptographic Algorithms",
-				"mine": "application\/dssc+der"
-			},
-			"dtb": {
-				"name": "Digital Talking Book",
-				"mine": "application\/x-dtbook+xml"
-			},
-			"dvi": {
-				"name": "Device Independent File Format (DVI)",
-				"mine": "application\/x-dvi"
-			},
-			"dwf": {
-				"name": "Autodesk Design Web Format (DWF)",
-				"mine": "model\/vnd.dwf"
-			},
-			"dxp": {
-				"name": "TIBCO Spotfire",
-				"mine": "application\/vnd.spotfire.dxp"
-			},
-			"edm": {
-				"name": "Novadigm's RADIA and EDM products",
-				"mine": "application\/vnd.novadigm.edm"
-			},
-			"edx": {
-				"name": "Novadigm's RADIA and EDM products",
-				"mine": "application\/vnd.novadigm.edx"
-			},
-			"efif": {
-				"name": "Pcsel eFIF File",
-				"mine": "application\/vnd.picsel"
-			},
-			"ei6": {
-				"name": "Proprietary P&G Standard Reporting System",
-				"mine": "application\/vnd.pg.osasli"
-			},
-			"emma": {
-				"name": "Extensible MultiModal Annotation",
-				"mine": "application\/emma+xml"
-			},
-			"epub": {
-				"name": "Electronic Publication",
-				"mine": "application\/epub+zip"
-			},
-			"es": {
-				"name": "ECMAScript",
-				"mine": "application\/ecmascript"
-			},
-			"es3": {
-				"name": "MICROSEC e-Szign\u00a2",
-				"mine": "application\/vnd.eszigno3+xml"
-			},
-			"esf": {
-				"name": "QUASS Stream Player",
-				"mine": "application\/vnd.epson.esf"
-			},
-			"exe": {
-				"name": "Microsoft Application",
-				"mine": "application\/x-msdownload"
-			},
-			"exi": {
-				"name": "Efficient XML Interchange",
-				"mine": "application\/exi"
-			},
-			"ext": {
-				"name": "Novadigm's RADIA and EDM products",
-				"mine": "application\/vnd.novadigm.ext"
-			},
-			"ez2": {
-				"name": "EZPix Secure Photo Album",
-				"mine": "application\/vnd.ezpix-album"
-			},
-			"ez3": {
-				"name": "EZPix Secure Photo Album",
-				"mine": "application\/vnd.ezpix-package"
-			},
-			"fcs": {
-				"name": "International Society for Advancement of Cytometry",
-				"mine": "application\/vnd.isac.fcs"
-			},
-			"fdf": {
-				"name": "Forms Data Format",
-				"mine": "application\/vnd.fdf"
-			},
-			"fe_launch": {
-				"name": "FCS Express Layout Link",
-				"mine": "application\/vnd.denovo.fcselayout-link"
-			},
-			"fg5": {
-				"name": "Fujitsu Oasys",
-				"mine": "application\/vnd.fujitsu.oasysgp"
-			},
-			"fig": {
-				"name": "Xfig",
-				"mine": "application\/x-xfig"
-			},
-			"flo": {
-				"name": "Micrografx",
-				"mine": "application\/vnd.micrografx.flo"
-			},
-			"fm": {
-				"name": "FrameMaker Normal Format",
-				"mine": "application\/vnd.framemaker"
-			},
-			"fnc": {
-				"name": "Frogans Player",
-				"mine": "application\/vnd.frogans.fnc"
-			},
-			"fsc": {
-				"name": "Friendly Software Corporation",
-				"mine": "application\/vnd.fsc.weblaunch"
-			},
-			"ftc": {
-				"name": "FluxTime Clip",
-				"mine": "application\/vnd.fluxtime.clip"
-			},
-			"fti": {
-				"name": "ANSER-WEB Terminal Client - Web Funds Transfer",
-				"mine": "application\/vnd.anser-web-funds-transfer-initiation"
-			},
-			"fxp": {
-				"name": "Adobe Flex Project",
-				"mine": "application\/vnd.adobe.fxp"
-			},
-			"fzs": {
-				"name": "FuzzySheet",
-				"mine": "application\/vnd.fuzzysheet"
-			},
-			"g2w": {
-				"name": "GeoplanW",
-				"mine": "application\/vnd.geoplan"
-			},
-			"g3w": {
-				"name": "GeospacW",
-				"mine": "application\/vnd.geospace"
-			},
-			"gac": {
-				"name": "Groove - Account",
-				"mine": "application\/vnd.groove-account"
-			},
-			"gdl": {
-				"name": "Geometric Description Language (GDL)",
-				"mine": "model\/vnd.gdl"
-			},
-			"geo": {
-				"name": "DynaGeo",
-				"mine": "application\/vnd.dynageo"
-			},
-			"gex": {
-				"name": "GeoMetry Explorer",
-				"mine": "application\/vnd.geometry-explorer"
-			},
-			"ggb": {
-				"name": "GeoGebra",
-				"mine": "application\/vnd.geogebra.file"
-			},
-			"ggt": {
-				"name": "GeoGebra",
-				"mine": "application\/vnd.geogebra.tool"
-			},
-			"ghf": {
-				"name": "Groove - Help",
-				"mine": "application\/vnd.groove-help"
-			},
-			"gim": {
-				"name": "Groove - Identity Message",
-				"mine": "application\/vnd.groove-identity-message"
-			},
-			"gmx": {
-				"name": "GameMaker ActiveX",
-				"mine": "application\/vnd.gmx"
-			},
-			"gnumeric": {
-				"name": "Gnumeric",
-				"mine": "application\/x-gnumeric"
-			},
-			"gph": {
-				"name": "NpGraphIt",
-				"mine": "application\/vnd.flographit"
-			},
-			"gqf": {
-				"name": "GrafEq",
-				"mine": "application\/vnd.grafeq"
-			},
-			"gram": {
-				"name": "Speech Recognition Grammar Specification",
-				"mine": "application\/srgs"
-			},
-			"grv": {
-				"name": "Groove - Injector",
-				"mine": "application\/vnd.groove-injector"
-			},
-			"grxml": {
-				"name": "Speech Recognition Grammar Specification - XML",
-				"mine": "application\/srgs+xml"
-			},
-			"gtar": {
-				"name": "GNU Tar Files",
-				"mine": "application\/x-gtar"
-			},
-			"gtm": {
-				"name": "Groove - Tool Message",
-				"mine": "application\/vnd.groove-tool-message"
-			},
-			"gtw": {
-				"name": "Gen-Trix Studio",
-				"mine": "model\/vnd.gtw"
-			},
-			"gxt": {
-				"name": "GEONExT and JSXGraph",
-				"mine": "application\/vnd.geonext"
-			},
-			"hal": {
-				"name": "Hypertext Application Language",
-				"mine": "application\/vnd.hal+xml"
-			},
-			"hbci": {
-				"name": "Homebanking Computer Interface (HBCI)",
-				"mine": "application\/vnd.hbci"
-			},
-			"hdf": {
-				"name": "Hierarchical Data Format",
-				"mine": "application\/x-hdf"
-			},
-			"hlp": {
-				"name": "WinHelp",
-				"mine": "application\/winhlp"
-			},
-			"hpgl": {
-				"name": "HP-GL\/2 and HP RTL",
-				"mine": "application\/vnd.hp-hpgl"
-			},
-			"hpid": {
-				"name": "Hewlett Packard Instant Delivery",
-				"mine": "application\/vnd.hp-hpid"
-			},
-			"hps": {
-				"name": "Hewlett-Packard's WebPrintSmart",
-				"mine": "application\/vnd.hp-hps"
-			},
-			"hqx": {
-				"name": "Macintosh BinHex 4.0",
-				"mine": "application\/mac-binhex40"
-			},
-			"htke": {
-				"name": "Kenamea App",
-				"mine": "application\/vnd.kenameaapp"
-			},
-			"hvd": {
-				"name": "HV Voice Dictionary",
-				"mine": "application\/vnd.yamaha.hv-dic"
-			},
-			"hvp": {
-				"name": "HV Voice Parameter",
-				"mine": "application\/vnd.yamaha.hv-voice"
-			},
-			"hvs": {
-				"name": "HV Script",
-				"mine": "application\/vnd.yamaha.hv-script"
-			},
-			"i2g": {
-				"name": "Interactive Geometry Software",
-				"mine": "application\/vnd.intergeo"
-			},
-			"icc": {
-				"name": "ICC profile",
-				"mine": "application\/vnd.iccprofile"
-			},
-			"ice": {
-				"name": "CoolTalk",
-				"mine": "x-conference\/x-cooltalk"
-			},
-			"ifm": {
-				"name": "Shana Informed Filler",
-				"mine": "application\/vnd.shana.informed.formdata"
-			},
-			"igl": {
-				"name": "igLoader",
-				"mine": "application\/vnd.igloader"
-			},
-			"igm": {
-				"name": "IOCOM Visimeet",
-				"mine": "application\/vnd.insors.igm"
-			},
-			"igs": {
-				"name": "Initial Graphics Exchange Specification (IGES)",
-				"mine": "model\/iges"
-			},
-			"igx": {
-				"name": "Micrografx iGrafx Professional",
-				"mine": "application\/vnd.micrografx.igx"
-			},
-			"iif": {
-				"name": "Shana Informed Filler",
-				"mine": "application\/vnd.shana.informed.interchange"
-			},
-			"imp": {
-				"name": "Simply Accounting - Data Import",
-				"mine": "application\/vnd.accpac.simply.imp"
-			},
-			"ims": {
-				"name": "Microsoft Class Server",
-				"mine": "application\/vnd.ms-ims"
-			},
-			"ipfix": {
-				"name": "Internet Protocol Flow Information Export",
-				"mine": "application\/ipfix"
-			},
-			"ipk": {
-				"name": "Shana Informed Filler",
-				"mine": "application\/vnd.shana.informed.package"
-			},
-			"irm": {
-				"name": "IBM DB2 Rights Manager",
-				"mine": "application\/vnd.ibm.rights-management"
-			},
-			"irp": {
-				"name": "iRepository \/ Lucidoc Editor",
-				"mine": "application\/vnd.irepository.package+xml"
-			},
-			"itp": {
-				"name": "Shana Informed Filler",
-				"mine": "application\/vnd.shana.informed.formtemplate"
-			},
-			"ivp": {
-				"name": "ImmerVision PURE Players",
-				"mine": "application\/vnd.immervision-ivp"
-			},
-			"ivu": {
-				"name": "ImmerVision PURE Players",
-				"mine": "application\/vnd.immervision-ivu"
-			},
-			"jam": {
-				"name": "Lightspeed Audio Lab",
-				"mine": "application\/vnd.jam"
-			},
-			"jisp": {
-				"name": "RhymBox",
-				"mine": "application\/vnd.jisp"
-			},
-			"jlt": {
-				"name": "HP Indigo Digital Press - Job Layout Languate",
-				"mine": "application\/vnd.hp-jlyt"
-			},
-			"jnlp": {
-				"name": "Java Network Launching Protocol",
-				"mine": "application\/x-java-jnlp-file"
-			},
-			"kia": {
-				"name": "Kidspiration",
-				"mine": "application\/vnd.kidspiration"
-			},
-			"kml": {
-				"name": "Google Earth - KML",
-				"mine": "application\/vnd.google-earth.kml+xml"
-			},
-			"kne": {
-				"name": "Kinar Applications",
-				"mine": "application\/vnd.kinar"
-			},
-			"ktz": {
-				"name": "Kahootz",
-				"mine": "application\/vnd.kahootz"
-			},
-			"lasxml": {
-				"name": "Laser App Enterprise",
-				"mine": "application\/vnd.las.las+xml"
-			},
-			"latex": {
-				"name": "LaTeX",
-				"mine": "application\/x-latex"
-			},
-			"lbd": {
-				"name": "Life Balance - Desktop Edition",
-				"mine": "application\/vnd.llamagraphics.life-balance.desktop"
-			},
-			"lbe": {
-				"name": "Life Balance - Exchange Format",
-				"mine": "application\/vnd.llamagraphics.life-balance.exchange+xml"
-			},
-			"les": {
-				"name": "Archipelago Lesson Player",
-				"mine": "application\/vnd.hhe.lesson-player"
-			},
-			"link66": {
-				"name": "ROUTE 66 Location Based Services",
-				"mine": "application\/vnd.route66.link66+xml"
-			},
-			"lrm": {
-				"name": "Microsoft Learning Resource Module",
-				"mine": "application\/vnd.ms-lrm"
-			},
-			"ltf": {
-				"name": "Frogans Player",
-				"mine": "application\/vnd.frogans.ltf"
-			},
-			"m21": {
-				"name": "MPEG-21",
-				"mine": "application\/mp21"
-			},
-			"m3u8": {
-				"name": "Multimedia Playlist Unicode",
-				"mine": "application\/vnd.apple.mpegurl"
-			},
-			"ma": {
-				"name": "Mathematica Notebooks",
-				"mine": "application\/mathematica"
-			},
-			"mads": {
-				"name": "Metadata Authority  Description Schema",
-				"mine": "application\/mads+xml"
-			},
-			"mag": {
-				"name": "EcoWin Chart",
-				"mine": "application\/vnd.ecowin.chart"
-			},
-			"mathml": {
-				"name": "Mathematical Markup Language",
-				"mine": "application\/mathml+xml"
-			},
-			"mbk": {
-				"name": "Mobius Management Systems - Basket file",
-				"mine": "application\/vnd.mobius.mbk"
-			},
-			"mc1": {
-				"name": "MedCalc",
-				"mine": "application\/vnd.medcalcdata"
-			},
-			"mcd": {
-				"name": "Micro CADAM Helix D&D",
-				"mine": "application\/vnd.mcd"
-			},
-			"mdb": {
-				"name": "Microsoft Access",
-				"mine": "application\/x-msaccess"
-			},
-			"meta4": {
-				"name": "Metalink",
-				"mine": "application\/metalink4+xml"
-			},
-			"mets": {
-				"name": "Metadata Encoding and Transmission Standard",
-				"mine": "application\/mets+xml"
-			},
-			"mfm": {
-				"name": "Melody Format for Mobile Platform",
-				"mine": "application\/vnd.mfmp"
-			},
-			"mgp": {
-				"name": "MapGuide DBXML",
-				"mine": "application\/vnd.osgeo.mapguide.package"
-			},
-			"mgz": {
-				"name": "EFI Proteus",
-				"mine": "application\/vnd.proteus.magazine"
-			},
-			"mif": {
-				"name": "FrameMaker Interchange Format",
-				"mine": "application\/vnd.mif"
-			},
-			"mlp": {
-				"name": "Dolby Meridian Lossless Packing",
-				"mine": "application\/vnd.dolby.mlp"
-			},
-			"mmd": {
-				"name": "Karaoke on Chipnuts Chipsets",
-				"mine": "application\/vnd.chipnuts.karaoke-mmd"
-			},
-			"mmf": {
-				"name": "SMAF File",
-				"mine": "application\/vnd.smaf"
-			},
-			"mny": {
-				"name": "Microsoft Money",
-				"mine": "application\/x-msmoney"
-			},
-			"mods": {
-				"name": "Metadata Object Description Schema",
-				"mine": "application\/mods+xml"
-			},
-			"mp4": {
-				"name": "MPEG4",
-				"mine": "application\/mp4"
-			},
-			"mpc": {
-				"name": "Mophun Certificate",
-				"mine": "application\/vnd.mophun.certificate"
-			},
-			"mpkg": {
-				"name": "Apple Installer Package",
-				"mine": "application\/vnd.apple.installer+xml"
-			},
-			"mpm": {
-				"name": "Blueice Research Multipass",
-				"mine": "application\/vnd.blueice.multipass"
-			},
-			"mpn": {
-				"name": "Mophun VM",
-				"mine": "application\/vnd.mophun.application"
-			},
-			"mpp": {
-				"name": "Microsoft Project",
-				"mine": "application\/vnd.ms-project"
-			},
-			"mpy": {
-				"name": "MiniPay",
-				"mine": "application\/vnd.ibm.minipay"
-			},
-			"mqy": {
-				"name": "Mobius Management Systems - Query File",
-				"mine": "application\/vnd.mobius.mqy"
-			},
-			"mrc": {
-				"name": "MARC Formats",
-				"mine": "application\/marc"
-			},
-			"mrcx": {
-				"name": "MARC21 XML Schema",
-				"mine": "application\/marcxml+xml"
-			},
-			"mscml": {
-				"name": "Media Server Control Markup Language",
-				"mine": "application\/mediaservercontrol+xml"
-			},
-			"mseq": {
-				"name": "3GPP MSEQ File",
-				"mine": "application\/vnd.mseq"
-			},
-			"msf": {
-				"name": "QUASS Stream Player",
-				"mine": "application\/vnd.epson.msf"
-			},
-			"msh": {
-				"name": "Mesh Data Type",
-				"mine": "model\/mesh"
-			},
-			"msl": {
-				"name": "Mobius Management Systems - Script Language",
-				"mine": "application\/vnd.mobius.msl"
-			},
-			"msty": {
-				"name": "Muvee Automatic Video Editing",
-				"mine": "application\/vnd.muvee.style"
-			},
-			"mts": {
-				"name": "Virtue MTS",
-				"mine": "model\/vnd.mts"
-			},
-			"mus": {
-				"name": "MUsical Score Interpreted Code Invented  for the ASCII designation of Notation",
-				"mine": "application\/vnd.musician"
-			},
-			"musicxml": {
-				"name": "Recordare Applications",
-				"mine": "application\/vnd.recordare.musicxml+xml"
-			},
-			"mvb": {
-				"name": "Microsoft MediaView",
-				"mine": "application\/x-msmediaview"
-			},
-			"mwf": {
-				"name": "Medical Waveform Encoding Format",
-				"mine": "application\/vnd.mfer"
-			},
-			"mxf": {
-				"name": "Material Exchange Format",
-				"mine": "application\/mxf"
-			},
-			"mxl": {
-				"name": "Recordare Applications",
-				"mine": "application\/vnd.recordare.musicxml"
-			},
-			"mxml": {
-				"name": "MXML",
-				"mine": "application\/xv+xml"
-			},
-			"mxs": {
-				"name": "Triscape Map Explorer",
-				"mine": "application\/vnd.triscape.mxs"
-			},
-			"n-gage": {
-				"name": "N-Gage Game Installer",
-				"mine": "application\/vnd.nokia.n-gage.symbian.install"
-			},
-			"nbp": {
-				"name": "Mathematica Notebook Player",
-				"mine": "application\/vnd.wolfram.player"
-			},
-			"nc": {
-				"name": "Network Common Data Form (NetCDF)",
-				"mine": "application\/x-netcdf"
-			},
-			"ncx": {
-				"name": "Navigation Control file for XML (for ePub)",
-				"mine": "application\/x-dtbncx+xml"
-			},
-			"ngdat": {
-				"name": "N-Gage Game Data",
-				"mine": "application\/vnd.nokia.n-gage.data"
-			},
-			"nlu": {
-				"name": "neuroLanguage",
-				"mine": "application\/vnd.neurolanguage.nlu"
-			},
-			"nml": {
-				"name": "Enliven Viewer",
-				"mine": "application\/vnd.enliven"
-			},
-			"nnd": {
-				"name": "NobleNet Directory",
-				"mine": "application\/vnd.noblenet-directory"
-			},
-			"nns": {
-				"name": "NobleNet Sealer",
-				"mine": "application\/vnd.noblenet-sealer"
-			},
-			"nnw": {
-				"name": "NobleNet Web",
-				"mine": "application\/vnd.noblenet-web"
-			},
-			"nsf": {
-				"name": "Lotus Notes",
-				"mine": "application\/vnd.lotus-notes"
-			},
-			"oa2": {
-				"name": "Fujitsu Oasys",
-				"mine": "application\/vnd.fujitsu.oasys2"
-			},
-			"oa3": {
-				"name": "Fujitsu Oasys",
-				"mine": "application\/vnd.fujitsu.oasys3"
-			},
-			"oas": {
-				"name": "Fujitsu Oasys",
-				"mine": "application\/vnd.fujitsu.oasys"
-			},
-			"ogx": {
-				"name": "Ogg",
-				"mine": "application\/ogg"
-			},
-			"onetoc": {
-				"name": "Microsoft OneNote",
-				"mine": "application\/onenote"
-			},
-			"opf": {
-				"name": "Open eBook Publication Structure",
-				"mine": "application\/oebps-package+xml"
-			},
-			"org": {
-				"name": "Lotus Organizer",
-				"mine": "application\/vnd.lotus-organizer"
-			},
-			"osf": {
-				"name": "Open Score Format",
-				"mine": "application\/vnd.yamaha.openscoreformat"
-			},
-			"osfpvg": {
-				"name": "OSFPVG",
-				"mine": "application\/vnd.yamaha.openscoreformat.osfpvg+xml"
-			},
-			"p10": {
-				"name": "PKCS #10 - Certification Request Standard",
-				"mine": "application\/pkcs10"
-			},
-			"p12": {
-				"name": "PKCS #12 - Personal Information Exchange Syntax Standard",
-				"mine": "application\/x-pkcs12"
-			},
-			"p7b": {
-				"name": "PKCS #7 - Cryptographic Message Syntax Standard (Certificates)",
-				"mine": "application\/x-pkcs7-certificates"
-			},
-			"p7m": {
-				"name": "PKCS #7 - Cryptographic Message Syntax Standard",
-				"mine": "application\/pkcs7-mime"
-			},
-			"p7r": {
-				"name": "PKCS #7 - Cryptographic Message Syntax Standard (Certificate Request Response)",
-				"mine": "application\/x-pkcs7-certreqresp"
-			},
-			"p7s": {
-				"name": "PKCS #7 - Cryptographic Message Syntax Standard",
-				"mine": "application\/pkcs7-signature"
-			},
-			"p8": {
-				"name": "PKCS #8 - Private-Key Information Syntax Standard",
-				"mine": "application\/pkcs8"
-			},
-			"paw": {
-				"name": "PawaaFILE",
-				"mine": "application\/vnd.pawaafile"
-			},
-			"pbd": {
-				"name": "PowerBuilder",
-				"mine": "application\/vnd.powerbuilder6"
-			},
-			"pcl": {
-				"name": "HP Printer Command Language",
-				"mine": "application\/vnd.hp-pcl"
-			},
-			"pclxl": {
-				"name": "PCL 6 Enhanced (Formely PCL XL)",
-				"mine": "application\/vnd.hp-pclxl"
-			},
-			"pcurl": {
-				"name": "CURL Applet",
-				"mine": "application\/vnd.curl.pcurl"
-			},
-			"pdb": {
-				"name": "PalmOS Data",
-				"mine": "application\/vnd.palm"
-			},
-			"pgn": {
-				"name": "Portable Game Notation (Chess Games)",
-				"mine": "application\/x-chess-pgn"
-			},
-			"pgp": {
-				"name": "Pretty Good Privacy - Signature",
-				"mine": "application\/pgp-signature"
-			},
-			"pki": {
-				"name": "Internet Public Key Infrastructure - Certificate Management Protocole",
-				"mine": "application\/pkixcmp"
-			},
-			"pkipath": {
-				"name": "Internet Public Key Infrastructure - Certification Path",
-				"mine": "application\/pkix-pkipath"
-			},
-			"plb": {
-				"name": "3rd Generation Partnership Project - Pic Large",
-				"mine": "application\/vnd.3gpp.pic-bw-large"
-			},
-			"plc": {
-				"name": "Mobius Management Systems - Policy Definition Language File",
-				"mine": "application\/vnd.mobius.plc"
-			},
-			"plf": {
-				"name": "PocketLearn Viewers",
-				"mine": "application\/vnd.pocketlearn"
-			},
-			"pls": {
-				"name": "Pronunciation Lexicon Specification",
-				"mine": "application\/pls+xml"
-			},
-			"pml": {
-				"name": "PosML",
-				"mine": "application\/vnd.ctc-posml"
-			},
-			"portpkg": {
-				"name": "MacPorts Port System",
-				"mine": "application\/vnd.macports.portpkg"
-			},
-			"ppd": {
-				"name": "Adobe PostScript Printer Description File Format",
-				"mine": "application\/vnd.cups-ppd"
-			},
-			"prc": {
-				"name": "Mobipocket",
-				"mine": "application\/x-mobipocket-ebook"
-			},
-			"pre": {
-				"name": "Lotus Freelance",
-				"mine": "application\/vnd.lotus-freelance"
-			},
-			"prf": {
-				"name": "PICSRules",
-				"mine": "application\/pics-rules"
-			},
-			"psb": {
-				"name": "3rd Generation Partnership Project - Pic Small",
-				"mine": "application\/vnd.3gpp.pic-bw-small"
-			},
-			"pskcxml": {
-				"name": "Portable Symmetric Key Container",
-				"mine": "application\/pskc+xml"
-			},
-			"ptid": {
-				"name": "Princeton Video Image",
-				"mine": "application\/vnd.pvi.ptid1"
-			},
-			"pvb": {
-				"name": "3rd Generation Partnership Project - Pic Var",
-				"mine": "application\/vnd.3gpp.pic-bw-var"
-			},
-			"pwn": {
-				"name": "3M Post It Notes",
-				"mine": "application\/vnd.3m.post-it-notes"
-			},
-			"qam": {
-				"name": "QuickAnime Player",
-				"mine": "application\/vnd.epson.quickanime"
-			},
-			"qbo": {
-				"name": "Open Financial Exchange",
-				"mine": "application\/vnd.intu.qbo"
-			},
-			"qfx": {
-				"name": "Quicken",
-				"mine": "application\/vnd.intu.qfx"
-			},
-			"qps": {
-				"name": "PubliShare Objects",
-				"mine": "application\/vnd.publishare-delta-tree"
-			},
-			"qxd": {
-				"name": "QuarkXpress",
-				"mine": "application\/vnd.quark.quarkxpress"
-			},
-			"rcprofile": {
-				"name": "IP Unplugged Roaming Client",
-				"mine": "application\/vnd.ipunplugged.rcprofile"
-			},
-			"rdf": {
-				"name": "Resource Description Framework",
-				"mine": "application\/rdf+xml"
-			},
-			"rdz": {
-				"name": "RemoteDocs R-Viewer",
-				"mine": "application\/vnd.data-vision.rdz"
-			},
-			"rep": {
-				"name": "BusinessObjects",
-				"mine": "application\/vnd.businessobjects"
-			},
-			"res": {
-				"name": "Digital Talking Book - Resource File",
-				"mine": "application\/x-dtbresource+xml"
-			},
-			"rif": {
-				"name": "IMS Networks",
-				"mine": "application\/reginfo+xml"
-			},
-			"rl": {
-				"name": "XML Resource Lists",
-				"mine": "application\/resource-lists+xml"
-			},
-			"rld": {
-				"name": "XML Resource Lists Diff",
-				"mine": "application\/resource-lists-diff+xml"
-			},
-			"rm": {
-				"name": "RealMedia",
-				"mine": "application\/vnd.rn-realmedia"
-			},
-			"rms": {
-				"name": "Mobile Information Device Profile",
-				"mine": "application\/vnd.jcp.javame.midlet-rms"
-			},
-			"rnc": {
-				"name": "Relax NG Compact Syntax",
-				"mine": "application\/relax-ng-compact-syntax"
-			},
-			"rp9": {
-				"name": "RetroPlatform Player",
-				"mine": "application\/vnd.cloanto.rp9"
-			},
-			"rpss": {
-				"name": "Nokia Radio Application - Preset",
-				"mine": "application\/vnd.nokia.radio-presets"
-			},
-			"rpst": {
-				"name": "Nokia Radio Application - Preset",
-				"mine": "application\/vnd.nokia.radio-preset"
-			},
-			"rq": {
-				"name": "SPARQL - Query",
-				"mine": "application\/sparql-query"
-			},
-			"rs": {
-				"name": "XML Resource Lists",
-				"mine": "application\/rls-services+xml"
-			},
-			"rsd": {
-				"name": "Really Simple Discovery",
-				"mine": "application\/rsd+xml"
-			},
-			"rtf": {
-				"name": "Rich Text Format",
-				"mine": "application\/rtf"
-			},
-			"saf": {
-				"name": "SMAF Audio",
-				"mine": "application\/vnd.yamaha.smaf-audio"
-			},
-			"sbml": {
-				"name": "Systems Biology Markup Language",
-				"mine": "application\/sbml+xml"
-			},
-			"sc": {
-				"name": "IBM Electronic Media Management System - Secure Container",
-				"mine": "application\/vnd.ibm.secure-container"
-			},
-			"scd": {
-				"name": "Microsoft Schedule+",
-				"mine": "application\/x-msschedule"
-			},
-			"scm": {
-				"name": "Lotus Screencam",
-				"mine": "application\/vnd.lotus-screencam"
-			},
-			"scq": {
-				"name": "Server-Based Certificate Validation Protocol - Validation Request",
-				"mine": "application\/scvp-cv-request"
-			},
-			"scs": {
-				"name": "Server-Based Certificate Validation Protocol - Validation Response",
-				"mine": "application\/scvp-cv-response"
-			},
-			"sdkm": {
-				"name": "SudokuMagic",
-				"mine": "application\/vnd.solent.sdkm+xml"
-			},
-			"sdp": {
-				"name": "Session Description Protocol",
-				"mine": "application\/sdp"
-			},
-			"see": {
-				"name": "SeeMail",
-				"mine": "application\/vnd.seemail"
-			},
-			"seed": {
-				"name": "Digital Siesmograph Networks - SEED Datafiles",
-				"mine": "application\/vnd.fdsn.seed"
-			},
-			"sema": {
-				"name": "Secured eMail",
-				"mine": "application\/vnd.sema"
-			},
-			"semd": {
-				"name": "Secured eMail",
-				"mine": "application\/vnd.semd"
-			},
-			"semf": {
-				"name": "Secured eMail",
-				"mine": "application\/vnd.semf"
-			},
-			"ser": {
-				"name": "Java Serialized Object",
-				"mine": "application\/java-serialized-object"
-			},
-			"setpay": {
-				"name": "Secure Electronic Transaction - Payment",
-				"mine": "application\/set-payment-initiation"
-			},
-			"setreg": {
-				"name": "Secure Electronic Transaction - Registration",
-				"mine": "application\/set-registration-initiation"
-			},
-			"sfd-hdstx": {
-				"name": "Hydrostatix Master Suite",
-				"mine": "application\/vnd.hydrostatix.sof-data"
-			},
-			"sfs": {
-				"name": "TIBCO Spotfire",
-				"mine": "application\/vnd.spotfire.sfs"
-			},
-			"sh": {
-				"name": "Bourne Shell Script",
-				"mine": "application\/x-sh"
-			},
-			"shf": {
-				"name": "S Hexdump Format",
-				"mine": "application\/shf+xml"
-			},
-			"sis": {
-				"name": "Symbian Install Package",
-				"mine": "application\/vnd.symbian.install"
-			},
-			"skp": {
-				"name": "SSEYO Koan Play File",
-				"mine": "application\/vnd.koan"
-			},
-			"slt": {
-				"name": "SimpleAnimeLite Player",
-				"mine": "application\/vnd.epson.salt"
-			},
-			"sm": {
-				"name": "StepMania",
-				"mine": "application\/vnd.stepmania.stepchart"
-			},
-			"smi": {
-				"name": "Synchronized Multimedia Integration Language",
-				"mine": "application\/smil+xml"
-			},
-			"spf": {
-				"name": "SMAF Phrase",
-				"mine": "application\/vnd.yamaha.smaf-phrase"
-			},
-			"spl": {
-				"name": "FutureSplash Animator",
-				"mine": "application\/x-futuresplash"
-			},
-			"spp": {
-				"name": "Server-Based Certificate Validation Protocol - Validation Policies - Response",
-				"mine": "application\/scvp-vp-response"
-			},
-			"spq": {
-				"name": "Server-Based Certificate Validation Protocol - Validation Policies - Request",
-				"mine": "application\/scvp-vp-request"
-			},
-			"src": {
-				"name": "WAIS Source",
-				"mine": "application\/x-wais-source"
-			},
-			"sru": {
-				"name": "Search\/Retrieve via URL Response Format",
-				"mine": "application\/sru+xml"
-			},
-			"srx": {
-				"name": "SPARQL - Results",
-				"mine": "application\/sparql-results+xml"
-			},
-			"sse": {
-				"name": "Kodak Storyshare",
-				"mine": "application\/vnd.kodak-descriptor"
-			},
-			"ssf": {
-				"name": "QUASS Stream Player",
-				"mine": "application\/vnd.epson.ssf"
-			},
-			"ssml": {
-				"name": "Speech Synthesis Markup Language",
-				"mine": "application\/ssml+xml"
-			},
-			"st": {
-				"name": "SailingTracker",
-				"mine": "application\/vnd.sailingtracker.track"
-			},
-			"stf": {
-				"name": "Worldtalk",
-				"mine": "application\/vnd.wt.stf"
-			},
-			"stk": {
-				"name": "Hyperstudio",
-				"mine": "application\/hyperstudio"
-			},
-			"stl": {
-				"name": "Microsoft Trust UI Provider - Certificate Trust Link",
-				"mine": "application\/vnd.ms-pki.stl"
-			},
-			"str": {
-				"name": "Proprietary P&G Standard Reporting System",
-				"mine": "application\/vnd.pg.format"
-			},
-			"sus": {
-				"name": "ScheduleUs",
-				"mine": "application\/vnd.sus-calendar"
-			},
-			"sv4crc": {
-				"name": "System V Release 4 CPIO Checksum Data",
-				"mine": "application\/x-sv4crc"
-			},
-			"svc": {
-				"name": "Digital Video Broadcasting",
-				"mine": "application\/vnd.dvb.service"
-			},
-			"swf": {
-				"name": "Adobe Flash",
-				"mine": "application\/x-shockwave-flash"
-			},
-			"swi": {
-				"name": "Arista Networks Software Image",
-				"mine": "application\/vnd.aristanetworks.swi"
-			},
-			"tao": {
-				"name": "Tao Intent",
-				"mine": "application\/vnd.tao.intent-module-archive"
-			},
-			"tcap": {
-				"name": "3rd Generation Partnership Project - Transaction Capabilities Application Part",
-				"mine": "application\/vnd.3gpp2.tcap"
-			},
-			"tcl": {
-				"name": "Tcl Script",
-				"mine": "application\/x-tcl"
-			},
-			"teacher": {
-				"name": "SMART Technologies Apps",
-				"mine": "application\/vnd.smart.teacher"
-			},
-			"tei": {
-				"name": "Text Encoding and Interchange",
-				"mine": "application\/tei+xml"
-			},
-			"tex": {
-				"name": "TeX",
-				"mine": "application\/x-tex"
-			},
-			"tfi": {
-				"name": "Sharing Transaction Fraud Data",
-				"mine": "application\/thraud+xml"
-			},
-			"tmo": {
-				"name": "MobileTV",
-				"mine": "application\/vnd.tmobile-livetv"
-			},
-			"torrent": {
-				"name": "BitTorrent",
-				"mine": "application\/x-bittorrent"
-			},
-			"tpl": {
-				"name": "Groove - Tool Template",
-				"mine": "application\/vnd.groove-tool-template"
-			},
-			"tpt": {
-				"name": "TRI Systems Config",
-				"mine": "application\/vnd.trid.tpt"
-			},
-			"tra": {
-				"name": "True BASIC",
-				"mine": "application\/vnd.trueapp"
-			},
-			"trm": {
-				"name": "Microsoft Windows Terminal Services",
-				"mine": "application\/x-msterminal"
-			},
-			"tsd": {
-				"name": "Time Stamped Data Envelope",
-				"mine": "application\/timestamped-data"
-			},
-			"twd": {
-				"name": "SimTech MindMapper",
-				"mine": "application\/vnd.simtech-mindmapper"
-			},
-			"txd": {
-				"name": "Genomatix Tuxedo Framework",
-				"mine": "application\/vnd.genomatix.tuxedo"
-			},
-			"txf": {
-				"name": "Mobius Management Systems - Topic Index File",
-				"mine": "application\/vnd.mobius.txf"
-			},
-			"ufd": {
-				"name": "Universal Forms Description Language",
-				"mine": "application\/vnd.ufdl"
-			},
-			"umj": {
-				"name": "UMAJIN",
-				"mine": "application\/vnd.umajin"
-			},
-			"unityweb": {
-				"name": "Unity 3d",
-				"mine": "application\/vnd.unity"
-			},
-			"uoml": {
-				"name": "Unique Object Markup Language",
-				"mine": "application\/vnd.uoml+xml"
-			},
-			"utz": {
-				"name": "User Interface Quartz - Theme (Symbian)",
-				"mine": "application\/vnd.uiq.theme"
-			},
-			"vcd": {
-				"name": "Video CD",
-				"mine": "application\/x-cdlink"
-			},
-			"vcg": {
-				"name": "Groove - Vcard",
-				"mine": "application\/vnd.groove-vcard"
-			},
-			"vcx": {
-				"name": "VirtualCatalog",
-				"mine": "application\/vnd.vcx"
-			},
-			"vis": {
-				"name": "Visionary",
-				"mine": "application\/vnd.visionary"
-			},
-			"vsd": {
-				"name": "Microsoft Visio",
-				"mine": "application\/vnd.visio"
-			},
-			"vsf": {
-				"name": "Viewport+",
-				"mine": "application\/vnd.vsf"
-			},
-			"vtu": {
-				"name": "Virtue VTU",
-				"mine": "model\/vnd.vtu"
-			},
-			"vxml": {
-				"name": "VoiceXML",
-				"mine": "application\/voicexml+xml"
-			},
-			"wad": {
-				"name": "Doom Video Game",
-				"mine": "application\/x-doom"
-			},
-			"wbs": {
-				"name": "Critical Tools - PERT Chart EXPERT",
-				"mine": "application\/vnd.criticaltools.wbs+xml"
-			},
-			"wbxml": {
-				"name": "WAP Binary XML (WBXML)",
-				"mine": "application\/vnd.wap.wbxml"
-			},
-			"wg": {
-				"name": "Qualcomm's Plaza Mobile Internet",
-				"mine": "application\/vnd.pmi.widget"
-			},
-			"wgt": {
-				"name": "Widget Packaging and XML Configuration",
-				"mine": "application\/widget"
-			},
-			"wmd": {
-				"name": "Microsoft Windows Media Player Download Package",
-				"mine": "application\/x-ms-wmd"
-			},
-			"wmf": {
-				"name": "Microsoft Windows Metafile",
-				"mine": "application\/x-msmetafile"
-			},
-			"wmlc": {
-				"name": "Compiled Wireless Markup Language (WMLC)",
-				"mine": "application\/vnd.wap.wmlc"
-			},
-			"wmlsc": {
-				"name": "WMLScript",
-				"mine": "application\/vnd.wap.wmlscriptc"
-			},
-			"wmz": {
-				"name": "Microsoft Windows Media Player Skin Package",
-				"mine": "application\/x-ms-wmz"
-			},
-			"wpl": {
-				"name": "Microsoft Windows Media Player Playlist",
-				"mine": "application\/vnd.ms-wpl"
-			},
-			"wps": {
-				"name": "Microsoft Works",
-				"mine": "application\/vnd.ms-works"
-			},
-			"wqd": {
-				"name": "SundaHus WQ",
-				"mine": "application\/vnd.wqd"
-			},
-			"wrl": {
-				"name": "Virtual Reality Modeling Language",
-				"mine": "model\/vrml"
-			},
-			"wsdl": {
-				"name": "WSDL - Web Services Description Language",
-				"mine": "application\/wsdl+xml"
-			},
-			"wspolicy": {
-				"name": "Web Services Policy",
-				"mine": "application\/wspolicy+xml"
-			},
-			"wtb": {
-				"name": "WebTurbo",
-				"mine": "application\/vnd.webturbo"
-			},
-			"x3d": {
-				"name": "3D Crossword Plugin",
-				"mine": "application\/vnd.hzn-3d-crossword"
-			},
-			"xap": {
-				"name": "Microsoft Silverlight",
-				"mine": "application\/x-silverlight-app"
-			},
-			"xar": {
-				"name": "CorelXARA",
-				"mine": "application\/vnd.xara"
-			},
-			"xbap": {
-				"name": "Microsoft XAML Browser Application",
-				"mine": "application\/x-ms-xbap"
-			},
-			"xbd": {
-				"name": "Fujitsu - Xerox DocuWorks Binder",
-				"mine": "application\/vnd.fujixerox.docuworks.binder"
-			},
-			"xdf": {
-				"name": "XML Configuration Access Protocol - XCAP Diff",
-				"mine": "application\/xcap-diff+xml"
-			},
-			"xdm": {
-				"name": "SyncML - Device Management",
-				"mine": "application\/vnd.syncml.dm+xml"
-			},
-			"xdp": {
-				"name": "Adobe XML Data Package",
-				"mine": "application\/vnd.adobe.xdp+xml"
-			},
-			"xdssc": {
-				"name": "Data Structure for the Security Suitability of Cryptographic Algorithms",
-				"mine": "application\/dssc+xml"
-			},
-			"xdw": {
-				"name": "Fujitsu - Xerox DocuWorks",
-				"mine": "application\/vnd.fujixerox.docuworks"
-			},
-			"xenc": {
-				"name": "XML Encryption Syntax and Processing",
-				"mine": "application\/xenc+xml"
-			},
-			"xer": {
-				"name": "XML Patch Framework",
-				"mine": "application\/patch-ops-error+xml"
-			},
-			"xfdf": {
-				"name": "Adobe XML Forms Data Format",
-				"mine": "application\/vnd.adobe.xfdf"
-			},
-			"xfdl": {
-				"name": "Extensible Forms Description Language",
-				"mine": "application\/vnd.xfdl"
-			},
-			"xo": {
-				"name": "Sugar Linux Application Bundle",
-				"mine": "application\/vnd.olpc-sugar"
-			},
-			"xop": {
-				"name": "XML-Binary Optimized Packaging",
-				"mine": "application\/xop+xml"
-			},
-			"xpi": {
-				"name": "XPInstall - Mozilla",
-				"mine": "application\/x-xpinstall"
-			},
-			"xpr": {
-				"name": "Express by Infoseek",
-				"mine": "application\/vnd.is-xpr"
-			},
-			"xps": {
-				"name": "Microsoft XML Paper Specification",
-				"mine": "application\/vnd.ms-xpsdocument"
-			},
-			"xpw": {
-				"name": "Intercon FormNet",
-				"mine": "application\/vnd.intercon.formnet"
-			},
-			"xslt": {
-				"name": "XML Transformations",
-				"mine": "application\/xslt+xml"
-			},
-			"xsm": {
-				"name": "SyncML",
-				"mine": "application\/vnd.syncml+xml"
-			},
-			"xspf": {
-				"name": "XSPF - XML Shareable Playlist Format",
-				"mine": "application\/xspf+xml"
-			},
-			"xul": {
-				"name": "XUL - XML User Interface Language",
-				"mine": "application\/vnd.mozilla.xul+xml"
-			},
-			"xyz": {
-				"name": "XYZ File Format",
-				"mine": "chemical\/x-xyz"
-			},
-			"yang": {
-				"name": "YANG Data Modeling Language",
-				"mine": "application\/yang"
-			},
-			"yin": {
-				"name": "YIN (YANG - XML)",
-				"mine": "application\/yin+xml"
-			},
-			"zaz": {
-				"name": "Zzazz Deck",
-				"mine": "application\/vnd.zzazz.deck+xml"
-			},
-			"zir": {
-				"name": "Z.U.L. Geometry",
-				"mine": "application\/vnd.zul"
-			},
-			"zmm": {
-				"name": "ZVUE Media Manager",
-				"mine": "application\/vnd.handheld-entertainment+xml"
-			},
-			"123": {
-				"name": "Lotus 1-2-3",
-				"mine": "application\/vnd.lotus-1-2-3"
-			}
-		},
-		"icon": "file-icons\/other.png",
-		"name": "Other"
+	"icon": "file-icons\/image.png",
+	"name": "Image"
+  },
+  "other": {
+	"extensions": {
+	  "aab": {
+		"name": "Adobe (Macropedia) Authorware - Binary File",
+		"mine": "application\/x-authorware-bin"
+	  },
+	  "aam": {
+		"name": "Adobe (Macropedia) Authorware - Map",
+		"mine": "application\/x-authorware-map"
+	  },
+	  "aas": {
+		"name": "Adobe (Macropedia) Authorware - Segment File",
+		"mine": "application\/x-authorware-seg"
+	  },
+	  "ac": {
+		"name": "Attribute Certificate",
+		"mine": "application\/pkix-attr-cert"
+	  },
+	  "acc": {
+		"name": "Active Content Compression",
+		"mine": "application\/vnd.americandynamics.acc"
+	  },
+	  "acu": {
+		"name": "ACU Cobol",
+		"mine": "application\/vnd.acucobol"
+	  },
+	  "aep": {
+		"name": "Audiograph",
+		"mine": "application\/vnd.audiograph"
+	  },
+	  "afp": {
+		"name": "MO:DCA-P",
+		"mine": "application\/vnd.ibm.modcap"
+	  },
+	  "ahead": {
+		"name": "Ahead AIR Application",
+		"mine": "application\/vnd.ahead.space"
+	  },
+	  "ai": {
+		"name": "PostScript",
+		"mine": "application\/postscript"
+	  },
+	  "air": {
+		"name": "Adobe AIR Application",
+		"mine": "application\/vnd.adobe.air-application-installer-package+zip"
+	  },
+	  "ait": {
+		"name": "Digital Video Broadcasting",
+		"mine": "application\/vnd.dvb.ait"
+	  },
+	  "ami": {
+		"name": "AmigaDE",
+		"mine": "application\/vnd.amiga.ami"
+	  },
+	  "application": {
+		"name": "Microsoft ClickOnce",
+		"mine": "application\/x-ms-application"
+	  },
+	  "apr": {
+		"name": "Lotus Approach",
+		"mine": "application\/vnd.lotus-approach"
+	  },
+	  "aso": {
+		"name": "Simply Accounting",
+		"mine": "application\/vnd.accpac.simply.aso"
+	  },
+	  "atc": {
+		"name": "ACU Cobol",
+		"mine": "application\/vnd.acucorp"
+	  },
+	  "atomcat": {
+		"name": "Atom Publishing Protocol",
+		"mine": "application\/atomcat+xml"
+	  },
+	  "atx": {
+		"name": "Antix Game Player",
+		"mine": "application\/vnd.antix.game-component"
+	  },
+	  "aw": {
+		"name": "Applixware",
+		"mine": "application\/applixware"
+	  },
+	  "azw": {
+		"name": "Amazon Kindle eBook format",
+		"mine": "application\/vnd.amazon.ebook"
+	  },
+	  "bdm": {
+		"name": "SyncML - Device Management",
+		"mine": "application\/vnd.syncml.dm+wbxml"
+	  },
+	  "bed": {
+		"name": "RealVNC",
+		"mine": "application\/vnd.realvnc.bed"
+	  },
+	  "bh2": {
+		"name": "Fujitsu Oasys",
+		"mine": "application\/vnd.fujitsu.oasysprs"
+	  },
+	  "bin": {
+		"name": "Binary Data",
+		"mine": "application\/octet-stream"
+	  },
+	  "bmi": {
+		"name": "BMI Drawing Data Interchange",
+		"mine": "application\/vnd.bmi"
+	  },
+	  "c11amc": {
+		"name": "ClueTrust CartoMobile - Config",
+		"mine": "application\/vnd.cluetrust.cartomobile-config"
+	  },
+	  "c11amz": {
+		"name": "ClueTrust CartoMobile - Config Package",
+		"mine": "application\/vnd.cluetrust.cartomobile-config-pkg"
+	  },
+	  "c4g": {
+		"name": "Clonk Game",
+		"mine": "application\/vnd.clonk.c4group"
+	  },
+	  "cab": {
+		"name": "Microsoft Cabinet File",
+		"mine": "application\/vnd.ms-cab-compressed"
+	  },
+	  "car": {
+		"name": "CURL Applet",
+		"mine": "application\/vnd.curl.car"
+	  },
+	  "cat": {
+		"name": "Microsoft Trust UI Provider - Security Catalog",
+		"mine": "application\/vnd.ms-pki.seccat"
+	  },
+	  "ccxml": {
+		"name": "Voice Browser Call Control",
+		"mine": "application\/ccxml+xml,"
+	  },
+	  "cdbcmsg": {
+		"name": "CIM Database",
+		"mine": "application\/vnd.contact.cmsg"
+	  },
+	  "cdkey": {
+		"name": "MediaRemote",
+		"mine": "application\/vnd.mediastation.cdkey"
+	  },
+	  "cdmia": {
+		"name": "Cloud Data Management Interface (CDMI) - Capability",
+		"mine": "application\/cdmi-capability"
+	  },
+	  "cdmic": {
+		"name": "Cloud Data Management Interface (CDMI) - Contaimer",
+		"mine": "application\/cdmi-container"
+	  },
+	  "cdmid": {
+		"name": "Cloud Data Management Interface (CDMI) - Domain",
+		"mine": "application\/cdmi-domain"
+	  },
+	  "cdmio": {
+		"name": "Cloud Data Management Interface (CDMI) - Object",
+		"mine": "application\/cdmi-object"
+	  },
+	  "cdmiq": {
+		"name": "Cloud Data Management Interface (CDMI) - Queue",
+		"mine": "application\/cdmi-queue"
+	  },
+	  "cdx": {
+		"name": "ChemDraw eXchange file",
+		"mine": "chemical\/x-cdx"
+	  },
+	  "cdxml": {
+		"name": "CambridgeSoft Chem Draw",
+		"mine": "application\/vnd.chemdraw+xml"
+	  },
+	  "cdy": {
+		"name": "Interactive Geometry Software Cinderella",
+		"mine": "application\/vnd.cinderella"
+	  },
+	  "cer": {
+		"name": "Internet Public Key Infrastructure - Certificate",
+		"mine": "application\/pkix-cert"
+	  },
+	  "chat": {
+		"name": "pIRCh",
+		"mine": "application\/x-chat"
+	  },
+	  "chm": {
+		"name": "Microsoft Html Help File",
+		"mine": "application\/vnd.ms-htmlhelp"
+	  },
+	  "cif": {
+		"name": "Crystallographic Interchange Format",
+		"mine": "chemical\/x-cif"
+	  },
+	  "cii": {
+		"name": "ANSER-WEB Terminal Client - Certificate Issue",
+		"mine": "application\/vnd.anser-web-certificate-issue-initiation"
+	  },
+	  "cil": {
+		"name": "Microsoft Artgalry",
+		"mine": "application\/vnd.ms-artgalry"
+	  },
+	  "cla": {
+		"name": "Claymore Data Files",
+		"mine": "application\/vnd.claymore"
+	  },
+	  "class": {
+		"name": "Java Bytecode File",
+		"mine": "application\/java-vm"
+	  },
+	  "clkk": {
+		"name": "CrickSoftware - Clicker - Keyboard",
+		"mine": "application\/vnd.crick.clicker.keyboard"
+	  },
+	  "clkp": {
+		"name": "CrickSoftware - Clicker - Palette",
+		"mine": "application\/vnd.crick.clicker.palette"
+	  },
+	  "clkt": {
+		"name": "CrickSoftware - Clicker - Template",
+		"mine": "application\/vnd.crick.clicker.template"
+	  },
+	  "clkx": {
+		"name": "CrickSoftware - Clicker",
+		"mine": "application\/vnd.crick.clicker"
+	  },
+	  "clp": {
+		"name": "Microsoft Clipboard Clip",
+		"mine": "application\/x-msclip"
+	  },
+	  "cmc": {
+		"name": "CosmoCaller",
+		"mine": "application\/vnd.cosmocaller"
+	  },
+	  "cmdf": {
+		"name": "CrystalMaker Data Format",
+		"mine": "chemical\/x-cmdf"
+	  },
+	  "cml": {
+		"name": "Chemical Markup Language",
+		"mine": "chemical\/x-cml"
+	  },
+	  "cmp": {
+		"name": "CustomMenu",
+		"mine": "application\/vnd.yellowriver-custom-menu"
+	  },
+	  "cod": {
+		"name": "Blackberry COD File",
+		"mine": "application\/vnd.rim.cod"
+	  },
+	  "cpt": {
+		"name": "Compact Pro",
+		"mine": "application\/mac-compactpro"
+	  },
+	  "crd": {
+		"name": "Microsoft Information Card",
+		"mine": "application\/x-mscardfile"
+	  },
+	  "crl": {
+		"name": "Internet Public Key Infrastructure - Certificate Revocation Lists",
+		"mine": "application\/pkix-crl"
+	  },
+	  "cryptonote": {
+		"name": "CryptoNote",
+		"mine": "application\/vnd.rig.cryptonote"
+	  },
+	  "csh": {
+		"name": "C Shell Script",
+		"mine": "application\/x-csh"
+	  },
+	  "csml": {
+		"name": "Chemical Style Markup Language",
+		"mine": "chemical\/x-csml"
+	  },
+	  "csp": {
+		"name": "Sixth Floor Media - CommonSpace",
+		"mine": "application\/vnd.commonspace"
+	  },
+	  "cu": {
+		"name": "CU-SeeMe",
+		"mine": "application\/cu-seeme"
+	  },
+	  "cww": {
+		"name": "CU-Writer",
+		"mine": "application\/prs.cww"
+	  },
+	  "dae": {
+		"name": "COLLADA",
+		"mine": "model\/vnd.collada+xml"
+	  },
+	  "davmount": {
+		"name": "Web Distributed Authoring and Versioning",
+		"mine": "application\/davmount+xml"
+	  },
+	  "dd2": {
+		"name": "OMA Download Agents",
+		"mine": "application\/vnd.oma.dd2+xml"
+	  },
+	  "ddd": {
+		"name": "Fujitsu - Xerox 2D CAD Data",
+		"mine": "application\/vnd.fujixerox.ddd"
+	  },
+	  "deb": {
+		"name": "Debian Package",
+		"mine": "application\/x-debian-package"
+	  },
+	  "der": {
+		"name": "X.509 Certificate",
+		"mine": "application\/x-x509-ca-cert"
+	  },
+	  "dfac": {
+		"name": "DreamFactory",
+		"mine": "application\/vnd.dreamfactory"
+	  },
+	  "dir": {
+		"name": "Adobe Shockwave Player",
+		"mine": "application\/x-director"
+	  },
+	  "dis": {
+		"name": "Mobius Management Systems - Distribution Database",
+		"mine": "application\/vnd.mobius.dis"
+	  },
+	  "dna": {
+		"name": "New Moon Liftoff\/DNA",
+		"mine": "application\/vnd.dna"
+	  },
+	  "dp": {
+		"name": "OSGi Deployment Package",
+		"mine": "application\/vnd.osgi.dp"
+	  },
+	  "dpg": {
+		"name": "DPGraph",
+		"mine": "application\/vnd.dpgraph"
+	  },
+	  "dssc": {
+		"name": "Data Structure for the Security Suitability of Cryptographic Algorithms",
+		"mine": "application\/dssc+der"
+	  },
+	  "dtb": {
+		"name": "Digital Talking Book",
+		"mine": "application\/x-dtbook+xml"
+	  },
+	  "dvi": {
+		"name": "Device Independent File Format (DVI)",
+		"mine": "application\/x-dvi"
+	  },
+	  "dwf": {
+		"name": "Autodesk Design Web Format (DWF)",
+		"mine": "model\/vnd.dwf"
+	  },
+	  "dxp": {
+		"name": "TIBCO Spotfire",
+		"mine": "application\/vnd.spotfire.dxp"
+	  },
+	  "edm": {
+		"name": "Novadigm's RADIA and EDM products",
+		"mine": "application\/vnd.novadigm.edm"
+	  },
+	  "edx": {
+		"name": "Novadigm's RADIA and EDM products",
+		"mine": "application\/vnd.novadigm.edx"
+	  },
+	  "efif": {
+		"name": "Pcsel eFIF File",
+		"mine": "application\/vnd.picsel"
+	  },
+	  "ei6": {
+		"name": "Proprietary P&G Standard Reporting System",
+		"mine": "application\/vnd.pg.osasli"
+	  },
+	  "emma": {
+		"name": "Extensible MultiModal Annotation",
+		"mine": "application\/emma+xml"
+	  },
+	  "epub": {
+		"name": "Electronic Publication",
+		"mine": "application\/epub+zip"
+	  },
+	  "es": {
+		"name": "ECMAScript",
+		"mine": "application\/ecmascript"
+	  },
+	  "es3": {
+		"name": "MICROSEC e-Szign\u00a2",
+		"mine": "application\/vnd.eszigno3+xml"
+	  },
+	  "esf": {
+		"name": "QUASS Stream Player",
+		"mine": "application\/vnd.epson.esf"
+	  },
+	  "exe": {
+		"name": "Microsoft Application",
+		"mine": "application\/x-msdownload"
+	  },
+	  "exi": {
+		"name": "Efficient XML Interchange",
+		"mine": "application\/exi"
+	  },
+	  "ext": {
+		"name": "Novadigm's RADIA and EDM products",
+		"mine": "application\/vnd.novadigm.ext"
+	  },
+	  "ez2": {
+		"name": "EZPix Secure Photo Album",
+		"mine": "application\/vnd.ezpix-album"
+	  },
+	  "ez3": {
+		"name": "EZPix Secure Photo Album",
+		"mine": "application\/vnd.ezpix-package"
+	  },
+	  "fcs": {
+		"name": "International Society for Advancement of Cytometry",
+		"mine": "application\/vnd.isac.fcs"
+	  },
+	  "fdf": {
+		"name": "Forms Data Format",
+		"mine": "application\/vnd.fdf"
+	  },
+	  "fe_launch": {
+		"name": "FCS Express Layout Link",
+		"mine": "application\/vnd.denovo.fcselayout-link"
+	  },
+	  "fg5": {
+		"name": "Fujitsu Oasys",
+		"mine": "application\/vnd.fujitsu.oasysgp"
+	  },
+	  "fig": {
+		"name": "Xfig",
+		"mine": "application\/x-xfig"
+	  },
+	  "flo": {
+		"name": "Micrografx",
+		"mine": "application\/vnd.micrografx.flo"
+	  },
+	  "fm": {
+		"name": "FrameMaker Normal Format",
+		"mine": "application\/vnd.framemaker"
+	  },
+	  "fnc": {
+		"name": "Frogans Player",
+		"mine": "application\/vnd.frogans.fnc"
+	  },
+	  "fsc": {
+		"name": "Friendly Software Corporation",
+		"mine": "application\/vnd.fsc.weblaunch"
+	  },
+	  "ftc": {
+		"name": "FluxTime Clip",
+		"mine": "application\/vnd.fluxtime.clip"
+	  },
+	  "fti": {
+		"name": "ANSER-WEB Terminal Client - Web Funds Transfer",
+		"mine": "application\/vnd.anser-web-funds-transfer-initiation"
+	  },
+	  "fxp": {
+		"name": "Adobe Flex Project",
+		"mine": "application\/vnd.adobe.fxp"
+	  },
+	  "fzs": {
+		"name": "FuzzySheet",
+		"mine": "application\/vnd.fuzzysheet"
+	  },
+	  "g2w": {
+		"name": "GeoplanW",
+		"mine": "application\/vnd.geoplan"
+	  },
+	  "g3w": {
+		"name": "GeospacW",
+		"mine": "application\/vnd.geospace"
+	  },
+	  "gac": {
+		"name": "Groove - Account",
+		"mine": "application\/vnd.groove-account"
+	  },
+	  "gdl": {
+		"name": "Geometric Description Language (GDL)",
+		"mine": "model\/vnd.gdl"
+	  },
+	  "geo": {
+		"name": "DynaGeo",
+		"mine": "application\/vnd.dynageo"
+	  },
+	  "gex": {
+		"name": "GeoMetry Explorer",
+		"mine": "application\/vnd.geometry-explorer"
+	  },
+	  "ggb": {
+		"name": "GeoGebra",
+		"mine": "application\/vnd.geogebra.file"
+	  },
+	  "ggt": {
+		"name": "GeoGebra",
+		"mine": "application\/vnd.geogebra.tool"
+	  },
+	  "ghf": {
+		"name": "Groove - Help",
+		"mine": "application\/vnd.groove-help"
+	  },
+	  "gim": {
+		"name": "Groove - Identity Message",
+		"mine": "application\/vnd.groove-identity-message"
+	  },
+	  "gmx": {
+		"name": "GameMaker ActiveX",
+		"mine": "application\/vnd.gmx"
+	  },
+	  "gnumeric": {
+		"name": "Gnumeric",
+		"mine": "application\/x-gnumeric"
+	  },
+	  "gph": {
+		"name": "NpGraphIt",
+		"mine": "application\/vnd.flographit"
+	  },
+	  "gqf": {
+		"name": "GrafEq",
+		"mine": "application\/vnd.grafeq"
+	  },
+	  "gram": {
+		"name": "Speech Recognition Grammar Specification",
+		"mine": "application\/srgs"
+	  },
+	  "grv": {
+		"name": "Groove - Injector",
+		"mine": "application\/vnd.groove-injector"
+	  },
+	  "grxml": {
+		"name": "Speech Recognition Grammar Specification - XML",
+		"mine": "application\/srgs+xml"
+	  },
+	  "gtar": {
+		"name": "GNU Tar Files",
+		"mine": "application\/x-gtar"
+	  },
+	  "gtm": {
+		"name": "Groove - Tool Message",
+		"mine": "application\/vnd.groove-tool-message"
+	  },
+	  "gtw": {
+		"name": "Gen-Trix Studio",
+		"mine": "model\/vnd.gtw"
+	  },
+	  "gxt": {
+		"name": "GEONExT and JSXGraph",
+		"mine": "application\/vnd.geonext"
+	  },
+	  "hal": {
+		"name": "Hypertext Application Language",
+		"mine": "application\/vnd.hal+xml"
+	  },
+	  "hbci": {
+		"name": "Homebanking Computer Interface (HBCI)",
+		"mine": "application\/vnd.hbci"
+	  },
+	  "hdf": {
+		"name": "Hierarchical Data Format",
+		"mine": "application\/x-hdf"
+	  },
+	  "hlp": {
+		"name": "WinHelp",
+		"mine": "application\/winhlp"
+	  },
+	  "hpgl": {
+		"name": "HP-GL\/2 and HP RTL",
+		"mine": "application\/vnd.hp-hpgl"
+	  },
+	  "hpid": {
+		"name": "Hewlett Packard Instant Delivery",
+		"mine": "application\/vnd.hp-hpid"
+	  },
+	  "hps": {
+		"name": "Hewlett-Packard's WebPrintSmart",
+		"mine": "application\/vnd.hp-hps"
+	  },
+	  "hqx": {
+		"name": "Macintosh BinHex 4.0",
+		"mine": "application\/mac-binhex40"
+	  },
+	  "htke": {
+		"name": "Kenamea App",
+		"mine": "application\/vnd.kenameaapp"
+	  },
+	  "hvd": {
+		"name": "HV Voice Dictionary",
+		"mine": "application\/vnd.yamaha.hv-dic"
+	  },
+	  "hvp": {
+		"name": "HV Voice Parameter",
+		"mine": "application\/vnd.yamaha.hv-voice"
+	  },
+	  "hvs": {
+		"name": "HV Script",
+		"mine": "application\/vnd.yamaha.hv-script"
+	  },
+	  "i2g": {
+		"name": "Interactive Geometry Software",
+		"mine": "application\/vnd.intergeo"
+	  },
+	  "icc": {
+		"name": "ICC profile",
+		"mine": "application\/vnd.iccprofile"
+	  },
+	  "ice": {
+		"name": "CoolTalk",
+		"mine": "x-conference\/x-cooltalk"
+	  },
+	  "ifm": {
+		"name": "Shana Informed Filler",
+		"mine": "application\/vnd.shana.informed.formdata"
+	  },
+	  "igl": {
+		"name": "igLoader",
+		"mine": "application\/vnd.igloader"
+	  },
+	  "igm": {
+		"name": "IOCOM Visimeet",
+		"mine": "application\/vnd.insors.igm"
+	  },
+	  "igs": {
+		"name": "Initial Graphics Exchange Specification (IGES)",
+		"mine": "model\/iges"
+	  },
+	  "igx": {
+		"name": "Micrografx iGrafx Professional",
+		"mine": "application\/vnd.micrografx.igx"
+	  },
+	  "iif": {
+		"name": "Shana Informed Filler",
+		"mine": "application\/vnd.shana.informed.interchange"
+	  },
+	  "imp": {
+		"name": "Simply Accounting - Data Import",
+		"mine": "application\/vnd.accpac.simply.imp"
+	  },
+	  "ims": {
+		"name": "Microsoft Class Server",
+		"mine": "application\/vnd.ms-ims"
+	  },
+	  "ipfix": {
+		"name": "Internet Protocol Flow Information Export",
+		"mine": "application\/ipfix"
+	  },
+	  "ipk": {
+		"name": "Shana Informed Filler",
+		"mine": "application\/vnd.shana.informed.package"
+	  },
+	  "irm": {
+		"name": "IBM DB2 Rights Manager",
+		"mine": "application\/vnd.ibm.rights-management"
+	  },
+	  "irp": {
+		"name": "iRepository \/ Lucidoc Editor",
+		"mine": "application\/vnd.irepository.package+xml"
+	  },
+	  "itp": {
+		"name": "Shana Informed Filler",
+		"mine": "application\/vnd.shana.informed.formtemplate"
+	  },
+	  "ivp": {
+		"name": "ImmerVision PURE Players",
+		"mine": "application\/vnd.immervision-ivp"
+	  },
+	  "ivu": {
+		"name": "ImmerVision PURE Players",
+		"mine": "application\/vnd.immervision-ivu"
+	  },
+	  "jam": {
+		"name": "Lightspeed Audio Lab",
+		"mine": "application\/vnd.jam"
+	  },
+	  "jisp": {
+		"name": "RhymBox",
+		"mine": "application\/vnd.jisp"
+	  },
+	  "jlt": {
+		"name": "HP Indigo Digital Press - Job Layout Languate",
+		"mine": "application\/vnd.hp-jlyt"
+	  },
+	  "jnlp": {
+		"name": "Java Network Launching Protocol",
+		"mine": "application\/x-java-jnlp-file"
+	  },
+	  "kia": {
+		"name": "Kidspiration",
+		"mine": "application\/vnd.kidspiration"
+	  },
+	  "kml": {
+		"name": "Google Earth - KML",
+		"mine": "application\/vnd.google-earth.kml+xml"
+	  },
+	  "kne": {
+		"name": "Kinar Applications",
+		"mine": "application\/vnd.kinar"
+	  },
+	  "ktz": {
+		"name": "Kahootz",
+		"mine": "application\/vnd.kahootz"
+	  },
+	  "lasxml": {
+		"name": "Laser App Enterprise",
+		"mine": "application\/vnd.las.las+xml"
+	  },
+	  "latex": {
+		"name": "LaTeX",
+		"mine": "application\/x-latex"
+	  },
+	  "lbd": {
+		"name": "Life Balance - Desktop Edition",
+		"mine": "application\/vnd.llamagraphics.life-balance.desktop"
+	  },
+	  "lbe": {
+		"name": "Life Balance - Exchange Format",
+		"mine": "application\/vnd.llamagraphics.life-balance.exchange+xml"
+	  },
+	  "les": {
+		"name": "Archipelago Lesson Player",
+		"mine": "application\/vnd.hhe.lesson-player"
+	  },
+	  "link66": {
+		"name": "ROUTE 66 Location Based Services",
+		"mine": "application\/vnd.route66.link66+xml"
+	  },
+	  "lrm": {
+		"name": "Microsoft Learning Resource Module",
+		"mine": "application\/vnd.ms-lrm"
+	  },
+	  "ltf": {
+		"name": "Frogans Player",
+		"mine": "application\/vnd.frogans.ltf"
+	  },
+	  "m21": {
+		"name": "MPEG-21",
+		"mine": "application\/mp21"
+	  },
+	  "m3u8": {
+		"name": "Multimedia Playlist Unicode",
+		"mine": "application\/vnd.apple.mpegurl"
+	  },
+	  "ma": {
+		"name": "Mathematica Notebooks",
+		"mine": "application\/mathematica"
+	  },
+	  "mads": {
+		"name": "Metadata Authority  Description Schema",
+		"mine": "application\/mads+xml"
+	  },
+	  "mag": {
+		"name": "EcoWin Chart",
+		"mine": "application\/vnd.ecowin.chart"
+	  },
+	  "mathml": {
+		"name": "Mathematical Markup Language",
+		"mine": "application\/mathml+xml"
+	  },
+	  "mbk": {
+		"name": "Mobius Management Systems - Basket file",
+		"mine": "application\/vnd.mobius.mbk"
+	  },
+	  "mc1": {
+		"name": "MedCalc",
+		"mine": "application\/vnd.medcalcdata"
+	  },
+	  "mcd": {
+		"name": "Micro CADAM Helix D&D",
+		"mine": "application\/vnd.mcd"
+	  },
+	  "mdb": {
+		"name": "Microsoft Access",
+		"mine": "application\/x-msaccess"
+	  },
+	  "meta4": {
+		"name": "Metalink",
+		"mine": "application\/metalink4+xml"
+	  },
+	  "mets": {
+		"name": "Metadata Encoding and Transmission Standard",
+		"mine": "application\/mets+xml"
+	  },
+	  "mfm": {
+		"name": "Melody Format for Mobile Platform",
+		"mine": "application\/vnd.mfmp"
+	  },
+	  "mgp": {
+		"name": "MapGuide DBXML",
+		"mine": "application\/vnd.osgeo.mapguide.package"
+	  },
+	  "mgz": {
+		"name": "EFI Proteus",
+		"mine": "application\/vnd.proteus.magazine"
+	  },
+	  "mif": {
+		"name": "FrameMaker Interchange Format",
+		"mine": "application\/vnd.mif"
+	  },
+	  "mlp": {
+		"name": "Dolby Meridian Lossless Packing",
+		"mine": "application\/vnd.dolby.mlp"
+	  },
+	  "mmd": {
+		"name": "Karaoke on Chipnuts Chipsets",
+		"mine": "application\/vnd.chipnuts.karaoke-mmd"
+	  },
+	  "mmf": {
+		"name": "SMAF File",
+		"mine": "application\/vnd.smaf"
+	  },
+	  "mny": {
+		"name": "Microsoft Money",
+		"mine": "application\/x-msmoney"
+	  },
+	  "mods": {
+		"name": "Metadata Object Description Schema",
+		"mine": "application\/mods+xml"
+	  },
+	  "mpc": {
+		"name": "Mophun Certificate",
+		"mine": "application\/vnd.mophun.certificate"
+	  },
+	  "mpkg": {
+		"name": "Apple Installer Package",
+		"mine": "application\/vnd.apple.installer+xml"
+	  },
+	  "mpm": {
+		"name": "Blueice Research Multipass",
+		"mine": "application\/vnd.blueice.multipass"
+	  },
+	  "mpn": {
+		"name": "Mophun VM",
+		"mine": "application\/vnd.mophun.application"
+	  },
+	  "mpp": {
+		"name": "Microsoft Project",
+		"mine": "application\/vnd.ms-project"
+	  },
+	  "mpy": {
+		"name": "MiniPay",
+		"mine": "application\/vnd.ibm.minipay"
+	  },
+	  "mqy": {
+		"name": "Mobius Management Systems - Query File",
+		"mine": "application\/vnd.mobius.mqy"
+	  },
+	  "mrc": {
+		"name": "MARC Formats",
+		"mine": "application\/marc"
+	  },
+	  "mrcx": {
+		"name": "MARC21 XML Schema",
+		"mine": "application\/marcxml+xml"
+	  },
+	  "mscml": {
+		"name": "Media Server Control Markup Language",
+		"mine": "application\/mediaservercontrol+xml"
+	  },
+	  "mseq": {
+		"name": "3GPP MSEQ File",
+		"mine": "application\/vnd.mseq"
+	  },
+	  "msf": {
+		"name": "QUASS Stream Player",
+		"mine": "application\/vnd.epson.msf"
+	  },
+	  "msh": {
+		"name": "Mesh Data Type",
+		"mine": "model\/mesh"
+	  },
+	  "msl": {
+		"name": "Mobius Management Systems - Script Language",
+		"mine": "application\/vnd.mobius.msl"
+	  },
+	  "msty": {
+		"name": "Muvee Automatic Video Editing",
+		"mine": "application\/vnd.muvee.style"
+	  },
+	  "mts": {
+		"name": "Virtue MTS",
+		"mine": "model\/vnd.mts"
+	  },
+	  "mus": {
+		"name": "MUsical Score Interpreted Code Invented  for the ASCII designation of Notation",
+		"mine": "application\/vnd.musician"
+	  },
+	  "musicxml": {
+		"name": "Recordare Applications",
+		"mine": "application\/vnd.recordare.musicxml+xml"
+	  },
+	  "mvb": {
+		"name": "Microsoft MediaView",
+		"mine": "application\/x-msmediaview"
+	  },
+	  "mwf": {
+		"name": "Medical Waveform Encoding Format",
+		"mine": "application\/vnd.mfer"
+	  },
+	  "mxf": {
+		"name": "Material Exchange Format",
+		"mine": "application\/mxf"
+	  },
+	  "mxl": {
+		"name": "Recordare Applications",
+		"mine": "application\/vnd.recordare.musicxml"
+	  },
+	  "mxml": {
+		"name": "MXML",
+		"mine": "application\/xv+xml"
+	  },
+	  "mxs": {
+		"name": "Triscape Map Explorer",
+		"mine": "application\/vnd.triscape.mxs"
+	  },
+	  "n-gage": {
+		"name": "N-Gage Game Installer",
+		"mine": "application\/vnd.nokia.n-gage.symbian.install"
+	  },
+	  "nbp": {
+		"name": "Mathematica Notebook Player",
+		"mine": "application\/vnd.wolfram.player"
+	  },
+	  "nc": {
+		"name": "Network Common Data Form (NetCDF)",
+		"mine": "application\/x-netcdf"
+	  },
+	  "ncx": {
+		"name": "Navigation Control file for XML (for ePub)",
+		"mine": "application\/x-dtbncx+xml"
+	  },
+	  "ngdat": {
+		"name": "N-Gage Game Data",
+		"mine": "application\/vnd.nokia.n-gage.data"
+	  },
+	  "nlu": {
+		"name": "neuroLanguage",
+		"mine": "application\/vnd.neurolanguage.nlu"
+	  },
+	  "nml": {
+		"name": "Enliven Viewer",
+		"mine": "application\/vnd.enliven"
+	  },
+	  "nnd": {
+		"name": "NobleNet Directory",
+		"mine": "application\/vnd.noblenet-directory"
+	  },
+	  "nns": {
+		"name": "NobleNet Sealer",
+		"mine": "application\/vnd.noblenet-sealer"
+	  },
+	  "nnw": {
+		"name": "NobleNet Web",
+		"mine": "application\/vnd.noblenet-web"
+	  },
+	  "nsf": {
+		"name": "Lotus Notes",
+		"mine": "application\/vnd.lotus-notes"
+	  },
+	  "oa2": {
+		"name": "Fujitsu Oasys",
+		"mine": "application\/vnd.fujitsu.oasys2"
+	  },
+	  "oa3": {
+		"name": "Fujitsu Oasys",
+		"mine": "application\/vnd.fujitsu.oasys3"
+	  },
+	  "oas": {
+		"name": "Fujitsu Oasys",
+		"mine": "application\/vnd.fujitsu.oasys"
+	  },
+	  "ogx": {
+		"name": "Ogg",
+		"mine": "application\/ogg"
+	  },
+	  "onetoc": {
+		"name": "Microsoft OneNote",
+		"mine": "application\/onenote"
+	  },
+	  "opf": {
+		"name": "Open eBook Publication Structure",
+		"mine": "application\/oebps-package+xml"
+	  },
+	  "org": {
+		"name": "Lotus Organizer",
+		"mine": "application\/vnd.lotus-organizer"
+	  },
+	  "osf": {
+		"name": "Open Score Format",
+		"mine": "application\/vnd.yamaha.openscoreformat"
+	  },
+	  "osfpvg": {
+		"name": "OSFPVG",
+		"mine": "application\/vnd.yamaha.openscoreformat.osfpvg+xml"
+	  },
+	  "p10": {
+		"name": "PKCS #10 - Certification Request Standard",
+		"mine": "application\/pkcs10"
+	  },
+	  "p12": {
+		"name": "PKCS #12 - Personal Information Exchange Syntax Standard",
+		"mine": "application\/x-pkcs12"
+	  },
+	  "p7b": {
+		"name": "PKCS #7 - Cryptographic Message Syntax Standard (Certificates)",
+		"mine": "application\/x-pkcs7-certificates"
+	  },
+	  "p7m": {
+		"name": "PKCS #7 - Cryptographic Message Syntax Standard",
+		"mine": "application\/pkcs7-mime"
+	  },
+	  "p7r": {
+		"name": "PKCS #7 - Cryptographic Message Syntax Standard (Certificate Request Response)",
+		"mine": "application\/x-pkcs7-certreqresp"
+	  },
+	  "p7s": {
+		"name": "PKCS #7 - Cryptographic Message Syntax Standard",
+		"mine": "application\/pkcs7-signature"
+	  },
+	  "p8": {
+		"name": "PKCS #8 - Private-Key Information Syntax Standard",
+		"mine": "application\/pkcs8"
+	  },
+	  "paw": {
+		"name": "PawaaFILE",
+		"mine": "application\/vnd.pawaafile"
+	  },
+	  "pbd": {
+		"name": "PowerBuilder",
+		"mine": "application\/vnd.powerbuilder6"
+	  },
+	  "pcl": {
+		"name": "HP Printer Command Language",
+		"mine": "application\/vnd.hp-pcl"
+	  },
+	  "pclxl": {
+		"name": "PCL 6 Enhanced (Formely PCL XL)",
+		"mine": "application\/vnd.hp-pclxl"
+	  },
+	  "pcurl": {
+		"name": "CURL Applet",
+		"mine": "application\/vnd.curl.pcurl"
+	  },
+	  "pdb": {
+		"name": "PalmOS Data",
+		"mine": "application\/vnd.palm"
+	  },
+	  "pgn": {
+		"name": "Portable Game Notation (Chess Games)",
+		"mine": "application\/x-chess-pgn"
+	  },
+	  "pgp": {
+		"name": "Pretty Good Privacy - Signature",
+		"mine": "application\/pgp-signature"
+	  },
+	  "pki": {
+		"name": "Internet Public Key Infrastructure - Certificate Management Protocole",
+		"mine": "application\/pkixcmp"
+	  },
+	  "pkipath": {
+		"name": "Internet Public Key Infrastructure - Certification Path",
+		"mine": "application\/pkix-pkipath"
+	  },
+	  "plb": {
+		"name": "3rd Generation Partnership Project - Pic Large",
+		"mine": "application\/vnd.3gpp.pic-bw-large"
+	  },
+	  "plc": {
+		"name": "Mobius Management Systems - Policy Definition Language File",
+		"mine": "application\/vnd.mobius.plc"
+	  },
+	  "plf": {
+		"name": "PocketLearn Viewers",
+		"mine": "application\/vnd.pocketlearn"
+	  },
+	  "pls": {
+		"name": "Pronunciation Lexicon Specification",
+		"mine": "application\/pls+xml"
+	  },
+	  "pml": {
+		"name": "PosML",
+		"mine": "application\/vnd.ctc-posml"
+	  },
+	  "portpkg": {
+		"name": "MacPorts Port System",
+		"mine": "application\/vnd.macports.portpkg"
+	  },
+	  "ppd": {
+		"name": "Adobe PostScript Printer Description File Format",
+		"mine": "application\/vnd.cups-ppd"
+	  },
+	  "prc": {
+		"name": "Mobipocket",
+		"mine": "application\/x-mobipocket-ebook"
+	  },
+	  "pre": {
+		"name": "Lotus Freelance",
+		"mine": "application\/vnd.lotus-freelance"
+	  },
+	  "prf": {
+		"name": "PICSRules",
+		"mine": "application\/pics-rules"
+	  },
+	  "psb": {
+		"name": "3rd Generation Partnership Project - Pic Small",
+		"mine": "application\/vnd.3gpp.pic-bw-small"
+	  },
+	  "pskcxml": {
+		"name": "Portable Symmetric Key Container",
+		"mine": "application\/pskc+xml"
+	  },
+	  "ptid": {
+		"name": "Princeton Video Image",
+		"mine": "application\/vnd.pvi.ptid1"
+	  },
+	  "pvb": {
+		"name": "3rd Generation Partnership Project - Pic Var",
+		"mine": "application\/vnd.3gpp.pic-bw-var"
+	  },
+	  "pwn": {
+		"name": "3M Post It Notes",
+		"mine": "application\/vnd.3m.post-it-notes"
+	  },
+	  "qam": {
+		"name": "QuickAnime Player",
+		"mine": "application\/vnd.epson.quickanime"
+	  },
+	  "qbo": {
+		"name": "Open Financial Exchange",
+		"mine": "application\/vnd.intu.qbo"
+	  },
+	  "qfx": {
+		"name": "Quicken",
+		"mine": "application\/vnd.intu.qfx"
+	  },
+	  "qps": {
+		"name": "PubliShare Objects",
+		"mine": "application\/vnd.publishare-delta-tree"
+	  },
+	  "qxd": {
+		"name": "QuarkXpress",
+		"mine": "application\/vnd.quark.quarkxpress"
+	  },
+	  "rcprofile": {
+		"name": "IP Unplugged Roaming Client",
+		"mine": "application\/vnd.ipunplugged.rcprofile"
+	  },
+	  "rdf": {
+		"name": "Resource Description Framework",
+		"mine": "application\/rdf+xml"
+	  },
+	  "rdz": {
+		"name": "RemoteDocs R-Viewer",
+		"mine": "application\/vnd.data-vision.rdz"
+	  },
+	  "rep": {
+		"name": "BusinessObjects",
+		"mine": "application\/vnd.businessobjects"
+	  },
+	  "res": {
+		"name": "Digital Talking Book - Resource File",
+		"mine": "application\/x-dtbresource+xml"
+	  },
+	  "rif": {
+		"name": "IMS Networks",
+		"mine": "application\/reginfo+xml"
+	  },
+	  "rl": {
+		"name": "XML Resource Lists",
+		"mine": "application\/resource-lists+xml"
+	  },
+	  "rld": {
+		"name": "XML Resource Lists Diff",
+		"mine": "application\/resource-lists-diff+xml"
+	  },
+	  "rm": {
+		"name": "RealMedia",
+		"mine": "application\/vnd.rn-realmedia"
+	  },
+	  "rms": {
+		"name": "Mobile Information Device Profile",
+		"mine": "application\/vnd.jcp.javame.midlet-rms"
+	  },
+	  "rnc": {
+		"name": "Relax NG Compact Syntax",
+		"mine": "application\/relax-ng-compact-syntax"
+	  },
+	  "rp9": {
+		"name": "RetroPlatform Player",
+		"mine": "application\/vnd.cloanto.rp9"
+	  },
+	  "rpss": {
+		"name": "Nokia Radio Application - Preset",
+		"mine": "application\/vnd.nokia.radio-presets"
+	  },
+	  "rpst": {
+		"name": "Nokia Radio Application - Preset",
+		"mine": "application\/vnd.nokia.radio-preset"
+	  },
+	  "rq": {
+		"name": "SPARQL - Query",
+		"mine": "application\/sparql-query"
+	  },
+	  "rs": {
+		"name": "XML Resource Lists",
+		"mine": "application\/rls-services+xml"
+	  },
+	  "rsd": {
+		"name": "Really Simple Discovery",
+		"mine": "application\/rsd+xml"
+	  },
+	  "rtf": {
+		"name": "Rich Text Format",
+		"mine": "application\/rtf"
+	  },
+	  "saf": {
+		"name": "SMAF Audio",
+		"mine": "application\/vnd.yamaha.smaf-audio"
+	  },
+	  "sbml": {
+		"name": "Systems Biology Markup Language",
+		"mine": "application\/sbml+xml"
+	  },
+	  "sc": {
+		"name": "IBM Electronic Media Management System - Secure Container",
+		"mine": "application\/vnd.ibm.secure-container"
+	  },
+	  "scd": {
+		"name": "Microsoft Schedule+",
+		"mine": "application\/x-msschedule"
+	  },
+	  "scm": {
+		"name": "Lotus Screencam",
+		"mine": "application\/vnd.lotus-screencam"
+	  },
+	  "scq": {
+		"name": "Server-Based Certificate Validation Protocol - Validation Request",
+		"mine": "application\/scvp-cv-request"
+	  },
+	  "scs": {
+		"name": "Server-Based Certificate Validation Protocol - Validation Response",
+		"mine": "application\/scvp-cv-response"
+	  },
+	  "sdkm": {
+		"name": "SudokuMagic",
+		"mine": "application\/vnd.solent.sdkm+xml"
+	  },
+	  "sdp": {
+		"name": "Session Description Protocol",
+		"mine": "application\/sdp"
+	  },
+	  "see": {
+		"name": "SeeMail",
+		"mine": "application\/vnd.seemail"
+	  },
+	  "seed": {
+		"name": "Digital Siesmograph Networks - SEED Datafiles",
+		"mine": "application\/vnd.fdsn.seed"
+	  },
+	  "sema": {
+		"name": "Secured eMail",
+		"mine": "application\/vnd.sema"
+	  },
+	  "semd": {
+		"name": "Secured eMail",
+		"mine": "application\/vnd.semd"
+	  },
+	  "semf": {
+		"name": "Secured eMail",
+		"mine": "application\/vnd.semf"
+	  },
+	  "ser": {
+		"name": "Java Serialized Object",
+		"mine": "application\/java-serialized-object"
+	  },
+	  "setpay": {
+		"name": "Secure Electronic Transaction - Payment",
+		"mine": "application\/set-payment-initiation"
+	  },
+	  "setreg": {
+		"name": "Secure Electronic Transaction - Registration",
+		"mine": "application\/set-registration-initiation"
+	  },
+	  "sfd-hdstx": {
+		"name": "Hydrostatix Master Suite",
+		"mine": "application\/vnd.hydrostatix.sof-data"
+	  },
+	  "sfs": {
+		"name": "TIBCO Spotfire",
+		"mine": "application\/vnd.spotfire.sfs"
+	  },
+	  "sh": {
+		"name": "Bourne Shell Script",
+		"mine": "application\/x-sh"
+	  },
+	  "shf": {
+		"name": "S Hexdump Format",
+		"mine": "application\/shf+xml"
+	  },
+	  "sis": {
+		"name": "Symbian Install Package",
+		"mine": "application\/vnd.symbian.install"
+	  },
+	  "skp": {
+		"name": "SSEYO Koan Play File",
+		"mine": "application\/vnd.koan"
+	  },
+	  "slt": {
+		"name": "SimpleAnimeLite Player",
+		"mine": "application\/vnd.epson.salt"
+	  },
+	  "sm": {
+		"name": "StepMania",
+		"mine": "application\/vnd.stepmania.stepchart"
+	  },
+	  "smi": {
+		"name": "Synchronized Multimedia Integration Language",
+		"mine": "application\/smil+xml"
+	  },
+	  "spf": {
+		"name": "SMAF Phrase",
+		"mine": "application\/vnd.yamaha.smaf-phrase"
+	  },
+	  "spl": {
+		"name": "FutureSplash Animator",
+		"mine": "application\/x-futuresplash"
+	  },
+	  "spp": {
+		"name": "Server-Based Certificate Validation Protocol - Validation Policies - Response",
+		"mine": "application\/scvp-vp-response"
+	  },
+	  "spq": {
+		"name": "Server-Based Certificate Validation Protocol - Validation Policies - Request",
+		"mine": "application\/scvp-vp-request"
+	  },
+	  "src": {
+		"name": "WAIS Source",
+		"mine": "application\/x-wais-source"
+	  },
+	  "sru": {
+		"name": "Search\/Retrieve via URL Response Format",
+		"mine": "application\/sru+xml"
+	  },
+	  "srx": {
+		"name": "SPARQL - Results",
+		"mine": "application\/sparql-results+xml"
+	  },
+	  "sse": {
+		"name": "Kodak Storyshare",
+		"mine": "application\/vnd.kodak-descriptor"
+	  },
+	  "ssf": {
+		"name": "QUASS Stream Player",
+		"mine": "application\/vnd.epson.ssf"
+	  },
+	  "ssml": {
+		"name": "Speech Synthesis Markup Language",
+		"mine": "application\/ssml+xml"
+	  },
+	  "st": {
+		"name": "SailingTracker",
+		"mine": "application\/vnd.sailingtracker.track"
+	  },
+	  "stf": {
+		"name": "Worldtalk",
+		"mine": "application\/vnd.wt.stf"
+	  },
+	  "stk": {
+		"name": "Hyperstudio",
+		"mine": "application\/hyperstudio"
+	  },
+	  "stl": {
+		"name": "Microsoft Trust UI Provider - Certificate Trust Link",
+		"mine": "application\/vnd.ms-pki.stl"
+	  },
+	  "str": {
+		"name": "Proprietary P&G Standard Reporting System",
+		"mine": "application\/vnd.pg.format"
+	  },
+	  "sus": {
+		"name": "ScheduleUs",
+		"mine": "application\/vnd.sus-calendar"
+	  },
+	  "sv4crc": {
+		"name": "System V Release 4 CPIO Checksum Data",
+		"mine": "application\/x-sv4crc"
+	  },
+	  "svc": {
+		"name": "Digital Video Broadcasting",
+		"mine": "application\/vnd.dvb.service"
+	  },
+	  "swf": {
+		"name": "Adobe Flash",
+		"mine": "application\/x-shockwave-flash"
+	  },
+	  "swi": {
+		"name": "Arista Networks Software Image",
+		"mine": "application\/vnd.aristanetworks.swi"
+	  },
+	  "tao": {
+		"name": "Tao Intent",
+		"mine": "application\/vnd.tao.intent-module-archive"
+	  },
+	  "tcap": {
+		"name": "3rd Generation Partnership Project - Transaction Capabilities Application Part",
+		"mine": "application\/vnd.3gpp2.tcap"
+	  },
+	  "tcl": {
+		"name": "Tcl Script",
+		"mine": "application\/x-tcl"
+	  },
+	  "teacher": {
+		"name": "SMART Technologies Apps",
+		"mine": "application\/vnd.smart.teacher"
+	  },
+	  "tei": {
+		"name": "Text Encoding and Interchange",
+		"mine": "application\/tei+xml"
+	  },
+	  "tex": {
+		"name": "TeX",
+		"mine": "application\/x-tex"
+	  },
+	  "tfi": {
+		"name": "Sharing Transaction Fraud Data",
+		"mine": "application\/thraud+xml"
+	  },
+	  "tmo": {
+		"name": "MobileTV",
+		"mine": "application\/vnd.tmobile-livetv"
+	  },
+	  "torrent": {
+		"name": "BitTorrent",
+		"mine": "application\/x-bittorrent"
+	  },
+	  "tpl": {
+		"name": "Groove - Tool Template",
+		"mine": "application\/vnd.groove-tool-template"
+	  },
+	  "tpt": {
+		"name": "TRI Systems Config",
+		"mine": "application\/vnd.trid.tpt"
+	  },
+	  "tra": {
+		"name": "True BASIC",
+		"mine": "application\/vnd.trueapp"
+	  },
+	  "trm": {
+		"name": "Microsoft Windows Terminal Services",
+		"mine": "application\/x-msterminal"
+	  },
+	  "tsd": {
+		"name": "Time Stamped Data Envelope",
+		"mine": "application\/timestamped-data"
+	  },
+	  "twd": {
+		"name": "SimTech MindMapper",
+		"mine": "application\/vnd.simtech-mindmapper"
+	  },
+	  "txd": {
+		"name": "Genomatix Tuxedo Framework",
+		"mine": "application\/vnd.genomatix.tuxedo"
+	  },
+	  "txf": {
+		"name": "Mobius Management Systems - Topic Index File",
+		"mine": "application\/vnd.mobius.txf"
+	  },
+	  "ufd": {
+		"name": "Universal Forms Description Language",
+		"mine": "application\/vnd.ufdl"
+	  },
+	  "umj": {
+		"name": "UMAJIN",
+		"mine": "application\/vnd.umajin"
+	  },
+	  "unityweb": {
+		"name": "Unity 3d",
+		"mine": "application\/vnd.unity"
+	  },
+	  "uoml": {
+		"name": "Unique Object Markup Language",
+		"mine": "application\/vnd.uoml+xml"
+	  },
+	  "utz": {
+		"name": "User Interface Quartz - Theme (Symbian)",
+		"mine": "application\/vnd.uiq.theme"
+	  },
+	  "vcd": {
+		"name": "Video CD",
+		"mine": "application\/x-cdlink"
+	  },
+	  "vcg": {
+		"name": "Groove - Vcard",
+		"mine": "application\/vnd.groove-vcard"
+	  },
+	  "vcx": {
+		"name": "VirtualCatalog",
+		"mine": "application\/vnd.vcx"
+	  },
+	  "vis": {
+		"name": "Visionary",
+		"mine": "application\/vnd.visionary"
+	  },
+	  "vsd": {
+		"name": "Microsoft Visio",
+		"mine": "application\/vnd.visio"
+	  },
+	  "vsf": {
+		"name": "Viewport+",
+		"mine": "application\/vnd.vsf"
+	  },
+	  "vtu": {
+		"name": "Virtue VTU",
+		"mine": "model\/vnd.vtu"
+	  },
+	  "vxml": {
+		"name": "VoiceXML",
+		"mine": "application\/voicexml+xml"
+	  },
+	  "wad": {
+		"name": "Doom Video Game",
+		"mine": "application\/x-doom"
+	  },
+	  "wbs": {
+		"name": "Critical Tools - PERT Chart EXPERT",
+		"mine": "application\/vnd.criticaltools.wbs+xml"
+	  },
+	  "wbxml": {
+		"name": "WAP Binary XML (WBXML)",
+		"mine": "application\/vnd.wap.wbxml"
+	  },
+	  "wg": {
+		"name": "Qualcomm's Plaza Mobile Internet",
+		"mine": "application\/vnd.pmi.widget"
+	  },
+	  "wgt": {
+		"name": "Widget Packaging and XML Configuration",
+		"mine": "application\/widget"
+	  },
+	  "wmd": {
+		"name": "Microsoft Windows Media Player Download Package",
+		"mine": "application\/x-ms-wmd"
+	  },
+	  "wmf": {
+		"name": "Microsoft Windows Metafile",
+		"mine": "application\/x-msmetafile"
+	  },
+	  "wmlc": {
+		"name": "Compiled Wireless Markup Language (WMLC)",
+		"mine": "application\/vnd.wap.wmlc"
+	  },
+	  "wmlsc": {
+		"name": "WMLScript",
+		"mine": "application\/vnd.wap.wmlscriptc"
+	  },
+	  "wmz": {
+		"name": "Microsoft Windows Media Player Skin Package",
+		"mine": "application\/x-ms-wmz"
+	  },
+	  "wpl": {
+		"name": "Microsoft Windows Media Player Playlist",
+		"mine": "application\/vnd.ms-wpl"
+	  },
+	  "wps": {
+		"name": "Microsoft Works",
+		"mine": "application\/vnd.ms-works"
+	  },
+	  "wqd": {
+		"name": "SundaHus WQ",
+		"mine": "application\/vnd.wqd"
+	  },
+	  "wrl": {
+		"name": "Virtual Reality Modeling Language",
+		"mine": "model\/vrml"
+	  },
+	  "wsdl": {
+		"name": "WSDL - Web Services Description Language",
+		"mine": "application\/wsdl+xml"
+	  },
+	  "wspolicy": {
+		"name": "Web Services Policy",
+		"mine": "application\/wspolicy+xml"
+	  },
+	  "wtb": {
+		"name": "WebTurbo",
+		"mine": "application\/vnd.webturbo"
+	  },
+	  "x3d": {
+		"name": "3D Crossword Plugin",
+		"mine": "application\/vnd.hzn-3d-crossword"
+	  },
+	  "xap": {
+		"name": "Microsoft Silverlight",
+		"mine": "application\/x-silverlight-app"
+	  },
+	  "xar": {
+		"name": "CorelXARA",
+		"mine": "application\/vnd.xara"
+	  },
+	  "xbap": {
+		"name": "Microsoft XAML Browser Application",
+		"mine": "application\/x-ms-xbap"
+	  },
+	  "xbd": {
+		"name": "Fujitsu - Xerox DocuWorks Binder",
+		"mine": "application\/vnd.fujixerox.docuworks.binder"
+	  },
+	  "xdf": {
+		"name": "XML Configuration Access Protocol - XCAP Diff",
+		"mine": "application\/xcap-diff+xml"
+	  },
+	  "xdm": {
+		"name": "SyncML - Device Management",
+		"mine": "application\/vnd.syncml.dm+xml"
+	  },
+	  "xdp": {
+		"name": "Adobe XML Data Package",
+		"mine": "application\/vnd.adobe.xdp+xml"
+	  },
+	  "xdssc": {
+		"name": "Data Structure for the Security Suitability of Cryptographic Algorithms",
+		"mine": "application\/dssc+xml"
+	  },
+	  "xdw": {
+		"name": "Fujitsu - Xerox DocuWorks",
+		"mine": "application\/vnd.fujixerox.docuworks"
+	  },
+	  "xenc": {
+		"name": "XML Encryption Syntax and Processing",
+		"mine": "application\/xenc+xml"
+	  },
+	  "xer": {
+		"name": "XML Patch Framework",
+		"mine": "application\/patch-ops-error+xml"
+	  },
+	  "xfdf": {
+		"name": "Adobe XML Forms Data Format",
+		"mine": "application\/vnd.adobe.xfdf"
+	  },
+	  "xfdl": {
+		"name": "Extensible Forms Description Language",
+		"mine": "application\/vnd.xfdl"
+	  },
+	  "xo": {
+		"name": "Sugar Linux Application Bundle",
+		"mine": "application\/vnd.olpc-sugar"
+	  },
+	  "xop": {
+		"name": "XML-Binary Optimized Packaging",
+		"mine": "application\/xop+xml"
+	  },
+	  "xpi": {
+		"name": "XPInstall - Mozilla",
+		"mine": "application\/x-xpinstall"
+	  },
+	  "xpr": {
+		"name": "Express by Infoseek",
+		"mine": "application\/vnd.is-xpr"
+	  },
+	  "xps": {
+		"name": "Microsoft XML Paper Specification",
+		"mine": "application\/vnd.ms-xpsdocument"
+	  },
+	  "xpw": {
+		"name": "Intercon FormNet",
+		"mine": "application\/vnd.intercon.formnet"
+	  },
+	  "xslt": {
+		"name": "XML Transformations",
+		"mine": "application\/xslt+xml"
+	  },
+	  "xsm": {
+		"name": "SyncML",
+		"mine": "application\/vnd.syncml+xml"
+	  },
+	  "xspf": {
+		"name": "XSPF - XML Shareable Playlist Format",
+		"mine": "application\/xspf+xml"
+	  },
+	  "xul": {
+		"name": "XUL - XML User Interface Language",
+		"mine": "application\/vnd.mozilla.xul+xml"
+	  },
+	  "xyz": {
+		"name": "XYZ File Format",
+		"mine": "chemical\/x-xyz"
+	  },
+	  "yang": {
+		"name": "YANG Data Modeling Language",
+		"mine": "application\/yang"
+	  },
+	  "yin": {
+		"name": "YIN (YANG - XML)",
+		"mine": "application\/yin+xml"
+	  },
+	  "zaz": {
+		"name": "Zzazz Deck",
+		"mine": "application\/vnd.zzazz.deck+xml"
+	  },
+	  "zir": {
+		"name": "Z.U.L. Geometry",
+		"mine": "application\/vnd.zul"
+	  },
+	  "zmm": {
+		"name": "ZVUE Media Manager",
+		"mine": "application\/vnd.handheld-entertainment+xml"
+	  },
+	  "123": {
+		"name": "Lotus 1-2-3",
+		"mine": "application\/vnd.lotus-1-2-3"
+	  }
 	},
-	"pdf": {
-		"extensions": {
-			"pdf": {
-				"name": "Adobe Portable Document Format",
-				"mine": "application\/pdf"
-			}
-		},
-		"icon": "file-icons\/pdf.png",
-		"name": "Pdf"
+	"icon": "file-icons\/other.png",
+	"name": "Other"
+  },
+  "pdf": {
+	"extensions": {
+	  "pdf": {
+		"name": "Adobe Portable Document Format",
+		"mine": "application\/pdf"
+	  }
 	},
-	"presentation": {
-		"extensions": {
-			"odp": {
-				"name": "OpenDocument Presentation",
-				"mine": "application\/vnd.oasis.opendocument.presentation"
-			},
-			"otp": {
-				"name": "OpenDocument Presentation Template",
-				"mine": "application\/vnd.oasis.opendocument.presentation-template"
-			},
-			"potm": {
-				"name": "Microsoft PowerPoint - Macro-Enabled Template File",
-				"mine": "application\/vnd.ms-powerpoint.template.macroenabled.12"
-			},
-			"potx": {
-				"name": "Microsoft Office - OOXML - Presentation Template",
-				"mine": "application\/vnd.openxmlformats-officedocument.presentationml.template"
-			},
-			"ppam": {
-				"name": "Microsoft PowerPoint - Add-in file",
-				"mine": "application\/vnd.ms-powerpoint.addin.macroenabled.12"
-			},
-			"ppsm": {
-				"name": "Microsoft PowerPoint - Macro-Enabled Slide Show File",
-				"mine": "application\/vnd.ms-powerpoint.slideshow.macroenabled.12"
-			},
-			"ppsx": {
-				"name": "Microsoft Office - OOXML - Presentation (Slideshow)",
-				"mine": "application\/vnd.openxmlformats-officedocument.presentationml.slideshow"
-			},
-			"ppt": {
-				"name": "Microsoft PowerPoint",
-				"mine": "application\/vnd.ms-powerpoint"
-			},
-			"pptm": {
-				"name": "Microsoft PowerPoint - Macro-Enabled Presentation File",
-				"mine": "application\/vnd.ms-powerpoint.presentation.macroenabled.12"
-			},
-			"pptx": {
-				"name": "Microsoft Office - OOXML - Presentation",
-				"mine": "application\/vnd.openxmlformats-officedocument.presentationml.presentation"
-			},
-			"pub": {
-				"name": "Microsoft Publisher",
-				"mine": "application\/x-mspublisher"
-			},
-			"sldm": {
-				"name": "Microsoft PowerPoint - Macro-Enabled Open XML Slide",
-				"mine": "application\/vnd.ms-powerpoint.slide.macroenabled.12"
-			},
-			"sldx": {
-				"name": "Microsoft Office - OOXML - Presentation (Slide)",
-				"mine": "application\/vnd.openxmlformats-officedocument.presentationml.slide"
-			},
-			"sti": {
-				"name": "OpenOffice - Impress Template (Presentation)",
-				"mine": "application\/vnd.sun.xml.impress.template"
-			},
-			"sxi": {
-				"name": "OpenOffice - Impress (Presentation)",
-				"mine": "application\/vnd.sun.xml.impress"
-			}
-		},
-		"icon": "file-icons\/presentation.png",
-		"name": "Presentation"
+	"icon": "file-icons\/pdf.png",
+	"name": "Pdf"
+  },
+  "presentation": {
+	"extensions": {
+	  "odp": {
+		"name": "OpenDocument Presentation",
+		"mine": "application\/vnd.oasis.opendocument.presentation"
+	  },
+	  "otp": {
+		"name": "OpenDocument Presentation Template",
+		"mine": "application\/vnd.oasis.opendocument.presentation-template"
+	  },
+	  "potm": {
+		"name": "Microsoft PowerPoint - Macro-Enabled Template File",
+		"mine": "application\/vnd.ms-powerpoint.template.macroenabled.12"
+	  },
+	  "potx": {
+		"name": "Microsoft Office - OOXML - Presentation Template",
+		"mine": "application\/vnd.openxmlformats-officedocument.presentationml.template"
+	  },
+	  "ppam": {
+		"name": "Microsoft PowerPoint - Add-in file",
+		"mine": "application\/vnd.ms-powerpoint.addin.macroenabled.12"
+	  },
+	  "ppsm": {
+		"name": "Microsoft PowerPoint - Macro-Enabled Slide Show File",
+		"mine": "application\/vnd.ms-powerpoint.slideshow.macroenabled.12"
+	  },
+	  "ppsx": {
+		"name": "Microsoft Office - OOXML - Presentation (Slideshow)",
+		"mine": "application\/vnd.openxmlformats-officedocument.presentationml.slideshow"
+	  },
+	  "ppt": {
+		"name": "Microsoft PowerPoint",
+		"mine": "application\/vnd.ms-powerpoint"
+	  },
+	  "pptm": {
+		"name": "Microsoft PowerPoint - Macro-Enabled Presentation File",
+		"mine": "application\/vnd.ms-powerpoint.presentation.macroenabled.12"
+	  },
+	  "pptx": {
+		"name": "Microsoft Office - OOXML - Presentation",
+		"mine": "application\/vnd.openxmlformats-officedocument.presentationml.presentation"
+	  },
+	  "pub": {
+		"name": "Microsoft Publisher",
+		"mine": "application\/x-mspublisher"
+	  },
+	  "sldm": {
+		"name": "Microsoft PowerPoint - Macro-Enabled Open XML Slide",
+		"mine": "application\/vnd.ms-powerpoint.slide.macroenabled.12"
+	  },
+	  "sldx": {
+		"name": "Microsoft Office - OOXML - Presentation (Slide)",
+		"mine": "application\/vnd.openxmlformats-officedocument.presentationml.slide"
+	  },
+	  "sti": {
+		"name": "OpenOffice - Impress Template (Presentation)",
+		"mine": "application\/vnd.sun.xml.impress.template"
+	  },
+	  "sxi": {
+		"name": "OpenOffice - Impress (Presentation)",
+		"mine": "application\/vnd.sun.xml.impress"
+	  }
 	},
-	"spreadsheet": {
-		"extensions": {
-			"csv": {
-				"name": "Comma-Seperated Values",
-				"mine": "text\/csv,text\/comma-separated-values,text\/x-csv"
-			},
-			"ods": {
-				"name": "OpenDocument Spreadsheet",
-				"mine": "application\/vnd.oasis.opendocument.spreadsheet"
-			},
-			"ots": {
-				"name": "OpenDocument Spreadsheet Template",
-				"mine": "application\/vnd.oasis.opendocument.spreadsheet-template"
-			},
-			"stc": {
-				"name": "OpenOffice - Calc Template (Spreadsheet)",
-				"mine": "application\/vnd.sun.xml.calc.template"
-			},
-			"sxc": {
-				"name": "OpenOffice - Calc (Spreadsheet)",
-				"mine": "application\/vnd.sun.xml.calc"
-			},
-			"xlam": {
-				"name": "Microsoft Excel - Add-In File",
-				"mine": "application\/vnd.ms-excel.addin.macroenabled.12"
-			},
-			"xls": {
-				"name": "Microsoft Excel",
-				"mine": "application\/vnd.ms-excel"
-			},
-			"xlsb": {
-				"name": "Microsoft Excel - Binary Workbook",
-				"mine": "application\/vnd.ms-excel.sheet.binary.macroenabled.12"
-			},
-			"xlsm": {
-				"name": "Microsoft Excel - Macro-Enabled Workbook",
-				"mine": "application\/vnd.ms-excel.sheet.macroenabled.12"
-			},
-			"xlsx": {
-				"name": "Microsoft Office - OOXML - Spreadsheet",
-				"mine": "application\/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-			},
-			"xltm": {
-				"name": "Microsoft Excel - Macro-Enabled Template File",
-				"mine": "application\/vnd.ms-excel.template.macroenabled.12"
-			},
-			"xltx": {
-				"name": "Microsoft Office - OOXML - Spreadsheet Teplate",
-				"mine": "application\/vnd.openxmlformats-officedocument.spreadsheetml.template"
-			}
-		},
-		"icon": "file-icons\/spreadsheet.png",
-		"name": "Spreadsheet"
+	"icon": "file-icons\/presentation.png",
+	"name": "Presentation"
+  },
+  "spreadsheet": {
+	"extensions": {
+	  "csv": {
+		"name": "Comma-Seperated Values",
+		"mine": "text\/csv,text\/comma-separated-values,text\/x-csv"
+	  },
+	  "ods": {
+		"name": "OpenDocument Spreadsheet",
+		"mine": "application\/vnd.oasis.opendocument.spreadsheet"
+	  },
+	  "ots": {
+		"name": "OpenDocument Spreadsheet Template",
+		"mine": "application\/vnd.oasis.opendocument.spreadsheet-template"
+	  },
+	  "stc": {
+		"name": "OpenOffice - Calc Template (Spreadsheet)",
+		"mine": "application\/vnd.sun.xml.calc.template"
+	  },
+	  "sxc": {
+		"name": "OpenOffice - Calc (Spreadsheet)",
+		"mine": "application\/vnd.sun.xml.calc"
+	  },
+	  "xlam": {
+		"name": "Microsoft Excel - Add-In File",
+		"mine": "application\/vnd.ms-excel.addin.macroenabled.12"
+	  },
+	  "xls": {
+		"name": "Microsoft Excel",
+		"mine": "application\/vnd.ms-excel"
+	  },
+	  "xlsb": {
+		"name": "Microsoft Excel - Binary Workbook",
+		"mine": "application\/vnd.ms-excel.sheet.binary.macroenabled.12"
+	  },
+	  "xlsm": {
+		"name": "Microsoft Excel - Macro-Enabled Workbook",
+		"mine": "application\/vnd.ms-excel.sheet.macroenabled.12"
+	  },
+	  "xlsx": {
+		"name": "Microsoft Office - OOXML - Spreadsheet",
+		"mine": "application\/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+	  },
+	  "xltm": {
+		"name": "Microsoft Excel - Macro-Enabled Template File",
+		"mine": "application\/vnd.ms-excel.template.macroenabled.12"
+	  },
+	  "xltx": {
+		"name": "Microsoft Office - OOXML - Spreadsheet Teplate",
+		"mine": "application\/vnd.openxmlformats-officedocument.spreadsheetml.template"
+	  }
 	},
-	"text": {
-		"extensions": {
-			"3dml": {
-				"name": "In3D - 3DML",
-				"mine": "text\/vnd.in3d.3dml"
-			},
-			"c": {
-				"name": "C Source File",
-				"mine": "text\/x-c"
-			},
-			"curl": {
-				"name": "Curl - Applet",
-				"mine": "text\/vnd.curl"
-			},
-			"dcurl": {
-				"name": "Curl - Detached Applet",
-				"mine": "text\/vnd.curl.dcurl"
-			},
-			"dsc": {
-				"name": "PRS Lines Tag",
-				"mine": "text\/prs.lines.tag"
-			},
-			"etx": {
-				"name": "Setext",
-				"mine": "text\/x-setext"
-			},
-			"f": {
-				"name": "Fortran Source File",
-				"mine": "text\/x-fortran"
-			},
-			"flx": {
-				"name": "FLEXSTOR",
-				"mine": "text\/vnd.fmi.flexstor"
-			},
-			"fly": {
-				"name": "mod_fly \/ fly.cgi",
-				"mine": "text\/vnd.fly"
-			},
-			"gv": {
-				"name": "Graphviz",
-				"mine": "text\/vnd.graphviz"
-			},
-			"ics": {
-				"name": "iCalendar",
-				"mine": "text\/calendar"
-			},
-			"jad": {
-				"name": "J2ME App Descriptor",
-				"mine": "text\/vnd.sun.j2me.app-descriptor"
-			},
-			"java": {
-				"name": "Java Source File",
-				"mine": "text\/x-java-source,java"
-			},
-			"mcurl": {
-				"name": "Curl - Manifest File",
-				"mine": "text\/vnd.curl.mcurl"
-			},
-			"n3": {
-				"name": "Notation3",
-				"mine": "text\/n3"
-			},
-			"p": {
-				"name": "Pascal Source File",
-				"mine": "text\/x-pascal"
-			},
-			"par": {
-				"name": "BAS Partitur Format",
-				"mine": "text\/plain-bas"
-			},
-			"rtx": {
-				"name": "Rich Text Format (RTF)",
-				"mine": "text\/richtext"
-			},
-			"s": {
-				"name": "Assembler Source File",
-				"mine": "text\/x-asm"
-			},
-			"scurl": {
-				"name": "Curl - Source Code",
-				"mine": "text\/vnd.curl.scurl"
-			},
-			"sgml": {
-				"name": "Standard Generalized Markup Language (SGML)",
-				"mine": "text\/sgml"
-			},
-			"spot": {
-				"name": "In3D - 3DML",
-				"mine": "text\/vnd.in3d.spot"
-			},
-			"t": {
-				"name": "troff",
-				"mine": "text\/troff"
-			},
-			"tsv": {
-				"name": "Tab Seperated Values",
-				"mine": "text\/tab-separated-values"
-			},
-			"ttl": {
-				"name": "Turtle (Terse RDF Triple Language)",
-				"mine": "text\/turtle"
-			},
-			"txt": {
-				"name": "Text File",
-				"mine": "text\/plain"
-			},
-			"uri": {
-				"name": "URI Resolution Services",
-				"mine": "text\/uri-list"
-			},
-			"uu": {
-				"name": "UUEncode",
-				"mine": "text\/x-uuencode"
-			},
-			"vcf": {
-				"name": "vCard",
-				"mine": "text\/x-vcard"
-			},
-			"vcs": {
-				"name": "vCalendar",
-				"mine": "text\/x-vcalendar"
-			},
-			"wml": {
-				"name": "Wireless Markup Language (WML)",
-				"mine": "text\/vnd.wap.wml"
-			},
-			"wmls": {
-				"name": "Wireless Markup Language Script (WMLScript)",
-				"mine": "text\/vnd.wap.wmlscript"
-			},
-			"yaml": {
-				"name": "YAML Ain't Markup Language \/ Yet Another Markup Language",
-				"mine": "text\/yaml"
-			}
-		},
-		"icon": "file-icons\/text.png",
-		"name": "Text"
+	"icon": "file-icons\/spreadsheet.png",
+	"name": "Spreadsheet"
+  },
+  "text": {
+	"extensions": {
+	  "3dml": {
+		"name": "In3D - 3DML",
+		"mine": "text\/vnd.in3d.3dml"
+	  },
+	  "c": {
+		"name": "C Source File",
+		"mine": "text\/x-c"
+	  },
+	  "curl": {
+		"name": "Curl - Applet",
+		"mine": "text\/vnd.curl"
+	  },
+	  "dcurl": {
+		"name": "Curl - Detached Applet",
+		"mine": "text\/vnd.curl.dcurl"
+	  },
+	  "dsc": {
+		"name": "PRS Lines Tag",
+		"mine": "text\/prs.lines.tag"
+	  },
+	  "etx": {
+		"name": "Setext",
+		"mine": "text\/x-setext"
+	  },
+	  "f": {
+		"name": "Fortran Source File",
+		"mine": "text\/x-fortran"
+	  },
+	  "flx": {
+		"name": "FLEXSTOR",
+		"mine": "text\/vnd.fmi.flexstor"
+	  },
+	  "fly": {
+		"name": "mod_fly \/ fly.cgi",
+		"mine": "text\/vnd.fly"
+	  },
+	  "gv": {
+		"name": "Graphviz",
+		"mine": "text\/vnd.graphviz"
+	  },
+	  "ics": {
+		"name": "iCalendar",
+		"mine": "text\/calendar"
+	  },
+	  "jad": {
+		"name": "J2ME App Descriptor",
+		"mine": "text\/vnd.sun.j2me.app-descriptor"
+	  },
+	  "java": {
+		"name": "Java Source File",
+		"mine": "text\/x-java-source,java"
+	  },
+	  "mcurl": {
+		"name": "Curl - Manifest File",
+		"mine": "text\/vnd.curl.mcurl"
+	  },
+	  "n3": {
+		"name": "Notation3",
+		"mine": "text\/n3"
+	  },
+	  "p": {
+		"name": "Pascal Source File",
+		"mine": "text\/x-pascal"
+	  },
+	  "par": {
+		"name": "BAS Partitur Format",
+		"mine": "text\/plain-bas"
+	  },
+	  "rtx": {
+		"name": "Rich Text Format (RTF)",
+		"mine": "text\/richtext"
+	  },
+	  "s": {
+		"name": "Assembler Source File",
+		"mine": "text\/x-asm"
+	  },
+	  "scurl": {
+		"name": "Curl - Source Code",
+		"mine": "text\/vnd.curl.scurl"
+	  },
+	  "sgml": {
+		"name": "Standard Generalized Markup Language (SGML)",
+		"mine": "text\/sgml"
+	  },
+	  "spot": {
+		"name": "In3D - 3DML",
+		"mine": "text\/vnd.in3d.spot"
+	  },
+	  "t": {
+		"name": "troff",
+		"mine": "text\/troff"
+	  },
+	  "tsv": {
+		"name": "Tab Seperated Values",
+		"mine": "text\/tab-separated-values"
+	  },
+	  "ttl": {
+		"name": "Turtle (Terse RDF Triple Language)",
+		"mine": "text\/turtle"
+	  },
+	  "txt": {
+		"name": "Text File",
+		"mine": "text\/plain"
+	  },
+	  "uri": {
+		"name": "URI Resolution Services",
+		"mine": "text\/uri-list"
+	  },
+	  "uu": {
+		"name": "UUEncode",
+		"mine": "text\/x-uuencode"
+	  },
+	  "vcf": {
+		"name": "vCard",
+		"mine": "text\/x-vcard"
+	  },
+	  "vcs": {
+		"name": "vCalendar",
+		"mine": "text\/x-vcalendar"
+	  },
+	  "wml": {
+		"name": "Wireless Markup Language (WML)",
+		"mine": "text\/vnd.wap.wml"
+	  },
+	  "wmls": {
+		"name": "Wireless Markup Language Script (WMLScript)",
+		"mine": "text\/vnd.wap.wmlscript"
+	  },
+	  "yaml": {
+		"name": "YAML Ain't Markup Language \/ Yet Another Markup Language",
+		"mine": "text\/yaml"
+	  }
 	},
-	"video": {
-		"extensions": {
-			"3g2": {
-				"name": "3GP2",
-				"mine": "video\/3gpp2"
-			},
-			"3gp": {
-				"name": "3GP",
-				"mine": "video\/3gpp"
-			},
-			"asf": {
-				"name": "Microsoft Advanced Systems Format (ASF)",
-				"mine": "video\/x-ms-asf"
-			},
-			"avi": {
-				"name": "Audio Video Interleave (AVI)",
-				"mine": "video\/x-msvideo"
-			},
-			"f4v": {
-				"name": "Flash Video",
-				"mine": "video\/x-f4v"
-			},
-			"fli": {
-				"name": "FLI\/FLC Animation Format",
-				"mine": "video\/x-fli"
-			},
-			"flv": {
-				"name": "Flash Video",
-				"mine": "video\/x-flv"
-			},
-			"fvt": {
-				"name": "FAST Search & Transfer ASA",
-				"mine": "video\/vnd.fvt"
-			},
-			"h261": {
-				"name": "H.261",
-				"mine": "video\/h261"
-			},
-			"h263": {
-				"name": "H.263",
-				"mine": "video\/h263"
-			},
-			"h264": {
-				"name": "H.264",
-				"mine": "video\/h264"
-			},
-			"jpgv": {
-				"name": "JPGVideo",
-				"mine": "video\/jpeg"
-			},
-			"jpm": {
-				"name": "JPEG 2000 Compound Image File Format",
-				"mine": "video\/jpm"
-			},
-			"m4v": {
-				"name": "M4v",
-				"mine": "video\/x-m4v"
-			},
-			"mj2": {
-				"name": "Motion JPEG 2000",
-				"mine": "video\/mj2"
-			},
-			"movie": {
-				"name": "SGI Movie",
-				"mine": "video\/x-sgi-movie"
-			},
-			"mp4": {
-				"name": "MPEG-4 Video",
-				"mine": "video\/mp4"
-			},
-			"mpeg": {
-				"name": "MPEG Video",
-				"mine": "video\/mpeg"
-			},
-			"mxu": {
-				"name": "MPEG Url",
-				"mine": "video\/vnd.mpegurl"
-			},
-			"ogv": {
-				"name": "Ogg Video",
-				"mine": "video\/ogg"
-			},
-			"pyv": {
-				"name": "Microsoft PlayReady Ecosystem Video",
-				"mine": "video\/vnd.ms-playready.media.pyv"
-			},
-			"qt": {
-				"name": "Quicktime Video",
-				"mine": "video\/quicktime"
-			},
-			"uvh": {
-				"name": "DECE High Definition Video",
-				"mine": "video\/vnd.dece.hd"
-			},
-			"uvm": {
-				"name": "DECE Mobile Video",
-				"mine": "video\/vnd.dece.mobile"
-			},
-			"uvp": {
-				"name": "DECE PD Video",
-				"mine": "video\/vnd.dece.pd"
-			},
-			"uvs": {
-				"name": "DECE SD Video",
-				"mine": "video\/vnd.dece.sd"
-			},
-			"uvu": {
-				"name": "DECE MP4",
-				"mine": "video\/vnd.uvvu.mp4"
-			},
-			"uvv": {
-				"name": "DECE Video",
-				"mine": "video\/vnd.dece.video"
-			},
-			"viv": {
-				"name": "Vivo",
-				"mine": "video\/vnd.vivo"
-			},
-			"webm": {
-				"name": "Open Web Media Project - Video",
-				"mine": "video\/webm"
-			},
-			"wm": {
-				"name": "Microsoft Windows Media",
-				"mine": "video\/x-ms-wm"
-			},
-			"wmv": {
-				"name": "Microsoft Windows Media Video",
-				"mine": "video\/x-ms-wmv"
-			},
-			"wmx": {
-				"name": "Microsoft Windows Media Audio\/Video Playlist",
-				"mine": "video\/x-ms-wmx"
-			},
-			"wvx": {
-				"name": "Microsoft Windows Media Video Playlist",
-				"mine": "video\/x-ms-wvx"
-			}
-		},
-		"icon": "file-icons\/video.png",
-		"name": "Video"
+	"icon": "file-icons\/text.png",
+	"name": "Text"
+  },
+  "video": {
+	"extensions": {
+	  "3g2": {
+		"name": "3GP2",
+		"mine": "video\/3gpp2"
+	  },
+	  "3gp": {
+		"name": "3GP",
+		"mine": "video\/3gpp"
+	  },
+	  "asf": {
+		"name": "Microsoft Advanced Systems Format (ASF)",
+		"mine": "video\/x-ms-asf"
+	  },
+	  "avi": {
+		"name": "Audio Video Interleave (AVI)",
+		"mine": "video\/x-msvideo"
+	  },
+	  "f4v": {
+		"name": "Flash Video",
+		"mine": "video\/x-f4v"
+	  },
+	  "fli": {
+		"name": "FLI\/FLC Animation Format",
+		"mine": "video\/x-fli"
+	  },
+	  "flv": {
+		"name": "Flash Video",
+		"mine": "video\/x-flv"
+	  },
+	  "fvt": {
+		"name": "FAST Search & Transfer ASA",
+		"mine": "video\/vnd.fvt"
+	  },
+	  "h261": {
+		"name": "H.261",
+		"mine": "video\/h261"
+	  },
+	  "h263": {
+		"name": "H.263",
+		"mine": "video\/h263"
+	  },
+	  "h264": {
+		"name": "H.264",
+		"mine": "video\/h264"
+	  },
+	  "jpgv": {
+		"name": "JPGVideo",
+		"mine": "video\/jpeg"
+	  },
+	  "jpm": {
+		"name": "JPEG 2000 Compound Image File Format",
+		"mine": "video\/jpm"
+	  },
+	  "m4v": {
+		"name": "M4v",
+		"mine": "video\/x-m4v"
+	  },
+	  "mj2": {
+		"name": "Motion JPEG 2000",
+		"mine": "video\/mj2"
+	  },
+	  "movie": {
+		"name": "SGI Movie",
+		"mine": "video\/x-sgi-movie"
+	  },
+	  "mp4": {
+		"name": "MPEG-4 Video",
+		"mine": "video\/mp4"
+	  },
+	  "mpeg": {
+		"name": "MPEG Video",
+		"mine": "video\/mpeg"
+	  },
+	  "mxu": {
+		"name": "MPEG Url",
+		"mine": "video\/vnd.mpegurl"
+	  },
+	  "ogv": {
+		"name": "Ogg Video",
+		"mine": "video\/ogg"
+	  },
+	  "pyv": {
+		"name": "Microsoft PlayReady Ecosystem Video",
+		"mine": "video\/vnd.ms-playready.media.pyv"
+	  },
+	  "qt": {
+		"name": "Quicktime Video",
+		"mine": "video\/quicktime"
+	  },
+	  "uvh": {
+		"name": "DECE High Definition Video",
+		"mine": "video\/vnd.dece.hd"
+	  },
+	  "uvm": {
+		"name": "DECE Mobile Video",
+		"mine": "video\/vnd.dece.mobile"
+	  },
+	  "uvp": {
+		"name": "DECE PD Video",
+		"mine": "video\/vnd.dece.pd"
+	  },
+	  "uvs": {
+		"name": "DECE SD Video",
+		"mine": "video\/vnd.dece.sd"
+	  },
+	  "uvu": {
+		"name": "DECE MP4",
+		"mine": "video\/vnd.uvvu.mp4"
+	  },
+	  "uvv": {
+		"name": "DECE Video",
+		"mine": "video\/vnd.dece.video"
+	  },
+	  "viv": {
+		"name": "Vivo",
+		"mine": "video\/vnd.vivo"
+	  },
+	  "webm": {
+		"name": "Open Web Media Project - Video",
+		"mine": "video\/webm"
+	  },
+	  "wm": {
+		"name": "Microsoft Windows Media",
+		"mine": "video\/x-ms-wm"
+	  },
+	  "wmv": {
+		"name": "Microsoft Windows Media Video",
+		"mine": "video\/x-ms-wmv"
+	  },
+	  "wmx": {
+		"name": "Microsoft Windows Media Audio\/Video Playlist",
+		"mine": "video\/x-ms-wmx"
+	  },
+	  "wvx": {
+		"name": "Microsoft Windows Media Video Playlist",
+		"mine": "video\/x-ms-wvx"
+	  }
 	},
-	"web": {
-		"extensions": {
-			"asp": {
-				"name": "Active Server Pages",
-				"mine": "application\/asp"
-			},
-			"aspx": {
-				"name": "Active Server Pages",
-				"mine": "application\/aspx"
-			},
-			"atom": {
-				"name": "Atom Syndication Format",
-				"mine": "application\/atom+xml"
-			},
-			"css": {
-				"name": "Cascading Style Sheets (CSS)",
-				"mine": "text\/css"
-			},
-			"html": {
-				"name": "HyperText Markup Language (HTML)",
-				"mine": "text\/html"
-			},
-			"js": {
-				"name": "JavaScript",
-				"mine": "application\/javascript"
-			},
-			"json": {
-				"name": "JavaScript Object Notation (JSON)",
-				"mine": "application\/json"
-			},
-			"less": {
-				"name": "Less CSS",
-				"mine": "text\/css"
-			},
-			"php": {
-				"name": "PHP: Hypertext Preprocessor",
-				"mine": "text\/plain"
-			},
-			"rss": {
-				"name": "RSS - Really Simple Syndication",
-				"mine": "application\/rss+xml"
-			},
-			"sass": {
-				"name": "SASS: Syntactically Awesome Style Sheets",
-				"mine": "text\/css"
-			},
-			"scss": {
-				"name": "SCSS: SASSified CSS",
-				"mine": "text\/css"
-			},
-			"sql": {
-				"name": "Structured Query Langauge",
-				"mine": "text\/x-sql,text\/sql"
-			},
-			"xhtml": {
-				"name": "XHTML - The Extensible HyperText Markup Language",
-				"mine": "application\/xhtml+xml"
-			},
-			"xml": {
-				"name": "XML - Extensible Markup Language",
-				"mine": "application\/xml"
-			}
-		},
-		"icon": "file-icons\/web.png",
-		"name": "Web"
-	}
+	"icon": "file-icons\/video.png",
+	"name": "Video"
+  },
+  "web": {
+	"extensions": {
+	  "asp": {
+		"name": "Active Server Pages",
+		"mine": "application\/asp"
+	  },
+	  "aspx": {
+		"name": "Active Server Pages",
+		"mine": "application\/aspx"
+	  },
+	  "atom": {
+		"name": "Atom Syndication Format",
+		"mine": "application\/atom+xml"
+	  },
+	  "css": {
+		"name": "Cascading Style Sheets (CSS)",
+		"mine": "text\/css"
+	  },
+	  "html": {
+		"name": "HyperText Markup Language (HTML)",
+		"mine": "text\/html"
+	  },
+	  "js": {
+		"name": "JavaScript",
+		"mine": "application\/javascript"
+	  },
+	  "json": {
+		"name": "JavaScript Object Notation (JSON)",
+		"mine": "application\/json"
+	  },
+	  "less": {
+		"name": "Less CSS",
+		"mine": "text\/css"
+	  },
+	  "php": {
+		"name": "PHP: Hypertext Preprocessor",
+		"mine": "text\/plain"
+	  },
+	  "rss": {
+		"name": "RSS - Really Simple Syndication",
+		"mine": "application\/rss+xml"
+	  },
+	  "sass": {
+		"name": "SASS: Syntactically Awesome Style Sheets",
+		"mine": "text\/css"
+	  },
+	  "scss": {
+		"name": "SCSS: SASSified CSS",
+		"mine": "text\/css"
+	  },
+	  "sql": {
+		"name": "Structured Query Langauge",
+		"mine": "text\/x-sql,text\/sql"
+	  },
+	  "xhtml": {
+		"name": "XHTML - The Extensible HyperText Markup Language",
+		"mine": "application\/xhtml+xml"
+	  },
+	  "xml": {
+		"name": "XML - Extensible Markup Language",
+		"mine": "application\/xml"
+	  }
+	},
+	"icon": "file-icons\/web.png",
+	"name": "Web"
+  }
 }

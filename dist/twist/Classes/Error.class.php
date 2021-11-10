@@ -102,9 +102,9 @@
             $strExceptionTemplate = sprintf("%s/system/exception-user.tpl",TWIST_FRAMEWORK_VIEWS);
 
             //Clean the screen output ready for an exception
-			if(in_array('ob_gzhandler', ob_list_handlers())){
-				ob_clean();
-			}
+            if(in_array('ob_gzhandler', ob_list_handlers())){
+                ob_clean();
+            }
 
             try{
                 $strName = \Twist::framework() -> setting('SITE_NAME');
@@ -228,7 +228,7 @@
 
 			$strOut = '';
 
-			if(count($arrData)){
+			if(is_array($arrData) && count($arrData)){
 				foreach($arrData as $strKey => $mxdValue){
 					$strOut .= sprintf('<tr><th>%s</th><td>%s</td><td>%s</td><td>%s</td></tr>',
 						$strKey,

@@ -935,11 +935,12 @@ class File extends Base{
 	 * @related copy
 	 * @param string $strSourcePath
 	 * @param string $strDestinationPath
+	 * @param bool $blReplace Set to false will merge the copy
 	 */
-	public function recursiveCopy($strSourcePath,$strDestinationPath){
+	public function recursiveCopy($strSourcePath,$strDestinationPath,$blReplace = true){
 
 		//Remove data from the destination if already exists
-		(file_exists($strDestinationPath)) ? $this->recursiveRemove($strDestinationPath) : null;
+		($blReplace && file_exists($strDestinationPath)) ? $this->recursiveRemove($strDestinationPath) : null;
 
 		if(is_dir($strSourcePath)){
 
@@ -950,7 +951,7 @@ class File extends Base{
 			foreach($arrFiles as $strEachFile){
 				if($strEachFile != "." && $strEachFile != ".."){
 					//Recursively copy as this is another directory
-					$this->recursiveCopy("$strSourcePath/$strEachFile", sprintf('%s/%s',$strDestinationPath,$strEachFile));
+					$this->recursiveCopy("$strSourcePath/$strEachFile", sprintf('%s/%s',$strDestinationPath,$strEachFile),$blReplace);
 				}
 			}
 		}elseif(file_exists($strSourcePath)){

@@ -31,6 +31,11 @@
 
 		protected $strTable = null;
 		protected $strDatabase = TWIST_DATABASE_NAME;
+		protected $strDatabaseKey = null;
+
+		public function __construct($strDatabaseKey){
+			$this->strDatabaseKey = $strDatabaseKey;
+		}
 
 		/**
 		 * Set the table that is being used in the current request
@@ -57,7 +62,7 @@
 
 			$strFindTable = ($blAddTwistPrefix) ? sprintf('%s%s',TWIST_DATABASE_TABLE_PREFIX,$this->strTable) : $this->strTable;
 
-			$resResult = \Twist::Database()->query("SELECT 'exists' AS `status` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '%s' AND  TABLE_NAME = '%s'",
+			$resResult = \Twist::Database($this->strDatabaseKey)->query("SELECT 'exists' AS `status` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '%s' AND  TABLE_NAME = '%s'",
 				$this->strDatabase,
 				$strFindTable
 			);
@@ -106,7 +111,7 @@
 
 			if(is_null($arrStructure)){
 
-				$resResult = \Twist::Database()->query("SELECT `COLUMN_NAME` AS `column_name`,
+				$resResult = \Twist::Database($this->strDatabaseKey)->query("SELECT `COLUMN_NAME` AS `column_name`,
 										`DATA_TYPE` AS `data_type`,
 										`CHARACTER_MAXIMUM_LENGTH` AS `character_length_value`,
 										`IS_NULLABLE` AS `nullable`,
@@ -141,7 +146,7 @@
 						'engine' => 'MyISAM',
 					);
 
-					$resKeyResults = \Twist::Database()->query("SELECT `INDEX_NAME` AS `index_name`,
+					$resKeyResults = \Twist::Database($this->strDatabaseKey)->query("SELECT `INDEX_NAME` AS `index_name`,
 										`NON_UNIQUE` AS `non_unique`,
 										`SEQ_IN_INDEX` AS `order`,
 										`COLUMN_NAME` AS `column_name`,
@@ -235,7 +240,7 @@
 		 * @return bool
 		 */
 		public function rename($strNewTable){
-			return \Twist::Database()->query("RENAME TABLE `%s`.`%s` TO `%s`.`%s`;",$this->strDatabase,$this->strTable,$this->strDatabase,$strNewTable)->status();
+			return \Twist::Database($this->strDatabaseKey)->query("RENAME TABLE `%s`.`%s` TO `%s`.`%s`;",$this->strDatabase,$this->strTable,$this->strDatabase,$strNewTable)->status();
 		}
 
 		/**
@@ -243,7 +248,7 @@
 		 * @return bool
 		 */
 		public function optimize(){
-			return \Twist::Database()->query("OPTIMIZE TABLE `%s`.`%s`;",$this->strDatabase,$this->strTable)->status();
+			return \Twist::Database($this->strDatabaseKey)->query("OPTIMIZE TABLE `%s`.`%s`;",$this->strDatabase,$this->strTable)->status();
 		}
 
 		/**
@@ -251,7 +256,7 @@
 		 * @return bool
 		 */
 		public function truncate(){
-			return \Twist::Database()->query("TRUNCATE TABLE `%s`.`%s`;",$this->strDatabase,$this->strTable)->status();
+			return \Twist::Database($this->strDatabaseKey)->query("TRUNCATE TABLE `%s`.`%s`;",$this->strDatabase,$this->strTable)->status();
 		}
 
 		/**
@@ -259,6 +264,6 @@
 		 * @return bool
 		 */
 		public function drop(){
-			return \Twist::Database()->query("DROP TABLE IF EXISTS `%s`.`%s`;",$this->strDatabase,$this->strTable)->status();
+			return \Twist::Database($this->strDatabaseKey)->query("DROP TABLE IF EXISTS `%s`.`%s`;",$this->strDatabase,$this->strTable)->status();
 		}
 	}

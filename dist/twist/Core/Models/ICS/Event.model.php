@@ -65,20 +65,20 @@
 			return (array_key_exists('DTSTART;TZID=ALLDAY;VALUE=DATE',$this->arrData)) ? $this->arrData['DTSTART;TZID=ALLDAY;VALUE=DATE'] : null;
 		}
 
-		public function startDate($strStartDate = null){
+		public function startDate($strStartDate = null,$strTimezone = ''){
 
 			if(!is_null($strStartDate)){
-				$this->arrData['DTSTART'] = gmstrftime("%Y%m%dT%H%M00Z", $strStartDate);
+				$this->arrData['DTSTART'] = (empty($strTimezone) ? '' : ';TZID='.$strTimezone.':').gmstrftime("%Y%m%dT%H%M00", $strStartDate).(empty($strTimezone) ? 'Z' : '');
 				$this->lastModified();
 			}
 
 			return (array_key_exists('DTSTART',$this->arrData)) ? $this->arrData['DTSTART'] : null;
 		}
 
-		public function endDate($strEndDate = null){
+		public function endDate($strEndDate = null,$strTimezone = ''){
 
 			if(!is_null($strEndDate)){
-				$this->arrData['DTEND'] = gmstrftime("%Y%m%dT%H%M00Z", $strEndDate);
+				$this->arrData['DTEND'] = (empty($strTimezone) ? '' : ';TZID='.$strTimezone.':').gmstrftime("%Y%m%dT%H%M00", $strEndDate).(empty($strTimezone) ? 'Z' : '');
 				$this->lastModified();
 			}
 
@@ -147,7 +147,11 @@
 
 				//Output all the values for the event
 				foreach($this->arrData as $strKey => $mxdValue){
-					$strOut .= sprintf("%s:%s%s",$strKey,$mxdValue,$this->strReturnCode);
+					if(substr($mxdValue,0,1) == ';'){
+						$strOut .= sprintf("%s%s%s",$strKey,$mxdValue,$this->strReturnCode);
+					}else{
+						$strOut .= sprintf("%s:%s%s",$strKey,$mxdValue,$this->strReturnCode);
+					}
 				}
 
 				$strOut .= sprintf("END:VEVENT%s",$this->strReturnCode);

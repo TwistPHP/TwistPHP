@@ -46,6 +46,13 @@
 		}
 
 		/**
+		 * Get any error message that has been returned as the result of a failed command
+		 */
+		public function getMessage(){
+			return $this->resLibrary->getMessage();
+		}
+
+		/**
 		 * Connect to the remote FTP server
 		 * @param string $strHost
 		 * @param int $intPort
@@ -55,7 +62,7 @@
 
 			//Set the connection timeout
 			$this->resLibrary->setTimeout($intConnectionTimeout);
-			$this->resLibrary->connect($strHost,$intPort);
+			return $this->resLibrary->connect($strHost,$intPort);
 		}
 
 		/**
@@ -73,7 +80,7 @@
 		 * @return bool
 		 */
 		public function login($strUsername,$strPassword){
-			$this->resLibrary->login($strUsername,$strPassword);
+			return $this->resLibrary->login($strUsername,$strPassword);
 		}
 
 		/**
@@ -135,69 +142,60 @@
 		 * @return bool Returns the status of directory
 		 */
 		public function isDirectory($strDirectory){
-			return count($this->resLibrary->nlist($strDirectory));
+			return is_array($this->resLibrary->nlist($strDirectory));
 		}
 
 		/**
 		 * Make a new directory on the remote FTP server
 		 *
 		 * @param string $strDirectory Path for the new directory
-		 * @param bool $blRecursive
 		 * @return bool Returns the status of directory creation
 		 */
-		public function makeDirectory($strDirectory,$blRecursive = false){
+		public function makeDirectory($strDirectory){
 
-			if($blRecursive == true && strstr($strDirectory,'/')){
-				$arrDirectoryParts = explode('/',trim($strDirectory,'/'));
-				$strCurrentPath = '';
-
-				//Run through all directories until get to last one
-				while(count($arrDirectoryParts) > 1){
-					$strCurrentPath .= array_shift($arrDirectoryParts);
-					if(!$this->isDirectory($strCurrentPath)){
-						$this->resLibrary->mkd($strCurrentPath);
-					}
-					$strCurrentPath .= '/';
-				}
-
-				//Allow the main function to make the new directory
-				$strDirectory = $strCurrentPath.array_shift($arrDirectoryParts);
+			if(substr($strDirectory, 0, 1) == '/'){
+				//Full Path Create
+				$this->changeDirectory('/');
 			}
 
-			return $this->resLibrary->mkd($strDirectory);
+			$arrDirectoryParts = explode('/', trim($strDirectory, '/'));
+			foreach($arrDirectoryParts as $strSubDir){
+				if($this->listDirectory($strSubDir) === false){
+					$this->resLibrary->mkd($strSubDir);
+				}
+				$this->changeDirectory($strSubDir);
+			}
+
+			return true;
 		}
 
 		/**
 		 * Remove a directory on the remote FTP server
 		 *
 		 * @param string $strDirectory Path of the directory to remove
-		 * @param bool $blRecursive
 		 * @return bool Returns the status of the removal
 		 */
-		public function removeDirectory($strDirectory,$blRecursive = false){
+		public function removeDirectory($strDirectory){
 
-			if($blRecursive == true){
+			if($this->isDirectory($strDirectory)){
+
 				$arrFiles = $this->resLibrary->nlist($strDirectory);
-
-				if(count($arrFiles) > 2){
-
-					//Go through all files and folders in this directory removing them before removing the directory concerned
+				if(is_array($arrFiles)){
 					foreach($arrFiles as $strFile){
-
 						if(!in_array($strFile,array('.','..'))){
-							$strFilePath = sprintf('%s/%s',rtrim($strDirectory,'/'),$strFile);
-
-							if($this->isDirectory($strFilePath)){
-								$this->removeDirectory($strFilePath,true);
+							if($this->isDirectory($strFile)){
+								$this->removeDirectory($strFile);
 							}else{
-								$this->delete($strFilePath);
+								$this->delete($strFile);
 							}
 						}
 					}
 				}
+
+				$this->delete($strDirectory);
 			}
 
-			return $this->resLibrary->rmd($strDirectory);
+			return false;
 		}
 
 		/**

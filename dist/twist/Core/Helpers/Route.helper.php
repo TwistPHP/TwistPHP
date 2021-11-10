@@ -1336,8 +1336,17 @@ class Route extends Base{
 				}
 
 				if($arrRestriction['login_required']){
-					\Twist::User()->setAfterLoginRedirect();
-					\Twist::redirect(str_replace('//', '/', $arrRestriction['login_uri']));
+                    if(TWIST_AJAX_REQUEST){
+                        $arrTags['response'] = json_encode(['status' => false,'message' => $arrRestriction['status'].' [AUTH_LOGIN]','data' => ['login_required' => true,'login_url' => str_replace('//', '/', $arrRestriction['login_uri'])]]);
+                        header( 'Cache-Control: no-cache, must-revalidate' );
+                        header( 'Expires: Wed, 24 Sep 1986 14:20:00 GMT' );
+                        header( 'Content-type: application/json' );
+                        header( sprintf( 'Content-length: %d', function_exists('mb_strlen') ? mb_strlen( $arrTags['response'] ) : strlen( $arrTags['response'] ) ) );
+                        echo $arrTags['response'];
+                    }else{
+                        \Twist::User()->setAfterLoginRedirect();
+                        \Twist::redirect(str_replace('//', '/', $arrRestriction['login_uri']));
+                    }
 				}elseif($arrRestriction['allow_access'] == false){
 					\Twist::respond(403,null,$blExitOnComplete);
 				}else{

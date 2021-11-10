@@ -29,6 +29,11 @@
 		protected $resConnection = null;
 		protected $intTimeout = 90;
 		protected $blPassiveMode = false;
+		protected $strError = '';
+
+		public function getMessage(){
+			return $this->strError;
+		}
 
 		public function setTimeout($intTimeout = null){
 			$this->intTimeout = (is_null($intTimeout)) ? 90 : $intTimeout;
@@ -41,6 +46,12 @@
 		 */
 		public function connect($strHost,$intPort = 21){
 			$this->resConnection = ftp_connect($strHost,$intPort,$this->intTimeout);
+
+			if(empty($this->resConnection)){
+				$this->strError = 'Failed to connect to the FTP Server.';
+			}
+
+			return (!empty($this->resConnection));
 		}
 
 		/**
@@ -57,7 +68,24 @@
 		 * @return bool
 		 */
 		public function login($strUsername,$strPassword){
-			return @ftp_login($this->resConnection, $strUsername, $strPassword);
+
+			$blStatus = false;
+			if(!empty($this->resConnection)){
+				try{
+					$blStatus = ftp_login($this->resConnection, $strUsername, $strPassword);
+				}catch(\Throwable | \Exception $e){
+					$this->strError = $e->getMessage();
+				}
+
+				if(!$blStatus){
+					$this->strError = 'Invalid FTP login credentials provided';
+				}
+
+			}else{
+				$this->strError = 'No FTP connection has been established yet';
+			}
+
+			return $blStatus;
 		}
 
 		public function pasv($blEnable = true){

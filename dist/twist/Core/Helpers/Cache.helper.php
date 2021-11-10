@@ -113,6 +113,8 @@
 		 * @param string|integer $mxdUniqueID Unique ID used to reference the cache
 		 * @param string|array $mxdData Data to be stored in the cache
 		 * @param integer $intLifeTime Life of the cache, time until expiry
+		 * @return mixed
+		 * @throws \Exception
 		 */
 		public function write($mxdUniqueID,$mxdData,$intLifeTime = 3600){
 
@@ -137,6 +139,8 @@
 					\Twist::File()->write($dirCacheFile, json_encode($arrData),null,\Twist::framework()->setting('CACHE_DELAYED_WRITE'));
 				}
 			}
+
+			return $mxdData;
 		}
 
 		/**
@@ -158,7 +162,7 @@
 				}elseif(\Twist::File()->exists($dirCacheFile)){
 					$arrData = json_decode(\Twist::File()->read($dirCacheFile),true);
 
-					if(count($arrData) && array_key_exists('expiry',$arrData) && array_key_exists('data',$arrData) && $arrData['expiry'] >= \Twist::DateTime()->time()){
+					if(is_array($arrData) && count($arrData) && array_key_exists('expiry',$arrData) && array_key_exists('data',$arrData) && $arrData['expiry'] >= \Twist::DateTime()->time()){
 						return $arrData['data'];
 					}
 

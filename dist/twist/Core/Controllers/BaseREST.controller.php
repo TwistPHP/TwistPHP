@@ -40,8 +40,10 @@ class BaseREST extends Base{
      */
     public function _baseCalls(){
 
-        header("Access-Control-Allow-Orgin: *");
+    	header("Access-Control-Allow-Origin: ". $_SERVER['HTTP_ORIGIN']);
 		header("Access-Control-Allow-Methods: ".\Twist::framework()->setting('API_ALLOWED_REQUEST_METHODS'));
+		header("Access-Control-Allow-Headers: Content-type, Content-Type, Auth-Email, Auth-Password, Auth-Token");
+		header("Access-Control-Allow-Credentials: true");
 
         $this->_timeout(60);
         $this->_ignoreUserAbort(true);
@@ -49,18 +51,6 @@ class BaseREST extends Base{
         $strAllowedMethods = explode(',',str_replace(" ","",\Twist::framework()->setting('API_ALLOWED_REQUEST_METHODS')));
 		if(!in_array('*',$strAllowedMethods) && !in_array($_SERVER['REQUEST_METHOD'],$strAllowedMethods)){
 			return $this->_respondError("Unsupported/Restricted request method used",405);
-		}
-
-		//If the method is POST and the data has been sent as JSON, extract the JSON into the global $_POST var
-		if(strtoupper($_SERVER['REQUEST_METHOD'] == 'POST') && strstr($_SERVER['CONTENT_TYPE'], 'application/json')){
-
-			$resSTDIN = (defined('STDIN')) ? STDIN : 'php://input';
-			$strSDIN = file_get_contents($resSTDIN);
-
-			$arrPostedJSON = json_decode($strSDIN, true);
-			if(json_last_error() === JSON_ERROR_NONE){
-				$_POST = $arrPostedJSON;
-			}
 		}
 
         //Determine the format in which to return the data, default is JSON
@@ -152,9 +142,9 @@ class BaseREST extends Base{
         return $strOutput;
     }
 
-	protected function _check(){
+	protected function _check($blFirstErrorOnly = true){
 
-		if(!parent::_check(true)){
+		if(!parent::_check($blFirstErrorOnly)){
 
 			//422 for missing parameters and 400 for bad formatting of parameter data
 			//$intResponseCode = ($arrEachResult['type'] == 'missing') ? 422 : 400;

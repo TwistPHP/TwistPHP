@@ -1,5 +1,4 @@
 <?php
-
 	/**
 	 * TwistPHP - An open source PHP MVC framework built from the ground up.
 	 * Shadow Technologies Ltd.

@@ -80,7 +80,8 @@
 		}
 
 		function escapeString($strRawString){//done
-			return $this->resLink->quote($strRawString);
+			//return $this->resLink->quote($strRawString);
+			return $strRawString;
 		}
 
 		function numberRows($resResult){//done

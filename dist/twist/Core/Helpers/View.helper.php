@@ -673,7 +673,9 @@ class View extends Base{
 			//If the length has stayed the same it is not a string and type needs correcting
 			$blDetect = ($intLength == strlen($mxdValue));
 
-			if($blDetect && $mxdValue == 'null'){
+            if($blDetect && $mxdValue == 'empty'){
+                $mxdValue = 'twst-empty-variable';
+            }elseif($blDetect && $mxdValue == 'null'){
 				$mxdValue = null;
 			}elseif($blDetect && $mxdValue == 'undefined'){
 				$mxdValue = 'twst-undefined-variable';
@@ -709,13 +711,27 @@ class View extends Base{
 
 		switch($strCondition){
 			case'===':
-				$blOut = ($mxdValue1 === $mxdValue2);
+				$blOut = ($mxdValue1 === $mxdValue2 ||
+                    (empty($mxdValue1) && $mxdValue2 === 'twst-empty-variable') ||
+                    (empty($mxdValue2) && $mxdValue1 === 'twst-empty-variable') ||
+                    ($mxdValue1 === 'twst-undefined-variable' && $mxdValue2 === 'twst-empty-variable') ||
+                    ($mxdValue2 === 'twst-undefined-variable' && $mxdValue1 === 'twst-empty-variable') ||
+                    ($mxdValue1 == '' && $mxdValue2 === 'twst-undefined-variable') ||
+                    ($mxdValue2 == '' && $mxdValue1 === 'twst-undefined-variable')
+                );
 				break;
 			case'!==':
 				$blOut = ($mxdValue1 !== $mxdValue2);
 				break;
 			case'==':
-				$blOut = ($mxdValue1 == $mxdValue2 || ($mxdValue1 == '' && $mxdValue2 === 'twst-undefined-variable') || ($mxdValue2 == '' && $mxdValue1 === 'twst-undefined-variable'));
+				$blOut = ($mxdValue1 == $mxdValue2 ||
+                    (empty($mxdValue1) && $mxdValue2 === 'twst-empty-variable') ||
+                    (empty($mxdValue2) && $mxdValue1 === 'twst-empty-variable') ||
+                    ($mxdValue1 === 'twst-undefined-variable' && $mxdValue2 === 'twst-empty-variable') ||
+                    ($mxdValue2 === 'twst-undefined-variable' && $mxdValue1 === 'twst-empty-variable') ||
+                    ($mxdValue1 == '' && $mxdValue2 === 'twst-undefined-variable') ||
+                    ($mxdValue2 == '' && $mxdValue1 === 'twst-undefined-variable')
+                );
 				break;
 			case'<':
 				$blOut = ($mxdValue1 < $mxdValue2);
@@ -866,10 +882,14 @@ class View extends Base{
 				$blProcessTags = (array_key_exists('process-tags',$this->arrViewParams) && $this->arrViewParams['process-tags'] == false) ? false : true;
 
 				$strTagData = '';
-				if(!empty($arrData['view']) && array_key_exists($strReference,$arrData) && count($arrData[$strReference])){
+                $arrUseData = $this->processArrayItem($strReference,$arrData,true);
+
+				if(!empty($arrData['view']) && $arrUseData['status'] && count($arrUseData['return'])){
+
 					//Allow the original data to be accessed via parent
 					\Twist::framework()->hooks()->register('TWIST_VIEW_TAG','parent',$arrData);
-					foreach($arrData[$strReference] as $arrEachItem){
+					foreach($arrUseData['return'] as $arrEachItem){
+                        $arrEachItem = (is_array($arrEachItem)) ? $arrEachItem : ["value" => $arrEachItem];
 						$strTagData .= $this->build($arrData['view'],$arrEachItem,$blRemoveTags,$blProcessTags);
 					}
 					//Remove the original parent data tag
@@ -1116,6 +1136,7 @@ class View extends Base{
 				'strlen','strtolower','strtoupper',
 				'ucfirst','ucwords',
 				'prettytime','bytestosize',
+				'parseint','intval',
 				'date',
 				'syntaxhighlight'
 			);
@@ -1134,15 +1155,16 @@ class View extends Base{
 					}elseif(array_key_exists(0,$arrParameters)){
 						$strDateFormat = $arrParameters[0];
 					}elseif(count($arrParameters) == 1){
-						$arrParamKey = array_keys($arrParameters);
-						$strDateFormat = array_pop($arrParamKey);
+						$strDateFormat = array_pop(array_keys($arrParameters));
 					}
 
 					$strData = date($strDateFormat,strtotime($strData));
 
 				}elseif($strFunction == 'decimalise'){
 					$strData = number_format($strData,2,'.','');
-				}elseif(function_exists($strFunction)){
+				}elseif($strFunction == 'parseint' || $strFunction == 'intval'){
+                    $strData = intval($strData);
+                }elseif(function_exists($strFunction)){
 					$strData = call_user_func($strFunction,$strData);
 				}elseif($strFunction == 'escape'){
 					$strData = htmlspecialchars($strData);

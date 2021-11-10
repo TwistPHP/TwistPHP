@@ -84,7 +84,7 @@ class Auth{
 
 				if(is_null($objSession->data('user-id'))){
 
-					$arrUserData = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->get($intUserID,'id')->values();
+					$arrUserData = \Twist::Database(\Twist::userDatabase())->records(TWIST_DATABASE_TABLE_PREFIX.'users')->get($intUserID,'id')->values();
 
 					$objSession->data('user-id',$intUserID);
 					$objSession->data('user-level',$arrUserData['level']);
@@ -101,7 +101,7 @@ class Auth{
 					$objSession->data('user-surname',$arrUserData['surname']);
 				}
 
-				$resResult = \Twist::Database()->query("SELECT * FROM `%suser_groups` WHERE `id` IN (SELECT `group_id` FROM `%suser_group_members` WHERE `user_id` = %d)",TWIST_DATABASE_TABLE_PREFIX,TWIST_DATABASE_TABLE_PREFIX,$intUserID);
+				$resResult = \Twist::Database(\Twist::userDatabase())->query("SELECT * FROM `%suser_groups` WHERE `id` IN (SELECT `group_id` FROM `%suser_group_members` WHERE `user_id` = %d)",TWIST_DATABASE_TABLE_PREFIX,TWIST_DATABASE_TABLE_PREFIX,$intUserID);
 				$arrUserGroups = $resResult->rows();
 				$objSession->data('user-groups',$arrUserGroups);
 
@@ -202,7 +202,7 @@ class Auth{
 		//If the user is still not valid then check email and password
 		if(!is_null($strEmail) && !is_null($strPassword)){
 
-			$resUser = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->get($strEmail,'email');
+			$resUser = \Twist::Database(\Twist::userDatabase())->records(TWIST_DATABASE_TABLE_PREFIX.'users')->get($strEmail,'email');
 
 			if( !is_null( $resUser ) ) {
 				$arrUserData = $resUser->values();
@@ -234,7 +234,7 @@ class Auth{
 								//But we do want to save the email address (don't return it in the SQL as it is more secure not to return both email and password in at together)
 								$arrUserData['email'] = $strEmail;
 
-								$resResult = \Twist::Database()->query("SELECT * FROM `%suser_groups` WHERE `id` IN (SELECT `group_id` FROM `%suser_group_members` WHERE `user_id` = %d)",TWIST_DATABASE_TABLE_PREFIX,TWIST_DATABASE_TABLE_PREFIX,$arrUserData['id']);
+								$resResult = \Twist::Database(\Twist::userDatabase())->query("SELECT * FROM `%suser_groups` WHERE `id` IN (SELECT `group_id` FROM `%suser_group_members` WHERE `user_id` = %d)",TWIST_DATABASE_TABLE_PREFIX,TWIST_DATABASE_TABLE_PREFIX,$arrUserData['id']);
 								$arrUserData['groups'] = $resResult->rows();
 
 								self::$arrCurrentSession['status'] = true;
@@ -242,7 +242,7 @@ class Auth{
 								self::$arrCurrentSession['user_uid'] = $arrUserData['uid'];
 								self::$arrCurrentSession['user_data'] = $arrUserData;
 
-								if( \Twist::framework()->setting( 'USER_PASSWORD_CHANGE' ) === true && $arrUserData['temp_password'] === '1' ) {
+								if(\Twist::framework()->setting( 'USER_PASSWORD_CHANGE' ) === true && $arrUserData['temp_password'] === '1'){
 									//The user is on a temporary password and a change is required by the system
 									self::$arrCurrentSession['issue'] = 'temporary';
 									self::$arrCurrentSession['message'] = 'You are using a temporary password, please change your password';

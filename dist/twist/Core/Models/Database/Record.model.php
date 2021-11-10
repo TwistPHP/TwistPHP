@@ -29,11 +29,13 @@
 	 */
 	class Record{
 
+		protected $strDatabaseKey = null;
 		protected $strDatabase = null;
 		protected $strTable = null;
 		protected $arrOriginalRecord = array();
 		protected $arrRecord = array();
 		protected $arrStructure = array();
+		protected $blNewRecord = false;
 
 		/**
 		 * Construct the class with all the required data to make usable
@@ -43,19 +45,29 @@
 		 * @param array $arrRecord
 		 * @param bool $blClone
 		 */
-		public function __construct($strDatabase,$strTable,$arrStructure,$arrRecord,$blClone = false){
+		public function __construct($strDatabase,$strTable,$arrStructure,$arrRecord,$strDatabaseKey,$blClone = false){
+			$this->strDatabaseKey = $strDatabaseKey;
 			$this->strDatabase = $strDatabase;
 			$this->strTable = $strTable;
 			$this->arrStructure = $arrStructure;
+			$this->blNewRecord = ($arrRecord === [] || $blClone);
+
+			if($arrRecord === []){
+				foreach($arrStructure['columns'] as $strField => $arrField){
+					$arrRecord[$strField] = $arrField['default_value'];
+				}
+			}
+
 			$this->arrRecord = $arrRecord;
-			$this->arrOriginalRecord = ($blClone) ? array() : $arrRecord;
-			($blClone) ? $this->nullAutoIncrement() : null;
+			$this->arrOriginalRecord = ($blClone) ? [] : $arrRecord;
+			($this->blNewRecord) ? $this->nullAutoIncrement() : null;
 		}
 
 		/**
 		 * Destruct the class so it cannot be used anymore
 		 */
 		public function __destruct(){
+			$this->strDatabaseKey = null;
 			$this->strDatabase = null;
 			$this->strTable = null;
 			$this->arrRecord = null;
@@ -150,7 +162,7 @@
 				$this->whereClause()
 			);
 
-			if(\Twist::Database()->query($strSQL)->status()){
+			if(\Twist::Database($this->strDatabaseKey)->query($strSQL)->status()){
 				$this->__destruct();
 				$blOut = true;
 			}
@@ -196,11 +208,12 @@
 			if(json_encode($this->arrOriginalRecord) !== json_encode($this->arrRecord)){
 
 				$strSQL = $this->sql($blInsert);
-				$resResult = \Twist::Database()->query($strSQL);
+				$resResult = \Twist::Database($this->strDatabaseKey)->query($strSQL);
 
 				if($resResult->status()){
 					//Now that the record has been updated in the database the original data must equal the current data
 					$this->arrOriginalRecord = $this->arrRecord;
+                    $this->blNewRecord = false;
 
 					if(substr($strSQL,0,6) === 'INSERT'){
 
@@ -232,9 +245,8 @@
 		 */
 		public function sql($blInsert = false){
 
-			$blInsert = (count($this->arrOriginalRecord) > 0) ? $blInsert : true;
-
-			if($blInsert == true){
+			$blInsert = ($this->blNewRecord) ? true : $blInsert;
+			if($blInsert === true){
 
 				$strSQL = sprintf("INSERT INTO `%s`.`%s` SET %s",
 					$this->strDatabase,
@@ -278,7 +290,7 @@
 						}
 					}
 
-					$arrValueClause[] = sprintf($strFieldString, \Twist::Database()->escapeString($strField), \Twist::Database()->escapeString($strValue));
+					$arrValueClause[] = sprintf($strFieldString, \Twist::Database($this->strDatabaseKey)->escapeString($strField), \Twist::Database($this->strDatabaseKey)->escapeString($strValue));
 				}
 			}
 
@@ -297,7 +309,7 @@
 			$strAutoIncrementField = $this->detectAutoIncrement();
 
 			if(!is_null($strAutoIncrementField)){
-				$arrWhereClause[] = sprintf("`%s` = %d", \Twist::Database()->escapeString($strAutoIncrementField), \Twist::Database()->escapeString($this->arrOriginalRecord[$strAutoIncrementField]));
+				$arrWhereClause[] = sprintf("`%s` = %d", \Twist::Database($this->strDatabaseKey)->escapeString($strAutoIncrementField), \Twist::Database($this->strDatabaseKey)->escapeString($this->arrOriginalRecord[$strAutoIncrementField]));
 			}else{
 				foreach($this->arrOriginalRecord as $strField => $strValue){
 
@@ -312,7 +324,7 @@
 						}
 					}
 
-					$arrWhereClause[] = sprintf($strFieldString, \Twist::Database()->escapeString($strField), \Twist::Database()->escapeString($strValue));
+					$arrWhereClause[] = sprintf($strFieldString, \Twist::Database($this->strDatabaseKey)->escapeString($strField), \Twist::Database($this->strDatabaseKey)->escapeString($strValue));
 				}
 			}
 

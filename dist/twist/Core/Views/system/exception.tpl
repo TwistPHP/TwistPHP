@@ -34,15 +34,16 @@
 
 			body {
 				margin: 35px;
+				font-family: Arial;
 			}
 
 			.grid-container {
-				padding: 20px 0;
+				padding: 20px 10px;
 
 				background: rgba(255, 255, 255, 0.85);
 
 				border: 1px #CCC solid;
-				border-radius: 3px;
+				border-radius: 4px;
 			}
 
 			h1,
@@ -51,19 +52,79 @@
 			}
 
 			pre {
-				margin: 1.5em 0 2em;
+				position: relative;
+				margin: 40px 0 2em;
+				border:1px solid #CCC;
+				border-radius: 4px;
+				padding:4px;
 			}
 
+			pre:before{
+				content:attr(title);
+				position: absolute;
+				top:-24px;
+				left:0;
+				display: block;
+				background-color: #CCC;
+				color:#666;
+				padding:4px;
+				font-size: 14px;
+				line-height: 14px;
+				border-radius: 4px;
+			}
+
+			pre .highlight{
+				background-color: yellow;
+			}
 			pre + pre {
 				margin-top: 0;
 			}
 
-			td {
-				width: 100%;
-
-				word-wrap: break-word;
-				overflow-wrap: break-word;
+			table{
+				width:100%;
+				max-width: 100%;
 			}
+
+			table thead tr th{
+				background-color: #529f00;
+				color:#FFF;
+				text-align: left;
+				padding:6px;
+			}
+			table th{
+				padding:6px;
+			}
+			table tbody td,
+			table tbody th{
+				word-break: break-all;
+				overflow-wrap: anywhere;
+				padding:6px;
+			}
+			dl {
+				display: flex;
+				flex-flow: row wrap;
+				border: solid #529f00;
+				border-width: 1px 1px 0 0;
+				border-radius: 4px;
+				overflow: hidden;
+			}
+			dt {
+				flex-basis: 20%;
+				padding: 6px 12px;
+				background: #529f00;
+				text-align: right;
+				color: #fff;
+			}
+			dd {
+				flex-basis: 70%;
+				flex-grow: 1;
+				margin: 0;
+				padding: 6px 12px;
+				border-bottom: 1px solid #529f00;
+				word-break: break-all;
+				overflow-wrap: anywhere;
+			}
+
 		</style>
 
 		<!--================================ LINKED DOCUMENTS ================================-->

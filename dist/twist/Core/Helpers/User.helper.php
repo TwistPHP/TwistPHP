@@ -255,14 +255,9 @@
 		 * Get the user as an object
 		 * @param integer $intUserID
 		 * @return \Twist\Core\Models\User\User
-		 * @throws \Twist\Classes\Exception
 		 */
 		public function get($intUserID){
-			$resUserRecord = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->get($intUserID);
-			if(is_null($resUserRecord)){
-				throw new \Twist\Classes\Exception('Error: Failed to get an instance of user "'.$intUserID.'", user ID doesnt exist!');
-			}
-			return new UserObject($resUserRecord,$this);
+			return new UserObject(\Twist::Database(\Twist::userDatabase())->records(TWIST_DATABASE_TABLE_PREFIX.'users')->get($intUserID),$this);
 		}
 
 		/**
@@ -270,7 +265,7 @@
 		 * @return \Twist\Core\Models\User\User
 		 */
 		public function create(){
-			return new UserObject(\Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->create(),$this);
+			return new UserObject(\Twist::Database(\Twist::userDatabase())->records(TWIST_DATABASE_TABLE_PREFIX.'users')->create(),$this);
 		}
 
 		/**
@@ -279,7 +274,7 @@
 		 * @return array
 		 */
 		public function getData($intUserID){
-			return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->get($intUserID,'id',true);
+			return \Twist::Database(\Twist::userDatabase())->records(TWIST_DATABASE_TABLE_PREFIX.'users')->get($intUserID,'id',true);
 		}
 
 		/**
@@ -288,7 +283,7 @@
 		 * @return array
 		 */
 		public function getByEmail($strEmail){
-			return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->get($strEmail,'email',true);
+			return \Twist::Database(\Twist::userDatabase())->records(TWIST_DATABASE_TABLE_PREFIX.'users')->get($strEmail,'email',true);
 		}
 
 		/**
@@ -300,7 +295,7 @@
 
 			$arrUserDetails = array();
 
-			$resResult = \Twist::Database()->query("SELECT `ud`.`data`,`udf`.`slug` FROM `%suser_data` AS `ud` JOIN `%suser_data_fields` AS `udf` ON `ud`.`field_id` = `udf`.`id` WHERE `ud`.`user_id` = %d",
+			$resResult = \Twist::Database(\Twist::userDatabase())->query("SELECT `ud`.`data`,`udf`.`slug` FROM `%suser_data` AS `ud` JOIN `%suser_data_fields` AS `udf` ON `ud`.`field_id` = `udf`.`id` WHERE `ud`.`user_id` = %d",
 				TWIST_DATABASE_TABLE_PREFIX,
 				TWIST_DATABASE_TABLE_PREFIX,
 				$intUserID
@@ -321,7 +316,7 @@
 		 * @return array
 		 */
 		public function getAll($strOrderBy = 'id'){
-			return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->find(null,null,$strOrderBy);
+			return \Twist::Database(\Twist::userDatabase())->records(TWIST_DATABASE_TABLE_PREFIX.'users')->find(null,null,$strOrderBy);
 		}
 
 		/**
@@ -330,7 +325,21 @@
 		 * @return array
 		 */
 		public function getAllByLevel($intLevelID){
-			return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->find($intLevelID,'level');
+			return \Twist::Database(\Twist::userDatabase())->records(TWIST_DATABASE_TABLE_PREFIX.'users')->find($intLevelID,'level');
+		}
+
+		/**
+		 * Get and array of the users default information by User ID
+		 * @param $intLevelID
+		 * @return array
+		 */
+		public function getAllByGroup($mxdGroup){
+
+            $resResult = \Twist::Database(\Twist::userDatabase())->query("SELECT * FROM `twist_users` WHERE `id` IN (SELECT `user_id` FROM `twist_user_group_members` AS `ugm` JOIN `twist_user_groups` AS `ug` ON `ugm`.`group_id` = `ug`.`id` WHERE `ug`.`slug` = '%s')",
+                $mxdGroup
+            );
+
+			return $resResult->rows();
 		}
 
 		/**
@@ -339,7 +348,7 @@
 		 * @return array
 		 */
 		public function getLevel($intLevelID){
-			return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'user_levels')->get($intLevelID,'level',true);
+			return \Twist::Database(\Twist::userDatabase())->records(TWIST_DATABASE_TABLE_PREFIX.'user_levels')->get($intLevelID,'level',true);
 		}
 
 		/**
@@ -347,7 +356,7 @@
 		 * @return array
 		 */
 		public function getLevels(){
-			return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'user_levels')->find();
+			return \Twist::Database(\Twist::userDatabase())->records(TWIST_DATABASE_TABLE_PREFIX.'user_levels')->find();
 		}
 
 		/**
@@ -366,7 +375,7 @@
 				//Check that the email address is semi valid and code is long enough
 				if(strstr($arrParts[0],'@') && strstr($arrParts[0],'.') && strlen($arrParts[1]) === 16){
 
-					$resResult = \Twist::Database()->query("UPDATE `%s`.`%susers`
+					$resResult = \Twist::Database(\Twist::userDatabase())->query("UPDATE `%s`.`%susers`
 												SET `verified` = '1',
 													`verification_code` = ''
 												WHERE `email` = '%s'

@@ -55,6 +55,10 @@ class BaseRESTKey extends BaseREST{
 
         if($mxdResponse === true || is_null($mxdResponse)){
 
+			if($_SERVER['REQUEST_METHOD'] === 'OPTIONS'){
+				return $this->_respond('CORS Access Granted',1,204);
+			}
+
             //Basic Auth is an API key, BaseRESTUser has a more advance auth
             self::$blRequestHeaderAuth = \Twist::framework()->setting('API_REQUEST_HEADER_AUTH');
 

@@ -167,13 +167,23 @@ class Validate extends Base{
 	}
 
 	/**
-	 * Validate a sting, this will ensure the is is not an object, resource or boolean value
+	 * Validate a sting, this will ensure that it is not an object, resource or boolean value
 	 *
 	 * @param string $mxdString String to be validated
 	 * @return bool
 	 */
 	public function string($mxdString){
 		return (is_object($mxdString) || is_resource($mxdString) || is_bool($mxdString)) ? false : $mxdString;
+	}
+
+	/**
+	 * Validate a array, this will ensure that it is an array
+	 *
+	 * @param array $mxdArray Array to be validated
+	 * @return bool
+	 */
+	public function array($mxdArray){
+		return (!is_array($mxdArray)) ? false : $mxdArray;
 	}
 
 	/**

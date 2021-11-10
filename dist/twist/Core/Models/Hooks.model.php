@@ -24,7 +24,9 @@
 
 	namespace Twist\Core\Models;
 
-	/**
+	use Twist\Classes\Instance;
+
+    /**
 	 * Framework hooks that are used throughout the framework, see the docs for a full list of integrated hocks.
 	 * Register a hook to add in new view tags or extend framework functionality. Custom hooks are available in some packages to all them to be extended easily.
 	 * The default framework hooks are loaded in the construct
@@ -227,4 +229,64 @@
 				\Twist::Cache('twist/hooks')->write('permanent',$this->arrPermanentHooks,(3600*24)*365);
 			}
 		}
+
+        /**
+         * Run a specific hook and return the result
+         * @param $strHook
+         * @param $mxdUniqueKey
+         * @param array $arrArguments
+         * @return array|false|mixed|null
+         */
+        public function runHook($strHook,$mxdUniqueKey,$arrArguments = []){
+
+            $mxdOut = null;
+            $arrHook = $this->get($strHook,$mxdUniqueKey);
+            if(count($arrHook)){
+
+                if(array_key_exists('core',$arrHook)){
+
+                    $strClassName = $arrHook['core'];
+
+                    $mxdOut = call_user_func_array(array('\Twist',$strClassName), $arrArguments);
+                    //$mxdOut = \Twist::$strClassName($strReference,$arrParameters);
+
+                }elseif(array_key_exists('module',$arrHook)){
+
+                    $strClassName = $arrHook['module'];
+                    $strFunctionName = $arrHook['function'];
+
+                    $mxdOut = call_user_func_array(array('\Twist::'.$strClassName,$strFunctionName), $arrArguments);
+                    //$mxdOut = \Twist::$strClassName() -> $strFunctionName($strReference,$arrParameters);
+
+                }elseif(array_key_exists('class',$arrHook)){
+
+                    $strClassName = sprintf('\\%s',$arrHook['class']);
+                    $strFunctionName = $arrHook['function'];
+
+                    $objClass = new $strClassName();
+                    $mxdOut = call_user_func_array(array($objClass,$strFunctionName), $arrArguments);
+                    //$mxdOut = $objClass -> $strFunctionName($strReference,$arrParameters,$arrData);
+
+                }elseif(array_key_exists('instance',$arrHook)){
+
+                    $resClass = Instance::retrieveObject($arrHook['instance']);
+                    $strFunctionName = $arrHook['function'];
+
+                    $mxdOut = call_user_func_array(array($resClass,$strFunctionName), $arrArguments);
+                    //$mxdOut = $resClass -> $strFunctionName($strReference,$arrParameters);
+
+                }elseif(array_key_exists('function',$arrHook)){
+
+                    //@note Does not accept the params array at the moment, may deprecate this option
+                    $strFunctionName = $arrHook['function'];
+
+                    $mxdOut = call_user_func_array($strFunctionName, $arrArguments);
+                    //$mxdOut = call_user_func($strFunctionName,$strReference);
+                }else{
+                    $mxdOut = $arrHook;
+                }
+            }
+
+            return $mxdOut;
+        }
 	}

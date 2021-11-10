@@ -32,7 +32,12 @@
 
 		protected $strTable = null;
 		protected $strDatabase = TWIST_DATABASE_NAME;
+		protected $strDatabaseKey = null;
 
+		public function __construct($strDatabaseKey){
+			$this->strDatabaseKey = $strDatabaseKey;
+		}
+		
 		/**
 		 * Set the table that is being used in the current request
 		 * @param string $strTable SQL table name
@@ -56,9 +61,9 @@
 		public function create(){
 
 			//Get the structure of the table
-			$arrStructure = \Twist::Database()->table($this->strTable,$this->strDatabase)->structure();
+			$arrStructure = \Twist::Database($this->strDatabaseKey)->table($this->strTable,$this->strDatabase)->structure();
 
-			return (is_null($arrStructure)) ? null : new Record($this->strDatabase,$this->strTable,$arrStructure,array());
+			return (is_null($arrStructure)) ? null : new Record($this->strDatabase,$this->strTable,$arrStructure,array(),$this->strDatabaseKey);
 		}
 
 		/**
@@ -73,7 +78,7 @@
 
 			$mxdRecord = ($blReturnArray) ? array() : null;
 
-			$resResult = \Twist::Database()->query("SELECT * FROM `%s`.`%s` WHERE `%s` = '%s' LIMIT 1",
+			$resResult = \Twist::Database($this->strDatabaseKey)->query("SELECT * FROM `%s`.`%s` WHERE `%s` = '%s' LIMIT 1",
 				$this->strDatabase,
 				$this->strTable,
 				$strField,
@@ -89,8 +94,9 @@
 					$mxdRecord = new Record(
 						$this->strDatabase,
 						$this->strTable,
-						\Twist::Database()->table($this->strTable,$this->strDatabase)->structure(),
-						$mxdRecord
+						\Twist::Database($this->strDatabaseKey)->table($this->strTable,$this->strDatabase)->structure(),
+						$mxdRecord,
+						$this->strDatabaseKey
 					);
 				}
 			}
@@ -110,7 +116,7 @@
 			$resRecord = null;
 
 			//Get the structure of the table
-			$arrStructure = \Twist::Database()->table($this->strTable,$this->strDatabase)->structure();
+			$arrStructure = \Twist::Database($this->strDatabaseKey)->table($this->strTable,$this->strDatabase)->structure();
 
 			if(!is_null($arrStructure)){
 
@@ -122,7 +128,7 @@
 						$arrRecord[$arrStructure['auto_increment']] = null;
 					}
 
-					$resRecord = new Record($this->strDatabase,$this->strTable,$arrStructure,$arrRecord,true);
+					$resRecord = new Record($this->strDatabase,$this->strTable,$arrStructure,$arrRecord,$this->strDatabaseKey,true);
 				}
 			}
 
@@ -145,10 +151,10 @@
 				$this->strDatabase,
 				$this->strTable,
 				$this->buildWhereClause($mxdValue,$strField),
-				(is_null($intLimit)) ? '' : sprintf(' LIMIT %d',\Twist::Database()->escapeString($intLimit))
+				(is_null($intLimit)) ? '' : sprintf(' LIMIT %d',\Twist::Database($this->strDatabaseKey)->escapeString($intLimit))
 			);
 
-			if(\Twist::Database()->query($strSQL)->status()){
+			if(\Twist::Database($this->strDatabaseKey)->query($strSQL)->status()){
 				$blOut = true;
 			}
 
@@ -166,9 +172,9 @@
 
 			$intOut = 0;
 
-			$resResult = \Twist::Database()->query(sprintf("SELECT COUNT(*) AS `total` FROM `%s`.`%s`%s",
-				\Twist::Database()->escapeString($this->strDatabase),
-				\Twist::Database()->escapeString($this->strTable),
+			$resResult = \Twist::Database($this->strDatabaseKey)->query(sprintf("SELECT COUNT(*) AS `total` FROM `%s`.`%s`%s",
+				\Twist::Database($this->strDatabaseKey)->escapeString($this->strDatabase),
+				\Twist::Database($this->strDatabaseKey)->escapeString($this->strTable),
 				$this->buildWhereClause($mxdValue,$strField)
 			));
 
@@ -202,19 +208,19 @@
 
 				$strOrderClause = ' ORDER BY';
 				foreach($arrOrder as $strEachOrder){
-					$strOrderClause .= sprintf(' `%s` %s,',\Twist::Database()->escapeString($strEachOrder),\Twist::Database()->escapeString($strDirection));
+					$strOrderClause .= sprintf(' `%s` %s,',\Twist::Database($this->strDatabaseKey)->escapeString($strEachOrder),\Twist::Database($this->strDatabaseKey)->escapeString($strDirection));
 				}
 
 				$strOrderClause = rtrim($strOrderClause,',');
 			}
 
-			$resResult = \Twist::Database()->query(sprintf("SELECT * FROM `%s`.`%s`%s%s%s%s",
-				\Twist::Database()->escapeString($this->strDatabase),
-				\Twist::Database()->escapeString($this->strTable),
+			$resResult = \Twist::Database($this->strDatabaseKey)->query(sprintf("SELECT * FROM `%s`.`%s`%s%s%s%s",
+				\Twist::Database($this->strDatabaseKey)->escapeString($this->strDatabase),
+				\Twist::Database($this->strDatabaseKey)->escapeString($this->strTable),
 				$this->buildWhereClause($mxdValue,$strField),
 				$strOrderClause,
-				(!is_null($intLimit)) ? sprintf(' LIMIT %d',\Twist::Database()->escapeString($intLimit)) : '',
-				(!is_null($intLimit) && !is_null($intOffset)) ? sprintf(',%d',\Twist::Database()->escapeString($intOffset)) : ''
+				(!is_null($intLimit)) ? sprintf(' LIMIT %d',\Twist::Database($this->strDatabaseKey)->escapeString($intLimit)) : '',
+				(!is_null($intLimit) && !is_null($intOffset)) ? sprintf(',%d',\Twist::Database($this->strDatabaseKey)->escapeString($intOffset)) : ''
 			));
 
 			if($resResult->status() && $resResult->numberRows()){
@@ -248,19 +254,19 @@
 
 				if(is_array($mxdValue)){
 
-					array_walk( $mxdValue, array( \Twist::Database(), 'escapeString' ) );
+					array_walk( $mxdValue, array( \Twist::Database($this->strDatabaseKey), 'escapeString' ) );
 
 					$strWhereClause = sprintf(" WHERE `%s` IN ('%s')",
-						\Twist::Database()->escapeString($strField),
+						\Twist::Database($this->strDatabaseKey)->escapeString($strField),
 						implode("','",$mxdValue)
 					);
 
 				}else{
 
 					$strWhereClause = sprintf(" WHERE `%s` %s '%s'",
-						\Twist::Database()->escapeString($strField),
+						\Twist::Database($this->strDatabaseKey)->escapeString($strField),
 						(strstr($mxdValue,'%')) ? 'LIKE' : '=',
-						\Twist::Database()->escapeString($mxdValue)
+						\Twist::Database($this->strDatabaseKey)->escapeString($mxdValue)
 					);
 				}
 			}

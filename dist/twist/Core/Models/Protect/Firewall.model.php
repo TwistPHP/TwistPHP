@@ -80,6 +80,22 @@
 					self::$arrBanHistory = \Twist::Cache()->read('protect/ban-history');
 				}
 
+                if(!is_array(self::$arrBannedIPs)){
+                    self::$arrBannedIPs = [];
+                }
+
+                if(!is_array(self::$arrWhitelistIPs)){
+                    self::$arrWhitelistIPs = [];
+                }
+
+                if(!is_array(self::$arrFailedActions)){
+                    self::$arrFailedActions = [];
+                }
+
+                if(!is_array(self::$arrBanHistory)){
+                    self::$arrBanHistory = [];
+                }
+
 				self::$blLoaded = true;
 			}
 		}
@@ -130,11 +146,24 @@
 					//Users that are already banned can process the band list
 					self::processBanned();
 
-					$arrResponse = Error::responseInfo(403);
+                    $arrResponse = Error::responseInfo(403);
+                    $strHttpProtocol = ("HTTP/1.1" === $_SERVER["SERVER_PROTOCOL"]) ? 'HTTP/1.1' : 'HTTP/1.0';
 
-					//Output the correct
-					$strHttpProtocol = ("HTTP/1.1" === $_SERVER["SERVER_PROTOCOL"]) ? 'HTTP/1.1' : 'HTTP/1.0';
-					header(sprintf('%s %d %s',$strHttpProtocol,403,$arrResponse['return']),true,403);
+                    header("Access-Control-Allow-Origin: ". $_SERVER['HTTP_ORIGIN']);
+                    header("Access-Control-Allow-Methods: ".\Twist::framework()->setting('API_ALLOWED_REQUEST_METHODS'));
+                    header("Access-Control-Allow-Headers: Content-type, Content-Type, Auth-Email, Auth-Password, Auth-Token");
+                    header("Access-Control-Allow-Credentials: true");
+
+                    if($_SERVER['REQUEST_METHOD'] === 'OPTIONS'){
+                        //Pre-flight check we will still return the 204 message so that we can get the correct response back to the 403
+                        $arrResponse = Error::responseInfo(204);
+                        header(sprintf('%s %d %s',$strHttpProtocol,204,$arrResponse['return']),true,204);
+                        header("Content-type: application/json");
+                        die(json_encode(["message" => 'CORS Access Granted']));
+                    }else{
+                        //Output the 403 error
+                        header(sprintf('%s %d %s',$strHttpProtocol,403,$arrResponse['return']),true,403);
+                    }
 
 					//Clean the screen output ready for an exception
 					ob_clean();
@@ -151,9 +180,19 @@
 						'expire' => $arrCurrentBan['expire']
 					);
 
-					$strTemplate = sprintf("%s/protect/firewall-".$arrCurrentBan['type']."ban.tpl",TWIST_FRAMEWORK_VIEWS);
-
-					die(\Twist::View('Exception')->build($strTemplate,$arrTags));
+                    if(TWIST_AJAX_REQUEST){
+                        header("Content-type: application/json");
+                        die(json_encode([
+                            'status' => 'error',
+                            'error' => $arrTags['reason'],
+                            'count' => 0,
+                            'format' => 'json',
+                            'data' => $arrTags,
+                        ]));
+                    }else{
+                        $strTemplate = sprintf("%s/protect/firewall-".$arrCurrentBan['type']."ban.tpl",TWIST_FRAMEWORK_VIEWS);
+                        die(\Twist::View('Exception')->build($strTemplate,$arrTags));
+                    }
 				}
 			}
 		}

@@ -64,8 +64,8 @@ class Email extends Base{
 		return $resEmail->send(true);
 	}
 
-	public function parseSource($strEmailSource,$blShowHeaders = false){
+	public function parseSource($strEmailSource){
 		$resSourceParser = new \Twist\Core\Models\Email\SourceParser();
-		return $resSourceParser->processEmailSource($strEmailSource,$blShowHeaders);
+		return $resSourceParser->processEmailSource($strEmailSource);
 	}
 }

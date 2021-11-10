@@ -30,69 +30,53 @@ namespace Twist\Core\Models\Email;
  */
 class SourceParser{
 
-	protected $blShowHeaders = false;
 	protected $arrTempData = array();
 
 	/**
 	 * Pass in the full raw source of an email and it will parse and return as a simple usable array of data.
 	 * @param string $strEmailSource
-	 * @param bool $blShowHeaders
 	 * @return array
 	 */
-	public function processEmailSource($strEmailSource,$blShowHeaders = false){
-
-		$this->blShowHeaders = $blShowHeaders;
+	public function processEmailSource($strEmailSource){
 
 		$arrBoundaries = $this->splitBoundaries($strEmailSource);
 		$arrEmailData = $this->parseBoundaries($arrBoundaries);
-		$arrEmailData['headers'] = $this->parseHeaders($arrBoundaries['headers']);
+
+		//$arrEmailData['source'] = $strEmailSource;
+
+		//Get the subject form the email
+		preg_match("#\nSubject:(.*)\n#i",$strEmailSource,$arrResults);
+		$arrEmailData['subject'] = (is_array($arrResults) && count($arrResults) > 1) ? trim($arrResults[1]) : '';
 
 		//Get the from address from the email
-		preg_match("#([^\<]+)\<(.*)\>#i",$arrEmailData['headers']['From'],$strFromMatch);
-		$arrEmailData['from'] = array(
-			'email' => (strstr($arrEmailData['headers']['From'],"<")) ? $strFromMatch[2] : $arrEmailData['headers']['From'],
-			'name' => (strstr($arrEmailData['headers']['From'],"<")) ? $strFromMatch[1] : ''
-		);
+		preg_match("#\nFrom:(.*)\n#i",$strEmailSource,$arrResults);
+		$arrEmailData['from'] = (is_array($arrResults) && count($arrResults) > 1) ? trim($arrResults[1]) : '';
+		$arrEmailData['from_name'] = '';
 
-		//Get all the To addresses and their names
-		$arrToAddress = explode(',',$arrEmailData['headers']['To']);
-		foreach($arrToAddress as $strEachAddress){
-			preg_match("#([^\<]+)\<(.*)\>#i",$strEachAddress,$strFromMatch);
-			$arrEmailData['to'][] = array(
-				'email' => (strstr($strEachAddress,"<")) ? $strFromMatch[2] : $strEachAddress,
-				'name' => (strstr($strEachAddress,"<")) ? $strFromMatch[1] : ''
-			);
+		if(strstr($arrEmailData['from'],"<")){
+			preg_match("#([a-z0-9\-\_\s]+)\<([^\>]+)#i",$arrEmailData['from'],$strFromMatch);
+			$arrEmailData['from'] = $strFromMatch[2];
+			$arrEmailData['from_name'] = $strFromMatch[1];
 		}
 
-		//Get all the Cc addresses and their names
-		if(array_key_exists('Cc',$arrEmailData['headers'])){
-			$arrCcAddress = explode(',',$arrEmailData['headers']['Cc']);
-			foreach($arrCcAddress as $strEachAddress){
-				preg_match("#([^\<]+)\<(.*)\>#i",$strEachAddress,$strFromMatch);
-				$arrEmailData['cc'][] = array(
-					'email' => (strstr($strEachAddress,"<")) ? $strFromMatch[2] : $strEachAddress,
-					'name' => (strstr($strEachAddress,"<")) ? $strFromMatch[1] : ''
-				);
-			}
+		//Get the to address from the email
+		preg_match("#\nTo:(.*)\n#i",$strEmailSource,$arrResults);
+		$arrEmailData['to'] = (is_array($arrResults) && count($arrResults) > 1) ? trim($arrResults[1]) : '';
+
+		if(strstr($arrEmailData['to'],"<")){
+			preg_match("#([a-z0-9\-\_\s]+)\<([^\>]+)#i",$arrEmailData['to'],$strToMatch);
+			$arrEmailData['to'] = $strToMatch[2];
+			$arrEmailData['to_name'] = $strToMatch[1];
 		}
 
-		//Get all the Bcc addresses and their names (Only shows if you are the Bcc)
-		if(array_key_exists('Bcc',$arrEmailData['headers'])){
-			preg_match("#([^\<]+)\<(.*)\>#i",$arrEmailData['headers']['Bcc'],$strFromMatch);
-			$arrEmailData['bcc'] = array(
-				'email' => (strstr($arrEmailData['headers']['Bcc'],"<")) ? $strFromMatch[2] : $arrEmailData['headers']['Bcc'],
-				'name' => (strstr($arrEmailData['headers']['Bcc'],"<")) ? $strFromMatch[1] : ''
-			);
-		}
+		//Get the Cc address from the email
+		preg_match("#\nCc:(.*)\n#i",$strEmailSource,$arrResults);
+		$arrEmailData['cc'] = (is_array($arrResults) && count($arrResults) > 1) ? trim($arrResults[1]) : '';
 
-		//Get the subject form the email
-		$arrEmailData['date'] = date('Y-m-d H:i:s',strtotime($arrEmailData['headers']['Date']));
-
-		//Get the subject form the email
-		$arrEmailData['subject'] = $arrEmailData['headers']['Subject'];
-
-		if(!$this->blShowHeaders){
-			unset($arrEmailData['headers']);
+		if(strstr($arrEmailData['cc'],"<")){
+			preg_match("#([a-z0-9\-\_\s]+)\<([^\>]+)#i",$arrEmailData['cc'],$strCcMatch);
+			$arrEmailData['cc'] = $strCcMatch[2];
+			$arrEmailData['cc_name'] = $strCcMatch[1];
 		}
 
 		return $arrEmailData;
@@ -108,13 +92,6 @@ class SourceParser{
 
 		if($blReturnLog){
 			$this->arrTempData = array(
-				'headers' => array(),
-				'from' => array(),
-				'to' => array(),
-				'cc' => array(),
-				'bcc' => array(),
-				'date' => '',
-				'subject' => '',
 				'body' => array(
 					'plain' => '',
 					'html' => ''
@@ -140,12 +117,6 @@ class SourceParser{
 			}elseif($arrBoundaries['type'] == 'text/html'){
 				$this->arrTempData['body']['html'] = $arrBoundaries['data'];
 			}else{
-
-				if(!$this->blShowHeaders){
-					unset($arrBoundaries['uid']);
-					unset($arrBoundaries['headers']);
-				}
-
 				$this->arrTempData['attachments'][] = $arrBoundaries;
 			}
 		}
@@ -162,7 +133,6 @@ class SourceParser{
 	protected function splitBoundaries($strData,$strBoundary = ''){
 
 		$arrOut = array();
-		$blFirstPart = ($strBoundary === '');
 
 		preg_match("#(content\-type|type)\:([^\;]+)\;#i",$strData,$arrContentType);
 		//preg_match("#boundary\=\"([^\"]+)\"#i",$strData,$arrBoundaryInfo);
@@ -175,8 +145,6 @@ class SourceParser{
 
 			$strData = str_replace('--'.$strBoundary.'--','--'.$strBoundary,$strData);
 			$arrDataParts = explode('--'.$strBoundary,$strData);
-
-			$strEmailHeaders = ($blFirstPart) ? $arrDataParts[0] : '';
 			array_shift($arrDataParts);
 			array_pop($arrDataParts);
 
@@ -185,14 +153,8 @@ class SourceParser{
 				$arrOut = array(
 					'uid' => $strBoundary,
 					'type' => $strType,
-					'headers' => $strEmailHeaders,
 					'children' => array()
 				);
-
-				//We only want email headers from the very first boundary
-				if(!$blFirstPart){
-					unset($arrOut['headers']);
-				}
 
 				foreach($arrDataParts as $strNewData){
 					$arrOut['children'][] = $this->splitBoundaries($strNewData,$strBoundary);
@@ -212,81 +174,26 @@ class SourceParser{
 			unset($arrHeaderParts[0]);
 			$strContent = trim(implode("\n\n",$arrHeaderParts));
 
-			//Parse the headers into a formatted array
+			//Parse the headers into a formated array
 			$arrHeaders = array();
 			foreach($arrFoundHeaders[1] as $intKey => $strHeaderTag){
-				$arrHeaders[trim(strtolower($strHeaderTag))] = trim($arrFoundHeaders[2][$intKey]);
+				$arrHeaders[trim(strtolower($strHeaderTag))] = trim(trim($arrFoundHeaders[2][$intKey]),'"');
 			}
 
-			$intContentID = '';
 			if(array_key_exists('content-id',$arrHeaders)){
 				$arrHeaders['content-id'] = trim($arrHeaders['content-id'],'<>');
-				$intContentID = $arrHeaders['content-id'];
-			}elseif(array_key_exists('x-content-id',$arrHeaders)){
-				$arrHeaders['x-content-id'] = trim($arrHeaders['x-content-id'],'<>');
-				$intContentID = $arrHeaders['x-content-id'];
-			}
-
-			$strDisposition = (array_key_exists('content-disposition',$arrHeaders)) ? explode(';',$arrHeaders['content-disposition'])[0] : 'attachment';
-
-			if(array_key_exists('filename',$arrHeaders)){
-				$strFilename = trim($arrHeaders['filename'],'"');
-			}elseif(array_key_exists('content-disposition',$arrHeaders) && strstr($arrHeaders['content-disposition'],'filename')){
-				list($strIgnore,$strFilename) = explode('filename="',trim($arrHeaders['content-disposition'],'"'));
-			}elseif(array_key_exists('content-type',$arrHeaders) && strstr($arrHeaders['content-type'],'name')){
-				list($strIgnore,$strFilename) = explode('name="',trim($arrHeaders['content-type'],'"'));
-			}else{
-				$arrInfo = \Twist::File()->mimeTypeInfoByMime($strType);
-				$strFilename = $arrHeaders['content-id'].$arrInfo['extensions'];
 			}
 
 			$arrOut = array(
 				'uid' => $strBoundary,
-				'cid' => $intContentID,
 				'type' => $strType,
-				'filename' => $strFilename,
-				'disposition' => $strDisposition,
 				'headers' => $arrHeaders,
 				'data' => $strContent
 			);
+
 		}
 
 		return $arrOut;
-	}
-
-	/**
-	 * Parse the email headers into a usable array of data
-	 * @param $strHeaders
-	 * @return array
-	 */
-	protected function parseHeaders($strHeaders){
-
-		$strKey = '';
-		$arrHeaders = array();
-
-		$arrHeaderLines = explode("\n",$strHeaders);
-		foreach($arrHeaderLines as $strEachLine){
-			if(substr($strEachLine,0,1) === ' ' || substr($strEachLine,0,1) === "\t"){
-				if(is_array($arrHeaders[$strKey])){
-					$arrHeaders[$strKey][count($arrHeaders[$strKey])-1] .= "\n".$strEachLine;
-				}else{
-					$arrHeaders[$strKey] .= "\n" . $strEachLine;
-				}
-			}else{
-				list($strKey,$strValue) = explode(':',$strEachLine,2);
-
-				if(!empty($strKey)){
-					if(array_key_exists($strKey,$arrHeaders) && !is_array($arrHeaders[$strKey])){
-						$arrHeaders[$strKey] = array($arrHeaders[$strKey]);
-						$arrHeaders[$strKey][] = trim($strValue);
-					}else{
-						$arrHeaders[$strKey] = trim($strValue);
-					}
-				}
-			}
-		}
-
-		return $arrHeaders;
 	}
 
 	/**
@@ -315,4 +222,5 @@ class SourceParser{
 
 		return $strEmailSource;
 	}
+
 }

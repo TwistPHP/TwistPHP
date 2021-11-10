@@ -59,12 +59,12 @@
 			$this->blNewAccount = is_null($intUserID);
 
 			//Get the array of user fields
-			$this->arrUserDataFields = \Twist::framework()->tools()->arrayReindex(\Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'user_data_fields')->find(),'slug');
+			$this->arrUserDataFields = \Twist::framework()->tools()->arrayReindex(\Twist::Database(\Twist::userDatabase())->records(TWIST_DATABASE_TABLE_PREFIX.'user_data_fields')->find(),'slug');
 
 			//Check the user id before trying to collect userdata
 			if(!is_null($intUserID) && $intUserID > 0) {
 
-				$resResult = \Twist::Database()->query("SELECT `ud`.`data`,`udf`.`slug` FROM `%suser_data` AS `ud` JOIN `%suser_data_fields` AS `udf` ON `ud`.`field_id` = `udf`.`id` WHERE `ud`.`user_id` = %d",
+				$resResult = \Twist::Database(\Twist::userDatabase())->query("SELECT `ud`.`data`,`udf`.`slug` FROM `%suser_data` AS `ud` JOIN `%suser_data_fields` AS `udf` ON `ud`.`field_id` = `udf`.`id` WHERE `ud`.`user_id` = %d",
 					TWIST_DATABASE_TABLE_PREFIX,
 					TWIST_DATABASE_TABLE_PREFIX,
 					$intUserID
@@ -143,7 +143,7 @@
 					if(!array_key_exists($strKey,$this->arrUserDataFields)){
 
 						//The field is a new filed, insert into the database
-						$resUserDataField = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'user_data_fields')->create();
+						$resUserDataField = \Twist::Database(\Twist::userDatabase())->records(TWIST_DATABASE_TABLE_PREFIX.'user_data_fields')->create();
 						$resUserDataField->set('slug',$strKey);
 						$resUserDataField->commit();
 						$this->arrUserDataFields[$strKey] = $resUserDataField->values();
@@ -152,7 +152,7 @@
 					if(is_null($mxdData)){
 
 						//If the item is null it can be removed
-						\Twist::Database()->query("DELETE FROM `%suser_data` WHERE `user_id` = %d AND `field_id` = %d LIMIT 1",
+						\Twist::Database(\Twist::userDatabase())->query("DELETE FROM `%suser_data` WHERE `user_id` = %d AND `field_id` = %d LIMIT 1",
 							TWIST_DATABASE_TABLE_PREFIX,
 							$this->resDatabaseRecord->get('id'),
 							$this->arrUserDataFields[$strKey]['id']
@@ -163,7 +163,7 @@
 					}elseif(array_key_exists($strKey,$this->arrOriginalUserData) && $mxdData !== $this->arrOriginalUserData[$strKey]){
 
 						//If the key was in the original array and the value is different from the original it can be removed
-						\Twist::Database()->query( "UPDATE `%suser_data` SET `data` = '%s' WHERE `user_id` = %d AND `field_id` = %d LIMIT 1",
+						\Twist::Database(\Twist::userDatabase())->query( "UPDATE `%suser_data` SET `data` = '%s' WHERE `user_id` = %d AND `field_id` = %d LIMIT 1",
 							TWIST_DATABASE_TABLE_PREFIX,
 							$mxdData,
 							$this->resDatabaseRecord->get( 'id' ),
@@ -173,7 +173,7 @@
 					}elseif(!array_key_exists($strKey,$this->arrOriginalUserData)){
 
 						//If the key is not in the original array we need to insert the value
-						$resUserData = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'user_data')->create();
+						$resUserData = \Twist::Database(\Twist::userDatabase())->records(TWIST_DATABASE_TABLE_PREFIX.'user_data')->create();
 						$resUserData->set('user_id',$this->resDatabaseRecord->get('id'));
 						$resUserData->set('field_id',$this->arrUserDataFields[$strKey]['id']);
 						$resUserData->set('data',$mxdData);
@@ -270,25 +270,29 @@
 		}
 
 		/**
-		 * Get array of all the groups the user is a member of
+		 * Get array of all the goups the user is a member of
 		 * @return array
 		 * @throws \Exception
 		 */
 		public function groups(){
-			$resResult = \Twist::Database()->query("SELECT * FROM `%suser_groups` WHERE `id` IN (SELECT `group_id` FROM `%suser_group_members` WHERE `user_id` = %d)",TWIST_DATABASE_TABLE_PREFIX,TWIST_DATABASE_TABLE_PREFIX,$this->id());
+			$resResult = \Twist::Database(\Twist::userDatabase())->query("SELECT * FROM `%suser_groups` WHERE `id` IN (SELECT `group_id` FROM `%suser_group_members` WHERE `user_id` = %d)",TWIST_DATABASE_TABLE_PREFIX,TWIST_DATABASE_TABLE_PREFIX,$this->id());
 			return $resResult->rows();
 		}
 
 		public function joinGroup($intGroupID){
-			$resGroup = \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'user_group_members')->create();
+			$resGroup = \Twist::Database(\Twist::userDatabase())->records(TWIST_DATABASE_TABLE_PREFIX.'user_group_members')->create();
 			$resGroup->set('user_id',$this->id());
 			$resGroup->set('group_id',$intGroupID);
 			$resGroup->commit();
 		}
 
 		public function leaveGroup($intGroupID){
-			return \Twist::Database()->query("DELETE FROM `%suser_group_members` WHERE `group_id` = %d AND `user_id` = %d",TWIST_DATABASE_TABLE_PREFIX,$intGroupID,$this->id());
+			return \Twist::Database(\Twist::userDatabase())->query("DELETE FROM `%suser_group_members` WHERE `group_id` = %d AND `user_id` = %d",TWIST_DATABASE_TABLE_PREFIX,$intGroupID,$this->id());
 		}
+
+        public function leaveGroups(){
+            return \Twist::Database(\Twist::userDatabase())->query("DELETE FROM `%suser_group_members` WHERE `user_id` = %d",TWIST_DATABASE_TABLE_PREFIX,$this->id());
+        }
 
 		public function enabled(){
 			return (bool) $this->resDatabaseRecord->get('enabled');
@@ -313,11 +317,11 @@
 
 		public function delete(){
 
-			\Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'user_data')->delete($this->resDatabaseRecord->get('id'),'user_id',null);
+			\Twist::Database(\Twist::userDatabase())->records(TWIST_DATABASE_TABLE_PREFIX.'user_data')->delete($this->resDatabaseRecord->get('id'),'user_id',null);
 
 			//TODO: remove sessions and devices
 
-			return \Twist::Database()->records(TWIST_DATABASE_TABLE_PREFIX.'users')->delete($this->resDatabaseRecord->get('id'),'id');
+			return \Twist::Database(\Twist::userDatabase())->records(TWIST_DATABASE_TABLE_PREFIX.'users')->delete($this->resDatabaseRecord->get('id'),'id');
 		}
 
 		public function requireVerification(){
