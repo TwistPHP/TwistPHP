@@ -1,6 +1,6 @@
 {
   "name": "twistphp",
-  "version": "4.0.0",
+  "version": "4.0.2",
   "description": "The PHP MVC framework with a TWIST",
   "main": "",
   "scripts": {
