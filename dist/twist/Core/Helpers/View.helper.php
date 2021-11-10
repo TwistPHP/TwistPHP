@@ -857,6 +857,29 @@ class View extends Base{
 
 				break;
 
+			case'repeater':
+
+				$this->arrViewParams = $arrParameters;
+				$arrData = is_array($arrData) ? array_merge($arrData,$arrParameters) : $arrParameters;
+
+				$blRemoveTags = (array_key_exists('remove-tags',$this->arrViewParams) && $this->arrViewParams['remove-tags'] == true) ? true : false;
+				$blProcessTags = (array_key_exists('process-tags',$this->arrViewParams) && $this->arrViewParams['process-tags'] == false) ? false : true;
+
+				$strTagData = '';
+				if(!empty($arrData['view']) && array_key_exists($strReference,$arrData) && count($arrData[$strReference])){
+					//Allow the original data to be accessed via parent
+					\Twist::framework()->hooks()->register('TWIST_VIEW_TAG','parent',$arrData);
+					foreach($arrData[$strReference] as $arrEachItem){
+						$strTagData .= $this->build($arrData['view'],$arrEachItem,$blRemoveTags,$blProcessTags);
+					}
+					//Remove the original parent data tag
+					\Twist::framework()->hooks()->cancel('TWIST_VIEW_TAG','parent');
+				}
+
+				$strRawView = $this->replaceTag($strRawView,$strTag,$strTagData,$strFunction,array(),$arrParameters);
+
+				break;
+
 			/**
 			 * PHP Global VARS GET, POST, SERVER, COOKIE
 			 */
@@ -991,7 +1014,7 @@ class View extends Base{
 						$strFunctionName = $arrExtensions[$strType]['function'];
 
 						$objClass = new $strClassName();
-						$strReplacementData = $objClass -> $strFunctionName($strReference,$arrParameters);
+						$strReplacementData = $objClass -> $strFunctionName($strReference,$arrParameters,$arrData);
 
 					}elseif(array_key_exists('instance',$arrExtensions[$strType])){
 
