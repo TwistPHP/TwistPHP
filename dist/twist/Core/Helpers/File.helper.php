@@ -831,23 +831,27 @@ class File extends Base{
 
 				$resFileHandler = fopen($dirFilePath, "w+");
 
-				if(flock($resFileHandler, LOCK_EX)){
+				if(is_resource($resFileHandler)){
 
-					//Allow for the writing of file data to the beginning/end of a file (default Replaces all data)
-					if($strOptions === 'prefix'){
-						fseek($resFileHandler, 0);
-					}elseif($strOptions === 'suffix'){
-						fseek($resFileHandler, filesize($dirFilePath));
-					}else{
-						ftruncate($resFileHandler, 0);
+					if(flock($resFileHandler, LOCK_EX)){
+						//Allow for the writing of file data to the beginning/end of a file (default Replaces all data)
+						if($strOptions === 'prefix'){
+							fseek($resFileHandler, 0);
+						}elseif($strOptions === 'suffix'){
+							fseek($resFileHandler, filesize($dirFilePath));
+						}else{
+							ftruncate($resFileHandler, 0);
+						}
+
+						fwrite($resFileHandler, $mxdData);
+						flock($resFileHandler, LOCK_UN);
 					}
 
-					fwrite($resFileHandler, $mxdData);
-					flock($resFileHandler, LOCK_UN);
+					fclose($resFileHandler);
+					chmod($dirFilePath, 0755);
+				}else{
+					throw new \Exception('Failed to write to file '.$dirFilePath);
 				}
-
-				fclose($resFileHandler);
-				chmod($dirFilePath, 0755);
 
 			}catch(\Exception $resException){
 				throw new \Exception('TwistPHP File::write() - '.$resException->getMessage());
